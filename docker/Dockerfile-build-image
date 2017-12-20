@@ -1,0 +1,41 @@
+# хоть в docker hub и есть node:6.9.4, но CD не соберется если просто если указать node:6.9.4 (так как там нет инета)
+# поэтому нужно всегда писать через наш внутренний докер репозиторий
+FROM node:6.9.4
+MAINTAINER front-core
+
+# получаем через ARG имя папки приложения внутри образа как параметр билда, чтобы можно было скопировать из внешнего скрипты содержимое контейнера
+# docker build --file ./Dockerfile-build-image --tag $buildImage --build-arg rootFolderName=$tmpBuildImageRootFolderName .
+# docker cp $buildContainerId:$tmpBuildImageRootFolder/node_modules ./node_modules
+ARG rootFolderName="dockerBuildImageRoot"
+# делаем абсолютный внутри контейнера путь до сборки
+ENV rootFolder /${rootFolderName}
+
+# Создаем папку для docker build image внутри образа
+RUN mkdir -p ${rootFolder}
+
+# todo @ANKU @LOW - не знаю почему, если сначала все копировать, ADD . ${rootFolder} а потом заменять ADD tmp-package.json ${rootFolder}/package.json
+# то падает непонятная ошибка
+# npm ERR! bignum@0.12.5 install: `node-pre-gyp install --fallback-to-build`
+# поэтому делаем сначала сборку, а потом уже докидываем все остальное для билда
+
+# созданый в predokcer-build стадии через prepare-build-pachage.js tmp-package.json (где вырезаны все средства
+# для тестирования, так как они не нужны для проде) копируем под именем package.json (для npm)
+ADD tmp-package.json ${rootFolder}/package.json
+# копируем .npmrc чтобы не нужно указывать registry (он возмется из файла)
+ADD .npmrc ${rootFolder}/.npmrc
+
+# Инсталируем необходимы либы в тихом режиме
+RUN cd ${rootFolder} && npm install --quiet --no-progress --unsafe-perm
+
+# копируем все остальное для билда (node_modules не будет копироваться так как в файле .dockerignore прописаны)
+ADD . ${rootFolder}
+
+# для всех последующийх RUN и CMD контекстом будет ${rootFolder}
+WORKDIR ${rootFolder}
+
+# Собираем production сборку (с одним только node сервером, без frontend webpack сервера)
+RUN npm run build
+
+# clean some shit
+RUN npm prune --production --quiet --no-progress --unsafe-perm > /dev/null 2>&1
+

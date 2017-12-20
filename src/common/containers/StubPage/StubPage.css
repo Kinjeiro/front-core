@@ -1,0 +1,67 @@
+@import "./Test.css";
+
+:root {
+  --stub-color: red;
+}
+
+/* декараторы из postcss-bemed */
+@block StubPage {
+  /* цвет из ../../app-style/vars.js */
+  background: var(--test-color);
+
+  @element languageElement {
+    @modifier lang {
+      height: 20px;
+
+      @value en {
+        background: var(--opa);
+      }
+      @value ru {
+        /*http://cssnext.io/features/#color-function*/
+        background: color(var(--opa) blackness(30%));
+      }
+    }
+  }
+
+  @element title {
+    height: 200px;
+    color: var(--stub-color);
+
+    &:hover {
+      background: red;
+    }
+  }
+
+  @modifier foo {
+    font-size: 12px;
+
+    &:hover {
+      background: orange;
+    }
+
+    @value bar {
+      width: 100%;
+    }
+  }
+
+  &:hover {
+    background: green;
+  }
+}
+
+
+/*
+  todo @ANKU @LOW @BUG_OUT @postcss-bemed - не работает nested внутри @element, а внутри @block работает
+
+  @element title {
+    height: 200px;
+    color: var(--stub-color);
+
+    &:hover {
+      background: green;
+    }
+    @nest &:hover {
+      background: orange;
+    }
+  }
+*/

@@ -1,0 +1,7 @@
+.idea/
+.build/
+.build-docker/
+node_modules/
+
+.git/
+.githooks/

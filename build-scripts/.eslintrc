@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "comma-dangle": ["error", "never"], // node версия не поддерживает лишние "," в конце всего и вся
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true }] // это билд папка она использует модули из devDependencies
+  }
+}

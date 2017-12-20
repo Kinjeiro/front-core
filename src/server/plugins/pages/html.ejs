@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="<%= assetsDir %>/favicon.ico">
+    <link rel="manifest" href="<%= assetsDir %>/manifest.json">
+
+    <% if (staticAssets) { %>
+        <!--
+        // todo @ANKU @CRIT @MAIN - если ни одного нету файла из node_modules - то не создасться файл vendor.css и будет ошибка
+        // todo @ANKU @LOW - а вообще нужно создавать линки на файлы по инфе от webpack
+        -->
+        <link rel="stylesheet" href="<%= assetsDir %>/vendor.css" />
+        <link rel="stylesheet" href="<%= assetsDir %>/index.css" />
+    <% } %>
+
+    <%- unescapedHeadHtml %>
+</head>
+<body class="body">
+    <%- unescapedBodyHtml %>
+    <div id="react-app" class="ReactApp"><%- content %></div>
+    <script> window.<%= GLOBAL_CLIENT_STORE_INITIAL_STATE %> = <%- state %>; </script>
+    <script> window.<%= GLOBAL_I18N_CLIENT_BUNDLES %> = <%- i18nClientBundle %>; </script>
+    <script src="<%= assetsDir %>/vendor.js"></script>
+    <script src="<%= assetsDir %>/index.js"></script>
+</body>
+</html>

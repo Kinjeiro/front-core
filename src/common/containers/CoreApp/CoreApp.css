@@ -1,0 +1,11 @@
+.CoreApp {
+  height: 100%;
+
+  &__ThemeProvider {
+    height: 100%;
+  }
+
+  &__StickyContainer {
+    height: 100%;
+  }
+}
