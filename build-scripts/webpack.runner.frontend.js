@@ -8,6 +8,8 @@ function startFrontend({
   webpackConfig,
   webpackDevServerOptions
 }) {
+  // console.debug('WEBPACK FRONTEND', JSON.stringify(webpackConfig, null, 2));
+
   const PROXY_ASSETS = appConfig.server.main.proxyAssets;
 
   webpackDevServerOptions = Object.assign({

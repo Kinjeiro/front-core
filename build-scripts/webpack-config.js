@@ -94,12 +94,12 @@ const WEBPACK_CONFIG_UTILS = {
         require('./plugins/frontend/plugin-frontend-main'),
       ],
       middlePlugins: [
-        require('./plugins/frontend/plugin-polyfills'),
         require('./plugins/frontend/plugin-split-vendors'),
         require('./plugins/frontend/plugin-file-static'),
+        require('./plugins/frontend/plugin-frontend-hot-reload')
       ],
       finishPlugins: [
-        require('./plugins/frontend/plugin-finish-frontend-hot-reload')
+        require('./plugins/frontend/plugin-finish-polyfills'),
       ]
     }, otherPlugins));
   },
@@ -127,8 +127,8 @@ const WEBPACK_CONFIG_UTILS = {
 
   getTestWebpackConfig(context, otherPlugins) {
     return this.getUniWebpackConfig(context, this.expandPlugins({
-      middlePlugins: [
-        require('./plugins/frontend/plugin-polyfills')
+      finishPlugins: [
+        require('./plugins/frontend/plugin-finish-polyfills'),
       ]
     }, otherPlugins));
   }

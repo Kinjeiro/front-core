@@ -1,4 +1,4 @@
-import { createApiConfig as api } from '../../../config/utils/create-config';
+import { createApiConfig as api } from '../utils/create-api-config';
 
 import sendApiRequest from '../utils/send-api-request';
 
