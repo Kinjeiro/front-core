@@ -32,7 +32,7 @@
     "preversion": "npm run test",
     "postversion": "git push --follow-tags",
     "postversion-hg": "hg add package.json && hg commit package.json -m \"front-core new version\" && hg push",
-    "postversion-git": "git add package.json && git commit package.json -m \"front-core new version\" && git push --follow-tags",
+    "postversion-git": "git push --follow-tags",
     "docker-build": "sh docker/docker-build.sh",
     "docker-push": "sh docker/docker-push.sh",
     "docker-test-run": "sh docker/docker-test-run.sh",
