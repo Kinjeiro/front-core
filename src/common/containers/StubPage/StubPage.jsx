@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+// todo @ANKU @LOW - заменить на lodash-derocators так как там есть нормальный debouce
 import { autobind } from 'core-decorators';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';

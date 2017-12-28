@@ -22,7 +22,7 @@ function inProject(...args) {
   return path.resolve(PROCESS_PATH, ...args);
 }
 
-const appStyleConfig = require('../src/common/app-style/vars.js');
+const appStyleConfig = require(inCoreProject('lib/common/app-style/vars.js'));
 
 const context = {
   PROCESS_PATH,
