@@ -148,7 +148,7 @@ export default class AbstractClientRunner {
       logger.warn(`Container with "${htmlContainerId}" id doesn't exist. Create manual.`);
       container = document.createElement('div', {
         id: htmlContainerId,
-        className: 'ReactApp'
+        className: 'ReactApp',
       });
       document.body.appendChild(container);
     }

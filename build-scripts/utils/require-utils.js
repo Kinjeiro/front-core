@@ -45,5 +45,5 @@ function tryLoadProjectFile(fromRootPath) {
 
 module.exports = {
   requireSafe,
-  tryLoadProjectFile,
+  tryLoadProjectFile
 };

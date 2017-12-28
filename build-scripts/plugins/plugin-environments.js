@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-//используемм process.cwd() (именно процесс запуск, может быть наследуемый проект) вместо __dirname (конкретно front-core)
+// используемм process.cwd() (именно процесс запуск, может быть наследуемый проект) вместо __dirname (конкретно front-core)
 const packageJson = require(path.join(process.cwd(), 'package.json'));
 
 function pluginEnvironments(webpackConfig, {
@@ -14,7 +14,7 @@ function pluginEnvironments(webpackConfig, {
         {
           APP_ID: JSON.stringify(packageJson.name),
           APP_VERSION: JSON.stringify(packageJson.version),
-          NODE_ENV: JSON.stringify(ENV.NODE_ENV),
+          NODE_ENV: JSON.stringify(ENV.NODE_ENV)
         },
         // переменный стоит фиксировать только для локалхоста, остальные запускаются через build и могут свои переменные
         // при запуске проставлять а в таком случае они перезатрут на те, которые были при билде
@@ -33,7 +33,7 @@ function pluginEnvironments(webpackConfig, {
 
           SERVICES_PROTOCOL: JSON.stringify(ENV.SERVICES_PROTOCOL),
           SERVICES_HOST: JSON.stringify(ENV.SERVICES_HOST),
-          SERVICES_PORT: ENV.SERVICES_PORT,
+          SERVICES_PORT: ENV.SERVICES_PORT
         } : null,
         customEnvironments
       )

@@ -3,11 +3,8 @@ import factoryAuthApiService from './auth-api';
 /**
  * Метод для создания сервисов
  */
-export default function createServices(defaultServiceConfig, endpointServiceConfigs) {
+export default function createServices(endpointServiceConfigs) {
   return {
-    authUserService: factoryAuthApiService({
-      ...defaultServiceConfig,
-      ...endpointServiceConfigs.authApiService,
-    }),
+    authUserService: factoryAuthApiService(endpointServiceConfigs.authApiService),
   };
 }

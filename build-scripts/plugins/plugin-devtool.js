@@ -1,7 +1,7 @@
 function pluginDevtool(webpackConfig, {
   isProduction,
   appConfig,
-  assetsDir,
+  assetsDir
 }) {
   const configDevTools = appConfig.server.main.devtools;
   // for production
@@ -14,8 +14,8 @@ function pluginDevtool(webpackConfig, {
   // todo @ANKU @LOW - пропали sourcemap для веба
 
   if (configDevTools) {
-    //https://webpack.js.org/configuration/devtool/#devtool
-    //webpackConfig.devtool = 'sourcemap';
+    // https://webpack.js.org/configuration/devtool/#devtool
+    // webpackConfig.devtool = 'sourcemap';
     webpackConfig.devtool = configDevTools === true
       ? 'inline-source-map'
       // ? 'cheap-module-source-map'

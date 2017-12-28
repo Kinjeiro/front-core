@@ -5,11 +5,11 @@ function pluginFrontendMain(webpackConfig, {
   isLocalhost,
   publicPath,
   assetsDir,
-  clientStartPath, //'./src/client/index.js'
+  clientStartPath, // './src/client/index.js'
   inProject,
   inProjectBuild
 }) {
-  //\src\common\routes.pathes.js::ASSETS
+  // \src\common\routes.pathes.js::ASSETS
   const PROXY_ASSETS = isLocalhost && appConfig.server.main.proxyAssets;
 
   if (!webpackConfig.entry.index) {
@@ -29,12 +29,12 @@ function pluginFrontendMain(webpackConfig, {
    For these files the output.chunkFilename option is used.
    It also doesn't affect files created by loaders. For these files see loader options.
   */
-  webpackConfig.output.filename = assetsDir + '/[name].js';
+  webpackConfig.output.filename = `${assetsDir}/[name].js`;
 
   // todo @ANKU @LOW @BUG_OUT @webpack - динамически чанки через import \ require.ensure подключаются просто тупым сложением publicPath + chunkFilename без нормализации
   // <script type="text/javascript" charset="utf-8" async="" src="\./assets/0.js"></script>
   // webpackConfig.output.chunkFilename = './' + assetsDir + '/[name].js';
-  webpackConfig.output.chunkFilename = assetsDir + '/[name].js';
+  webpackConfig.output.chunkFilename = `${assetsDir}/[name].js`;
 
   /*
    The output directory as an absolute path.
@@ -90,7 +90,7 @@ function pluginFrontendMain(webpackConfig, {
    See this discussion for more information on __webpack_public_path__.
   */
   webpackConfig.output.publicPath = PROXY_ASSETS
-    ? '//' + PROXY_ASSETS.host + ':' + PROXY_ASSETS.port + '/'
+    ? `//${PROXY_ASSETS.host}:${PROXY_ASSETS.port}/`
     : urlJoin('/', publicPath);
 }
 

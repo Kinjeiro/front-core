@@ -9,7 +9,7 @@ export default apiPluginFactory(
     routeConfig: {
       // для этого обработчика авторизация не нужна
       auth: false,
-    }
+    },
   },
 );
 

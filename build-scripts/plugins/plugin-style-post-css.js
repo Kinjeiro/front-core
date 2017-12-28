@@ -33,14 +33,14 @@ function pluginStylePostCss(webpackConfig, context) {
             ИЛИ
             https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/200#issuecomment-248248578
           */
-          //addDependencyTo: webpack
-          //addDependencyTo: loader,
-          //plugins: [
+          // addDependencyTo: webpack
+          // addDependencyTo: loader,
+          // plugins: [
           //  (any, result) => {
           //    //result.opts.from --- node_modules
           //    console.warn('ANKU args', args);
           //  }
-          //]
+          // ]
         }),
         // todo @ANKU @LOW @BUG_OUT @postcss-bemed - НУЖЕН только postcss@5 явно! не работает inner стили при компиляции через postcss@6
 
@@ -79,7 +79,7 @@ function pluginStylePostCss(webpackConfig, context) {
           {
             loader: 'css-loader',
             options: {
-              //The query parameter importLoaders allows to configure how many loaders before css-loader should be applied to @imported resources.
+              // The query parameter importLoaders allows to configure how many loaders before css-loader should be applied to @imported resources.
               importLoaders: 1
             }
           },
@@ -97,8 +97,8 @@ function pluginStylePostCss(webpackConfig, context) {
         {
           loader: 'css-loader',
           options: {
-            //The query parameter importLoaders allows to configure how many loaders before css-loader should be applied to @imported resources.
-            importLoaders: 1 //postCss
+            // The query parameter importLoaders allows to configure how many loaders before css-loader should be applied to @imported resources.
+            importLoaders: 1 // postCss
           }
         },
         postCssLoader

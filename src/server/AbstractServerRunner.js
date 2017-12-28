@@ -39,7 +39,7 @@ export default class AbstractServerRunner {
     this.hapiServerOptions = merge(
       {},
       serverConfig.server.features.serverFeatures.defaultServerOptions,
-      hapiServerOptions
+      hapiServerOptions,
     );
   }
 
@@ -180,7 +180,7 @@ export default class AbstractServerRunner {
     // server.ext('onPreAuth', function (request, reply) {
       logger.log(
         '[START\tany request]\t',
-        request.info && `${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ...`
+        request.info && `${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ...`,
       );
       return reply.continue();
     });
@@ -193,7 +193,7 @@ export default class AbstractServerRunner {
       logger.log(
         code !== 200 && code !== 304  ? 'warn' : 'info',
         '[END\tany response]\t',
-        request.info && `${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ${code}\n`
+        request.info && `${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ${code}\n`,
       );
       return reply.continue();
     });

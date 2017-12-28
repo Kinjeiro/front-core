@@ -126,7 +126,7 @@ describe('(Redux Module) i18n-info', () => {
           expect(spyApiI18NChangeLanguage.calledOnce).to.be.true;
           expect(getReducerSliceState().language)
             .to.deep.equals('en');
-        })
+        });
     });
 
     it('Should change actionI18NChangeLanguageStatus when action proceed', () => {

@@ -35,8 +35,8 @@ function startBuild({
   frontendCompiler.plugin('compile', () => console.log('Building frontend...'));
   backendCompiler.plugin('compile', () => console.log('Building server...'));
 
-  frontendCompiler.run(function (error, stats) {
-    checkError(error, stats, function () {
+  frontendCompiler.run((error, stats) => {
+    checkError(error, stats, () => {
       backendCompiler.run(checkError);
     });
   });

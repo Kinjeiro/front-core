@@ -20,7 +20,7 @@ export function appUrl(pathname = '', ...otherPaths) {
     // url parameters
     return formatUrlParameters(
       lastUrlParameters,
-      joinUri('/', resultUrl, ...otherPaths.slice(0, otherPaths.length - 1))
+      joinUri('/', resultUrl, ...otherPaths.slice(0, otherPaths.length - 1)),
     );
   }
 

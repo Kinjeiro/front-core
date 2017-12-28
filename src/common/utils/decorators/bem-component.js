@@ -43,8 +43,8 @@ function bemDecorator(options) {
   let finalOptions = options || {};
   if (typeof finalOptions === 'string') {
     finalOptions = {
-      componentName: finalOptions
-    }
+      componentName: finalOptions,
+    };
   }
   const {
     componentName,

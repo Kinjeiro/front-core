@@ -31,10 +31,10 @@ function pluginFileImages(webpackConfig, {
            Use this to speed up initial and, to a lesser extent, subsequent compilations while developing or using webpack-dev-server.
            Normal builds are processed normally, outputting optimized files.
            */
-          bypassOnDebug: true,
-        },
-      },
-    ],
+          bypassOnDebug: true
+        }
+      }
+    ]
   });
 
   // [

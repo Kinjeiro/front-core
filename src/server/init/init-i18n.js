@@ -34,8 +34,8 @@ const finalI18nextOptions = merge(
       loadPath: config.common.features.i18n.assetsLoadPath
         ? joinUri(process.cwd(), '.build', ASSETS, config.common.features.i18n.assetsLoadPath)
         : DEFAULT_I18NEXT_OPTIONS.backend.loadPath,
-    }
-  }
+    },
+  },
 );
 
 i18n

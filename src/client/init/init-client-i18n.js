@@ -115,8 +115,8 @@ export function i18nNextInit(options = {}) {
       backend: {
         loadPath: clientConfig.common.features.i18n.assetsLoadPath
           ? joinUri(ASSETS, clientConfig.common.features.i18n.assetsLoadPath)
-          : DEFAULT_OPTIONS.backend.loadPath
-      }
+          : DEFAULT_OPTIONS.backend.loadPath,
+      },
     },
     // динамические данные
     {
@@ -128,7 +128,7 @@ export function i18nNextInit(options = {}) {
 
   i18next.on('languageChanged', (lng) => {
     setCookie(I18N_LANGUAGE_COOKIE_NAME, lng, {
-      path: appUrl()
+      path: appUrl(),
     });
   });
 

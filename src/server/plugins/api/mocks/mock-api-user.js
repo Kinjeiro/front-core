@@ -18,7 +18,8 @@ export default [
       return reply(createUniError({
         code: 401,
         clientErrorMessage: i18n('core:Mock user not found'),
-      }));
+      }))
+        .code(401);
     }
     const fakeToken = TOKENS[userInfo.username];
 

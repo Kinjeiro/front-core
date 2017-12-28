@@ -1,4 +1,4 @@
-const { writeToFile, } = require('./utils/file-utils');
+const { writeToFile } = require('./utils/file-utils');
 const { tryLoadProjectFile } = require('./utils/require-utils');
 
 // const context = require('./webpack-context');

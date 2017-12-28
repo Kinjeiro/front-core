@@ -47,14 +47,9 @@ export default class CoreServerRunner extends AbstractServerRunner {
   // for OVERRIDE
   // ======================================================
   createServices() {
-    const { server } = this;
-
     return {
       ...super.createServices(),
-      ...createServices({
-        // todo @ANKU @CRIT @MAIN - logger
-        logger: server,
-      }, serverConfig.server.endpointServices),
+      ...createServices(serverConfig.server.endpointServices),
     };
   }
 
@@ -94,7 +89,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
       this.getLoginPath(),
       PATH_ERROR_PAGE,
       PATH_ACCESS_DENIED,
-      'favicon.ico'
+      'favicon.ico',
     );
   }
 
@@ -136,7 +131,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
       h2o2, // проксирование
       // loggerPlugin,
       pluginI18n,
-      pluginAuthJwt, //options передаются при регистрации стратегии в методе initServerAuthStrategy
+      pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
       {
         register: pluginMocking,
         options: {

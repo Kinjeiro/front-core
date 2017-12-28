@@ -121,6 +121,7 @@ export default class LoginPage extends Component {
       urlReturn,
     } = this.props;
 
+    // todo @ANKU @CRIT @MAIN - тут сначала срабатывает promise, и если ответ возвращается без кода ошибки то сработает сначала then а потом запарсится uniError
     actionChangeUser(username, password)
       .then(() => actionGoTo(urlReturn || PATH_INDEX));
   }

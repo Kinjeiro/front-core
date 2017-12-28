@@ -234,7 +234,7 @@ class BaseApiClientClass {
     // REQUEST INIT
     // ======================================================
     // https://visionmedia.github.io/superagent/#post-/-put-requests
-    let request = requestAgent[method](urlFinal);
+    const request = requestAgent[method](urlFinal);
 
     // json \ form - for application/x-www-form-urlencoded
 
@@ -305,7 +305,7 @@ class BaseApiClientClass {
 
   deserializeResponse(response, requestOptions) {
     const {
-      customDeserializer
+      customDeserializer,
     } = requestOptions;
     return customDeserializer
       ? customDeserializer(response)
@@ -400,7 +400,7 @@ class BaseApiClientClass {
     return parseToUniError(
       response || err,
       undefined,
-      { withoutException: true }
+      { withoutException: true },
     );
   }
 

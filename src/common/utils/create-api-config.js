@@ -14,13 +14,13 @@ import { joinUri } from './uri-utils';
 export function createApiConfig(
   path,
   method = 'GET',
-  payload
+  payload,
 ) {
   return {
     method,
     // /api/test-client-api/find
     path: joinUri('/', clientConfig.common.serverApiPrefix, '/', path),
-    payload
+    payload,
   };
 }
 

@@ -21,7 +21,7 @@ export default function pluginApiLog(apiRequest, apiConfig, prefixString = '', r
   const credentials = getCredentialsFromRequest(apiRequest);
 
   const paramsStr = requestDataToString ? requestDataToString(query) : JSON.stringify(query);
-  logger.log(`${prefixString ? prefixString + ' ' : ''}(${method}) ${path} userid ${credentials.getUserName() || '<NO USER>'} ${remoteAddress}: ${paramsStr}`);
+  logger.log(`${prefixString ? `${prefixString} ` : ''}(${method}) ${path} userid ${credentials.getUserName() || '<NO USER>'} ${remoteAddress}: ${paramsStr}`);
 
 
   if (payload && Object.keys(payload).length) {

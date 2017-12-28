@@ -26,7 +26,7 @@ function startBackend({
   // require('./generate-app-config');
 
   // const serverFilePath = path.join(webpackConfig.output.path, webpackConfig.output.filename);
-  const serverFilePath = './' + buildDir + '/' + webpackConfig.output.filename;
+  const serverFilePath = `./${buildDir}/${webpackConfig.output.filename}`;
   const backendCompiler = webpack(webpackConfig);
 
   let lastHash = null;
@@ -47,7 +47,7 @@ function startBackend({
 
     if (stats.hash !== lastHash) {
       lastHash = stats.hash;
-      process.stdout.write(stats.toString(STATS_OPTIONS) + '\n');
+      process.stdout.write(`${stats.toString(STATS_OPTIONS)}\n`);
     }
   }
 

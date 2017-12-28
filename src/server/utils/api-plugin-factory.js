@@ -42,7 +42,7 @@ async function permissionWrapper(permissions, checkPermissionStrategy, other) {
     apiConfig,
     reply,
     isLogging,
-    apiRequest
+    apiRequest,
   } = other;
 
   if (permissions && typeof checkPermissionStrategy !== 'function') {
@@ -85,18 +85,18 @@ function proxyWrapper(reply, proxy, callback) {
   let proxyOptions = proxy;
   if (typeof proxy === 'string') {
     proxyOptions = {
-      uri: proxy
+      uri: proxy,
     };
   } else if (typeof proxy === 'function') {
     proxyOptions = {
-      mapUri: proxy
+      mapUri: proxy,
     };
   }
   if (proxyOptions.apiPrefix) {
     proxyOptions = {
       // @guide - важно чтобы перед path не было слеша, так как все request.path идут по слешом
-      uri: `${proxyOptions.protocol || '{protocol}'}://${proxyOptions.host || '{host}'}:${proxyOptions.port || '{port}'}/${proxyOptions.apiPrefix}{path}`
-    }
+      uri: `${proxyOptions.protocol || '{protocol}'}://${proxyOptions.host || '{host}'}:${proxyOptions.port || '{port}'}/${proxyOptions.apiPrefix}{path}`,
+    };
   }
   proxyOptions = {
     ...DEFAULT_PROXY_OPTIONS,
@@ -124,7 +124,7 @@ function proxyWrapper(reply, proxy, callback) {
         // todo @ANKU @LOW @BUG_OUT @h2o2 - по умолчанию они не передают query!!! https://github.com/hapijs/h2o2/issues/23
         const queryStr = request.url.search;
         if (queryStr && updatedData.uri.indexOf(queryStr) < 0) {
-          updatedData.uri = updatedData.uri + queryStr;
+          updatedData.uri += queryStr;
         }
         logger.debug('proxy to:', updatedData.uri);
 
@@ -137,10 +137,10 @@ function proxyWrapper(reply, proxy, callback) {
 
       logger.debug('proxy to by callback in mapUri');
       return originalMapUri(request, callback);
-    }
+    };
   }
 
-  let proxyOptionsFinal = proxyOptions;
+  const proxyOptionsFinal = proxyOptions;
   if (callback) {
     // нужно обработать после ответа от сервиса
     if (proxyOptions.onResponse) {
@@ -161,8 +161,8 @@ function proxyWrapper(reply, proxy, callback) {
       // logger.debug('proxy REQUEST', request.headers);
       // logger.debug('proxy RESPONSE', res.headers);
       // logger.debug('proxy RESPONSE result', res.payload);
-      let payload = await Wreck.read(res, {
-        json: true // если не парсанят, то вернет буффер
+      const payload = await Wreck.read(res, {
+        json: true, // если не парсанят, то вернет буффер
       });
 
       if (res.statusCode < 200 || res.statusCode >= 300) {
@@ -171,7 +171,7 @@ function proxyWrapper(reply, proxy, callback) {
           payload && payload instanceof Buffer
             ? payload.toString()
             : JSON.stringify(payload, null, 2),
-          ' '
+          ' ',
         );
       } else {
         logger.debug('(proxy response) payload: ', payload, ' ');
@@ -201,7 +201,7 @@ function createProxyWrapperCallback(handler, apiRequest, pluginOptions) {
           {
             isServerError: true,
             responseStatusCode: proxyResponse.statusCode,
-          }
+          },
         );
       } catch (error) {
         const errorMessage = (payload && payload.toString()) || proxyResponse.statusMessage;
@@ -216,7 +216,7 @@ function createProxyWrapperCallback(handler, apiRequest, pluginOptions) {
       return responseError(
         uniError,
         newReply,
-        proxyResponse.statusCode
+        proxyResponse.statusCode,
       );
     }
 
@@ -357,7 +357,7 @@ function apiPluginFullFactory(apiConfig, options) {
       apiConfig,
       reply,
       isLogging,
-      apiRequest
+      apiRequest,
     });
 
     try {
@@ -369,9 +369,9 @@ function apiPluginFullFactory(apiConfig, options) {
           proxy,
           createProxyWrapperCallback(handler, apiRequest, pluginOptions),
         );
-      } else {
-        result = await handler(getRequestData(apiRequest), apiRequest, reply, pluginOptions);
       }
+      result = await handler(getRequestData(apiRequest), apiRequest, reply, pluginOptions);
+
 
       return result;
     } catch (error) {
@@ -403,8 +403,8 @@ function apiPluginFullFactory(apiConfig, options) {
 export function apiPluginFactory(apiConfig, handler, otherOptions = {}) {
   return apiPluginFullFactory(apiConfig, {
     handler,
-    ...otherOptions
-  })
+    ...otherOptions,
+  });
 }
 
 /**
@@ -425,7 +425,7 @@ export function proxyRoutePluginFactory(path, proxy, otherOptions = {}) {
   if (typeof apiConfig === 'string') {
     apiConfig = {
       path: apiConfig,
-      method: ['GET', 'POST', 'PUT', 'DELETE']
+      method: ['GET', 'POST', 'PUT', 'DELETE'],
     };
   }
 

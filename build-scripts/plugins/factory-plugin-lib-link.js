@@ -15,14 +15,14 @@ const path = require('path');
  */
 function factoryPluginLibLink(libName, { filesDir = 'src', scoped = '' } = {}) {
   return (webpackConfig, { inProject }) => {
-    //const libModulePath = fs.realpathSync(inProject('node_modules', libName, filesDir));
-    //// todo @ANKU @LOW @BUG_OUT @webpack - не работает alias - https://github.com/webpack/webpack/issues/4160#issuecomment-300280757
-    //webpackConfig.resolve.alias[libName] = libModulePath;
+    // const libModulePath = fs.realpathSync(inProject('node_modules', libName, filesDir));
+    // // todo @ANKU @LOW @BUG_OUT @webpack - не работает alias - https://github.com/webpack/webpack/issues/4160#issuecomment-300280757
+    // webpackConfig.resolve.alias[libName] = libModulePath;
     //
-    //const babelLoader = webpackConfig.module.rules
+    // const babelLoader = webpackConfig.module.rules
     //  .find((loader) => loader.loader === 'babel-loader');
     //
-    //babelLoader.include.push(libModulePath);
+    // babelLoader.include.push(libModulePath);
 
 
     const babelLoader = webpackConfig.module.rules

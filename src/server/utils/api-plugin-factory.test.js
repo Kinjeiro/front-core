@@ -34,12 +34,12 @@ describe('api-plugin-factory', () => {
         [{
           method: 'GET',
           path: '/upstreamApi/test',
-          handler: function (request, h) {
+          handler(request, h) {
             return h.response('ok');
           },
         }],
         null,
-        testCodeFn
+        testCodeFn,
       );
     }
 
@@ -55,8 +55,8 @@ describe('api-plugin-factory', () => {
             {
               routeConfig: {
                 auth: false,
-              }
-            }
+              },
+            },
           ),
         ]);
 
@@ -69,7 +69,7 @@ describe('api-plugin-factory', () => {
 
         expect(res.statusCode).to.equal(200);
         expect(res.result).to.equal('ok');
-      })
+      });
     });
 
     it('should work with apiPrefix', async () => {
@@ -85,8 +85,8 @@ describe('api-plugin-factory', () => {
             {
               routeConfig: {
                 auth: false,
-              }
-            }
+              },
+            },
           ),
         ]);
 
@@ -94,7 +94,7 @@ describe('api-plugin-factory', () => {
 
         expect(res.statusCode).to.equal(200);
         expect(res.result).to.equal('ok');
-      })
+      });
     });
 
     it('should work with handler for string payload', async () => {
@@ -113,8 +113,8 @@ describe('api-plugin-factory', () => {
               },
               routeConfig: {
                 auth: false,
-              }
-            }
+              },
+            },
           ),
         ]);
 
@@ -123,7 +123,7 @@ describe('api-plugin-factory', () => {
         expect(res.statusCode).to.equal(200);
         // expect(res.payload).to.equal('ok');
         expect(res.result).to.equal('updated_ok');
-      })
+      });
     });
 
     it('should work with handler for json payload', async () => {
@@ -132,9 +132,9 @@ describe('api-plugin-factory', () => {
         [{
           method: 'GET',
           path: '/upstreamApi/test',
-          handler: function (request, h) {
+          handler(request, h) {
             return h.response({
-              test: 'testValue'
+              test: 'testValue',
             });
           },
         }],
@@ -151,12 +151,12 @@ describe('api-plugin-factory', () => {
               {
                 handler: (payload, apiRequest, newReply, pluginOptions) => newReply({
                   ...payload,
-                  test2: 'test2Value'
+                  test2: 'test2Value',
                 }),
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
@@ -166,9 +166,9 @@ describe('api-plugin-factory', () => {
           // expect(res.payload).to.equal('ok');
           expect(res.result).to.deep.equal({
             test: 'testValue',
-            test2: 'test2Value'
+            test2: 'test2Value',
           });
-        }
+        },
       );
     });
 
@@ -191,7 +191,7 @@ describe('api-plugin-factory', () => {
             pluginH2o2,
             proxyRoutePluginFactory(
               {
-                path: '/test/*'
+                path: '/test/*',
               },
               {
                 apiPrefix: 'upstreamApi',
@@ -200,8 +200,8 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
@@ -212,7 +212,7 @@ describe('api-plugin-factory', () => {
           res = await server.inject('/test/2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('test2');
-        }
+        },
       );
     });
 
@@ -230,7 +230,7 @@ describe('api-plugin-factory', () => {
             pluginH2o2,
             proxyRoutePluginFactory(
               {
-                path: '/test/*'
+                path: '/test/*',
               },
               {
                 apiPrefix: 'upstreamApi',
@@ -239,15 +239,15 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/test');
+          const res = await server.inject('/test');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('test1');
-        }
+        },
       );
     });
     it('should work with wildcard (*) on few slashes', async () => {
@@ -264,7 +264,7 @@ describe('api-plugin-factory', () => {
             pluginH2o2,
             proxyRoutePluginFactory(
               {
-                path: '/test/*'
+                path: '/test/*',
               },
               {
                 apiPrefix: 'upstreamApi',
@@ -273,15 +273,15 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/test/test2');
+          const res = await server.inject('/test/test2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('test1');
-        }
+        },
       );
     });
     it('should work with function (with callback h2o2@6.1.0)', async () => {
@@ -300,20 +300,20 @@ describe('api-plugin-factory', () => {
               '/test/*',
               (request, callback) => {
                 // в версии h2o2@6.0.1 нужно подавать через callback
-                callback(null, `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`)
+                callback(null, `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`);
               },
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/test/test2');
+          const res = await server.inject('/test/test2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('test1');
-        }
+        },
       );
     });
     it('should work with function mapUri with return params (without callback h2o2@7.0.0)', async () => {
@@ -331,20 +331,20 @@ describe('api-plugin-factory', () => {
             proxyRoutePluginFactory(
               '/test/*',
               (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`
+                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
               }),
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/test/test2');
+          const res = await server.inject('/test/test2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('test1');
-        }
+        },
       );
     });
 
@@ -364,23 +364,23 @@ describe('api-plugin-factory', () => {
             proxyRoutePluginFactory(
               '/test/*',
               (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`
+                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
               }),
               {
                 handler: (payload, apiRequest, newReply, pluginOptions) => newReply(payload),
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/test/test2?param1=value1');
+          const res = await server.inject('/test/test2?param1=value1');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal({
-            param1: 'value1'
+            param1: 'value1',
           });
-        }
+        },
       );
     });
 
@@ -400,22 +400,22 @@ describe('api-plugin-factory', () => {
               '/test/*',
               {
                 host: '127.0.0.1',
-                port: upstream.info.port
+                port: upstream.info.port,
               },
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/test/test2?param1=value1');
+          const res = await server.inject('/test/test2?param1=value1');
           expect(res.statusCode).to.equal(200);
           expect(JSON.parse(res.payload)).to.deep.equal({
-            param1: 'value1'
+            param1: 'value1',
           });
-        }
+        },
       );
     });
 
@@ -437,7 +437,7 @@ describe('api-plugin-factory', () => {
               ...request.query,
               ...request.payload,
             }),
-          }
+          },
         ],
         null,
         async (upstream) => {
@@ -446,35 +446,35 @@ describe('api-plugin-factory', () => {
             proxyRoutePluginFactory(
               '/test/*',
               (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`
+                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
               }),
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
           let res = await server.inject('/test/test2?param1=value1');
           expect(res.statusCode).to.equal(200);
           expect(JSON.parse(res.payload)).to.deep.equal({
-            param1: 'value1'
+            param1: 'value1',
           });
 
           res = await server.inject({
             url: '/test/test2?param1=value1',
             method: 'post',
             payload: {
-              postField: 'postValue'
-            }
+              postField: 'postValue',
+            },
           });
           expect(res.statusCode).to.equal(200);
           expect(JSON.parse(res.payload)).to.deep.equal({
             param1: 'value1',
             postField: 'postValue',
           });
-        }
+        },
       );
     });
 
@@ -506,13 +506,13 @@ describe('api-plugin-factory', () => {
             proxyRoutePluginFactory(
               '/test/*',
               (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`
+                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
               }),
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
@@ -522,19 +522,19 @@ describe('api-plugin-factory', () => {
             name: 'Ren & Stimpy',
             description: [
               'Ren Höek is a hot-tempered, "asthma-hound" Chihuahua.',
-              'Stimpson "Stimpy" J. Cat is a three-year-old dim-witted and happy-go-lucky cat.'
+              'Stimpson "Stimpy" J. Cat is a three-year-old dim-witted and happy-go-lucky cat.',
             ].join('\n'),
             filename: 'ren.jpg',
             checksum: '5965ae98ecab44a2a29b87f90c681229',
-            width: "256",
-            height: "256",
+            width: '256',
+            height: '256',
             filedata: new Buffer('lets imagine that this is an image'),
             myLogo: myLogoFileBuffer,
           };
 
           const form = new FormData();
           // Fill the form object
-          Object.keys(image).forEach(function (key) {
+          Object.keys(image).forEach((key) => {
             form.append(key, image[key]);
           });
 
@@ -544,7 +544,7 @@ describe('api-plugin-factory', () => {
             url: '/test/upload',
             method: 'POST',
             headers: form.getHeaders(),
-            payload: resultStream
+            payload: resultStream,
           });
           const { result } = response;
 
@@ -557,7 +557,7 @@ describe('api-plugin-factory', () => {
           expect(result.height).to.equal(image.height);
           // expect(Buffer.from(result.myLogo, 'utf-8')).to.equal(myLogoFile);
           expect(result.myLogo).to.equal(myLogoFileBuffer.toString());
-        }
+        },
       );
     });
 
@@ -571,27 +571,27 @@ describe('api-plugin-factory', () => {
         }],
         null,
         async (upstream) => {
-          const apiPrefixRegExp = new RegExp(`^/?api/`, 'g');
+          const apiPrefixRegExp = new RegExp('^/?api/', 'g');
 
           const server = await simpleServer([
             pluginH2o2,
             proxyRoutePluginFactory(
               '/api/test/*',
               (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href.replace(apiPrefixRegExp, '/')}`
+                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href.replace(apiPrefixRegExp, '/')}`,
               }),
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/api/test/test2');
+          const res = await server.inject('/api/test/test2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('test1');
-        }
+        },
       );
     });
     it('should work with two string parameters', async () => {
@@ -613,15 +613,15 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/api/apiContext/test/test2');
+          const res = await server.inject('/api/apiContext/test/test2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('testAnswer');
-        }
+        },
       );
     });
     it('should work with two string parameters and headers', async () => {
@@ -646,15 +646,15 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/api/apiContext/test/test2');
+          const res = await server.inject('/api/apiContext/test/test2');
           expect(res.statusCode).to.equal(200);
           expect(res.result).to.deep.equal('testAnswer');
-        }
+        },
       );
     });
     it('should throw string error', async () => {
@@ -679,16 +679,16 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/api/apiContext/test/test2');
+          const res = await server.inject('/api/apiContext/test/test2');
           expect(res.statusCode).to.equal(400);
           expect(res.result.uniCode).to.deep.equal(400);
           expect(res.result.message).to.deep.equal('errorMessage');
-        }
+        },
       );
     });
     it('should throw json error', async () => {
@@ -716,16 +716,16 @@ describe('api-plugin-factory', () => {
               {
                 routeConfig: {
                   auth: false,
-                }
-              }
+                },
+              },
             ),
           ]);
 
-          let res = await server.inject('/api/apiContext/test/test2');
+          const res = await server.inject('/api/apiContext/test/test2');
           expect(res.statusCode).to.equal(400);
           expect(res.result.uniCode).to.deep.equal('ERROR_CODE');
           expect(res.result.message).to.deep.equal('Error message');
-        }
+        },
       );
     });
   });

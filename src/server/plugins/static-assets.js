@@ -27,11 +27,11 @@ export const register = function (server, options, next) {
 
   server.route({
     method: 'GET',
-    path: `/favicon.ico`,
+    path: '/favicon.ico',
     handler: {
       proxy: {
-        uri: `{protocol}://{host}:{port}${appUrl(ASSETS, 'favicon.ico')}`
-      }
+        uri: `{protocol}://{host}:{port}${appUrl(ASSETS, 'favicon.ico')}`,
+      },
     },
     config: {
       auth: null,

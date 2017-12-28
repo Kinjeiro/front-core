@@ -45,7 +45,7 @@ import './StubPage.css';
   i18n('core:pages.StubPage.title'),
   {
     description: i18n('core:pages.StubPage.description'),
-  }
+  },
 )
 // todo @ANKU @CRIT @MAIN - вынести все это в examples
 @connect(

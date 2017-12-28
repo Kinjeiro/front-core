@@ -7,7 +7,7 @@ function pluginFinishProductionMinimum(webpackConfig, { isProduction }) {
     webpackConfig.plugins.push(
       new webpack.LoaderOptionsPlugin({
         minimize: true,
-        debug: false,
+        debug: false
       }),
 
       // new UglifyJsPlugin({

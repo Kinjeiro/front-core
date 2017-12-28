@@ -152,7 +152,7 @@ module.exports = {
     serverApiPrefix: FRONT_UI_SERVER_API_PREFIX,
 
     app: {
-      contextRoot: CONTEXT_ROOT,
+      contextRoot: CONTEXT_ROOT
     },
 
     // ======================================================
@@ -185,7 +185,7 @@ module.exports = {
           // ... other see in \src\server\plugins\i18n.js
           //             and https://www.i18next.com/configuration-options.html
         },
-        assetsLoadPath: `/i18n/{{lng}}/{{ns}}.js`
+        assetsLoadPath: '/i18n/{{lng}}/{{ns}}.js'
       },
 
       bem: {
@@ -199,7 +199,7 @@ module.exports = {
       notifications: {
         ui: true,
         systemQueue: true
-      },
+      }
     },
 
     apiConfig: {
@@ -240,7 +240,7 @@ module.exports = {
 
       servicesHost: FINAL_SERVICES_HOST,
       servicesPort: SERVICES_PORT,
-      apiPrefix: FRONT_UI_SERVER_API_PREFIX,
+      apiPrefix: FRONT_UI_SERVER_API_PREFIX
     },
 
     features: {
@@ -248,7 +248,7 @@ module.exports = {
         defaultServerOptions: {
           // hapi options - https://hapijs.com/api/15.2.0#server-options
           /* место хранения runtime данных на сервере (к примеру, для контекстов страниц ошибок) */
-          app: {},
+          app: {}
         },
 
         defaultRouteOptions: {
@@ -259,7 +259,7 @@ module.exports = {
              uploads - the directory used for writing file uploads. Defaults to os.tmpDir().
           */
           payload: {
-            maxBytes: 7000000, /*7mb*/
+            maxBytes: 7000000 /* 7mb*/
           }
         }
       },
@@ -274,8 +274,8 @@ module.exports = {
 
         // Настройки для аутентификации клиента в front-core-auth
         applicationClientInfo: {
-          id: "frontCore",
-          secret: "frontCorefrontCore",
+          id: 'frontCore',
+          secret: 'frontCorefrontCore',
           credentials: {}
         }
       },
@@ -366,7 +366,7 @@ module.exports = {
       // ======================================================
       // AUTH Services - front-core-auth server
       // ======================================================
-      authApiService: endpoint({ port: 1337 }),
+      authApiService: endpoint({ port: 1337 })
     }
 
     // рестовый сервисов не должно быть, для единообразия все запросы которые не проксируются через apiConfig.serviceUrl

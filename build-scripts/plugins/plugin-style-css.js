@@ -5,7 +5,7 @@ function pluginStyleBase(webpackConfig, { isLocalhost, assetsDir }) {
   if (!isLocalhost) {
     webpackConfig.plugins.push(
       new ExtractTextPlugin({
-        filename: assetsDir + '/[name].css', // относительно .build
+        filename: `${assetsDir}/[name].css`, // относительно .build
         allChunks: true
       })
     );

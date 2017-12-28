@@ -27,7 +27,7 @@ export function simpleServer(plugins = [], routes = null, serverConfig = null) {
 
   finalPlugins.forEach((plugin) => {
     if (!plugin.attributes) {
-      plugin.attributes = { name: `${Math.random()}` }
+      plugin.attributes = { name: `${Math.random()}` };
     }
   });
 

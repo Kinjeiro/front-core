@@ -36,7 +36,7 @@ export default function createApiPlugins(services/* , strategies*/) {
         routeConfig: {
           // для этого обработчика авторизация не нужна
           auth: false,
-        }
+        },
       },
     ),
     apiPluginFactory(

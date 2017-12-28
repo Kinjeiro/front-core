@@ -56,7 +56,7 @@ if (!Array.prototype.find) {
     enumerable: false,
     configurable: true,
     writable: true,
-    value: ArrayFind.getPolyfill(),
+    value: ArrayFind.getPolyfill()
   });
 }
 

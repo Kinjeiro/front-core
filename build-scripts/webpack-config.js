@@ -75,6 +75,7 @@ const WEBPACK_CONFIG_UTILS = {
         require('./plugins/plugin-style-css'),
         require('./plugins/plugin-style-less'),
         require('./plugins/plugin-style-post-css'),
+        require('./plugins/plugin-style-sass'),
 
         require('./plugins/plugin-react'),
         require('./plugins/plugin-devtool'),
@@ -91,7 +92,7 @@ const WEBPACK_CONFIG_UTILS = {
   getFrontendWebpackConfig(context, otherPlugins) {
     return this.getUniWebpackConfig(context, this.expandPlugins({
       startPlugins: [
-        require('./plugins/frontend/plugin-frontend-main'),
+        require('./plugins/frontend/plugin-frontend-main')
       ],
       middlePlugins: [
         require('./plugins/frontend/plugin-split-vendors'),
@@ -99,7 +100,7 @@ const WEBPACK_CONFIG_UTILS = {
         require('./plugins/frontend/plugin-frontend-hot-reload')
       ],
       finishPlugins: [
-        require('./plugins/frontend/plugin-finish-polyfills'),
+        require('./plugins/frontend/plugin-finish-polyfills')
       ]
     }, otherPlugins));
   },
@@ -107,7 +108,7 @@ const WEBPACK_CONFIG_UTILS = {
   getBackendWebpackConfig(context, otherPlugins) {
     return this.getUniWebpackConfig(context, this.expandPlugins({
       startPlugins: [
-        require('./plugins/backend/plugin-backend-main'),
+        require('./plugins/backend/plugin-backend-main')
       ],
       middlePlugins: [
         require('./plugins/backend/plugin-i18n-files'),
@@ -128,7 +129,7 @@ const WEBPACK_CONFIG_UTILS = {
   getTestWebpackConfig(context, otherPlugins) {
     return this.getUniWebpackConfig(context, this.expandPlugins({
       finishPlugins: [
-        require('./plugins/frontend/plugin-finish-polyfills'),
+        require('./plugins/frontend/plugin-finish-polyfills')
       ]
     }, otherPlugins));
   }

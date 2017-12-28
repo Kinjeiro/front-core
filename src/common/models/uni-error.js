@@ -60,9 +60,12 @@ function checkProperties(obj, ...props) {
 
 export function getStackTrace() {
   // либо console.trace() в консоль
-  const obj = {};
-  Error.captureStackTrace(obj, getStackTrace);
-  return obj.stack;
+  if (typeof Error.captureStackTrace === 'function') {
+    const obj = {};
+    Error.captureStackTrace(obj, getStackTrace);
+    return obj.stack;
+  }
+  return (new Error()).stack;
 }
 
 export function isUniError(object) {

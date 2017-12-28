@@ -4,3 +4,7 @@ export UniError from './UniError/UniError';
 export ListItem from './ListItem/ListItem';
 export Notifications from './Notifications/Notifications';
 export Loading from './Loading/Loading';
+
+export Link from './Link/Link';
+export MediaQuery from './MediaQuery/MediaQuery';
+export ReadMore from './ReadMore/ReadMore';

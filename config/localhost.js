@@ -9,7 +9,7 @@ const {
   SERVICES_PORT = 80,
   SERVICES_PROTOCOL,
   /** Первый запуск мидловых сервисов бывает до 20 сек*/
-  REQUEST_TIMEOUT = 120000,
+  REQUEST_TIMEOUT = 120000
 } = process.env;
 
 module.exports = {
@@ -33,7 +33,7 @@ module.exports = {
       mocking: {
         // authMock: false
         authMock: true
-      },
-    },
+      }
+    }
   }
 };

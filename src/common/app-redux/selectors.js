@@ -4,6 +4,13 @@ import orm from '../models/domains/utils/orm';
 
 import { STATE_CLIENT_CONFIG_PARAM } from '../constants/sync-consts';
 
+export function getCurrentPath(globalState) {
+  // используется в redux-router 4
+  // return globalState.routing.location.pathname;
+  // используется в redux-router 3
+  return globalState.routing.locationBeforeTransitions.pathname;
+}
+
 // ======================================================
 // APP
 // ======================================================

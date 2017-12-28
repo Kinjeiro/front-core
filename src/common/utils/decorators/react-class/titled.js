@@ -54,7 +54,7 @@ export default function titledDecorator(
           id,
           title,
           metas,
-          otherInfo
+          otherInfo,
         });
       }
       componentWillUnmount() {
@@ -62,10 +62,10 @@ export default function titledDecorator(
       }
 
       render() {
-        return <ReactComponentClass { ...this.props } />
+        return <ReactComponentClass { ...this.props } />;
       }
     }
 
     return TitledComponent;
-  }
+  };
 }

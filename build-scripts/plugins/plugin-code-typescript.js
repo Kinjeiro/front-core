@@ -3,7 +3,7 @@ function pluginFrontendMain(webpackConfig, {
 }) {
   const CORE_TYPESCRIPT_DEFINE_PATH = inCoreProject('src/common/defines.d.ts');
 
-  //const TYPESCRIPT_ATL_OPTIONS = [
+  // const TYPESCRIPT_ATL_OPTIONS = [
   //  'target=es6',
   //  'jsx=react',
   //  '+experimentalDecorators',
@@ -13,7 +13,7 @@ function pluginFrontendMain(webpackConfig, {
   //  '+emitRequireType',
   //  'instanceName=front',
   //  'externals[]=' + CORE_TYPESCRIPT_DEFINE_PATH
-  //].join('&');
+  // ].join('&');
 
   webpackConfig.module.rules.push({
     test: /\.tsx?$/,

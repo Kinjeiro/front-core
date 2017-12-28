@@ -18,14 +18,14 @@ function pluginFinishFrontendHotReload(webpackConfig, {
         const newEntry = [];
 
         if (isHotLoader) {
-          //should be first
+          // should be first
           newEntry.push('react-hot-loader/patch');
         }
 
         if (PROXY_ASSETS) {
           newEntry.push(
             'webpack/hot/only-dev-server',
-            'webpack-dev-server/client?http://' + PROXY_ASSETS.host + ':' + PROXY_ASSETS.port
+            `webpack-dev-server/client?http://${PROXY_ASSETS.host}:${PROXY_ASSETS.port}`
           );
         }
 
