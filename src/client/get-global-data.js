@@ -6,7 +6,7 @@ import {
 
 // export const isBrowser = (new Function('try {return this===window;}catch(e){ return false;}'))();
 export function getClientStoreInitialState() {
-  return window[GLOBAL_CLIENT_STORE_INITIAL_STATE];
+  return window[GLOBAL_CLIENT_STORE_INITIAL_STATE] || {};
 }
 
 export function getClientConfig() {
@@ -14,5 +14,5 @@ export function getClientConfig() {
 }
 
 export function getI18nClientBundles() {
-  return window[GLOBAL_I18N_CLIENT_BUNDLES];
+  return window[GLOBAL_I18N_CLIENT_BUNDLES] || {};
 }

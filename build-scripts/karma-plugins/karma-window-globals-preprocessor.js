@@ -7,7 +7,7 @@ var TEMPLATE = 'window[\'%s\'] = %s;\n';
 var createGlobalVariables = function (args, config, logger, helper) {
   var log = logger.create('preprocessor.window-globals');
   var globals = config.globals || {};
-  log.info('Attaching the global variables to the window object: ', globals);
+  log.info('Attaching the global variables to the window object: ', JSON.stringify(globals, null, 2));
 
   return function (content, file, done) {
     var envContent = '';

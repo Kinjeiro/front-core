@@ -214,6 +214,7 @@ export default function (webpackContext, webpackConfigUtils) {
         common: webpackContext.appConfig.common,
       },
     };
+    config.preprocessors[SETUP_CLIENT_FILE].push('window-globals');
     config.preprocessors[SRC_FILES_MASK].push('window-globals');
 
     console.log(

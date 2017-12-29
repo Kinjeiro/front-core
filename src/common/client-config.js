@@ -1,4 +1,5 @@
 // see initialization in index.jsx
+import merge from 'lodash/merge';
 
 /**
  * Располагается в common, так как используется для инициализации и на серверной части тоже для компонентов
@@ -16,8 +17,8 @@ const clientConfig = {};
  * @returns {{}}
  */
 export function initConfig(inputConfig) {
-  Object.assign(clientConfig, inputConfig);
-  return clientConfig;
+  // важно именно clientConfig изменять, так как везде на него ссылка
+  return merge(clientConfig, inputConfig);
 }
 
 /*

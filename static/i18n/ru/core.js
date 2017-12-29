@@ -58,5 +58,8 @@ module.exports = {
       errorOccurred: 'Произошла ошибка',
       showDetails: 'Показать детали',
     },
+    ReadMore: {
+      more: 'Еще',
+    },
   },
 };
