@@ -41,7 +41,7 @@ const FORM_DEFAULT_VALUES = {
   (globalState, ownProps) => ({
     form: getForm(globalState, FORM_ID) || FORM_DEFAULT_VALUES,
     actionChangeUserStatus: getUserInfo(globalState).actionChangeUserStatus,
-    urlReturn: ownProps.location.query[PARAM_RETURN_URL],
+    urlReturn: ownProps.urlReturn || ownProps.location.query[PARAM_RETURN_URL],
   }),
   {
     actionCurrentPageChanged: reduxCurrentPage.actions.actionCurrentPageChanged,

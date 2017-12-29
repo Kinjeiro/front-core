@@ -10,14 +10,14 @@ module.exports = {
   },
 
   errors: {
-    clientErrorTitleDefault: '@RU Error',
-    clientErrorMessageDefault: '@RU Sorry. An error has occurred.',
+    clientErrorTitleDefault: 'Ошибка',
+    clientErrorMessageDefault: 'Произошла ошибка.',
     errorWhileParseToUniError: "@RU Can't convert to UniError.",
 
-    authServerNotResponse: "@RU Authenticated server doesn't response.",
-    wrongUserCredentials: '@RU Invalid user credentials.',
-    missingPassword: '@RU Missing required parameter: password.',
-    notAuthorize: '@RU Not authorize.',
+    authServerNotResponse: 'Авторизационный сервер не отвечает.',
+    wrongUserCredentials: 'Некорректно введенные данные.',
+    missingPassword: 'Введите пароль.',
+    notAuthorize: 'Не авторизован.',
   },
 
   pages: {
@@ -33,20 +33,20 @@ module.exports = {
       testErrorNotification: '@RU Test error Notification',
     },
     LoginPage: {
-      title: '@RU Login',
-      description: '@RU Login page',
-      userNameLabel: '@RU Username',
-      passwordLabel: '@RU Password',
-      loginButton: '@RU Login',
+      title: 'Логин',
+      description: 'Страница логина',
+      userNameLabel: 'Логин',
+      passwordLabel: 'Пароль',
+      loginButton: 'Войти',
     },
     ErrorPage: {
-      returnTo: '@RU Return to',
-      indexPage: '@RU index page',
+      returnTo: 'Вернуться к ',
+      indexPage: 'Начальная страница',
     },
     Info404: {
-      pageNotFoundError: '@RU Page not found',
-      returnTo: '@RU Return to',
-      indexPage: '@RU index page',
+      pageNotFoundError: 'Страница не найдена',
+      returnTo: 'Вернуться к',
+      indexPage: 'Начальная страница',
     },
   },
 
@@ -55,8 +55,8 @@ module.exports = {
       loading: 'Загрузка...',
     },
     UniError: {
-      errorOccurred: '@RU An error has occurred',
-      showDetails: '@RU show details',
+      errorOccurred: 'Произошла ошибка',
+      showDetails: 'Показать детали',
     },
   },
 };

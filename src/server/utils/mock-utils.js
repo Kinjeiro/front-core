@@ -20,9 +20,9 @@ export function createMockRoute(
 
 export function delayValueHandler(value, delay, delayMax = null) {
   // функция нужна чтобы каждый раз расчитывалась новая задержка
-  return () => {
+  return (...args) => {
     const valueUpdate = typeof value === 'function'
-      ? value()
+      ? value(...args)
       : value;
 
     const valuePromise =

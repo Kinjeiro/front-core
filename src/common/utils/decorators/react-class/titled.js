@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { executeVariable } from '../../common';
 
 import * as reduxCurrentPage from '../../../app-redux/reducers/app/current-page';
 
@@ -51,10 +52,10 @@ export default function titledDecorator(
       // ======================================================
       componentWillMount() {
         this.props.actionCurrentPageChanged({
-          id,
-          title,
-          metas,
-          otherInfo,
+          id: executeVariable(id, null, this.props),
+          title: executeVariable(title, null, this.props),
+          metas: executeVariable(metas, null, this.props),
+          otherInfo: executeVariable(otherInfo, null, this.props),
         });
       }
       componentWillUnmount() {
