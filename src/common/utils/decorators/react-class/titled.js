@@ -34,6 +34,8 @@ export default function titledDecorator(
   metas = {},
   otherInfo = {},
 ) {
+  const idFinal = executeVariable(id, null, this.props);
+
   return (ReactComponentClass) => {
     @connect(
       null,
@@ -45,6 +47,7 @@ export default function titledDecorator(
     class TitledComponent extends Component {
       static propTypes = {
         actionCurrentPageChanged: PropTypes.func,
+        actionClearCurrentPageInfo: PropTypes.func,
       };
 
       // ======================================================
@@ -52,14 +55,14 @@ export default function titledDecorator(
       // ======================================================
       componentWillMount() {
         this.props.actionCurrentPageChanged({
-          id: executeVariable(id, null, this.props),
+          id: idFinal,
           title: executeVariable(title, null, this.props),
           metas: executeVariable(metas, null, this.props),
           otherInfo: executeVariable(otherInfo, null, this.props),
         });
       }
       componentWillUnmount() {
-        this.props.actionClearCurrentPageInfo();
+        this.props.actionClearCurrentPageInfo(idFinal);
       }
 
       render() {

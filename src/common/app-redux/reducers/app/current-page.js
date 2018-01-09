@@ -31,10 +31,10 @@ export const actions = {
       payload: newPageData,
     };
   },
-  actionClearCurrentPageInfo(newPageData) {
+  actionClearCurrentPageInfo(pageId) {
     return {
       type: TYPES.CLEAR_CURRENT_PAGE_INFO,
-      payload: newPageData,
+      payload: pageId,
     };
   },
 };
@@ -50,7 +50,11 @@ const reducer = createReducer(initialState, {
       ...newPageData,
     }),
   [TYPES.CLEAR_CURRENT_PAGE_INFO]:
-    (state, action, newPageData) => initialState,
+    (state, action, pageId) => {
+      return state.id === pageId
+        ? initialState
+        : state;
+    },
 });
 
 export default reducer;
