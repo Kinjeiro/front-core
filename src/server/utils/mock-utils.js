@@ -1,4 +1,8 @@
-import { delayPromiseThen } from '../../common/utils/common';
+import {
+  delayPromise,
+  getRandomValue,
+  executeVariable,
+} from '../../common/utils/common';
 
 import { parseResponseHandler } from './hapi-utils';
 
@@ -17,20 +21,8 @@ export function createMockRoute(
   };
 }
 
-
-export function delayValueHandler(value, delay, delayMax = null) {
+export function delayValueHandler(value, delay, delayMax) {
   // функция нужна чтобы каждый раз расчитывалась новая задержка
-  return (...args) => {
-    const valueUpdate = typeof value === 'function'
-      ? value(...args)
-      : value;
-
-    const valuePromise =
-      value.then
-        ? value
-        : Promise.resolve(valueUpdate);
-
-    return valuePromise
-      .then(delayPromiseThen(delay, delayMax));
-  };
+  return (...args) => delayPromise(getRandomValue(delay, delayMax))
+    .then(() => executeVariable(value, undefined, ...args));
 }
