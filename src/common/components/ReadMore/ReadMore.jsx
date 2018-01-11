@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Truncate from 'react-truncate';
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 import i18n from '../../utils/i18n-utils';
 
@@ -24,7 +24,7 @@ export default class ReadMore extends Component {
     truncated: false,
   };
 
-  @autobind
+  @bind()
   handleTruncate(truncated) {
     if (this.state.truncated !== truncated) {
       this.setState({
@@ -33,7 +33,7 @@ export default class ReadMore extends Component {
     }
   }
 
-  @autobind
+  @bind()
   toggleLines(event) {
     event.preventDefault();
 

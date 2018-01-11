@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 import bemDecorator from '../../utils/decorators/bem-component';
 
@@ -54,20 +54,20 @@ export default class ListItem extends Component {
   // HANDLERS
   // ======================================================
   /*
-  @guide - @autobind (так как это бинд быстрее работает, нежели анонимная функция с кложером, которая используется
+  @guide - @bind() (так как это бинд быстрее работает, нежели анонимная функция с кложером, которая используется
   в стрелочных функциях типа handleClick = () => {}
   Причем такой бинд создается только при использовании, если нет использования - нагрузки не будет
   Если компонент будет часто переиспользоваться, это важно, если нет можно на удобных стрелочных делать
   */
-  @autobind
+  @bind()
   handleClick(event) {
     this.callHandler('onClick', event);
   }
-  @autobind
+  @bind()
   handleMouseOut(event) {
     this.callHandler('onMouseOut', event);
   }
-  @autobind
+  @bind()
   handleMouseOver(event) {
     this.callHandler('onMouseOver', event);
   }

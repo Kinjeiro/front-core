@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // todo @ANKU @LOW - заменить на lodash-derocators так как там есть нормальный debouce
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
@@ -118,7 +118,7 @@ export default class StubPage extends Component {
   // ======================================================
   // HANDLERS
   // ======================================================
-  @autobind
+  @bind()
   handleChangeUser() {
     this.props.actionChangeUser(
       this.props.userInfo.username === 'ivanovI'
@@ -128,15 +128,15 @@ export default class StubPage extends Component {
     );
   }
 
-  @autobind
+  @bind()
   handleClickCreateTestDomain() {
     this.props.actionCreateTestDomain({ value: Math.random() });
   }
-  @autobind
+  @bind()
   handleClickItemTestDomain(id) {
     this.props.actionUpdateTestDomain(id, { value: Math.random() });
   }
-  @autobind
+  @bind()
   handleClickRemoveTestDomain(id) {
     this.props.actionDeleteTestDomain(id);
   }

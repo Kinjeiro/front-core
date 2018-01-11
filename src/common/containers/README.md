@@ -11,7 +11,7 @@ ClassName2 = ClassName
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'; 
 import { connect } from 'react-redux';
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 import bemDecorator from '@reagentum/front-core/lib/common/utils/decorators/bem-component';
 import i18n from '@reagentum/front-core/lib/common/utils/i18n-utils';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 import bemDecorator from '../../utils/decorators/bem-component';
 import i18n from '../../utils/i18n-utils';
@@ -95,21 +95,21 @@ export default class LoginPage extends Component {
   // ======================================================
   // HANDLERS
   // ======================================================
-  @autobind
+  @bind()
   handleChangeUserName(event) {
     this.updateForm({
       username: event.target.value,
     });
   }
 
-  @autobind
+  @bind()
   handleChangePassword(event) {
     this.updateForm({
       password: event.target.value,
     });
   }
 
-  @autobind
+  @bind()
   handleLogin() {
     const {
       form: {

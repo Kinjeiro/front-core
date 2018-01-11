@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 import bemDecorator from '../../utils/decorators/bem-component';
 import NoticeEmitter from '../../helpers/notifications';
@@ -46,12 +46,12 @@ export default class Notice extends Component {
   //  }
   //  this.closeNotice();
   // };
-  @autobind
+  @bind()
   handleNotificationCloseTimeout() {
     this.closeNotice();
   }
 
-  @autobind
+  @bind()
   handleNotificationCloserClick() {
     this.closeNotice();
   }

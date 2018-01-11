@@ -1,5 +1,5 @@
 import h2o2 from 'h2o2'; // Proxy handler plugin for hapi.js
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 // ======================================================
 // UTILS
@@ -64,7 +64,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return new CoreClientRunner();
   }
 
-  @autobind
+  @bind()
   // eslint-disable-next-line no-unused-vars
   createProjectPrepareState(request, server, reduxGlobalState, pluginOptions) {
     return reduxGlobalState;
@@ -81,7 +81,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return '';
   }
 
-  @autobind
+  @bind()
   noAuthRequireMatcher(pathname) {
     return testAppUrlStartWith(
       pathname,

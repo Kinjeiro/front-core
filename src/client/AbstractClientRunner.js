@@ -5,7 +5,7 @@ import RedBox from 'redbox-react';
 import { useRouterHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 // import { createHistory as libCreateHistory } from 'history';
-import { autobind } from 'core-decorators';
+import bind from 'lodash-decorators/bind';
 
 import clientConfig from '../common/client-config';
 
@@ -156,21 +156,21 @@ export default class AbstractClientRunner {
   }
 
 
-  @autobind
+  @bind()
   reloadAll() {
     this.reloadModels();
     this.reloadStore();
     this.reloadUi();
   }
-  @autobind
+  @bind()
   reloadModels() {
     this.registerModels(true);
   }
-  @autobind
+  @bind()
   reloadStore() {
     reloadReducers(this.store, getRootReducer(this.getReducers()));
   }
-  @autobind
+  @bind()
   reloadUi() {
     this.routes = this.getRoutes(this.store);
     this.renderDOM(true);
