@@ -32,8 +32,8 @@ import {
 
 const FORM_ID = 'formLogin';
 const FORM_DEFAULT_VALUES = {
-  username: undefined,
-  password: undefined,
+  username: '',
+  password: '',
 };
 // import './LoginPage.css';
 
