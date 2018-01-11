@@ -1,18 +1,29 @@
-/* eslint-disable no-param-reassign */
 import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
-import uniqueId from 'lodash/uniqueId';
+// import uniqueId from 'lodash/uniqueId';
 
 export function generateId() {
-  return uniqueId();
+  // return uniqueId();
+
+  // https://stackoverflow.com/a/2117523/344172
+
+  // eslint-disable-next-line space-infix-ops
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(
+    /[018]/g,
+    // eslint-disable-next-line no-bitwise,no-undef,no-mixed-operators
+    c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
+  );
 }
 
 export function getRandomInt(min = 0, max = Number.MAX_VALUE) {
   return Math.floor(Math.random() * ((max - min) + 1)) + min;
 }
 
-export function getRandomValue(min, max) {
+export function getRandomValue(min, max = null) {
+  if (max === null) {
+    return min;
+  }
   return min % 1 !== 0 || max % 1 !== 0
     ? min + (Math.random() * (max - min))
     : getRandomInt(min, max);
