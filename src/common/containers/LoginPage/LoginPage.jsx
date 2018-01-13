@@ -185,9 +185,9 @@ export default class LoginPage extends Component {
           </div>
         </div>
 
-        <div className={ `${this.bem('buttons')} ${loginButtonClassName || ''}` }>
+        <div className={ this.bem('buttons') }>
           <button
-            className={ this.bem('login-button') }
+            className={ `${this.bem('login-button')} ${loginButtonClassName || ''}` }
             disabled={ isFetching || !username }
             onClick={ this.handleLogin }
           >
