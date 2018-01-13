@@ -63,6 +63,8 @@ export default class LoginPage extends Component {
     actionFormRemove: PropTypes.func,
     actionGoTo: PropTypes.func,
     urlReturn: PropTypes.string,
+
+    loginButtonClassName: PropTypes.string,
   };
 
   // ======================================================
@@ -158,6 +160,7 @@ export default class LoginPage extends Component {
       actionChangeUserStatus: {
         isFetching,
       },
+      loginButtonClassName,
     } = this.props;
 
     return (
@@ -182,7 +185,7 @@ export default class LoginPage extends Component {
           </div>
         </div>
 
-        <div className={ this.bem('buttons') }>
+        <div className={ `${this.bem('buttons')} ${loginButtonClassName || ''}` }>
           <button
             className={ this.bem('login-button') }
             disabled={ isFetching || !username }
