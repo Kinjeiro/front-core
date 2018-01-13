@@ -1,7 +1,10 @@
 import { API_CONFIGS } from '../../../../common/api/api-user';
 
 import { createMockRoute } from '../../../utils/mock-utils';
-import { setAuthCookies } from '../../../utils/auth-utils';
+import {
+  setAuthCookies,
+  clearAuthCookie,
+} from '../../../utils/auth-utils';
 
 import i18n from '../../../../common/utils/i18n-utils';
 import { createUniError } from '../../../../common/models/uni-error';
@@ -28,5 +31,8 @@ export default [
       fakeToken,
       fakeToken,
     );
+  }),
+  createMockRoute(API_CONFIGS.logout, (requestData, request, reply) => {
+    return clearAuthCookie(reply());
   }),
 ];
