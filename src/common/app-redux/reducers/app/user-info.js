@@ -3,6 +3,8 @@ import { DEFAULT_VALUES } from '../../../models/user-info';
 import { createReducer } from '../../utils';
 import { createStatusReducer } from '../../helpers';
 
+import * as api from '../../../api/api-user';
+
 // ======================================================
 // INITIAL STATE
 // ======================================================
@@ -11,6 +13,7 @@ export const initialState = {
   ...DEFAULT_VALUES,
 
   actionChangeUserStatus: undefined,
+  actionUserLogoutStatus: undefined,
 };
 
 // ======================================================
@@ -21,29 +24,40 @@ export const TYPES = {
   CHANGE_USER_FETCH:    `${PREFIX}/CHANGE_USER_FETCH`,
   CHANGE_USER_FAIL:     `${PREFIX}/CHANGE_USER_FAIL`,
   CHANGE_USER_SUCCESS:  `${PREFIX}/CHANGE_USER_SUCCESS`,
+
+  USER_LOGOUT_FETCH:     `${PREFIX}/USER_LOGOUT_FETCH`,
+  USER_LOGOUT_SUCCESS:   `${PREFIX}/USER_LOGOUT_SUCCESS`,
+  USER_LOGOUT_FAIL:      `${PREFIX}/USER_LOGOUT_FAIL`,
 };
 
 
 // ======================================================
 // ACTION CREATORS
 // ======================================================
-export const actions = {
-  actionChangeUser(apiChangeUser, username, password) {
-    return {
-      types: [TYPES.CHANGE_USER_FETCH, TYPES.CHANGE_USER_SUCCESS, TYPES.CHANGE_USER_FAIL],
-      payload: apiChangeUser(username, password),
-    };
-  },
-};
-
 export function getBindActions({
   apiChangeUser,
+  apiUserLogout,
 }) {
   return {
-    ...actions,
-    actionChangeUser: actions.actionChangeUser.bind(this, apiChangeUser),
+    actionChangeUser(username, password) {
+      return {
+        types: [TYPES.CHANGE_USER_FETCH, TYPES.CHANGE_USER_SUCCESS, TYPES.CHANGE_USER_FAIL],
+        payload: apiChangeUser(username, password),
+      };
+    },
+    actionUserLogout() {
+      return {
+        types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
+        payload: apiUserLogout(),
+      };
+    },
   };
 }
+
+export const actions = getBindActions({
+  apiChangeUser: api.apiLogin,
+  apiUserLogout: api.apiLogout,
+});
 
 // ======================================================
 // REDUCER
@@ -60,6 +74,9 @@ export const reducer = createReducer(
   {
     actionChangeUserStatus: createStatusReducer(
       TYPES.CHANGE_USER_FETCH, TYPES.CHANGE_USER_SUCCESS, TYPES.CHANGE_USER_FAIL,
+    ),
+    actionUserLogoutStatus: createStatusReducer(
+      TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL
     ),
   },
 );

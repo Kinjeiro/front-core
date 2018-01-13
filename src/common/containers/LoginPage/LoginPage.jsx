@@ -10,8 +10,6 @@ import i18n from '../../utils/i18n-utils';
 // ======================================================
 // REDUX
 // ======================================================
-import apiUser from '../../api/api-user';
-
 import {
   getUserInfo,
   getForm,
@@ -45,9 +43,7 @@ const FORM_DEFAULT_VALUES = {
   }),
   {
     actionCurrentPageChanged: reduxCurrentPage.actions.actionCurrentPageChanged,
-    actionChangeUser: reduxUserInfo.getBindActions({
-      apiChangeUser: apiUser.apiLogin,
-    }).actionChangeUser,
+    actionChangeUser: reduxUserInfo.actions.actionChangeUser,
     ...reduxUiForm.actions,
     actionGoTo: push,
   },

@@ -9,17 +9,17 @@ export const API_CONFIGS = {
   logout: api(`${API_PREFIX}/logout`),
 };
 
-function apiLogin(username, password) {
+export function apiLogin(username, password) {
   return sendApiRequest(API_CONFIGS.login, {
     username,
     password,
   });
 }
-function apiRefreshLogin() {
+export function apiRefreshLogin() {
   return sendApiRequest(API_CONFIGS.refreshLogin);
 }
 
-function apiLogout(username) {
+export function apiLogout(username) {
   return sendApiRequest(API_CONFIGS.logout, {
     username,
   });
