@@ -1,7 +1,7 @@
 function pluginFrontendMain(webpackConfig, {
   inCoreProject
 }) {
-  const CORE_TYPESCRIPT_DEFINE_PATH = inCoreProject('src/common/defines.d.ts');
+  const CORE_TYPESCRIPT_DEFINE_PATH = inCoreProject('lib/common/defines.d.ts');
 
   // const TYPESCRIPT_ATL_OPTIONS = [
   //  'target=es6',

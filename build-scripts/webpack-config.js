@@ -65,7 +65,7 @@ const WEBPACK_CONFIG_UTILS = {
         require('./plugins/plugin-environments'),
         require('./plugins/plugin-code-jsx'),
         require('./plugins/plugin-code-babel-options'),
-        require('./plugins/plugin-code-typescript'),
+        // require('./plugins/plugin-code-typescript'),
 
         require('./plugins/plugin-file-image'),
         require('./plugins/plugin-file-font'),
