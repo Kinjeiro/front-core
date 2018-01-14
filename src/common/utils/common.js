@@ -1,19 +1,36 @@
 import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
+import uuidv1 from 'uuid/v1';
 // import uniqueId from 'lodash/uniqueId';
 
-export function generateId() {
+export function generateId(uuidOptions = null) {
   // return uniqueId();
 
   // https://stackoverflow.com/a/2117523/344172
+  // let d = new Date().getTime();
+  // // eslint-disable-next-line no-undef
+  // if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+  //   // eslint-disable-next-line no-undef
+  //   d += performance.now(); // use high-precision timer if available
+  // }
+  // return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+  //   // eslint-disable-next-line no-mixed-operators,no-bitwise
+  //   const r = (d + Math.random() * 16) % 16 | 0;
+  //   d = Math.floor(d / 16);
+  //   // eslint-disable-next-line no-mixed-operators,no-bitwise
+  //   return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  // });
 
+  // for window.crypto
   // eslint-disable-next-line space-infix-ops
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(
-    /[018]/g,
-    // eslint-disable-next-line no-bitwise,no-undef,no-mixed-operators
-    c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
-  );
+  // return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(
+  //   /[018]/g,
+  //   // eslint-disable-next-line no-bitwise,no-undef,no-mixed-operators
+  //   c => (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
+  // );
+
+  return uuidv1(uuidOptions);
 }
 
 export function getRandomInt(min = 0, max = Number.MAX_VALUE) {

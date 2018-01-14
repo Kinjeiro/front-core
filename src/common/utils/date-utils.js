@@ -19,11 +19,14 @@ export const DATETIME_FORMAT =        clientConfig.common.features.date.dateTime
 export const SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || FORMATS.TIMESTAMP;
 export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeForms || FORMATS.TIMESTAMP;
 
-function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT, FORMATS.ISO]) {
+export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT, FORMATS.ISO]) {
   let momentDate;
 
   if (typeof date === 'undefined' || date === null) {
     return date;
+  }
+  if (date === '') {
+    return null;
   }
 
   if (typeof date === 'string') {

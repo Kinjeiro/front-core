@@ -5,6 +5,7 @@ import XHR from 'i18next-xhr-backend';
 // import Backend from 'i18next-sync-fs-backend';
 import Cache from 'i18next-localstorage-cache';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import moment from 'moment';
 
 import clientConfig from '../../common/client-config';
 import { ASSETS } from '../../common/constants/routes.pathes';
@@ -125,11 +126,13 @@ export function i18nNextInit(options = {}) {
     },
     options,
   ));
+  moment.locale(locale);
 
   i18next.on('languageChanged', (lng) => {
     setCookie(I18N_LANGUAGE_COOKIE_NAME, lng, {
       path: appUrl(),
     });
+    moment.locale(locale);
   });
 
   Object.keys(resourcesByNamespace).forEach((namespace) => {

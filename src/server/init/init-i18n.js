@@ -1,6 +1,7 @@
 import merge from 'lodash/merge';
 import i18n from 'i18next';
 import Backend from 'i18next-sync-fs-backend';
+import moment from 'moment';
 
 import { ASSETS } from '../../common/constants/routes.pathes';
 import { joinUri } from '../../common/utils/uri-utils';
@@ -45,6 +46,8 @@ i18n
 if (!i18n.language) {
   i18n.language = i18n.options.fallbackLng[0];
 }
+
+moment.locale(i18n.language);
 
 export default initI18nUtils(i18n);
 

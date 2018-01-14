@@ -46,9 +46,13 @@ export const TOKENS = {
 
 export function getUser(username, password) {
   const user = USERS[username];
-  return user && user.password === password
-    ? user
-    : null;
+  if (user && user.password === password) {
+    return {
+      ...user,
+      password: null,
+    };
+  }
+  return null;
 }
 
 export function getUserByToken(token) {
