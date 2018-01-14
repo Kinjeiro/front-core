@@ -1,10 +1,10 @@
 import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
-import uuidv1 from 'uuid/v1';
+import uuid from 'uuid';
 // import uniqueId from 'lodash/uniqueId';
 
-export function generateId(uuidOptions = null) {
+export function generateId(uuidOptions = null, version = 'v1') {
   // return uniqueId();
 
   // https://stackoverflow.com/a/2117523/344172
@@ -30,7 +30,7 @@ export function generateId(uuidOptions = null) {
   //   c => (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
   // );
 
-  return uuidv1(uuidOptions);
+  return uuid[version](uuidOptions);
 }
 
 export function getRandomInt(min = 0, max = Number.MAX_VALUE) {
