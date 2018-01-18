@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "description": "front-core",
   "main": "./build-scripts/start.js",
   "scripts": {
