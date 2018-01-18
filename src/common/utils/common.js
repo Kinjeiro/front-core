@@ -260,3 +260,15 @@ export function executeVariable(fn, defaultValue = undefined, ...args) {
            ? defaultValue
            : fn;
 }
+
+export function includes(first, second) {
+  if (typeof first === 'undefined' || first === null || typeof second === 'undefined' || second === null) {
+    return false;
+  }
+  const firstArray = Array.isArray(first) ? first : [first];
+  return firstArray.some((firstValue) => (
+    Array.isArray(second)
+      ? second.includes(firstValue)
+      : firstValue === second
+  ));
+}

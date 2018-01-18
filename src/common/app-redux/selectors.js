@@ -1,5 +1,7 @@
 import { createSelector } from 'redux-orm';
 
+import { includes } from '../utils/common';
+
 import orm from '../models/domains/utils/orm';
 
 import { STATE_CLIENT_CONFIG_PARAM } from '../constants/sync-consts';
@@ -27,7 +29,12 @@ export function getUser(globalState) {
 
 export function hasPermission(globalState, permission) {
   const user = getUser(globalState);
-  return user && user.permissions && user.permissions.includes(permission);
+  return user && includes(user.permissions, permission);
+}
+
+export function hasRole(globalState, role) {
+  const user = getUser(globalState);
+  return user && includes(user.roles, role);
 }
 
 export function getGlobalUniError(globalState) {
