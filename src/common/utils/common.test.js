@@ -1,5 +1,6 @@
 import {
   includes,
+  arrayToTree,
 } from './common';
 
 describe('common utils', () => {
@@ -15,6 +16,69 @@ describe('common utils', () => {
     });
     it('should not find includes with difference arrays', () => {
       expect(includes(['1', '2'], [1, 2])).to.equal(false);
+    });
+  });
+
+  describe('[function] arrayToTree', () => {
+    it('should parse to correct tree', () => {
+      const array = [
+        { id: 1, parentId: 0 },
+        { id: 2, parentId: 1 },
+        { id: 3, parentId: 1 },
+        { id: 4, parentId: 2 },
+        { id: 5, parentId: 0 },
+        { id: 6, parentId: 0 },
+        { id: 7, parentId: 4, testField: 'testValue' },
+      ];
+
+      expect(arrayToTree(array)).to.deep.equal([
+        {
+          id: 1,
+          parentId: 0,
+          level: 0,
+          children: [
+            {
+              id: 2,
+              parentId: 1,
+              level: 1,
+              children: [
+                {
+                  id: 4,
+                  parentId: 2,
+                  level: 2,
+                  children: [
+                    {
+                      id: 7,
+                      parentId: 4,
+                      level: 3,
+                      children: [],
+                      testField: 'testValue',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 3,
+              parentId: 1,
+              level: 1,
+              children: [],
+            },
+          ],
+        },
+        {
+          id: 5,
+          parentId: 0,
+          level: 0,
+          children: [],
+        },
+        {
+          id: 6,
+          parentId: 0,
+          level: 0,
+          children: [],
+        },
+      ]);
     });
   });
 });

@@ -104,13 +104,12 @@ export function formatDateTime(date, format = DATETIME_FORMAT) {
   return parseDate(date, format);
 }
 
-// работают на моменте
-export function parseToAntd(date) {
-  return normalizeDate(date);
+export function parseToSystem(momentData) {
+  return parseDate(momentData, SYSTEM_DATE_FORMAT);
 }
 
-export function parseFromAntdToSystem(momentData) {
-  return parseDate(momentData, SYSTEM_DATE_FORMAT);
+export function getCurrentTime() {
+  return parseToSystem(Date.now());
 }
 
 export function compareDate(dateA, dateB, withoutTime = true) {

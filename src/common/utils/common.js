@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
@@ -271,4 +272,49 @@ export function includes(first, second) {
       ? second.includes(firstValue)
       : firstValue === second
   ));
+}
+
+export function isEmpty(value, objectChecker = null) {
+  if (objectChecker && typeof value === 'object') {
+    return objectChecker(value);
+  }
+  return value === null || typeof value === 'undefined' || value === '' || (Array.isArray(value) && value.length === 0);
+}
+
+export function arrayToTree(array, options = {}, parent = null, level = 0) {
+  const {
+    tree = [],
+    fieldId = 'id',
+    fieldParent = 'parentId',
+    fieldChildren = 'children',
+    fieldLevel = 'level',
+    useLevels = true,
+    emptyChildren = true,
+  } = options;
+
+  parent = parent || {
+    [fieldId]: 0,
+  };
+
+  let treeResult = tree;
+
+  const children = array.filter((child) => child[fieldParent] === parent[fieldId]);
+
+  if (!isEmpty(children)) {
+    if (parent[fieldId] === 0) {
+      treeResult = children;
+    } else {
+      parent[fieldChildren] = children;
+    }
+    children.forEach((child) => {
+      if (useLevels) {
+        child[fieldLevel] = level;
+      }
+      arrayToTree(array, options, child, level + 1);
+    });
+  } else if (emptyChildren) {
+    parent[fieldChildren] = [];
+  }
+
+  return treeResult;
 }
