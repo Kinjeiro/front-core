@@ -293,15 +293,18 @@ export function arrayToTree(array, options = {}, parent = null, level = 0) {
   } = options;
 
   parent = parent || {
-    [fieldId]: 0,
+    [fieldId]: null,
   };
 
   let treeResult = tree;
 
-  const children = array.filter((child) => child[fieldParent] === parent[fieldId]);
+  const children = array.filter((child) =>
+    (isEmpty(child[fieldParent]) && isEmpty(parent[fieldId]))
+    || (child[fieldParent] === parent[fieldId]),
+  );
 
   if (!isEmpty(children)) {
-    if (parent[fieldId] === 0) {
+    if (isEmpty(parent[fieldId])) {
       treeResult = children;
     } else {
       parent[fieldChildren] = children;
@@ -309,6 +312,9 @@ export function arrayToTree(array, options = {}, parent = null, level = 0) {
     children.forEach((child) => {
       if (useLevels) {
         child[fieldLevel] = level;
+      }
+      if (typeof child[fieldParent] === 'undefined') {
+        child[fieldParent] = null;
       }
       arrayToTree(array, options, child, level + 1);
     });

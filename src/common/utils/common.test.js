@@ -22,19 +22,19 @@ describe('common utils', () => {
   describe('[function] arrayToTree', () => {
     it('should parse to correct tree', () => {
       const array = [
-        { id: 1, parentId: 0 },
+        { id: 1 },
         { id: 2, parentId: 1 },
         { id: 3, parentId: 1 },
         { id: 4, parentId: 2 },
-        { id: 5, parentId: 0 },
-        { id: 6, parentId: 0 },
+        { id: 5 },
+        { id: 6, parentId: null },
         { id: 7, parentId: 4, testField: 'testValue' },
       ];
 
       expect(arrayToTree(array)).to.deep.equal([
         {
           id: 1,
-          parentId: 0,
+          parentId: null,
           level: 0,
           children: [
             {
@@ -68,13 +68,13 @@ describe('common utils', () => {
         },
         {
           id: 5,
-          parentId: 0,
+          parentId: null,
           level: 0,
           children: [],
         },
         {
           id: 6,
-          parentId: 0,
+          parentId: null,
           level: 0,
           children: [],
         },
