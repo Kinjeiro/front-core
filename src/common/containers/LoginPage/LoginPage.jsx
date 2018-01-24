@@ -108,7 +108,7 @@ export default class LoginPage extends Component {
   }
 
   @bind()
-  handleLogin() {
+  handleLogin(event) {
     const {
       form: {
         username,
@@ -118,6 +118,9 @@ export default class LoginPage extends Component {
       actionGoTo,
       urlReturn,
     } = this.props;
+
+    event.preventDefault();
+    event.stopPropagation();
 
     // todo @ANKU @CRIT @MAIN - тут сначала срабатывает promise, и если ответ возвращается без кода ошибки то сработает сначала then а потом запарсится uniError
     actionChangeUser(username, password)
@@ -164,13 +167,17 @@ export default class LoginPage extends Component {
     } = this.props;
 
     return (
-      <div className={ this.fullClassName }>
+      <form
+        className={ this.fullClassName }
+        onSubmit={ this.handleLogin }
+      >
         <div className={ this.bem('fields') }>
           <div className={ this.bem('username') }>
             <span>{i18n('core:pages.LoginPage.userNameLabel')}</span>
             <input
               name="username"
               value={ username }
+              autoComplete="username"
               onChange={ this.handleChangeUserName }
             />
           </div>
@@ -180,6 +187,7 @@ export default class LoginPage extends Component {
               name="password"
               type="password"
               value={ password }
+              autoComplete="current-password"
               onChange={ this.handleChangePassword }
             />
           </div>
@@ -187,16 +195,16 @@ export default class LoginPage extends Component {
 
         <div className={ this.bem('buttons') }>
           <button
+            type="submit"
             className={ `${this.bem('login-button')} ${loginButtonClassName || ''}` }
             disabled={ isFetching || !username }
-            onClick={ this.handleLogin }
           >
             {i18n('core:pages.LoginPage.loginButton')}
           </button>
         </div>
 
         { this.renderError() }
-      </div>
+      </form>
     );
   }
 }

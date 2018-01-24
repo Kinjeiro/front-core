@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 /*
 {
-  userId: '59c28a68b52cec41904f9848',
+  //userId: '59c28a68b52cec41904f9848',
   username: 'ivanovI',
   userType: undefined,
 
@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 
 // данные берутся из \src\stub\server\models\credentials.js
 export const MAP = {
-  userId: PropTypes.string,
+  // userId: PropTypes.string,
   username: PropTypes.string,
   userType: PropTypes.string,
 
