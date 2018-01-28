@@ -5,9 +5,10 @@ import { setRequestData } from './hapi-utils';
 describe('(Utils) hapi-utils', () => {
   describe('(method) setRequestData', () => {
     it('should correct set query params', async function test() {
-      const testUrl = 'http://example.opa.com/path1/path2/?query1=value1&query2=value2#hash1';
+      // const testUrl = 'http://example.opa.com/path1/path2/?query1=value1&query2=value2#hash1';
+      const testRelativeUrl = '/path1/path2/?query1=value1&query2=value2#hash1';
       const requestOptions = setRequestData({
-        url: testUrl,
+        url: testRelativeUrl,
       }, {
         testQuery: 'testValue',
       });

@@ -19,7 +19,14 @@ require('./init/init-test-server-enviroment');
 
 // 3) Инициализирируем остальные настройки сервера
 // * server-config.js - автоматически синхронно инициализируются при первом запросе с помощью модуля node-config
-require('../../lib/server/init');
+try {
+  // для коры
+  require('../../src/server/init');
+} catch (error) {
+  // для других проектов где нет src
+  require('../../lib/server/init');
+}
+
 
 // 4) добавдяем глобальный дефолтный сервер, для упрощения тестирования (он подключается по запросу)
 require('./init/init-global-default-server');

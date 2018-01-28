@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import { URL } from 'url';
 
 import Response from 'hapi/lib/response';
 
@@ -38,10 +38,10 @@ export function setRequestData(requestOptions, data) {
 
        searchParams - object with methods "set" \ "update" and e.t
       */
-      // const urlObj = new URL(requestOptions.url);
-      // Object.keys(data).forEach((queryKey) =>
-      //   urlObj.searchParams.set(queryKey, data[queryKey]));
-      //
+      const urlObj = new URL(requestOptions.url, 'http://localhost/');
+      Object.keys(data).forEach((queryKey) =>
+        urlObj.searchParams.set(queryKey, data[queryKey]));
+
       // requestOptionsFinal.url = {
       //   ...urlObj,
       //   query: {
@@ -49,10 +49,7 @@ export function setRequestData(requestOptions, data) {
       //     ...data,
       //   },
       // };
-      // requestOptionsFinal.url = urlObj.href;
-
-      // todo @ANKU @LOW - бага что если массив из одного элемента он будет его передавать как обычное поле и на принимающей стороне будет казаться что не массив (нужно чтобы было name[]=value)
-      requestOptionsFinal.url = `${requestOptions.url}${data ?  `?${queryString.stringify(data)}` : ''}`;
+      requestOptionsFinal.url = urlObj.href;
     } else {
       requestOptionsFinal.payload = data;
     }
