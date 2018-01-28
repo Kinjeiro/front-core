@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.0.52",
+  "version": "1.0.53",
   "description": "front-core",
   "main": "./build-scripts/start.js",
   "scripts": {
@@ -24,7 +24,6 @@
     "compile": "npm run update-babelrc && rimraf lib/* -f && babel src --out-dir lib --copy-files",
     "prepublish": "npm run compile",
     "publish-patch": "npm run release-patch && npm publish",
-
     "preversion": "npm run test && git push --follow-tags",
     "release-patch": "npm version patch -m \"chore(*) patch version: %s\"",
     "release-minor": "npm version minor -m \"chore(*) minor version: %s\"",
@@ -34,7 +33,6 @@
     "postversion": "git push --follow-tags",
     "postversion-hg": "hg add package.json && hg commit package.json -m \"front-core new version\" && hg push",
     "postversion-git": "git push --follow-tags",
-
     "docker-build": "sh docker/docker-build.sh",
     "docker-push": "sh docker/docker-push.sh",
     "docker-test-run": "sh docker/docker-test-run.sh",
