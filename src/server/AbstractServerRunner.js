@@ -50,7 +50,7 @@ export default class AbstractServerRunner {
   // ======================================================
   // for OVERRIDE
   // ======================================================
-  createServices() {
+  createServices(/* endpointServices */) {
     return {};
   }
 
@@ -212,7 +212,7 @@ export default class AbstractServerRunner {
     try {
       this.init();
 
-      const services = this.createServices();
+      const services = this.createServices(serverConfig.server.endpointServices);
       const strategies = this.createStrategies(services);
 
       this.connection();

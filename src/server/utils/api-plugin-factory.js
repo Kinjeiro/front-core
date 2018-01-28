@@ -25,7 +25,7 @@ import serverConfig from '../server-config';
 function authWrapper(handler, pluginOptions) {
   return (request, reply) => {
     // if (request.auth && request.auth.credentials && !request.auth.credentials.profileId) {
-    if (!getCredentialsFromRequest(request).isAuth()) {
+    if (!getCredentialsFromRequest(request).isAuth() && !serverConfig.common.isTest) {
       logger.info('[plugin ERROR AUTH]');
       return responseError(createUniError({
         message: i18n('No auth'),

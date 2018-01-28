@@ -46,10 +46,10 @@ export default class CoreServerRunner extends AbstractServerRunner {
   // ======================================================
   // for OVERRIDE
   // ======================================================
-  createServices() {
+  createServices(endpointServices) {
     return {
-      ...super.createServices(),
-      ...createServices(serverConfig.server.endpointServices),
+      ...super.createServices(endpointServices),
+      ...createServices(endpointServices),
     };
   }
 
