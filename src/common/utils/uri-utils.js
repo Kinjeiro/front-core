@@ -77,11 +77,10 @@ export function parseUrlParameters(url, defaultValues = {}) {
   };
 }
 
-export function formatUrlParameters(params, url = '', hash = '') {
-  const paramStr = queryString.stringify(params, { arrayFormat: 'bracket' });
+export function formatUrlParameters(params, url = '', hash = '', useBracket = false) {
+  const paramStr = queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined });
   return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
-
 
 
 export function getLocationUrlParameters(defaultValues = {}) {
