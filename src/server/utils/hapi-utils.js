@@ -2,11 +2,17 @@ import { URL } from 'url';
 
 import Response from 'hapi/lib/response';
 
+import {
+  parseUrlParameters,
+  formatUrlParameters,
+} from '../../common/utils/uri-utils';
 import { parseToUniError } from '../../common/models/uni-error';
 
 export function getRequestData(hapiRequest) {
   return hapiRequest.method.toUpperCase() === 'GET'
-    ? hapiRequest.query
+    // не правильно парсит брекет параметры var1[]=2
+    // ? hapiRequest.query
+    ? parseUrlParameters(hapiRequest.url.href)
     : hapiRequest.payload;
 }
 
@@ -39,17 +45,12 @@ export function setRequestData(requestOptions, data) {
        searchParams - object with methods "set" \ "update" and e.t
       */
       const urlObj = new URL(requestOptions.url, 'http://localhost/');
-      Object.keys(data).forEach((queryKey) =>
-        urlObj.searchParams.set(queryKey, data[queryKey]));
 
-      // requestOptionsFinal.url = {
-      //   ...urlObj,
-      //   query: {
-      //     ...(urlObj.query || {}),
-      //     ...data,
-      //   },
-      // };
-      requestOptionsFinal.url = urlObj.href;
+      const params = parseUrlParameters(requestOptions.url);
+      Object.keys(data).forEach((queryKey) =>
+        params[queryKey] = data[queryKey]);
+
+      requestOptionsFinal.url = formatUrlParameters(params, urlObj.pathname);
     } else {
       requestOptionsFinal.payload = data;
     }

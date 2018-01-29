@@ -118,7 +118,7 @@ function createEndpointServiceConfig({
   fullUrl
 }) {
   const fullUrlFinal = fullUrl ||
-    `${protocol}://${host}:${port}${endpoint ? join('/', endpoint) : ''}`;
+    `${protocol}://${host}${port !== 80 ? `:${port}` : ''}${endpoint ? join('/', endpoint) : ''}`;
 
   return {
     protocol,

@@ -61,12 +61,28 @@ function proceedDefaultValues(defaultValues) {
 }
 
 export function parseUrlParameters(url, defaultValues = {}) {
-  const params = queryString.parse(queryString.extract(url));
+  const extracted = queryString.extract(url);
+
+  const params = queryString.parse(
+    extracted,
+    {
+      arrayFormat: extracted.indexOf('[]=') >= 0
+        ? 'bracket'
+        : undefined,
+    },
+  );
   return {
     ...proceedDefaultValues(defaultValues),
     ...params,
   };
 }
+
+export function formatUrlParameters(params, url = '') {
+  const paramStr = queryString.stringify(params, { arrayFormat: 'bracket' });
+  return `${url}${(url && paramStr && '?') || ''}${paramStr}`;
+}
+
+
 
 export function getLocationUrlParameters(defaultValues = {}) {
   return typeof window !== 'undefined' && window.location
@@ -88,10 +104,6 @@ export function isFullUrl(uri) {
   return uri.indexOf('://') > 0;
 }
 
-export function formatUrlParameters(params, url = '') {
-  const paramStr = queryString.stringify(params);
-  return `${url}${url && paramStr && '?' || ''}${paramStr}`;
-}
 
 export function updateHash(hash, affectHistory) {
   // eslint-disable-next-line no-param-reassign
