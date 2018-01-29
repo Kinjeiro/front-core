@@ -47,10 +47,11 @@ export function setRequestData(requestOptions, data) {
       const urlObj = new URL(requestOptions.url, 'http://localhost/');
 
       const params = parseUrlParameters(requestOptions.url);
-      Object.keys(data).forEach((queryKey) =>
-        params[queryKey] = data[queryKey]);
+      Object.keys(data).forEach((queryKey) => {
+        params[queryKey] = data[queryKey];
+      });
 
-      requestOptionsFinal.url = formatUrlParameters(params, urlObj.pathname);
+      requestOptionsFinal.url = formatUrlParameters(params, urlObj.pathname, urlObj.hash);
     } else {
       requestOptionsFinal.payload = data;
     }

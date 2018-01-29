@@ -77,9 +77,9 @@ export function parseUrlParameters(url, defaultValues = {}) {
   };
 }
 
-export function formatUrlParameters(params, url = '') {
+export function formatUrlParameters(params, url = '', hash = '') {
   const paramStr = queryString.stringify(params, { arrayFormat: 'bracket' });
-  return `${url}${(url && paramStr && '?') || ''}${paramStr}`;
+  return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
 
 
