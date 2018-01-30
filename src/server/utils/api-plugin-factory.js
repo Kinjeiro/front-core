@@ -20,6 +20,8 @@ import {
   getRequestData,
 } from './hapi-utils';
 
+import { getToken } from './auth-utils';
+
 import serverConfig from '../server-config';
 
 function authWrapper(handler, pluginOptions) {
@@ -420,7 +422,7 @@ export function apiPluginFactory(apiConfig, handler, otherOptions = {}) {
    - isLogging
  */
 export const PROXY_WILDCARD_NAME = 'proxyWildcardPath';
-export function proxyRoutePluginFactory(path, proxy, otherOptions = {}) {
+export function proxyRoute(path, proxy, otherOptions = {}) {
   let apiConfig = path;
   if (typeof apiConfig === 'string') {
     apiConfig = {
@@ -439,6 +441,44 @@ export function proxyRoutePluginFactory(path, proxy, otherOptions = {}) {
       ...otherOptions,
     },
   );
+}
+
+/**
+ * @deprecated - use proxyRoute
+ */
+export function proxyRoutePluginFactory(path, proxy, otherOptions) {
+  return proxyRoute(path, proxy, otherOptions);
+}
+
+export function defaultHeadersExtractor(clientRequest, proxyFullUrl = null) {
+  // proxyFullUrl - нежун для hawk токенов
+  const token = getToken(clientRequest);
+  return {
+    authorization: `Bearer ${token}`,
+  };
+}
+
+export function proxyRouteFactory(middlewareEndpointConfig, headersExtractor = defaultHeadersExtractor) {
+  return (apiConfig, middleApiPath = null, otherRouteOptions = {}) => {
+    // whateverPath
+    return proxyRoute(
+      apiConfig,
+      (clientRequest) => {
+        let url = middleApiPath || clientRequest.url.href;
+        // proceed params
+        Object.keys(clientRequest.params).forEach((paramKey) => {
+          url = url.replace(new RegExp(`{${paramKey}}`, 'g'), clientRequest.params[paramKey]);
+        });
+
+        const middlewareFullUrl = `${middlewareEndpointConfig.fullUrl}${joinUri('/', url)}`;
+        return {
+          uri: middlewareFullUrl,
+          headers: headersExtractor(clientRequest, middlewareFullUrl),
+        };
+      },
+      otherRouteOptions,
+    );
+  };
 }
 
 export default apiPluginFactory;

@@ -13,7 +13,7 @@ import logger, { logObject } from '../helpers/server-logger';
 // UTILS
 // ======================================================
 
-export function getHeaders(apiRequest) {
+export function getHeaders(/* apiRequest */) {
   return {
     applicationId: serverConfig.common.appId,
   };
@@ -237,8 +237,3 @@ export async function factoryEndpointServiceMethodRequest(endpointServiceConfig,
   return (data, apiRequest, requestOptions) =>
     sendEndpointMethodRequest(endpointServiceConfig, serviceMethodPath, method, data, apiRequest, requestOptions);
 }
-
-
-
-
-
