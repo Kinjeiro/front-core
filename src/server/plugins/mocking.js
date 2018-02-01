@@ -122,7 +122,7 @@ export function getRequestPath(url, pluginOptions, isMocked) {
 function onRequest(options, request, reply) {
   // if (!serverConfig.common.isProduction) {
   const {
-    // enable,
+    enable,
     useMocks,
     mockRoutes,
     cookieEnableMocking,
@@ -144,7 +144,7 @@ function onRequest(options, request, reply) {
 
   // enable - нужно только чтобы включить мокирующие роуты, но не чтобы включить сам процесс мокирования (он включается через url mock=true)
   // if ((typeof cookieEnable === 'undefined' && enable) || cookieEnable === 'true') {
-  if ((typeof cookieEnable === 'undefined' && useMocks) || cookieEnable === 'true') {
+  if ((typeof cookieEnable === 'undefined' && useMocks && enable) || cookieEnable === 'true') {
     mockRoutes.some((mockRoute) => {
       if (validateRoutePath(request, mockRoute.path, mockRoute)) {
         // используем request.url.path - чтобы поддержать пробросс query параметров
@@ -162,7 +162,7 @@ function onRequest(options, request, reply) {
 function onPreResponse(mockOptions, request, reply) {
   // if (!serverConfig.common.isProduction) {
   const {
-    // enable,
+    enable,
     useMocks,
     cookieEnableMocking,
   } = mockOptions;
@@ -171,7 +171,7 @@ function onPreResponse(mockOptions, request, reply) {
 
   if (request.app.urlParamForEnableMocking) {
     reply.state(cookieEnableMocking, request.app.urlParamForEnableMocking, { path: contextRoot });
-  } else if (useMocks && request.state && typeof request.state[cookieEnableMocking] === 'undefined') {
+  } else if (enable && useMocks && request.state && typeof request.state[cookieEnableMocking] === 'undefined') {
     // enable - нужно только чтобы включить мокирующие роуты, но не чтобы включить сам процесс мокирования (он включается через url mock=true)
     // если запустили с помощью environment в конфигах APP_MOCK или через options плагина
     reply.state(cookieEnableMocking, 'true', { path: contextRoot });

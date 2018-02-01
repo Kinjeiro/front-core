@@ -4,6 +4,7 @@ import {
   joinUri,
   isFullUrl,
 } from './uri-utils';
+import { parseToJsonPatch } from './api-utils';
 import generateId from './generate-id';
 
 import { getCookie } from './cookie';
@@ -77,7 +78,7 @@ class BaseApiClientClass {
       ...options,
       method: 'patch',
       url,
-      data,
+      data: parseToJsonPatch(data),
     });
   }
   del(url, data, options = {}) {

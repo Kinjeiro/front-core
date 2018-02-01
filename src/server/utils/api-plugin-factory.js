@@ -427,7 +427,7 @@ export function proxyRoute(path, proxy, otherOptions = {}) {
   if (typeof apiConfig === 'string') {
     apiConfig = {
       path: apiConfig,
-      method: ['GET', 'POST', 'PUT', 'DELETE'],
+      method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     };
   }
 
@@ -465,7 +465,7 @@ export function proxyRouteFactory(middlewareEndpointConfig, headersExtractor = d
       apiConfig,
       (clientRequest) => {
         let url = middleApiPath || clientRequest.url.href;
-        // proceed params
+        // proceed path params
         Object.keys(clientRequest.params).forEach((paramKey) => {
           url = url.replace(new RegExp(`{${paramKey}}`, 'g'), clientRequest.params[paramKey]);
         });

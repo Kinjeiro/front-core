@@ -23,11 +23,11 @@ import {
 
 import {
   apiPluginFactory,
-  proxyRoutePluginFactory,
+  proxyRoute,
 } from './api-plugin-factory';
 
 describe('api-plugin-factory', () => {
-  describe('[method] proxyRoutePluginFactory', () => {
+  describe('[method] proxyRoute', () => {
     async function runSimpleUpstream(testCodeFn) {
       return upstreamServer(
         null,
@@ -47,7 +47,7 @@ describe('api-plugin-factory', () => {
       await runSimpleUpstream(async (upstream) => {
         const server = simpleServer([
           pluginH2o2,
-          proxyRoutePluginFactory(
+          proxyRoute(
             '/test',
             {
               uri: `{protocol}://{host}:${upstream.info.port}/upstreamApi{path}`,
@@ -76,7 +76,7 @@ describe('api-plugin-factory', () => {
       await runSimpleUpstream(async (upstream) => {
         const server = await simpleServer([
           pluginH2o2,
-          proxyRoutePluginFactory(
+          proxyRoute(
             '/test',
             {
               apiPrefix: 'upstreamApi',
@@ -101,7 +101,7 @@ describe('api-plugin-factory', () => {
       await runSimpleUpstream(async (upstream) => {
         const server = await simpleServer([
           pluginH2o2,
-          proxyRoutePluginFactory(
+          proxyRoute(
             '/test',
             {
               apiPrefix: 'upstreamApi',
@@ -142,7 +142,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test',
               {
                 apiPrefix: 'upstreamApi',
@@ -189,7 +189,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               {
                 path: '/test/*',
               },
@@ -228,7 +228,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               {
                 path: '/test/*',
               },
@@ -262,7 +262,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               {
                 path: '/test/*',
               },
@@ -296,7 +296,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test/*',
               (request, callback) => {
                 // в версии h2o2@6.0.1 нужно подавать через callback
@@ -328,7 +328,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test/*',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
@@ -361,7 +361,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test/*',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
@@ -396,7 +396,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test/*',
               {
                 host: '127.0.0.1',
@@ -443,7 +443,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test/*',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
@@ -503,7 +503,7 @@ describe('api-plugin-factory', () => {
         async (upstream) => {
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/test/*',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
@@ -575,7 +575,7 @@ describe('api-plugin-factory', () => {
 
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/api/test/*',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href.replace(apiPrefixRegExp, '/')}`,
@@ -607,7 +607,7 @@ describe('api-plugin-factory', () => {
           // https://github.com/hapijs/h2o2#custom-uri-template-values
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/api/apiContext/{myPath*}',
               `http://127.0.0.1:${upstream.info.port}/upstreamApi/{myPath}`,
               {
@@ -637,7 +637,7 @@ describe('api-plugin-factory', () => {
           // https://github.com/hapijs/h2o2#custom-uri-template-values
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/api/apiContext/{myPath*}',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi/{myPath}`,
@@ -670,12 +670,14 @@ describe('api-plugin-factory', () => {
           // https://github.com/hapijs/h2o2#custom-uri-template-values
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/api/apiContext/{myPath*}',
-              (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi/{myPath}`,
-                headers: {},
-              }),
+              (request) => {
+                return {
+                  uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi/{myPath}`,
+                  headers: {},
+                };
+              },
               {
                 routeConfig: {
                   auth: false,
@@ -684,7 +686,7 @@ describe('api-plugin-factory', () => {
             ),
           ]);
 
-          const res = await server.inject('/api/apiContext/test/test2');
+          const res = await server.inject('/api/apiContext/test/test2?opa=test');
           expect(res.statusCode).to.equal(400);
           expect(res.result.uniCode).to.deep.equal(400);
           expect(res.result.message).to.deep.equal('errorMessage');
@@ -707,7 +709,7 @@ describe('api-plugin-factory', () => {
           // https://github.com/hapijs/h2o2#custom-uri-template-values
           const server = await simpleServer([
             pluginH2o2,
-            proxyRoutePluginFactory(
+            proxyRoute(
               '/api/apiContext/{myPath*}',
               (request) => ({
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi/{myPath}`,
