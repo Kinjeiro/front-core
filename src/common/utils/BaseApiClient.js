@@ -4,7 +4,10 @@ import {
   joinUri,
   isFullUrl,
 } from './uri-utils';
-import { parseToJsonPatch } from './api-utils';
+import {
+  parseToJsonPatch,
+  replacePathIndexToItemId,
+} from './api-utils';
 import generateId from './generate-id';
 
 import { getCookie } from './cookie';
@@ -20,6 +23,7 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
   contextRoot: '',
   // против CSRF атаки берем из куков и проставляем в хеадер значение
   cookieCSRF: null,
+  usePatchByItemId: false,
 };
 
 class BaseApiClientClass {
@@ -74,11 +78,17 @@ class BaseApiClientClass {
     });
   }
   patch(url, data, options = {}) {
+    let patchOperations = parseToJsonPatch(data);
+
+    if (this.apiClientOptions.usePatchByItemId) {
+      patchOperations = patchOperations.map((operation) => replacePathIndexToItemId(operation));
+    }
+
     return this.proceedRequest({
       ...options,
       method: 'patch',
       url,
-      data: parseToJsonPatch(data),
+      data: patchOperations,
     });
   }
   del(url, data, options = {}) {

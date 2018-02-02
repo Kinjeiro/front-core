@@ -3,6 +3,7 @@ import {
   parseToJsonPatch,
   applyPatchOperations,
   createJsonPatchOperation,
+  replacePathIndexToItemId,
 } from './api-utils';
 
 describe('api utils', () => {
@@ -33,6 +34,47 @@ describe('api utils', () => {
         field1: 'newValue1',
         field2: ['newValue2', 'newValue4'],
         field3: 'newFieldValue',
+      });
+    });
+  });
+  describe('[function] replacePathIndexToItemId', () => {
+    it('should replace by ids', () => {
+      const operation = {
+        op: 'add',
+        path: 'test/111/opa/222/test/333',
+        value: 'test',
+        itemIds: ['a', 'b', 'c'],
+      };
+      expect(replacePathIndexToItemId(operation)).to.deep.equal({
+        op: 'add',
+        path: 'test/a/opa/b/test/c',
+        value: 'test',
+      });
+    });
+    it('should replace by ids with incorrect path', () => {
+      const operation = {
+        op: 'add',
+        path: 'test/111/opa/222/333',
+        value: 'test',
+        itemIds: ['a', 'b', 'c'],
+      };
+      expect(replacePathIndexToItemId(operation)).to.deep.equal({
+        op: 'add',
+        path: 'test/a/opa/b/c',
+        value: 'test',
+      });
+    });
+    it('should replace path by one id', () => {
+      const operation = createJsonPatchOperation(
+        'test/111/opa/test',
+        'test',
+        PATCH_OPERATIONS.ADD,
+        'a',
+      );
+      expect(replacePathIndexToItemId(operation)).to.deep.equal({
+        op: 'add',
+        path: '/test/a/opa/test',
+        value: 'test',
       });
     });
   });
