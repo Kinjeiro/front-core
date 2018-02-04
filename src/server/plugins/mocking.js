@@ -186,6 +186,7 @@ function onPreResponse(mockOptions, request, reply) {
 export const register = function (server, options, next) {
   const finalOptions = {
     ...DEFAULT_OPTIONS,
+    ...serverConfig.server.features.mocking,
     ...(options || {}),
   };
   const {
