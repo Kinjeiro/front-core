@@ -34,7 +34,10 @@ export default function pluginApiLog(apiRequest, apiConfig, prefixString = '', r
     }
     logger.debug(
       // 'query: ', query,
-      'payload: ', logPayload,
+      'apiPluginLog payload: ',
+      logPayload && logPayload instanceof Buffer
+        ? logPayload.toString()
+        : JSON.stringify(logPayload, null, 2),
       '\n',
     );
   }

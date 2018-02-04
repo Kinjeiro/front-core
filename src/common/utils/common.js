@@ -5,6 +5,11 @@ import mergeLib from 'lodash/merge';
 import uuid from 'uuid';
 // import uniqueId from 'lodash/uniqueId';
 
+import {
+  findInTree as findInTreeLib,
+  arrayToTree as arrayToTreeLib,
+} from './tree-utils';
+
 export function generateId(uuidOptions = null, version = 'v1') {
   // return uniqueId();
 
@@ -163,48 +168,6 @@ export function isDecimal(value) {
 
 export function emptyFunction() {}
 
-export function findInTree(tree, id, config = {}, deep = 0, path = [], pathStr = '') {
-  const {
-    fieldChildren = 'children',
-    fieldId = 'id',
-  } = config;
-
-  let result;
-  let resultValue = null;
-
-  if (id === null || typeof id === 'undefined') {
-    result = null;
-  } else if (tree[fieldId] === id) {
-    result = tree;
-    path.push(result);
-  } else {
-    const isFound = tree[fieldChildren].some((child, index) => {
-      if (child[fieldId] === id) {
-        result = child;
-        path.push(result);
-        pathStr = `${pathStr}[${index}]`;
-        return true;
-      }
-      resultValue = findInTree(child, id, config, deep + 1, path, `${pathStr}[${index}]`);
-      if (resultValue.result) {
-        result = resultValue.result;
-        pathStr = resultValue.pathStr;
-        return true;
-      }
-      return false;
-    });
-
-    if (isFound) {
-      path.push(tree);
-    }
-  }
-
-  if (deep === 0) {
-    path.reverse();
-  }
-  return { result, path, pathStr };
-}
-
 export function filterObjects(collections, queryFields) {
   return collections.filter((payer) =>
     Object.keys(queryFields).every((field) => {
@@ -281,46 +244,19 @@ export function isEmpty(value, objectChecker = null) {
   return value === null || typeof value === 'undefined' || value === '' || (Array.isArray(value) && value.length === 0);
 }
 
+
+
+
+/**
+ @deprecated - user tree-utils.js::findInTree
+ */
+export function findInTree(tree, id, config = {}, deep = 0, path = [], pathStr = '') {
+  return findInTreeLib(tree, id, config, deep, path, pathStr);
+}
+
+/**
+ * @deprecated - use tree-utils.js arrayToTree
+ */
 export function arrayToTree(array, options = {}, parent = null, level = 0) {
-  const {
-    tree = [],
-    fieldId = 'id',
-    fieldParent = 'parentId',
-    fieldChildren = 'children',
-    fieldLevel = 'level',
-    useLevels = true,
-    emptyChildren = true,
-  } = options;
-
-  parent = parent || {
-    [fieldId]: null,
-  };
-
-  let treeResult = tree;
-
-  const children = array.filter((child) =>
-    (isEmpty(child[fieldParent]) && isEmpty(parent[fieldId]))
-    || (child[fieldParent] === parent[fieldId]),
-  );
-
-  if (!isEmpty(children)) {
-    if (isEmpty(parent[fieldId])) {
-      treeResult = children;
-    } else {
-      parent[fieldChildren] = children;
-    }
-    children.forEach((child) => {
-      if (useLevels) {
-        child[fieldLevel] = level;
-      }
-      if (typeof child[fieldParent] === 'undefined') {
-        child[fieldParent] = null;
-      }
-      arrayToTree(array, options, child, level + 1);
-    });
-  } else if (emptyChildren) {
-    parent[fieldChildren] = [];
-  }
-
-  return treeResult;
+  return arrayToTreeLib(array, options, parent, level);
 }
