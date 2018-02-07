@@ -64,6 +64,9 @@ export default class AbstractClientRunner {
   getRoutes(store) {
     throw new Error('need override "AbstractClientRunner.getRoutes"');
   }
+  getApi() {
+    return {};
+  }
 
 
   // ======================================================
@@ -77,6 +80,7 @@ export default class AbstractClientRunner {
     this.store = this.createStore(routeHistory);
     this.history = syncHistoryWithStore(routeHistory, this.store);
     this.routes = this.getRoutes(this.store);
+    this.api = this.getApi();
 
     // ======================================================
     // DEBUG
@@ -92,6 +96,7 @@ export default class AbstractClientRunner {
       logger.log('=====[ CLIENT CONFIG ]=====', clientConfig.client);
       window.store = this.store;
       window.config = clientConfig;
+      window.api = this.api;
     }
   }
 

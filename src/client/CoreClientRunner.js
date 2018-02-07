@@ -18,12 +18,17 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return require('../common/create-routes').default(store);
   }
 
+  getApi() {
+    return require('../common/api').default;
+  }
+
   hotReloadListeners() {
     super.hotReloadListeners();
 
     module.hot.accept('../common/create-routes', this.reloadUi);
     module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);
     module.hot.accept('../common/models/domains', this.reloadAll);
+    module.hot.accept('../common/api', this.reloadAll);
   }
 
   getInitialState() {

@@ -1,3 +1,5 @@
+import appUrl from '../helpers/app-urls';
+
 export const ASSETS = 'assets';
 
 export const STUB_ROUTES_NAMES = {
@@ -6,9 +8,9 @@ export const STUB_ROUTES_NAMES = {
   LOGIN: 'login',
 };
 
-export const PATH_INDEX = '/';
-export const PATH_ACCESS_DENIED = `/${STUB_ROUTES_NAMES.ACCESS_DENIED}`;
-export const PATH_ERROR_PAGE = `/${STUB_ROUTES_NAMES.ERROR}`;
-export const PATH_LOGIN_PAGE = `/${STUB_ROUTES_NAMES.LOGIN}`;
+export const PATH_INDEX = appUrl('/');
+export const PATH_ACCESS_DENIED = appUrl(PATH_INDEX, STUB_ROUTES_NAMES.ACCESS_DENIED);
+export const PATH_ERROR_PAGE = appUrl(PATH_INDEX, STUB_ROUTES_NAMES.ERROR);
+export const PATH_LOGIN_PAGE = appUrl(PATH_INDEX, STUB_ROUTES_NAMES.LOGIN);
 
 export const PARAM_RETURN_URL = 'return';

@@ -1,5 +1,7 @@
 import requestAgent from 'superagent';
 
+import clientConfig from '../client-config';
+
 import {
   joinUri,
   isFullUrl,
@@ -20,9 +22,9 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
   apiPrefix: '',
   apiProtocol: 'http',
   withCredentials: false,
-  contextRoot: '',
+  contextRoot: clientConfig.common.app.contextRoot,
   // против CSRF атаки берем из куков и проставляем в хеадер значение
-  cookieCSRF: null,
+  cookieCSRF: clientConfig.common.cookieCSRF,
   usePatchByItemId: false,
 };
 
