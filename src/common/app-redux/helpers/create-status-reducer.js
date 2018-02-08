@@ -1,3 +1,5 @@
+import { getCurrentTime } from '../../utils/date-utils';
+
 import { getFetchTypesByType } from '../utils';
 
 export const INITIAL_STATE = {
@@ -6,6 +8,7 @@ export const INITIAL_STATE = {
   isFailed: false,
   isResponseNotEmpty: false,
   error: null,
+  updated: null,
 };
 
 /**
@@ -33,6 +36,7 @@ export default function createStatusesReducer(...typesArray) {
       isFailed,
       isResponseNotEmpty,
       error: finalError,
+      updated: getCurrentTime(),
     };
   };
 }

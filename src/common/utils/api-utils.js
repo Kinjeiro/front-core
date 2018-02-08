@@ -51,6 +51,10 @@ export function applyPatchOperations(object, patchOperations) {
   return applyPatch(object, parseToJsonPatch(patchOperations)).newDocument;
 }
 
+// нужен чтобы при повторных проходах, не учитывать уже заменненые значения
+const SPECIAL_DELIMITER = '{';
+const SPECIAL_DELIMITER_REGEXP = new RegExp(SPECIAL_DELIMITER, 'g');
+
 export function replacePathIndexToItemId(operation, saveItemIds = false) {
   if (operation.itemIds) {
     const {
@@ -61,8 +65,9 @@ export function replacePathIndexToItemId(operation, saveItemIds = false) {
     } = operation;
 
     const resultPath = itemIds.reduce((result, itemId) =>
-      result.replace(/\/(\d+)(\/|$)/, `/${itemId}$2`,
-    ), path);
+      result.replace(/\/(\d+)(\/|$)/, `/${SPECIAL_DELIMITER}${itemId}${SPECIAL_DELIMITER}$2`,
+    ), path)
+      .replace(SPECIAL_DELIMITER_REGEXP, '');
 
     // const regExp = /\/(\d+)(\/|$)/g;
     // let resultPath = '';

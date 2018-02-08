@@ -77,5 +77,18 @@ describe('api utils', () => {
         value: 'test',
       });
     });
+    it('should replace path indexes to number ids', () => {
+      const operation = createJsonPatchOperation(
+        'test/1/opa/2',
+        'test',
+        PATCH_OPERATIONS.ADD,
+        [3, 4],
+      );
+      expect(replacePathIndexToItemId(operation)).to.deep.equal({
+        op: 'add',
+        path: '/test/3/opa/4',
+        value: 'test',
+      });
+    });
   });
 });
