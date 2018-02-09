@@ -17,7 +17,7 @@ export const SYSTEM_DATETIME_FORMAT = clientConfig.common.features.date.systemDa
 export const DATE_FORMAT =            clientConfig.common.features.date.dateFormat || 'DD.MM.YYYY';
 export const DATETIME_FORMAT =        clientConfig.common.features.date.dateTimeFormat || 'DD.MM.YYYY HH:mm';
 export const SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || FORMATS.TIMESTAMP;
-export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeForms || FORMATS.TIMESTAMP;
+export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeFormat || FORMATS.TIMESTAMP;
 
 export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT, FORMATS.ISO]) {
   let momentDate;
@@ -106,6 +106,10 @@ export function formatDateTime(date, format = DATETIME_FORMAT) {
 
 export function parseToSystem(momentData) {
   return parseDate(momentData, SYSTEM_DATE_FORMAT);
+}
+
+export function parseToServerFormat(momentData) {
+  return parseDate(momentData, SERVER_DATE_FORMAT);
 }
 
 export function getCurrentTime() {

@@ -171,7 +171,7 @@ module.exports = {
         dateFormat: 'DD.MM.YYYY',
         dateTimeFormat: 'DD.MM.YYYY HH:mm',
         serverDateFormat: 'timestamp',
-        serverDateTimeForms: 'timestamp'
+        serverDateTimeFormat: 'timestamp'
       },
 
       i18n: {

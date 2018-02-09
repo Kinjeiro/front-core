@@ -177,7 +177,12 @@ export default class LoginPage extends Component {
             <input
               name="username"
               value={ username }
+              type="text"
               autoComplete="username"
+              autoCorrect="off"
+              spellCheck="false"
+              autoCapitalize="off"
+              autoFocus="autofocus"
               onChange={ this.handleChangeUserName }
             />
           </div>
