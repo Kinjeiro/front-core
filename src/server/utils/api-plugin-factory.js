@@ -18,6 +18,7 @@ import {
   parseResponseHandler,
   responseError,
   getRequestData,
+  responseWrapper,
 } from './hapi-utils';
 
 import { getToken } from './auth-utils';
@@ -187,10 +188,18 @@ function proxyWrapper(reply, proxy, callback) {
   return reply.proxy(proxyOptionsFinal);
 }
 
+/**
+ *
+ * @param handler - (payload, requestData, apiRequest, newReply, proxyResponse, pluginOptions) => {}
+ * @param apiRequest
+ * @param pluginOptions
+ * @returns {function(*=, *=, *=)}
+ */
 function createProxyWrapperCallback(handler, apiRequest, pluginOptions) {
   return (payload, newReply, proxyResponse) => {
     if (handler) {
-      return handler(payload, apiRequest, newReply, pluginOptions, proxyResponse);
+      const result = handler(payload, getRequestData(apiRequest), apiRequest, newReply, proxyResponse, pluginOptions);
+      return responseWrapper(result, newReply);
     }
 
     if (proxyResponse.statusCode < 200 || proxyResponse.statusCode >= 300) {
@@ -414,8 +423,8 @@ export function apiPluginFactory(apiConfig, handler, otherOptions = {}) {
  * @param method
  * @param proxy - string \ mapUri function \ h2o2 options (proxyOptions) - https://github.com/hapijs/h2o2 (add support { apiPrefix: 'serviceApiPath' })
  *          server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: 'http://localhost:' + upstream.info.port + '/item/{a}/{b}' } } });
- * @param otherOptions
-   - handler - (payload, apiRequest, reply, pluginOptions) => {}
+ * @param otherOptions - если только функция, значит это handler
+   - handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
    - permissions
    - checkPermissionStrategy
    - routeConfig
@@ -428,6 +437,13 @@ export function proxyRoute(path, proxy, otherOptions = {}) {
     apiConfig = {
       path: apiConfig,
       method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    };
+  }
+
+  if (typeof otherOptions === 'function') {
+    // eslint-disable-next-line no-param-reassign
+    otherOptions = {
+      handler: otherOptions,
     };
   }
 
