@@ -64,10 +64,11 @@ async function permissionWrapper(permissions, checkPermissionStrategy, other) {
   try {
     if (permissions) {
       if (!Array.isArray(permissions)) {
+        // eslint-disable-next-line no-param-reassign
         permissions = [permissions];
       }
       // проверяем доступы
-      await Promise.all(permissions.map((permission) =>
+      return await Promise.all(permissions.map((permission) =>
         // если пермишен не будет найден - вызовется throw Error и дальне не пойдет
         checkPermissionStrategy(apiRequest, permission),
       ));
@@ -190,7 +191,7 @@ function proxyWrapper(reply, proxy, callback) {
 
 /**
  *
- * @param handler - (payload, requestData, apiRequest, newReply, proxyResponse, pluginOptions) => {}
+ * @param handler - (proxyPayload, requestData, apiRequest, newReply, proxyResponse, pluginOptions) => {}
  * @param apiRequest
  * @param pluginOptions
  * @returns {function(*=, *=, *=)}

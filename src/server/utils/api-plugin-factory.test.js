@@ -108,8 +108,8 @@ describe('api-plugin-factory', () => {
               port: upstream.info.port,
             },
             {
-              handler: (payload, apiRequest, newReply, pluginOptions) => {
-                return newReply(`updated_${payload}`);
+              handler: (proxyPayload, requestData, apiRequest, newReply, proxyResponse, pluginOptions) => {
+                return newReply(`updated_${proxyPayload}`);
               },
               routeConfig: {
                 auth: false,
@@ -149,8 +149,8 @@ describe('api-plugin-factory', () => {
                 port: upstream.info.port,
               },
               {
-                handler: (payload, apiRequest, newReply, pluginOptions) => newReply({
-                  ...payload,
+                handler: (proxyPayload, requestData, apiRequest, newReply) => newReply({
+                  ...proxyPayload,
                   test2: 'test2Value',
                 }),
                 routeConfig: {
@@ -367,7 +367,7 @@ describe('api-plugin-factory', () => {
                 uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
               }),
               {
-                handler: (payload, apiRequest, newReply, pluginOptions) => newReply(payload),
+                handler: (proxyPayload, requestData, apiRequest, newReply) => newReply(proxyPayload),
                 routeConfig: {
                   auth: false,
                 },
