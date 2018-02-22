@@ -1,8 +1,9 @@
 import EventEmitter from 'wolfy87-eventemitter';
 
-import clientConfig from '../client-config';
 import i18n from '../utils/i18n-utils';
+import { generateId } from '../utils/common';
 
+import clientConfig from '../client-config';
 
 /**
 
@@ -20,12 +21,15 @@ export default class Notification extends Component {
     NoticeEmitter.removeListener(this.addNotice);
   }
 
-  addNotice = (noticeData) => {
+  addNotice = (noticeData, isRemove = false) => {
     const { notices } = this.state;
-    notices.push({
-      id: uuid.v4(),
-      ...noticeData
-    });
+
+    if (isRemove) {
+      notices = notices.filter(({ id }) => id !== noticeData.id)
+    } else {
+      notices.push(noticeData);
+    }
+
     this.setState({ notices });
   };
 
@@ -57,8 +61,9 @@ class NoticeEmitter extends EventEmitter {
   EVENT_NAME = 'app-notification';
 
   STATUSES = {
-    OK: 'ok',
-    FAIL: 'fail',
+    SUCCESS: 'success',
+    INFO: 'info',
+    WARNING: 'warning',
     ERROR: 'error',
   };
 
@@ -79,13 +84,28 @@ class NoticeEmitter extends EventEmitter {
   }
 
   // todo @ANKU @CRIT @MAIN - typescript описать формат
-  notify(message = i18n('core:Произошла ошибка'), { title, icon, status = this.STATUSES.ERROR } = {}) {
+  notify(messages, options = {}) {
+    if (!Array.isArray(messages)) {
+      // eslint-disable-next-line no-param-reassign
+      messages = messages ? [messages] : [i18n('core:Произошла ошибка')];
+    }
+
+    const notice = {
+      messages,
+      ...options,
+      // title,
+      // icon,
+      // status,
+      id: options.id || generateId(),
+      status: options.status || this.STATUSES.ERROR,
+    };
+
     if (this.getListeners(this.EVENT_NAME).length > 0) {
       // если подключился компонент для отображения
-      this.emitEvent(this.EVENT_NAME, [{ message, title, icon, status }]);
+      this.emitEvent(this.EVENT_NAME, [notice]);
     } else if (clientConfig.common.features.notifications && clientConfig.common.features.notifications.systemQueue) {
       // копим, пока не подключится компонент, который будет все показывать
-      this.noticeQueue.push({ message, title, icon, status });
+      this.noticeQueue.push(notice);
     }
   }
 
@@ -93,31 +113,50 @@ class NoticeEmitter extends EventEmitter {
   // ======================================================
   // API
   // ======================================================
-  error(message, options = {}) {
-    this.notify(message, {
+  error(messages, options = {}) {
+    this.notify(messages, {
       ...options,
       status: this.STATUSES.ERROR,
     });
   }
-  info(message, options = {}) {
-    this.notify(message, {
+  success(messages, options = {}) {
+    this.notify(messages, {
       ...options,
-      status: this.STATUSES.OK,
+      status: this.STATUSES.SUCCESS,
     });
   }
-  warn(message, options = {}) {
-    this.notify(message, {
+  info(messages, options = {}) {
+    this.notify(messages, {
       ...options,
-      status: this.STATUSES.FAIL,
+      status: this.STATUSES.INFO,
     });
+  }
+  warn(messages, options = {}) {
+    this.notify(messages, {
+      ...options,
+      status: this.STATUSES.WARNING,
+    });
+  }
+
+  removeNotice(id) {
+    if (this.getListeners(this.EVENT_NAME).length > 0) {
+      // если подключился компонент для отображения
+      this.emitEvent(this.EVENT_NAME, [{ id }], true);
+    } else if (clientConfig.common.features.notifications && clientConfig.common.features.notifications.systemQueue) {
+      // копим, пока не подключится компонент, который будет все показывать
+      this.noticeQueue = this.noticeQueue.filter(({ id: itemId }) => itemId !== id);
+    }
   }
 }
 
 const emitter = new NoticeEmitter();
 
+export const STATUSES = emitter.STATUSES;
 export const notify = emitter.notify.bind(emitter);
+export const notifySuccess = emitter.success.bind(emitter);
 export const notifyInfo = emitter.info.bind(emitter);
 export const notifyWarn = emitter.warn.bind(emitter);
 export const notifyError = emitter.error.bind(emitter);
+export const removeNotice = emitter.removeNotice.bind(emitter);
 
 export default emitter;

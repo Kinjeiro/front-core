@@ -12,10 +12,10 @@ export default class Notice extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
-    message: PropTypes.string,
+    messages: PropTypes.arrayOf(PropTypes.string),
     icon: PropTypes.element,
 
-    status: PropTypes.oneOf([STATUSES.OK, STATUSES.FAIL, STATUSES.ERROR]),
+    status: PropTypes.oneOf([STATUSES.SUCCESS, STATUSES.WARNING, STATUSES.ERROR]),
     autoCloseDelay: PropTypes.number,
 
     // todo @ANKU @CRIT @MAIN - если нужно будет - подключим этот функционал
@@ -71,7 +71,7 @@ export default class Notice extends Component {
   render() {
     const {
       title,
-      message,
+      messages,
       status,
       // icon,
       autoCloseDelay,
@@ -89,8 +89,17 @@ export default class Notice extends Component {
 
     return (
       <div className={ this.fullClassName }>
-        { title && <div>{ title }</div> }
-        { message && <div>{ message }</div>}
+        { title && (
+          <div className={ this.bem('title') }>{ title }</div>
+        ) }
+        { messages && messages.map((message, index) => (
+          <div
+            key={ index }
+            className={ this.bem('message') }
+          >
+            { message }
+          </div>
+        )) }
         <button
           className={ this.bem('closer') }
           onClick={ this.handleNotificationCloserClick }

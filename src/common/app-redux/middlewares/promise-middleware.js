@@ -81,7 +81,7 @@ const promiseMiddleware = ({ dispatch, getState }) => next => action => {
         }
 
         if (!errorIsAnswer) {
-          Notifications.notify(uniError.clientErrorMessage);
+          Notifications.notify(uniError.clientErrorMessages);
         }
       });
 

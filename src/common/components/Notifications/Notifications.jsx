@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import bemDecorator from '../../utils/decorators/bem-component';
-import { generateId } from '../../utils/common';
 import NoticeEmitter from '../../helpers/notifications';
 
 import Notice from './Notice';
@@ -12,7 +11,10 @@ import './Notifications.css';
 @bemDecorator({ componentName: 'Notifications', wrapper: false })
 export default class Notifications extends Component {
   static propTypes = {
-    NoticeComponent: PropTypes.func,
+    NoticeComponent: PropTypes.oneOfType([
+      PropTypes.instanceOf(Component),
+      PropTypes.func,
+    ]),
   };
 
   static defaultProps = {
@@ -32,13 +34,14 @@ export default class Notifications extends Component {
     NoticeEmitter.removeListener(this.addNotice);
   }
 
-  addNotice = (noticeData) => {
-    const { notices } = this.state;
-    notices.push({
-      id: generateId(),
-      ...noticeData,
-    });
-    this.setState({ notices });
+  addNotice = (noticeData, isRemove = false) => {
+    if (isRemove) {
+      this.removeNotice(noticeData.id);
+    } else {
+      this.setState({
+        notices: [...this.state.notices, noticeData],
+      });
+    }
   };
 
   removeNotice = (id) => {

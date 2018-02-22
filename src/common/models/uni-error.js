@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 
@@ -31,10 +32,14 @@ export const MAP = {
   responseStatusCode: PropTypes.number,
   isServerError: PropTypes.bool,
 
-  clientErrorTitle: PropTypes.string,
-  clientErrorMessage: PropTypes.string,
+  clientErrorTitle: PropTypes.node,
+  /**
+   * @deprecated - use clientErrorMessages
+   */
+  clientErrorMessage: PropTypes.node,
+  clientErrorMessages: PropTypes.arrayOf(PropTypes.node),
 
-  message: PropTypes.string,
+  message: PropTypes.node,
   stack: PropTypes.any,
 
   errorFrom: PropTypes.oneOf([
@@ -49,7 +54,11 @@ export const MAP = {
 
   // calculated
   uniCode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  uniMessage: PropTypes.string,
+  /**
+   * @deprecated - use uniMessages
+   */
+  uniMessage: PropTypes.node,
+  uniMessages: PropTypes.arrayOf(PropTypes.node),
   isNotFound: PropTypes.bool,
 };
 export const UNI_ERROR_PROP_TYPE = PropTypes.shape(MAP);
@@ -74,10 +83,19 @@ export function isUniError(object) {
 
 export function createUniError(uniErrorData = {}) {
   if (typeof uniErrorData === 'string') {
-    // eslint-disable-next-line no-param-reassign
     uniErrorData = {
       clientErrorMessage: uniErrorData,
     };
+  } else if (Array.isArray(uniErrorData)) {
+    uniErrorData = {
+      clientErrorMessages: uniErrorData,
+    };
+  }
+
+  if (uniErrorData.clientErrorMessages && uniErrorData.clientErrorMessages.length > 0) {
+    uniErrorData.clientErrorMessage = uniErrorData.clientErrorMessages[0];
+  } else if (uniErrorData.clientErrorMessage) {
+    uniErrorData.clientErrorMessages = [uniErrorData.clientErrorMessage];
   }
 
   const defaultValues = {
@@ -87,18 +105,13 @@ export function createUniError(uniErrorData = {}) {
     responseStatusCode: undefined,
     isServerError: false,
 
-    clientErrorTitle: i18n('core:errors.clientErrorTitleDefault'),
-    clientErrorMessage: i18n('core:errors.clientErrorMessageDefault'),
-
-    message: undefined,
-    stack: undefined,
-
     errorFrom: UNI_ERROR_FROM.FROM_CREATE,
     originalObject: undefined,
 
     // calculated
     uniCode: undefined,
     uniMessage: undefined,
+    uniMessages: undefined,
     isNotFound: false,
   };
 
@@ -107,10 +120,14 @@ export function createUniError(uniErrorData = {}) {
   uniError.uniCode = uniError.errorCode || uniError.responseStatusCode;
 
   uniError.uniMessage =
-    uniErrorData.clientErrorMessage
+    (uniErrorData.clientErrorMessages && uniErrorData.clientErrorMessages[0])
+    || uniErrorData.clientErrorMessage
     || uniErrorData.clientErrorTitle
     || uniErrorData.message
     || defaultValues.clientErrorMessage;
+  uniError.uniMessages = uniErrorData.clientErrorMessages && uniErrorData.clientErrorMessages.length > 0
+    ? uniErrorData.clientErrorMessages
+    : [uniError.uniMessage];
 
   uniError.isNotFound = ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
     || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode);
@@ -242,6 +259,7 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
         innerUniError = {
           message: responseBody.message,
           clientErrorMessage: responseBody.clientErrorMessage,
+          clientErrorMessages: responseBody.clientErrorMessages,
         };
       }
 
