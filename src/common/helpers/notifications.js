@@ -83,6 +83,13 @@ class NoticeEmitter extends EventEmitter {
     }
   }
 
+  emitNotify(...args) {
+    // делаем с задержкой, чтобы компоненты отображающие смогли применить свои setState
+    setTimeout(() => {
+      this.emitEvent(this.EVENT_NAME, args);
+    }, 10);
+  }
+
   // todo @ANKU @CRIT @MAIN - typescript описать формат
   notify(messages, options = {}) {
     if (!Array.isArray(messages)) {
@@ -102,7 +109,7 @@ class NoticeEmitter extends EventEmitter {
 
     if (this.getListeners(this.EVENT_NAME).length > 0) {
       // если подключился компонент для отображения
-      this.emitEvent(this.EVENT_NAME, [notice]);
+      this.emitNotify(notice);
     } else if (clientConfig.common.features.notifications && clientConfig.common.features.notifications.systemQueue) {
       // копим, пока не подключится компонент, который будет все показывать
       this.noticeQueue.push(notice);
@@ -141,7 +148,7 @@ class NoticeEmitter extends EventEmitter {
   removeNotice(id) {
     if (this.getListeners(this.EVENT_NAME).length > 0) {
       // если подключился компонент для отображения
-      this.emitEvent(this.EVENT_NAME, [{ id }], true);
+      this.emitNotify({ id }, true);
     } else if (clientConfig.common.features.notifications && clientConfig.common.features.notifications.systemQueue) {
       // копим, пока не подключится компонент, который будет все показывать
       this.noticeQueue = this.noticeQueue.filter(({ id: itemId }) => itemId !== id);
