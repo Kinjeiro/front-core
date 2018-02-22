@@ -11,13 +11,14 @@ module.exports = {
 
   errors: {
     clientErrorTitleDefault: 'Error',
-    clientErrorMessageDefault: 'Sorry. An error has occurred.',
+    clientErrorMessageDefault: 'Sorry. An error has occurred',
     errorWhileParseToUniError: "Can't convert to UniError.",
 
     authServerNotResponse: "Authenticated server doesn't response.",
     wrongUserCredentials: 'Invalid user credentials.',
     missingPassword: 'Missing required parameter: password.',
     notAuthorize: 'Not authorize.',
+    mockUserNotFound: 'Mock user not found',
   },
 
   pages: {

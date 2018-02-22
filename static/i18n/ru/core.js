@@ -11,13 +11,14 @@ module.exports = {
 
   errors: {
     clientErrorTitleDefault: 'Ошибка',
-    clientErrorMessageDefault: 'Произошла ошибка.',
+    clientErrorMessageDefault: 'Произошла ошибка',
     errorWhileParseToUniError: "@RU Can't convert to UniError.",
 
     authServerNotResponse: 'Авторизационный сервер не отвечает.',
     wrongUserCredentials: 'Некорректно введенные данные.',
     missingPassword: 'Введите пароль.',
     notAuthorize: 'Не авторизован.',
+    mockUserNotFound: 'Не найден замокированный пользователь.',
   },
 
   pages: {

@@ -94,7 +94,7 @@ class NoticeEmitter extends EventEmitter {
   notify(messages, options = {}) {
     if (!Array.isArray(messages)) {
       // eslint-disable-next-line no-param-reassign
-      messages = messages ? [messages] : [i18n('core:Произошла ошибка')];
+      messages = messages ? [messages] : [i18n('core:errors.clientErrorMessageDefault')];
     }
 
     const notice = {

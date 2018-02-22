@@ -20,7 +20,7 @@ export default [
     if (!userInfo) {
       return reply(createUniError({
         code: 401,
-        clientErrorMessage: i18n('core:Mock user not found'),
+        clientErrorMessage: i18n('core:errors.mockUserNotFound'),
       }))
         .code(401);
     }

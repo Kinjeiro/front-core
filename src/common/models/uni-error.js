@@ -389,7 +389,11 @@ export function parseToUniError(errorOrResponse, uniErrorData = {}, { withoutExc
 
   if (!result && !withoutException) {
     logger.error('Can\'t convert to uni error', errorOrResponse);
-    throw new Error(i18n('core:errors.errorWhileParseToUniError'));
+    // throw new Error(i18n('core:errors.errorWhileParseToUniError'));
+    return createUniError({
+      message: 'Can\'t convert to uni error',
+      originalObject: errorOrResponse,
+    });
   }
 
   return result;
