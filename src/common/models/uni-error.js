@@ -182,6 +182,18 @@ export function parseFromUniError(errorOrResponse, uniErrorData) {
   return null;
 }
 
+export function parseFromJsonError(errorOrResponse, uniErrorData) {
+  if (
+    typeof errorOrResponse === 'object'
+    && errorOrResponse.message
+    && (errorOrResponse.clientErrorMessage || errorOrResponse.clientErrorMessages)
+  ) {
+    return createUniError(merge({}, errorOrResponse, uniErrorData));
+  }
+
+  return null;
+}
+
 export function parseFromProjectFormat(errorOrResponse = {}, uniErrorData = {}) {
   // client wrapper
   if (checkProperties(errorOrResponse, 'data', 'ok')) {
@@ -377,6 +389,7 @@ export function parseToUniError(errorOrResponse, uniErrorData = {}, { withoutExc
     parseFromThrowableUniError,
     parseFromUniError,
     parseFromProjectFormat,
+    parseFromJsonError,
     parseFromResponse,
     parseFromError,
     parseFromBoomResponse,

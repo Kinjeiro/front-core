@@ -73,7 +73,7 @@ const promiseMiddleware = ({ dispatch, getState }) => next => action => {
 
       errors.forEach((error) => {
         const uniError = parseToUniError(error);
-        logger.error('MIDDLEWARE ERROR:', uniError, uniError.stack);
+        logger.error('MIDDLEWARE ERROR:', uniError.message, uniError, uniError.stack);
 
         if (!resultUniError) {
           // первый error отдаем
