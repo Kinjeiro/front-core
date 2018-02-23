@@ -478,88 +478,89 @@ describe('api-plugin-factory', () => {
       );
     });
 
-
-    it('should proxy file', async () => {
-      await upstreamServer(
-        null,
-        [
-          {
-            method: 'POST',
-            path: '/upstreamApi/test/upload',
-            config: {
-              // payload: {
-              //   maxBytes: 1048576, // 1MB
-              //   output: 'stream',  // We need to pipe the filedata to another server
-              //   parse: true
-              // },
-            },
-            handler: (request, h) => {
-              // return h.response('ok');
-              return h(request.payload);
-            },
-          },
-        ],
-        null,
-        async (upstream) => {
-          const server = await simpleServer([
-            pluginH2o2,
-            proxyRoute(
-              '/test/*',
-              (request) => ({
-                uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
-              }),
-              {
-                routeConfig: {
-                  auth: false,
-                },
-              },
-            ),
-          ]);
-
-          const myLogoFileBuffer = fs.readFileSync('./static/favicon.ico', 'utf-8');
-
-          const image = {
-            name: 'Ren & Stimpy',
-            description: [
-              'Ren Höek is a hot-tempered, "asthma-hound" Chihuahua.',
-              'Stimpson "Stimpy" J. Cat is a three-year-old dim-witted and happy-go-lucky cat.',
-            ].join('\n'),
-            filename: 'ren.jpg',
-            checksum: '5965ae98ecab44a2a29b87f90c681229',
-            width: '256',
-            height: '256',
-            filedata: new Buffer('lets imagine that this is an image'),
-            myLogo: myLogoFileBuffer,
-          };
-
-          const form = new FormData();
-          // Fill the form object
-          Object.keys(image).forEach((key) => {
-            form.append(key, image[key]);
-          });
-
-          const resultStream = await streamToPromise(form);
-
-          const response = await server.inject({
-            url: '/test/upload',
-            method: 'POST',
-            headers: form.getHeaders(),
-            payload: resultStream,
-          });
-          const { result } = response;
-
-          expect(response.statusCode).to.equal(200);
-          expect(result.name).to.equal(image.name);
-          expect(result.description).to.equal(image.description);
-          expect(result.filename).to.equal(image.filename);
-          expect(result.checksum).to.equal(image.checksum);
-          expect(result.width).to.equal(image.width);
-          expect(result.height).to.equal(image.height);
-          // expect(Buffer.from(result.myLogo, 'utf-8')).to.equal(myLogoFile);
-          expect(result.myLogo).to.equal(myLogoFileBuffer.toString());
-        },
-      );
-    });
+    // todo @ANKU @LOW - портит консоль своим выводом инфы - пока отключил
+    // it('should proxy file', async () => {
+    //   await upstreamServer(
+    //     null,
+    //     [
+    //       {
+    //         method: 'POST',
+    //         path: '/upstreamApi/test/upload',
+    //         config: {
+    //           // payload: {
+    //           //   maxBytes: 1048576, // 1MB
+    //           //   output: 'stream',  // We need to pipe the filedata to another server
+    //           //   parse: true
+    //           // },
+    //         },
+    //         handler: (request, h) => {
+    //           // return h.response('ok');
+    //           return h(request.payload);
+    //         },
+    //       },
+    //     ],
+    //     null,
+    //     async (upstream) => {
+    //       const server = await simpleServer([
+    //         pluginH2o2,
+    //         proxyRoute(
+    //           '/test/*',
+    //           (request) => ({
+    //             uri: `http://127.0.0.1:${upstream.info.port}/upstreamApi${request.url.href}`,
+    //           }),
+    //           {
+    //             routeConfig: {
+    //               auth: false,
+    //             },
+    //           },
+    //         ),
+    //       ]);
+    //
+    //       const myLogoFileBuffer = fs.readFileSync('./static/favicon.ico', 'utf-8');
+    //
+    //       const image = {
+    //         name: 'Ren & Stimpy',
+    //         description: [
+    //           'Ren Höek is a hot-tempered, "asthma-hound" Chihuahua.',
+    //           'Stimpson "Stimpy" J. Cat is a three-year-old dim-witted and happy-go-lucky cat.',
+    //         ].join('\n'),
+    //         filename: 'ren.jpg',
+    //         checksum: '5965ae98ecab44a2a29b87f90c681229',
+    //         width: '256',
+    //         height: '256',
+    //         filedata: new Buffer('lets imagine that this is an image'),
+    //         myLogo: myLogoFileBuffer,
+    //       };
+    //
+    //       const form = new FormData();
+    //       // Fill the form object
+    //       Object.keys(image).forEach((key) => {
+    //         form.append(key, image[key]);
+    //       });
+    //
+    //       const resultStream = await streamToPromise(form);
+    //
+    //       const response = await server.inject({
+    //         url: '/test/upload',
+    //         method: 'POST',
+    //         headers: form.getHeaders(),
+    //         payload: resultStream,
+    //       });
+    //       const { result } = response;
+    //
+    //       expect(response.statusCode).to.equal(200);
+    //       expect(result.name).to.equal(image.name);
+    //       expect(result.description).to.equal(image.description);
+    //       expect(result.filename).to.equal(image.filename);
+    //       expect(result.checksum).to.equal(image.checksum);
+    //       expect(result.width).to.equal(image.width);
+    //       expect(result.height).to.equal(image.height);
+    //       // expect(Buffer.from(result.myLogo, 'utf-8')).to.equal(myLogoFile);
+    //
+    //       expect(result.myLogo).to.equal(myLogoFileBuffer.toString());
+    //     },
+    //   );
+    // });
 
     it('should work with replace api prefix', async () => {
       await upstreamServer(

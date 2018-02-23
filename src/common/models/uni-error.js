@@ -183,8 +183,11 @@ export function parseFromUniError(errorOrResponse, uniErrorData) {
 }
 
 export function parseFromJsonError(errorOrResponse, uniErrorData) {
-  if (typeof errorOrResponse === 'object'
-    && (errorOrResponse.message || errorOrResponse.clientErrorMessage || errorOrResponse.clientErrorMessages)) {
+  if (
+    typeof errorOrResponse === 'object'
+    && typeof errorOrResponse.message !== 'undefined'
+    && (errorOrResponse.clientErrorMessage || errorOrResponse.clientErrorMessages)
+  ) {
     return createUniError(merge({}, errorOrResponse, uniErrorData));
   }
 
