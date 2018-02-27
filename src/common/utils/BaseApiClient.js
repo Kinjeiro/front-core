@@ -1,7 +1,11 @@
+/* eslint-disable no-param-reassign,no-undef,no-unused-vars */
 import requestAgent from 'superagent';
 
 import clientConfig from '../client-config';
 
+import {
+  generateId,
+} from './common';
 import {
   joinUri,
   isFullUrl,
@@ -9,8 +13,9 @@ import {
 import {
   parseToJsonPatch,
   replacePathIndexToItemId,
+  downloadFile,
 } from './api-utils';
-import generateId from './generate-id';
+import createApiConfig from './create-api-config';
 
 import { getCookie } from './cookie';
 
@@ -101,14 +106,41 @@ class BaseApiClientClass {
       data,
     });
   }
-  api(apiConfig, paramsOrData, options = {}) {
+  api(apiConfig, paramsOrData = null, options = {}) {
     const {
       method = 'get',
       path,
-    } = apiConfig;
+    } = createApiConfig(apiConfig);
     return this[method.toLowerCase()](path, paramsOrData, options);
   }
 
+  uploadFile(apiConfig, file, params = {}, options = {}) {
+    const {
+      fieldName = 'name',
+      fieldFile = 'file',
+    } = options;
+
+    const formData = new FormData();
+    formData.append(fieldName, file.name);
+    formData.append(fieldFile, file);
+    Object.keys(params).forEach((paramKey) => {
+      formData.append(paramKey, params[paramKey]);
+    });
+
+    return this.api(apiConfig, formData, options);
+  }
+
+  downloadFile(apiConfig, fileName, paramsOrData = null, options = {}) {
+    return this.api(
+      apiConfig,
+      paramsOrData,
+      {
+        ...options,
+        isFile: true,
+      },
+    )
+      .then((blob) => downloadFile(blob, fileName));
+  }
 
   proceedPathParams(url, pathParams) {
     // todo @ANKU @LOW - лучше проверять не по pathParams а наоборот из урла извлекать и искать в pathParams и если нету искать из доп параметра contextParams (для userId, примеру)
@@ -204,15 +236,19 @@ class BaseApiClientClass {
    * @returns {Promise}
    */
   proceedRequest(requestOptions) {
-    requestOptions = this.serializeRequest(requestOptions);
+    requestOptions = this.parseOptions(requestOptions);
 
     const {
+      optionsParser, // используется в parseOptions
+
       url,
       method = 'get',
 
       // customize
       // type = 'json',
       type,
+      isFile = false,
+      binaryType, // blob, arraybuffer
       acceptType = 'application/json',
       headers = {},
       timeout = 0,
@@ -224,7 +260,7 @@ class BaseApiClientClass {
 
       // pre\post-processing
       serializer, // используется внутри this.serializeRequest
-      deserializer,
+      deserializer, // используется внутри this.deserializeResponse
 
       mock,
       mockFilter = this.mockFilter,
@@ -247,7 +283,7 @@ class BaseApiClientClass {
     // REQUEST INIT
     // ======================================================
     // https://visionmedia.github.io/superagent/#post-/-put-requests
-    const request = requestAgent[method](urlFinal);
+    let request = requestAgent[method](urlFinal);
 
     // json \ form - for application/x-www-form-urlencoded
 
@@ -255,13 +291,17 @@ class BaseApiClientClass {
       request.type(type);
     }
 
-    request
+    if (isFile || binaryType || acceptType === 'blob' || acceptType === 'arraybuffer' || acceptType === '*/*') {
+      request.responseType((isFile && 'blob') || binaryType || acceptType);
+    } else {
       // json \ application/json \ xml
-      .accept(acceptType)
-      .timeout({
-        // response: 5000,  // Wait 5 seconds for the server to start sending,
-        deadline: timeout,
-      });
+      request.accept(acceptType);
+    }
+
+    request.timeout({
+      // response: 5000,  // Wait 5 seconds for the server to start sending,
+      deadline: timeout,
+    });
 
     // ======================================================
     // HEADERS
@@ -299,6 +339,16 @@ class BaseApiClientClass {
       request.send(data);
     }
 
+    // ======================================================
+    // SERIALIZE
+    // ======================================================
+    // eslint-disable-next-line no-const-assign
+    request = this.serializeRequest(request, requestOptions);
+
+
+    // ======================================================
+    // RUN
+    // ======================================================
     return new Promise((resolve, reject) => {
       const callback = this.requestCallback.bind(this, resolve, reject, requestOptions);
       // EXECUTE
@@ -310,18 +360,24 @@ class BaseApiClientClass {
     });
   }
 
-  serializeRequest(requestOptions) {
-    return requestOptions.serializer
-      ? requestOptions.serializer(requestOptions)
+  parseOptions(requestOptions) {
+    return requestOptions.optionsParser
+      ? requestOptions.optionsParser(requestOptions)
       : requestOptions;
   }
 
-  deserializeResponse(response, requestOptions) {
+  serializeRequest(request, requestOptions) {
+    return requestOptions.serializer
+      ? requestOptions.serializer(request, requestOptions)
+      : request;
+  }
+
+  deserializeResponse(error, response, requestOptions) {
     const {
-      customDeserializer,
+      deserializer,
     } = requestOptions;
-    return customDeserializer
-      ? customDeserializer(response)
+    return deserializer
+      ? deserializer(error, response)
       : response;
   }
 
@@ -330,7 +386,7 @@ class BaseApiClientClass {
       mockFilter = this.mockFilter,
     } = requestOptions;
 
-    const deserializedResponse = this.deserializeResponse(response, requestOptions);
+    const deserializedResponse = this.deserializeResponse(err, response, requestOptions);
 
     const error = err && this.parseError(err, deserializedResponse);
 
@@ -340,8 +396,12 @@ class BaseApiClientClass {
         .catch(reject);
     } else if (error) {
       reject(error);
-    } else {
+    } else if (typeof deserializedResponse.body !== 'undefined') {
+      // response
       resolve(deserializedResponse.body || deserializedResponse.text);
+    } else {
+      // custom deserialized object
+      resolve(deserializedResponse);
     }
   }
 

@@ -16,6 +16,9 @@ export function createApiConfig(
   method = 'GET',
   payload,
 ) {
+  if (typeof path === 'object') {
+    return path;
+  }
   return {
     method,
     // /api/test-client-api/find
