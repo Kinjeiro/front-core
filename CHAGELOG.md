@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2018-03-01
+### !!! Breaking changes:
+1) переделал роутинг на опции среди которых можно переопределить классы для некоторых компонентов
+2) переделал authStrategy: теперь вместо token она работает от (request, response)
+
+### Added
+- feat(auth): - !!! переделал роутинг на опции среди которых можно переопределить классы для некоторых компонентов // !!! - переделал authStrategy теперь она работает от request, response // если сесси протухла, то либо появится сообщение о переходе на логин страницу, либо форма логина (в завизимости от config.common.features.auth.reLoginModalForm) за этим следить AuthErrorContainer // добавлен новый redux lastUniError (в промисах) // uni-error теперь содержит поле isNoAuth, если слетела авторизаци // в i18n-utils появился метод для биндинга namespace translateWithNamespace // пофиксил багу queryString что не энкодился hash
+
+
 ## [1.1.0] - 2018-02-27
 
 ### !!! Breaking changes:
