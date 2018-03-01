@@ -17,13 +17,8 @@ export function init(newI18nInstance) {
   return i18nInstance;
 }
 
-/**
- * Translate - see \lk\front\src\i18n\ru\common.json
- * @param key
- * @param mapParams ( defaultValue props include )
- * @returns {*}
- */
-function translate(key, mapParams = {}) {
+
+export function translateWithNamespace(namespace, key, mapParams = {}) {
   // return i18nInstance.t(key, {
   //  defaultValue: defaultValue || key,
   //  ...mapParams
@@ -35,6 +30,11 @@ function translate(key, mapParams = {}) {
     );
   }
 
+  if (namespace && key.indexOf(':') < 0) {
+    // eslint-disable-next-line no-param-reassign
+    key = `${namespace}:${key}`;
+  }
+
   const value = i18nInstance.t(key, {
     defaultValue: clientConfig.common && !clientConfig.common.isProduction
       ? `@@ ${key}`
@@ -43,6 +43,20 @@ function translate(key, mapParams = {}) {
   });
   return value;
 }
+
+/**
+ * Translate - see \lk\front\src\i18n\ru\common.json
+ * @param key
+ * @param mapParams ( defaultValue props include )
+ * @param namespace
+ * @returns {*}
+ */
+export function translateDefault(key, mapParams = {}, namespace = '') {
+  return translateWithNamespace(namespace, key, mapParams);
+}
+
+export const translateCore = translateWithNamespace.bind(null, 'core');
+
 
 /**
  * чтобы каждый раз не писать префиксы для конкретного компонента
@@ -90,4 +104,4 @@ export function changeLanguagePromise(language) {
     });
 }
 
-export default translate;
+export default translateDefault;

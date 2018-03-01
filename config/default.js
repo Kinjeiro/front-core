@@ -161,6 +161,8 @@ module.exports = {
     features: {
       auth: {
         globalAuth: true,
+        // если сессия протухает, то над компонентами появляется модальное окно для входа в систему
+        reLoginModalForm: true,
         // permissions - настройки прав, если permissions: false - отключает проверку прав
         permissions: []
       },
@@ -192,7 +194,7 @@ module.exports = {
         separators: {
           element: '__',
           modifier: '--',
-          value: '-'
+          value: '-'``
         }
       },
 
@@ -271,6 +273,7 @@ module.exports = {
         tokenParam: 'token',
         tokenCookie: 'token',
         refreshTokenCookie: 'refreshToken',
+        authTypeCookie: 'authType',
 
         // Настройки для аутентификации клиента в front-core-auth
         applicationClientInfo: {

@@ -4,12 +4,17 @@ import {
   ThrowableUniError,
 } from '../../common/models/uni-error';
 
+import {
+  AUTH_TYPES,
+  getHeadersByAuthType,
+} from '../utils/auth-utils';
 import { sendEndpointMethodRequest } from '../utils/send-server-request';
+
 
 import serverConfig from '../server-config';
 
 /**
- *
+ * Клиенсткая реализация протокола OAuth 2.0 Bearer
  * @param endpointServiceConfig
  * @returns {{ authValidate, authLogin }}
  */
@@ -26,10 +31,10 @@ export default function factoryServices(endpointServiceConfig) {
       {
         // @NOTE: необходимо учитывать snake запись (_) это стандарт
         grant_type: 'password',
-        client_id: serverConfig.server.features.auth.applicationClientInfo.id,
-        client_secret: serverConfig.server.features.auth.applicationClientInfo.secret,
         username,
         password,
+        client_id: serverConfig.server.features.auth.applicationClientInfo.id,
+        client_secret: serverConfig.server.features.auth.applicationClientInfo.secret,
       },
     )
       .catch((error) => {
@@ -66,9 +71,9 @@ export default function factoryServices(endpointServiceConfig) {
       '/api/oauth/token', 'post',
       {
         grant_type: 'refresh_token',
+        refresh_token: refreshToken,
         client_id: serverConfig.server.features.auth.clientId,
         client_secret: serverConfig.server.features.auth.clientSecret,
-        refresh_token: refreshToken,
       },
     );
   }
@@ -80,28 +85,25 @@ export default function factoryServices(endpointServiceConfig) {
    "scope": "*"
   }
   */
-  function authValidate(token) {
+  function authValidate(token, authType = AUTH_TYPES.BEARER) {
+    // todo @ANKU @LOW - заиспользовать разные типы
     return sendEndpointMethodRequest(endpointServiceConfig,
       '/api/oauth/user', 'get',
       null,
       null,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeadersByAuthType(authType, token),
       },
     );
   }
 
-  function authLogout(token) {
+  function authLogout(token, authType = AUTH_TYPES.BEARER) {
     return sendEndpointMethodRequest(endpointServiceConfig,
       '/api/oauth/logout', 'get',
       null,
       null,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeadersByAuthType(authType, token),
       },
     );
   }

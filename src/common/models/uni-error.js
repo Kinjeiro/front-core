@@ -60,6 +60,7 @@ export const MAP = {
   uniMessage: PropTypes.node,
   uniMessages: PropTypes.arrayOf(PropTypes.node),
   isNotFound: PropTypes.bool,
+  isNotAuth: PropTypes.bool,
 };
 export const UNI_ERROR_PROP_TYPE = PropTypes.shape(MAP);
 
@@ -131,6 +132,8 @@ export function createUniError(uniErrorData = {}) {
 
   uniError.isNotFound = ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
     || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode);
+
+  uniError.isNotAuth = uniError.uniCode === 401;
 
   uniError.stack = uniError.stack || (uniError.stack !== false && getStackTrace());
 
@@ -396,7 +399,10 @@ export function parseToUniError(errorOrResponse, uniErrorData = {}, { withoutExc
     parseFromBoomError,
     // parseFromString, // нельзя так как бывает просто проверка
   ].some((method) => {
-    result = method(errorOrResponse, uniErrorData);
+    const methodResult = method(errorOrResponse, uniErrorData);
+    if (methodResult) {
+      result = createUniError(methodResult);
+    }
     return !!result;
   });
 

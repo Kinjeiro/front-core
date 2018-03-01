@@ -2,6 +2,8 @@ import logger from '../../helpers/client-logger';
 import Notifications from '../../helpers/notifications';
 import { parseToUniError } from '../../models/uni-error';
 
+export const ACTION_PROMISE_UNI_ERROR_FIELD = 'promiseError';
+
 // это улучшеная версия redux-thunk
 // также аналог можно посмотреть тут - https://github.com/reactjs/redux/blob/5b94a18f560eff60ce37ae01d1b16387bcfb8e3a/examples/real-world/middleware/api.js
 function isPromise(promise) {
@@ -50,14 +52,14 @@ const promiseMiddleware = ({ dispatch, getState }) => next => action => {
     : promise;
 
   actionPromise
-    .then((payload) => {
-      const uniError = parseToUniError(payload, undefined, { withoutException: true });
+    .then((promisePayload) => {
+      const uniError = parseToUniError(promisePayload, undefined, { withoutException: true });
       if (uniError) {
         return Promise.reject(uniError);
       }
-      next(
+      return next(
         {
-          payload,
+          payload: promisePayload,
           ...other,
           type: SUCCESS,
         },
@@ -69,6 +71,7 @@ const promiseMiddleware = ({ dispatch, getState }) => next => action => {
         errors = [errors];
       }
 
+      let isNoAuthError = false;
       let resultUniError = null;
 
       errors.forEach((error) => {
@@ -78,18 +81,20 @@ const promiseMiddleware = ({ dispatch, getState }) => next => action => {
         if (!resultUniError) {
           // первый error отдаем
           resultUniError = uniError;
+          isNoAuthError = uniError.isNotAuth;
         }
 
-        if (!errorIsAnswer) {
+        if (!errorIsAnswer && !isNoAuthError) {
           Notifications.notify(uniError.clientErrorMessages);
         }
       });
 
-      next(
+      return next(
         {
           payload,
           ...other,
           error: resultUniError,
+          [ACTION_PROMISE_UNI_ERROR_FIELD]: resultUniError,
           type: FAILURE,
         },
       );

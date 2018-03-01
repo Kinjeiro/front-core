@@ -41,6 +41,10 @@ export function getGlobalUniError(globalState) {
   return globalState.globalUniError;
 }
 
+export function getLastUniError(globalState) {
+  return globalState.lastUniError;
+}
+
 export const CLIENT_CONFIG_STORE_VARIABLE = STATE_CLIENT_CONFIG_PARAM;
 export function getClientConfig(globalState) {
   return globalState[STATE_CLIENT_CONFIG_PARAM];

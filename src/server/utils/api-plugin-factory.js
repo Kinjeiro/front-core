@@ -4,6 +4,7 @@ import Wreck from 'wreck';
 import { joinUri } from '../../common/utils/uri-utils';
 import i18n from '../../common/utils/i18n-utils';
 import generateId from '../../common/utils/generate-id';
+import createApiConfig from '../../common/utils/create-api-config';
 
 import {
   createUniError,
@@ -21,7 +22,11 @@ import {
   responseWrapper,
 } from './hapi-utils';
 
-import { getToken } from './auth-utils';
+import {
+  getToken,
+  getAuthType,
+  getHeadersByAuthType,
+} from './auth-utils';
 
 import serverConfig from '../server-config';
 
@@ -356,7 +361,7 @@ function apiPluginFullFactory(apiConfig, options) {
   const {
     method,
     path,
-  } = apiConfig;
+  } = createApiConfig(apiConfig);
 
   const handlerFinal = async function (apiRequest, reply, pluginOptions) {
     // logger.info(`======= PLUGIN: ${apiRequest.path} =========`);
@@ -470,9 +475,8 @@ export function proxyRoutePluginFactory(path, proxy, otherOptions) {
 export function defaultHeadersExtractor(clientRequest, proxyFullUrl = null) {
   // proxyFullUrl - нежун для hawk токенов
   const token = getToken(clientRequest);
-  return {
-    authorization: `Bearer ${token}`,
-  };
+  const authType = getAuthType(clientRequest);
+  return getHeadersByAuthType(authType, token);
 }
 
 export function proxyRouteFactory(middlewareEndpointConfig, headersExtractor = defaultHeadersExtractor) {

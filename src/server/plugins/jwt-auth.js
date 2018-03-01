@@ -13,6 +13,7 @@ import {
 import {
   setAuthCookies,
   getToken,
+  clearAuthCookie,
 } from '../utils/auth-utils';
 
 /**
@@ -38,7 +39,6 @@ export function remoteJwt(server, pluginOptions) {
     // Проставляем через url
     if (tokenParamValue) {
       logger.log(i18n('core:Проставляем token из params в cookie'), tokenParamValue);
-
 
       // todo @ANKU @CRIT @MAIN @BUG_OUT @hapi - при обновлении на hapi@16.1.1 куки перестают сохраняться
 
@@ -70,8 +70,10 @@ export function remoteJwt(server, pluginOptions) {
 
     // ПРИ КАЖДОМ ЗАПРОСЕ идет обращение на auth-api сервер и расшифровывается токен каждый раз
 
-    // может быть как промисом так и обычным ответом (если инфа защита внутри токена)
-    let checkResult = authStrategy(token);
+
+    let checkResult = authStrategy(request, reply);
+
+    // может быть как промисом так и обычным ответом (если инфа защита внутри токена, либо используем моки)
     if (!checkResult.then) {
       checkResult = Promise.resolve(checkResult);
     }
@@ -90,8 +92,14 @@ export function remoteJwt(server, pluginOptions) {
       })
       .catch((error) => {
         logger.error(['error', 'auth'], i18n('core:Ошибка во время проверки авторизации'), parseToUniError(error));
+
+        // очищаем данные
+        clearAuthCookie(reply);
+
         return continueWithoutCredentials(reply, parseToUniError(error, {
           clientErrorMessage: i18n('core:Произошла ошибка во время проверки авторизации.'),
+          // чтобы был редирект на логин
+          isNotAuth: true,
         }));
       });
   }

@@ -29,6 +29,7 @@ import {
 } from '../../app-redux/selectors';
 import * as reduxI18nInfo from '../../app-redux/reducers/app/i18n-info';
 import * as reduxUserInfo from '../../app-redux/reducers/app/user-info';
+import * as reduxTest from '../../app-redux/reducers/app/test';
 
 import TestDomain from '../../models/domains/TestDomain';
 
@@ -69,6 +70,7 @@ import './StubPage.css';
       apiChangeUser: apiUser.apiLogin,
     }),
     ...TestDomain.getActions(),
+    ...reduxTest.actions,
     actionGoto: push,
   },
 )
@@ -93,6 +95,7 @@ export default class StubPage extends Component {
     actionCreateTestDomain: PropTypes.func,
     actionUpdateTestDomain: PropTypes.func,
     actionDeleteTestDomain: PropTypes.func,
+    actionLoadTestGet: PropTypes.func,
     actionGoto: PropTypes.func,
   };
 
@@ -157,6 +160,7 @@ export default class StubPage extends Component {
       testDomains,
       showTestPermission,
       actionI18NChangeLanguage,
+      actionLoadTestGet,
       actionGoto,
     } = this.props;
 
@@ -246,6 +250,14 @@ export default class StubPage extends Component {
               </ListItem>
             ))}
           </ul>
+        </div>
+
+        <div>
+          <button
+            onClick={ () => actionLoadTestGet() }
+          >
+            Load test get with auth check
+          </button>
         </div>
       </div>
     );

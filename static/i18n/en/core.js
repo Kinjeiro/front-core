@@ -1,7 +1,7 @@
 module.exports = {
   app: {
-    title: '[EN] Cabinet',
-    description: '[EN] Cabinet description',
+    title: 'Cabinet',
+    description: 'Cabinet description',
   },
 
   languages: {
@@ -48,6 +48,13 @@ module.exports = {
       pageNotFoundError: 'Page not found',
       returnTo: 'Return to',
       indexPage: 'index page',
+    },
+  },
+
+  containers: {
+    AuthErrorContainer: {
+      sessionExpire: 'Your session has expired. Please relogin.',
+      actionGoToLogin: 'Go to login page',
     },
   },
 

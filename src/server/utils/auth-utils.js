@@ -4,6 +4,7 @@ import serverConfig from '../server-config';
 
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
 const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
+const authTypeCookie = serverConfig.server.features.auth.authTypeCookie;
 const finalContextRoot = appUrl();
 
 const OPTIONS = {
@@ -13,7 +14,18 @@ const OPTIONS = {
   isSecure: false,
 };
 
-export function setAuthCookies(response, accessToken, refreshToken, expiresIn = undefined) {
+// https://habrahabr.ru/company/dataart/blog/262817/
+export const AUTH_TYPES = {
+  BEARER: 'Bearer',
+};
+
+export function setAuthCookies(
+  response,
+  accessToken,
+  refreshToken,
+  expiresIn = undefined,
+  authType = AUTH_TYPES.BEARER,
+) {
   // server.state(tokenCookie, {
   //   //expire: 365 * 24 * 60 * 60 * 1000,   // 1 year
   //   //isSecure: false,
@@ -29,7 +41,8 @@ export function setAuthCookies(response, accessToken, refreshToken, expiresIn = 
       // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
       expire: expiresIn,
     })
-    .state(refreshTokenCookie, refreshToken, OPTIONS);
+    .state(refreshTokenCookie, refreshToken, OPTIONS)
+    .state(authTypeCookie, authType, OPTIONS);
 }
 
 function getState(req, name) {
@@ -48,10 +61,26 @@ export function getToken(req) {
 export function getRefreshToken(req) {
   return getState(req, refreshTokenCookie);
 }
+export function getAuthType(req) {
+  return getState(req, authTypeCookie);
+}
+
+export function getHeadersByAuthType(authType, token) {
+  const headers = {};
+  // eslint-disable-next-line default-case
+  switch (authType) {
+    case AUTH_TYPES.BEARER:
+      headers.authorization = `Bearer ${token}`;
+      break;
+  }
+
+  return headers;
+}
 
 
 export function clearAuthCookie(res) {
   return res
     .unstate(tokenCookie, OPTIONS)
-    .unstate(refreshTokenCookie, OPTIONS);
+    .unstate(refreshTokenCookie, OPTIONS)
+    .unstate(authTypeCookie, OPTIONS);
 }

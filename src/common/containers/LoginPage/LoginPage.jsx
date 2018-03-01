@@ -16,6 +16,7 @@ import {
 } from '../../app-redux/selectors';
 import * as reduxCurrentPage from '../../app-redux/reducers/app/current-page';
 import * as reduxUserInfo from '../../app-redux/reducers/app/user-info';
+import * as reduxLastUniError from '../../app-redux/reducers/app/last-uni-error';
 import * as reduxUiForm from '../../app-redux/reducers/ui-domains/forms';
 
 // ======================================================
@@ -39,11 +40,14 @@ const FORM_DEFAULT_VALUES = {
   (globalState, ownProps) => ({
     form: getForm(globalState, FORM_ID) || FORM_DEFAULT_VALUES,
     actionChangeUserStatus: getUserInfo(globalState).actionChangeUserStatus,
-    urlReturn: ownProps.urlReturn || ownProps.location.query[PARAM_RETURN_URL],
+    urlReturn: typeof ownProps.urlReturn !== 'undefined'
+      ? ownProps.urlReturn
+      : ownProps.location.query[PARAM_RETURN_URL],
   }),
   {
     actionCurrentPageChanged: reduxCurrentPage.actions.actionCurrentPageChanged,
     actionChangeUser: reduxUserInfo.actions.actionChangeUser,
+    ...reduxLastUniError.actions,
     ...reduxUiForm.actions,
     actionGoTo: push,
   },
@@ -51,6 +55,15 @@ const FORM_DEFAULT_VALUES = {
 @bemDecorator({ componentName: 'LoginPage', wrapper: false })
 export default class LoginPage extends Component {
   static propTypes = {
+    // ======================================================
+    // PROPS
+    // ======================================================
+    onLogin: PropTypes.func,
+    inModal: PropTypes.bool,
+
+    // ======================================================
+    // CONNECT
+    // ======================================================
     form: PropTypes.shape({
       username: PropTypes.string,
       password: PropTypes.string,
@@ -62,7 +75,11 @@ export default class LoginPage extends Component {
     actionFormUpdate: PropTypes.func,
     actionFormRemove: PropTypes.func,
     actionGoTo: PropTypes.func,
-    urlReturn: PropTypes.string,
+    actionClearLastError: PropTypes.func,
+    urlReturn: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+    ]),
 
     loginButtonClassName: PropTypes.string,
   };
@@ -117,6 +134,8 @@ export default class LoginPage extends Component {
       actionChangeUser,
       actionGoTo,
       urlReturn,
+      onLogin,
+      actionClearLastError,
     } = this.props;
 
     event.preventDefault();
@@ -124,7 +143,18 @@ export default class LoginPage extends Component {
 
     // todo @ANKU @CRIT @MAIN - тут сначала срабатывает promise, и если ответ возвращается без кода ошибки то сработает сначала then а потом запарсится uniError
     actionChangeUser(username, password)
-      .then(() => actionGoTo(urlReturn || PATH_INDEX));
+      .then(() => {
+        if (onLogin) {
+          onLogin();
+        }
+
+        actionClearLastError();
+
+        if (urlReturn !== false) {
+          return actionGoTo(urlReturn || PATH_INDEX);
+        }
+        return Promise.resolve();
+      });
   }
 
   // ======================================================
@@ -163,12 +193,13 @@ export default class LoginPage extends Component {
       actionChangeUserStatus: {
         isFetching,
       },
+      inModal,
       loginButtonClassName,
     } = this.props;
 
     return (
       <form
-        className={ this.fullClassName }
+        className={ `${this.fullClassName} ${this.bem({ inModal })}` }
         onSubmit={ this.handleLogin }
       >
         <div className={ this.bem('fields') }>

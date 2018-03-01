@@ -338,7 +338,6 @@ export function downloadFile(blob, fileName, type = null) {
   // // now that we have the byte array, construct the blob from it
   // const blob1 = new Blob([byteArray], { type: 'application/octet-stream' });
   // const blob2 = new Blob([content], { type: 'application/octet-stream' });
-  // debugger;
   // FileSaver.saveAs(blob2, fileName);
 
   // const file = new Blob(

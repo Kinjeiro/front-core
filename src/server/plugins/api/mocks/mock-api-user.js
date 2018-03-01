@@ -19,7 +19,7 @@ export default [
     const userInfo = getUser(requestData.username, requestData.password);
     if (!userInfo) {
       return reply(createUniError({
-        code: 401,
+        responseStatusCode: 401,
         clientErrorMessage: i18n('core:errors.mockUserNotFound'),
       }))
         .code(401);

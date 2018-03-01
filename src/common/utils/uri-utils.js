@@ -78,7 +78,10 @@ export function parseUrlParameters(url, defaultValues = {}) {
 }
 
 export function formatUrlParameters(params, url = '', hash = '', useBracket = false) {
-  const paramStr = queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined });
+  const paramStr =
+    queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined })
+    // todo @ANKU @LOW - @BUT_OUT queryString - они не кодируют # hash
+    .replace(/#/g, '%23');
   return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
 

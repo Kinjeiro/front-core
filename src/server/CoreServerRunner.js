@@ -33,6 +33,7 @@ import pluginI18n from './plugins/i18n';
 import pluginMocking from './plugins/mocking';
 // plugin api
 import pluginApiHealthmonitor from './plugins/api/healthmonitor';
+import pluginsApiTest from './plugins/api/plugin-api-test';
 import pluginsApiAuthUser from './plugins/api/plugin-api-auth-user';
 
 import AbstractServerRunner from './AbstractServerRunner';
@@ -140,6 +141,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
         },
       },
       pluginApiHealthmonitor,
+      pluginsApiTest,
       ...pluginsApiAuthUser(services, strategies),
       this.getIndexPagePlugin(services, strategies),
     );

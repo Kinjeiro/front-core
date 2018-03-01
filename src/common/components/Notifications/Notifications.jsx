@@ -11,14 +11,14 @@ import './Notifications.css';
 @bemDecorator({ componentName: 'Notifications', wrapper: false })
 export default class Notifications extends Component {
   static propTypes = {
-    NoticeComponent: PropTypes.oneOfType([
+    NoticeComponentClass: PropTypes.oneOfType([
       PropTypes.instanceOf(Component),
       PropTypes.func,
     ]),
   };
 
   static defaultProps = {
-    NoticeComponent: Notice,
+    NoticeComponentClass: Notice,
   };
 
   state = {
@@ -51,13 +51,13 @@ export default class Notifications extends Component {
   };
 
   render() {
-    const { NoticeComponent } = this.props;
+    const { NoticeComponentClass } = this.props;
     const { notices } = this.state;
 
     return (
       <div className={ this.fullClassName }>
         {notices.map((noticeData) =>
-          React.createElement(NoticeComponent, {
+          React.createElement(NoticeComponentClass, {
             key: noticeData.id,
             className: this.bem('notice'),
             ...noticeData,

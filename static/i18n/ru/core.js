@@ -51,6 +51,13 @@ module.exports = {
     },
   },
 
+  containers: {
+    AuthErrorContainer: {
+      sessionExpire: 'Ваша сессия истекла. Пожалуйста перелогиньтесь.',
+      actionGoToLogin: 'Перейти на страницу логина',
+    },
+  },
+
   components: {
     Loading: {
       loading: 'Загрузка...',
