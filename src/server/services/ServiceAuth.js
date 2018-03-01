@@ -40,7 +40,7 @@ export default class ServiceAuth {
   /*
    "access_token": "395549ac90cd6f37cbc28c6cb5b31aa8ffe2a22826831dba11d6baae9dafb07a",
    "refresh_token": "857896e0aab5b35456f6432ef2f812a344e2a3bab12d38b152ee3dd968442613",
-   "expires_in": 3600,
+   "expires_in": 299, seconds
    "token_type": "Bearer"
    */
   authLogin(username, password) {
@@ -55,6 +55,13 @@ export default class ServiceAuth {
         client_secret: serverConfig.server.features.auth.applicationClientInfo.secret,
       },
     )
+      .then((results) => {
+        // стандарт работает на секундах, а сервер на милисекундах
+        // https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
+        // eslint-disable-next-line no-param-reassign
+        results.expire_in *= 1000;
+        return results;
+      })
       .catch((error) => {
         // eslint-disable-next-line no-param-reassign
         const uniError = parseToUniError(error);
@@ -81,7 +88,7 @@ export default class ServiceAuth {
   /*
    "access_token": "395549ac90cd6f37cbc28c6cb5b31aa8ffe2a22826831dba11d6baae9dafb07a",
    "refresh_token": "857896e0aab5b35456f6432ef2f812a344e2a3bab12d38b152ee3dd968442613",
-   "expires_in": 3600,
+   "expires_in": 299, seconds
    "token_type": "Bearer"
    */
   authRefresh(refreshToken) {
@@ -93,7 +100,13 @@ export default class ServiceAuth {
         client_id: serverConfig.server.features.auth.clientId,
         client_secret: serverConfig.server.features.auth.clientSecret,
       },
-    );
+    )
+      .then((results) => {
+        // стандарт работает на секундах, а сервер на милисекундах
+        // eslint-disable-next-line no-param-reassign
+        results.expire_in *= 1000;
+        return results;
+      });
   }
 
   /*

@@ -23,11 +23,12 @@ export function setAuthCookies(
   response,
   accessToken,
   refreshToken,
-  expiresIn = undefined,
+  expiresInMilliseconds = undefined,
   authType = AUTH_TYPES.BEARER,
 ) {
   // server.state(tokenCookie, {
   //   //expire: 365 * 24 * 60 * 60 * 1000,   // 1 year
+  //   //ttl: 365 * 24 * 60 * 60 * 1000,   // 1 year
   //   //isSecure: false,
   //   path: finalContextRoot
   // });
@@ -48,7 +49,8 @@ export function setAuthCookies(
   response.state(tokenCookie, accessToken, {
     ...OPTIONS,
     // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
-    expire: expiresIn,
+    expire: expiresInMilliseconds,
+    ttl: expiresInMilliseconds,
   });
   response.state(refreshTokenCookie, refreshToken, OPTIONS);
   response.state(authTypeCookie, authType, OPTIONS);
