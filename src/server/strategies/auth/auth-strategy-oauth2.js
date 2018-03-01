@@ -15,7 +15,7 @@ export default async function authStrategyOAuth2(request, response, services) {
   const authType = getAuthType(request);
   const refreshToken = getRefreshToken(request);
 
-  logger.log(`Auth strategy. authType: ${authType}, accessToken:\n${accessToken}`);
+  logger.debug(`Auth strategy. authType: ${authType}, accessToken:\n${accessToken}`);
 
   let userInfo;
   try {
@@ -23,6 +23,7 @@ export default async function authStrategyOAuth2(request, response, services) {
   } catch (error) {
     const uniError = parseToUniError(error);
     if (authUserService.authRefresh && refreshToken && uniError.isNotAuth) {
+      logger.debug(`Auth strategy error. Try to reLogin by refresh_token:\n${refreshToken}`);
       const newAuthInfo = await authUserService.authRefresh(refreshToken);
 
       setAuthCookies(
@@ -33,6 +34,7 @@ export default async function authStrategyOAuth2(request, response, services) {
         newAuthInfo.token_type,
       );
 
+      logger.debug(`Auth strategy reLogin. Get userInfo by new access_token:\n${newAuthInfo.access_token}`);
       userInfo = await authUserService.authValidate(newAuthInfo.access_token);
     } else {
       throw error;
