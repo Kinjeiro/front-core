@@ -194,7 +194,7 @@ module.exports = {
         separators: {
           element: '__',
           modifier: '--',
-          value: '-'``
+          value: '-'
         }
       },
 
