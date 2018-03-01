@@ -35,14 +35,25 @@ export function setAuthCookies(
   //   path: finalContextRoot
   // });
 
-  return response
-    .state(tokenCookie, accessToken, {
-      ...OPTIONS,
-      // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
-      expire: expiresIn,
-    })
-    .state(refreshTokenCookie, refreshToken, OPTIONS)
-    .state(authTypeCookie, authType, OPTIONS);
+
+  // return response
+  //   .state(tokenCookie, accessToken, {
+  //     ...OPTIONS,
+  //     // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
+  //     expire: expiresIn,
+  //   })
+  //   .state(refreshTokenCookie, refreshToken, OPTIONS)
+  //   .state(authTypeCookie, authType, OPTIONS);
+
+  response.state(tokenCookie, accessToken, {
+    ...OPTIONS,
+    // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
+    expire: expiresIn,
+  });
+  response.state(refreshTokenCookie, refreshToken, OPTIONS);
+  response.state(authTypeCookie, authType, OPTIONS);
+
+  return response;
 }
 
 function getState(req, name) {
@@ -79,8 +90,9 @@ export function getHeadersByAuthType(authType, token) {
 
 
 export function clearAuthCookie(res) {
-  return res
-    .unstate(tokenCookie, OPTIONS)
-    .unstate(refreshTokenCookie, OPTIONS)
-    .unstate(authTypeCookie, OPTIONS);
+  res.unstate(tokenCookie, OPTIONS);
+  res.unstate(refreshTokenCookie, OPTIONS);
+  res.unstate(authTypeCookie, OPTIONS);
+
+  return res;
 }
