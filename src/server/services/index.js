@@ -1,10 +1,12 @@
-import factoryAuthApiService from './auth-api';
+import ServiceAuth from './ServiceAuth';
 
 /**
  * Метод для создания сервисов
  */
 export default function createServices(endpointServiceConfigs) {
   return {
-    authUserService: factoryAuthApiService(endpointServiceConfigs.authApiService),
+    authUserService: new ServiceAuth({
+      endpointServiceConfig: endpointServiceConfigs.authApiService,
+    }),
   };
 }

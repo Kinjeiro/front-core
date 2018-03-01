@@ -369,7 +369,10 @@ module.exports = {
       // ======================================================
       // AUTH Services - front-core-auth server
       // ======================================================
-      authApiService: endpoint({ port: 1337 })
+      authApiService: endpoint({
+        port: 1337,
+        endpoint: 'api'
+      })
     }
 
     // рестовый сервисов не должно быть, для единообразия все запросы которые не проксируются через apiConfig.serviceUrl

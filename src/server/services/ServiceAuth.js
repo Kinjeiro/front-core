@@ -18,16 +18,34 @@ import serverConfig from '../server-config';
  * @param endpointServiceConfig
  * @returns {{ authValidate, authLogin }}
  */
-export default function factoryServices(endpointServiceConfig) {
+export default class ServiceAuth {
+  endpointServiceConfig = null;
+  urls = {};
+
+  constructor({
+    endpointServiceConfig,
+    urls,
+  }) {
+    this.endpointServiceConfig = endpointServiceConfig;
+
+    this.urls = {
+      authLogin: '/oauth/token',
+      authRefresh: '/oauth/token',
+      authValidate: '/oauth/user',
+      authLogout: '/oauth/logout',
+      ...urls,
+    };
+  }
+
   /*
    "access_token": "395549ac90cd6f37cbc28c6cb5b31aa8ffe2a22826831dba11d6baae9dafb07a",
    "refresh_token": "857896e0aab5b35456f6432ef2f812a344e2a3bab12d38b152ee3dd968442613",
    "expires_in": 3600,
    "token_type": "Bearer"
-  */
-  function authLogin(username, password) {
-    return sendEndpointMethodRequest(endpointServiceConfig,
-      '/api/oauth/token', 'post',
+   */
+  authLogin(username, password) {
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authLogin, 'post',
       {
         // @NOTE: необходимо учитывать snake запись (_) это стандарт
         grant_type: 'password',
@@ -40,7 +58,7 @@ export default function factoryServices(endpointServiceConfig) {
       .catch((error) => {
         // eslint-disable-next-line no-param-reassign
         const uniError = parseToUniError(error);
-        if (uniError.originalObject.error_description) {
+        if (uniError.originalObject && uniError.originalObject.error_description) {
           let clientErrorMessage;
 
           switch (uniError.originalObject.error_description) {
@@ -66,9 +84,9 @@ export default function factoryServices(endpointServiceConfig) {
    "expires_in": 3600,
    "token_type": "Bearer"
    */
-  function authRefresh(refreshToken) {
-    return sendEndpointMethodRequest(endpointServiceConfig,
-      '/api/oauth/token', 'post',
+  authRefresh(refreshToken) {
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authRefresh, 'post',
       {
         grant_type: 'refresh_token',
         refresh_token: refreshToken,
@@ -79,16 +97,16 @@ export default function factoryServices(endpointServiceConfig) {
   }
 
   /*
-  {
+   {
    "user_id": "59ba24251d1c69466ca3346b",
    "name": "ivanovI",
    "scope": "*"
-  }
-  */
-  function authValidate(token, authType = AUTH_TYPES.BEARER) {
+   }
+   */
+  authValidate(token, authType = AUTH_TYPES.BEARER) {
     // todo @ANKU @LOW - заиспользовать разные типы
-    return sendEndpointMethodRequest(endpointServiceConfig,
-      '/api/oauth/user', 'get',
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authValidate, 'get',
       null,
       null,
       {
@@ -97,9 +115,9 @@ export default function factoryServices(endpointServiceConfig) {
     );
   }
 
-  function authLogout(token, authType = AUTH_TYPES.BEARER) {
-    return sendEndpointMethodRequest(endpointServiceConfig,
-      '/api/oauth/logout', 'get',
+  authLogout(token, authType = AUTH_TYPES.BEARER) {
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authLogout, 'get',
       null,
       null,
       {
@@ -107,11 +125,4 @@ export default function factoryServices(endpointServiceConfig) {
       },
     );
   }
-
-  return {
-    authLogin,
-    authRefresh,
-    authValidate,
-    authLogout,
-  };
 }
