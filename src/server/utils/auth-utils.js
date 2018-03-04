@@ -40,7 +40,6 @@ export function setAuthCookies(
   // return response
   //   .state(tokenCookie, accessToken, {
   //     ...OPTIONS,
-  //     // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
   //     expire: expiresIn,
   //   })
   //   .state(refreshTokenCookie, refreshToken, OPTIONS)
@@ -48,7 +47,6 @@ export function setAuthCookies(
 
   response.state(tokenCookie, accessToken, {
     ...OPTIONS,
-    // todo @ANKU @LOW - date.toUTCString() ??? проверить в каком формате hapi проставляет
     expire: expiresInMilliseconds,
     ttl: expiresInMilliseconds,
   });
