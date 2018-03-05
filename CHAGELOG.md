@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [current version]
+### !!! Breaking changes:
+1) src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory
+
+
 ## [1.2.0] - 2018-03-01
 ### !!! Breaking changes:
 1) переделал роутинг на опции среди которых можно переопределить классы для некоторых компонентов
