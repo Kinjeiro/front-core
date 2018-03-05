@@ -91,3 +91,24 @@ export function getFilter(globalState, id) {
   return getUiDomainEntity(globalState, 'filters', id) || undefined;
 }
 
+// ======================================================
+// TABLE
+// ======================================================
+export function getTables(globalState) {
+  return globalState.tables;
+}
+export function getTableItem(globalState, tableUuid) {
+  return getTables(globalState).byIds[tableUuid];
+}
+export function getTableInfo(globalState, tableUuid) {
+  const tableItem = getTableItem(globalState, tableUuid);
+  return tableItem ? tableItem.data : tableItem;
+}
+export function getLastInitTableInfo(globalState) {
+  const { lastInit } = getTables(globalState);
+  return lastInit ? getTableInfo(globalState, lastInit) : null;
+}
+export function getLastUsedTableInfo(globalState) {
+  const { lastUsed } = getTables(globalState);
+  return lastUsed ? getTableInfo(globalState, lastUsed) : null;
+}

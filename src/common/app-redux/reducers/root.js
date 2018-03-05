@@ -8,6 +8,7 @@ import lastUniError from './app/last-uni-error';
 import userInfo from './app/user-info';
 import currentPage from './app/current-page';
 import i18nInfo from './app/i18n-info';
+import tables from './app/redux-tables';
 import test from './app/test';
 
 import uiDomains from './ui-domains';
@@ -30,6 +31,7 @@ export const coreReduces = {
   userInfo,
   currentPage,
   i18nInfo,
+  tables,
   test,
 
   // ======================================================

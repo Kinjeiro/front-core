@@ -1,4 +1,4 @@
-import simpleModuleFactory from '../../simple-module-factory';
+import simpleModuleFactory from '../../helpers/simple-module-factory';
 
 // ======================================================
 // INITIAL STATE
