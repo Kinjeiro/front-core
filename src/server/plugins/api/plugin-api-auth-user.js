@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { API_CONFIGS } from '../../../common/api/api-user';
 
 import apiPluginFactory from '../../utils/api-plugin-factory';
@@ -29,7 +30,10 @@ export default function createApiPlugins(services/* , strategies*/) {
           reply(userInfo),
           access_token,
           refresh_token,
-          expires_in,
+          // стандарт работает на секундах, а сервер на милисекундах
+          // https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
+          // expires_in,
+          expires_in * 1000,
         );
       },
       {
@@ -53,7 +57,8 @@ export default function createApiPlugins(services/* , strategies*/) {
           reply(),
           access_token,
           refresh_token,
-          expires_in,
+          // expires_in,
+          expires_in * 1000,
         );
       },
     ),

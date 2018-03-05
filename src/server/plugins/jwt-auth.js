@@ -12,7 +12,7 @@ import {
 
 import {
   setAuthCookies,
-  getToken,
+  // getToken,
   clearAuthCookie,
 } from '../utils/auth-utils';
 
@@ -56,21 +56,16 @@ export function remoteJwt(server, pluginOptions) {
       return continueWithoutCredentials(reply);
     }
 
-    // Получаем из куков КАЖДЫЙ РАЗ параметры и отправляем их каждый раз на auth сервер, чтобы он расшифровал токен и
-    // дал нам credential информацию, которую мы потом можем использовать внутри запросов для проверки прав
-    const token = getToken(request);
+    // // Получаем из куков КАЖДЫЙ РАЗ параметры и отправляем их каждый раз на auth сервер, чтобы он расшифровал токен и
+    // // дал нам credential информацию, которую мы потом можем использовать внутри запросов для проверки прав
+    // const token = getToken(request);
 
     if (!authStrategy) {
       logger.warn(['info', 'auth'], 'Do not have authStrategy');
       return continueWithoutCredentials(reply);
-    } else if (!token) {
-      logger.warn(['info', 'auth'], 'Do not have a token');
-      return continueWithoutCredentials(reply);
     }
 
     // ПРИ КАЖДОМ ЗАПРОСЕ идет обращение на auth-api сервер и расшифровывается токен каждый раз
-
-
     let checkResult = authStrategy(request, reply);
 
     // может быть как промисом так и обычным ответом (если инфа защита внутри токена, либо используем моки)
@@ -80,6 +75,11 @@ export function remoteJwt(server, pluginOptions) {
 
     return checkResult
       .then((credentials) => {
+        if (!credentials) {
+          logger.warn(['info', 'auth'], 'Do not have a valid credentials');
+          return continueWithoutCredentials(reply);
+        }
+
         // logger.log(['info'], {
         //   event: 'LOGIN_ATTEMPT',
         //   username: credentials.getUserName(),

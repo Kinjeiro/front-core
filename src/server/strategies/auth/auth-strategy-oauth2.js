@@ -17,12 +17,9 @@ export default async function authStrategyOAuth2(request, response, services) {
 
   logger.debug(`Auth strategy. authType: ${authType}, accessToken:\n${accessToken}`);
 
-  let userInfo;
-  try {
-    userInfo = await authUserService.authValidate(accessToken, authType);
-  } catch (error) {
-    const uniError = parseToUniError(error);
-    if (authUserService.authRefresh && refreshToken && uniError.isNotAuth) {
+  async function tryRefresh() {
+    let userInfo;
+    if (authUserService.authRefresh && refreshToken) {
       logger.debug(`Auth strategy error. Try to reLogin by refresh_token:\n${refreshToken}`);
       const newAuthInfo = await authUserService.authRefresh(refreshToken);
 
@@ -36,8 +33,23 @@ export default async function authStrategyOAuth2(request, response, services) {
 
       logger.debug(`Auth strategy reLogin. Get userInfo by new access_token:\n${newAuthInfo.access_token}`);
       userInfo = await authUserService.authValidate(newAuthInfo.access_token);
-    } else {
-      throw error;
+    }
+    return userInfo;
+  }
+
+  let userInfo;
+  if (!accessToken) {
+    userInfo = await tryRefresh();
+  } else {
+    try {
+      userInfo = await authUserService.authValidate(accessToken, authType);
+    } catch (error) {
+      const uniError = parseToUniError(error);
+      if (uniError.isNotAuth) {
+        userInfo = await tryRefresh();
+      } else {
+        throw error;
+      }
     }
   }
 
