@@ -25,7 +25,7 @@ export default class CredentialsModel {
   }
   getUserName() {
     return this.isAuth()
-      ? this.userInfo.username
+      ? this.userInfo.username || this.userInfo.email
       : undefined;
   }
 }

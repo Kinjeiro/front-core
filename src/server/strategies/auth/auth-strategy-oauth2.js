@@ -8,6 +8,9 @@ import {
   setAuthCookies,
 } from '../../utils/auth-utils';
 
+/*
+ https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
+*/
 export default async function authStrategyOAuth2(request, response, services) {
   const { authUserService } = services;
 
@@ -23,16 +26,17 @@ export default async function authStrategyOAuth2(request, response, services) {
       logger.debug(`Auth strategy error. Try to reLogin by refresh_token:\n${refreshToken}`);
       const newAuthInfo = await authUserService.authRefresh(refreshToken);
 
+      logger.debug(`Auth strategy reLogin. Get userInfo by new access_token:\n${newAuthInfo.access_token}`);
+      userInfo = await authUserService.authValidate(newAuthInfo.access_token);
+
       setAuthCookies(
         response,
         newAuthInfo.access_token,
         newAuthInfo.refresh_token,
-        newAuthInfo.expires_in,
+        newAuthInfo.expires_in ? newAuthInfo.expires_in * 1000 : undefined,
         newAuthInfo.token_type,
+        request,
       );
-
-      logger.debug(`Auth strategy reLogin. Get userInfo by new access_token:\n${newAuthInfo.access_token}`);
-      userInfo = await authUserService.authValidate(newAuthInfo.access_token);
     }
     return userInfo;
   }

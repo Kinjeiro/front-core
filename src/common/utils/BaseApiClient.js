@@ -31,6 +31,8 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
   // против CSRF атаки берем из куков и проставляем в хеадер значение
   cookieCSRF: clientConfig.common.cookieCSRF,
   usePatchByItemId: false,
+  retryWhenNotAuthErrorTimeout: clientConfig.common.features.auth.retryWhenNotAuthErrorTimeout,
+  retryWhenNotAuthErrorAttempts: clientConfig.common.features.auth.retryWhenNotAuthErrorAttempts,
 };
 
 class BaseApiClientClass {
@@ -353,7 +355,7 @@ class BaseApiClientClass {
       const callback = this.requestCallback.bind(this, resolve, reject, requestOptions);
       // EXECUTE
       if (timeout) {
-        setTimeout(callback, timeout);
+        setTimeout(() => request.end(callback), timeout);
       } else {
         request.end(callback);
       }
@@ -395,7 +397,20 @@ class BaseApiClientClass {
         .then(resolve)
         .catch(reject);
     } else if (error) {
-      reject(error);
+      if (error.isNotAuth && this.apiClientOptions.retryWhenNotAuthErrorTimeout) {
+        requestOptions.retryWhenNotAuthErrorAttempts = requestOptions.retryWhenNotAuthErrorAttempts || 0;
+        if (requestOptions.retryWhenNotAuthErrorAttempts < this.apiClientOptions.retryWhenNotAuthErrorAttempts) {
+          requestOptions.retryWhenNotAuthErrorAttempts += 1;
+          setTimeout(() => {
+            // возможно уже отработал refresh_token и пришли на клиент обновленные токены
+            this.proceedRequest(requestOptions)
+              .then((result) => resolve(result))
+              .catch((result) => reject(result));
+          }, this.apiClientOptions.retryWhenNotAuthErrorTimeout);
+        }
+      } else {
+        reject(error);
+      }
     } else if (typeof deserializedResponse.body !== 'undefined') {
       // response
       resolve(deserializedResponse.body || deserializedResponse.text);

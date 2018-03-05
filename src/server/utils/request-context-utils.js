@@ -7,7 +7,7 @@ export function storeRequestContext(request, context, contextId = generateId()) 
   return contextId;
 }
 
-export function getRequestContext(request, contextId, deleteData) {
+export function getRequestContext(request, contextId, deleteData = false) {
   const data = request.server.app[contextId];
   if (deleteData) {
     // eslint-disable-next-line no-param-reassign

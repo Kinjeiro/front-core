@@ -1,5 +1,12 @@
 import { appUrl } from '../../common/helpers/app-urls';
 
+import logger from '../helpers/server-logger';
+
+import {
+  storeRequestContext,
+  getRequestContext,
+} from './request-context-utils';
+
 import serverConfig from '../server-config';
 
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
@@ -25,6 +32,7 @@ export function setAuthCookies(
   refreshToken,
   expiresInMilliseconds = undefined,
   authType = AUTH_TYPES.BEARER,
+  requestForProxyNewToken = null,
 ) {
   // server.state(tokenCookie, {
   //   //expire: 365 * 24 * 60 * 60 * 1000,   // 1 year
@@ -53,6 +61,12 @@ export function setAuthCookies(
   response.state(refreshTokenCookie, refreshToken, OPTIONS);
   response.state(authTypeCookie, authType, OPTIONS);
 
+  // чтобы если отработал refresh_token проксирующие запросы уже слались через новый токен
+  if (requestForProxyNewToken) {
+    logger.debug(`Set accessToken for proxy for request.id: ${requestForProxyNewToken.id}`);
+    storeRequestContext(requestForProxyNewToken, accessToken, requestForProxyNewToken.id);
+  }
+
   return response;
 }
 
@@ -67,7 +81,12 @@ function getState(req, name) {
 }
 
 export function getToken(req) {
-  return getState(req, tokenCookie);
+  // получем и удаляем из хранилища
+  const updatedToken = getRequestContext(req, req.id, true);
+  if (updatedToken) {
+    logger.debug(`Use accessToken for proxy from request.id: ${req.id}\n${updatedToken}`);
+  }
+  return updatedToken || getState(req, tokenCookie);
 }
 export function getRefreshToken(req) {
   return getState(req, refreshTokenCookie);
@@ -79,8 +98,8 @@ export function getAuthType(req) {
 export function getHeadersByAuthType(authType, token) {
   const headers = {};
   // eslint-disable-next-line default-case
-  switch (authType) {
-    case AUTH_TYPES.BEARER:
+  switch (authType.toLowerCase()) {
+    case AUTH_TYPES.BEARER.toLowerCase():
       headers.authorization = `Bearer ${token}`;
       break;
   }

@@ -40,7 +40,7 @@ export default class ServiceAuth {
   /*
    "access_token": "395549ac90cd6f37cbc28c6cb5b31aa8ffe2a22826831dba11d6baae9dafb07a",
    "refresh_token": "857896e0aab5b35456f6432ef2f812a344e2a3bab12d38b152ee3dd968442613",
-   "expires_in": 299, seconds
+   "expires_in": 299, (seconds)
    "token_type": "Bearer"
    */
   authLogin(username, password) {
