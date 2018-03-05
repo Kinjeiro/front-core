@@ -5,7 +5,7 @@ import simpleModuleFactory from '../../helpers/simple-module-factory';
 // ======================================================
 export const initialState = {};
 
-const module = simpleModuleFactory('filters', { dataInitialState: initialState });
+const module = simpleModuleFactory('filters', { initialState });
 // ======================================================
 // TYPES
 // ======================================================
@@ -15,9 +15,9 @@ export const TYPES = module.TYPES;
 // ACTION CREATORS
 // ======================================================
 export const actions = {
-  actionFilterInit: module.actions.actionInit,
-  actionFilterUpdate: module.actions.actionUpdate,
-  actionFilterRemove: module.actions.actionRemove,
+  actionFilterInit: module.actions.actionModuleItemInit,
+  actionFilterUpdate: module.actions.actionModuleItemUpdate,
+  actionFilterRemove: module.actions.actionModuleItemRemove,
 };
 
 // ======================================================

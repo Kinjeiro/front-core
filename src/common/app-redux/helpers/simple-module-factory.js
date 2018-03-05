@@ -180,5 +180,6 @@ export default function simpleModuleFactory(
     moduleReducer: moduleReducerWrapper,
     TYPES,
     getBindActions,
+    actions: getBindActions(),
   };
 }

@@ -6,8 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [current version]
 ### !!! Breaking changes:
-1) src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory
-
+1) src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 
 ## [1.2.0] - 2018-03-01
 ### !!! Breaking changes:
