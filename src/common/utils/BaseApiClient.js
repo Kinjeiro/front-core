@@ -407,6 +407,8 @@ class BaseApiClientClass {
               .then((result) => resolve(result))
               .catch((result) => reject(result));
           }, this.apiClientOptions.retryWhenNotAuthErrorTimeout);
+        } else {
+          reject(error);
         }
       } else {
         reject(error);
