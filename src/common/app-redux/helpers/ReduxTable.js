@@ -81,18 +81,21 @@ export default class ReduxTable extends ReduxUni {
       apiEditRecord,
     } = api;
 
+    const FIELD_UUID = this.constructor.FIELD_ACTION_UUID;
+    const FIELD_RECORD_ID = this.constructor.FIELD_ACTION_RECORD_ID;
+
     const actions = {
       ...super.getBindActions(api, TYPES),
       actionClearFilters(tableUuid) {
         return {
-          [this.constructor.FIELD_ACTION_UUID]: tableUuid,
+          [FIELD_UUID]: tableUuid,
           type: TYPES.CLEAR_FILTERS,
         };
       },
 
       actionChangeRecordsSelected(tableUuid, recordIds, selected) {
         return {
-          [this.constructor.FIELD_ACTION_UUID]: tableUuid,
+          [FIELD_UUID]: tableUuid,
           recordIds: Array.isArray(recordIds) ? recordIds : [recordIds],
           type: TYPES.CHANGE_SELECTED,
           payload: selected,
@@ -101,7 +104,7 @@ export default class ReduxTable extends ReduxUni {
 
       actionChangeRecordsSelectedAll(type, isSelectedAll) {
         return {
-          [this.constructor.FIELD_ACTION_UUID]: type,
+          [FIELD_UUID]: type,
           type: TYPES.CHANGE_SELECTED_ALL,
           payload: isSelectedAll,
         };
@@ -109,14 +112,16 @@ export default class ReduxTable extends ReduxUni {
 
       actionClearRecordSelection(type) {
         return {
-          [this.constructor.FIELD_ACTION_UUID]: type,
+          [FIELD_UUID]: type,
           type: TYPES.CLEAR_SELECTION,
         };
       },
     };
 
     if (apiLoadRecords) {
-      actions.actionLoadRecords = (tableUuid, meta = null, filters = null, forceUpdate = false) => {
+      const initialMeta = this.getInitialState().meta;
+
+      actions.actionLoadRecords = (tableUuid, meta = undefined, filters = undefined, forceUpdate = false) => {
         // return {
         //   types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
         //   uuid: tableUuid,
@@ -132,8 +137,16 @@ export default class ReduxTable extends ReduxUni {
             filters: currentFilters,
           } = state;
 
-          const newMeta = meta ? merge({}, currentMeta, meta) : currentMeta;
-          const newFilters = filters ? merge({}, currentFilters, filters) : currentFilters;
+          const newMeta = (meta === null || meta === false)
+            ? initialMeta
+            : meta
+              ? merge({}, currentMeta, meta)
+              : currentMeta;
+          const newFilters = (filters === null || filters === false)
+            ? {}
+            : filters
+              ? merge({}, currentFilters, filters)
+              : currentFilters;
 
           if (
             forceUpdate
@@ -142,7 +155,7 @@ export default class ReduxTable extends ReduxUni {
             || !deepEquals(newFilters, currentFilters)
           ) {
             return dispatch({
-              [this.constructor.FIELD_ACTION_UUID]: tableUuid,
+              [FIELD_UUID]: tableUuid,
               meta: newMeta,
               filters: newFilters,
               types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
@@ -156,8 +169,8 @@ export default class ReduxTable extends ReduxUni {
 
     if (apiEditRecord) {
       actions.actionEditRecord = (tableUuid, recordId, patchOperations) => ({
-        [this.constructor.FIELD_ACTION_UUID]: tableUuid,
-        [this.constructor.FIELD_ACTION_RECORD_ID]: recordId,
+        [FIELD_UUID]: tableUuid,
+        [FIELD_RECORD_ID]: recordId,
         types: [TYPES.EDIT_RECORD_FETCH, TYPES.EDIT_RECORD_SUCCESS, TYPES.EDIT_RECORD_FAIL],
         payload: apiEditRecord(tableUuid, recordId, patchOperations)
           .then((resultOperations) => resultOperations || patchOperations),
@@ -167,7 +180,7 @@ export default class ReduxTable extends ReduxUni {
     if (apiBulkChangeStatus) {
       actions.actionBulkChangeStatus = (tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus) => {
         return {
-          [this.constructor.FIELD_ACTION_UUID]: tableUuid,
+          [FIELD_UUID]: tableUuid,
           types: [TYPES.BULK_CHANGE_STATUS_FETCH, TYPES.BULK_CHANGE_STATUS_SUCCESS, TYPES.BULK_CHANGE_STATUS_FAIL],
           payload: apiBulkChangeStatus(meta, selectedIds, isSelectedAll, newStatus, oldStatus),
         };
@@ -219,6 +232,9 @@ export default class ReduxTable extends ReduxUni {
         ...state,
         selected: [],
         isSelectedAll: false,
+      }),
+      [TYPES.CLEAR_FILTERS]: () => ({
+        filters: {},
       }),
     };
   }
