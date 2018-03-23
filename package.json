@@ -31,9 +31,10 @@
     "release-prepatch": "npm version preptch -m \"chore(*) preptch version: %s\"",
     "release-prerelease": "npm version prerelease -m \"chore(*) prerelease version: %s\"",
     "preversion": "npm run test",
-    "version": "npm run build-docs && npm run compile",
+    "version": "npm run build-docs && npm run compile && git add -A",
     "//comment//": "prepublishOnly - only run before publish",
     "postversion": "git push --follow-tags",
+
     "docker-build": "sh docker/docker-build.sh",
     "docker-push": "sh docker/docker-push.sh",
     "docker-test-run": "sh docker/docker-test-run.sh",
