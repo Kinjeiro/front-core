@@ -10,6 +10,10 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return require('../common/models/domains').default;
   }
 
+  /**
+   * Возвращаем мапу редьюсеров
+   * @returns {*}
+   */
   getReducers() {
     return require('../common/app-redux/reducers/root').coreReduces;
   }

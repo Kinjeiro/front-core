@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
-import path from 'path';
+import pathLib from 'path';
 import forOwn from 'lodash/forOwn';
 import queryString from 'query-string';
 
-const pathModule = path.posix || path;
+const pathModule = pathLib.posix || pathLib;
 
 // на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
 export const joinUri = pathModule.join;
