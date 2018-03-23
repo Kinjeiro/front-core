@@ -5,8 +5,7 @@ import { generateId } from '../utils/common';
 
 import clientConfig from '../client-config';
 
-/**
-
+/*
 export default class Notification extends Component {
   state = {
     notices: []
@@ -54,10 +53,9 @@ export default class Notification extends Component {
     );
   }
 }
-
 */
 
-class NoticeEmitter extends EventEmitter {
+export class NoticeEmitter extends EventEmitter {
   EVENT_NAME = 'app-notification';
 
   STATUSES = {

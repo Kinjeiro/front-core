@@ -35,6 +35,9 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
   retryWhenNotAuthErrorAttempts: clientConfig.common.features.auth.retryWhenNotAuthErrorAttempts,
 };
 
+/**
+ * Класс для отсылки запросов на сервер
+ */
 class BaseApiClientClass {
   apiClientOptions;
 

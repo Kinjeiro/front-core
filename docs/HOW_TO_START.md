@@ -12,7 +12,7 @@
 
 ## Шаблон - заготовка приложения
 1. Скачать шаблон https://bitbucket.org/kinjeiro/frontcore_stub
-2. Запустить `npm install` для установки зависимостей
+1. Запустить `npm install` для установки зависимостей
 
 `@reagentum/front-core` поставляется в скомпилированном виде без исходников и соотвественно все файлы приложения используются от `@reagentum/front-core/lib/*`
 <br/> Исходники - https://bitbucket.org/kinjeiro/frontcore

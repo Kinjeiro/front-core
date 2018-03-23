@@ -41,6 +41,9 @@ Project
 
 ## Client api
 ./src/common/api/api-testUnits.js
+
+Про apiClient можно посмотреть в докумментации по [BaseApiClient.js](api.md#baseapiclientclass)
+
 ```javascript
 // api-config - это элементаный формат записи куда апи посылается { path, method }
 import apiConfig from '@reagentum/front-core/lib/common/utils/create-api-config';

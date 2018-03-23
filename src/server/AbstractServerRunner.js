@@ -25,6 +25,9 @@ process.on('unhandledRejection', error => {
   console.error('unhandledRejection', error);
 });
 
+/**
+* Абстрактный класс для серверного ранера, икапсулирующий логику запуска node js сервера hapi
+*/
 export default class AbstractServerRunner {
   hapiServerOptions;
 
