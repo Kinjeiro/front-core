@@ -11,4 +11,4 @@ test/client/coverage/
 test/client/test-results.xml
 .babelrc
 
-/src
+src/
