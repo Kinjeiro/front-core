@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "front-core",
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
   "main": "./build-scripts/start.js",
@@ -22,8 +22,8 @@
     "build": "cross-env NODE_ENV=production node ./build-scripts/build.js",
     "test-build": "npm run build && cross-env NODE_ENV=production npm run start-build",
     "lint": "./node_modules/.bin/eslint --ext js,jsx .",
-    "build-docs-md":    "documentation build src/** --config docs/api-documentation.yml --format md --output docs/api.md",
-    "build-docs-html":  "documentation build src/** --config docs/api-documentation.yml --format html --output docs/api",
+    "build-docs-md": "documentation build src/** --config docs/api-documentation.yml --format md --output docs/api.md",
+    "build-docs-html": "documentation build src/** --config docs/api-documentation.yml --format html --output docs/api",
     "compile": "npm run update-babelrc && rimraf lib/* -f && babel src --out-dir lib --copy-files",
     "publish-patch": "npm run release-patch && npm publish",
     "release-patch": "npm version patch -m \"chore(*) patch version: %s\"",
