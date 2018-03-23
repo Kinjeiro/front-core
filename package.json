@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "front-core",
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
   "main": "./build-scripts/start.js",
@@ -34,7 +34,6 @@
     "version": "npm run build-docs && npm run compile && git add -A",
     "//comment//": "prepublishOnly - only run before publish",
     "postversion": "git push --follow-tags",
-
     "docker-build": "sh docker/docker-build.sh",
     "docker-push": "sh docker/docker-push.sh",
     "docker-test-run": "sh docker/docker-test-run.sh",
