@@ -15,10 +15,11 @@ ___Front Core (FC) - коробка для быстрого развертыва
 * [Ключенвые особенности](#features)
 * [Используемые технологии](#techStack)
 * [Как начать](#howToStart)
+* [Документация API](#api)
+* [Change Log](#changeLog)
 * [Roadmap](#roadmap)
 * [Описание структуры Front Core](#structure)
 * [Troubleshooting](#troubleshooting)
-
 
 
 ## Ключенвые особенности
@@ -87,8 +88,19 @@ ___Front Core (FC) - коробка для быстрого развертыва
 * [Документация как стартовать шаблонный проект](./docs/HOW_TO_START.md)
 * [Как добавить кусок логики (api, redux, containers, mock, proxy)](./docs/CREATE_UNIT.md)
 
+## Документация API 
+[API в html](./docs/api/index.html)
+
+## Change Log 
+Актуальный [Change Log](./CHAGELOG.md)
+
 ## Roadmap
-TODO
+- добавить yoman скрипт вместо frontCore-Stub
+- data entity relations (допилить rest redux-orm или mobx)
+- hot reload (webpack неоптимально компилирует новые изменения)
+- добавить websocket из коробки
+- разбить на асинхронные chunk modules (react-router@4 + import + webpack chunks)
+- найти альтернативу redux-form
 
 ## Описание структуры Front Core
 TODO

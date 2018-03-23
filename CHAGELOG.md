@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 
 ### Features:
-1) ServiceAuth - теперь это класс для удобного и гибкого расширения
-2) UniRedux - новая схема работы с редаксом all-in-one и через расширение классов
-3) ReduxTable - редакс для таблиц со встроенным selected, meta, filters, changeStatus и редактированием
+1. ServiceAuth - теперь это класс для удобного и гибкого расширения
+2. UniRedux - новая схема работы с редаксом all-in-one и через расширение классов
+3. ReduxTable - редакс для таблиц со встроенным selected, meta, filters, changeStatus и редактированием
 
 ### Dependencies:
 
@@ -36,17 +36,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.2.0] - 2018-03-01
 ### !!! Breaking changes:
-1) переделал роутинг на опции среди которых можно переопределить классы для некоторых стилизованных компонентов (Notice)
-1) переделал authStrategy: теперь вместо (token) она работает от (request, response)
+1. переделал роутинг на опции среди которых можно переопределить классы для некоторых стилизованных компонентов (Notice)
+2. переделал authStrategy: теперь вместо (token) она работает от (request, response)
 
 ### Dependencies:
 
 ### Features:
-1) переделал роутинг на мапу опций, среди которых можно переопределить классы компонентов для некоторых стилизованные компонентов 
-1) переделал authStrategy теперь она работает от request, response 
-1) если сессия протухла, то либо появится сообщение о переходе на логин страницу, либо форма логина (в завизимости от config.common.features.auth.reLoginModalForm) за этим следить AuthErrorContainer 
-1) uni-error теперь содержит поле isNoAuth, если слетела авторизация
-1) добавил CHANGELOG.md журнал
+1. переделал роутинг на мапу опций, среди которых можно переопределить классы компонентов для некоторых стилизованные компонентов 
+2. переделал authStrategy теперь она работает от request, response 
+3. если сессия протухла, то либо появится сообщение о переходе на логин страницу, либо форма логина (в завизимости от config.common.features.auth.reLoginModalForm) за этим следить AuthErrorContainer 
+4. uni-error теперь содержит поле isNoAuth, если слетела авторизация
+5. добавил CHANGELOG.md журнал
 
 ### Commits:
     - feat(auth): - !!! переделал роутинг на опции среди которых можно переопределить классы для некоторых компонентов // !!! - переделал authStrategy теперь она работает от request, response // если сесси протухла, то либо появится сообщение о переходе на логин страницу, либо форма логина (в завизимости от config.common.features.auth.reLoginModalForm) за этим следить AuthErrorContainer 
@@ -59,16 +59,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.1.0] - 2018-02-27
 
 ### !!! Breaking changes:
-1) **BaseApiClient** метод **serializeRequest** теперь принимает два параметра и должен вернуть request.
+1. **BaseApiClient** метод **serializeRequest** теперь принимает два параметра и должен вернуть request.
 <br/>При наследовании старые **serializeRequest** переименуйте в **parseOptions**
 
 ### Features:
-1) В BaseApiClient добавлены в request options: serializer, deserializer, optionsParser 
-1) В BaseApiClient добавлены http PATCH метод c возможностью замены индексов на переданные id элементов
-1) В BaseApiClient добавлены downloadFile и uploadFile методы
-1) новые утилиты date-utils \ common utils \ tree-utils
-1) auth - логин по Enter \ autoComplete
-1) Стилизированный Notice класс компонент можно передать в App
+1. В BaseApiClient добавлены в request options: serializer, deserializer, optionsParser 
+1. В BaseApiClient добавлены http PATCH метод c возможностью замены индексов на переданные id элементов
+4. В BaseApiClient добавлены downloadFile и uploadFile методы
+5. новые утилиты date-utils \ common utils \ tree-utils
+6. auth - логин по Enter \ autoComplete
+7. Стилизированный Notice класс компонент можно передать в App
 
 ### Dependencies:
 \+ file-saver@1.3.3
@@ -128,20 +128,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.0.0] - 2017.12.26
 ### Features:
-1) проксирование запросов через hapi (с матчерами)
-1) обновление до webpack 3
-1) обновелние до react 16 (fiber)
-1) обновление до redux-router 3
-1) локализация теперь из js файлов, а не json
-1) Поддержка sass
-1) новые компоненты MediaQuery (react-responsive) \ ReadMore (react-truncate)
-1) обновленный универсальный uni-error используется везде
-1) возможность создания собственных схем авторизации (матчеры пропуска, редиректы стандартной логин страницы)
-1) авторизационный моки
-1) сприкты для демонизации процессов
-1) небольшая оптимизация под прод
-1) декоратор @titled для смены title заголовков
-1) фиксы загрузки в IE
+1. проксирование запросов через hapi (с матчерами)
+2. обновление до webpack 3
+3. обновелние до react 16 (fiber)
+4. обновление до redux-router 3
+5. локализация теперь из js файлов, а не json
+6. Поддержка sass
+7. новые компоненты MediaQuery (react-responsive) \ ReadMore (react-truncate)
+8. обновленный универсальный uni-error используется везде
+9. возможность создания собственных схем авторизации (матчеры пропуска, редиректы стандартной логин страницы)
+10. авторизационный моки
+11. сприкты для демонизации процессов
+12. небольшая оптимизация под прод
+13. декоратор @titled для смены title заголовков
+14. фиксы загрузки в IE
 
 ### Commits
     - bug(uniError): - captureStackTrace нет в Firefox
