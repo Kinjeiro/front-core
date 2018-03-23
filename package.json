@@ -26,6 +26,7 @@
     "build-docs-html": "documentation build src/** --config docs/api-documentation.yml --format html --output docs/api",
     "compile": "npm run update-babelrc && rimraf lib/* -f && babel src --out-dir lib --copy-files",
     "publish-patch": "npm run release-patch && npm publish",
+    "publish-patch-r": "git push --follow-tags && npm publish",
     "release-patch": "npm version patch -m \"chore(*) patch version: %s\"",
     "release-minor": "npm version minor -m \"chore(*) minor version: %s\"",
     "release-major": "npm version major -m \"chore(*) major version: %s\"",
