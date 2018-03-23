@@ -1,10 +1,8 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "front-core",
-
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
-
   "main": "./build-scripts/start.js",
   "scripts": {
     "start-build": "node ./.build/server.js",
@@ -21,36 +19,26 @@
     "start": "npm run start-localhost",
     "start-frontend-server": "node ./build-scripts/start-frontend.js",
     "start-backend-server": "node ./build-scripts/start-backend.js",
-
     "build": "cross-env NODE_ENV=production node ./build-scripts/build.js",
     "test-build": "npm run build && cross-env NODE_ENV=production npm run start-build",
-
     "lint": "./node_modules/.bin/eslint --ext js,jsx .",
     "build-docs": "documentation build src/** --config docs/api-documentation.yml --format html --output docs/api",
     "compile": "npm run update-babelrc && rimraf lib/* -f && babel src --out-dir lib --copy-files",
     "publish-patch": "npm run release-patch && npm publish",
-
     "release-patch": "npm version patch -m \"chore(*) patch version: %s\"",
     "release-minor": "npm version minor -m \"chore(*) minor version: %s\"",
     "release-major": "npm version major -m \"chore(*) major version: %s\"",
     "release-prepatch": "npm version preptch -m \"chore(*) preptch version: %s\"",
     "release-prerelease": "npm version prerelease -m \"chore(*) prerelease version: %s\"",
-
     "preversion": "npm run test",
     "version": "npm run build-docs && npm run compile",
-    "//comment//": "postversion for hg: hg add package.json && hg commit package.json -m \"front-core new version\" && hg push",
-    "//comment//": "postversion for git: git push --follow-tags",
-    "postversion": "git push --follow-tags",
-
-    "//comment//": "GIT_HTTP_LOW_SPEED_TIME=120 git push --follow-tags",
     "//comment//": "prepublishOnly - only run before publish",
-
+    "postversion": "git push --follow-tags",
     "docker-build": "sh docker/docker-build.sh",
     "docker-push": "sh docker/docker-push.sh",
     "docker-test-run": "sh docker/docker-test-run.sh",
     "docker-build-test-push": "sh docker/build-test-push-to-devops.sh",
     "update-babelrc": "node ./build-scripts/update-babelrc.js",
-
     "test-client": "cross-env NODE_ENV=test SERVER_PORT=8082 karma start ./test/client/run-client-tests.js",
     "test-client:watch": "npm run test-client -- --watch",
     "test-server": "cross-env TEST_SKIP_AUTH=1 NODE_ENV=test SERVER_PORT=8081 mocha ./test/server/run-server-tests.js --timeout 10000",
@@ -240,7 +228,6 @@
     "stream-to-promise": "^2.2.0",
     "style-loader": "^0.17.0",
     "stylelint": "^7.12.0",
-    "typescript": "// remove it from package",
     "typescript": "^1.8.10",
     "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "uglifyjs-webpack-plugin": "^1.1.2",
