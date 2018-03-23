@@ -40,8 +40,9 @@
     "version": "npm run build-docs && npm run compile",
     "//comment//": "postversion for hg: hg add package.json && hg commit package.json -m \"front-core new version\" && hg push",
     "//comment//": "postversion for git: git push --follow-tags",
-    "postversion": "GIT_HTTP_LOW_SPEED_TIME=120 git push --follow-tags",
+    "postversion": "git push --follow-tags",
 
+    "//comment//": "GIT_HTTP_LOW_SPEED_TIME=120 git push --follow-tags",
     "//comment//": "prepublishOnly - only run before publish",
 
     "docker-build": "sh docker/docker-build.sh",
