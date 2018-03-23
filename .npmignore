@@ -12,3 +12,4 @@ test/client/test-results.xml
 .babelrc
 
 src/
+docs/api/assets/fonts/
