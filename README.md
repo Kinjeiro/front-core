@@ -88,8 +88,8 @@ ___Front Core (FC) - коробка для быстрого развертыва
 * [Как добавить кусок логики (api, redux, containers, mock, proxy)](./docs/CREATE_UNIT.md)
 
 ## Документация API 
-[API в html](./docs/api/index.html)
-[API в MD](./docs/api.md)
+* [API в html](./docs/api/index.html)
+* [API в MD](./docs/api.md)
 
 ## Change Log 
 Актуальный [Change Log](./CHAGELOG.md)
