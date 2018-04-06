@@ -35,33 +35,38 @@
 -   [findInTree][31]
 -   [arrayToTree][32]
 -   [createApiConfig][33]
--   [titledDecorator][34]
--   [updatePathIfChange][35]
--   [onPropsUpdate][36]
--   [onStatusPropUpdate][37]
--   [formatDate][38]
--   [init][39]
--   [translateDefault][40]
--   [i18nContextProvider][41]
--   [isEmpty][42]
--   [DEFAULT_LOGGER_IDS][43]
--   [contextData][44]
--   [register][45]
--   [method][46]
+-   [createApiConfig][34]
+-   [titledDecorator][35]
+-   [updatePathIfChange][36]
+-   [onPropsUpdate][37]
+-   [onStatusPropUpdate][38]
+-   [formatDate][39]
+-   [init][40]
+-   [translateDefault][41]
+-   [i18nContextProvider][42]
+-   [isEmpty][43]
+-   [DEFAULT_LOGGER_IDS][44]
+-   [contextData][45]
+-   [register][46]
 -   [method][47]
--   [remoteJwt][48]
--   [prepare-state][49]
--   [createServices][50]
--   [ServiceAuth][51]
--   [createProxyWrapperCallback][52]
--   [apiPluginFullFactory][53]
--   [apiPluginFactory][54]
--   [proxyRoute][55]
--   [proxyRoutePluginFactory][56]
--   [sendSimpleRequest][57]
--   [sendEndpointMethodRequest][58]
--   [factoryEndpointServiceMethodRequest][59]
--   [proceedRequest][60]
+-   [method][48]
+-   [remoteJwt][49]
+-   [prepare-state][50]
+-   [createServices][51]
+-   [ServiceAuth][52]
+-   [createProxyWrapperCallback][53]
+-   [apiPluginFullFactory][54]
+-   [apiPluginFactory][55]
+-   [proxyRoute][56]
+-   [proxyRoutePluginFactory][57]
+-   [createEndpointServiceConfig][58]
+-   [HOST][59]
+-   [SERVICES_HOST][60]
+-   [REQUEST_TIMEOUT][61]
+-   [sendSimpleRequest][62]
+-   [sendEndpointMethodRequest][63]
+-   [factoryEndpointServiceMethodRequest][64]
+-   [proceedRequest][65]
 
 ## Runners
 
@@ -162,7 +167,7 @@ Returns **{}**
 
 Компонент для того, чтобы не писать bind функции c ключом
 В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][61]
+См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][66]
 
 ## ThemeProvider
 
@@ -181,7 +186,7 @@ Returns **{}**
 
 ## FROM_BOOM
 
-[https://github.com/hapijs/boom][62]
+[https://github.com/hapijs/boom][67]
 
 ## FROM_BOOM_RESPONSE
 
@@ -213,7 +218,7 @@ Returns **{}**
 
 ## parseFromBoom
 
-[https://github.com/hapijs/boom][62]
+[https://github.com/hapijs/boom][67]
 
 -   isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
 -   isServer - convenience bool indicating status code >= 500.
@@ -315,7 +320,7 @@ object of that fields
     other - result
 -   `mockFilter`  function(requestOptions, error, response) {}
 
-Returns **[Promise][63]** 
+Returns **[Promise][68]** 
 
 ## valueFromRange
 
@@ -374,6 +379,18 @@ Returns **[Promise][63]**
 
 Returns **({method, path, payload} | any)** 
 
+## createApiConfig
+
+Создание настроек для клиенской части и их роутинг через плагину на серверной
+
+**Parameters**
+
+-   `path`  
+-   `method`  
+-   `payload`  
+
+Returns **({method, path, payload} | any)** 
+
 ## titledDecorator
 
 Декорирует компонент, проставляя указанные данные в заголовок и в хедар документа
@@ -418,7 +435,7 @@ Returns **any** возвращает true - если нужно прервать
     -   если function - функция вызывается дважды, один раз для newProps второй раз для oldProps - на вход который подаются пропсы, вернуть должна часть props по которой будет deep equals
     -   если string - путь в props для объектов которые будут сравниваться
     -   если string array - если больше 1 то singleRun по умолчанию true
--   `$1` **[Object][64]**  (optional, default `{}`)
+-   `$1` **[Object][69]**  (optional, default `{}`)
     -   `$1.deepEqual`   (optional, default `true`)
     -   `$1.singleRun`   (optional, default `true`)
     -   `$1.oldPropsNotNull`   (optional, default `true`)
@@ -447,7 +464,7 @@ accountId: PropTypes.number,
 
 -   `statusPropPath`  
 
-Returns **[function][65]** 
+Returns **[function][70]** 
 
 ## formatDate
 
@@ -455,12 +472,12 @@ Returns **[function][65]**
 
 **Parameters**
 
--   `date` **[String][66]** Строка даты в формате `YYYY-MM-DD`
--   `options` **[Object][64]?** Список опций
-    -   `options.fullMonth` **[Boolean][67]** Если `true`, то название месяца, иначе номер (optional, default `true`)
-    -   `options.cutCurrentYear` **[Boolean][67]** Если `true`, то дата без указания года (optional, default `true`)
+-   `date` **[String][71]** Строка даты в формате `YYYY-MM-DD`
+-   `options` **[Object][69]?** Список опций
+    -   `options.fullMonth` **[Boolean][72]** Если `true`, то название месяца, иначе номер (optional, default `true`)
+    -   `options.cutCurrentYear` **[Boolean][72]** Если `true`, то дата без указания года (optional, default `true`)
 
-Returns **[String][66]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+Returns **[String][71]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
 
 ## init
 
@@ -496,7 +513,7 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
 -   `context`  
 
-Returns **[Function][65]** 
+Returns **[Function][70]** 
 
 ## isEmpty
 
@@ -577,7 +594,7 @@ Returns **{}**
 
 **Parameters**
 
--   `endpointServiceConfig` **[Object][64]** 
+-   `endpointServiceConfig` **[Object][69]** 
     -   `endpointServiceConfig.endpointServiceConfig`  
     -   `endpointServiceConfig.urls`  
 
@@ -625,8 +642,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][68] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][69]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][73] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][74]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `otherOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -646,13 +663,49 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   **deprecated**: use proxyRoute
 
 
+## createEndpointServiceConfig
+
+Это настройка для набора сервисов, который после подключения спец библиотек (Thrift или оберток над Rest)
+позволяют дергать свое апи через методы с переменными
+(вся логика выстраивания пути до rest сервисов, инкапсулирована внутри).
+Это позволяет их легко переиспользовать, в том числе и в других проектах.
+
+**Parameters**
+
+-   `$0` **[Object][69]** 
+    -   `$0.protocol`   (optional, default `'http'`)
+    -   `$0.host`   (optional, default `'localhost'`)
+    -   `$0.port`   (optional, default `80`)
+    -   `$0.endpoint`   (optional, default `''`)
+    -   `$0.timeout`  
+    -   `$0.fullUrl`  
+-   `protocol`  
+-   `host`  
+-   `port`  
+-   `endpoint`  
+-   `timeout`  
+
+Returns **{protocol: [string][71], host: [string][71], port: [number][75], endpoint: [string][71], fullUrl: [string][71], timeout: any}** 
+
+## HOST
+
+Марафон при запуска автоматически добавляет адресс хоста в эту переменную
+
+## SERVICES_HOST
+
+Когда запускаем на localhost или нужно на стендах зашить
+
+## REQUEST_TIMEOUT
+
+Первый запуск мидловых сервисов бывает до 20 сек
+
 ## sendSimpleRequest
 
 **Parameters**
 
--   `requestOptions`  [https://www.npmjs.com/package/request][70]
+-   `requestOptions`  [https://www.npmjs.com/package/request][76]
 
-Returns **[Promise][63]** 
+Returns **[Promise][68]** 
 
 ## sendEndpointMethodRequest
 
@@ -678,7 +731,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][70]
+-   `requestOptions`  [https://www.npmjs.com/package/request][76]
 -   `logger`  
 
 Returns **any** 
@@ -696,13 +749,13 @@ Returns **any**
 -   `requestOptions`  
 -   `logger`  
 
-Returns **[Promise][63]&lt;any>** 
+Returns **[Promise][68]&lt;any>** 
 
 ## proceedRequest
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][71]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][77]
 -   `server`  
 
 Returns **any** Promise
@@ -773,78 +826,90 @@ Returns **any** Promise
 
 [33]: #createapiconfig
 
-[34]: #titleddecorator
+[34]: #createapiconfig-1
 
-[35]: #updatepathifchange
+[35]: #titleddecorator
 
-[36]: #onpropsupdate
+[36]: #updatepathifchange
 
-[37]: #onstatuspropupdate
+[37]: #onpropsupdate
 
-[38]: #formatdate
+[38]: #onstatuspropupdate
 
-[39]: #init
+[39]: #formatdate
 
-[40]: #translatedefault
+[40]: #init
 
-[41]: #i18ncontextprovider
+[41]: #translatedefault
 
-[42]: #isempty
+[42]: #i18ncontextprovider
 
-[43]: #default_logger_ids
+[43]: #isempty
 
-[44]: #contextdata
+[44]: #default_logger_ids
 
-[45]: #register
+[45]: #contextdata
 
-[46]: #method
+[46]: #register
 
-[47]: #method-1
+[47]: #method
 
-[48]: #remotejwt
+[48]: #method-1
 
-[49]: #prepare-state
+[49]: #remotejwt
 
-[50]: #createservices
+[50]: #prepare-state
 
-[51]: #serviceauth
+[51]: #createservices
 
-[52]: #createproxywrappercallback
+[52]: #serviceauth
 
-[53]: #apipluginfullfactory
+[53]: #createproxywrappercallback
 
-[54]: #apipluginfactory
+[54]: #apipluginfullfactory
 
-[55]: #proxyroute
+[55]: #apipluginfactory
 
-[56]: #proxyroutepluginfactory
+[56]: #proxyroute
 
-[57]: #sendsimplerequest
+[57]: #proxyroutepluginfactory
 
-[58]: #sendendpointmethodrequest
+[58]: #createendpointserviceconfig
 
-[59]: #factoryendpointservicemethodrequest
+[59]: #host
 
-[60]: #proceedrequest-1
+[60]: #services_host
 
-[61]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+[61]: #request_timeout
 
-[62]: https://github.com/hapijs/boom
+[62]: #sendsimplerequest
 
-[63]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[63]: #sendendpointmethodrequest
 
-[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[64]: #factoryendpointservicemethodrequest
 
-[65]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[65]: #proceedrequest-1
 
-[66]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[66]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
 
-[67]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[67]: https://github.com/hapijs/boom
 
-[68]: https://github.com/hapijs/h2o2
+[68]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[69]: http://localhost:
+[69]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[70]: https://www.npmjs.com/package/request
+[70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[71]: https://hapijs.com/api#serverinjectoptions-callback
+[71]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[72]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[73]: https://github.com/hapijs/h2o2
+
+[74]: http://localhost:
+
+[75]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[76]: https://www.npmjs.com/package/request
+
+[77]: https://hapijs.com/api#serverinjectoptions-callback

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.2.16 | Documentation</title>
+  <title>@reagentum/front-core 1.2.17 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.2.16</code></div>
+          <div class='mb1'><code>1.2.17</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -371,6 +371,16 @@
               
                 
                 <li><a
+                  href='#createapiconfig'
+                  class="">
+                  createApiConfig
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#titleddecorator'
                   class="">
                   titledDecorator
@@ -594,6 +604,46 @@
                   href='#proxyroutepluginfactory'
                   class="">
                   proxyRoutePluginFactory
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createendpointserviceconfig'
+                  class="">
+                  createEndpointServiceConfig
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#host'
+                  class="">
+                  HOST
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#services_host'
+                  class="">
+                  SERVICES_HOST
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#request_timeout'
+                  class="">
+                  REQUEST_TIMEOUT
                   
                 </a>
                 
@@ -2823,6 +2873,90 @@ valueFromRange(25, [0, 5, 8, 15, 20], [a, b, c, d], 'Y') => 'Y'</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='createapiconfig'>
+      createApiConfig
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Создание настроек для клиенской части и их роутинг через плагину на серверной</p>
+
+
+  <div class='pre p1 fill-light mt0'>createApiConfig(path: any, method: any, payload: any): ({method, path, payload} | any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>method</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>payload</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>({method, path, payload} | any)</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='titleddecorator'>
       titledDecorator
     </h3>
@@ -4737,6 +4871,330 @@ server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createendpointserviceconfig'>
+      createEndpointServiceConfig
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Это настройка для набора сервисов, который после подключения спец библиотек (Thrift или оберток над Rest)
+позволяют дергать свое апи через методы с переменными
+(вся логика выстраивания пути до rest сервисов, инкапсулирована внутри).
+Это позволяет их легко переиспользовать, в том числе и в других проектах.</p>
+
+
+  <div class='pre p1 fill-light mt0'>createEndpointServiceConfig($0: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, protocol: any, host: any, port: any, endpoint: any, timeout: any): {protocol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, host: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, port: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, endpoint: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fullUrl: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, timeout: any}</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.protocol</span> <code class='quiet'>any</code>
+  
+    (default <code>&#39;http&#39;</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.host</span> <code class='quiet'>any</code>
+  
+    (default <code>&#39;localhost&#39;</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.port</span> <code class='quiet'>any</code>
+  
+    (default <code>80</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.endpoint</span> <code class='quiet'>any</code>
+  
+    (default <code>&#39;&#39;</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.timeout</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.fullUrl</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>protocol</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>host</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>port</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>endpoint</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeout</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{protocol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, host: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, port: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, endpoint: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fullUrl: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, timeout: any}</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='host'>
+      HOST
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Марафон при запуска автоматически добавляет адресс хоста в эту переменную</p>
+
+
+  <div class='pre p1 fill-light mt0'>HOST</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='services_host'>
+      SERVICES_HOST
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Когда запускаем на localhost или нужно на стендах зашить</p>
+
+
+  <div class='pre p1 fill-light mt0'>SERVICES_HOST</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='request_timeout'>
+      REQUEST_TIMEOUT
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Первый запуск мидловых сервисов бывает до 20 сек</p>
+
+
+  <div class='pre p1 fill-light mt0'>REQUEST_TIMEOUT</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
