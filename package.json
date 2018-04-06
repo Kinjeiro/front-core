@@ -50,7 +50,8 @@
     "test-scripts": "cross-env NODE_ENV=test mocha ./test/scripts/run-scripts-tests.js",
     "test-with-auth": "npm run test-scripts && npm run test-server && npm run test-client",
     "test": "npm run test-scripts && npm run test-server && npm run test-client",
-    "sync-work-branch": "sh ./build-scripts/sync-work-branch.sh"
+    "sync-work-branch": "sh ./build-scripts/sync-work-branch.sh",
+    "full-update-npm": "rm -r node_modules && npm cache clean --force && npm i"
   },
   "dependencies": {
     "accept-language-parser": "~1.4.0",
