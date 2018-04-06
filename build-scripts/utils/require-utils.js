@@ -14,7 +14,7 @@ function requireSafe(modulePath) {
   try {
     result = require(modulePath);
   } catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
+    if (e.code !== 'MODULE_NOT_FOUND' || fs.existsSync(`${modulePath}.js`)) {
       throw e;
     }
     console.log(`Doesn't find in current project module "${modulePath}"`);
