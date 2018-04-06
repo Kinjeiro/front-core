@@ -12,7 +12,7 @@ const ERROR_NOT_FOUND_CODES = [
   'ECONNREFUSED',
 ];
 const RESPONSE_NOT_FOUND_STATUS_CODES = [
-  404,
+  404, 502,
 ];
 
 export const UNI_ERROR_FROM = {

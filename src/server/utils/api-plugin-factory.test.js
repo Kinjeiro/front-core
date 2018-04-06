@@ -762,6 +762,7 @@ describe('api-plugin-factory', () => {
       expect(res.statusCode).to.equal(502);
       expect(res.result.isUniError).to.equal(true);
       expect(res.result.errorFrom).to.equal(UNI_ERROR_FROM.FROM_BOOM);
+      expect(res.result.isNotFound).to.equal(true);
     });
   });
 });
