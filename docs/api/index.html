@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.2.15 | Documentation</title>
+  <title>@reagentum/front-core 1.2.16 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.2.15</code></div>
+          <div class='mb1'><code>1.2.16</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -211,6 +211,36 @@
               
                 
                 <li><a
+                  href='#from_boom'
+                  class="">
+                  FROM_BOOM
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#from_boom_response'
+                  class="">
+                  FROM_BOOM_RESPONSE
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#from_boom_error'
+                  class="">
+                  FROM_BOOM_ERROR
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#clienterrormessage'
                   class="">
                   clientErrorMessage
@@ -224,6 +254,36 @@
                   href='#unimessage'
                   class="">
                   uniMessage
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#parsefromboom'
+                  class="">
+                  parseFromBoom
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#parsefromboomresponse'
+                  class="">
+                  parseFromBoomResponse
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#parsefromboomerror'
+                  class="">
+                  parseFromBoomError
                   
                 </a>
                 
@@ -1525,6 +1585,147 @@
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='from_boom'>
+      FROM_BOOM
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="https://github.com/hapijs/boom">https://github.com/hapijs/boom</a></p>
+
+
+  <div class='pre p1 fill-light mt0'>FROM_BOOM</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='from_boom_response'>
+      FROM_BOOM_RESPONSE
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>FROM_BOOM_RESPONSE</div>
+  
+  
+
+  <div>Deprecated: старый формат
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='from_boom_error'>
+      FROM_BOOM_ERROR
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>FROM_BOOM_ERROR</div>
+  
+  
+
+  <div>Deprecated: старый формат
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='clienterrormessage'>
       clientErrorMessage
     </h3>
@@ -1594,6 +1795,229 @@
   
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='parsefromboom'>
+      parseFromBoom
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="https://github.com/hapijs/boom">https://github.com/hapijs/boom</a></p>
+<ul>
+<li>isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.</li>
+<li>isServer - convenience bool indicating status code >= 500.</li>
+<li>output - the formatted response. Can be directly manipulated after object construction to return a custom error response. Allowed root keys:</li>
+<li>statusCode - the HTTP status code (typically 4xx or 5xx).</li>
+<li>headers - an object containing any HTTP headers where each key is a header name and value is the header content.</li>
+<li>payload - the formatted object used as the response payload (stringified). Can be directly manipulated but any changes will be lost if reformat() is called. Any content allowed and by default includes the following content:</li>
+<li>statusCode - the HTTP status code, derived from error.output.statusCode.</li>
+<li>error - the HTTP status message (e.g. 'Bad Request', 'Internal Server Error') derived from statusCode.</li>
+<li>message - the error message derived from error.message.</li>
+</ul>
+<p>// - message - the error message.
+// - typeof - the constructor used to create the error (e.g. Boom.badRequest).</p>
+<ul>
+<li>inherited Error properties.</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>parseFromBoom(errorOrResponse: any, uniErrorData: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>errorOrResponse</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uniErrorData</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='parsefromboomresponse'>
+      parseFromBoomResponse
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>parseFromBoomResponse(errorOrResponse: any, uniErrorData: any)</div>
+  
+  
+
+  <div>Deprecated: старый формат
+</div>
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>errorOrResponse</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uniErrorData</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='parsefromboomerror'>
+      parseFromBoomError
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>parseFromBoomError(boomError: any, uniErrorData: any)</div>
+  
+  
+
+  <div>Deprecated: старый формат
+</div>
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>boomError</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uniErrorData</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
