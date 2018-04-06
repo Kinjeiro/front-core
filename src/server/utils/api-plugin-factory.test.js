@@ -1,15 +1,20 @@
 import pluginH2o2 from 'h2o2';
-import streamToPromise from 'stream-to-promise';
-import FormData from 'form-data';
+// import streamToPromise from 'stream-to-promise';
+// import FormData from 'form-data';
+//
+// import fs from 'fs';
 
-import fs from 'fs';
+import { createEndpointServiceConfig } from '../../../config/utils/create-config';
 
-import createApiConfig from '../../common/utils/create-api-config';
+// import createApiConfig from '../../common/utils/create-api-config';
 
 import {
   simpleServer,
   upstreamServer,
 } from '../../test/server/test-server-utils';
+
+import { UNI_ERROR_FROM } from '../../common/models/uni-error';
+
 // const Lab = require('lab');
 // const Code = require('code');
 
@@ -24,6 +29,7 @@ import {
 import {
   apiPluginFactory,
   proxyRoute,
+  proxyRouteFactory,
 } from './api-plugin-factory';
 
 describe('api-plugin-factory', () => {
@@ -730,6 +736,32 @@ describe('api-plugin-factory', () => {
           expect(res.result.message).to.deep.equal('Error message');
         },
       );
+    });
+    it('should throw error when middleware endpoint doesn\'t reachable', async () => {
+      const fakeEndpoint = createEndpointServiceConfig({
+        port: 8088,
+        endpoint: 'fakeApi',
+      });
+      const proxyFactory = proxyRouteFactory(fakeEndpoint);
+      function proxy(pathOrApiConfig, middleApiPath = undefined, otherRouteOptions = {}) {
+        return proxyFactory(pathOrApiConfig, middleApiPath, {
+          routeConfig: {
+            auth: false,
+          },
+          ...otherRouteOptions,
+        });
+      }
+
+      const server = await simpleServer([
+        pluginH2o2,
+        proxy('/api/testUnits', '/testUnits'),
+        proxy('/api/testUnits/{myPath*}', '/testUnits/{myPath}'),
+      ]);
+
+      const res = await server.inject('/api/testUnits');
+      expect(res.statusCode).to.equal(502);
+      expect(res.result.isUniError).to.equal(true);
+      expect(res.result.errorFrom).to.equal(UNI_ERROR_FROM.FROM_BOOM);
     });
   });
 });
