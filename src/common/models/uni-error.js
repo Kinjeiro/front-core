@@ -2,7 +2,7 @@
 import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 
-import i18n from '../utils/i18n-utils';
+// import i18n from '../utils/i18n-utils';
 import logger from '../helpers/client-logger';
 
 // import { ExtendableError } from 'common/utils/common';
@@ -20,7 +20,17 @@ export const UNI_ERROR_FROM = {
   FROM_ERROR: 'FROM_ERROR',
   FROM_RESPONSE: 'FROM_RESPONSE',
   FROM_RESPONSE_BODY: 'FROM_RESPONSE_BODY',
+  /**
+   * https://github.com/hapijs/boom
+   */
+  FROM_BOOM: 'FROM_BOOM',
+  /**
+   * @deprecated - старый формат
+   */
   FROM_BOOM_RESPONSE: 'FROM_BOOM_RESPONSE',
+  /**
+   * @deprecated - старый формат
+   */
   FROM_BOOM_ERROR: 'FROM_BOOM_ERROR',
   FROM_PROJECT_FORMAT: 'FROM_PROJECT_FORMAT',
 };
@@ -252,7 +262,7 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
   ) {
     // это response
     const response = errorOrResponse.response || errorOrResponse;
-    const responseBody = response.body;
+    const responseBody = response.body || response.payload;
 
     if (typeof responseBody === 'object') {
       // json from middle
@@ -265,6 +275,7 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
        }
        */
 
+      // eslint-disable-next-line no-use-before-define
       let innerUniError = parseToUniError(responseBody, uniErrorData, { withoutException: true });
       if (innerUniError) {
         return innerUniError;
@@ -288,7 +299,8 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
     }
 
     return createUniError({
-      message: `${response.statusMessage || response.statusText}: ${response.request && response.request.href || response.req && response.req.url}`,
+      // eslint-disable-next-line max-len
+      message: `${response.statusMessage || response.statusText}: ${(response.request && response.request.href) || (response.req && response.req.url)}`,
       responseStatusCode: response.statusCode,
       originalObject: responseBody,
       errorFrom: UNI_ERROR_FROM.FROM_RESPONSE,
@@ -314,6 +326,50 @@ export function parseFromError(error, uniErrorData = {}) {
   return null;
 }
 
+/**
+ * https://github.com/hapijs/boom
+ - isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
+ - isServer - convenience bool indicating status code >= 500.
+ - output - the formatted response. Can be directly manipulated after object construction to return a custom error response. Allowed root keys:
+   - statusCode - the HTTP status code (typically 4xx or 5xx).
+   - headers - an object containing any HTTP headers where each key is a header name and value is the header content.
+   - payload - the formatted object used as the response payload (stringified). Can be directly manipulated but any changes will be lost if reformat() is called. Any content allowed and by default includes the following content:
+     - statusCode - the HTTP status code, derived from error.output.statusCode.
+     - error - the HTTP status message (e.g. 'Bad Request', 'Internal Server Error') derived from statusCode.
+     - message - the error message derived from error.message.
+
+ // - message - the error message.
+ // - typeof - the constructor used to create the error (e.g. Boom.badRequest).
+ - inherited Error properties.
+ */
+export function parseFromBoom(errorOrResponse, uniErrorData = {}) {
+  if (checkProperties(errorOrResponse, 'isBoom') && errorOrResponse.isBoom) {
+    const boomResponse = errorOrResponse;
+    const {
+      output: {
+        statusCode,
+        payload: {
+          message,
+          error,
+        },
+      },
+    } = boomResponse;
+
+    return createUniError({
+      responseStatusCode: statusCode,
+      clientErrorMessage: error,
+      message,
+      originalObject: boomResponse,
+      errorFrom: UNI_ERROR_FROM.FROM_BOOM,
+      ...uniErrorData,
+    });
+  }
+  return null;
+}
+
+/**
+ * @deprecated - старый формат
+ */
 export function parseFromBoomResponse(errorOrResponse, uniErrorData = {}) {
   if (checkProperties(errorOrResponse, 'statusCode')) {
     const boomResponse = errorOrResponse;
@@ -338,7 +394,7 @@ export function parseFromBoomResponse(errorOrResponse, uniErrorData = {}) {
     } = boomResponse;
 
     return createUniError({
-      statusCode,
+      responseStatusCode: statusCode,
       clientErrorMessage: message,
       message: error,
       originalObject: errors,
@@ -349,6 +405,9 @@ export function parseFromBoomResponse(errorOrResponse, uniErrorData = {}) {
   return null;
 }
 
+/**
+ * @deprecated - старый формат
+ */
 export function parseFromBoomError(boomError, uniErrorData = {}) {
   if (checkProperties(boomError, 'detail')) {
     /*
@@ -392,6 +451,7 @@ export function parseToUniError(errorOrResponse, uniErrorData = {}, { withoutExc
     parseFromThrowableUniError,
     parseFromUniError,
     parseFromProjectFormat,
+    parseFromBoom,
     parseFromJsonError,
     parseFromResponse,
     parseFromError,

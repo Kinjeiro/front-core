@@ -10,6 +10,7 @@ import {
   createUniError,
   throwUniError,
   parseToUniError,
+  isUniError,
 } from '../../common/models/uni-error';
 import logger from '../helpers/server-logger';
 import { getCredentialsFromRequest } from '../utils/credentials-utils';
@@ -159,34 +160,74 @@ function proxyWrapper(reply, proxy, callback) {
     proxyOptions.onResponse = async (err, res, request, newReply, settings, ttl) => {
       /*
        err - internal or upstream error returned from attempting to contact the upstream proxy.
+       {
+         Error: connect ECONNREFUSED 127.0.0.1:8088
+         at Object._errnoException (util.js:1031:13)
+         at _exceptionWithHostPort (util.js:1052:20)
+         at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1195:14)
+
+         errno: 'ECONNREFUSED',
+         code: 'ECONNREFUSED',
+         syscall: 'connect',
+         address: '127.0.0.1',
+         port: 8088,
+         trace:
+           [
+            {
+              method: 'GET',
+              url: 'http://127.0.0.1:8088/api/common/test/test2'
+            }
+           ],
+         isBoom: true,
+         isServer: true,
+         data: null,
+         output:
+           {
+             statusCode: 502,
+             payload:
+             {
+              message: 'Client request error: connect ECONNREFUSED 127.0.0.1:8088',
+              statusCode: 502,
+              error: 'Bad Gateway'
+             },
+             headers: {}
+           },
+         reformat: [Function]
+       }
        res - the node response object received from the upstream service. res is a readable stream (use the wreck module read method to easily convert it to a Buffer or string).
-       request - is the incoming request object.
+       request - is the incoming request object. (browser client request without proxy url format)
        newReply - the reply interface function.
        settings - the proxy handler configuration.
        ttl - the upstream TTL in milliseconds if proxy.ttl it set to 'upstream' and the upstream response included a valid 'Cache-Control' header with 'max-age'.
        */
-      logger.debug('(proxy response) from: ', res.req.path, `(${res.statusCode})`);
 
-      // logger.debug('proxy REQUEST', request.headers);
-      // logger.debug('proxy RESPONSE', res.headers);
-      // logger.debug('proxy RESPONSE result', res.payload);
-      const payload = await Wreck.read(res, {
-        json: true, // если не парсанят, то вернет буффер
-      });
-
-      if (res.statusCode < 200 || res.statusCode >= 300) {
-        logger.error(
-          '(proxy response) error: ',
-          payload && payload instanceof Buffer
-            ? payload.toString()
-            : JSON.stringify(payload, null, 2),
-          ' ',
-        );
+      let payload;
+      let response;
+      if (err) {
+        logger.debug('(proxy response) from: [ERROR]', err);
+        response = err.output;
+        payload = parseToUniError(err);
       } else {
-        logger.debug('(proxy response) payload: ', payload, ' ');
+        response = res;
+        logger.debug('(proxy response) from: ', response.req && response.req.path, `(${response.statusCode})`);
+        payload = await Wreck.read(res, {
+          json: true, // если не парсанят, то вернет буффер
+        });
+
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          logger.error(
+            '(proxy response) error: ',
+            payload && payload instanceof Buffer
+              ? payload.toString()
+              : JSON.stringify(payload, null, 2),
+            ' ',
+          );
+        } else {
+          logger.debug('(proxy response) payload: ', payload, ' ');
+        }
       }
 
-      callback(payload, newReply, res);
+      callback(payload, newReply, response);
     };
   }
 
@@ -208,32 +249,36 @@ function createProxyWrapperCallback(handler, apiRequest, pluginOptions) {
       return responseWrapper(result, newReply);
     }
 
-    if (proxyResponse.statusCode < 200 || proxyResponse.statusCode >= 300) {
+    if (isUniError(payload) || proxyResponse.statusCode < 200 || proxyResponse.statusCode >= 300) {
       let uniError;
-      try {
-        uniError = parseToUniError(
-          payload instanceof Buffer
-            ? JSON.parse(payload.toString())
-            : payload,
-          {
+      if (isUniError(payload)) {
+        uniError = payload;
+      } else {
+        try {
+          uniError = parseToUniError(
+            payload instanceof Buffer
+              ? JSON.parse(payload.toString())
+              : payload,
+            {
+              isServerError: true,
+              responseStatusCode: proxyResponse.statusCode,
+            },
+          );
+        } catch (error) {
+          const errorMessage = (payload && payload.toString()) || proxyResponse.statusMessage;
+          uniError = createUniError({
             isServerError: true,
+            message: errorMessage,
             responseStatusCode: proxyResponse.statusCode,
-          },
-        );
-      } catch (error) {
-        const errorMessage = (payload && payload.toString()) || proxyResponse.statusMessage;
-        uniError = createUniError({
-          isServerError: true,
-          message: errorMessage,
-          responseStatusCode: proxyResponse.statusCode,
-          stack: false,
-        });
+            stack: false,
+          });
+        }
       }
 
       return responseError(
         uniError,
         newReply,
-        proxyResponse.statusCode,
+        uniError.responseStatusCode,
       );
     }
 

@@ -98,10 +98,12 @@ export function getAuthType(req) {
 export function getHeadersByAuthType(authType, token) {
   const headers = {};
   // eslint-disable-next-line default-case
-  switch (authType.toLowerCase()) {
-    case AUTH_TYPES.BEARER.toLowerCase():
-      headers.authorization = `Bearer ${token}`;
-      break;
+  if (authType) {
+    switch (authType.toLowerCase()) {
+      case AUTH_TYPES.BEARER.toLowerCase():
+        headers.authorization = `Bearer ${token}`;
+        break;
+    }
   }
 
   return headers;
