@@ -10,6 +10,12 @@ ___Front Core (FC)___ - это расширяемый boilerplate для соз�
 
 ___Front Core (FC) - коробка для быстрого развертывания сложных проектов!___ 
 
+
+[Видео о Front-Core](https://youtu.be/HE45oM7IFpA)
+
+[![Видео о Front-Core](https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-256.png)](https://youtu.be/HE45oM7IFpA)
+
+
 ## Меню
 * [Ключенвые особенности](#features)
 * [Используемые технологии](#techStack)
@@ -84,6 +90,10 @@ ___Front Core (FC) - коробка для быстрого развертыва
 * протокол `OAuth 2.0` - для дефолтной авторизации 
 
 ## Как начать
+* [Видео о Front-Core](https://youtu.be/HE45oM7IFpA)
+  
+  [![Видео о Front-Core](https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-256.png)](https://youtu.be/HE45oM7IFpA)
+ 
 * [Документация как стартовать шаблонный проект](./docs/HOW_TO_START.md)
 * [Как добавить кусок логики (api, redux, containers, mock, proxy)](./docs/CREATE_UNIT.md)
 
