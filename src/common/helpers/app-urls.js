@@ -7,7 +7,7 @@ import config from '../client-config';
 const contextPath = config.common.app.contextRoot;
 
 /*
-* учитывает contextPath приложения
+* учитывает contextPath (basepath) приложения
 */
 export function appUrl(pathname = '', ...otherPaths) {
   let resultUrl = pathname;

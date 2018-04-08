@@ -30,8 +30,7 @@ export const DEFAULT_OPTIONS = {
 
   backend: {
     // path where resources get loaded from
-    // loadPath: `/${ASSETS}/i18n/{{lng}}/{{ns}}.json`,
-    loadPath: `/${ASSETS}/i18n/{{lng}}/{{ns}}.js`,
+    loadPath: appUrl(ASSETS, '/i18n/{{lng}}/{{ns}}.js'),
     parse: (data) => {
       let jsonData;
       try {
@@ -115,7 +114,9 @@ export function i18nNextInit(options = {}) {
     {
       backend: {
         loadPath: clientConfig.common.features.i18n.assetsLoadPath
-          ? joinUri(ASSETS, clientConfig.common.features.i18n.assetsLoadPath)
+          // todo @ANKU @LOW @TEST - проверить если есть basepath или если есть роутинг нужен абсолютно
+          // ? joinUri(ASSETS, clientConfig.common.features.i18n.assetsLoadPath)
+          ? appUrl(ASSETS, clientConfig.common.features.i18n.assetsLoadPath)
           : DEFAULT_OPTIONS.backend.loadPath,
       },
     },
