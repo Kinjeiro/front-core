@@ -184,6 +184,13 @@ Returns **{}**
 
 Дополнительный класс
 
+## 
+
+**Meta**
+
+-   **deprecated**: use src/routes-pathes.js
+
+
 ## FROM_BOOM
 
 [https://github.com/hapijs/boom][67]
