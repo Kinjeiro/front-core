@@ -76,6 +76,9 @@ export default class ReduxTable extends ReduxUni {
   // ======================================================
   getBindActions(api = {}, TYPES = this.getTypes(this.getPrefix())) {
     const {
+      /**
+       * апи который возвращает { meta, records }, либо массив, когда мультипейджинг не нужен
+       */
       apiLoadRecords,
       apiBulkChangeStatus,
       apiEditRecord,
@@ -159,7 +162,18 @@ export default class ReduxTable extends ReduxUni {
               meta: newMeta,
               filters: newFilters,
               types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
-              payload: apiLoadRecords(tableUuid, newMeta, newFilters),
+              payload: apiLoadRecords(tableUuid, newMeta, newFilters)
+                .then((response) => {
+                  if (Array.isArray(response)) {
+                    return {
+                      meta: {
+                        total: response.length,
+                      },
+                      records: response,
+                    };
+                  }
+                  return response;
+                }),
             });
           }
           return Promise.resolve();
