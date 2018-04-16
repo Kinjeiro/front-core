@@ -40,7 +40,7 @@ export default function (webpackContext, webpackConfigUtils) {
     const testsFiles = [
       SETUP_CLIENT_FILE,
       // пока не нужно, так как мы используем webpack с babel а внутри ключен polyfill: true. Phantom все прекрасно распознает
-      // inFrontCoreRoot('src/client/vendor-fixes/polyfills.js'),
+      // inFrontCoreRoot('src/client/vendor-fixes/polyfills/polyfills.js'),
       ...getTestsGlobs(TEST_FILES_PATHS),
     ];
 

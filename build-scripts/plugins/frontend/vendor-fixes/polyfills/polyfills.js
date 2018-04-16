@@ -1,7 +1,7 @@
-const ObjectIs = require('object-is');
-const ObjectAssign = require('es6-object-assign');
-const ArrayFind = require('array.prototype.find');
-const ArrayFrom = require('array-from');
+var ObjectIs = require('object-is');
+var ObjectAssign = require('es6-object-assign');
+var ArrayFind = require('array.prototype.find');
+var ArrayFrom = require('array-from');
 require('array.prototype.fill');
 require('ima-babel6-polyfill'); // fix super constructor call for ie < 10, see https://phabricator.babeljs.io/T3041
 require('core-js');

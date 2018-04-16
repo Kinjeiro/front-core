@@ -1,0 +1,19 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 3
+  },
+  "extends": "",
+
+  "globals": {
+    "document": false,
+    "navigator": false,
+    "window": false
+  },
+
+  "rules": {
+    "no-var": 0,
+    "global-require": 0,
+    "no-extend-native": 0,
+    "prefer-arrow-callback": 0
+  }
+}

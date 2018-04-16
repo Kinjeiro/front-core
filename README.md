@@ -25,6 +25,7 @@ ___Front Core (FC) - коробка для быстрого развертыва
 * [Roadmap](#roadmap)
 * [Описание структуры Front Core](#structure)
 * [Troubleshooting](#troubleshooting)
+* [Поддержка](#crossbrowsers)
 
 
 ## Ключенвые особенности
@@ -117,3 +118,8 @@ TODO
 
 ## Troubleshooting
 TODO
+
+## Поддержка
+IE 11+
+(IE <= 10 [не поддерживает наследование статических методов в классе](https://babeljs.io/docs/usage/caveats/#classes-10-and-below) (используется у нас в UniRedux и redux-orm)
+Есть непроверенные workaround, но это если ооооочень понадобиться.

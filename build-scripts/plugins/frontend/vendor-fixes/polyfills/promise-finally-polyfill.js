@@ -1,7 +1,6 @@
-/* eslint-disable prefer-arrow-callback,no-extend-native */
 if (!Promise.prototype.finally) {
   Promise.prototype.finally = function (callback) {
-    const p = this.constructor;
+    var p = this.constructor;
     // We don’t invoke the callback in here,
     // because we want then() to handle its exceptions
     return this.then(

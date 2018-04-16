@@ -127,7 +127,11 @@ export default class AbstractClientRunner {
   }
 
   registerModels(reload = false) {
-    registerOrmModels(this.getEntityModels(), reload);
+    try {
+      registerOrmModels(this.getEntityModels(), reload);
+    } catch (error) {
+      logger.error(error);
+    }
   }
 
 

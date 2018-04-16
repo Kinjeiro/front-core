@@ -18,4 +18,5 @@ import { Model } from 'redux-orm';
 //
 // const ValidatingModel = propTypesMixin(Model);
 
-export default Model;
+export default class UniModel extends Model {
+}
