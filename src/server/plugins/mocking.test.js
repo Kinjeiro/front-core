@@ -178,7 +178,7 @@ describe('(Plugin) Mocking', () => {
 
       testRequest = {
         method: 'GET',
-        url: '/anyService/pathValue1/pathValue2?query1=value11&query1=value12',
+        url: '/anyService/pathValue1/path-value-2?query1=value11&query1=value12',
       };
 
       testRequestMethod = (mockingOptions, request = testRequest) => {
@@ -219,7 +219,7 @@ describe('(Plugin) Mocking', () => {
 
             mockFilterConditions: {
               pathParams: {
-                pathParam2: 'pathValue2',
+                pathParam2: 'path-value-2',
               },
             },
           },
@@ -236,7 +236,7 @@ describe('(Plugin) Mocking', () => {
             handler: (request, reply) => reply('This is mock'),
             mockFilterConditions: {
               pathParams: {
-                pathParam2: 'pathWrongValue',
+                pathParam2: 'pathValue2',
               },
             },
           },
