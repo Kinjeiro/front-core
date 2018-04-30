@@ -10,14 +10,23 @@ export const PATCH_OPERATIONS = {
 };
 export const ADD_AS_LAST = '-';
 
+/**
+ * по умолчанию не добавляет в конец, нужно обязательно указывать позицию
+   createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
+   @guide - "/-" обозначает в конец
+   createJsonPatchOperation('/field2/-', 'newValue4', PATCH_OPERATIONS.ADD),
+ * @param path
+ * @param value
+ * @param operationType
+ * @param itemIds
+ * @returns {{path: string, value: *, op: string}}
+ */
 export function createJsonPatchOperation(path, value, operationType = PATCH_OPERATIONS.REPLACE, itemIds = undefined) {
-  // по умолчанию не добавляет в конец, нужно обязательно указывать позицию
-  // // createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
-  // @guide - "/-" обозначает в конец
-  // createJsonPatchOperation('/field2/-', 'newValue4', PATCH_OPERATIONS.ADD),
+  // по стандарту вложенные объекты разделяются не точками (как в lodash.get) а слешом
+  const pathFinal = path.replace(/\./g, '/');
 
   const operation = {
-    path: path.indexOf('/') === 0 ? path : `/${path}`,
+    path: pathFinal.indexOf('/') === 0 ? pathFinal : `/${pathFinal}`,
     value,
     op: operationType,
   };
