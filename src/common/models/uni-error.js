@@ -195,17 +195,6 @@ export function parseFromUniError(errorOrResponse, uniErrorData) {
   return null;
 }
 
-export function parseFromJsonError(errorOrResponse, uniErrorData) {
-  if (
-    typeof errorOrResponse === 'object'
-    && typeof errorOrResponse.message !== 'undefined'
-    && (errorOrResponse.clientErrorMessage || errorOrResponse.clientErrorMessages)
-  ) {
-    return createUniError(merge({}, errorOrResponse, uniErrorData));
-  }
-
-  return null;
-}
 
 export function parseFromProjectFormat(errorOrResponse = {}, uniErrorData = {}) {
   // client wrapper
@@ -252,6 +241,42 @@ export function parseFromProjectFormat(errorOrResponse = {}, uniErrorData = {}) 
     originalObject: errorOrResponse,
     ...uniErrorData,
   });
+}
+
+export function parseFromJsonError(errorOrResponse, uniErrorData) {
+  if (
+    typeof errorOrResponse === 'object'
+    && typeof errorOrResponse.message !== 'undefined'
+  ) {
+    const {
+      clientErrorMessage,
+      clientErrorMessages,
+      message,
+      error,
+      status,
+    } = errorOrResponse;
+
+    if (clientErrorMessage || clientErrorMessages) {
+      return createUniError(merge({}, errorOrResponse, uniErrorData));
+    }
+    if (typeof error === 'string') {
+      /*
+       error: "Internal Server Error",
+       exception: "java.lang.Exception",
+       message: "У объекта #28 нет актуальной версии.",
+       path: "/tobjects/28",
+       status: 500,
+       timestamp: 1524833891185,
+       */
+      return createUniError(merge({}, {
+        message: error,
+        clientErrorMessage: message,
+        errorCode: status,
+        originalObject: errorOrResponse,
+      }, uniErrorData));
+    }
+  }
+  return null;
 }
 
 export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
