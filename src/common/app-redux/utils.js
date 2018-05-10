@@ -142,11 +142,11 @@ export function createAllTypesReducer(TYPES, reducer) {
     return state;
   };
 }
-export function createAllTypesMapCollectionReducer(TYPES, reducer, actionIdField = ACTION_ID_FIELD) {
+export function createAllTypesMapCollectionReducer(TYPES, reducer, actionIdField = ACTION_ID_FIELD, createIfNotExist = true) {
   return createAllTypesReducer(TYPES, (state, action) => {
     const uuid = action[actionIdField];
     const mapItem = state[uuid];
-    if (mapItem) {
+    if (typeof mapItem !== 'undefined' || createIfNotExist) {
       return {
         ...state,
         [uuid]: reducer(mapItem, action),
