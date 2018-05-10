@@ -94,24 +94,6 @@ const isProduction = NODE_ENV === 'production';
 const isLocalhost = NODE_ENV === 'localhost';
 const isTest = NODE_ENV === 'test';
 
-
-// const apiWithService = createApiConfigWithService.bind(null, 'http', FINAL_SERVICES_HOST, SERVICES_PORT);
-const endpoint = (endpoint, otherConfigs = {}) => {
-  if (typeof endpoint === 'object') {
-    otherConfigs = endpoint;
-    endpoint = '';
-  }
-
-  return createEndpointServiceConfig(Object.assign({
-    host: FINAL_SERVICES_HOST,
-    port: SERVICES_PORT,
-    protocol: SERVICES_PROTOCOL,
-    endpoint,
-    timeout: REQUEST_TIMEOUT
-  }, otherConfigs));
-};
-
-
 module.exports = {
   // ======================================================
   // ПУТЬ до родительских конфигов
@@ -374,7 +356,7 @@ module.exports = {
       // ======================================================
       // AUTH Services - front-core-auth server
       // ======================================================
-      authApiService: endpoint({
+      authApiService: createEndpointServiceConfig({
         port: 1337,
         endpoint: 'api'
       })

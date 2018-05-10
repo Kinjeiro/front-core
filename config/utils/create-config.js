@@ -110,27 +110,50 @@ function createApiConfig(
  * @returns {{protocol: string, host: string, port: number, endpoint: string, fullUrl: string, timeout: *}}
  */
 function createEndpointServiceConfig({
-  protocol = 'http',
-  host = 'localhost',
-  port = 80,
-  endpoint = '',
+  protocol,
+  host,
+  port,
+  endpoint,
   timeout,
   fullUrl
 }) {
-  const fullUrlFinal = fullUrl ||
-    `${protocol}://${host}${port !== 80 ? `:${port}` : ''}${endpoint ? join('/', endpoint) : ''}`;
+  if (fullUrl) {
+    return {
+      fullUrl,
+      timeout
+    };
+  }
 
-  return {
-    protocol,
-    host,
-    port,
-    endpoint,
-    fullUrl: fullUrlFinal,
-    timeout
+  const {
+    /** Марафон при запуска автоматически добавляет адресс хоста в эту переменную */
+    HOST,
+    /** Когда запускаем на localhost или нужно на стендах зашить */
+    SERVICES_HOST,
+    SERVICES_PORT,
+    /** Первый запуск мидловых сервисов бывает до 20 сек*/
+    REQUEST_TIMEOUT
+  } = process.env;
+
+  const config = {
+    protocol: protocol || 'http',
+    host: host || HOST || SERVICES_HOST || 'localhost',
+    port: port || SERVICES_PORT || 80,
+    endpoint: endpoint || '',
+    timeout: timeout || REQUEST_TIMEOUT || 120000
+    // fullUrl,
   };
+
+  // eslint-disable-next-line max-len
+  config.fullUrl = `${config.protocol}://${config.host}${config.port !== 80 ? `:${config.port}` : ''}${config.endpoint ? join('/', config.endpoint) : ''}`;
+  return config;
 }
 
-
+/**
+ * @deprecated
+ *
+ * @param env
+ * @returns {function(*, *=)}
+ */
 function createEndpointFactoryFromEnv(env) {
   const {
     /** Марафон при запуска автоматически добавляет адресс хоста в эту переменную */
