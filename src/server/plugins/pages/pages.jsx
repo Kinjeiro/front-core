@@ -161,8 +161,16 @@ export function register(server, pluginOptions, next) {
       // ======================================================
       // CREATE STORE + HISTORY + ROUTES
       // ======================================================
-      // const memoryHistory = createMemoryHistory(path);
-      const memoryHistory = createMemoryHistory(originalUrl);
+      // const memoryHistory = createMemoryHistory(originalUrl);
+      // todo @ANKU @LOW @BUG_OUT @react-router - не поддерживают basename в memory history
+      // https://github.com/ReactTraining/history/issues/409#issuecomment-329479076
+      // https://stackoverflow.com/a/42208727/344172
+      const basename = serverConfig.common.app.contextRoot;
+      const location = basename && originalUrl
+        ? originalUrl.replace(new RegExp(`^/?${basename}`, 'g'), '/')
+        : originalUrl;
+      const memoryHistory = createMemoryHistory(location);
+
       // const store = createClientStore(memoryHistory, reduxGlobalState);
       const store = clientRunner.createStore(memoryHistory, reduxGlobalState);
       const history = syncHistoryWithStore(memoryHistory, store);

@@ -155,6 +155,7 @@ export default class StubPage extends Component {
       },
       userInfo: {
         username,
+        displayName,
         profileImageURI,
       },
       testDomains,
@@ -208,12 +209,12 @@ export default class StubPage extends Component {
                 <div>
                   <img
                     src={ profileImageURI }
-                    alt={ username }
+                    alt={ username || displayName }
                   />
                 </div>
               )
             }
-            <p>{ username }</p>
+            <p>{ username || displayName }</p>
           </div>
 
           {

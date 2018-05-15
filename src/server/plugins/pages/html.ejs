@@ -23,7 +23,7 @@
 <body class="body">
     <%- unescapedBodyHtml %>
     <div id="react-app" class="ReactApp"><%- content %></div>
-    <script> window.<%= GLOBAL_CLIENT_STORE_INITIAL_STATE %> = <%- state %>; </script>
+    <script> window.<%= GLOBAL_CLIENT_STORE_INITIAL_STATE %> = <%- storeState %>; </script>
     <script> window.<%= GLOBAL_I18N_CLIENT_BUNDLES %> = <%- i18nClientBundle %>; </script>
     <script src="<%= assetsDir %>/vendor.js"></script>
     <script src="<%= assetsDir %>/index.js"></script>

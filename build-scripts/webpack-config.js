@@ -70,6 +70,7 @@ const WEBPACK_CONFIG_UTILS = {
         require('./plugins/plugin-file-image'),
         require('./plugins/plugin-file-font'),
         require('./plugins/plugin-file-html'),
+        require('./plugins/plugin-file-ejs'), // на фронте для static билада
         // require('./plugins/plugin-file-json'), //doesn't need in webpack 2
 
         require('./plugins/plugin-style-css'),
@@ -97,6 +98,7 @@ const WEBPACK_CONFIG_UTILS = {
       middlePlugins: [
         require('./plugins/frontend/plugin-split-vendors'),
         require('./plugins/frontend/plugin-file-static'),
+        require('./plugins/frontend/plugin-index-html'),
         require('./plugins/frontend/plugin-frontend-hot-reload')
       ],
       finishPlugins: [
@@ -111,8 +113,7 @@ const WEBPACK_CONFIG_UTILS = {
         require('./plugins/backend/plugin-backend-main')
       ],
       middlePlugins: [
-        require('./plugins/backend/plugin-i18n-files'),
-        require('./plugins/backend/plugin-file-ejs')
+        require('./plugins/backend/plugin-i18n-files')
       ]
     }, otherPlugins));
   },

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [last version][1.2.1 - 1.2.9]
+## [last version][1.2.1 - 1.2.23]
 ### !!! Breaking changes:
 * переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 
@@ -16,6 +16,36 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Dependencies:
 
 ### Commits:
+    - chore(npm_repo): - обновил наш npm репозиторий
+    - chore(depen): - обновил node-sass@4.6.0 которая дружит с nodejs 9
+    - feat(utils, redux): - теперь createAllTypesMapCollectionReducer если не найден элемент вызывает редьюсер с undefined в state
+    - feat(utils): - endpoint унифицировал
+    - feat(uni-error): - добавил формат от java error json (от нашей платформы)
+    - feat(api-patch): - возможность конвертить коммон lodash.get в patch json формат
+    - chore(redme): - правила и найминг коммитов
+    - chore(lock): - лок постоянно скачет
+    - bug(ie11): - исправил полифилы для ie11, ie10 не поддерживается так как babel без __proto__ (которого нет в ie10) не может сделать наследование статических методов \\ добавил это в readme
+    - feature(mocks) - тесты дополнены (path param с дефисом) AVagizov 13.04.2018 22:35 
+    - feature(mocks) - корректный парсинг значений path params, содержащих дефис AVagizov 13.04.2018 22:21 
+    - feat(ReduxTable): - возможность в качестве данных поставлять не { meta, records }, а просто массив, который пойдет сразу в records
+    - chore(routes): - для единообразия вынес роут константы выше, а прошлый файл пометил деприкейтед - теперь используес src/routes-paths.js (как в проектах)
+    - bug(start, core): - если запускать кору, без скомпиленной lib то падала ошибка
+    - bug(i18n): - при смене языка через клиент не учитывался contextPath и сложный роутинг (был относительный, а не абсолютный путь)
+    - chore(docs): - добавил ссылку на видео о Front-Core
+    - chore(package.json): - фикс чтобы при сохранении зависимостей указывался префикс только патчей \\ добавил скрипт npm run full-update-npm чтобы полностью обновить node_modules (будет полезно пока package-lock.json не устаканится)
+    - chore(test, proxy): - 502 статус для uniError.isNotFound = true
+    - chore(test, proxy): - добавил тест для ошибки на фейк эндпоинт
+    - bug(proxy): - не обрабатывались ошибки во время proxy \\ добавил в uni-error FROM_BOOM (hapi boom - https://github.com/hapijs/boom)
+    - chore(package.json): - stop-daemon теперь не падает с ошибкой, если процесс не был запущен // установил обновление версий только в рамках patch (0.0.*) (минорные фичи (через ^) у сторонних часто ломают функционал)
+    - bug(webpack-config): - если ошибка компиляции самого файла webpack-config - то она не показывалась
+    - chore(dependencies): - добавил недостающие пакеты \\ добавил лок файл
+    - chore(docs): - красивости
+    - chore(version): - борьда с версиями, бывает что не успеваю пароль ввбить для пуша и падает. Чтобы версию не обновлять добавил доп метод
+    - chore(docs): - добавил компиляцию доков в markdown
+    - chore(docs): - красивости
+    - chore(version): - война с версиями
+    - chore(npm scripts): - настройка авторизационного таймаута
+    - chore(docs): - Документирование проекта \\ обновил CHANGELOG \\ Написал первые инструкции в \docs\*.md
     - bug(redux, table): - добавил возможность сбросить фильтры и мета через подачу null или false
     - bug(auth): - если попытки истекли предлагать залогиниться. Но остается проблема, что после релогина нет повторного запуска неудачных процессов
     - bug(auth): - проксирование обновленного после refresh токена для следующих requests 

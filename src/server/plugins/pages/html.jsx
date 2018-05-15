@@ -118,7 +118,7 @@ export default function createRenderHandler(reply, store, server = null, options
           content: appCode && formatHtml(appCode),
           GLOBAL_CLIENT_STORE_INITIAL_STATE,
           GLOBAL_I18N_CLIENT_BUNDLES,
-          state: JSON.stringify(state),
+          storeState: JSON.stringify(state),
           i18nClientBundle: JSON.stringify(i18nClientBundle),
           // contextRoot: appUrl(),
           unescapedHeadHtml: formatHtml(headHtml),

@@ -115,8 +115,12 @@ function createEndpointServiceConfig({
   port,
   endpoint,
   timeout,
-  fullUrl
+  fullUrl,
+  envPriority
 }) {
+  // eslint-disable-next-line no-param-reassign
+  envPriority = envPriority || typeof envPriority === 'undefined';
+
   if (fullUrl) {
     return {
       fullUrl,
@@ -136,8 +140,12 @@ function createEndpointServiceConfig({
 
   const config = {
     protocol: protocol || 'http',
-    host: host || HOST || SERVICES_HOST || 'localhost',
-    port: port || SERVICES_PORT || 80,
+    host: envPriority
+      ? HOST || SERVICES_HOST || host || 'localhost'
+      : host || HOST || SERVICES_HOST || 'localhost',
+    port: envPriority
+      ? SERVICES_PORT || port || 80
+      : port || SERVICES_PORT || 80,
     endpoint: endpoint || '',
     timeout: timeout || REQUEST_TIMEOUT || 120000
     // fullUrl,

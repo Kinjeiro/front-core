@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="shortcut icon" href="<%= htmlWebpackPlugin.options.assetsDir %>/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="<%= htmlWebpackPlugin.options.assetsDir %>/vendor.css" media="screen, projection" rel="stylesheet" type="text/css" charset="UTF-8"/>
+    <link href="<%= htmlWebpackPlugin.options.assetsDir %>/index.css" media="screen, projection" rel="stylesheet" type="text/css" charset="UTF-8"/>
+</head>
+<body>
+<script>
+  window.<%= htmlWebpackPlugin.options.GLOBAL_CLIENT_STORE_INITIAL_STATE %> = <%- htmlWebpackPlugin.options.storeState %>;
+</script>
+
+<div id="content"></div>
+<script src="<%= htmlWebpackPlugin.options.assetsDir %>/vendor.js" charset="UTF-8"></script>
+<script src="<%= htmlWebpackPlugin.options.assetsDir %>/index.js" charset="UTF-8"></script>
+</body>
+</html>

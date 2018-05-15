@@ -10,6 +10,7 @@ docker/tmp-package.json
 test/client/coverage/
 test/client/test-results.xml
 .babelrc
+npm-debug.log.*
 
 src/
 docs/api/assets/fonts/

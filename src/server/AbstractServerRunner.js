@@ -206,13 +206,29 @@ export default class AbstractServerRunner {
     });
   }
 
-
+  logConfig() {
+    logger.log(
+      '\n    Server config       \n',
+      '\n =======================\n',
+      '==[  COMMON CONFIG  ]==\n',
+      JSON.stringify(serverConfig.common, null, 2),
+      '\n =======================\n',
+      '==[  CLIENT CONFIG  ]==\n',
+      JSON.stringify(serverConfig.client, null, 2),
+      '\n =======================\n',
+      '==[  SERVER CONFIG  ]==\n',
+      JSON.stringify(serverConfig.server, null, 2),
+      '\n=======================\n',
+    );
+  }
 
   // ======================================================
   // MAIN RUN
   // ======================================================
   async run() {
     try {
+      this.logConfig();
+
       this.init();
 
       const services = this.createServices(serverConfig.server.endpointServices);

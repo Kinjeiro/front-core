@@ -136,9 +136,11 @@ export function i18nNextInit(options = {}) {
     moment.locale(locale);
   });
 
-  Object.keys(resourcesByNamespace).forEach((namespace) => {
-    i18next.addResourceBundle(locale, namespace, resourcesByNamespace[namespace], true);
-  });
+  if (resourcesByNamespace) {
+    Object.keys(resourcesByNamespace).forEach((namespace) => {
+      i18next.addResourceBundle(locale, namespace, resourcesByNamespace[namespace], true);
+    });
+  }
   i18next.changeLanguage(locale);
 
   return i18next;

@@ -221,6 +221,7 @@ module.exports = {
 
   server: {
     main: {
+      // todo @ANKU @LOW - проблема с переопределением, если в проектах переопределять, то нужно в них каждый раз дублировать есть ли SERVER_PORT из env
       port: SERVER_PORT,
       requestTimeout: REQUEST_TIMEOUT,
       devtools: true,
