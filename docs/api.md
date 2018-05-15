@@ -710,6 +710,7 @@ Returns **any** function(apiRequestData, request, reply) {}
     -   `$0.endpoint`  
     -   `$0.timeout`  
     -   `$0.fullUrl`  
+    -   `$0.envPriority`  
 -   `protocol`  
 -   `host`  
 -   `port`  
