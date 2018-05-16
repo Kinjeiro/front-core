@@ -68,4 +68,6 @@ if (!Array.from) {
   Array.from = ArrayFrom;
 }
 
+require('whatwg-fetch');
+
 require('./promise-finally-polyfill');
