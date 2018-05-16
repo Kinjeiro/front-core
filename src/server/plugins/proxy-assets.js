@@ -1,18 +1,14 @@
 import { ASSETS } from '../../common/constants/routes.pathes';
 
 export const register = function (server, options, next) {
-  const handler = function (request, reply) {
-    return reply.proxy({
-      host: options.host,
-      port: options.port,
-      protocol: 'http',
-    });
-  };
-
   server.route({
     method: 'GET',
     path: `/${ASSETS}/{resource*}`,
-    handler,
+    handler: (request, reply) => reply.proxy({
+      host: options.host,
+      port: options.port,
+      protocol: 'http',
+    }),
   });
 
   // todo @ANKU @LOW - подумать как это сделать красивее

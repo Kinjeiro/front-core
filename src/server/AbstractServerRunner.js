@@ -123,11 +123,17 @@ export default class AbstractServerRunner {
   registerPlugins(services, strategies) {
     const { server } = this;
     const hapiServerPlugins = this.getPlugins(services, strategies);
+    const contextPath = serverConfig.common.app.contextRoot;
 
     return new Promise(
       (resolve, reject) =>
         server.register(
           hapiServerPlugins,
+          {
+            routes: {
+              prefix: contextPath || undefined,
+            },
+          },
           (error) => {
             return error
               ? reject(error)

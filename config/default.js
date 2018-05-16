@@ -68,6 +68,10 @@ const {
   SERVICES_PORT = 80,
   SERVICES_PROTOCOL,
 
+  CONTEXT_PATH = '',
+  /**
+   * @deprecated - use CONTEXT_PATH
+   */
   CONTEXT_ROOT = '',
 
   SERVER_PORT = 8080,
@@ -134,7 +138,7 @@ module.exports = {
     serverApiPrefix: FRONT_UI_SERVER_API_PREFIX,
 
     app: {
-      contextRoot: CONTEXT_ROOT
+      contextRoot: CONTEXT_PATH || CONTEXT_ROOT
     },
 
     // ======================================================

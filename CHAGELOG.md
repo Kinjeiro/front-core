@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [last version][1.3.0 - ]
+## [last version][1.3.0 - ] (2018.05.16)
 ### !!! Breaking changes:
 1. Теперь конфиги клиента подгружаются асинхронно. Это необходимо, если код используется как статические ассеты на другом сервере (к примеру, на weblogic).
 Необходимо свои src\client\index.js переписать на асинхронный режим
@@ -38,7 +38,7 @@ try {
     - chore(ie): - добавил полифил для fetch в ie 
 
 
-## [1.2.24] - 2018-05-16
+## [1.2.24] - 2018-05-15
 ### !!! Breaking changes:
 * переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 

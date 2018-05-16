@@ -9,6 +9,8 @@ import {
 import i18n from '../../../../common/utils/i18n-utils';
 import { createUniError } from '../../../../common/models/uni-error';
 
+import logger from '../../../helpers/server-logger';
+
 import {
   getUser,
   TOKENS,
@@ -16,6 +18,7 @@ import {
 
 export default [
   createMockRoute(API_CONFIGS.login, (requestData, request, reply) => {
+    logger.debug('MOCK LOGIN', requestData.username);
     const userInfo = getUser(requestData.username, requestData.password);
     if (!userInfo) {
       return reply(createUniError({

@@ -24,6 +24,7 @@ function pluginEnvironments(webpackConfig, {
 
           PROJECT_NAME: JSON.stringify(ENV.PROJECT_NAME),
           SERVER_PORT: ENV.SERVER_PORT,
+          CONTEXT_PATH: JSON.stringify(ENV.CONTEXT_PATH),
           CONTEXT_ROOT: JSON.stringify(ENV.CONTEXT_ROOT),
           CLIENT_SIDE_RENDERING: JSON.stringify(ENV.CLIENT_SIDE_RENDERING),
           APP_MOCKS: JSON.stringify(ENV.APP_MOCKS),

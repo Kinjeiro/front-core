@@ -8,6 +8,7 @@
 </head>
 <body>
 <script>
+  window.<%= htmlWebpackPlugin.options.CONTEXT_PATH %> = '<%- htmlWebpackPlugin.options.contextPath %>';
   window.<%= htmlWebpackPlugin.options.GLOBAL_CLIENT_STORE_INITIAL_STATE %> = <%- htmlWebpackPlugin.options.storeState %>;
 </script>
 

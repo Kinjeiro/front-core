@@ -112,6 +112,7 @@ export default class AbstractClientRunner {
       // необходимо через require, так как этот файл используется на сервере и там windows нет
       ? useRouterHistory(require('history').createHistory)({
         basename: this.getContextRootBasename(),
+        // basename: '',
       })
       : null;
   }

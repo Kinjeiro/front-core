@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
  * смотри \src\common\constants\sync-consts.js
  * @type {string}
  */
+const CONTEXT_PATH = 'contextPath';
 const GLOBAL_CLIENT_STORE_INITIAL_STATE = '__data';
 const STATE_CLIENT_CONFIG_PARAM = 'clientConfig';
 
@@ -17,7 +18,7 @@ function pluginIndexHtml(webpackConfig, context) {
     inProjectBuildAssets
   } = context;
 
-  const basePath = appConfig.common.app.contextRoot;
+  const contextPath = appConfig.common.app.contextRoot.replace(/^\//g, '');
 
   // убираем все серверные настройки
   const clientConfig = merge({}, {
@@ -56,12 +57,13 @@ function pluginIndexHtml(webpackConfig, context) {
       inject: false, // сами добавим через наши ассеты и basePath
 
       // params
+      CONTEXT_PATH,
       GLOBAL_CLIENT_STORE_INITIAL_STATE,
       // assetsDir: appUrl(ASSETS),
-      assetsDir: `/${basePath ? `${basePath}/` : ''}${assetsDir}`,
+      assetsDir: `/${contextPath ? `${contextPath}/` : ''}${assetsDir}`,
+      contextPath,
       storeState: JSON.stringify({
-        // todo @ANKU @CRIT @MAIN @DEBUG -
-        // [STATE_CLIENT_CONFIG_PARAM]: clientConfig
+        [STATE_CLIENT_CONFIG_PARAM]: clientConfig
         // ,
         // userInfo
       })

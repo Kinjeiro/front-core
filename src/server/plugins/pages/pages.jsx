@@ -165,10 +165,12 @@ export function register(server, pluginOptions, next) {
       // todo @ANKU @LOW @BUG_OUT @react-router - не поддерживают basename в memory history
       // https://github.com/ReactTraining/history/issues/409#issuecomment-329479076
       // https://stackoverflow.com/a/42208727/344172
+
       const basename = serverConfig.common.app.contextRoot;
-      const location = basename && originalUrl
-        ? originalUrl.replace(new RegExp(`^/?${basename}`, 'g'), '/')
-        : originalUrl;
+      const location = basename && pathname
+        ? pathname.replace(new RegExp(`^/?${basename}/`, 'g'), '/')
+        : pathname;
+
       const memoryHistory = createMemoryHistory(location);
 
       // const store = createClientStore(memoryHistory, reduxGlobalState);
@@ -184,7 +186,7 @@ export function register(server, pluginOptions, next) {
         history,
         routes,
         // todo @ANKU @CRIT @MAIN - проверить есть request.path (только path без папарметров) а есть request.url.path (с params)
-        location: path,
+        location: pathname,
       }, createRenderHandler(reply, store, server, pluginOptions));
     } catch (error) {
       logger.error(error);

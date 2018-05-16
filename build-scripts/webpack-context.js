@@ -1,5 +1,6 @@
 const path = require('path');
 
+const { urlJoin } = require('./utils/path-utils')
 const appConfig = require('../config/utils/get-full-config');
 
 const ENV = process.env;
@@ -9,7 +10,8 @@ const CURRENT_FILE_PATH = __dirname;
 const srcDir = 'src';
 const buildDir = '.build';
 const assetsDir = 'assets';
-const publicPath = '/';
+// const publicPath = '/';
+const publicPath = urlJoin('/', appConfig.common.app.contextRoot);
 
 const staticPath = './static';
 const clientStartPath = './src/client/index.js';

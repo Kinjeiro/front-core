@@ -48,11 +48,11 @@ function startFrontend({
   // ======================================================
   // RUN WEBPACK DEV SERVER
   // ======================================================
-  const frontendServer = new WebpackDevServer(frontendCompiler, webpackDevServerOptions);
+  const webpackProxyDevServer = new WebpackDevServer(frontendCompiler, webpackDevServerOptions);
 
   if (PROXY_ASSETS) {
-    frontendServer.listen(PROXY_ASSETS.port, PROXY_ASSETS.host, () => {
-      console.log(`Frontend server running at http://${PROXY_ASSETS.host}:${PROXY_ASSETS.port}...`);
+    webpackProxyDevServer.listen(PROXY_ASSETS.port, PROXY_ASSETS.host, () => {
+      console.log(`webpackProxyDevServer running at http://${PROXY_ASSETS.host}:${PROXY_ASSETS.port}...`);
     });
   }
 }

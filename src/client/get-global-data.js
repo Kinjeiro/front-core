@@ -14,15 +14,21 @@ export function getClientStoreInitialState() {
 }
 
 export async function getClientConfig() {
+  const contextPath = (window[CONTEXT_PATH] || '').replace(/^\//gi, '');
   let clientConfig = getClientStoreInitialState()[STATE_CLIENT_CONFIG_PARAM];
   if (!clientConfig || clientConfig === {}) {
+    const url = `/${contextPath}/${DEFAULT_CONFIG_JSON_PATH}`;
     try {
-      const contextPath = window[CONTEXT_PATH] || '';
-      const response = await fetch(`${contextPath}/${DEFAULT_CONFIG_JSON_PATH}`);
+      const response = await fetch(url);
       clientConfig = await response.json();
     } catch (error) {
-      console.error('Can\'t load "/assets/default-config.json"', error);
+      console.error(`Can't load ${url}`, error);
     }
+  }
+
+  // перезатираем, если явно задан
+  if (contextPath) {
+    clientConfig.common.app.contextRoot = contextPath;
   }
   return clientConfig || {};
 }

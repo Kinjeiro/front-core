@@ -1,14 +1,16 @@
 const { urlJoin } = require('../../utils/path-utils');
 
-function pluginFrontendMain(webpackConfig, {
-  appConfig,
-  isLocalhost,
-  publicPath,
-  assetsDir,
-  clientStartPath, // './src/client/index.js'
-  inProject,
-  inProjectBuild
-}) {
+function pluginFrontendMain(webpackConfig, webpackContext) {
+  const {
+    appConfig,
+    isLocalhost,
+    publicPath,
+    assetsDir,
+    clientStartPath, // './src/client/index.js'
+    inProject,
+    inProjectBuild
+  } = webpackContext;
+
   // \src\common\routes.pathes.js::ASSETS
   const PROXY_ASSETS = isLocalhost && appConfig.server.main.proxyAssets;
 
@@ -90,7 +92,7 @@ function pluginFrontendMain(webpackConfig, {
    See this discussion for more information on __webpack_public_path__.
   */
   webpackConfig.output.publicPath = PROXY_ASSETS
-    ? `//${PROXY_ASSETS.host}:${PROXY_ASSETS.port}/`
+    ? `//${PROXY_ASSETS.host}:${PROXY_ASSETS.port}${urlJoin('/', publicPath)}`
     : urlJoin('/', publicPath);
 }
 
