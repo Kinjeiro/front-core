@@ -1,9 +1,13 @@
 // @guide - Первым делом инициализируем конфиги, а уж потом импортим все остальное, чтобы во время своих внутренних импортов они могли пользоваться
-import './init';
+import initAll from './init';
 
-import CoreClientRunner from './CoreClientRunner';
+async function start() {
+  await initAll();
+  const CoreClientRunner = require('./CoreClientRunner').default;
+  await (new CoreClientRunner()).run();
+}
 
-(new CoreClientRunner()).run();
+start();
 
 if (module.hot) {
   /*

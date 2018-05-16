@@ -31,7 +31,7 @@ function startBuild({
 }) {
   const {
     appConfig,
-    inProjectBuild
+    inProjectBuildAssets
   } = context;
 
   if (fs.existsSync(webpackFrontConfig.output.path)) {
@@ -45,7 +45,7 @@ function startBuild({
     client: appConfig.client
   });
   // todo @ANKU @LOW - может название куда вынести?
-  const defaultConfigFile = inProjectBuild('default-config.json');
+  const defaultConfigFile = inProjectBuildAssets('default-config.json');
   writeToFile(defaultConfigFile, clientConfig);
 
   const frontendCompiler = webpack(webpackFrontConfig);

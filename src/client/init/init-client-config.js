@@ -2,4 +2,7 @@ import { initConfig } from '../../common/client-config';
 
 import { getClientConfig } from '../get-global-data';
 
-initConfig(getClientConfig());
+export default async function initClientConfig() {
+  const clientConfig = await getClientConfig();
+  initConfig(clientConfig);
+}

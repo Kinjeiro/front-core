@@ -13,6 +13,7 @@ function pluginIndexHtml(webpackConfig, context) {
     appConfig,
     assetsDir,
     inProjectSrc,
+    inCoreProjectSrcRelative,
     inProjectBuildAssets
   } = context;
 
@@ -43,7 +44,9 @@ function pluginIndexHtml(webpackConfig, context) {
 
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
-      template:  './src/static-client/index.template.ejs',
+      // './node-modules/@reagentum/front-core/lib/static-client/index.template.ejs'
+      // template:  './src/static-client/index.template.ejs',
+      template:  inCoreProjectSrcRelative('static-client/index.template.ejs'),
       // filename: './.build/assets/index.html', // relative to root of the application
       filename: 'index.html', // relative to build root
       // template: inProjectSrc('index.template.html'),
@@ -57,7 +60,8 @@ function pluginIndexHtml(webpackConfig, context) {
       // assetsDir: appUrl(ASSETS),
       assetsDir: `/${basePath ? `${basePath}/` : ''}${assetsDir}`,
       storeState: JSON.stringify({
-        [STATE_CLIENT_CONFIG_PARAM]: clientConfig
+        // todo @ANKU @CRIT @MAIN @DEBUG -
+        // [STATE_CLIENT_CONFIG_PARAM]: clientConfig
         // ,
         // userInfo
       })

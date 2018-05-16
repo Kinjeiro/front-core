@@ -9,7 +9,7 @@ import moment from 'moment';
 
 import clientConfig from '../../common/client-config';
 import { ASSETS } from '../../common/constants/routes.pathes';
-import { joinUri } from '../../common/utils/uri-utils';
+// import { joinUri } from '../../common/utils/uri-utils';
 import { setCookie } from '../../common/utils/cookie';
 import appUrl from '../../common/helpers/app-urls';
 import { init as initI18nUtils } from '../../common/utils/i18n-utils';

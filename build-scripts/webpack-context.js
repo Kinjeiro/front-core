@@ -15,14 +15,20 @@ const staticPath = './static';
 const clientStartPath = './src/client/index.js';
 const serverStartPath = './src/server/index.js';
 
+const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
+
 function inCoreProject(...args) {
   return path.resolve(CURRENT_FILE_PATH, '..', ...args);
 }
+function inCoreProjectSrcRelative(srcPath) {
+  return useFromFrontCore
+    ? `src/${srcPath}`
+    : `node_modules/@reagentum/front-core/lib/${srcPath}`;
+}
+
 function inProject(...args) {
   return path.resolve(PROCESS_PATH, ...args);
 }
-
-const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
 
 // todo @ANKU @LOW - если запускаем кору из коры нужно писать src/ path.cwd === __dirname
 const appStyleConfig = require(useFromFrontCore
@@ -49,6 +55,7 @@ const context = {
 
   inProject,
   inCoreProject,
+  inCoreProjectSrcRelative,
   // делаем внутри, так как если переопределят srcDir чтобы подхватилось новое значение
   inProjectSrc(...args) {
     return this.inProject(this.srcDir, ...args);
