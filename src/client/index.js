@@ -7,7 +7,11 @@ async function start() {
   await (new CoreClientRunner()).run();
 }
 
-start();
+try {
+  start();
+} catch (error) {
+  console.error(error);
+}
 
 if (module.hot) {
   /*

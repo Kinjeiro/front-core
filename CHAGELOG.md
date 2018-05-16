@@ -4,7 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [last version][1.2.1 - 1.2.23]
+## [last version][1.3.0 - ]
+### !!! Breaking changes:
+1. Теперь конфиги клиента подгружаются асинхронно. Это необходимо, если код используется как статические ассеты на другом сервере (к примеру, на weblogic).
+Необходимо свои src\client\index.js переписать на асинхронный режим
+```javascript
+import initAll from '@reagentum/front-core/lib/client/init';
+
+async function start() {
+  await initAll();
+  const ClientRunner = require('./ClientRunner').default;
+  await (new ClientRunner()).run();
+}
+
+try {
+  start();
+} catch (error) {
+  console.error(error);
+}
+```
+
+### Dependencies:
+    + "whatwg-fetch": "~2.0.4"
+    
+### Dev Dependencies:
+
+### Features:
+1. использование сборки как статически ассетов для другого сервера 
+
+### Commits:
+    - feat(build): - теперь конфиги инициализируются асинхронно (нужно переделать src\client\index.js стартеры в проектах)
+        \\ если конфиги не пришли вместе со window.__data - тогда они загрузятся из ассектов\default-config.json (поэтому и асинхронно) 
+    - chore(ie): - добавил полифил для fetch в ie 
+
+
+## [1.2.24] - 2018-05-16
 ### !!! Breaking changes:
 * переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 
@@ -15,7 +49,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Dependencies:
 
+### Dev Dependencies:
+    + "documentation": "~6.1.0"
+    + "html-webpack-plugin": "~3.2.0"
+    + "node-sass": "~4.6.0"
+    + "live-server": "~1.2.0"
+    + "pm2": "~2.8.0"
+
 ### Commits:
+    - feat(build): - добавил полезности для статической сборки: ./.build/default-config.json и ./.build/index.html с втроенным дефолтным конфигом
+        \\ в плагине /build-scripts/frontend/plugin-index-html.js показано как создавть темплейт для index.html 
+        \\ перевел npm на ru
     - chore(npm_repo): - обновил наш npm репозиторий
     - chore(depen): - обновил node-sass@4.6.0 которая дружит с nodejs 9
     - feat(utils, redux): - теперь createAllTypesMapCollectionReducer если не найден элемент вызывает редьюсер с undefined в state
@@ -101,7 +145,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 1. Стилизированный Notice класс компонент можно передать в App
 
 ### Dependencies:
-\+ file-saver@1.3.3
+    + "file-saver": "~1.3.3"
 
 ### Commits:
     - feat(api): - обновлен BaseApiClient - добавлены в request options: serializer, deserializer, optionsParser \\ добавлены методы у apiClient: downloadFile и uploadFile \\ добавил библиотеку file-saver@1.3.3
