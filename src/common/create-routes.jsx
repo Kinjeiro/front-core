@@ -1,15 +1,12 @@
 import React from 'react';
-import { Route/* , IndexRoute, IndexRedirect*/ } from 'react-router';
+import { Route , IndexRoute, IndexRedirect } from 'react-router';
 
 import {
   Info404,
 } from './components';
 
 import {
-  PATH_INDEX,
-  PATH_ACCESS_DENIED,
-  PATH_ERROR_PAGE,
-  PATH_LOGIN_PAGE,
+  STUB_ROUTES_NAMES,
 } from './constants/routes.pathes';
 
 import Notice from './components/Notifications/Notice';
@@ -21,6 +18,7 @@ import {
   StubPage,
   AuthErrorContainer,
 } from './containers';
+import TestPage from './containers/TestPage/TestPage';
 
 export default function createRoutes(
   store,
@@ -47,9 +45,15 @@ export default function createRoutes(
     />
   ));
 
+  // beforeRoutes = (
+  //   <IndexRoute
+  //     component={ TestPage }
+  //   />
+  // );
+
   return (
     <Route
-      path={ PATH_INDEX }
+      path="/"
       component={ rootComponent }
     >
       {
@@ -77,17 +81,17 @@ export default function createRoutes(
       {
         !authLayout && (
           <Route
-            path={ PATH_LOGIN_PAGE }
+            path={ STUB_ROUTES_NAMES.LOGIN }
             component={ LoginPageComponentClass }
           />
         )
       }
       <Route
-        path={ PATH_ACCESS_DENIED }
+        path={ STUB_ROUTES_NAMES.ACCESS_DENIED }
         component={ ErrorPage }
       />
       <Route
-        path={ PATH_ERROR_PAGE }
+        path={ STUB_ROUTES_NAMES.ERROR }
         component={ ErrorPage }
         showDetail={ true }
       />

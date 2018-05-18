@@ -269,8 +269,8 @@ export function parseFromJsonError(errorOrResponse, uniErrorData) {
        timestamp: 1524833891185,
        */
       return createUniError(merge({}, {
-        message: error,
-        clientErrorMessage: message,
+        message: error && message ? message : error,
+        clientErrorMessage: error && message ? error : message,
         errorCode: status,
         originalObject: errorOrResponse,
       }, uniErrorData));

@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import RedBox from 'redbox-react';
 import { useRouterHistory } from 'react-router';
+// import { createHistory } from 'history'; // через require
 import { syncHistoryWithStore } from 'react-router-redux';
-// import { createHistory as libCreateHistory } from 'history';
 import bind from 'lodash-decorators/bind';
 
 import clientConfig from '../common/client-config';
 
+import { joinUri } from '../common/utils/uri-utils';
 import logger from '../common/helpers/client-logger';
 
 import { registerModels as registerOrmModels } from '../common/models/domains/utils/orm';
@@ -100,9 +101,8 @@ export default class AbstractClientRunner {
     }
   }
 
-
   getContextRootBasename() {
-    return clientConfig.common.app.contextRoot;
+    return joinUri('/', clientConfig.common.app.contextRoot);
   }
   createHistory() {
     // только для клиента
@@ -112,7 +112,6 @@ export default class AbstractClientRunner {
       // необходимо через require, так как этот файл используется на сервере и там windows нет
       ? useRouterHistory(require('history').createHistory)({
         basename: this.getContextRootBasename(),
-        // basename: '',
       })
       : null;
   }
