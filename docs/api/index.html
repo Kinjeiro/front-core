@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.3 | Documentation</title>
+  <title>@reagentum/front-core 1.3.4 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.3</code></div>
+          <div class='mb1'><code>1.3.4</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -237,6 +237,16 @@
               
                 
                 <li><a
+                  href='#appurl'
+                  class="">
+                  appUrl
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#from_boom'
                   class="">
                   FROM_BOOM
@@ -310,6 +320,16 @@
                   href='#parsefromboomerror'
                   class="">
                   parseFromBoomError
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#stub_routes_names'
+                  class="">
+                  STUB_ROUTES_NAMES
                   
                 </a>
                 
@@ -1875,6 +1895,76 @@
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='appurl'>
+      appUrl
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>осторожно!!! contextPath (basename) уже учитывается во всех роутингах, дополнительно не нужно. Поэтому пользуйтесь аккуратно
+учитывает contextPath (basepath) приложения</p>
+
+
+  <div class='pre p1 fill-light mt0'>appUrl(pathname: any, otherPaths: ...any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pathname</span> <code class='quiet'>(any
+            = <code>&#39;&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>otherPaths</span> <code class='quiet'>(...any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='from_boom'>
       FROM_BOOM
     </h3>
@@ -2308,6 +2398,58 @@
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='stub_routes_names'>
+      STUB_ROUTES_NAMES
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>STUB_ROUTES_NAMES</div>
+  
+    <p>
+      Type:
+      {ACCESS_DENIED: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, ERROR: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, LOGIN: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, STUB: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}
+    </p>
+  
+  
+
+  <div>Deprecated: use CORE_ROUTES_NAMES
+</div>
+  
+  
+  
+  
+  
+
   
 
   
