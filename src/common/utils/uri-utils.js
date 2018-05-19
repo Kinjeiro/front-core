@@ -6,9 +6,10 @@ import queryString from 'query-string';
 const pathModule = pathLib.posix || pathLib;
 
 // на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
-export const joinUri = pathModule.join;
+const joinUriInner = pathModule.join;
 export const normalize = pathModule.normalize;
 export const resolve = pathModule.resolve;
+
 
 const VALID_PATH_REGEXP = /^([a-zA-Z]:)?(\\[^<>:"/\\|?*]+)+\\?$/;
 export function isValidPath(path) {
@@ -85,6 +86,18 @@ export function formatUrlParameters(params, url = '', hash = '', useBracket = fa
   return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
 
+export function joinUri(pathname, ...otherPaths) {
+  const lastUrlParameters = otherPaths && otherPaths[otherPaths.length - 1];
+  if (typeof lastUrlParameters === 'object') {
+    // url parameters
+    return formatUrlParameters(
+      lastUrlParameters,
+      joinUriInner('/', pathname, ...otherPaths.slice(0, otherPaths.length - 1)),
+    );
+  }
+
+  return joinUriInner('/', pathname, ...otherPaths);
+}
 
 export function getLocationUrlParameters(defaultValues = {}) {
   return typeof window !== 'undefined' && window.location
