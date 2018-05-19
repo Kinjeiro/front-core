@@ -62,6 +62,21 @@ export default class AbstractServerRunner {
   }
 
   getPlugins(services, strategies) {
+    // server.inject({
+    //   method: 'OPTIONS',
+    //   url: '/',
+    //   headers: {
+    //     origin: 'http://test.example.com',
+    //     'access-control-request-method': 'GET',
+    //     'access-control-request-headers': '',
+    //   } },
+    //   (res) => {
+    //     console.log(res.headers);
+    //     console.log(res.payload);
+    //     console.log(res.statusCode);
+    //   },
+    // );
+
     return [
       RequestID,
       {
@@ -108,7 +123,7 @@ export default class AbstractServerRunner {
     const { server } = this;
 
     // server.realm.modifiers.route.prefix = contextRoot;
-    return server.connection({
+    return server.connection(merge({
       // todo @ANKU @LOW - из конфигов тоже брать и делать deep merge
       port: serverConfig.server.main.port,
       routes: {
@@ -116,8 +131,13 @@ export default class AbstractServerRunner {
           xframe: true,
           noSniff: false,
         },
+        // cors: {
+        //   origin: ['example.com'],
+        //   additionalHeaders: ['x-token-token']
+        // },
+        cors: true,
       },
-    });
+    }, serverConfig.server.features.serverFeatures.serverConnectionOptions));
   }
 
   registerPlugins(services, strategies) {

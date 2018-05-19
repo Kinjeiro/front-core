@@ -1,8 +1,11 @@
 // default implementation
-import BaseApiClient from './BaseApiClient';
+import getApiClient from '../helpers/get-api-client';
 
-export const apiClient = new BaseApiClient();
+/**
+ * @deprecated - используйте helpers/get-api-client.js
+ */
+export const apiClient = getApiClient();
 
 export default function sendApi({ method = 'get', path }, paramsOrData, options = {}) {
-  return apiClient[method.toLowerCase()](path, paramsOrData, options);
+  return getApiClient()[method.toLowerCase()](path, paramsOrData, options);
 }

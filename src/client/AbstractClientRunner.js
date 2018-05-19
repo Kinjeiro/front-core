@@ -11,6 +11,8 @@ import clientConfig from '../common/client-config';
 
 import { joinUri } from '../common/utils/uri-utils';
 import logger from '../common/helpers/client-logger';
+import { initApiConfig } from '../common/helpers/get-api-client';
+
 
 import { registerModels as registerOrmModels } from '../common/models/domains/utils/orm';
 import
@@ -75,6 +77,11 @@ export default class AbstractClientRunner {
   // ======================================================
   init() {
     // ======================================================
+    // API CLIENT
+    // ======================================================
+    this.initApiClient();
+
+    // ======================================================
     // CREATE STORE + HISTORY + ROUTES
     // ======================================================
     const routeHistory = this.createHistory();
@@ -102,7 +109,8 @@ export default class AbstractClientRunner {
   }
 
   getContextRootBasename() {
-    return joinUri('/', clientConfig.common.app.contextRoot);
+    const basename = joinUri('/', clientConfig.common.app.contextRoot);
+    return basename === '/' ? undefined : basename;
   }
   createHistory() {
     // только для клиента
@@ -134,6 +142,12 @@ export default class AbstractClientRunner {
     }
   }
 
+  /**
+   * место для переопределения и инициализации инстанса BaseApiClient
+   */
+  initApiClient(apiClientInstance = null) {
+    initApiConfig(apiClientInstance);
+  }
 
   // ======================================================
   // AFTER INIT

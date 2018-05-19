@@ -198,6 +198,8 @@ module.exports = {
     apiConfig: {
       health: createApiConfig('/health')
     },
+    // по умолчанию работает на относительном урле
+    apiClientEndpoint: null,
 
     // ======================================================
     // ПРОКСИРУЮЩИЕ апи
@@ -239,12 +241,48 @@ module.exports = {
 
     features: {
       serverFeatures: {
+        /**
+         * @see https://hapijs.com/api/16.5.0#new-serveroptions
+         */
         defaultServerOptions: {
           // hapi options - https://hapijs.com/api/15.2.0#server-options
           /* место хранения runtime данных на сервере (к примеру, для контекстов страниц ошибок) */
           app: {}
         },
-
+        // server.connection(options)
+        serverConnectionOptions: {
+          /**
+           * @see https://hapijs.com/api/16.5.0#route-options
+           * \typings\hapi\hapi.d.ts - IRouteAdditionalConfigurationOptions
+           */
+          routes: {
+            security: {
+              xframe: true,
+              noSniff: false
+            },
+            /**
+             cors - the Cross-Origin Resource Sharing protocol allows browsers to make cross-origin API calls. CORS is required by web applications running inside a browser which are loaded from a different domain than the API server. CORS headers are disabled by default (false). To enable, set cors to true, or to an object with the following options:
+               origin - a strings array of allowed origin servers ('Access-Control-Allow-Origin'). The array can contain any combination of fully qualified origins along with origin strings containing a wildcard '' character, or a single '' origin string. Defaults to any origin ['*'].
+               maxAge - number of seconds the browser should cache the CORS response ('Access-Control-Max-Age'). The greater the value, the longer it will take before the browser checks for changes in policy. Defaults to 86400 (one day).
+               headers - a strings array of allowed headers ('Access-Control-Allow-Headers'). Defaults to ['Accept', 'Authorization', 'Content-Type', 'If-None-Match'].
+               additionalHeaders - a strings array of additional headers to headers. Use this to keep the default headers in place.
+               exposedHeaders - a strings array of exposed headers ('Access-Control-Expose-Headers'). Defaults to ['WWW-Authenticate', 'Server-Authorization'].
+               additionalExposedHeaders - a strings array of additional headers to exposedHeaders. Use this to keep the default headers in place.
+               credentials - if true, allows user credentials to be sent ('Access-Control-Allow-Credentials'). Defaults to false.
+               methods - a strings array of allowed HTTP methods ('Access-Control-Allow-Methods').Defaults to ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'].
+               override - if false, preserves existing CORS headers set manually before the response is sent.Defaults to true.
+            */
+            cors: {
+              origin: ['*'],
+              // methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+              additionalHeaders: [
+                'X-CSRF-Token',
+                'X-Request-ID'
+              ],
+              credentials: true
+            }
+          }
+        },
         defaultRouteOptions: {
           // https://hapijs.com/api/15.2.0#route-options
           /*

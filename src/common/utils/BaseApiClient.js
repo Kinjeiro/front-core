@@ -21,10 +21,16 @@ import { getCookie } from './cookie';
 
 import { parseToUniError } from '../models/uni-error';
 
+const {
+  host = null,
+  port = null,
+  endpoint,
+} = clientConfig.common.apiClientEndpoint || {};
+
 export const DEFAULT_API_CLIENT_OPTIONS = {
-  apiHost: null,
-  apiPort: null,
-  apiPrefix: '',
+  apiHost: host,
+  apiPort: port,
+  apiPrefix: endpoint || '',
   apiProtocol: 'http',
   withCredentials: false,
   contextRoot: clientConfig.common.app.contextRoot,
@@ -34,6 +40,7 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
   retryWhenNotAuthErrorTimeout: clientConfig.common.features.auth.retryWhenNotAuthErrorTimeout,
   retryWhenNotAuthErrorAttempts: clientConfig.common.features.auth.retryWhenNotAuthErrorAttempts,
 };
+
 
 /**
  * Класс для отсылки запросов на сервер
@@ -170,19 +177,19 @@ class BaseApiClientClass {
       return url;
     }
 
-    const fullPath = joinUri('/', this.getContextRoot(), apiPrefix, url);
+    const fullPath = joinUri('/', apiPrefix || '', url);
 
-    if (apiHost) {
+    if (apiHost || apiPort) {
       const protocol = typeof location !== 'undefined'
         ? location.protocol.replace(':', '')
         : apiProtocol;
 
       // Prepend host and port of the API server to the path.
       // or for server rendering use absolute path
-      return `${protocol}://${apiHost}${apiPort ? `:${apiPort}` : ''}${fullPath}`;
+      return `${protocol}://${apiHost || 'localhost'}${apiPort ? `:${apiPort}` : ''}${fullPath}`;
     }
     // Prepend `/api` to relative URL, to proxy to API server.
-    return fullPath;
+    return joinUri('/', this.getContextRoot(), fullPath);
   }
 
   /**
