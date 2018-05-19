@@ -7,6 +7,7 @@
   "scripts": {
     "start-build": "node ./.build/server.js",
     "start-static-build": "cd ./.build && live-server --entry-file=./index.html",
+    "start-test-contextRoot": "cross-env CONTEXT_ROOT=.build npm run build-development && live-server --entry-file=./.build/index.html",
     "start-daemon": "pm2 start ./.build/server.js --name front-core",
     "stop-daemon": "pm2 delete -s front-core || echo 'pm2 app not started'",
     "start-production": "cross-env NODE_ENV=production npm run start-build",

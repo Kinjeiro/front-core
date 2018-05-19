@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
 
+import Link from '../../components/Link/Link';
+import { PATH_STUB } from '../../routes.pathes';
 // import './TestPage.scss';
 
 @connect(
@@ -46,6 +48,10 @@ export default class TestPage extends Component {
     return (
       <div className="TestPage">
         testtest
+
+        <Link to={ PATH_STUB }>
+          STUB PAGE (test routing)
+        </Link>
       </div>
     );
   }

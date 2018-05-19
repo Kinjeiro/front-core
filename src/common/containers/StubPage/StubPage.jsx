@@ -12,7 +12,7 @@ import bemDecorator from '../../utils/decorators/bem-component';
 import loading from '../../utils/decorators/react-class/loading';
 import titled from '../../utils/decorators/react-class/titled';
 import i18n, { changeLanguagePromise } from '../../utils/i18n-utils';
-import appUrl from '../../helpers/app-urls';
+import { PATH_INDEX } from '../../routes.pathes';
 
 import { notifyError } from '../../helpers/notifications';
 
@@ -174,7 +174,7 @@ export default class StubPage extends Component {
       <div className={ this.fullClassName }>
         { i18n('core:pages.StubPage.pageTitle') }
 
-        <button onClick={ () => actionGoto(appUrl()) }>
+        <button onClick={ () => actionGoto(PATH_INDEX) }>
           { i18n('core:go to index') }
         </button>
 

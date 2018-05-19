@@ -6,7 +6,8 @@ import config from '../client-config';
 
 const contextPath = config.common.app.contextRoot;
 
-/*
+/**
+ * осторожно!!! contextPath (basename) уже учитывается во всех роутингах, дополнительно не нужно. Поэтому пользуйтесь аккуратно
 * учитывает contextPath (basepath) приложения
 */
 export function appUrl(pathname = '', ...otherPaths) {
