@@ -32,6 +32,7 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
   apiPort: port,
   apiPrefix: endpoint || '',
   apiProtocol: 'http',
+  withContextUrl: true,
   withCredentials: false,
   contextRoot: clientConfig.common.app.contextRoot,
   // против CSRF атаки берем из куков и проставляем в хеадер значение
@@ -171,6 +172,7 @@ class BaseApiClientClass {
       apiPort,
       apiPrefix,
       apiProtocol,
+      withContextUrl,
     } = this.apiClientOptions;
 
     if (isFullUrl(url)) {
@@ -189,7 +191,7 @@ class BaseApiClientClass {
       return `${protocol}://${apiHost || 'localhost'}${apiPort ? `:${apiPort}` : ''}${fullPath}`;
     }
     // Prepend `/api` to relative URL, to proxy to API server.
-    return joinUri('/', this.getContextRoot(), fullPath);
+    return joinUri('/', withContextUrl ? this.getContextRoot() : '', fullPath);
   }
 
   /**
