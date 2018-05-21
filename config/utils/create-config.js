@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars,no-param-reassign */
 const pathLib = require('path');
 // на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
 const join = (pathLib.posix || pathLib).join;
@@ -114,6 +114,7 @@ function createEndpointServiceConfig({
   host,
   port,
   endpoint,
+  useDeafault = true,
   timeout,
   fullUrl,
   envPriority
@@ -139,20 +140,31 @@ function createEndpointServiceConfig({
   } = process.env;
 
   const config = {
-    protocol: protocol || 'http',
+    protocol: protocol || (useDeafault && 'http') || undefined,
     host: envPriority
-      ? HOST || SERVICES_HOST || host || 'localhost'
-      : host || HOST || SERVICES_HOST || 'localhost',
+      ? HOST || SERVICES_HOST || host || (useDeafault && 'localhost') || undefined
+      : host || HOST || SERVICES_HOST || (useDeafault && 'localhost') || undefined,
     port: envPriority
-      ? SERVICES_PORT || port || 80
-      : port || SERVICES_PORT || 80,
+      ? SERVICES_PORT || port || (useDeafault && 80) || undefined
+      : port || SERVICES_PORT || (useDeafault && 80) || undefined,
     endpoint: endpoint || '',
-    timeout: timeout || REQUEST_TIMEOUT || 120000
+    timeout: timeout || REQUEST_TIMEOUT || (useDeafault && 120000) || undefined
     // fullUrl,
   };
 
-  // eslint-disable-next-line max-len
-  config.fullUrl = `${config.protocol}://${config.host}${config.port !== 80 ? `:${config.port}` : ''}${config.endpoint ? join('/', config.endpoint) : ''}`;
+  let fullUrlFinal = '';
+  if (config.protocol || config.host || config.port) {
+    fullUrlFinal += `${config.protocol || 'http'}://`;
+  }
+  if (config.host || config.port) {
+    fullUrlFinal += config.host || 'localhost';
+  }
+  if (config.port && config.port !== 80) {
+    fullUrlFinal += `:${config.port}`;
+  }
+  fullUrlFinal += join('/', config.endpoint || '');
+
+  config.fullUrl = fullUrlFinal;
   return config;
 }
 
