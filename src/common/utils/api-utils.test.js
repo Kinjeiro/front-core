@@ -68,11 +68,11 @@ describe('api utils', () => {
       const operation = createJsonPatchOperation(
         'test/111/opa/test',
         'test',
-        PATCH_OPERATIONS.ADD,
+        PATCH_OPERATIONS.REPLACE,
         'a',
       );
       expect(replacePathIndexToItemId(operation)).to.deep.equal({
-        op: 'add',
+        op: 'replace',
         path: '/test/a/opa/test',
         value: 'test',
       });
