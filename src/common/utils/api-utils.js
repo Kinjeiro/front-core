@@ -27,7 +27,7 @@ export function createJsonPatchOperation(path, value, operationType = PATCH_OPER
   // по стандарту вложенные объекты разделяются не точками (как в lodash.get) а слешом
   let pathFinal = Array.isArray(path) ? path.join('/') : path.replace(RE_DOT, '/');
   pathFinal = pathFinal.indexOf('/') === 0 ? pathFinal : `/${pathFinal}`;
-  if (operationType === PATCH_OPERATIONS.ADD && !RE_ADD_INDEX.test(operationType)) {
+  if (operationType === PATCH_OPERATIONS.ADD && !RE_ADD_INDEX.test(path)) {
     // если в конце не указана позиция или не указан "-" - то есть в конец, то добавим
     pathFinal += '/-';
   }
