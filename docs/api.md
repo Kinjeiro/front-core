@@ -746,7 +746,7 @@ Returns **any** function(apiRequestData, request, reply) {}
     -   `$0.host`  
     -   `$0.port`  
     -   `$0.endpoint`  
-    -   `$0.useDeafault`   (optional, default `true`)
+    -   `$0.useDefault`   (optional, default `true`)
     -   `$0.timeout`  
     -   `$0.fullUrl`  
     -   `$0.envPriority`  
