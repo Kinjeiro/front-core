@@ -9,9 +9,10 @@ export const PATCH_OPERATIONS = {
   REMOVE: 'remove',
 };
 // export const ADD_AS_LAST = '-';
+export const ADD_AS_LAST = '-';
 
-const RE_DOT = /\./g;
-const RE_ADD_INDEX = /\/(-|\d+)$/g;
+export const RE_DOT = /\./g;
+export const RE_ADD_INDEX = new RegExp(`\\/(${ADD_AS_LAST}|\\d+)$`, 'g');
 /**
  * по умолчанию не добавляет в конец, нужно обязательно указывать позицию
    createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
@@ -27,9 +28,9 @@ export function createJsonPatchOperation(path, value, operationType = PATCH_OPER
   // по стандарту вложенные объекты разделяются не точками (как в lodash.get) а слешом
   let pathFinal = Array.isArray(path) ? path.join('/') : path.replace(RE_DOT, '/');
   pathFinal = pathFinal.indexOf('/') === 0 ? pathFinal : `/${pathFinal}`;
-  if (operationType === PATCH_OPERATIONS.ADD && !RE_ADD_INDEX.test(path)) {
+  if (operationType === PATCH_OPERATIONS.ADD && !RE_ADD_INDEX.test(pathFinal)) {
     // если в конце не указана позиция или не указан "-" - то есть в конец, то добавим
-    pathFinal += '/-';
+    pathFinal += `/${ADD_AS_LAST}`;
   }
 
   const operation = {
@@ -345,7 +346,9 @@ export function getContentType(ext) {
 
 export function downloadFile(blob, fileName, type = null) {
   type = type || fileName ? getContentType(getExt(fileName)) : 'application/octet-stream';
+  // eslint-disable-next-line no-undef
   if (!(blob instanceof Blob)) {
+    // eslint-disable-next-line no-undef
     blob = new Blob([blob], { type });
   }
 
@@ -419,7 +422,7 @@ export function downloadFile(blob, fileName, type = null) {
 }
 
 export function downloadText(text, fileName = null) {
-  return downloadFile(text, fileName || `${text.substr(0, Math.min(10, text.length))}.txt`, 'text/plain;charset=utf-8')
+  return downloadFile(text, fileName || `${text.substr(0, Math.min(10, text.length))}.txt`, 'text/plain;charset=utf-8');
 }
 
 export function downloadFileFromResponse(response, fileName) {

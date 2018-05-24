@@ -114,7 +114,7 @@ function createEndpointServiceConfig({
   host,
   port,
   endpoint,
-  useDeafault = true,
+  useDefault = true,
   timeout,
   fullUrl,
   envPriority
@@ -140,15 +140,15 @@ function createEndpointServiceConfig({
   } = process.env;
 
   const config = {
-    protocol: protocol || (useDeafault && 'http') || undefined,
+    protocol: protocol || (useDefault && 'http') || undefined,
     host: envPriority
-      ? HOST || SERVICES_HOST || host || (useDeafault && 'localhost') || undefined
-      : host || HOST || SERVICES_HOST || (useDeafault && 'localhost') || undefined,
+      ? HOST || SERVICES_HOST || host || (useDefault && 'localhost') || undefined
+      : host || HOST || SERVICES_HOST || (useDefault && 'localhost') || undefined,
     port: envPriority
-      ? SERVICES_PORT || port || (useDeafault && 80) || undefined
-      : port || SERVICES_PORT || (useDeafault && 80) || undefined,
+      ? SERVICES_PORT || port || (useDefault && 80) || undefined
+      : port || SERVICES_PORT || (useDefault && 80) || undefined,
     endpoint: endpoint || '',
-    timeout: timeout || REQUEST_TIMEOUT || (useDeafault && 120000) || undefined
+    timeout: timeout || REQUEST_TIMEOUT || (useDefault && 120000) || undefined
     // fullUrl,
   };
 
