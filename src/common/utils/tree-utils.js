@@ -121,7 +121,7 @@ export function treeToArray(tree, options = {}) {
   }
 
   return tree.reduce((result, treeItem) => {
-    const filtered = filterFn(treeItem, options);
+    const filtered = filterFn ? filterFn(treeItem, options) : true;
     if (filtered && !leafIsFirst) {
       result.push(treeItem);
     }

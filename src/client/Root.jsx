@@ -5,8 +5,7 @@ import { Router, applyRouterMiddleware } from 'react-router';
 import useScroll from 'react-router-scroll/lib/useScroll';
 
 // @guide - важно чтобы это было на первом месте, так как внутри идет инициализация i18n
-import i18nInstance from './init/init-client-i18n';
-
+import { getI18Instance } from '../common/utils/i18n-utils';
 import { I18NProvider } from '../common/containers';
 
 // ======================================================
@@ -53,7 +52,7 @@ export default class Root extends Component {
 
     return (
       <Provider store={ store } key="provider">
-        <I18NProvider i18nInstance={ i18nInstance } >
+        <I18NProvider i18nInstance={ getI18Instance() } >
           <Router
             key={ Math.random() }
             history={ history }

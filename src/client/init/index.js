@@ -6,5 +6,12 @@ export default async function initAll() {
   // только после того как все подгрузили, запускаем остальные процессы
 
   // инициалзиция локализации
-  require('./init-client-i18n').default;
+  const i18next = require('./init-client-i18n').default;
+
+  await new Promise((resolve, reject) => {
+    // первая загрузка
+    i18next.on('languageChanged', (lng) => {
+      resolve();
+    });
+  });
 }

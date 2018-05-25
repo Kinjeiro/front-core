@@ -17,6 +17,52 @@ import { I18N_LANGUAGE_COOKIE_NAME } from '../../common/constants/sync-consts';
 
 import { getI18nClientBundles } from '../get-global-data';
 
+const loadUrl = appUrl(
+  ASSETS,
+  clientConfig.common.features.i18n.assetsLoadPath
+    || '/i18n/{{lng}}/{{ns}}.js',
+);
+
+/*
+function loadLocales(url, options, callback, data) {
+  try {
+    debugger;
+    console.warn('ANKU , url', url);
+    console.warn('ANKU , url result', `${joinUri('/', ASSETS, 'i18n', url)}`);
+    // const waitForLocale = require(`bundle!./locales/${url}.json`);
+    // const waitForLocale = require(`bundle!${url}`);
+    const waitForLocale = require(`bundle-loader!../../../static/i18n/${url}`);
+
+    /!*
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\static\i18n]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\client\init\lib]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\client\init\node_modules]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\client\lib]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\client\node_modules]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\lib]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\src\node_modules]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\lib]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\node_modules]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\lib]
+     [H:\__CODER__\_W_Reagentum_\__Gasprom__\node_modules]
+     [H:\__CODER__\_W_Reagentum_\lib]
+     [H:\__CODER__\_W_Reagentum_\node_modules]
+     [H:\__CODER__\lib]
+     [H:\__CODER__\node_modules]
+    *!/
+    const waitForLocale = require(`bundle-loader!static/i18n/${url}`);
+    waitForLocale((locale) => {
+      debugger;
+      console.warn('ANKU , locale', locale);
+      callback(locale, { status: '200' });
+    });
+  } catch (e) {
+    console.error(e);
+    callback(null, { status: '404' });
+  }
+}
+*/
+
 export const DEFAULT_OPTIONS = {
   debug: true,
 
@@ -30,7 +76,7 @@ export const DEFAULT_OPTIONS = {
 
   backend: {
     // path where resources get loaded from
-    loadPath: appUrl(ASSETS, '/i18n/{{lng}}/{{ns}}.js'),
+    loadPath: loadUrl,
     parse: (data) => {
       let jsonData;
       try {
@@ -40,10 +86,14 @@ export const DEFAULT_OPTIONS = {
         // for js file
         // window.module = { exports: '' };
         // todo @ANKU @CRIT @MAIN @hack - по хорошему нужно на бэке сделать апи и через него выдавать
+        // eslint-disable-next-line no-eval
         jsonData = eval(data);
       }
       return jsonData;
     },
+
+    // loadPath: '{{lng}}/{{ns}}.js',
+    // ajax: loadLocales,
 
     // todo @ANKU @LOW - подумать нужно ли подключать дополнительно
     // // path to post missing resources
@@ -111,15 +161,11 @@ export function i18nNextInit(options = {}) {
     {},
     DEFAULT_OPTIONS,
     clientConfig.common.features.i18n.i18nextOptions,
-    {
-      backend: {
-        loadPath: clientConfig.common.features.i18n.assetsLoadPath
-          // todo @ANKU @LOW @TEST - проверить если есть basepath или если есть роутинг нужен абсолютно
-          // ? joinUri(ASSETS, clientConfig.common.features.i18n.assetsLoadPath)
-          ? appUrl(ASSETS, clientConfig.common.features.i18n.assetsLoadPath)
-          : DEFAULT_OPTIONS.backend.loadPath,
-      },
-    },
+    // {
+    //   backend: {
+    //     loadPath: loadUrl,
+    //   },
+    // },
     // динамические данные
     {
       whitelist: whitelist || DEFAULT_OPTIONS.whitelist,

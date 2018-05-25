@@ -17,6 +17,10 @@ export function init(newI18nInstance) {
   return i18nInstance;
 }
 
+export function getI18Instance() {
+  return i18nInstance;
+}
+
 
 export function translateWithNamespace(namespace, key, mapParams = {}) {
   // return i18nInstance.t(key, {
