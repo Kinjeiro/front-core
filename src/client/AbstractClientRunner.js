@@ -11,8 +11,9 @@ import clientConfig from '../common/client-config';
 
 import { joinUri } from '../common/utils/uri-utils';
 import logger from '../common/helpers/client-logger';
-import { initApiConfig } from '../common/helpers/get-api-client';
-
+import getApiClient, { initApiConfig } from '../common/helpers/get-api-client';
+import BaseApiClient from '../common/utils/BaseApiClient';
+import * as apiUtils from '../common/utils/api-utils';
 
 import { registerModels as registerOrmModels } from '../common/models/domains/utils/orm';
 import
@@ -70,44 +71,28 @@ export default class AbstractClientRunner {
   getApi() {
     return {};
   }
+  /**
+   * место для переопределения и инициализации инстанса BaseApiClient
+   */
+  initApiClient(apiClientInstance = null) {
+    return initApiConfig(apiClientInstance);
+  }
 
+  getGlobalWindowDebugVariables() {
+    return {
+      store: this.store,
+      config: clientConfig,
+      api: this.api,
+      apiClient: getApiClient(),
+      clientRunner: this,
+      BaseApiClient,
+      apiUtils,
+    };
+  }
 
   // ======================================================
   // INIT
   // ======================================================
-  init() {
-    // ======================================================
-    // API CLIENT
-    // ======================================================
-    this.initApiClient();
-
-    // ======================================================
-    // CREATE STORE + HISTORY + ROUTES
-    // ======================================================
-    const routeHistory = this.createHistory();
-    this.store = this.createStore(routeHistory);
-    this.history = syncHistoryWithStore(routeHistory, this.store);
-    this.routes = this.getRoutes(this.store);
-    this.api = this.getApi();
-
-    // ======================================================
-    // DEBUG
-    // ======================================================
-    logger.warn(`
-      ================================\n
-      ======= ${clientConfig.common.appId}:${clientConfig.common.appVersion} ========\n
-      ================================
-    `);
-
-    if (!clientConfig.common.isProduction) {
-      logger.log('=====[ COMMON CONFIG ]=====', clientConfig.common);
-      logger.log('=====[ CLIENT CONFIG ]=====', clientConfig.client);
-      window.store = this.store;
-      window.config = clientConfig;
-      window.api = this.api;
-    }
-  }
-
   getContextRootBasename() {
     const basename = joinUri('/', clientConfig.common.app.contextRoot);
     return basename === '/' ? undefined : basename;
@@ -142,11 +127,42 @@ export default class AbstractClientRunner {
     }
   }
 
-  /**
-   * место для переопределения и инициализации инстанса BaseApiClient
-   */
-  initApiClient(apiClientInstance = null) {
-    initApiConfig(apiClientInstance);
+  init() {
+    // ======================================================
+    // API CLIENT
+    // ======================================================
+    this.initApiClient();
+
+    // ======================================================
+    // CREATE STORE + HISTORY + ROUTES
+    // ======================================================
+    const routeHistory = this.createHistory();
+    this.store = this.createStore(routeHistory);
+    this.history = syncHistoryWithStore(routeHistory, this.store);
+    this.routes = this.getRoutes(this.store);
+    this.api = this.getApi();
+
+    // ======================================================
+    // DEBUG
+    // ======================================================
+    logger.warn(`
+      ================================\n
+      ======= ${clientConfig.common.appId}:${clientConfig.common.appVersion} ========\n
+      ================================
+    `);
+
+    if (!clientConfig.common.isProduction) {
+      logger.log('=====[ COMMON CONFIG ]=====', clientConfig.common);
+      logger.log('=====[ CLIENT CONFIG ]=====', clientConfig.client);
+
+      const variables = this.getGlobalWindowDebugVariables();
+
+      logger.log(`Init global window variables: \n${Object.keys(variables).join('\n')}`);
+      Object.keys(variables).forEach((key) => {
+        logger.log(`Init variable: window.${key}`);
+        window[key] = variables[key];
+      });
+    }
   }
 
   // ======================================================

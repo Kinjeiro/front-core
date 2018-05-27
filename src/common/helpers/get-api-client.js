@@ -4,6 +4,7 @@ let apiClient;
 
 export function initApiConfig(newApiClient = null) {
   apiClient = newApiClient || new BaseApiClient();
+  return apiClient;
 }
 
 export default function getApiClient() {

@@ -203,7 +203,7 @@ class BaseApiClientClass {
    */
   ajaxGet(absoluteUrl, params, options = {}) {
     return this.proceedRequest({
-      urlPath: absoluteUrl,
+      url: absoluteUrl,
       ...options,
       urlRelative: false,
       params,
@@ -220,7 +220,7 @@ class BaseApiClientClass {
   ajaxPost(absoluteUrl, data, options = {}) {
     return this.proceedRequest({
       ...options,
-      urlPath: absoluteUrl,
+      url: absoluteUrl,
       method: 'post',
       urlRelative: false,
       data,
