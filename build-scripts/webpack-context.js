@@ -74,7 +74,7 @@ const context = {
 
   // todo @ANKU @LOW - сделать методом, чтобы если переопределят assetsDir чтобы и тут менялось
   ASSETS_BASE_QUERY: {
-    name: `${assetsDir}/[name].[hash].[ext]`,
+    name: `${urlJoin('/', assetsDir)}/[name].[hash].[ext]`,
     limit: 10000
   },
   isProduction: ENV.NODE_ENV === 'production',

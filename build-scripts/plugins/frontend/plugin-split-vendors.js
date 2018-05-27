@@ -33,6 +33,15 @@ function pluginOptimizeProdVendors(webpackConfig, {
       }
     })
   );
+  // // todo @ANKU @LOW - нужно отделить корные вещи в отдельный файл
+  // webpackConfig.plugins.push(
+  //   new webpack.optimize.CommonsChunkPlugin({
+  //     name: 'front-core',
+  //     minChunks(module) {
+  //       return module.context && module.context.indexOf('/front-core') !== -1;
+  //     }
+  //   })
+  // );
 
   /*
    плюс нужно чтобы было [name]:
