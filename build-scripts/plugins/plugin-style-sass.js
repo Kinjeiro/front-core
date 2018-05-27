@@ -1,6 +1,10 @@
 // todo @ANKU @CRIT @MAIN - объединить с коравскими loader (искать их через filter rules)
 
 function pluginStyleSass(webpackConfig, context) {
+  const {
+    appStyleConfig,
+  } = context;
+
   const loaders = {
     style: { loader: 'style-loader' },
     css: { loader: 'css-loader', options: { sourceMap: true } },
@@ -42,7 +46,7 @@ function pluginStyleSass(webpackConfig, context) {
           browsers: 'last 2 versions',
           features: {
             customProperties: {
-              variables: {}
+              variables: appStyleConfig
             }
           }
         })

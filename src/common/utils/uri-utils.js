@@ -11,10 +11,10 @@ export const normalize = pathModule.normalize;
 export const resolve = pathModule.resolve;
 
 
-const VALID_PATH_REGEXP = /^([a-zA-Z]:)?(\\[^<>:"/\\|?*]+)+\\?$/;
+// const VALID_PATH_REGEXP = /^([a-zA-Z]:)?(\\[^<>:"/\\|?*]+)+\\?$/;
 export function isValidPath(path) {
   // return str && str === path.basename(str);
-  return path && VALID_PATH_REGEXP.test(path);
+  return path && /^([a-zA-Z]:)?(\\[^<>:"/\\|?*]+)+\\?$/.test(path);
 }
 
 // export function parseUrlParameters(url) {
