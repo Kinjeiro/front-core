@@ -26,6 +26,19 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return require('../common/api').default;
   }
 
+  getApiClientClass() {
+    const { store } = this;
+    // чтобы получать redux данные внутри апи (удобно для userId), чтобы не передавать глобальные контекстные данные во все методы апи
+    const SuperClass = super.getApiClientClass();
+    class ApiClientWithContextClass extends SuperClass {
+      constructor(...args) {
+        super(...args);
+        this.setGetContextDataFn(store.getState.bind(store));
+      }
+    }
+    return ApiClientWithContextClass;
+  }
+
   hotReloadListeners() {
     super.hotReloadListeners();
 

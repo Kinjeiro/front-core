@@ -21,16 +21,10 @@ import { getCookie } from './cookie';
 
 import { parseToUniError } from '../models/uni-error';
 
-const {
-  host = null,
-  port = null,
-  endpoint,
-} = clientConfig.common.apiClientEndpoint || {};
-
 export const DEFAULT_API_CLIENT_OPTIONS = {
-  apiHost: host,
-  apiPort: port,
-  apiPrefix: endpoint || '',
+  apiHost: null,
+  apiPort: null,
+  apiPrefix: '',
   apiProtocol: 'http',
   withContextUrl: true,
   withCredentials: false,
@@ -68,6 +62,11 @@ class BaseApiClientClass {
       throw new Error('Функция получения контекста "getContextFn" не задана');
     }
     return this.getContextDataFn(...args);
+  }
+  getUserInfo(...args) {
+    const context = this.getContextData(...args);
+    // обычно у нас в качестве контекста redux state и в нем есть userInfo
+    return context ? context.userInfo : null;
   }
 
   getContextRoot() {

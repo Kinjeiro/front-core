@@ -11,7 +11,11 @@ import clientConfig from '../common/client-config';
 
 import { joinUri } from '../common/utils/uri-utils';
 import logger from '../common/helpers/client-logger';
-import getApiClient, { initApiConfig } from '../common/helpers/get-api-client';
+import getApiClient, {
+  initApiClient,
+  initApiClientClass,
+  createApiClientByEndpoint,
+} from '../common/helpers/get-api-client';
 import BaseApiClient from '../common/utils/BaseApiClient';
 import * as apiUtils from '../common/utils/api-utils';
 
@@ -74,8 +78,11 @@ export default class AbstractClientRunner {
   /**
    * место для переопределения и инициализации инстанса BaseApiClient
    */
-  initApiClient(apiClientInstance = null) {
-    return initApiConfig(apiClientInstance);
+  getApiClientClass() {
+    return BaseApiClient;
+  }
+  getApiClient(defaultEndpoint) {
+    return createApiClientByEndpoint(defaultEndpoint);
   }
 
   getGlobalWindowDebugVariables() {
@@ -129,11 +136,6 @@ export default class AbstractClientRunner {
 
   init() {
     // ======================================================
-    // API CLIENT
-    // ======================================================
-    this.initApiClient();
-
-    // ======================================================
     // CREATE STORE + HISTORY + ROUTES
     // ======================================================
     const routeHistory = this.createHistory();
@@ -141,6 +143,14 @@ export default class AbstractClientRunner {
     this.history = syncHistoryWithStore(routeHistory, this.store);
     this.routes = this.getRoutes(this.store);
     this.api = this.getApi();
+
+    // ======================================================
+    // API CLIENT
+    // ======================================================
+    const ApiClientClass = this.getApiClientClass();
+    initApiClientClass(ApiClientClass);
+    const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
+    initApiClient(apiClient);
 
     // ======================================================
     // DEBUG

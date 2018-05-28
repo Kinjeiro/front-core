@@ -43,6 +43,8 @@ export const MAP = {
   roles: PropTypes.arrayOf(PropTypes.string),
   permissions: PropTypes.arrayOf(PropTypes.string),
   scope: PropTypes.string,
+
+  contextData: PropTypes.object,
 };
 
 export const DEFAULT_VALUES = {
@@ -64,6 +66,8 @@ export const DEFAULT_VALUES = {
   roles: [],
   permissions: [],
   scope: undefined,
+
+  contextData: {},
 };
 
 export default PropTypes.shape(MAP);
