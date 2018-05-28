@@ -5,7 +5,7 @@
 -   [Runners][1]
 -   [AbstractClientRunner][2]
     -   [getReducers][3]
-    -   [initApiClient][4]
+    -   [getApiClientClass][4]
 -   [CoreClientRunner][5]
     -   [getReducers][6]
 -   [AbstractServerRunner][7]
@@ -98,13 +98,9 @@
 
 Returns **{}** 
 
-### initApiClient
+### getApiClientClass
 
 место для переопределения и инициализации инстанса BaseApiClient
-
-**Parameters**
-
--   `apiClientInstance`   (optional, default `null`)
 
 ## CoreClientRunner
 
@@ -862,7 +858,7 @@ Returns **any** Promise
 
 [3]: #getreducers
 
-[4]: #initapiclient
+[4]: #getapiclientclass
 
 [5]: #coreclientrunner
 
