@@ -81,6 +81,8 @@ export default class AbstractServerRunner {
       RequestID,
       {
         /*
+          Модуль для предотвращение CSRF атака - client из этой куки добавляет header "X-CSRF-Token"
+          Только реальный клиент может переложить из куки в header значение.
           @NOTE: если не проставить в header значение cookieCSRF, то будет 403 Forbidden
         */
         register: crumb,

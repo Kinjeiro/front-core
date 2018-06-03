@@ -11,6 +11,7 @@ export function isEmpty(value, objectChecker = null) {
   return value === null || typeof value === 'undefined' || value === '' || (Array.isArray(value) && value.length === 0);
 }
 
+// todo @ANKU @CRIT @MAIN - сделать memoize
 export function findInTree(tree, id, config = {}, deep = 0, path = [], pathStr = '') {
   const {
     fieldChildren = 'children',
