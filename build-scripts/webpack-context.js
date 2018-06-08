@@ -10,8 +10,9 @@ const CURRENT_FILE_PATH = __dirname;
 const srcDir = 'src';
 const buildDir = '.build';
 const assetsDir = 'assets';
-// const publicPath = '/';
 const publicPath = urlJoin('/', appConfig.common.app.contextRoot);
+const hasContextRoot = publicPath !== '/';
+
 
 const staticPath = './static';
 const clientStartPath = './src/client/index.js';
@@ -38,6 +39,7 @@ const appStyleConfig = require(useFromFrontCore
   : inCoreProject('lib/common/app-style/vars.js')
 );
 
+console.warn('ANKU , hasContextRoot', hasContextRoot);
 const context = {
   PROCESS_PATH,
   ENV,
@@ -74,8 +76,9 @@ const context = {
 
   // todo @ANKU @LOW - сделать методом, чтобы если переопределят assetsDir чтобы и тут менялось
   ASSETS_BASE_QUERY: {
-    name: `${urlJoin('/', assetsDir)}/[name].[hash].[ext]`,
-    limit: 10000
+    name: urlJoin(hasContextRoot ? '/' : '', assetsDir, '[name].[hash].[ext]'),
+    limit: 10000,
+    publicPath: hasContextRoot ? publicPath : undefined,
   },
   isProduction: ENV.NODE_ENV === 'production',
   isLocalhost: ENV.NODE_ENV === 'localhost'
