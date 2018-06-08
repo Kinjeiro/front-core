@@ -11,47 +11,98 @@ export function isEmpty(value, objectChecker = null) {
   return value === null || typeof value === 'undefined' || value === '' || (Array.isArray(value) && value.length === 0);
 }
 
+
+export const EQUAL_CONSTRAINTS = {
+  EQUAL: 'EQUAL',
+  CONTAINS: 'CONTAINS',
+  START_WITH: 'START_WITH',
+};
+
+export function findInTreeDefaultFilter(searchTerm, treeItem, options) {
+  const {
+    fieldSearch = 'id',
+    equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
+  } = options;
+
+  const value = treeItem[fieldSearch];
+  switch (equalConstraint) {
+    case EQUAL_CONSTRAINTS.EQUAL:
+      // eslint-disable-next-line eqeqeq
+      return value == searchTerm;
+    case EQUAL_CONSTRAINTS.CONTAINS:
+      return value && `${value.toLowerCase()}`.indexOf(searchTerm.toLowerCase()) >= 0;
+    case EQUAL_CONSTRAINTS.START_WITH:
+      return value && `${value.toLowerCase()}`.indexOf(searchTerm.toLowerCase()) === 0;
+    default:
+      return false;
+  }
+}
+
 // todo @ANKU @CRIT @MAIN - сделать memoize
-export function findInTree(tree, id, config = {}, deep = 0, path = [], pathStr = '') {
+/**
+ * Ищет первое вхождение в дереве
+ * @param tree
+ * @param filter - либо искомый id либо функция (treeItem, config)
+ * @param options - {
+    fieldChildren = 'children',
+    fieldSearch = 'id', - если не задано поле filter как функция
+    equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
+  }
+ * @returns {{result: *, path: Array, pathStr: string}}
+ */
+export function findInTree(tree, filter, options = {}, deep = 0, path = [], pathStr = '') {
   const {
     fieldChildren = 'children',
-    fieldId = 'id',
-  } = config;
+  } = options;
+
+  if (typeof filter !== 'function') {
+    if (filter === null || typeof filter === 'undefined' || filter === '') {
+      return { result: undefined, path: [], pathStr: '' };
+    }
+    filter = findInTreeDefaultFilter.bind(null, filter);
+  }
 
   let result;
   let resultValue = null;
 
-  if (id === null || typeof id === 'undefined') {
+  if (filter === null || typeof filter === 'undefined') {
     result = null;
-  } else if (tree[fieldId] === id) {
+  } else if (filter(tree, options)) {
     result = tree;
-    path.push(result);
+    // path.push(result);
   } else {
-    const isFound = tree[fieldChildren].some((child, index) => {
-      if (child[fieldId] === id) {
-        result = child;
-        path.push(result);
-        pathStr = `${pathStr}[${index}]`;
-        return true;
-      }
-      resultValue = findInTree(child, id, config, deep + 1, path, `${pathStr}[${index}]`);
-      if (resultValue.result) {
-        result = resultValue.result;
-        pathStr = resultValue.pathStr;
-        return true;
-      }
-      return false;
-    });
+    const isFound = tree[fieldChildren]
+      .some((child, index) => {
+        const pathStrChild = `${pathStr ? `${pathStr}.` : ''}${fieldChildren}.${index}`;
+        if (filter(child, options)) {
+          result = child;
+          // path.push(result);
+          pathStr = pathStrChild;
+          return true;
+        }
+        resultValue = findInTree(child, filter, options, deep + 1, path, pathStrChild);
+        if (resultValue.result) {
+          result = resultValue.result;
+          pathStr = resultValue.pathStr;
+          // path.push(result);
+          return true;
+        }
+        return false;
+      });
 
-    if (isFound) {
-      path.push(tree);
-    }
+    // if (isFound) {
+    //   path.push(tree);
+    // }
   }
 
-  if (deep === 0) {
-    path.reverse();
-  }
-  return { result, path, pathStr };
+  // if (deep === 0) {
+  //   path.reverse();
+  // }
+  return {
+    result,
+    // path,
+    pathStr,
+  };
 }
 
 export function arrayToTree(array, options = {}, parent = null, level = 0) {
