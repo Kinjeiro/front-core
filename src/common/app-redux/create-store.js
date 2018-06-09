@@ -7,7 +7,7 @@ import {
 import { routerMiddleware } from 'react-router-redux';
 // import { browserHistory } from 'react-router';
 // import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 import clientConfig from '../client-config';
 
