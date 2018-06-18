@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.16 | Documentation</title>
+  <title>@reagentum/front-core 1.3.17 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.16</code></div>
+          <div class='mb1'><code>1.3.17</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -420,6 +420,16 @@
                   href='#arraytotree'
                   class="">
                   arrayToTree
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#formatstring'
+                  class="">
+                  formatString
                   
                 </a>
                 
@@ -3184,7 +3194,7 @@ valueFromRange(25, [0, 5, 8, 15, 20], [a, b, c, d], 'Y') => 'Y'</p>
   <p>Ищет первое вхождение в дереве</p>
 
 
-  <div class='pre p1 fill-light mt0'>findInTree(tree: any, filter: any, options: any, deep: any, path: any, pathStr: any): {result: any, path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>, pathStr: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</div>
+  <div class='pre p1 fill-light mt0'>findInTree(tree: any, filter: any, options: any, deep: any, path: any, pathStr: any): {result: any, isRoot: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, pathStr: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</div>
   
   
 
@@ -3264,7 +3274,7 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>{result: any, path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>, pathStr: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</code>:
+      <code>{result: any, isRoot: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, pathStr: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</code>:
         
 
       
@@ -3356,6 +3366,86 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='formatstring'>
+      formatString
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>formatString(str: any, args: ...any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>str</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...any)</code>
+	    либо один параметр - мапа с параметрами ключ:значение
+<ul>
+<li>либо остальные стринги \ намбер - последовательно добавляются</li>
+<li>последний параметр может быть функция реплейсмент (ключ, значение из мапы если есть, position, allString)</li>
+</ul>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
   
 
   
