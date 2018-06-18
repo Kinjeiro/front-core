@@ -62,18 +62,21 @@ describe('tree-utils utils', () => {
       expect(findInTree(tree, 8)).to.deep.equal({
         result: lodashGet(tree, 'children.0.children.1.children.0'),
         pathStr: 'children.0.children.1.children.0',
+        isRoot: false,
       });
     });
     it('should search id in tree by string', () => {
       expect(findInTree(tree, '4')).to.deep.equal({
         result: lodashGet(tree, 'children.0.children.0'),
         pathStr: 'children.0.children.0',
+        isRoot: false,
       });
     });
     it('should n\'t search in tree', () => {
       expect(findInTree(tree, 11111)).to.deep.equal({
         result: undefined,
         pathStr: '',
+        isRoot: false,
       });
     });
     it('should search by change "fieldSearch" options', () => {
@@ -86,6 +89,7 @@ describe('tree-utils utils', () => {
       )).to.deep.equal({
         result: lodashGet(tree, 'children.0.children.1.children.0'),
         pathStr: 'children.0.children.1.children.0',
+        isRoot: false,
       });
     });
     it('should search by "equalConstraint" options = EQUAL_CONSTRAINTS.CONTAINS', () => {
@@ -99,6 +103,7 @@ describe('tree-utils utils', () => {
       )).to.deep.equal({
         result: lodashGet(tree, 'children.0.children.1.children.0'),
         pathStr: 'children.0.children.1.children.0',
+        isRoot: false,
       });
     });
     it('should search by "equalConstraint" options = EQUAL_CONSTRAINTS.START_WITH', () => {
@@ -112,6 +117,7 @@ describe('tree-utils utils', () => {
       )).to.deep.equal({
         result: lodashGet(tree, 'children.0.children.1.children.0'),
         pathStr: 'children.0.children.1.children.0',
+        isRoot: false,
       });
     });
 
@@ -119,6 +125,7 @@ describe('tree-utils utils', () => {
       expect(findInTree(tree, ({ testField }) => testField === 'anyValue 8')).to.deep.equal({
         result: lodashGet(tree, 'children.0.children.1.children.0'),
         pathStr: 'children.0.children.1.children.0',
+        isRoot: false,
       });
     });
   });

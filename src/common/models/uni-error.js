@@ -115,8 +115,15 @@ export function createUniError(uniErrorData = {}) {
     errorCode: undefined,
     responseStatusCode: undefined,
     isServerError: false,
-
     errorFrom: UNI_ERROR_FROM.FROM_CREATE,
+
+    clientErrorTitle: undefined,
+    clientErrorMessages: undefined,
+    clientErrorMessage: undefined,
+    message: undefined,
+
+    stack: undefined,
+
     originalObject: undefined,
 
     // calculated
@@ -124,6 +131,7 @@ export function createUniError(uniErrorData = {}) {
     uniMessage: undefined,
     uniMessages: undefined,
     isNotFound: false,
+    isNotAuth: false,
   };
 
   const uniError = merge({}, defaultValues, uniErrorData);
@@ -195,7 +203,7 @@ export function parseFromUniError(errorOrResponse, uniErrorData) {
   return null;
 }
 
-
+// todo @ANKU @LOW - сделать кастом формат через раннер, а этот хелпер как синглтон
 export function parseFromProjectFormat(errorOrResponse = {}, uniErrorData = {}) {
   // client wrapper
   if (checkProperties(errorOrResponse, 'data', 'ok')) {

@@ -48,7 +48,7 @@ export function findInTreeDefaultFilter(searchTerm, treeItem, options) {
     fieldSearch = 'id', - если не задано поле filter как функция
     equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
   }
- * @returns {{result: *, path: Array, pathStr: string}}
+ * @returns {{result: *, isRoot: boolean, pathStr: string}}
  */
 export function findInTree(tree, filter, options = {}, deep = 0, path = [], pathStr = '') {
   const {
@@ -64,11 +64,13 @@ export function findInTree(tree, filter, options = {}, deep = 0, path = [], path
 
   let result;
   let resultValue = null;
+  let isRoot = false;
 
   if (filter === null || typeof filter === 'undefined') {
     result = null;
   } else if (filter(tree, options)) {
     result = tree;
+    isRoot = deep === 0;
     // path.push(result);
   } else {
     const isFound = tree[fieldChildren]
@@ -102,6 +104,7 @@ export function findInTree(tree, filter, options = {}, deep = 0, path = [], path
     result,
     // path,
     pathStr,
+    isRoot,
   };
 }
 
