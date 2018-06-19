@@ -41,7 +41,7 @@ describe('format-utils', () => {
     it('should format with replaceFn', () => {
       expect(formatString(
         '{test1}: {test2} {test1}',
-        (key, nonWordSeparator) => `${key}1${nonWordSeparator}`,
+        (key) => `${key}1`,
       )).to.equal('test11: test21 test11');
     });
     it('should format with replaceFn with value', () => {
@@ -49,8 +49,8 @@ describe('format-utils', () => {
         '{0}: {1} {0}',
         'foo',
         'bar',
-        (path, nonWordSeparator, type, mask, value, position/* , allString */) =>
-          `${value}${position}${nonWordSeparator}`,
+        (path, value, type, mask, space, position/* , allString */) =>
+          `${value}${position}`,
       )).to.equal('foo0: bar5 foo9');
     });
     it('should hide nonWordSeparator if value is empty', () => {
@@ -85,7 +85,7 @@ describe('format-utils', () => {
       expect(formatString(
         'Test mask {attr}, {empty}: {innerObj.region} and {innerObj.birthday:date:DD.MM.YY}',
         omit(data, 'attr'),
-        (path, space, type, mask, value) => `${value || lodashGet(data, path)}${space}`,
+        (path, value, /* type, mask */) => `${value || lodashGet(data, path)}`,
       )).to.equal('Test mask ATTR, null: REGION and 19.06.18');
     });
   });

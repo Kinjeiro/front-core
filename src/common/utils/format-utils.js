@@ -22,11 +22,10 @@ export const TYPES = {
  * @param args
  * - либо один параметр - мапа с параметрами ключ:значение
  * - либо остальные стринги \ намбер - последовательно добавляются
- * - последний параметр может быть функция реплейсмент (path,nonWordSeparator, type, mask, значение из мапы если есть, position, allString)
- *   важно использовать nonWordSeparator (пустое место до следующего элемента), ибо по умолчанию для функции оно не подставляется. Это нужно чтобы иметь возможность менять его в функции
+ * - последний параметр может быть функция реплейсмент (path, значение из мапы если есть, type, mask, nextNonWordCharacters, position, allString)
  * @returns {*}
  */
-export function formatString(str, ...args) {
+function formatStringInner(addNextNonWordCharacters, str, ...args) {
   let strFinal = str;
   if (args.length) {
     let argsFinal = args;
@@ -49,7 +48,7 @@ export function formatString(str, ...args) {
     }
 
     // 'Test mask {attr}, {innerObj.region} and {innerObj.birthday:date:dd.mm.yy}'
-    strFinal = strFinal.replace(new RegExp('\\{([^}]+)\\}([:\\-!\\,\\. ]*)', 'g'), (match, key, nonWordSeparator, position, allString) => {
+    strFinal = strFinal.replace(new RegExp('\\{([^}]+)\\}([:\\-!\\,\\. ]*)', 'g'), (match, key, nextNonWordCharacters, position, allString) => {
       const parts = key.split(':');
       const pathsStr = parts[0]; // может быть комплексным \ вложенным
       const type = parts[1];
@@ -73,13 +72,43 @@ export function formatString(str, ...args) {
       }
 
       if (itemFormatterFn) {
-        return itemFormatterFn(pathsStr, nonWordSeparator, type, mask, value, position, allString);
+        value = itemFormatterFn(pathsStr, value, type, mask, nextNonWordCharacters, position, allString);
       }
 
       return value
-        ? `${value}${nonWordSeparator}`
+        ? addNextNonWordCharacters
+          ? `${value}${nextNonWordCharacters}`
+          : value
         : '';
     });
   }
   return strFinal;
+}
+/**
+ *
+ * @param str
+ * @param args
+ * - либо один параметр - мапа с параметрами ключ:значение
+ * - либо остальные стринги \ намбер - последовательно добавляются
+ * - последний параметр может быть функция реплейсмент (path, значение из мапы если есть, type, mask, nextNonWordCharacters, position, allString)
+ *   важно использовать nonWordSeparator (пустое место до следующего элемента), ибо по умолчанию для функции оно не подставляется. Это нужно чтобы иметь возможность менять его в функции
+ * @returns {*}
+ */
+export function formatString(str, ...args) {
+  return formatStringInner(true, str, ...args);
+}
+
+/**
+ * автоматически не добавляет nextNonWordCharacters
+ *
+ * @param str
+ * @param args
+ * - либо один параметр - мапа с параметрами ключ:значение
+ * - либо остальные стринги \ намбер - последовательно добавляются
+ * - последний параметр может быть функция реплейсмент (path, значение из мапы если есть, type, mask, nextNonWordCharacters, position, allString)
+ *   важно использовать nextNonWordCharacters (пустое место до следующего элемента), ибо по умолчанию для функции оно не подставляется. Это нужно чтобы иметь возможность менять его в функции
+ * @returns {*}
+ */
+export function formatStringWithoutAutoSpaces(str, ...args) {
+  return formatStringInner(false, str, ...args);
 }
