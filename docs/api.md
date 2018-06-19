@@ -40,14 +40,14 @@
 -   [findInTree][36]
 -   [findInTree][37]
 -   [arrayToTree][38]
--   [formatString][39]
+-   [createApiConfig][39]
 -   [createApiConfig][40]
--   [createApiConfig][41]
--   [titledDecorator][42]
--   [updatePathIfChange][43]
--   [onPropsUpdate][44]
--   [onStatusPropUpdate][45]
--   [formatDate][46]
+-   [titledDecorator][41]
+-   [updatePathIfChange][42]
+-   [onPropsUpdate][43]
+-   [onStatusPropUpdate][44]
+-   [formatDate][45]
+-   [formatString][46]
 -   [init][47]
 -   [translateDefault][48]
 -   [i18nContextProvider][49]
@@ -446,16 +446,6 @@ Returns **{result: any, isRoot: [boolean][82], pathStr: [string][80]}**
 -   **deprecated**: use tree-utils.js arrayToTree
 
 
-## formatString
-
-**Parameters**
-
--   `str`  
--   `args` **...any** либо один параметр - мапа с параметрами ключ:значение-   либо остальные стринги \\ намбер - последовательно добавляются
-    -   последний параметр может быть функция реплейсмент (ключ, значение из мапы если есть, position, allString)
-
-Returns **any** 
-
 ## createApiConfig
 
 Создание настроек для клиенской части и их роутинг через плагину на серверной
@@ -567,6 +557,17 @@ Returns **[function][84]**
     -   `options.cutCurrentYear` **[Boolean][82]** Если `true`, то дата без указания года (optional, default `true`)
 
 Returns **[String][80]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+
+## formatString
+
+**Parameters**
+
+-   `str`  
+-   `args` **...any** либо один параметр - мапа с параметрами ключ:значение-   либо остальные стринги \\ намбер - последовательно добавляются
+    -   последний параметр может быть функция реплейсмент (path,nonWordSeparator, type, mask, значение из мапы если есть, position, allString)
+        важно использовать nonWordSeparator (пустое место до следующего элемента), ибо по умолчанию для функции оно не подставляется. Это нужно чтобы иметь возможность менять его в функции
+
+Returns **any** 
 
 ## init
 
@@ -959,21 +960,21 @@ Returns **any** Promise
 
 [38]: #arraytotree
 
-[39]: #formatstring
+[39]: #createapiconfig
 
-[40]: #createapiconfig
+[40]: #createapiconfig-1
 
-[41]: #createapiconfig-1
+[41]: #titleddecorator
 
-[42]: #titleddecorator
+[42]: #updatepathifchange
 
-[43]: #updatepathifchange
+[43]: #onpropsupdate
 
-[44]: #onpropsupdate
+[44]: #onstatuspropupdate
 
-[45]: #onstatuspropupdate
+[45]: #formatdate
 
-[46]: #formatdate
+[46]: #formatstring
 
 [47]: #init
 
