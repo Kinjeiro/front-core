@@ -39,7 +39,6 @@ const appStyleConfig = require(useFromFrontCore
   : inCoreProject('lib/common/app-style/vars.js')
 );
 
-console.warn('ANKU , hasContextRoot', hasContextRoot);
 const context = {
   PROCESS_PATH,
   ENV,
