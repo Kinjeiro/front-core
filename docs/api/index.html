@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.18 | Documentation</title>
+  <title>@reagentum/front-core 1.3.19 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.18</code></div>
+          <div class='mb1'><code>1.3.19</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -497,9 +497,29 @@
               
                 
                 <li><a
+                  href='#formatstringinner'
+                  class="">
+                  formatStringInner
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#formatstring'
                   class="">
                   formatString
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#formatstringwithoutautospaces'
+                  class="">
+                  formatStringWithoutAutoSpaces
                   
                 </a>
                 
@@ -4160,6 +4180,94 @@ accountId: PropTypes.number,
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='formatstringinner'>
+      formatStringInner
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>formatStringInner(addNextNonWordCharacters: any, str: any, args: ...any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>addNextNonWordCharacters</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>str</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...any)</code>
+	    либо один параметр - мапа с параметрами ключ:значение
+<ul>
+<li>либо остальные стринги \ намбер - последовательно добавляются</li>
+<li>последний параметр может быть функция реплейсмент (path, значение из мапы если есть, type, mask, nextNonWordCharacters, position, allString)</li>
+</ul>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='formatstring'>
       formatString
     </h3>
@@ -4199,8 +4307,90 @@ accountId: PropTypes.number,
 	    либо один параметр - мапа с параметрами ключ:значение
 <ul>
 <li>либо остальные стринги \ намбер - последовательно добавляются</li>
-<li>последний параметр может быть функция реплейсмент (path,nonWordSeparator, type, mask, значение из мапы если есть, position, allString)
+<li>последний параметр может быть функция реплейсмент (path, значение из мапы если есть, type, mask, nextNonWordCharacters, position, allString)
 важно использовать nonWordSeparator (пустое место до следующего элемента), ибо по умолчанию для функции оно не подставляется. Это нужно чтобы иметь возможность менять его в функции</li>
+</ul>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='formatstringwithoutautospaces'>
+      formatStringWithoutAutoSpaces
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>автоматически не добавляет nextNonWordCharacters</p>
+
+
+  <div class='pre p1 fill-light mt0'>formatStringWithoutAutoSpaces(str: any, args: ...any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>str</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...any)</code>
+	    либо один параметр - мапа с параметрами ключ:значение
+<ul>
+<li>либо остальные стринги \ намбер - последовательно добавляются</li>
+<li>последний параметр может быть функция реплейсмент (path, значение из мапы если есть, type, mask, nextNonWordCharacters, position, allString)
+важно использовать nextNonWordCharacters (пустое место до следующего элемента), ибо по умолчанию для функции оно не подставляется. Это нужно чтобы иметь возможность менять его в функции</li>
 </ul>
 
           </div>
