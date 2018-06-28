@@ -191,6 +191,8 @@ export default class ReduxTable extends ReduxUni {
       });
     }
 
+    // todo @ANKU @LOW - actionRemoveRecord
+
     if (apiBulkChangeStatus) {
       actions.actionBulkChangeStatus = (tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus) => {
         return {
