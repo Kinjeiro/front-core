@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.20 | Documentation</title>
+  <title>@reagentum/front-core 1.3.21 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.20</code></div>
+          <div class='mb1'><code>1.3.21</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1521,13 +1521,13 @@
 actionModuleItemInit(TABLE_ID)
 и можно пользоваться всеми экщенами</p>
 <p>Экшены
-actionModuleItemInit(entityId, data = undefined)
-actionModuleItemUpdate(entityId, data)
-actionModuleItemRemove(entityId)</p>
+actionModuleItemInit(tableUuid, data = undefined)
+actionModuleItemUpdate(tableUuid, data)
+actionModuleItemRemove(tableUuid)</p>
 <p>actionClearFilters(tableUuid)</p>
 <p>actionChangeRecordsSelected(tableUuid, recordIds, selected)
-actionChangeRecordsSelectedAll(type, isSelectedAll)
-actionClearRecordSelection(type)</p>
+actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
+actionClearRecordSelection(tableUuid)</p>
 <p>actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
 actionEditRecord(tableUuid, recordId, patchOperations)
 actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)</p>

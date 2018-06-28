@@ -169,9 +169,9 @@ actionModuleItemInit(TABLE_ID)
 и можно пользоваться всеми экщенами
 
 Экшены
-actionModuleItemInit(entityId, data = undefined)
-actionModuleItemUpdate(entityId, data)
-actionModuleItemRemove(entityId)
+actionModuleItemInit(tableUuid, data = undefined)
+actionModuleItemUpdate(tableUuid, data)
+actionModuleItemRemove(tableUuid)
 
 actionClearFilters(tableUuid)
 
