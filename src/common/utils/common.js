@@ -270,3 +270,11 @@ export function checkExist(value, error = 'Произошла ошибка', not
   }
   return true;
 }
+
+export function wrapToArray(value = null) {
+  return Array.isArray(value)
+    ? value
+    : value === null || value === ''
+      ? []
+      : [value];
+}
