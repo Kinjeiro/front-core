@@ -2,6 +2,8 @@
 import FileSaver from 'file-saver';
 import { applyPatch } from 'fast-json-patch';
 
+import apiConfig from './create-api-config';
+
 // https://tools.ietf.org/html/rfc6902
 export const PATCH_OPERATIONS = {
   REPLACE: 'replace',
@@ -426,4 +428,45 @@ export function downloadText(text, fileName = null) {
 
 export function downloadFileFromResponse(response, fileName) {
   return downloadFile(response.data || response.text, fileName, response.type);
+}
+
+export function createCrudApi(API_PREFIX, sendApiFn) {
+  const API_CONFIGS = {
+    loadEntities: apiConfig(`/${API_PREFIX}`, 'GET'),
+
+    createEntity: apiConfig(`/${API_PREFIX}`, 'POST'),
+    readEntity: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
+    updateEntity: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
+    deleteEntity: apiConfig(`/${API_PREFIX}/{id}`, 'DELETE'),
+  };
+
+  function apiLoadEntities(type, meta = null, filters = null) {
+    return sendApiFn(API_CONFIGS.loadEntities, {
+      type,
+      meta,
+      filters,
+    });
+  }
+  function apiCreateEntity(data) {
+    return sendApiFn(API_CONFIGS.createEntity, data);
+  }
+  function apiReadEntity(id) {
+    return sendApiFn(API_CONFIGS.readEntity, null, { pathParams: { id } });
+  }
+  function apiUpdateEntity(id, patchOperations) {
+    return sendApiFn(API_CONFIGS.updateEntity, patchOperations, { pathParams: { id } });
+  }
+  function apiDeleteEntity(id) {
+    return sendApiFn(API_CONFIGS.deleteEntity, null, { pathParams: { id } });
+  }
+
+  return {
+    API_PREFIX,
+    API_CONFIGS,
+    apiLoadEntities,
+    apiCreateEntity,
+    apiReadEntity,
+    apiUpdateEntity,
+    apiDeleteEntity,
+  };
 }

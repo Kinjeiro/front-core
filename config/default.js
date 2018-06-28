@@ -402,7 +402,12 @@ module.exports = {
       authApiService: createEndpointServiceConfig({
         port: 1337,
         endpoint: 'api'
-      })
+      }),
+
+      /**
+       * Дефолтный middleware (для него в \src\server\helpers\middleware-api.js есть методы по умолчанию send и proxy
+       */
+      middlewareApiService: null
     }
 
     // рестовый сервисов не должно быть, для единообразия все запросы которые не проксируются через apiConfig.serviceUrl
