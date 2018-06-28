@@ -260,3 +260,13 @@ export function findInTree(tree, id, config = {}, deep = 0, path = [], pathStr =
 export function arrayToTree(array, options = {}, parent = null, level = 0) {
   return arrayToTreeLib(array, options, parent, level);
 }
+
+export function checkExist(value, error = 'Произошла ошибка', notEmpty = false, throwError = true) {
+  if (value === null || typeof value === 'undefined' || (notEmpty && (value === '' || value.length === 0))) {
+    if (throwError) {
+      throw new Error(error);
+    }
+    return false;
+  }
+  return true;
+}
