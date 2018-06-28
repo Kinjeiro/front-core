@@ -176,8 +176,8 @@ actionModuleItemRemove(entityId)
 actionClearFilters(tableUuid)
 
 actionChangeRecordsSelected(tableUuid, recordIds, selected)
-actionChangeRecordsSelectedAll(type, isSelectedAll)
-actionClearRecordSelection(type)
+actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
+actionClearRecordSelection(tableUuid)
 
 actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
 actionEditRecord(tableUuid, recordId, patchOperations)

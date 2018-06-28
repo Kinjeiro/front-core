@@ -12,15 +12,15 @@ export const TYPES = MODULE.TYPES;
  и можно пользоваться всеми экщенами
 
  Экшены
- actionModuleItemInit(entityId, data = undefined)
- actionModuleItemUpdate(entityId, data)
- actionModuleItemRemove(entityId)
+ actionModuleItemInit(tableUuid, data = undefined)
+ actionModuleItemUpdate(tableUuid, data)
+ actionModuleItemRemove(tableUuid)
 
  actionClearFilters(tableUuid)
 
  actionChangeRecordsSelected(tableUuid, recordIds, selected)
- actionChangeRecordsSelectedAll(type, isSelectedAll)
- actionClearRecordSelection(type)
+ actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
+ actionClearRecordSelection(tableUuid)
 
  actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
  actionEditRecord(tableUuid, recordId, patchOperations)

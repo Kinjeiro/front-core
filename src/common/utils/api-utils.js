@@ -432,41 +432,41 @@ export function downloadFileFromResponse(response, fileName) {
 
 export function createCrudApi(API_PREFIX, sendApiFn) {
   const API_CONFIGS = {
-    loadEntities: apiConfig(`/${API_PREFIX}`, 'GET'),
+    loadRecords: apiConfig(`/${API_PREFIX}`, 'GET'),
 
-    createEntity: apiConfig(`/${API_PREFIX}`, 'POST'),
-    readEntity: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
-    updateEntity: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
-    deleteEntity: apiConfig(`/${API_PREFIX}/{id}`, 'DELETE'),
+    createRecord: apiConfig(`/${API_PREFIX}`, 'POST'),
+    readRecord: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
+    updateRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
+    deleteRecord: apiConfig(`/${API_PREFIX}/{id}`, 'DELETE'),
   };
 
-  function apiLoadEntities(type, meta = null, filters = null) {
-    return sendApiFn(API_CONFIGS.loadEntities, {
+  function apiLoadRecords(type, meta = null, filters = null) {
+    return sendApiFn(API_CONFIGS.loadRecords, {
       type,
       meta,
       filters,
     });
   }
-  function apiCreateEntity(data) {
-    return sendApiFn(API_CONFIGS.createEntity, data);
+  function apiCreateRecord(data) {
+    return sendApiFn(API_CONFIGS.createRecord, data);
   }
-  function apiReadEntity(id) {
-    return sendApiFn(API_CONFIGS.readEntity, null, { pathParams: { id } });
+  function apiReadRecord(id) {
+    return sendApiFn(API_CONFIGS.readRecord, null, { pathParams: { id } });
   }
-  function apiUpdateEntity(id, patchOperations) {
-    return sendApiFn(API_CONFIGS.updateEntity, patchOperations, { pathParams: { id } });
+  function apiUpdateRecord(id, patchOperations) {
+    return sendApiFn(API_CONFIGS.updateRecord, patchOperations, { pathParams: { id } });
   }
-  function apiDeleteEntity(id) {
-    return sendApiFn(API_CONFIGS.deleteEntity, null, { pathParams: { id } });
+  function apiDeleteRecord(id) {
+    return sendApiFn(API_CONFIGS.deleteRecord, null, { pathParams: { id } });
   }
 
   return {
     API_PREFIX,
     API_CONFIGS,
-    apiLoadEntities,
-    apiCreateEntity,
-    apiReadEntity,
-    apiUpdateEntity,
-    apiDeleteEntity,
+    apiLoadRecords,
+    apiCreateRecord,
+    apiReadRecord,
+    apiUpdateRecord,
+    apiDeleteRecord,
   };
 }

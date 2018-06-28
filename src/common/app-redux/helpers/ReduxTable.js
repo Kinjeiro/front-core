@@ -105,17 +105,17 @@ export default class ReduxTable extends ReduxUni {
         };
       },
 
-      actionChangeRecordsSelectedAll(type, isSelectedAll) {
+      actionChangeRecordsSelectedAll(tableUuid, isSelectedAll) {
         return {
-          [FIELD_UUID]: type,
+          [FIELD_UUID]: tableUuid,
           type: TYPES.CHANGE_SELECTED_ALL,
           payload: isSelectedAll,
         };
       },
 
-      actionClearRecordSelection(type) {
+      actionClearRecordSelection(tableUuid) {
         return {
-          [FIELD_UUID]: type,
+          [FIELD_UUID]: tableUuid,
           type: TYPES.CLEAR_SELECTION,
         };
       },
