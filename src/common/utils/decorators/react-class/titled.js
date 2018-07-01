@@ -66,7 +66,11 @@ export default function titledDecorator(
       }
 
       render() {
-        return <ReactComponentClass { ...this.props } />;
+        return (
+          <ReactComponentClass
+            { ...this.props }
+          />
+        );
       }
     }
 

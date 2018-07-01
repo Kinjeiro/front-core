@@ -1,3 +1,6 @@
+/**
+ * @deprecated - чтобы не подгружались все лишние компоненты, нужно не импортить index.js а писать полный путь
+ */
 export Info404 from './Info404/Info404';
 export ThemeProvider from './ThemeProvider/ThemeProvider';
 export UniError from './UniError/UniError';

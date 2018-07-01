@@ -74,6 +74,19 @@ export default class ReduxTable extends ReduxUni {
   // ======================================================
   // ACTIONS
   // ======================================================
+  /**
+   В зависимости есть ли нужный api:
+   - apiLoadRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
+   - apiEditRecord -> actionEditRecord(tableUuid, recordId, patchOperations)
+   - apiBulkChangeStatus -> actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)
+
+   Остальные синхронные методы:
+   - actionClearFilters(tableUuid)
+
+   - actionChangeRecordsSelected(tableUuid, recordIds, selected)
+   - actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
+   - actionClearRecordSelection(tableUuid)
+   */
   getBindActions(api = {}, TYPES = this.getTypes(this.getPrefix())) {
     const {
       /**

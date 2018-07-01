@@ -38,7 +38,8 @@ import TestDomain from '../../models/domains/TestDomain';
 // ======================================================
 import { TEST_PERMISSION } from '../../constants/permissions';
 import { USER_INFO_PROPS } from '../../models';
-import { ListItem } from '../../components';
+import ListItem from '../../components/ListItem/ListItem';
+import Link from '../../components/Link/Link';
 
 import './StubPage.css';
 
@@ -259,6 +260,12 @@ export default class StubPage extends Component {
           >
             Load test get with auth check
           </button>
+        </div>
+
+        <div>
+          <Link onClick={ () => alert('opa') }>
+            Test Link
+          </Link>
         </div>
       </div>
     );

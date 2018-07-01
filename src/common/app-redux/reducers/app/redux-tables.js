@@ -10,21 +10,22 @@ export const TYPES = MODULE.TYPES;
  Нужно в контейнере инициализровать таблицу через метод с уникальным TABLE_ID
  actionModuleItemInit(TABLE_ID)
  и можно пользоваться всеми экщенами
+ либо просто обернуть в декоратор - \src\common\utils\decorators\react-class\redux-table.jsx
 
  Экшены
  actionModuleItemInit(tableUuid, data = undefined)
  actionModuleItemUpdate(tableUuid, data)
  actionModuleItemRemove(tableUuid)
 
+ actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
+ actionEditRecord(tableUuid, recordId, patchOperations)
+ actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)
+
  actionClearFilters(tableUuid)
 
  actionChangeRecordsSelected(tableUuid, recordIds, selected)
  actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
  actionClearRecordSelection(tableUuid)
-
- actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
- actionEditRecord(tableUuid, recordId, patchOperations)
- actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)
 */
 export const getBindActions = MODULE.getBindActions;
 export const reducer = MODULE.moduleReducer;
