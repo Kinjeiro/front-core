@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.21 | Documentation</title>
+  <title>@reagentum/front-core 1.3.22 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.21</code></div>
+          <div class='mb1'><code>1.3.22</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -147,6 +147,16 @@
               
                 
                 <li><a
+                  href='#getbindactions'
+                  class="">
+                  getBindActions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#apiloadrecords'
                   class="">
                   apiLoadRecords
@@ -200,6 +210,16 @@
                   href='#initconfig'
                   class="">
                   initConfig
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#info404'
+                  class="">
+                  Info404
                   
                 </a>
                 
@@ -1460,6 +1480,96 @@
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getbindactions'>
+      getBindActions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>В зависимости есть ли нужный api:</p>
+<ul>
+<li>apiLoadRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)</li>
+<li>apiEditRecord -> actionEditRecord(tableUuid, recordId, patchOperations)</li>
+<li>apiBulkChangeStatus -> actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)</li>
+</ul>
+<p>Остальные синхронные методы:</p>
+<ul>
+<li>
+<p>actionClearFilters(tableUuid)</p>
+</li>
+<li>
+<p>actionChangeRecordsSelected(tableUuid, recordIds, selected)</p>
+</li>
+<li>
+<p>actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)</p>
+</li>
+<li>
+<p>actionClearRecordSelection(tableUuid)</p>
+</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>getBindActions(api: any, TYPES: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>api</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>TYPES</span> <code class='quiet'>(any
+            = <code>this.getTypes(this.getPrefix())</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='apiloadrecords'>
       apiLoadRecords
     </h3>
@@ -1519,18 +1629,19 @@
 Поэтому от этого файла достаточно только actions</p>
 <p>Нужно в контейнере инициализровать таблицу через метод с уникальным TABLE_ID
 actionModuleItemInit(TABLE_ID)
-и можно пользоваться всеми экщенами</p>
+и можно пользоваться всеми экщенами
+либо просто обернуть в декоратор - \src\common\utils\decorators\react-class\redux-table.jsx</p>
 <p>Экшены
 actionModuleItemInit(tableUuid, data = undefined)
 actionModuleItemUpdate(tableUuid, data)
 actionModuleItemRemove(tableUuid)</p>
+<p>actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
+actionEditRecord(tableUuid, recordId, patchOperations)
+actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)</p>
 <p>actionClearFilters(tableUuid)</p>
 <p>actionChangeRecordsSelected(tableUuid, recordIds, selected)
 actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
 actionClearRecordSelection(tableUuid)</p>
-<p>actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
-actionEditRecord(tableUuid, recordId, patchOperations)
-actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)</p>
 
 
   <div class='pre p1 fill-light mt0'>getBindActions</div>
@@ -1832,6 +1943,53 @@ actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, o
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='info404'>
+      Info404
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>Info404</div>
+  
+  
+
+  <div>Deprecated: чтобы не подгружались все лишние компоненты, нужно не импортить index.js а писать полный путь
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
   
 
   
