@@ -1,14 +1,15 @@
-import PropTypes from 'prop-types';
+import * as model from './model-action-status';
 
-export const MAP = {
-  isFetching: PropTypes.bool,
-  isLoaded: PropTypes.bool,
-  isFailed: PropTypes.bool,
-  isResponseNotEmpty: PropTypes.bool,
-  errorType: PropTypes.string,
-  errorMessage: PropTypes.string,
-};
+/**
+ * @deprecated - use model-action-status
+ */
+export const MAP = model.ACTION_STATUS_PROP_TYPE_MAP;
+/**
+ * @deprecated - use model-action-status
+ */
+export const STATUS_PROP = model.ACTION_STATUS_PROP_TYPE;
 
-const STATUS_PROPS = PropTypes.shape(MAP);
-
-export default STATUS_PROPS;
+/**
+ * @deprecated - use model-action-status
+ */
+export default STATUS_PROP;

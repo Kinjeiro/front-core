@@ -100,6 +100,33 @@ export function getTables(globalState) {
 export function getTableItem(globalState, tableUuid) {
   return getTables(globalState).byIds[tableUuid];
 }
+/**
+ * @param globalState
+ * @param tableUuid
+ *
+ *
+ * @returns -
+    {
+      records: [],
+      meta: {
+        search: null,
+        startPage: 0,
+        itemsPerPage: 10,
+        sortBy: null,
+        sortDesc: true,
+        total: null,
+      },
+      filters: {
+        // field: value
+      },
+      selected: [],
+      isSelectedAll: false,
+
+      actionLoadRecordsStatus: undefined,
+      actionBulkChangeStatusStatus: undefined,
+      actionEditRecordStatusMap: {}
+    }
+ */
 export function getTableInfo(globalState, tableUuid) {
   const tableItem = getTableItem(globalState, tableUuid);
   return tableItem ? tableItem.data : tableItem;

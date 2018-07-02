@@ -7,6 +7,7 @@ import logger from '../helpers/client-logger';
 
 // import { ExtendableError } from 'common/utils/common';
 
+
 const ERROR_NOT_FOUND_CODES = [
   'ETIMEDOUT',
   'ECONNREFUSED',
@@ -35,23 +36,13 @@ export const UNI_ERROR_FROM = {
   FROM_PROJECT_FORMAT: 'FROM_PROJECT_FORMAT',
 };
 
-export const MAP = {
+
+export const UNI_ERROR_PROP_TYPE_MAP = {
   isUniError: PropTypes.bool,
 
   errorCode: PropTypes.string,
   responseStatusCode: PropTypes.number,
   isServerError: PropTypes.bool,
-
-  clientErrorTitle: PropTypes.node,
-  /**
-   * @deprecated - use clientErrorMessages
-   */
-  clientErrorMessage: PropTypes.node,
-  clientErrorMessages: PropTypes.arrayOf(PropTypes.node),
-
-  message: PropTypes.node,
-  stack: PropTypes.any,
-
   errorFrom: PropTypes.oneOf([
     UNI_ERROR_FROM.FROM_CREATE,
     UNI_ERROR_FROM.FROM_ERROR,
@@ -60,6 +51,17 @@ export const MAP = {
     UNI_ERROR_FROM.FROM_BOOM_RESPONSE,
     UNI_ERROR_FROM.FROM_BOOM_ERROR,
   ]),
+
+  clientErrorTitle: PropTypes.node,
+  /**
+   * @deprecated - use clientErrorMessages
+   */
+  clientErrorMessage: PropTypes.node,
+  clientErrorMessages: PropTypes.arrayOf(PropTypes.node),
+  message: PropTypes.node,
+
+  stack: PropTypes.any,
+
   originalObject: PropTypes.any,
 
   // calculated
@@ -72,7 +74,38 @@ export const MAP = {
   isNotFound: PropTypes.bool,
   isNotAuth: PropTypes.bool,
 };
-export const UNI_ERROR_PROP_TYPE = PropTypes.shape(MAP);
+
+/**
+ * @deprecated - use UNI_ERROR_PROP_TYPE_MAP
+ */
+export const MAP = UNI_ERROR_PROP_TYPE_MAP;
+export const UNI_ERROR_PROP_TYPE = PropTypes.shape(UNI_ERROR_PROP_TYPE_MAP);
+
+export const UNI_ERROR_DEFAULT_VALUE = {
+  isUniError: true,
+
+  errorCode: undefined,
+  responseStatusCode: undefined,
+  isServerError: false,
+  errorFrom: UNI_ERROR_FROM.FROM_CREATE,
+
+  clientErrorTitle: undefined,
+  clientErrorMessages: undefined,
+  clientErrorMessage: undefined,
+  message: undefined,
+
+  stack: undefined,
+
+  originalObject: undefined,
+
+  // calculated
+  uniCode: undefined,
+  uniMessage: undefined,
+  uniMessages: undefined,
+  isNotFound: false,
+  isNotAuth: false,
+};
+
 
 function checkProperties(obj, ...props) {
   return props.every((prop) => Object.prototype.hasOwnProperty.call(obj, prop));
@@ -109,30 +142,7 @@ export function createUniError(uniErrorData = {}) {
     uniErrorData.clientErrorMessages = [uniErrorData.clientErrorMessage];
   }
 
-  const defaultValues = {
-    isUniError: true,
-
-    errorCode: undefined,
-    responseStatusCode: undefined,
-    isServerError: false,
-    errorFrom: UNI_ERROR_FROM.FROM_CREATE,
-
-    clientErrorTitle: undefined,
-    clientErrorMessages: undefined,
-    clientErrorMessage: undefined,
-    message: undefined,
-
-    stack: undefined,
-
-    originalObject: undefined,
-
-    // calculated
-    uniCode: undefined,
-    uniMessage: undefined,
-    uniMessages: undefined,
-    isNotFound: false,
-    isNotAuth: false,
-  };
+  const defaultValues = UNI_ERROR_DEFAULT_VALUE;
 
   const uniError = merge({}, defaultValues, uniErrorData);
 
