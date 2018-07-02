@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.22 | Documentation</title>
+  <title>@reagentum/front-core 1.3.23 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.22</code></div>
+          <div class='mb1'><code>1.3.23</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -177,6 +177,16 @@
               
                 
                 <li><a
+                  href='#gettableinfo'
+                  class="">
+                  getTableInfo
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#createfilteredreducer'
                   class="">
                   createFilteredReducer
@@ -287,6 +297,86 @@
               
                 
                 <li><a
+                  href='#map'
+                  class="">
+                  MAP
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#map'
+                  class="">
+                  MAP
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#map'
+                  class="">
+                  MAP
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#status_prop'
+                  class="">
+                  STATUS_PROP
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#action-status'
+                  class="">
+                  action-status
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#action_status_props'
+                  class="">
+                  ACTION_STATUS_PROPS
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#uni_error_props'
+                  class="">
+                  UNI_ERROR_PROPS
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#user_info_props'
+                  class="">
+                  USER_INFO_PROPS
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#from_boom'
                   class="">
                   FROM_BOOM
@@ -360,6 +450,26 @@
                   href='#parsefromboomerror'
                   class="">
                   parseFromBoomError
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#default_values'
+                  class="">
+                  DEFAULT_VALUES
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#user-info'
+                  class="">
+                  user-info
                   
                 </a>
                 
@@ -1680,6 +1790,99 @@ actionClearRecordSelection(tableUuid)</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='gettableinfo'>
+      getTableInfo
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>getTableInfo(globalState: any, tableUuid: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>globalState</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>tableUuid</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        {
+records: [],
+meta: {
+search: null,
+startPage: 0,
+itemsPerPage: 10,
+sortBy: null,
+sortDesc: true,
+total: null,
+},
+filters: {
+// field: value
+},
+selected: [],
+isSelectedAll: false,
+<p>actionLoadRecordsStatus: undefined,
+actionBulkChangeStatusStatus: undefined,
+actionEditRecordStatusMap: {}
+}</p>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='createfilteredreducer'>
       createFilteredReducer
     </h3>
@@ -2326,6 +2529,382 @@ actionClearRecordSelection(tableUuid)</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='map'>
+      MAP
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>MAP</div>
+  
+  
+
+  <div>Deprecated: use model-action-status
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='map'>
+      MAP
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>MAP</div>
+  
+  
+
+  <div>Deprecated: use UNI_ERROR_PROP_TYPE_MAP
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='map'>
+      MAP
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>MAP</div>
+  
+  
+
+  <div>Deprecated: use model-user-info
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='status_prop'>
+      STATUS_PROP
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>STATUS_PROP</div>
+  
+  
+
+  <div>Deprecated: use model-action-status
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='action-status'>
+      action-status
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>action-status</div>
+  
+  
+
+  <div>Deprecated: use model-action-status
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='action_status_props'>
+      ACTION_STATUS_PROPS
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>ACTION_STATUS_PROPS</div>
+  
+  
+
+  <div>Deprecated: use ACTION_STATUS_PROP_TYPE
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='uni_error_props'>
+      UNI_ERROR_PROPS
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>UNI_ERROR_PROPS</div>
+  
+  
+
+  <div>Deprecated: use UNI_ERROR_PROP_TYPE
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='user_info_props'>
+      USER_INFO_PROPS
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>USER_INFO_PROPS</div>
+  
+  
+
+  <div>Deprecated: use USER_INFO_PROP_TYPE
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='from_boom'>
       FROM_BOOM
     </h3>
@@ -2759,6 +3338,100 @@ actionClearRecordSelection(tableUuid)</p>
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='default_values'>
+      DEFAULT_VALUES
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>DEFAULT_VALUES</div>
+  
+  
+
+  <div>Deprecated: use model-user-info
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='user-info'>
+      user-info
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>user-info</div>
+  
+  
+
+  <div>Deprecated: use model-user-info
+</div>
+  
+  
+  
+  
+  
+
   
 
   
