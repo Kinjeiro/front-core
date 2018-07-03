@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.23 | Documentation</title>
+  <title>@reagentum/front-core 1.3.24 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.23</code></div>
+          <div class='mb1'><code>1.3.24</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -280,6 +280,36 @@
                   href='#'
                   class="">
                   
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#bind'
+                  class="">
+                  bind
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#decoratorcontextmodules'
+                  class="">
+                  decoratorContextModules
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#rootappcomponentprops'
+                  class="">
+                  rootAppComponentProps
                   
                 </a>
                 
@@ -2428,6 +2458,187 @@ actionEditRecordStatusMap: {}
 
   <div>Deprecated: use src/routes-pathes.js
 </div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='bind'>
+      bind
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Полный путь до ресурса с учетом префикса различных модулей</p>
+
+
+  <div class='pre p1 fill-light mt0'>bind</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>relativeLocation</span> <code class='quiet'>(any)</code>
+	    LocationDescription - see model-location.js
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>moduleName</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='decoratorcontextmodules'>
+      decoratorContextModules
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Декорирует компонент и добавляет в него:</p>
+<ul>
+<li>getFullPath(location, moduleName)</li>
+<li>onGoTo(location, moduleName)</li>
+<li>match</li>
+<li>location</li>
+</ul>
+<p>location - LocationDescriptor (see \src\common\models\model-location.js)</p>
+
+
+  <div class='pre p1 fill-light mt0'>decoratorContextModules</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='rootappcomponentprops'>
+      rootAppComponentProps
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>themeProviderProps: {},
+modulesProviderProps: {
+moduleToRoutePrefixMap: {}
+}</p>
+
+
+  <div class='pre p1 fill-light mt0'>rootAppComponentProps</div>
+  
+  
+
+  
   
   
   
