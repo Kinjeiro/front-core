@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,7 +8,9 @@ import {
   executeVariable,
 } from '../../common';
 
+import { getTableInfo } from '../../../app-redux/selectors';
 import * as reduxTables from '../../../app-redux/reducers/app/redux-tables';
+import TABLE_PROP_TYPE from '../../../models/model-table';
 
 // эти методы можно и без апи использовать
 const {
@@ -20,11 +23,16 @@ const {
  * Автоматически инициализирует в redux store под tables свои данные и при выходе их очищает
  * @param tableId - айди таблицы, или функция (props) => id
  * @param clearOnUnmount - очищать ли данные, когда компонент unmount
+ *
+ * Возвращает компонент с доп пропертями:
+ * - table - текущая данные таблицы
 */
 export default function reduxTableDecorator(tableId = generateId(), clearOnUnmount = true) {
   return (ReactComponentClass) => {
     @connect(
-      null,
+      (globalState) => ({
+        table: getTableInfo(globalState, tableId),
+      }),
       {
         actionModuleItemInit,
         actionModuleItemRemove,
@@ -32,6 +40,7 @@ export default function reduxTableDecorator(tableId = generateId(), clearOnUnmou
     )
     class ExtendedComponent extends Component {
       static propTypes = {
+        table: TABLE_PROP_TYPE,
         actionModuleItemInit: PropTypes.func,
         actionModuleItemRemove: PropTypes.func,
       };
