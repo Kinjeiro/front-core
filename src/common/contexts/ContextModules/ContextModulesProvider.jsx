@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { joinUri } from '../../utils/uri-utils';
+import { getModuleFullPath } from '../../utils/uri-utils';
 
 import { actions as modulesActions } from '../../app-redux/reducers/app/redux-modules';
 // import i18n from '../../utils/i18n';
@@ -73,32 +73,12 @@ export default class ContextModulesProvider extends Component {
   // ======================================================
   // UTILS
   // ======================================================
-  /**
-   * Полный путь до ресурса с учетом префикса различных модулей
-   * @param relativeLocation - LocationDescription - see model-location.js
-   * @param moduleName
-   * @returns {*}
-   */
   @bind()
   getFullPath(relativeLocation, moduleName = null) {
     const {
       moduleToRoutePrefixMap,
     } = this.props;
-
-    const prefix = moduleToRoutePrefixMap[moduleName];
-
-    if (!prefix) {
-      return relativeLocation;
-    }
-
-    if (typeof relativeLocation === 'object') {
-      return {
-        ...relativeLocation,
-        pathname: joinUri('/', prefix, relativeLocation.pathname),
-      };
-    }
-
-    return joinUri('/', prefix, relativeLocation);
+    return getModuleFullPath(relativeLocation, moduleName, moduleToRoutePrefixMap);
   }
 
   @bind()

@@ -8,7 +8,7 @@ import { convertToString } from './common';
 const pathModule = pathLib.posix || pathLib;
 
 // на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
-const joinUriInner = pathModule.join;
+const joinPathInner = pathModule.join;
 export const normalize = pathModule.normalize;
 export const resolve = pathModule.resolve;
 
@@ -88,17 +88,35 @@ export function formatUrlParameters(params, url = '', hash = '', useBracket = fa
   return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
 
-export function joinUri(...paths) {
+/**
+ * Конкатинация кусков path (в переди всегда проставляется '/')
+ *
+ * @param paths - пути, который нужно объединить
+ * Последним параметром может быть мапа queryParams которая преобразуется в строку
+ * @returns {*}
+ */
+export function joinPath(...paths) {
   const lastUrlParameters = paths.length > 1 && paths[paths.length - 1];
   if (typeof lastUrlParameters === 'object') {
     // url parameters
     return formatUrlParameters(
       lastUrlParameters,
-      joinUriInner('/', ...convertToString(...paths.slice(0, paths.length - 1))),
+      joinPathInner('/', ...convertToString(...paths.slice(0, paths.length - 1))),
     );
   }
 
-  return joinUriInner('/', ...convertToString(...paths));
+  return joinPathInner('/', ...convertToString(...paths));
+}
+
+
+/**
+ * @deprecated - use joinPath
+ *
+ * @param paths
+ * @returns {*}
+ */
+export function joinUri(...paths) {
+  return joinPath(...paths);
 }
 
 export function getLocationUrlParameters(defaultValues = {}) {
@@ -149,4 +167,29 @@ export function updateHash(hash, affectHistory) {
 export function getHash() {
   // return window.location.hash.slice(1);
   return window.location.hash.replace(/^#/, '');
+}
+
+/**
+ * Полный путь до ресурса с учетом префикса различных модулей
+ *
+ * @param relativeLocation - LocationDescription - @see model-location.js
+ * @param moduleName
+ * @param modulesPrefixes - мапа: moduleName => prefix
+ * @returns {*}
+ */
+export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes = {}) {
+  const prefix = modulesPrefixes[moduleName];
+
+  if (!prefix) {
+    return relativeLocation;
+  }
+
+  if (typeof relativeLocation === 'object') {
+    return {
+      ...relativeLocation,
+      pathname: joinPath('/', prefix, relativeLocation.pathname),
+    };
+  }
+
+  return joinPath('/', prefix, relativeLocation);
 }
