@@ -40,7 +40,8 @@
     "react/jsx-boolean-value": ["error", "always"],
     "react/jsx-curly-spacing": [2, "always", {"spacing": {
       "objectLiterals": "never"
-    }}] //чтобы в jsx были пробелы для наглядного расположения параметров
+    }}], //чтобы в jsx были пробелы для наглядного расположения параметров
+    "react/forbid-prop-types": 0 // часто нужно обозначить мапу, а PropTypes.object запрещен
 
     //    //чтобы поддержать функциональность абсолютного импорта из-под src "import Test from 'components/Test'"
     //    "import/no-unresolved": 0,
