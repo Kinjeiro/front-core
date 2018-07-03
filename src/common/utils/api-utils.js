@@ -440,9 +440,8 @@ export function createCrudApi(API_PREFIX, sendApiFn) {
     deleteRecord: apiConfig(`/${API_PREFIX}/{id}`, 'DELETE'),
   };
 
-  function apiLoadRecords(type, meta = null, filters = null) {
+  function apiLoadRecords(meta = null, filters = null) {
     return sendApiFn(API_CONFIGS.loadRecords, {
-      type,
       meta,
       filters,
     });

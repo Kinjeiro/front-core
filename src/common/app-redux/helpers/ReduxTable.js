@@ -175,7 +175,7 @@ export default class ReduxTable extends ReduxUni {
               meta: newMeta,
               filters: newFilters,
               types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
-              payload: apiLoadRecords(tableUuid, newMeta, newFilters)
+              payload: apiLoadRecords(newMeta, newFilters)
                 .then((response) => {
                   if (Array.isArray(response)) {
                     return {
@@ -199,7 +199,7 @@ export default class ReduxTable extends ReduxUni {
         [FIELD_UUID]: tableUuid,
         [FIELD_RECORD_ID]: recordId,
         types: [TYPES.EDIT_RECORD_FETCH, TYPES.EDIT_RECORD_SUCCESS, TYPES.EDIT_RECORD_FAIL],
-        payload: apiEditRecord(tableUuid, recordId, patchOperations)
+        payload: apiEditRecord(recordId, patchOperations)
           .then((resultOperations) => resultOperations || patchOperations),
       });
     }

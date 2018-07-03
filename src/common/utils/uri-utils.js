@@ -74,9 +74,38 @@ export function parseUrlParameters(url, defaultValues = {}) {
         : undefined,
     },
   );
+
+  /*
+    Чтобы парсить объекты в query
+    http://localhost:8080/api/products?type=products&meta%5Bsearch%5D&meta%5BstartPage%5D=0&meta%5BitemsPerPage%5D=10&meta%5BsortBy%5D&meta%5BsortDesc%5D=true&meta%5Btotal%5D&filters%5Btype%5D=goods
+    Иначе выводится:
+     meta[search]:
+     meta[startPage]: 0
+     meta[itemsPerPage]: 10
+     meta[sortBy]:
+     meta[sortDesc]: true
+     meta[total]:
+     filters[type]: goods
+  */
+  const paramsFinal = {};
+  Object.keys(params).forEach((key) => {
+    const value = params[key];
+    const result = /^(\S+)\[(\S+)\]$/i.exec(key);
+    const firstPart = result && result[1];
+    const innerPart = result && result[2];
+    if (innerPart) {
+      if (typeof paramsFinal[firstPart] === 'undefined') {
+        paramsFinal[firstPart] = {};
+      }
+      paramsFinal[firstPart][innerPart] = value;
+    } else {
+      paramsFinal[key] = value;
+    }
+  });
+
   return {
     ...proceedDefaultValues(defaultValues),
-    ...params,
+    ...paramsFinal,
   };
 }
 
