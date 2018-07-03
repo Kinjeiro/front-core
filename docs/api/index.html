@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.3.25 | Documentation</title>
+  <title>@reagentum/front-core 1.3.26 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.3.25</code></div>
+          <div class='mb1'><code>1.3.26</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -280,16 +280,6 @@
                   href='#'
                   class="">
                   
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#bind'
-                  class="">
-                  bind
                   
                 </a>
                 
@@ -770,6 +760,36 @@
                   href='#isempty'
                   class="">
                   isEmpty
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#joinpath'
+                  class="">
+                  joinPath
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#joinuri'
+                  class="">
+                  joinUri
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getmodulefullpath'
+                  class="">
+                  getModuleFullPath
                   
                 </a>
                 
@@ -2468,83 +2488,6 @@ actionEditRecordStatusMap: {}
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='bind'>
-      bind
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Полный путь до ресурса с учетом префикса различных модулей</p>
-
-
-  <div class='pre p1 fill-light mt0'>bind</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>relativeLocation</span> <code class='quiet'>(any)</code>
-	    LocationDescription - see model-location.js
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>moduleName</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        
-
-      
-    
   
 
   
@@ -6094,6 +6037,230 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='joinpath'>
+      joinPath
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Конкатинация кусков path (в переди всегда проставляется '/')</p>
+
+
+  <div class='pre p1 fill-light mt0'>joinPath(paths: ...any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>paths</span> <code class='quiet'>(...any)</code>
+	    пути, который нужно объединить
+Последним параметром может быть мапа queryParams которая преобразуется в строку
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='joinuri'>
+      joinUri
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>joinUri(paths: ...any): any</div>
+  
+  
+
+  <div>Deprecated: use joinPath
+</div>
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>paths</span> <code class='quiet'>(...any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getmodulefullpath'>
+      getModuleFullPath
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Полный путь до ресурса с учетом префикса различных модулей</p>
+
+
+  <div class='pre p1 fill-light mt0'>getModuleFullPath(relativeLocation: any, moduleName: any, modulesPrefixes: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>relativeLocation</span> <code class='quiet'>(any)</code>
+	    LocationDescription - @see model-location.js
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>moduleName</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>modulesPrefixes</span> <code class='quiet'>(any)</code>
+	    мапа: moduleName => prefix
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
   
 
   
