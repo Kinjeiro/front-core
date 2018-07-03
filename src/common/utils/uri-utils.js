@@ -3,6 +3,8 @@ import pathLib from 'path';
 import forOwn from 'lodash/forOwn';
 import queryString from 'query-string';
 
+import { convertToString } from './common';
+
 const pathModule = pathLib.posix || pathLib;
 
 // на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
@@ -86,17 +88,17 @@ export function formatUrlParameters(params, url = '', hash = '', useBracket = fa
   return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
 
-export function joinUri(pathname, ...otherPaths) {
-  const lastUrlParameters = otherPaths && otherPaths[otherPaths.length - 1];
+export function joinUri(...paths) {
+  const lastUrlParameters = paths.length > 1 && paths[paths.length - 1];
   if (typeof lastUrlParameters === 'object') {
     // url parameters
     return formatUrlParameters(
       lastUrlParameters,
-      joinUriInner('/', pathname, ...otherPaths.slice(0, otherPaths.length - 1)),
+      joinUriInner('/', ...convertToString(...paths.slice(0, paths.length - 1))),
     );
   }
 
-  return joinUriInner('/', pathname, ...otherPaths);
+  return joinUriInner('/', ...convertToString(...paths));
 }
 
 export function getLocationUrlParameters(defaultValues = {}) {

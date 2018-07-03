@@ -278,3 +278,7 @@ export function wrapToArray(value = null) {
       ? []
       : [value];
 }
+
+export function convertToString(...args) {
+  return args.map((value) => (typeof value === 'string' ? value : `${value}`));
+}
