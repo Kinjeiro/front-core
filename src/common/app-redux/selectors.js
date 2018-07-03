@@ -76,6 +76,13 @@ export const getTestDomains = createOrmSelector(session => {
   // });
 });
 
+export function getModules(globalState) {
+  return globalState.modules;
+}
+
+export function getModulesRoutePrefixes(globalState) {
+  return getModules(globalState).moduleToRoutePrefixMap;
+}
 
 // ======================================================
 // UI-DOMAINS

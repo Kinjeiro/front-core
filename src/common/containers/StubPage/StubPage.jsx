@@ -40,9 +40,11 @@ import { TEST_PERMISSION } from '../../constants/permissions';
 import { USER_INFO_PROPS } from '../../models';
 import ListItem from '../../components/ListItem/ListItem';
 import Link from '../../components/Link/Link';
+import contextModules from '../../contexts/ContextModules/decorator-context-modules';
 
 import './StubPage.css';
 
+@contextModules()
 @titled(
   'stubPage',
   i18n('core:pages.StubPage.title'),
@@ -80,7 +82,12 @@ import './StubPage.css';
 export default class StubPage extends Component {
   static propTypes = {
     // ======================================================
-    // CONNECT
+    // @contextModules
+    // ======================================================
+    onGoTo: PropTypes.func,
+
+    // ======================================================
+    // @connect
     // ======================================================
     i18nInfo: PropTypes.shape({
       language: PropTypes.string,
@@ -150,6 +157,7 @@ export default class StubPage extends Component {
   // ======================================================
   render() {
     const {
+      onGoTo,
       i18nInfo: {
         language,
         whitelist,
@@ -266,6 +274,14 @@ export default class StubPage extends Component {
           <Link onClick={ () => alert('opa') }>
             Test Link
           </Link>
+        </div>
+
+        <div>
+          <button
+            onClick={ () => onGoTo('relative', 'testModule') }
+          >
+            Test module routing
+          </button>
         </div>
       </div>
     );

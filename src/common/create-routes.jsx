@@ -1,5 +1,9 @@
 import React from 'react';
-import { Route, IndexRoute, IndexRedirect } from 'react-router';
+import {
+  Route,
+  // IndexRoute,
+  // IndexRedirect,
+} from 'react-router';
 
 import {
   Info404,
@@ -18,7 +22,7 @@ import {
   StubPage,
   AuthErrorContainer,
 } from './containers';
-import TestPage from './containers/TestPage/TestPage';
+// import TestPage from './containers/TestPage/TestPage';
 
 export default function createRoutes(
   store,
@@ -30,6 +34,13 @@ export default function createRoutes(
     afterRoutes = [],
     authLayout,
     rootAppComponent,
+    /**
+      themeProviderProps: {},
+      modulesProviderProps: {
+        moduleToRoutePrefixMap: {}
+      }
+     */
+    rootAppComponentProps = {},
 
     NoticeComponentClass = Notice,
     LoginPageComponentClass = LoginPage,
@@ -42,6 +53,7 @@ export default function createRoutes(
     <CoreApp
       { ...props }
       NoticeComponentClass={ NoticeComponentClass }
+      { ...rootAppComponentProps }
     />
   ));
 

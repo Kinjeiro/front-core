@@ -24,6 +24,8 @@ import {
   Notifications,
 } from '../../components';
 
+import ContextModulesProvider from '../../contexts/ContextModules/ContextModulesProvider';
+
 @connect(
   (state) => ({
     currentPage: getCurrentPage(state),
@@ -39,6 +41,7 @@ export default class CoreApp extends Component {
     // ======================================================
     children: PropTypes.node,
     themeProviderProps: PropTypes.shape(ThemeProvider.propTypes),
+    modulesProviderProps: PropTypes.shape(ContextModulesProvider.propTypes),
     NoticeComponentClass: Notifications.propTypes.NoticeComponentClass,
 
     // ======================================================
@@ -53,6 +56,11 @@ export default class CoreApp extends Component {
   };
   static defaultProps = {
     themeProviderProps: {},
+    modulesProviderProps: {
+      // moduleToRoutePrefixMap: {
+      //   testModule: 'opa',
+      // },
+    },
   };
 
   /*
@@ -92,6 +100,7 @@ export default class CoreApp extends Component {
     const {
       children,
       themeProviderProps,
+      modulesProviderProps,
       currentPage: {
         id,
         title,
@@ -103,35 +112,37 @@ export default class CoreApp extends Component {
 
     // todo @ANKU @LOW - вынести настройки графических компонентов таких как Логин \\ Нотификации в спец расширяемый в ClientRunner класс Layout
     return (
-      <ThemeProvider
-        className={ this.bem('ThemeProvider') }
-        { ...themeProviderProps }
-      >
-        <StickyContainer className={ this.bem('StickyContainer') }>
-          <Helmet>
-            <title>{title || id || ' '}</title>
+      <ContextModulesProvider { ...modulesProviderProps } >
+        <ThemeProvider
+          className={ this.bem('ThemeProvider') }
+          { ...themeProviderProps }
+        >
+          <StickyContainer className={ this.bem('StickyContainer') }>
+            <Helmet>
+              <title>{title || id || ' '}</title>
+              {
+                Object.keys(metas).map((metaName) => (
+                  <meta
+                    key={ metaName }
+                    name={ metaName }
+                    content={ metas[metaName] }
+                  />
+                ))
+              }
+            </Helmet>
+
+            { children }
+
             {
-              Object.keys(metas).map((metaName) => (
-                <meta
-                  key={ metaName }
-                  name={ metaName }
-                  content={ metas[metaName] }
+              clientConfig.common.features.notifications && clientConfig.common.features.notifications.ui && (
+                <Notifications
+                  NoticeComponentClass={ NoticeComponentClass }
                 />
-              ))
+              )
             }
-          </Helmet>
-
-          { children }
-
-          {
-            clientConfig.common.features.notifications && clientConfig.common.features.notifications.ui && (
-              <Notifications
-                NoticeComponentClass={ NoticeComponentClass }
-              />
-            )
-          }
-        </StickyContainer>
-      </ThemeProvider>
+          </StickyContainer>
+        </ThemeProvider>
+      </ContextModulesProvider>
     );
   }
 }

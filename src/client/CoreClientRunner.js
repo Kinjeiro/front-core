@@ -18,8 +18,8 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return require('../common/app-redux/reducers/root').coreReduces;
   }
 
-  getRoutes(store) {
-    return require('../common/create-routes').default(store);
+  getRoutes(store, projectLayout = null, options = {}) {
+    return require('../common/create-routes').default(store, projectLayout, options);
   }
 
   getApi() {
