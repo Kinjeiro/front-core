@@ -442,7 +442,8 @@ export function createCrudApi(API_PREFIX, sendApiFn) {
 
   function apiLoadRecords(meta = null, filters = null) {
     return sendApiFn(API_CONFIGS.loadRecords, {
-      meta,
+      // мета передаем от рута, а вот все остальные фильтры от объекта filters
+      ...meta,
       filters,
     });
   }
