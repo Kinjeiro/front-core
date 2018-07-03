@@ -686,7 +686,7 @@ Returns **({method, path, payload} | any)**
 **Parameters**
 
 -   `tableId`  айди таблицы, или функция (props) => id
--   `clearOnUnmount`  очищать ли данные, когда компонент unmount
+-   `clearOnUnmount`  очищать ли данные, когда компонент unmountВозвращает компонент с доп пропертями:-   table - текущая данные таблицы
 
 ## titledDecorator
 
