@@ -21,9 +21,7 @@ export default class Link extends Component {
     className: PropTypes.string,
   };
 
-  static defaultProps = {
-    ...RouterLink.getDefaultProps(),
-  };
+  static defaultProps = RouterLink.getDefaultProps();
 
   render() {
     return (

@@ -41,6 +41,7 @@ import { USER_INFO_PROPS } from '../../models';
 import ListItem from '../../components/ListItem/ListItem';
 import Link from '../../components/Link/Link';
 import contextModules from '../../contexts/ContextModules/decorator-context-modules';
+import ModuleLink from '../../containers/ModuleLink/ModuleLink';
 
 import './StubPage.css';
 
@@ -280,8 +281,14 @@ export default class StubPage extends Component {
           <button
             onClick={ () => onGoTo('relative', 'testModule') }
           >
-            Test module routing
+            Test module routing - onGoTo
           </button>
+          <ModuleLink
+            modulePath={ 'relative' }
+            moduleName={ 'testModule' }
+          >
+            Test ModuleLink
+          </ModuleLink>
         </div>
       </div>
     );
