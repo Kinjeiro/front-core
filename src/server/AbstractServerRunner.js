@@ -1,18 +1,16 @@
 /* eslint-disable no-unused-vars */
 import merge from 'lodash/merge';
-
 import Hapi from 'hapi'; // server
-
 // Static file and directory handlers plugin for hapi.js
 // Также для отсылки файлов в apiPlugin reply.file()
 import inert from 'inert';
-
 import crumb from 'crumb';
 import RequestID from 'hapi-request-id';
 // import pluginYar from 'yar';
 
-import logger from './helpers/server-logger';
+import { joinPath } from '../common/utils/uri-utils';
 
+import logger from './helpers/server-logger';
 import serverConfig from './server-config';
 
 if (!serverConfig.common.isProduction) {
@@ -153,7 +151,9 @@ export default class AbstractServerRunner {
           hapiServerPlugins,
           {
             routes: {
-              prefix: contextPath || undefined,
+              prefix: contextPath
+                ? joinPath('/', contextPath)
+                : undefined,
             },
           },
           (error) => {

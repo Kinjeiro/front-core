@@ -23,6 +23,11 @@ try {
   console.error(error);
 }
 ```
+2. Добавил использование новой фичи реакта - создание нового контекста React.createContext. Необходимо обновить версию реакта
+```
+ "react": "~16.4.0",
+ "react-dom": "~16.4.0",
+```
 
 ### Dependencies:
     + "whatwg-fetch": "~2.0.4"
@@ -40,7 +45,7 @@ try {
 
 ## [1.2.24] - 2018-05-15
 ### !!! Breaking changes:
-* переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory
+1. переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory
 <br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 
 ### Features:
@@ -176,7 +181,22 @@ try {
   );
 ```
 
-1. переделал authStrategy: теперь вместо (token) она работает от (request, response)
+2. переделал authStrategy: теперь вместо (token) она работает от (request, response)
+\src\server\strategies\auth\index.js
+```
+export default function factoryAuthStrategy(services/* , otherStrategies, strategyOptions*/) {
+  return async (request, response) => {
+    let userInfo;
+    if (serverConfig.server.features.mocking.authMock) {
+      userInfo = await authStrategyMock(request, response, services);
+    } else {
+      userInfo = await authStrategyOauth2(request, response, services);
+    }
+
+    return new CredentialsModel(userInfo);
+  };
+}
+```
 
 ### Dependencies:
 
@@ -410,13 +430,23 @@ try {
         \\ сделал наследуемые конфиги через config.server.parentConfigs 
         \\ fillBase доработал
     - bug(test): - тесты для сервера
-    - feat(test): - победил karma и пробросил внутрь ее браузера конфиги для клиента \\ написал собственный плагин для этого
-    - feat(*): - подключил OAuth через front-core-auth сервер \\ страница логина \\ отключил мокирование авторизации \\ тестирование авторизации на полном сервере \\ dateUtils \\ redux ui domains \\ стили кода (в конце запятые по airbnb) \\ и куча других изменений
+    - feat(test): - победил karma и пробросил внутрь ее браузера конфиги для клиента 
+        \\ написал собственный плагин для этого
+    - feat(*): - подключил OAuth через front-core-auth сервер 
+        \\ страница логина 
+        \\ отключил мокирование авторизации 
+        \\ тестирование авторизации на полном сервере 
+        \\ dateUtils 
+        \\ redux ui domains 
+        \\ стили кода (в конце запятые по airbnb) \\ и куча других изменений
     - feat(orm): - nextId 
         \\ найминг 
         \\ инструменты для создания селекторов
-    - bug(hot-reload): - небольшой фикс перезагрузки роутов \\ добавил getUser селектор (а то проблемы были если пустой юзер при отключенной проверки авторизации)
-    - feat(models): - подключил redux-orm для связей \\ изменил способ подключения редьюсеров через require \\ сервер index page теперь питается ClientRunner
+    - bug(hot-reload): - небольшой фикс перезагрузки роутов 
+        \\ добавил getUser селектор (а то проблемы были если пустой юзер при отключенной проверки авторизации)
+    - feat(models): - подключил redux-orm для связей
+        \\ изменил способ подключения редьюсеров через require 
+        \\ сервер index page теперь питается ClientRunner
     - bug(plugin-api): - универсальный parseResponseHandler для моков и api-plugin
     - bug(*): - changeUser + MOCK - ListItem - для перебора элементов без bind на handler - проблема с куками для csrf атак - фикс i18n начальный язык мануально насильственно проставляется - фикс hot-reload
     - bug(webpack): - бага в ExtractTextPlugin - обновил ее и webpack@3.5.0
@@ -437,29 +467,44 @@ try {
     - bug(webpack): - доступ по cors для hot reload (разные порты были из-за двух серверов во время ДЕВ режима)
     - bug(css): - опустил библиотеки до версии postcss@5 так как на 6 версии не работает postcss-bemed (просто пустоту в тегах выдает)
     - bug(test): - переименование название блоков в css как название компонентов в js (c большой буквы и слитно)
-    - feat(bem): - проблема компилирования postcss (разные версии) \\ компиляция bem в postcss \\ webpack не показывал ошибки компиляции \\ небольшие баги
+    - feat(bem): - проблема компилирования postcss (разные версии) 
+        \\ компиляция bem в postcss 
+        \\ webpack не показывал ошибки компиляции 
+        \\ небольшие баги
     - chore (webpack): - фиксы плагинов для вебпака
     - chore (babel): - решил проблема с babel - теперь если он нужен его нужно сгенерировать из конфигов
     - небольшие фиксы либы
-    - chore(build): - скрипт для синхронизации рабочего бранча и мастера \\ а также для паблиша новой версии после фаст форвард мержа
+    - chore(build): - скрипт для синхронизации рабочего бранча и мастера 
+        \\ а также для паблиша новой версии после фаст форвард мержа
     - chore(mocking): - проброс query параметров для мок урлов
     - chore(mocking): - провязка через cookie и url
-    - chore(mocking): - тестирование серверной части \\ основной механизм мокирование запросов на сервер
-    - chore(unittest): - тестирование async функций \\ хелперы для тестирования redux \\ бага с chai-as-promise
+    - chore(mocking): - тестирование серверной части 
+        \\ основной механизм мокирование запросов на сервер
+    - chore(unittest): - тестирование async функций
+        \\ хелперы для тестирования redux 
+        \\ бага с chai-as-promise
     - chore(i18n): - более прозрачные единый метод для инициализации i18n
     - chore(unittest): - фикс enzyme
     - chore(unittest): - exist фикс + тесты перед версией
     - chore(unittest): - основные механизмы для подключения тестирования через mocha + chai + enzyme
-    - chore(I18N): - смена заголовка страницы при изменении страниц и локали \\ remount при изменении локали
+    - chore(I18N): - смена заголовка страницы при изменении страниц и локали 
+        \\ remount при изменении локали
     - chore(I18N): - локализация для стаб страницы
     - chore(bem): - переименовал для уникальности
-    - chore(*) подключение через link и alias на front-core для дочерних компонентов \\ добавил в паблиш файлы не js
+    - chore(*) подключение через link и alias на front-core для дочерних компонентов
+        \\ добавил в паблиш файлы не js
     - chore(unitest) Подготовка к publish
-    - chore(localization) CORE: Локализация приложения \\ конфигурация для i18n в конфигах \\ тест на странице \\ react нежесткая завесимость \\ многочисленные фиксы
+    - chore(localization) CORE: Локализация приложения
+        \\ конфигурация для i18n в конфигах 
+        \\ тест на странице 
+        \\ react нежесткая завесимость 
+        \\ многочисленные фиксы
     - chore(webpack) CORE: переезд на webpack 3.0
     - chore(webpack) CORE: переезд на webpack 2.0 - фиксы для дочерних проектов
     - chore(webpack) CORE: переезд на webpack 2.0
-    - chore(webpack): - добавил less-loader \\ вынес в babel-loader \\ упростил создание и расширение webpack config
+    - chore(webpack): - добавил less-loader 
+        \\ вынес в babel-loader 
+        \\ упростил создание и расширение webpack config
     - chore(webpack): - система плагинов + less loader - окончание
     - chore(*): - работу с текущем package.json вынес
     - chore(*): - front-core init
