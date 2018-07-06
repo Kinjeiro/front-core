@@ -8,7 +8,6 @@ function pathJoin(...args) {
   return path.join(...args);
 }
 function urlJoin(...args) {
-  // return path.posix.join(...args);
   return path.posix.join(...args);
 }
 

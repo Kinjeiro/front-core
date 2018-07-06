@@ -40,7 +40,8 @@ try {
 
 ## [1.2.24] - 2018-05-15
 ### !!! Breaking changes:
-* переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
+* переместил src/common/app-redux/simple-module-factory -> src/common/app-redux/helpers/simple-module-factory
+<br/>Изменились параметры создания и по-новому называются дефолтные экшены (actionModuleItemInit)
 
 ### Features:
 1. ServiceAuth - теперь это класс для удобного и гибкого расширения
@@ -111,6 +112,70 @@ try {
 ## [1.2.0] - 2018-03-01
 ### !!! Breaking changes:
 1. переделал роутинг на опции среди которых можно переопределить классы для некоторых стилизованных компонентов (Notice)
+```javascript
+ return createParentRoutes(
+    store,
+    [
+      // ======================================================
+      // AUTH
+      // ======================================================
+      <Route
+        key="authLayout"
+        path={ NAMES.auth }
+        component={ AuthLayout }
+      >
+        <IndexRedirect to={ NAMES.signin } />
+        <Route
+          path={ NAMES.signin }
+          component={ Signin }
+        />
+      </Route>,
+
+      // ======================================================
+      // APP
+      // ======================================================
+      <Route
+        key="appLayout"
+        component={ AppLayout }
+      >
+        <IndexRedirect to={ NAMES.tickers } />
+        <Route
+          path={ NAMES.tickers }
+          component={ Tickers }
+        />
+      </Route>,
+    ],
+    [
+      <Redirect
+        key={ `redirect_${PATH_LOGIN_PAGE}` }
+        from={ PATH_LOGIN_PAGE }
+        to={ paths.PATH_AUTH_INDEX }
+      />,
+    ],
+  );
+```
+Вынести в отдельные куски projectLayout и authLayout:
+```javascript
+  return createParentRoutes(
+    store,
+    projectLayout,
+    {
+      beforeRoutes: [
+        <Redirect
+          key={ `redirect_${PATH_LOGIN_PAGE}` }
+          from={ PATH_LOGIN_PAGE }
+          to={ FC_COMPONENTS_PATHS.PATH_AUTH_INDEX }
+        />,
+      ],
+      authLayout,
+
+      NoticeComponentClass: Notice,
+      LoginPageComponentClass: Signin,
+      ModalLoginPageComponentClass: Signin,
+    },
+  );
+```
+
 1. переделал authStrategy: теперь вместо (token) она работает от (request, response)
 
 ### Dependencies:

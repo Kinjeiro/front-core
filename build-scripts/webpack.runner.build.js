@@ -51,6 +51,7 @@ function startBuild({
   const frontendCompiler = webpack(webpackFrontConfig);
   const backendCompiler = webpack(webpackBackendConfig);
 
+  console.log('=== APP CONFIG (while build) ===\n', JSON.stringify(appConfig, null, 2));
   frontendCompiler.plugin('compile', () => console.log('Building frontend...'));
   backendCompiler.plugin('compile', () => console.log('Building server...'));
 

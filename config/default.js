@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign,no-shadow,import/no-dynamic-require,no-unused-vars */
 const path = require('path');
 
+const { urlJoin } = require('../build-scripts/utils/path-utils');
+
 const {
   FRONT_UI_SERVER_API_PREFIX,
   createApiConfig,
@@ -74,6 +76,7 @@ const {
    */
   CONTEXT_ROOT = '',
 
+  PORT,
   SERVER_PORT = 8080,
   PROXY_PORT = 9091,
   HOT_LOADER,
@@ -139,6 +142,8 @@ module.exports = {
 
     app: {
       contextRoot: CONTEXT_PATH || CONTEXT_ROOT
+        ? urlJoin('/', CONTEXT_PATH || CONTEXT_ROOT)
+        : ''
     },
 
     // ======================================================
@@ -228,7 +233,7 @@ module.exports = {
   server: {
     main: {
       // todo @ANKU @LOW - проблема с переопределением, если в проектах переопределять, то нужно в них каждый раз дублировать есть ли SERVER_PORT из env
-      port: SERVER_PORT,
+      port: PORT || SERVER_PORT,
       requestTimeout: REQUEST_TIMEOUT,
       devtools: true,
 

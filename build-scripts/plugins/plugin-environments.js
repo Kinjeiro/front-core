@@ -23,6 +23,7 @@ function pluginEnvironments(webpackConfig, {
           NODE_CONFIG: JSON.stringify(ENV.NODE_CONFIG),
 
           PROJECT_NAME: JSON.stringify(ENV.PROJECT_NAME),
+          PORT: ENV.PORT,
           SERVER_PORT: ENV.SERVER_PORT,
           CONTEXT_PATH: JSON.stringify(ENV.CONTEXT_PATH),
           CONTEXT_ROOT: JSON.stringify(ENV.CONTEXT_ROOT),
