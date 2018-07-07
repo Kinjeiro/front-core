@@ -75,34 +75,36 @@
 -   [apiClient][71]
 -   [isEmpty][72]
 -   [joinPath][73]
--   [joinUri][74]
--   [getModuleFullPath][75]
--   [DEFAULT_LOGGER_IDS][76]
--   [contextData][77]
--   [register][78]
--   [method][79]
+-   [joinPathSimple][74]
+-   [joinUri][75]
+-   [getModuleFullPath][76]
+-   [DEFAULT_LOGGER_IDS][77]
+-   [contextData][78]
+-   [register][79]
 -   [method][80]
--   [remoteJwt][81]
--   [prepare-state][82]
--   [createServices][83]
--   [ServiceAuth][84]
--   [createProxyWrapperCallback][85]
--   [apiPluginFullFactory][86]
--   [apiPluginFactory][87]
--   [proxyRoute][88]
--   [proxyRoutePluginFactory][89]
--   [createEndpointServiceConfig][90]
--   [HOST][91]
--   [HOST][92]
--   [SERVICES_HOST][93]
--   [SERVICES_HOST][94]
--   [REQUEST_TIMEOUT][95]
--   [REQUEST_TIMEOUT][96]
--   [createEndpointFactoryFromEnv][97]
--   [sendSimpleRequest][98]
--   [sendEndpointMethodRequest][99]
--   [factoryEndpointServiceMethodRequest][100]
--   [proceedRequest][101]
+-   [method][81]
+-   [remoteJwt][82]
+-   [onPreResponse][83]
+-   [prepare-state][84]
+-   [createServices][85]
+-   [ServiceAuth][86]
+-   [createProxyWrapperCallback][87]
+-   [apiPluginFullFactory][88]
+-   [apiPluginFactory][89]
+-   [proxyRoute][90]
+-   [proxyRoutePluginFactory][91]
+-   [createEndpointServiceConfig][92]
+-   [HOST][93]
+-   [HOST][94]
+-   [SERVICES_HOST][95]
+-   [SERVICES_HOST][96]
+-   [REQUEST_TIMEOUT][97]
+-   [REQUEST_TIMEOUT][98]
+-   [createEndpointFactoryFromEnv][99]
+-   [sendSimpleRequest][100]
+-   [sendEndpointMethodRequest][101]
+-   [factoryEndpointServiceMethodRequest][102]
+-   [proceedRequest][103]
 
 ## Runners
 
@@ -298,7 +300,7 @@ Returns **{}**
 
 Компонент для того, чтобы не писать bind функции c ключом
 В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][102]
+См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][104]
 
 ## ThemeProvider
 
@@ -408,7 +410,7 @@ moduleToRoutePrefixMap: {}
 
 ## FROM_BOOM
 
-[https://github.com/hapijs/boom][103]
+[https://github.com/hapijs/boom][105]
 
 ## FROM_BOOM_RESPONSE
 
@@ -440,7 +442,7 @@ moduleToRoutePrefixMap: {}
 
 ## parseFromBoom
 
-[https://github.com/hapijs/boom][103]
+[https://github.com/hapijs/boom][105]
 
 -   isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
 -   isServer - convenience bool indicating status code >= 500.
@@ -502,7 +504,7 @@ moduleToRoutePrefixMap: {}
 
 ## STUB_ROUTES_NAMES
 
-Type: {ACCESS_DENIED: [string][104], ERROR: [string][104], LOGIN: [string][104], STUB: [string][104]}
+Type: {ACCESS_DENIED: [string][106], ERROR: [string][106], LOGIN: [string][106], STUB: [string][106]}
 
 **Meta**
 
@@ -521,7 +523,7 @@ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
 -   `operationType`  
 -   `itemIds`  
 
-Returns **{path: [string][104], value: any, op: [string][104]}** 
+Returns **{path: [string][106], value: any, op: [string][106]}** 
 
 ## BaseApiClientClass
 
@@ -579,7 +581,7 @@ object of that fields
     other - result
 -   `mockFilter`  function(requestOptions, error, response) {}
 
-Returns **[Promise][105]** 
+Returns **[Promise][107]** 
 
 ## valueFromRange
 
@@ -629,7 +631,7 @@ Returns **[Promise][105]**
 -   `path`   (optional, default `[]`)
 -   `pathStr`   (optional, default `''`)
 
-Returns **{result: any, isRoot: [boolean][106], pathStr: [string][104]}** 
+Returns **{result: any, isRoot: [boolean][108], pathStr: [string][106]}** 
 
 ## arrayToTree
 
@@ -723,7 +725,7 @@ Returns **any** возвращает true - если нужно прервать
     -   если function - функция вызывается дважды, один раз для newProps второй раз для oldProps - на вход который подаются пропсы, вернуть должна часть props по которой будет deep equals
     -   если string - путь в props для объектов которые будут сравниваться
     -   если string array - если больше 1 то singleRun по умолчанию true
--   `$1` **[Object][107]**  (optional, default `{}`)
+-   `$1` **[Object][109]**  (optional, default `{}`)
     -   `$1.deepEqual`   (optional, default `true`)
     -   `$1.singleRun`   (optional, default `true`)
     -   `$1.oldPropsNotNull`   (optional, default `true`)
@@ -752,7 +754,7 @@ accountId: PropTypes.number,
 
 -   `statusPropPath`  
 
-Returns **[function][108]** 
+Returns **[function][110]** 
 
 ## formatDate
 
@@ -760,12 +762,12 @@ Returns **[function][108]**
 
 **Parameters**
 
--   `date` **[String][104]** Строка даты в формате `YYYY-MM-DD`
--   `options` **[Object][107]?** Список опций
-    -   `options.fullMonth` **[Boolean][106]** Если `true`, то название месяца, иначе номер (optional, default `true`)
-    -   `options.cutCurrentYear` **[Boolean][106]** Если `true`, то дата без указания года (optional, default `true`)
+-   `date` **[String][106]** Строка даты в формате `YYYY-MM-DD`
+-   `options` **[Object][109]?** Список опций
+    -   `options.fullMonth` **[Boolean][108]** Если `true`, то название месяца, иначе номер (optional, default `true`)
+    -   `options.cutCurrentYear` **[Boolean][108]** Если `true`, то дата без указания года (optional, default `true`)
 
-Returns **[String][104]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+Returns **[String][106]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
 
 ## formatStringInner
 
@@ -804,7 +806,7 @@ Returns **any**
 
 ## generateId
 
-Returns **[string][104]** 
+Returns **[string][106]** 
 
 **Meta**
 
@@ -845,7 +847,7 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
 -   `context`  
 
-Returns **[Function][108]** 
+Returns **[Function][110]** 
 
 ## apiClient
 
@@ -878,6 +880,16 @@ Returns **[Function][108]**
 
 Returns **any** 
 
+## joinPathSimple
+
+в отличии от joinPath не добавляет в начало / и не парсит параметры, просто конкатинирует части path
+
+**Parameters**
+
+-   `paths` **...any** 
+
+Returns **[string][106]** 
+
 ## joinUri
 
 **Parameters**
@@ -888,7 +900,7 @@ Returns **any**
 
 **Meta**
 
--   **deprecated**: use joinPath
+-   **deprecated**: renaming - use joinPath
 
 
 ## getModuleFullPath
@@ -942,6 +954,18 @@ token - это токен сотрудника банка
 
 Returns **{authenticate: authenticate}** 
 
+## onPreResponse
+
+включение моков по урлу
+
+**Parameters**
+
+-   `mockOptions`  
+-   `request`  
+-   `reply`  
+
+Returns **(void | any)** 
+
 ## prepare-state
 
 загрузка необходимых вначале общих данных из различных сервисов (в данном случае organizations и profiles
@@ -969,7 +993,7 @@ Returns **{}**
 
 **Parameters**
 
--   `endpointServiceConfig` **[Object][107]** 
+-   `endpointServiceConfig` **[Object][109]** 
     -   `endpointServiceConfig.endpointServiceConfig`  
     -   `endpointServiceConfig.urls`  
 
@@ -1017,8 +1041,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][109] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][110]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][111] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][112]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `otherOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -1047,7 +1071,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 
 **Parameters**
 
--   `$0` **[Object][107]** 
+-   `$0` **[Object][109]** 
     -   `$0.protocol`  
     -   `$0.host`  
     -   `$0.port`  
@@ -1062,7 +1086,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   `endpoint`  
 -   `timeout`  
 
-Returns **{protocol: [string][104], host: [string][104], port: [number][111], endpoint: [string][104], fullUrl: [string][104], timeout: any}** 
+Returns **{protocol: [string][106], host: [string][106], port: [number][113], endpoint: [string][106], fullUrl: [string][106], timeout: any}** 
 
 ## HOST
 
@@ -1105,9 +1129,9 @@ Returns **function (any, any?)**
 
 **Parameters**
 
--   `requestOptions`  [https://www.npmjs.com/package/request][112]
+-   `requestOptions`  [https://www.npmjs.com/package/request][114]
 
-Returns **[Promise][105]** 
+Returns **[Promise][107]** 
 
 ## sendEndpointMethodRequest
 
@@ -1133,7 +1157,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][112]
+-   `requestOptions`  [https://www.npmjs.com/package/request][114]
 -   `logger`  
 
 Returns **any** 
@@ -1151,13 +1175,13 @@ Returns **any**
 -   `requestOptions`  
 -   `logger`  
 
-Returns **[Promise][105]&lt;any>** 
+Returns **[Promise][107]&lt;any>** 
 
 ## proceedRequest
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][113]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][115]
 -   `server`  
 
 Returns **any** Promise
@@ -1308,82 +1332,86 @@ Returns **any** Promise
 
 [73]: #joinpath
 
-[74]: #joinuri
+[74]: #joinpathsimple
 
-[75]: #getmodulefullpath
+[75]: #joinuri
 
-[76]: #default_logger_ids
+[76]: #getmodulefullpath
 
-[77]: #contextdata
+[77]: #default_logger_ids
 
-[78]: #register
+[78]: #contextdata
 
-[79]: #method
+[79]: #register
 
-[80]: #method-1
+[80]: #method
 
-[81]: #remotejwt
+[81]: #method-1
 
-[82]: #prepare-state
+[82]: #remotejwt
 
-[83]: #createservices
+[83]: #onpreresponse
 
-[84]: #serviceauth
+[84]: #prepare-state
 
-[85]: #createproxywrappercallback
+[85]: #createservices
 
-[86]: #apipluginfullfactory
+[86]: #serviceauth
 
-[87]: #apipluginfactory
+[87]: #createproxywrappercallback
 
-[88]: #proxyroute
+[88]: #apipluginfullfactory
 
-[89]: #proxyroutepluginfactory
+[89]: #apipluginfactory
 
-[90]: #createendpointserviceconfig
+[90]: #proxyroute
 
-[91]: #host
+[91]: #proxyroutepluginfactory
 
-[92]: #host-1
+[92]: #createendpointserviceconfig
 
-[93]: #services_host
+[93]: #host
 
-[94]: #services_host-1
+[94]: #host-1
 
-[95]: #request_timeout
+[95]: #services_host
 
-[96]: #request_timeout-1
+[96]: #services_host-1
 
-[97]: #createendpointfactoryfromenv
+[97]: #request_timeout
 
-[98]: #sendsimplerequest
+[98]: #request_timeout-1
 
-[99]: #sendendpointmethodrequest
+[99]: #createendpointfactoryfromenv
 
-[100]: #factoryendpointservicemethodrequest
+[100]: #sendsimplerequest
 
-[101]: #proceedrequest-1
+[101]: #sendendpointmethodrequest
 
-[102]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+[102]: #factoryendpointservicemethodrequest
 
-[103]: https://github.com/hapijs/boom
+[103]: #proceedrequest-1
 
-[104]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[104]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
 
-[105]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[105]: https://github.com/hapijs/boom
 
-[106]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[106]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[107]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[107]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[108]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[108]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[109]: https://github.com/hapijs/h2o2
+[109]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[110]: http://localhost:
+[110]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[111]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[111]: https://github.com/hapijs/h2o2
 
-[112]: https://www.npmjs.com/package/request
+[112]: http://localhost:
 
-[113]: https://hapijs.com/api#serverinjectoptions-callback
+[113]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[114]: https://www.npmjs.com/package/request
+
+[115]: https://hapijs.com/api#serverinjectoptions-callback
