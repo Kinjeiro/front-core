@@ -4,15 +4,14 @@ import {
 } from '../utils/uri-utils';
 import config from '../client-config';
 
-const contextPath = config.common.app.contextRoot;
-
 /**
  * осторожно!!! contextPath (basename) уже учитывается во всех роутингах, дополнительно не нужно. Поэтому пользуйтесь аккуратно
 * учитывает contextPath (basepath) приложения
 */
 export function appUrl(pathname = '', ...otherPaths) {
+  const contextPath = joinUri('/', config.common.app.contextRoot);
   let resultUrl = pathname;
-  if (resultUrl.indexOf(contextPath) < 0 && resultUrl.indexOf(`/${contextPath}`) < 0) {
+  if (resultUrl.indexOf(contextPath) < 0) {
     resultUrl = joinUri(contextPath, resultUrl);
   }
 
@@ -29,8 +28,14 @@ export function appUrl(pathname = '', ...otherPaths) {
 }
 
 export function testAppUrlStartWith(pathname, ...testUrls) {
-  const url = appUrl(pathname);
-  return testUrls.some((testUri) => url.indexOf(appUrl(testUri)) >= 0);
+  return testUrls.some((testUri) => pathname.indexOf(joinUri('/', testUri)) === 0);
+}
+
+export function cutContextPath(requestPath) {
+  const contextPath = config.common.app.contextRoot;
+  return contextPath && contextPath !== '/'
+    ? requestPath.replace(new RegExp(`^${joinUri('/', contextPath).replace(/\//gi, '\\/')}`, 'gi'), '')
+    : requestPath;
 }
 
 export default appUrl;

@@ -19,7 +19,10 @@ import {
 } from '../../../common/models/uni-error';
 
 import { STATE_CLIENT_CONFIG_PARAM } from '../../../common/constants/sync-consts';
-import { appUrl } from '../../../common/helpers/app-urls';
+import {
+  appUrl,
+  cutContextPath,
+} from '../../../common/helpers/app-urls';
 
 // ======================================================
 // SERVER
@@ -101,7 +104,7 @@ export function register(server, pluginOptions, next) {
       const isAuthTurnOn = serverConfig.common.features.auth && serverConfig.common.features.auth.globalAuth !== false;
 
       if (isAuthTurnOn) {
-        if (!noAuthRequireMatcherFn(pathname)) {
+        if (!noAuthRequireMatcherFn(cutContextPath(pathname))) {
           const isAuth = isAuthenticated(request);
           const authUniError = getAuthUniErrorFromRequest(request);
 

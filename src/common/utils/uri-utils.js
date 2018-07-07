@@ -137,9 +137,18 @@ export function joinPath(...paths) {
   return joinPathInner('/', ...convertToString(...paths));
 }
 
+/**
+ * в отличии от joinPath не добавляет в начало / и не парсит параметры, просто конкатинирует части path
+ * @param paths
+ * @returns {string}
+ */
+export function joinPathSimple(...paths) {
+  return joinPathInner(...convertToString(...paths));
+}
+
 
 /**
- * @deprecated - use joinPath
+ * @deprecated - renaming - use joinPath
  *
  * @param paths
  * @returns {*}

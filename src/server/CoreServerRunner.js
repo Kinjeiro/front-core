@@ -83,9 +83,9 @@ export default class CoreServerRunner extends AbstractServerRunner {
   }
 
   @bind()
-  noAuthRequireMatcher(pathname) {
+  noAuthRequireMatcher(pathnameWithoutContextPath) {
     return testAppUrlStartWith(
-      pathname,
+      pathnameWithoutContextPath,
       ASSETS,
       this.getLoginPath(),
       PATH_ERROR_PAGE,

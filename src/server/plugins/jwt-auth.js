@@ -1,4 +1,7 @@
-import { appUrl } from '../../common/helpers/app-urls';
+import {
+  appUrl,
+  cutContextPath,
+} from '../../common/helpers/app-urls';
 import { parseToUniError } from '../../common/models/uni-error';
 import i18n from '../../common/utils/i18n-utils';
 
@@ -51,7 +54,7 @@ export function remoteJwt(server, pluginOptions) {
       );
     }
 
-    if (noAuthRequireMatcherFn && noAuthRequireMatcherFn(pathname)) {
+    if (noAuthRequireMatcherFn && noAuthRequireMatcherFn(cutContextPath(pathname))) {
       logger.log(i18n('core:Авторизация не нужна для'), path);
       return continueWithoutCredentials(reply);
     }

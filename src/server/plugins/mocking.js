@@ -1,8 +1,12 @@
-import path from 'path';
 import RouteParser from 'route-parser';
 import Cookie from 'cookie';
 
-import { joinUri } from '../../common/utils/uri-utils';
+import {
+  joinUri,
+  joinPathSimple,
+} from '../../common/utils/uri-utils';
+import { cutContextPath } from '../../common/helpers/app-urls';
+
 import serverConfig from '../server-config';
 import logger from '../helpers/server-logger';
 
@@ -32,14 +36,15 @@ function getValue(value, ...args) {
 
 function compareValues(requestValue, conditionValue) {
   if (!Array.isArray(conditionValue)) {
+    // eslint-disable-next-line no-param-reassign
     conditionValue = [conditionValue];
   }
 
-  return conditionValue.every((condition) =>
+  return conditionValue.every((condition) => (
     Array.isArray(requestValue)
-    ? requestValue.includes(condition)
-    : requestValue === condition,
-  );
+      ? requestValue.includes(condition)
+      : requestValue === condition
+  ));
 }
 
 export function validateRoutePath(request, templatePath, {
@@ -48,7 +53,7 @@ export function validateRoutePath(request, templatePath, {
     reqexpPath,
     pathParams,
     queryParams,
-    dataParams,
+    // dataParams,
   } = {},
 } = {}) {
   let validation = true;
@@ -58,9 +63,12 @@ export function validateRoutePath(request, templatePath, {
     method: requestMethod,
   } = request;
 
+  // нужно вырезать contextPath
+  const requestPathWithoutContextPath = cutContextPath(requestPath);
+
   // parse hapi route format "/abs/{pathParam}" to router parser format "/abs/:pathParam"
   const requestTryParams = new RouteParser(templatePath.replace(/\{((\w|-)+)\}/g, ':$1'))
-    .match(requestPath);
+    .match(requestPathWithoutContextPath);
 
   /*
     api config template path - api/my/api/{pathParam1}/{pathParam2}
@@ -75,7 +83,7 @@ export function validateRoutePath(request, templatePath, {
   if (validation) {
     // todo @ANKU @LOW - сделать поддержку таких урлов path: '/hello/{user*2}', (/hello/john/doe)
     const reqexpPathResult = reqexpPath || new RegExp(`^\/?${templatePath.replace(/\{((\w|-)+)\}/g, '((\\w|-)+)')}\/?$`);
-    validation = reqexpPathResult.test(requestPath);
+    validation = reqexpPathResult.test(requestPathWithoutContextPath);
   }
 
   if (validation && pathParams) {
@@ -106,10 +114,10 @@ export function getRequestPath(url, pluginOptions, isMocked) {
     mocksRouteBase,
   } = pluginOptions;
 
-  const normalizeApiPrefix = apiPrefix ? path.posix.join(apiPrefix, '/') : '';
-  const normalizeMockRouteBase = path.posix.join(mocksRouteBase, '/');
+  const normalizeApiPrefix = apiPrefix ? joinPathSimple(apiPrefix, '/') : '';
+  const normalizeMockRouteBase = joinPathSimple(mocksRouteBase, '/');
 
-  return path.posix.join(
+  return joinUri(
     '/',
     normalizeApiPrefix,
     isMocked ? normalizeMockRouteBase : '',
@@ -159,6 +167,14 @@ function onRequest(options, request, reply) {
   return reply.continue();
 }
 
+/**
+ * включение моков по урлу
+ *
+ * @param mockOptions
+ * @param request
+ * @param reply
+ * @returns {void|*}
+ */
 function onPreResponse(mockOptions, request, reply) {
   // if (!serverConfig.common.isProduction) {
   const {
