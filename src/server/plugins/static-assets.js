@@ -1,5 +1,8 @@
 import { ASSETS } from '../../common/constants/routes.pathes';
-import { joinUri } from '../../common/utils/uri-utils';
+import {
+  joinUri,
+  joinPathSimple,
+} from '../../common/utils/uri-utils';
 import appUrl from '../../common/helpers/app-urls';
 
 // todo @ANKU @LOW - как это протащить правильнее?
@@ -7,7 +10,7 @@ const BUILD_DIR = '.build';
 
 export const register = function (server, options, next) {
   // тут реально нужен путь относительно операционки (то есть специфика винды)
-  const assetsPath = joinUri(process.cwd(), BUILD_DIR, ASSETS);
+  const assetsPath = joinPathSimple(process.cwd(), BUILD_DIR, ASSETS);
   const routePath = joinUri('/', `${ASSETS}/{resource*}`);
 
   server.route({
