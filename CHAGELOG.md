@@ -13,6 +13,7 @@ import initAll from '@reagentum/front-core/lib/client/init';
 
 async function start() {
   await initAll();
+  // подгружаем раннер со всеми его импортами ПОСЛЕ инициализации конфигов и глобальных значений (i18n)
   const ClientRunner = require('./ClientRunner').default;
   await (new ClientRunner()).run();
 }
@@ -27,6 +28,17 @@ try {
 ```
  "react": "~16.4.0",
  "react-dom": "~16.4.0",
+```
+3. ServerRunner::noAuthRequireMatcher принимает pathname без контекста, для удобства сравнения с путями
+4. Чистка зависимостей в package.json. Нужно проверить работоспособность. Был баг: неправильно записаны зависимости в dependencies для продакшена (npm i --production)
+- убрал "redux-form" (не использовался)
+- убрал "date-fns" (мы используем тяжеловесный moment пока)
+- убрал "moment-duration-format" (не использовался)
+- убрал "nock" (не использовался)
+- убрал "good" и "good-console" (не использовался)
+ВАЖНО: после обновления коры почистите npm у себя:
+```
+rm -rf ./node_modules && rm -f package-lock.json && npm cache clean --force && npm install
 ```
 
 ### Dependencies:
@@ -438,7 +450,8 @@ export default function factoryAuthStrategy(services/* , otherStrategies, strate
         \\ тестирование авторизации на полном сервере 
         \\ dateUtils 
         \\ redux ui domains 
-        \\ стили кода (в конце запятые по airbnb) \\ и куча других изменений
+        \\ стили кода (в конце запятые по airbnb) 
+        \\ и куча других изменений
     - feat(orm): - nextId 
         \\ найминг 
         \\ инструменты для создания селекторов
@@ -451,18 +464,27 @@ export default function factoryAuthStrategy(services/* , otherStrategies, strate
     - bug(*): - changeUser + MOCK - ListItem - для перебора элементов без bind на handler - проблема с куками для csrf атак - фикс i18n начальный язык мануально насильственно проставляется - фикс hot-reload
     - bug(webpack): - бага в ExtractTextPlugin - обновил ее и webpack@3.5.0
     - feat(webpack): - вынес отдельно vendors.css
-    - bug(build): - фикс build \\ добавил метод для указания hot reload путей
-    - feat(mock): - добавил mock-utils \\ userInfo.avatar
+    - bug(build): - фикс build 
+        \\ добавил метод для указания hot reload путей
+    - feat(mock): - добавил mock-utils 
+        \\ userInfo.avatar
     - bug(config): - в карму невозможно ничего передать, пока зашил config руками
     - bug(config): - конфиги нужно генерить и для тестов тоже
     - feat(propsType): - добавил ACTION_STATUS
-    - bug(i18n): - не проставлялся язык, если куки были пусты \\ подцепил bem конфиги
-    - bug(auth): - вынес авторизацию в раздел фич \\ баги с auth permissions \\ добавил send-api-request
+    - bug(i18n): - не проставлялся язык, если куки были пусты 
+        \\ подцепил bem конфиги
+    - bug(auth): - вынес авторизацию в раздел фич 
+        \\ баги с auth permissions \\ добавил send-api-request
     - bug(config): - неправильное использование merge
     - feat(config): - config компилится в .build/app-config.json и этот путь должен указываться в env CONFIG_PATH при запуске сервера
-    - bug(config): - заменил глючную библиотеку deep-assign \\ добавил загрузку общего конфига через папку текущего проекта (а не Коры)
-    - feat(api): - адаптировал api-client для вызова с клиента \\ добавил защиту от csrf атаки
-    - chore(config): - вынес объединение конфигов на уровень webpack (до сервера) \\ теперь на сервере конфиги сразу инициализируются \\ добавил parentConfigs для указание папки родительских конфигов \\ фиксы по мелочи
+    - bug(config): - заменил глючную библиотеку deep-assign 
+        \\ добавил загрузку общего конфига через папку текущего проекта (а не Коры)
+    - feat(api): - адаптировал api-client для вызова с клиента 
+        \\ добавил защиту от csrf атаки
+    - chore(config): - вынес объединение конфигов на уровень webpack (до сервера) 
+        \\ теперь на сервере конфиги сразу инициализируются 
+        \\ добавил parentConfigs для указание папки родительских конфигов 
+        \\ фиксы по мелочи
     - feat(bem): - убрал лишний функционал оборачивания, теперь всегда возвращается стринга при this.bem
     - bug(webpack): - доступ по cors для hot reload (разные порты были из-за двух серверов во время ДЕВ режима)
     - bug(css): - опустил библиотеки до версии postcss@5 так как на 6 версии не работает postcss-bemed (просто пустоту в тегах выдает)
