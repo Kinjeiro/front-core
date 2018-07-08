@@ -7,7 +7,16 @@ import {
 import { routerMiddleware } from 'react-router-redux';
 // import { browserHistory } from 'react-router';
 // import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+
+/*
+ todo @ANKU @LOW @BUG_OUT @redux-logger - Uncaught (in promise) TypeError: p[(p.length - 1)].lhs.hasOwnProperty is not a function #243
+ wrong version diff for v2.0.4
+ https://github.com/evgenyrodionov/redux-logger/issues/243
+ https://github.com/thiamsantos/redux-logger/tree/ddiff
+ import { createLogger } from 'redux-logger';
+ "redux-logger": "git+https://github.com/thiamsantos/redux-logger.git#ddiff",
+*/
+import { createLogger } from 'redux-logger/src';
 
 import clientConfig from '../client-config';
 
