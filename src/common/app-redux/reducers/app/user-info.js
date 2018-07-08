@@ -1,4 +1,4 @@
-import { DEFAULT_VALUES } from '../../../models/user-info';
+import { USER_INFO_DEFAULT_VALUES } from '../../../models/model-user-info';
 
 import { createReducer } from '../../utils';
 import { createStatusReducer } from '../../helpers';
@@ -10,7 +10,7 @@ import * as api from '../../../api/api-user';
 // ======================================================
 export const initialState = {
   // todo @ANKU @CRIT @MAIN - проверить, так как часть инфы приходит с сервера в фиксированном стартовом initialState (без actionChangeUserStatus)
-  ...DEFAULT_VALUES,
+  ...USER_INFO_DEFAULT_VALUES,
 
   actionChangeUserStatus: undefined,
   actionUserLogoutStatus: undefined,
@@ -69,6 +69,11 @@ export const reducer = createReducer(
       (state, action, userInfo) => ({
         ...state,
         ...userInfo,
+      }),
+    [TYPES.USER_LOGOUT_SUCCESS]:
+      (state) => ({
+        ...state,
+        ...USER_INFO_DEFAULT_VALUES,
       }),
   },
   {

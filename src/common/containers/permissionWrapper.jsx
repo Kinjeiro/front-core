@@ -37,8 +37,8 @@ export default function permissionWrapper(permissions, accessDeniedRoutePath = P
       static propTypes = {
         // from connect
         userInfo: USER_INFO_PROP_TYPE,
-        actionChangeGlobalUniError: PropTypes.func.isRequired,
-        actionGoTo: PropTypes.func.isRequired,
+        actionChangeGlobalUniError: PropTypes.func,
+        actionGoTo: PropTypes.func,
       };
 
       componentWillMount() {

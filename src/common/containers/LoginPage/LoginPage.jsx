@@ -82,6 +82,7 @@ export default class LoginPage extends Component {
     ]),
 
     loginButtonClassName: PropTypes.string,
+    loginCancelButtonClassName: PropTypes.string,
   };
 
   // ======================================================
@@ -195,6 +196,8 @@ export default class LoginPage extends Component {
       },
       inModal,
       loginButtonClassName,
+      loginCancelButtonClassName,
+      actionClearLastError,
     } = this.props;
 
     return (
@@ -237,6 +240,17 @@ export default class LoginPage extends Component {
           >
             {i18n('core:pages.LoginPage.loginButton')}
           </button>
+          {
+            inModal && (
+              <button
+                className={ `${this.bem('login-cancel')} ${loginCancelButtonClassName || ''}` }
+                disabled={ isFetching }
+                onClick={ () => actionClearLastError() }
+              >
+                {i18n('core:pages.LoginPage.loginCancelButton')}
+              </button>
+            )
+          }
         </div>
 
         { this.renderError() }

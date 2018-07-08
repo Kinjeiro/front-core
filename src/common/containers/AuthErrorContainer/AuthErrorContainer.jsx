@@ -84,11 +84,68 @@ export default class AuthErrorContainer extends Component {
         search,
         hash,
       },
+      lastUniError: {
+        linkForwardTo,
+      },
     } = this.props;
 
     // if (!reLoginModalForm && lastUniError && lastUniError.isNotAuth) {
-    actionGoTo(pathGetLoginPage(`${pathname}${search}${hash}`));
+    actionGoTo(pathGetLoginPage(linkForwardTo || `${pathname}${search}${hash}`));
     // }
+  }
+
+  // ======================================================
+  // RENDERS
+  // ======================================================
+  renderNeedReLoginOnIndexPage() {
+    const {
+      lastUniError: {
+        uniMessage,
+      },
+    } = this.props;
+
+    // todo @ANKU @LOW - можно сделать пропсы для текста отдельные
+    return (
+      <div className="AuthErrorContainer__goToLogin GoToLogin">
+        <h3 className="GoToLogin__title">
+          { uniMessage || i18n('containers.AuthErrorContainer.sessionExpire') }
+        </h3>
+        <button
+          className="GoToLogin__action"
+          onClick={ this.handleGoToLogin }
+        >
+          { i18n('containers.AuthErrorContainer.actionGoToLogin') }
+        </button>
+      </div>
+    );
+  }
+
+  renderModalMessage() {
+    const {
+      LoginPageComponentClass,
+      lastUniError: {
+        isNotAuth,
+        linkForwardTo,
+      },
+    } = this.props;
+
+    return isNotAuth && (
+      <div className="AuthErrorContainer__modal">
+        <div className="AuthErrorContainer__modalContent">
+          {
+            reLoginModalForm
+              ? (
+                <LoginPageComponentClass
+                  { ...this.props }
+                  inModal={ true }
+                  urlReturn={ linkForwardTo || false }
+                />
+              )
+              : this.renderNeedReLoginOnIndexPage()
+          }
+        </div>
+      </div>
+    );
   }
 
   // ======================================================
@@ -99,7 +156,6 @@ export default class AuthErrorContainer extends Component {
       lastUniError,
       children,
       user,
-      LoginPageComponentClass,
       // actionClearLastError,
     } = this.props;
 
@@ -108,38 +164,7 @@ export default class AuthErrorContainer extends Component {
         className="AuthErrorContainer"
         key={ user }
       >
-        {
-          lastUniError && lastUniError.isNotAuth && (
-            <div className="AuthErrorContainer__modal">
-              <div className="AuthErrorContainer__modalContent">
-                {
-                  reLoginModalForm
-                  ? (
-                    <LoginPageComponentClass
-                      { ...this.props }
-                      inModal={ true }
-                      urlReturn={ false }
-                    />
-                  )
-                  // todo @ANKU @LOW - можно сделать пропсы для текста отдельные
-                  : (
-                    <div className="AuthErrorContainer__goToLogin GoToLogin">
-                      <h3 className="GoToLogin__title">
-                        { i18n('containers.AuthErrorContainer.sessionExpire') }
-                      </h3>
-                      <button
-                        className="GoToLogin__action"
-                        onClick={ this.handleGoToLogin }
-                      >
-                        { i18n('containers.AuthErrorContainer.actionGoToLogin') }
-                      </button>
-                    </div>
-                  )
-                }
-              </div>
-            </div>
-          )
-        }
+        { lastUniError && this.renderModalMessage() }
 
         { children }
       </div>

@@ -225,12 +225,19 @@ export function executeVariable(fn, defaultValue = undefined, ...args) {
            : fn;
 }
 
+export function wrapToArray(value = null) {
+  return Array.isArray(value)
+    ? value
+    : value === null || value === ''
+      ? []
+      : [value];
+}
+
 export function includes(first, second) {
   if (typeof first === 'undefined' || first === null || typeof second === 'undefined' || second === null) {
     return false;
   }
-  const firstArray = Array.isArray(first) ? first : [first];
-  return firstArray.some((firstValue) => (
+  return wrapToArray(first).some((firstValue) => (
     Array.isArray(second)
       ? second.includes(firstValue)
       : firstValue === second
@@ -271,13 +278,6 @@ export function checkExist(value, error = 'Произошла ошибка', not
   return true;
 }
 
-export function wrapToArray(value = null) {
-  return Array.isArray(value)
-    ? value
-    : value === null || value === ''
-      ? []
-      : [value];
-}
 
 export function convertToString(...args) {
   return args.map((value) => (typeof value === 'string' ? value : `${value}`));

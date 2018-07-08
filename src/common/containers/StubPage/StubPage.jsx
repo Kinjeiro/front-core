@@ -30,6 +30,7 @@ import {
 import * as reduxI18nInfo from '../../app-redux/reducers/app/i18n-info';
 import * as reduxUserInfo from '../../app-redux/reducers/app/user-info';
 import * as reduxTest from '../../app-redux/reducers/app/test';
+import * as reduxLastUniError from '../../app-redux/reducers/app/last-uni-error';
 
 import TestDomain from '../../models/domains/TestDomain';
 
@@ -55,15 +56,15 @@ import './StubPage.css';
 )
 // todo @ANKU @CRIT @MAIN - вынести все это в examples
 @connect(
-  (state) => {
-    const userInfo = getUserInfo(state);
+  (globalState) => {
+    const userInfo = getUserInfo(globalState);
 
     return {
-      i18nInfo: getI18NInfo(state),
+      i18nInfo: getI18NInfo(globalState),
       userInfo,
       // @debug - так как мы используем mock, то реальный пользователь с загрузкой страницы не приходит, так как мы токен не используем, поэтому нужно проверить загрузился ли он через componentWillMount
-      showTestPermission: userInfo.username && hasPermission(state, TEST_PERMISSION),
-      testDomains: getTestDomains(state),
+      showTestPermission: hasPermission(globalState, TEST_PERMISSION),
+      testDomains: getTestDomains(globalState),
     };
   },
   {
@@ -72,10 +73,12 @@ import './StubPage.css';
     }),
     ...reduxUserInfo.getBindActions({
       apiChangeUser: apiUser.apiLogin,
+      apiUserLogout: apiUser.apiLogout,
     }),
     ...TestDomain.getActions(),
     ...reduxTest.actions,
     actionGoto: push,
+    ...reduxLastUniError.actions,
   },
 )
 @bemDecorator({ componentName: 'StubPage', wrapper: false })
@@ -99,6 +102,7 @@ export default class StubPage extends Component {
 
     actionI18NChangeLanguage: PropTypes.func,
     actionChangeUser: PropTypes.func,
+    actionUserLogout: PropTypes.func,
 
     testDomains: PropTypes.arrayOf(TestDomain.propTypes),
     actionCreateTestDomain: PropTypes.func,
@@ -106,6 +110,7 @@ export default class StubPage extends Component {
     actionDeleteTestDomain: PropTypes.func,
     actionLoadTestGet: PropTypes.func,
     actionGoto: PropTypes.func,
+    actionThrowNotAuthError: PropTypes.func,
   };
 
   state = {
@@ -173,6 +178,8 @@ export default class StubPage extends Component {
       actionI18NChangeLanguage,
       actionLoadTestGet,
       actionGoto,
+      actionThrowNotAuthError,
+      actionUserLogout,
     } = this.props;
 
 
@@ -289,6 +296,38 @@ export default class StubPage extends Component {
           >
             Test ModuleLink
           </ModuleLink>
+        </div>
+
+        <div>
+          <div>
+            <button
+              onClick={ () => actionUserLogout() }
+            >
+              Logout
+            </button>
+          </div>
+          <button
+            onClick={ () => actionThrowNotAuthError('/opa1/opa2') }
+          >
+            Not auth
+          </button>
+
+          <h4>
+            <Link
+              to="/opa3/opa4"
+              checkAuth={ true }
+            >
+              Not auth link
+            </Link>
+          </h4>
+          <h4>
+            <Link
+              to="/opa3/opa4"
+              permissions="testPermissions"
+            >
+              Not permissions Link
+            </Link>
+          </h4>
         </div>
       </div>
     );

@@ -29,6 +29,7 @@ export default class ModuleLink extends Component {
       getFullPath,
       modulePath,
       moduleName,
+      onGoTo,
       ...otherProps
     } = this.props;
 

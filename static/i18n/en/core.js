@@ -39,6 +39,7 @@ module.exports = {
       userNameLabel: 'Username',
       passwordLabel: 'Password',
       loginButton: 'Login',
+      loginCancelButton: 'Cancel',
     },
     ErrorPage: {
       returnTo: 'Return to',
@@ -55,6 +56,9 @@ module.exports = {
     AuthErrorContainer: {
       sessionExpire: 'Your session has expired. Please relogin.',
       actionGoToLogin: 'Go to login page',
+    },
+    AuthCheckWrapper: {
+      notPermissions: 'You haven\'t permissions ({{permissions}})',
     },
   },
 

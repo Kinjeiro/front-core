@@ -61,10 +61,16 @@ export const UNI_ERROR_PROP_TYPE_MAP = {
   message: PropTypes.node,
 
   stack: PropTypes.any,
-
   originalObject: PropTypes.any,
 
-  // calculated
+  linkForwardTo: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+
+  // ======================================================
+  // CALCULATED
+  // ======================================================
   uniCode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /**
    * @deprecated - use uniMessages
@@ -97,6 +103,8 @@ export const UNI_ERROR_DEFAULT_VALUE = {
   stack: undefined,
 
   originalObject: undefined,
+
+  linkForwardTo: undefined,
 
   // calculated
   uniCode: undefined,
@@ -158,10 +166,10 @@ export function createUniError(uniErrorData = {}) {
     ? uniErrorData.clientErrorMessages
     : [uniError.uniMessage];
 
-  uniError.isNotFound = ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
+  uniError.isNotFound = uniError.isNotFound || ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
     || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode);
 
-  uniError.isNotAuth = uniError.uniCode === 401;
+  uniError.isNotAuth = uniError.isNotAuth || uniError.uniCode === 401;
 
   uniError.stack = uniError.stack || (uniError.stack !== false && getStackTrace());
 

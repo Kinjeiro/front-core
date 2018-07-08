@@ -39,6 +39,7 @@ module.exports = {
       userNameLabel: 'Логин',
       passwordLabel: 'Пароль',
       loginButton: 'Войти',
+      loginCancelButton: 'Отмена',
     },
     ErrorPage: {
       returnTo: 'Вернуться к ',
@@ -55,6 +56,9 @@ module.exports = {
     AuthErrorContainer: {
       sessionExpire: 'Ваша сессия истекла. Пожалуйста перелогиньтесь.',
       actionGoToLogin: 'Перейти на страницу логина',
+    },
+    AuthCheckWrapper: {
+      notPermissions: 'У вас не хватает прав ({{permissions}})',
     },
   },
 
