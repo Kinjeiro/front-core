@@ -282,3 +282,8 @@ export function checkExist(value, error = 'Произошла ошибка', not
 export function convertToString(...args) {
   return args.map((value) => (typeof value === 'string' ? value : `${value}`));
 }
+
+export function escapeToRegExp(str) {
+  // eslint-disable-next-line no-useless-escape
+  return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}

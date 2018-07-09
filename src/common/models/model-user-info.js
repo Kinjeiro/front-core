@@ -57,6 +57,7 @@ export const USER_INFO_DEFAULT_VALUES = {
   lastName: '',
   displayName: '',
   email: undefined,
+  profileImageURI: undefined,
 
   provider: undefined,
 
