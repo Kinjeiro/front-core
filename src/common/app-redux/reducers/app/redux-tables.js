@@ -17,6 +17,7 @@ export const TYPES = MODULE.TYPES;
  actionModuleItemUpdate(tableUuid, data)
  actionModuleItemRemove(tableUuid)
 
+ Если meta=null|false или filters=null|false - это сбрасывает значения
  actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
  actionEditRecord(tableUuid, recordId, patchOperations)
  actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)

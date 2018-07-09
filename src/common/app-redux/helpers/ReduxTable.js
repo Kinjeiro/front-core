@@ -22,12 +22,12 @@ export default class ReduxTable extends ReduxUni {
       ...super.getInitialState(),
       records: [],
       meta: {
-        search: null,
+        search: undefined,
         startPage: 0,
         itemsPerPage: 10,
-        sortBy: null,
+        sortBy: undefined,
         sortDesc: true,
-        total: null,
+        total: undefined,
       },
       filters: {
         // field: value
@@ -262,7 +262,8 @@ export default class ReduxTable extends ReduxUni {
         selected: [],
         isSelectedAll: false,
       }),
-      [TYPES.CLEAR_FILTERS]: () => ({
+      [TYPES.CLEAR_FILTERS]: (state) => ({
+        ...state,
         filters: {},
       }),
     };
