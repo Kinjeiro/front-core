@@ -63,17 +63,26 @@ function proceedDefaultValues(defaultValues) {
          defaultValues;
 }
 
+/**
+ *
+ * @param url - либо мапа параметров либо стринга
+ * @param defaultValues
+ * @returns {{}}
+ */
 export function parseUrlParameters(url, defaultValues = {}) {
-  const extracted = queryString.extract(url);
+  let params = url;
+  if (typeof url === 'string') {
+    const extracted = queryString.extract(url);
 
-  const params = queryString.parse(
-    extracted,
-    {
-      arrayFormat: extracted.indexOf('[]=') >= 0
-        ? 'bracket'
-        : undefined,
-    },
-  );
+    params = queryString.parse(
+      extracted,
+      {
+        arrayFormat: extracted.indexOf('[]=') >= 0
+          ? 'bracket'
+          : undefined,
+      },
+    );
+  }
 
   /*
     Чтобы парсить объекты в query
@@ -109,11 +118,47 @@ export function parseUrlParameters(url, defaultValues = {}) {
   };
 }
 
-export function formatUrlParameters(params, url = '', hash = '', useBracket = false) {
-  const paramStr =
-    queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined })
-    // todo @ANKU @LOW - @BUT_OUT queryString - они не кодируют # hash
-    .replace(/#/g, '%23');
+
+
+function pushEncodedKeyValuePair(pairs, key, val) {
+  if (val != null) {
+    if (Array.isArray(val)) {
+      val.forEach((v) => {
+        pushEncodedKeyValuePair(pairs, key, v);
+      });
+    } else if (typeof val === 'object') {
+      for (const subkey in val) {
+        pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
+      }
+    } else {
+      pairs.push(`${encodeURIComponent(key)}=${encodeURIComponent(val)}`);
+    }
+  } else if (val === null) {
+    pairs.push(encodeURIComponent(key));
+  }
+}
+
+/**
+ * // todo @ANKU @LOW - не работают с "bracket" (когда multiple test[]=value1&test[]=value2)
+ *
+ * @param params
+ * @param url
+ * @param hash
+ * @returns {string}
+ */
+export function formatUrlParameters(params, url = '', hash = ''/* , useBracket = false */) {
+  // const paramStr =
+  //   queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined })
+  //   // todo @ANKU @LOW - @BUT_OUT queryString - они не кодируют # hash
+  //   .replace(/#/g, '%23');
+  // todo @ANKU @LOW @BUT_OUT @query-string - не умеет вложенные объекты парсить filters: { user: 'ivanovI' } to filters[user]=ivanovI
+  // Поэтому взял решение у superagent
+  const pairs = [];
+  for (const key in params) {
+    pushEncodedKeyValuePair(pairs, key, params[key]);
+  }
+  const paramStr = pairs.join('&');
+
   return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
 }
 

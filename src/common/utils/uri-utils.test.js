@@ -4,6 +4,28 @@ import {
 } from './uri-utils';
 
 describe('uri-utils', () => {
+  describe('[function] formatUrlParameters', () => {
+    it('should format simple', () => {
+      const params = {
+        itemsPerPage: 10,
+        testArray: [10, 20],
+      };
+
+      expect(formatUrlParameters(params)).to.be.equal('itemsPerPage=10&testArray=10&testArray=20');
+    });
+    it('should format inner object params', () => {
+      const params = {
+        itemsPerPage: 10,
+        filters: {
+          user: 'ivanovI',
+        },
+        testArray: [10, 20],
+      };
+
+      expect(formatUrlParameters(params)).to.be.equal('itemsPerPage=10&filters%5Buser%5D=ivanovI&testArray=10&testArray=20');
+    });
+  });
+
   describe('[function] parseUrlParameters', () => {
     it('should parse array variables correct', () => {
       const url = 'test?var2[]=21&var3[]=31&var3[]=32&var4=4';
