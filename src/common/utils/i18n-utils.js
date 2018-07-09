@@ -22,7 +22,7 @@ export function getI18Instance() {
 }
 
 
-export function translateWithNamespace(namespace, key, mapParams = {}) {
+export function translateWithNamespace(namespace, key, mapParams = {}, defaultValue = null) {
   // return i18nInstance.t(key, {
   //  defaultValue: defaultValue || key,
   //  ...mapParams
@@ -40,9 +40,10 @@ export function translateWithNamespace(namespace, key, mapParams = {}) {
   }
 
   const value = i18nInstance.t(key, {
-    defaultValue: clientConfig.common && !clientConfig.common.isProduction
+    defaultValue: defaultValue || (clientConfig.common && !clientConfig.common.isProduction
       ? `@@ ${key}`
-      : undefined,
+      : undefined
+    ),
     ...mapParams,
   });
   return value;
@@ -53,10 +54,11 @@ export function translateWithNamespace(namespace, key, mapParams = {}) {
  * @param key
  * @param mapParams ( defaultValue props include )
  * @param namespace
+ * @param defaultValue
  * @returns {*}
  */
-export function translateDefault(key, mapParams = {}, namespace = '') {
-  return translateWithNamespace(namespace, key, mapParams);
+export function translateDefault(key, mapParams = {}, namespace = '', defaultValue = null) {
+  return translateWithNamespace(namespace, key, mapParams, defaultValue);
 }
 
 export const translateCore = translateWithNamespace.bind(null, 'core');
