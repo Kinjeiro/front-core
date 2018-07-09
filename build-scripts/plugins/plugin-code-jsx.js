@@ -1,7 +1,10 @@
-const path = require('path');
-// const webpack = require('webpack');
-
-function pluginCodeJsx(webpackConfig, { inProjectSrc }) {
+function pluginCodeJsx(
+  webpackConfig,
+  {
+    inProjectSrc,
+    compileNodeModules
+  }
+) {
   const projectSrc = inProjectSrc();
 
   webpackConfig.resolve.modules.push(
@@ -16,6 +19,10 @@ function pluginCodeJsx(webpackConfig, { inProjectSrc }) {
 
   webpackConfig.resolve.extensions.push('*', '.js', '.jsx', '.web.js', '.webpack.js', '.styl');
 
+  const compileNodeModulesStr = compileNodeModules
+    .map((moduleName) => `${moduleName.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\/`)
+    .join('|');
+
   webpackConfig.module.rules.push({
     test: /\.jsx?$/,
     // include: path.join(__dirname, 'src'),
@@ -23,7 +30,16 @@ function pluginCodeJsx(webpackConfig, { inProjectSrc }) {
     include: [
       projectSrc
     ],
-    exclude: /node_modules/
+    // exclude(modulePath) {
+    //   console.warn('ANKU , modulePath', modulePath, /node_modules/.test(modulePath) &&
+    //     !/node_modules\/redux-logger/.test(modulePath));
+    //   return /node_modules/.test(modulePath) &&
+    //     !/node_modules\/redux-logger/.test(modulePath);
+    // }
+    exclude: compileNodeModulesStr
+      // (?!foo|bar) - это negative lookahead - https://www.regular-expressions.info/lookaround.html
+      ? new RegExp(`node_modules\\/(?!${compileNodeModulesStr})`)
+      : /node_modules\//
   });
 }
 

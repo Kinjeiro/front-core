@@ -1,6 +1,7 @@
-const path = require('path');
-
-const { urlJoin } = require('./utils/path-utils')
+const {
+  urlJoin,
+  pathResolve,
+} = require('./utils/path-utils');
 const appConfig = require('../config/utils/get-full-config');
 
 const ENV = process.env;
@@ -21,7 +22,7 @@ const serverStartPath = './src/server/index.js';
 const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
 
 function inCoreProject(...args) {
-  return path.resolve(CURRENT_FILE_PATH, '..', ...args);
+  return pathResolve(CURRENT_FILE_PATH, '..', ...args);
 }
 function inCoreProjectSrcRelative(srcPath) {
   return useFromFrontCore
@@ -30,7 +31,7 @@ function inCoreProjectSrcRelative(srcPath) {
 }
 
 function inProject(...args) {
-  return path.resolve(PROCESS_PATH, ...args);
+  return pathResolve(PROCESS_PATH, ...args);
 }
 
 // todo @ANKU @LOW - если запускаем кору из коры нужно писать src/ path.cwd === __dirname
@@ -49,7 +50,7 @@ const context = {
 
   staticPaths: [
     // абсолютные, чтобы другие проекты могли добавлять свои
-    path.resolve(CURRENT_FILE_PATH, '..', staticPath)
+    pathResolve(CURRENT_FILE_PATH, '..', staticPath)
   ],
 
   publicPath,
@@ -80,7 +81,11 @@ const context = {
     publicPath: hasContextRoot ? publicPath : undefined,
   },
   isProduction: ENV.NODE_ENV === 'production',
-  isLocalhost: ENV.NODE_ENV === 'localhost'
+  isLocalhost: ENV.NODE_ENV === 'localhost',
+
+  compileNodeModules: [
+    'redux-logger'
+  ]
 };
 context.inProjectSrc = context.inProjectSrc.bind(context);
 context.inProjectBuild = context.inProjectBuild.bind(context);

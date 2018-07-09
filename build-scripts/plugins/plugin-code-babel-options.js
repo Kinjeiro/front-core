@@ -52,6 +52,7 @@ function pluginCodeBabelOptions(webpackConfig, { inCoreProject }) {
             https://github.com/webpack/webpack/issues/4039#issuecomment-283501082
             */
             // modules: false,
+
             targets: {
               ie9: true
             },

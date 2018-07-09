@@ -1,4 +1,7 @@
 /* eslint-disable global-require */
+const { tryLoadProjectFile } = require('../build-scripts/utils/require-utils');
+
+const context = tryLoadProjectFile('build-scripts/webpack-context');
 
 const packageJson = require('../package.json');
 
@@ -13,6 +16,8 @@ module.exports = function initBabel(isServer = false) {
     @NOTE: ЗАПУСКАЕМ БАБЕЛ, чтобы он все последующие require компилировал из ES6
   */
   console.info('babel-register');
+
+
   /*
     todo @ANKU @QUESTION - папку для тестирования мы сделали на es6 с использованием babel.
     Но если вызывать их из наследуемых проектов с бабелем, по умолчанию babel игнорирует все, что находится в node_modules
@@ -21,8 +26,12 @@ module.exports = function initBabel(isServer = false) {
     1) добавить игнор на наш проект
     2) либо перевести тесты на es5 (без import)
 
-    Выбрал: 1)
+    Выбрал: 1) - packageJson.name
   */
+  const compileNodeModulesStr = [packageJson.name, ...context.compileNodeModules]
+    .map((moduleName) => `${moduleName.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\/`)
+    .join('|');
+
   require('babel-register')({
     // todo @ANKU @LOW @BUG_OUT @babel - работает только через require (через .babelrc не пашет) - https://stackoverflow.com/questions/35002195/babel-node-fails-to-require-jsx-file-in-node-modules
     // https://github.com/babel/babel/pull/3644#issuecomment-297016161
@@ -46,6 +55,8 @@ module.exports = function initBabel(isServer = false) {
      t-react\\lib\\index.js")
     */
     // ignore: `/node_modules\\/(?!${packageJson.name})/`
-    ignore: new RegExp(`node_modules\\/(?!${packageJson.name})`)
+    // ignore: new RegExp(`node_modules\\/(?!${packageJson.name})`)
+    // ignore: new RegExp(`node_modules\\/(?!${packageJson.name}|redux-logger)`)
+    ignore: new RegExp(`\\/node_modules\\/(?!${compileNodeModulesStr})`)
   });
 };
