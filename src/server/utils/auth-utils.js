@@ -12,10 +12,10 @@ import serverConfig from '../server-config';
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
 const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
 const authTypeCookie = serverConfig.server.features.auth.authTypeCookie;
-const finalContextRoot = appUrl();
+const contextPath = appUrl();
 
 const OPTIONS = {
-  path: finalContextRoot,
+  path: contextPath,
   isHttpOnly: true,
   // todo @ANKU @CRIT @MAIN @DEBUG - secure: false
   isSecure: false,
@@ -73,11 +73,23 @@ export function setAuthCookies(
 function getState(req, name) {
   const { state } = req;
   // eslint-disable-next-line no-nested-ternary
-  return state
+  let result = state
     ? typeof state === 'function'
       ? state(name)
       : state[name]
     : undefined;
+
+  if (Array.isArray(result)) {
+    /*
+      todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
+      refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
+      это бага, но никак настройки для isHttpOnly никак не получить
+      если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
+    */
+    // в таком случае всегда первым будет ближайший contextPath
+    result = result[0];
+  }
+  return result;
 }
 
 export function getToken(req) {
