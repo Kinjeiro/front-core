@@ -5,7 +5,10 @@ import {
   joinUri,
   joinPathSimple,
 } from '../../common/utils/uri-utils';
-import { cutContextPath } from '../../common/helpers/app-urls';
+import {
+  appUrl,
+  cutContextPath,
+} from '../../common/helpers/app-urls';
 
 import serverConfig from '../server-config';
 import logger from '../helpers/server-logger';
@@ -121,7 +124,7 @@ export function getRequestPath(url, pluginOptions, isMocked) {
     '/',
     normalizeApiPrefix,
     isMocked ? normalizeMockRouteBase : '',
-    url
+    cutContextPath(url)
       .replace(normalizeApiPrefix, '')
       .replace(normalizeMockRouteBase, ''),
   );
@@ -156,7 +159,8 @@ function onRequest(options, request, reply) {
     mockRoutes.some((mockRoute) => {
       if (validateRoutePath(request, mockRoute.path, mockRoute)) {
         // используем request.url.path - чтобы поддержать пробросс query параметров
-        request.setUrl(getRequestPath(request.url.path, options, true));
+        // необходимо не забыть про contextPath тут, а внутри наоборот нужно его вырезать
+        request.setUrl(appUrl(getRequestPath(request.url.path, options, true)));
         return true;
       }
       return false;

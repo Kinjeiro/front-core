@@ -125,12 +125,14 @@ export function register(server, pluginOptions, next) {
 
               const notReturnUrl = [
                 appUrl(''),
+                appUrl('/'),
                 appUrl(loginPath),
               ];
 
               const returnUrlStr = notReturnUrl.includes(path)
                 ? ''
-                : `?${PARAM_RETURN_URL}=${encodeURIComponent(path)}`;
+                // нужно вырезать contextPath так как его будет использовать роутинг на клиенте
+                : `?${PARAM_RETURN_URL}=${encodeURIComponent(cutContextPath(path))}`;
               logger.warn(i18n('core:errors.notAuthorize'));
               return reply.redirect(`${appUrl(loginPath)}${returnUrlStr}`);
             }

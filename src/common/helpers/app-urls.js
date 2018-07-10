@@ -35,7 +35,8 @@ export function cutContextPath(requestPath) {
   const contextPath = config.common.app.contextRoot;
   return contextPath && contextPath !== '/'
     ? requestPath.replace(new RegExp(`^${joinUri('/', contextPath).replace(/\//gi, '\\/')}`, 'gi'), '')
-    : requestPath;
+    // на всякий случай проверяем если впереди /
+    : joinUri('/', requestPath);
 }
 
 export default appUrl;
