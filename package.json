@@ -103,7 +103,7 @@
     "h2o2": "~6.1.0",
     "hapi": "~16.5.0",
     "hapi-request-id": "~1.1.0",
-    "history": "~3.0.0",
+    "history": "~3.3.0",
     "hoek": "~4.0.1",
     "html-loader": "~0.5.1",
     "html-webpack-plugin": "~3.2.0",
