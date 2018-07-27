@@ -160,7 +160,13 @@ module.exports = {
         // поэтому после первого запроса нужно подождать пока на клиент придут обновленные данные и уже с ними отослать непрошедшие запросы
         // если 0 - то отключить
         retryWhenNotAuthErrorTimeout: 300,
-        retryWhenNotAuthErrorAttempts: 2
+        retryWhenNotAuthErrorAttempts: 2,
+
+        /**
+         * чаше всего необходимо для открытых систем, а для enterprise обычно не надо
+         */
+        allowSignup: false,
+        allowResetPasswordByEmail: false
       },
 
       date: {
@@ -177,8 +183,13 @@ module.exports = {
           whitelist: ['ru', 'en'],
           fallbackLng: 'en',
           ns: ['core'],
-          useCookieForDetect: true
+          useCookieForDetect: true,
           // todo @ANKU @LOW - вынести сюда название куки - I18N_LANGUAGE_COOKIE_NAME
+
+          interpolation: {
+            // всегда отображать по умолчанию html теги как есть
+            escapeValue: false
+          }
 
           // ... other see in \src\server\plugins\i18n.js
           //             and https://www.i18next.com/configuration-options.html
@@ -310,11 +321,12 @@ module.exports = {
         refreshTokenCookie: 'refreshToken',
         authTypeCookie: 'authType',
 
-        // Настройки для аутентификации клиента в front-core-auth
+        // Настройки для аутентификации клиента в auth-server OAuth 2.0
+        // По умолчанию берется название проекта из package.json
         applicationClientInfo: {
-          id: 'frontCore',
-          secret: 'frontCorefrontCore',
-          credentials: {}
+          client_id: APP_ID,
+          client_secret: `${APP_ID}${APP_ID}`
+          // credentials: {}
         }
       },
 
