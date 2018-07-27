@@ -3,6 +3,7 @@ import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 
 // import i18n from '../utils/i18n-utils';
+import { errorToJson as utilsErrorToJson } from '../utils/common';
 import logger from '../helpers/client-logger';
 
 // import { ExtendableError } from 'common/utils/common';
@@ -272,7 +273,10 @@ export function parseFromProjectFormat(errorOrResponse = {}, uniErrorData = {}) 
 export function parseFromJsonError(errorOrResponse, uniErrorData) {
   if (
     typeof errorOrResponse === 'object'
-    && typeof errorOrResponse.message !== 'undefined'
+    && (
+      typeof errorOrResponse.message !== 'undefined'
+      || typeof errorOrResponse.error !== 'undefined'
+    )
   ) {
     const {
       clientErrorMessage,
@@ -285,7 +289,7 @@ export function parseFromJsonError(errorOrResponse, uniErrorData) {
     if (clientErrorMessage || clientErrorMessages) {
       return createUniError(merge({}, errorOrResponse, uniErrorData));
     }
-    if (typeof error === 'string') {
+    if (typeof error === 'string' || typeof message === 'string') {
       /*
        error: "Internal Server Error",
        exception: "java.lang.Exception",
@@ -536,6 +540,8 @@ export function hasError(object) {
 export function throwUniError(anyError) {
   throw new ThrowableUniError(parseToUniError(anyError));
 }
+
+export const errorToJson = utilsErrorToJson;
 
 
 export default UNI_ERROR_PROP_TYPE;

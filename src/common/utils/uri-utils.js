@@ -177,6 +177,8 @@ export function joinPath(...paths) {
       lastUrlParameters,
       joinPathInner('/', ...convertToString(...paths.slice(0, paths.length - 1))),
     );
+  } else if (typeof lastUrlParameters === 'undefined' || lastUrlParameters === null) {
+    return joinPathInner('/', ...convertToString(...paths.slice(0, paths.length - 1)));
   }
 
   return joinPathInner('/', ...convertToString(...paths));

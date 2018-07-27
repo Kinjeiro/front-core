@@ -34,6 +34,7 @@ export const USER_INFO_PROP_TYPE_MAP = {
   lastName: PropTypes.string,
   displayName: PropTypes.string,
   email: PropTypes.string,
+  phone: PropTypes.string,
 
   provider: PropTypes.string,
 
@@ -48,7 +49,7 @@ export const USER_INFO_PROP_TYPE_MAP = {
 };
 
 export const USER_INFO_DEFAULT_VALUES = {
-  userId: undefined,
+  // userId: undefined,
   username: undefined,
   userType: undefined,
 
@@ -58,6 +59,7 @@ export const USER_INFO_DEFAULT_VALUES = {
   displayName: '',
   email: undefined,
   profileImageURI: undefined,
+  phone: undefined,
 
   provider: undefined,
 

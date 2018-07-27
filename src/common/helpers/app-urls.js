@@ -39,4 +39,8 @@ export function cutContextPath(requestPath) {
     : joinUri('/', requestPath);
 }
 
+export function getFullUrl(routePath, queryParams = undefined) {
+  return `${window.location.origin}${joinUri(config.common.app.contextRoot, routePath, queryParams)}`;
+}
+
 export default appUrl;
