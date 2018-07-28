@@ -36,7 +36,7 @@ export default class UniError extends Component {
       <div>
         {
           uniError
-            ? uniError.clientErrorMessage
+            ? uniError.uniMessage
             : i18n('core:components.UniError.errorOccurred')
         }
 

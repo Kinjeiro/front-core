@@ -26,6 +26,12 @@ export function getUser(globalState) {
     ? userInfo
     : null;
 }
+export function getUserId(globalState) {
+  const userInfo = getUserInfo(globalState);
+  return userInfo && userInfo.username
+    ? userInfo.username
+    : null;
+}
 
 export function hasPermission(globalState, permission) {
   const user = getUser(globalState);
