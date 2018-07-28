@@ -233,12 +233,12 @@ export function wrapToArray(value = null) {
       : [value];
 }
 
-export function includes(first, second) {
+export function includes(first, second, emptyIsInclude = false) {
   const firstA = wrapToArray(first);
   const secondA = wrapToArray(second);
 
   if (secondA.length === 0) {
-    return true;
+    return emptyIsInclude;
   }
   if (firstA.length === 0) {
     return false;

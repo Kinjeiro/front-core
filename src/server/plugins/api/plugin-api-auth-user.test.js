@@ -46,7 +46,6 @@ describe('(Plugin)(Api) User', () => {
       } else {
         expect(statusCode).to.equal(200);
         expect(userInfo.username).to.equal(TEST_USER.username);
-        expect(userInfo.scope).to.equal('*');
       }
     });
   });

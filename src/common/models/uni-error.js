@@ -168,7 +168,8 @@ export function createUniError(uniErrorData = {}) {
     : [uniError.uniMessage];
 
   uniError.isNotFound = uniError.isNotFound || ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
-    || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode);
+    || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode)
+    || uniError.uniMessage.indexOf('connect ECONNREFUSED') === 0;
 
   uniError.isNotAuth = uniError.isNotAuth || uniError.uniCode === 401;
 
