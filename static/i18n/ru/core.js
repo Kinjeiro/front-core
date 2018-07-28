@@ -33,13 +33,45 @@ module.exports = {
       createTestDomainButton: '@RU Create TestDomain',
       testErrorNotification: '@RU Test error Notification',
     },
-    LoginPage: {
+    SignupPage: {
+      title: 'Регистрация',
+      fields: {
+        username: 'Логин',
+        password: 'Пароль',
+        email: 'Почта',
+        displayName: 'Отображаемое имя',
+      },
+      submitButton: 'Регистрация',
+      cancelButton: 'Отменить',
+    },
+    SigninPage: {
       title: 'Логин',
       description: 'Страница логина',
-      userNameLabel: 'Логин',
-      passwordLabel: 'Пароль',
+      fields: {
+        userNameLabel: 'Логин',
+        passwordLabel: 'Пароль',
+      },
       loginButton: 'Войти',
       loginCancelButton: 'Отмена',
+      signup: 'Регистрация',
+      forgotPassword: 'Забыл пароль',
+    },
+    ForgotPage: {
+      title: 'Восстановление пароля',
+      fields: {
+        email: 'Введите почту',
+      },
+      submitButton: 'Сбросить пароль',
+      submitSuccessMessage: 'На вашу почту {{email}} отослано сообщение с ссылкой для смены пароля',
+    },
+    ResetPage: {
+      title: 'Обновление пароля',
+      fields: {
+        newPassword: 'Введите новый пароль',
+      },
+      submitButton: 'Обновить',
+      submitSuccessMessage: 'Пароль успешно изменен',
+      goToIndexPage: 'На главную',
     },
     ErrorPage: {
       returnTo: 'Вернуться к ',

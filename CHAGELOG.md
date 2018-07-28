@@ -4,7 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [last version][1.3.0 - ] (2018.05.16)
+
+## [last version][1.4.0 - ] (2018.07.28)
+### !!! Breaking changes:
+1. Настроил ServiceAuth на работу с сервером ```@reagentum/auth-server@1.0.4```. Добавил Signup \ Forgot password \ Reset password фунционал
+   Перенес все что связано с авторизацией пока в отдельный псевдомодуль ```/src/modules/module-auth```
+   Изменил роутинг с ```/login``` на ```/auth/signin``` и кое-где классы для компонентов -
+   Поэтому проверьте у себя, чтобы ничего не отвалилось в авторизации
+   
+### API Dependencies:
+    + ServiceAuth - @reagentum/auth-server@1.0.4
+
+### Dependencies:
+    + "whatwg-fetch": "~2.0.4"
+    
+### Dev Dependencies:
+
+### Features:
+1.  OAuth авторизация с регистрацией и сбросом пароля через почту
+
+### Commits:
+    - !!! feat(auth): - вынес авторизацию в отдельный псевдомодуль (src\common\modules\module-auth)
+        \\ добавил signup (Регистрацию) и возможность сброса пароля через почту (forgot и reset)
+    - chore(*) minor version: 1.4.0
+    
+ 
+
+## [last version][1.3.0 - 1.3.38] (2018.07.28)
 ### !!! Breaking changes:
 1. Теперь конфиги клиента подгружаются асинхронно. Это необходимо, если код используется как статические ассеты на другом сервере (к примеру, на weblogic).
 Необходимо свои src\client\index.js переписать на асинхронный режим
@@ -50,6 +76,132 @@ rm -rf ./node_modules && rm -f package-lock.json && npm cache clean --force && n
 1. использование сборки как статически ассетов для другого сервера 
 
 ### Commits:
+    - chore(*) patch version: 1.3.38
+    - feat(api, health): - /health возвращает название и версию прилоежния
+    - bug(uni-error): - пофиксид uni-error нужно использовать uniMessage а не clientErrorMessage
+    - feat(auth): - добавил в конфиги common.features.auth.allowSignup и allowResetPasswordByEmail - возможность их включать и отключать
+		\\ i18n теперь по умолчанию не эскейпит html в сообщениях
+		\\ client_id равен APP_ID, а client_secret APP_IDAPP_ID
+    - bug(routes): - обновил history@3.3.0 там была бага сбрасывались query в стринговом path
+    - feat(components): - ActionStatus - чтобы показывать ошибки после промисов
+    - feat(utils): - новый метод app-urls::getFullUrl
+		\\ user - теперь появилось поле phone, email стал required
+		\\ utils\common.js::errorToJson - сериализация ошибок
+		\\ фикс uri-utils::joinPath - если последний параметер пустой - не учитывать его
+    - feat(redux): - добавил декоратор redux-simple-form для удобства работы с нашими redux ui form (как простую замену redux-form)
+    - chore(*) patch version: 1.3.37
+    - bug(contextPath, hapi): - бага в hapi - он не достает куки от contextPath а пихает все, использовали workaround с получением первого элемента массива для кук
+    - chore(*) patch version: 1.3.36
+    - bug(contextPath): - бага - моки не работали при contextPath
+    - chore(*) patch version: 1.3.35
+    - bug(ReduxTable): - при очистки фильтров терся весь остальной state
+    - bug(utils, uri): - не парсились вложенные объекты
+    - chore(*) patch version: 1.3.34
+    - feat(utils, regexp): - escapeToRegExp
+    - chore(babel): - добавил в webapck-context compileNodeModules - чтобы указывать какие модули в node_modules нужно траспилировать через babel (которые используют ES6)
+    - feat(i18n): - добавил defaultValue если нет такого ключа
+    - chore(depen): - отключил правило что нужно только из своего собственного package.json брать зависимости, ибо в коре уже многие есть
+    - chore(auth): - добавил AuthCheckWrapper - для проверки авторизованности и если ее нет - то появляется модальное окно логина
+		\\ обновил Link добавив внутрь этот враппер (перевел в containers) - checkAuth, permissions
+		\\ для uni-error linkForwardTo чтобы можно было после перейти на нужный роут
+    - bug(redux-logger): - @bug_out redux-logger ошибка из-за версии diff - изменил на исправленный форк
+    - chore(*) patch version: 1.3.33
+    - !!! chore(depen): - почистил депенденси
+		\\ бага что продакшен зависимости были в devDependencies
+		\\ теперь требуется реакт 16.4.0 (мы используем фичи React.createContext)
+    - bug(mock, contextPath): - неправильные пути до ассетов строились на сервере
+    - chore(*) patch version: 1.3.32
+    - bug(mock, contextPath): - моки не работали если есть contextPath
+    - chore(*) patch version: 1.3.31
+    - bug(contextPath): - для сервера нужно доп обертка для уверенности
+    - chore(*) patch version: 1.3.30
+    - feat(contextPath): - добавил оберту для contextPath чтобы если есть впереди проставлял слеш
+    - chore(*) patch version: 1.3.29
+    - feat(modules): - компонент ModuleLink для удобства
+    - chore(*) patch version: 1.3.28
+    - feat(utils, api): - сделал передачу meta от рута (без префикса meta[search])
+    - chore(*) patch version: 1.3.27
+    - bug(utils, api, uri): - исправил багу в api crud - убрал первым параметром id компонента
+		\\ добавил возможность парсить объекты из параметров: queryparam[innerKey]=value
+    - chore(*) patch version: 1.3.26
+    - feat(utils): - лучше использовать joinPath вместо joinUri
+		\\ добавил метод getModuleFullPath, чтобы в дочерних проектов у раутов \ меню расчитывать пути
+    - chore(*) patch version: 1.3.25
+    - feat(redux-table): - добавил в передаваемые проперти table
+    - chore(*) patch version: 1.3.24
+    - feat(context, ContextModulesProvider): - добавил доп проперть в которую передется маппинг модуля и префикса для него (через createRouter: rootAppComponentProps.modulesProviderProps.moduleToRoutePrefixMap)
+		\\ затем это используется в ContextModulesProvider чтобы составлять полный урл из относительного урла модуля
+		\\ а потом поставляются в любые компоненты посредствам декоратора src\common\contexts\ContextModules\decorator-context-modules.js - подаются методы getFullPath и onGoTo
+		\\ добавил описание model-location.js
+    - feat(utils): - добавил способ создания декораторов по Context.Consumer \utils\decorators\utils\create-context-decorator.jsx
+    - chore(eslint): - отключил проверку на PropTypes.object и остальное
+    - bug(utils): - в joinUrl было ограничение что можно только стринги были подавать, на number ругался
+    - chore(*) patch version: 1.3.23
+    - feat(models): - обновил модели, добавил model-table и model-id
+		\\ в утилиты добавил результат дифа - deep-diff.js
+    - chore(*) patch version: 1.3.22
+    - feat(Link): - добавил подсветку при наведении
+    - chore(*) patch version: 1.3.21
+    - feat(utils): - createCrud все поля с наймингом Record а не Entity для единообразия с ReduxTable
+    - feat(utils): - common::wrapToArray
+    - chore(*) patch version: 1.3.20
+    - feat(utils): - api-utils:createCrudApi
+		\\ в конфигах задать server.endpointServices.middlewareApiService и можно использовать server\helpers\middleware-api::proxy или send методы
+    - feat(redux): - декоратор для redux tables чтобы автоматом инициализироваться
+    - feat(utils): - добавил checkExist (для удобной проверки наличия переменных)
+    - feat(utils): - добавил createTestUser для удобства
+		\\ пару описаний
+    - chore(*) patch version: 1.3.19
+    - feat(utils): - добавил formatStringWithoutAutoSpaces
+    - chore(*) patch version: 1.3.18
+    - feat(utils): - format-utils:formatString
+    - chore(*) patch version: 1.3.17
+    - feat(utils): - formatString
+		\\ treeUtils - isRoot если нашелся элемент и он рутовый, подаваемый
+    - chore(*) patch version: 1.3.16
+    - feat(redux): - обновил redux-logger (добавился diff)
+    - chore(*) patch version: 1.3.15
+    - feat(tree-utils): - findInTree обновил и написал тесты (появилась возможность задать фильтр как функцию)
+    - chore(*) patch version: 1.3.14
+    - bug(webpack): - ассеты с контекст пасом не определялись
+    - chore(*) patch version: 1.3.13
+    - chore(depen): - обновил версию реакта до 16.4.0
+    - chore(*) patch version: 1.3.12
+    - feat(apiClient): - добавил инициализация общего для всех класс ApiClientClass чтобы проекты могли создавать множество инстансов на одинаковых данных
+		\\ также добавил по умолчанию в классе получение контекста - redux state и метод getUserInfo()
+    - chore(*) patch version: 1.3.11
+    - bug(patch): - regexp объект мутабельный и test плохо отрабатывает
+    - chore(*) patch version: 1.3.10
+    - bug(build): - неправильное проставлялись пути до ассетов шрифтов и иконок
+    - feat(client): - добавил window глобальные перменные
+    - chore(*) patch version: 1.3.9
+    - chore(dep): - апдейт
+    - bug(i18n): - отложенная загрузка скриптов. Приложение не стартанет пока не загрузится локализация
+    - chore(*) patch version: 1.3.8
+    - bug(api, utils): - неправильно находился "-" при добавлении
+    - chore(*) patch version: 1.3.7
+    - feat(api): - createEndpointServiceConfig useDefaults - чтобы можно было дефолтов делать относительные ссылки
+    - chore(*) patch version: 1.3.6
+    - feat(api): - добавил доп настройку для BaseApiClient - withContextUrl по умолчанию true (чтобы на другие относительные namespace заходить)
+    - chore(*) patch version: 1.3.5
+    - feat(utils, api): - patch-operation add 3
+    - feat(utils, api): - patch-operation add 2
+    - feat(utils, api): - patch-operation add - добавил автоматическое добавление \- для вставки в конец по стандарту
+    - chore(*) patch version: 1.3.4
+    - feat(utils, url): - joinUri в конце может принимать object - это query parameters
+    - bug(contextUrl): - appUrl не нужно использовать для роутинга, history сама добавит из basename
+    - chore(*) patch version: 1.3.3
+    - feat(apiClient): - метод взятия единого apiClient в helpers/get-api-client (возвращает метод который нужно вызвать)
+		\\ его инициализация происходит в AbstractClientRunner (либо внутри него самого, по умолчанию используется BaseApiClient)
+		\\ BaseApiClient по умолчанию берет apiHost \ apiPort \ apiPrefix из конфигов common.apiClientEndpoint (если пустой, то будет относительно запускаемого сервера)
+		\\ настройки для коннекшена hapi - server.features.serverFeatures.serverConnectionOptions
+		\\ включен cors * на ноде
+    - chore(*) patch version: 1.3.2
+    - bug(contextPath): - в path у роутеров были куски контекст паса из appUrl
+    - chore(*) patch version: 1.3.1
+    - feat(contextPath): - починил contextPath для статического билда (к сожалению, с серверной ноды, он пока не работает)
+    - chore(*) minor version: 1.3.0
+    - chore(doc): - change log
     - feat(build): - теперь конфиги инициализируются асинхронно (нужно переделать src\client\index.js стартеры в проектах)
         \\ если конфиги не пришли вместе со window.__data - тогда они загрузятся из ассектов\default-config.json (поэтому и асинхронно) 
     - chore(ie): - добавил полифил для fetch в ie 
@@ -66,13 +218,13 @@ rm -rf ./node_modules && rm -f package-lock.json && npm cache clean --force && n
 1. ReduxTable - редакс для таблиц со встроенным selected, meta, filters, changeStatus и редактированием
 
 ### Dependencies:
-
+    + "node-sass": "~4.6.0"
+    + "html-webpack-plugin": "~3.2.0"
+    + "pm2": "~2.8.0"
+    
 ### Dev Dependencies:
     + "documentation": "~6.1.0"
-    + "html-webpack-plugin": "~3.2.0"
-    + "node-sass": "~4.6.0"
     + "live-server": "~1.2.0"
-    + "pm2": "~2.8.0"
 
 ### Commits:
     - feat(build): - добавил полезности для статической сборки: ./.build/default-config.json и ./.build/index.html с втроенным дефолтным конфигом

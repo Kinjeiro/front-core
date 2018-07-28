@@ -24,6 +24,8 @@ import {
 } from './containers';
 // import TestPage from './containers/TestPage/TestPage';
 
+import getRouterAuth from './modules/module-auth/routes-auth';
+
 export default function createRoutes(
   store,
   projectLayout,
@@ -94,9 +96,10 @@ export default function createRoutes(
       {
         !authLayout && (
           <Route
-            path={ CORE_ROUTES_NAMES.LOGIN }
-            component={ LoginPageComponentClass }
-          />
+            path={ CORE_ROUTES_NAMES.auth }
+          >
+            { getRouterAuth() }
+          </Route>
         )
       }
       <Route

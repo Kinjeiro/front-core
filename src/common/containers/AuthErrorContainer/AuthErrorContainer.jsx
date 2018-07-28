@@ -13,7 +13,7 @@ import {
 } from '../../app-redux/selectors';
 // import { actions } from '../../app-redux/reducers/app/last-uni-error';
 
-import LoginPage from '../LoginPage/LoginPage';
+import Signin from '../../modules/module-auth/Signin/Signin';
 
 import './AuthErrorContainer.css';
 
@@ -54,7 +54,7 @@ export default class AuthErrorContainer extends Component {
   };
 
   static defaultProps = {
-    LoginPageComponentClass: LoginPage,
+    LoginPageComponentClass: Signin,
   };
 
   // ======================================================

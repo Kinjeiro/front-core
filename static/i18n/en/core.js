@@ -33,13 +33,45 @@ module.exports = {
       createTestDomainButton: 'Create TestDomain',
       testErrorNotification: 'Test error Notification',
     },
-    LoginPage: {
+    SignupPage: {
+      title: 'Sign up',
+      fields: {
+        username: 'Login',
+        password: 'Password',
+        email: 'Email',
+        displayName: 'Display name',
+      },
+      submitButton: 'Sign up',
+      cancelButton: 'Cancel',
+    },
+    SigninPage: {
       title: 'Login',
       description: 'Login page',
-      userNameLabel: 'Username',
-      passwordLabel: 'Password',
-      loginButton: 'Login',
+      fields: {
+        userNameLabel: 'Username',
+        passwordLabel: 'password',
+      },
+      loginButton: 'Log in',
       loginCancelButton: 'Cancel',
+      signup: 'Sign up',
+      forgotPassword: 'Forgot password',
+    },
+    ForgotPage: {
+      title: 'Forgot password',
+      fields: {
+        email: 'Email',
+      },
+      submitButton: 'Reset password',
+      submitSuccessMessage: 'Message with reset password link send to your email {{email}}.',
+    },
+    ResetPage: {
+      title: 'Reset password',
+      fields: {
+        newPassword: 'New password',
+      },
+      submitButton: 'Update',
+      submitSuccessMessage: 'Password has been updated',
+      goToIndexPage: 'To index page',
     },
     ErrorPage: {
       returnTo: 'Return to',

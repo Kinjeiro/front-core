@@ -43,7 +43,7 @@ export function sendSimpleRequest(requestOptions) {
         reject(parseToUniError(error));
       } else if (response.statusCode >= 300 || response.statusCode < 200) {
         logger.error(`[from server RESPONSE ERROR STATUS]\n${response.statusCode}: `);
-        logger.debug(response.body, requestOptions, '\n\n');
+        logger.debug('\n-- responseBody:\n', response.body, '\n-- request options:\n', requestOptions, '\n\n');
         reject(parseToUniError(response));
       } else {
         logger.log('[from server RESPONSE]');

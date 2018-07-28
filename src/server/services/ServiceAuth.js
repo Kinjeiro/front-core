@@ -29,12 +29,33 @@ export default class ServiceAuth {
     this.endpointServiceConfig = endpointServiceConfig;
 
     this.urls = {
-      authLogin: '/oauth/token',
-      authRefresh: '/oauth/token',
-      authValidate: '/oauth/user',
-      authLogout: '/oauth/logout',
+      authSignup: '/auth/signup',
+      authSignin: '/auth/signin',
+      authRefresh: '/auth/signin',
+      authValidate: '/auth/user',
+      authSignout: '/auth/signout',
+      authForgot: '/auth/forgot',
+      authReset: '/auth/reset',
       ...urls,
     };
+  }
+
+  getClientInfo() {
+    return {
+      client_id: serverConfig.server.features.auth.applicationClientInfo.client_id,
+      client_secret: serverConfig.server.features.auth.applicationClientInfo.client_secret,
+    };
+  }
+
+  async authSignup(userData, emailOptions = null) {
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authSignup, 'post',
+      {
+        userData,
+        ...this.getClientInfo(),
+        emailOptions,
+      },
+    );
   }
 
   /*
@@ -45,14 +66,13 @@ export default class ServiceAuth {
    */
   authLogin(username, password) {
     return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authLogin, 'post',
+      this.urls.authSignin, 'post',
       {
         // @NOTE: необходимо учитывать snake запись (_) это стандарт
         grant_type: 'password',
         username,
         password,
-        client_id: serverConfig.server.features.auth.applicationClientInfo.id,
-        client_secret: serverConfig.server.features.auth.applicationClientInfo.secret,
+        ...this.getClientInfo(),
       },
     )
       // .then((results) => {
@@ -68,7 +88,8 @@ export default class ServiceAuth {
         if (uniError.originalObject && uniError.originalObject.error_description) {
           let clientErrorMessage;
 
-          switch (uniError.originalObject.error_description) {
+          // switch (uniError.originalObject.error_description) {
+          switch (uniError.originalObject.error) {
             case 'Invalid resource owner credentials':
               clientErrorMessage = i18n('core:errors.wrongUserCredentials');
               break;
@@ -76,7 +97,8 @@ export default class ServiceAuth {
               clientErrorMessage = i18n('core:errors.missingPassword');
               break;
             default:
-              clientErrorMessage = uniError.originalObject.error_description;
+              // clientErrorMessage = uniError.originalObject.error_description;
+              clientErrorMessage = uniError.originalObject.error;
           }
           uniError.clientErrorMessage = clientErrorMessage;
         }
@@ -97,8 +119,7 @@ export default class ServiceAuth {
       {
         grant_type: 'refresh_token',
         refresh_token: refreshToken,
-        client_id: serverConfig.server.features.auth.clientId,
-        client_secret: serverConfig.server.features.auth.clientSecret,
+        ...this.getClientInfo(),
       },
     )
       // .then((results) => {
@@ -131,11 +152,56 @@ export default class ServiceAuth {
 
   authLogout(token, authType = AUTH_TYPES.BEARER) {
     return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authLogout, 'get',
+      this.urls.authSignout, 'get',
       null,
       null,
       {
         headers: getHeadersByAuthType(authType, token),
+      },
+    );
+  }
+
+
+  /**
+   * Протокол для @reagentum/auth-server@1.0.4
+   *
+   * @param email
+   * @param resetPasswordPageUrl
+   * @param emailOptions
+   * @return {*}
+   */
+  async authForgot(email, resetPasswordPageUrl, emailOptions) {
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authForgot, 'post',
+      {
+        email,
+        emailOptions,
+
+        resetPasswordPageUrl,
+
+        ...this.getClientInfo(),
+      },
+    );
+  }
+
+  /**
+   * Протокол для @reagentum/auth-server@1.0.4
+   *
+   * @param resetPasswordToken
+   * @param newPassword
+   * @param emailOptions
+   * @return {Promise.<*>}
+   */
+  async authResetPassword(resetPasswordToken, newPassword, emailOptions) {
+    return sendEndpointMethodRequest(this.endpointServiceConfig,
+      this.urls.authReset, 'post',
+      {
+        resetPasswordToken,
+        newPassword,
+
+        emailOptions,
+
+        ...this.getClientInfo(),
       },
     );
   }

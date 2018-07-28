@@ -50,11 +50,38 @@ export function translateWithNamespace(namespace, key, mapParams = {}, defaultVa
 }
 
 /**
- * Translate - see \lk\front\src\i18n\ru\common.json
+ * Translate - see \static\i18n\ru\core.js
+ *
  * @param key
  * @param mapParams ( defaultValue props include )
  * @param namespace
  * @param defaultValue
+ *
+ * @example:
+    {
+        "key": "The current date is {{date, MM/DD/YYYY}}", // mommentjs для форматирования
+        "key2": "{{text, uppercase}} just uppercased"
+    }
+
+ @example: как передать html в пропсу:
+    key:
+      submitSuccessMessage: 'На вашу почту {{email}} отослано сообщение с ссылкой для смены пароля',
+
+    textSuccess={
+      <div
+        dangerouslySetInnerHTML={{
+          __html: i18n(
+            'core:pages.ForgotPage.submitSuccessMessage',
+            {
+              email: `<b className="${this.bem('email-text')}">${email}</b>`,
+              // interpolation: {escapeValue: false},
+            },
+          ),
+        }}
+      />
+    }
+
+ *
  * @returns {*}
  */
 export function translateDefault(key, mapParams = {}, namespace = '', defaultValue = null) {

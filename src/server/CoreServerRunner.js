@@ -16,11 +16,13 @@ import CoreClientRunner from '../client/CoreClientRunner';
 import createServices from './services';
 import createStrategies from './strategies';
 import {
+  CORE_ROUTES_NAMES,
   ASSETS,
   PATH_ERROR_PAGE,
   PATH_ACCESS_DENIED,
-  PATH_LOGIN_PAGE,
-} from '../common/constants/routes.pathes';
+} from '../common/routes.pathes';
+import { PATH_AUTH_SIGNIN } from '../common/modules/module-auth/routes-paths-auth';
+
 
 // ======================================================
 // UTILS CONFIGS
@@ -87,7 +89,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return testAppUrlStartWith(
       pathnameWithoutContextPath,
       ASSETS,
-      this.getLoginPath(),
+      CORE_ROUTES_NAMES.auth,
+      // this.getLoginPath(),
       PATH_ERROR_PAGE,
       PATH_ACCESS_DENIED,
       'favicon.ico',
@@ -95,7 +98,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
   }
 
   getLoginPath() {
-    return PATH_LOGIN_PAGE;
+    return PATH_AUTH_SIGNIN;
   }
 
   // ======================================================
