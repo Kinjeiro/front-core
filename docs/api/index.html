@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.4.1 | Documentation</title>
+  <title>@reagentum/front-core 1.4.2 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.4.1</code></div>
+          <div class='mb1'><code>1.4.2</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -220,6 +220,26 @@
                   href='#initconfig'
                   class="">
                   initConfig
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#parsevaluetostring'
+                  class="">
+                  parseValueToString
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#update'
+                  class="">
+                  update
                   
                 </a>
                 
@@ -540,6 +560,36 @@
                   href='#user_info_props'
                   class="">
                   USER_INFO_PROPS
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#valuename'
+                  class="">
+                  valueName
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#constraints'
+                  class="">
+                  constraints
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#instancechange'
+                  class="">
+                  instanceChange
                   
                 </a>
                 
@@ -2472,6 +2522,189 @@ actionEditRecordStatusMap: {}
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='parsevaluetostring'>
+      parseValueToString
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>parseValueToString(type: any, value: any, customMask: any, props: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>customMask</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>props</span> <code class='quiet'>(any)</code>
+	    если LIST - то нужно options, componentProps: fieldLabel \ fieldValue - если они отличаются от стандартных
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='update'>
+      update
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>update(withBlur: any, withChange: any, event: any, comp: any, other: ...any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>withBlur</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>withChange</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>event</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>comp</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>other</span> <code class='quiet'>(...any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='info404'>
       Info404
     </h3>
@@ -3988,6 +4221,162 @@ moduleToRoutePrefixMap: {}
 
   <div>Deprecated: use USER_INFO_PROP_TYPE
 </div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='valuename'>
+      valueName
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Значение которое будет отображаться</p>
+
+
+  <div class='pre p1 fill-light mt0'>valueName</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='constraints'>
+      constraints
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>values
+maxLength
+minLength
+multipleMaxSize
+multipleMinSize
+maxSize
+minSize
+minValue
+maxValue,
+maxBytes,
+minBytes,
+value
+pattern</p>
+
+
+  <div class='pre p1 fill-light mt0'>constraints</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='instancechange'>
+      instanceChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>обычно для больших форм, чтобы сэкономить ресурсы значение применяется после потери фокуса или Enter
+Это сделано и для input</p>
+<p>Но бывают случаи когда нужно реально по символьно обновлять (когда данных мало и нужно явно показать что кнопка больше не дисеблится (к примеру, при форме логине)
+Значеие true - как раз и включает нотификацию по мере ввода</p>
+
+
+  <div class='pre p1 fill-light mt0'>instanceChange</div>
+  
+  
+
+  
   
   
   
