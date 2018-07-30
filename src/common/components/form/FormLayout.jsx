@@ -1,0 +1,54 @@
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+
+// import i18n from '../../utils/i18n';
+
+import './FormLayout.css';
+
+const ELEMENT_PROP_TYPE = PropTypes.oneOfType([
+  PropTypes.node,
+  PropTypes.arrayOf(PropTypes.node),
+]);
+
+export default class FormLayout extends PureComponent {
+  static propTypes = {
+    className: PropTypes.string,
+    inModal: PropTypes.bool,
+
+    fields: PropTypes.array,
+    actions: ELEMENT_PROP_TYPE,
+    postActions: ELEMENT_PROP_TYPE,
+    actionStatus: PropTypes.object,
+  };
+
+  renderElement(className, element) {
+    const isNotEmpty = element && (!Array.isArray(element) || element.length);
+    return isNotEmpty && (
+      <div className={ className }>
+        { element }
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      className,
+      inModal,
+
+      fields,
+      actions,
+      postActions,
+      actionStatus,
+    } = this.props;
+
+    return (
+      <div className={ `FormLayout ${className || ''} ${inModal ? 'FormLayout--modal' : ''}` }>
+        { this.renderElement('FormLayout__fields', fields) }
+        { this.renderElement('FormLayout__actions', actions) }
+        { this.renderElement('FormLayout__postActions', postActions) }
+        { this.renderElement('FormLayout__actionStatus', actionStatus) }
+      </div>
+    );
+  }
+}
+

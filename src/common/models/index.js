@@ -16,3 +16,5 @@ export UNI_ERROR_PROP_TYPE from './uni-error';
 export USER_INFO_PROP_TYPE from './model-action-status';
 export ID_PROP_TYPE from './model-id';
 export TABLE_PROP_TYPE from './model-table';
+export CONSTRAINTS_PROP_TYPE from './model-constraints';
+export FIELD_PROP_TYPE from './model-field';
