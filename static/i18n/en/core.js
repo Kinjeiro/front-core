@@ -36,10 +36,26 @@ module.exports = {
     SignupPage: {
       title: 'Sign up',
       fields: {
-        username: 'Login',
-        password: 'Password',
-        email: 'Email',
-        displayName: 'Display name',
+        username: {
+          label: 'Login',
+          placeholder: 'Enter login',
+          hint: 'User login',
+        },
+        password: {
+          label: 'Password',
+          placeholder: 'Enter password',
+          hint: 'User password',
+        },
+        email: {
+          label: 'Email',
+          placeholder: 'Enter email',
+          hint: 'User email',
+        },
+        displayName: {
+          label: 'Display name',
+          placeholder: 'Enter display name',
+          hint: 'User name to be displayed for other users',
+        },
       },
       submitButton: 'Sign up',
       cancelButton: 'Cancel',
@@ -48,8 +64,16 @@ module.exports = {
       title: 'Login',
       description: 'Login page',
       fields: {
-        userNameLabel: 'Username',
-        passwordLabel: 'password',
+        username: {
+          label: 'Login',
+          placeholder: 'Enter login',
+          hint: 'User login',
+        },
+        password: {
+          label: 'Password',
+          placeholder: 'Enter password',
+          hint: 'User password',
+        },
       },
       loginButton: 'Log in',
       loginCancelButton: 'Cancel',
@@ -104,6 +128,13 @@ module.exports = {
     },
     ReadMore: {
       more: 'more',
+    },
+    CoreForm: {
+      textActionSubmit: 'Send',
+      textActionCancel: 'Cancel',
+    },
+    CoreSelect: {
+      placeholder: 'Choice option...',
     },
   },
 };

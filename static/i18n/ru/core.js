@@ -36,25 +36,49 @@ module.exports = {
     SignupPage: {
       title: 'Регистрация',
       fields: {
-        username: 'Логин',
-        password: 'Пароль',
-        email: 'Почта',
-        displayName: 'Отображаемое имя',
+        username: {
+          label: 'Пользователь',
+          placeholder: 'Введите логин',
+          hint: 'Имя пользователя',
+        },
+        password: {
+          label: 'Пароль',
+          placeholder: 'Введите пароль',
+          hint: 'Пароль пользователя',
+        },
+        email: {
+          label: 'Почта',
+          placeholder: 'Введите email',
+          hint: 'Почта пользователя',
+        },
+        displayName: {
+          label: 'Отображаемое имя',
+          placeholder: 'Введите имя',
+          hint: 'Имя пользователя, которое будет всем видно',
+        },
       },
       submitButton: 'Регистрация',
       cancelButton: 'Отменить',
     },
     SigninPage: {
-      title: 'Логин',
-      description: 'Страница логина',
+      title: 'Вход',
+      description: 'Страница входа',
       fields: {
-        userNameLabel: 'Логин',
-        passwordLabel: 'Пароль',
+        username: {
+          label: 'Пользователь',
+          placeholder: 'Введите логин',
+          hint: 'Имя пользователя',
+        },
+        password: {
+          label: 'Пароль',
+          placeholder: 'Введите пароль',
+          hint: 'Пароль пользователя',
+        },
       },
       loginButton: 'Войти',
       loginCancelButton: 'Отмена',
       signup: 'Регистрация',
-      forgotPassword: 'Забыл пароль',
+      forgotPassword: 'Забыли пароль',
     },
     ForgotPage: {
       title: 'Восстановление пароля',
@@ -104,6 +128,13 @@ module.exports = {
     },
     ReadMore: {
       more: 'Еще',
+    },
+    CoreForm: {
+      textActionSubmit: 'Отправить',
+      textActionCancel: 'Отмена',
+    },
+    CoreSelect: {
+      placeholder: 'Выберите значение...',
     },
   },
 };
