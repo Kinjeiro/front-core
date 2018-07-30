@@ -40,9 +40,11 @@ export function translateWithNamespace(namespace, key, mapParams = {}, defaultVa
   }
 
   const value = i18nInstance.t(key, {
-    defaultValue: defaultValue || (clientConfig.common && !clientConfig.common.isProduction
-      ? `@@ ${key}`
-      : undefined
+    defaultValue: typeof defaultValue !== 'undefined'
+      ? defaultValue
+      : (clientConfig.common && !clientConfig.common.isProduction
+        ? `@@ ${key}`
+        : undefined
     ),
     ...mapParams,
   });
