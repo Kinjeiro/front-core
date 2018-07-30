@@ -31,6 +31,7 @@
     "prefer-arrow-callback": [ "error", { "allowNamedFunctions": true } ], // чтобы унифицировать и не потерять контекст (к примеру mocha describe it сделаем эту настройку)
     "import/no-named-as-default": 0, // неудобно, порой нужно называть функцию отдельно в экпорт и ту же в экспорт дефолт
     "import/no-named-as-default-member": 0, // неудобно, порой нужно называть функцию отдельно в экпорт и ту же в экспорт дефолт
+    "global-require": 0, // require используется не в node а для webpack
 
     "jsx-a11y/label-has-for": 0, // label for требует id, но в компонентах id очень редко бывают
 
