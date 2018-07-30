@@ -1,7 +1,8 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,no-continue,no-restricted-syntax */
 import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
+import memoize from 'lodash/memoize';
 import uuid from 'uuid';
 // import uniqueId from 'lodash/uniqueId';
 
@@ -221,9 +222,13 @@ export function executeVariable(fn, defaultValue = undefined, ...args) {
   return typeof fn === 'function'
     ? fn(...args)
     : typeof fn === 'undefined' || fn === null
-           ? defaultValue
-           : fn;
+      ? defaultValue
+      : fn;
 }
+
+export const executeVariableMemoize = memoize(
+  (key, ...args) => executeVariable(...args),
+);
 
 export function wrapToArray(value = null) {
   return Array.isArray(value)
