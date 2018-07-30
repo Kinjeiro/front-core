@@ -4,21 +4,18 @@ import PropTypes from 'prop-types';
 import bemDecorator from '../../utils/decorators/bem-component';
 import NoticeEmitter from '../../helpers/notifications';
 
-import Notice from './Notice';
+import componentsBase from '../ComponentsBase';
 
 import './Notifications.css';
+
+const { Notice } =  componentsBase;
 
 @bemDecorator({ componentName: 'Notifications', wrapper: false })
 export default class Notifications extends Component {
   static propTypes = {
-    NoticeComponentClass: PropTypes.oneOfType([
-      PropTypes.instanceOf(Component),
-      PropTypes.func,
-    ]),
   };
 
   static defaultProps = {
-    NoticeComponentClass: Notice,
   };
 
   state = {
@@ -51,19 +48,20 @@ export default class Notifications extends Component {
   };
 
   render() {
-    const { NoticeComponentClass } = this.props;
     const { notices } = this.state;
 
     return (
       <div className={ this.fullClassName }>
-        {notices.map((noticeData) =>
-          React.createElement(NoticeComponentClass, {
-            key: noticeData.id,
-            className: this.bem('notice'),
-            ...noticeData,
-            onClose: this.removeNotice,
-          }),
-        )}
+        {
+          notices.map((noticeData) => (
+            <Notice
+              key={ noticeData.id }
+              className={ this.bem('notice') }
+              { ...noticeData }
+              onClose={ this.removeNotice }
+            />
+          ))
+        }
       </div>
     );
   }

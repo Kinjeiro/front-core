@@ -39,9 +39,13 @@ const finalI18nextOptions = merge(
   },
 );
 
+// todo @ANKU @CRIT @MAIN - переключение локали на сервере по куки - https://github.com/i18next/i18next/issues/918 (по аналогии с express)
+// console.warn('ANKU , finalI18nextOptions', finalI18nextOptions);
+
 i18n
   .use(Backend)
   .init(finalI18nextOptions);
+
 
 if (!i18n.language) {
   i18n.language = i18n.options.fallbackLng[0];

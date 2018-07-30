@@ -109,7 +109,8 @@ export const UNI_ERROR_DEFAULT_VALUE = {
 
   // calculated
   uniCode: undefined,
-  uniMessage: undefined,
+  // todo @ANKU @LOW - подумать над локализацией
+  uniMessage: 'Произошла ошибка',
   uniMessages: undefined,
   isNotFound: false,
   isNotAuth: false,
@@ -151,25 +152,23 @@ export function createUniError(uniErrorData = {}) {
     uniErrorData.clientErrorMessages = [uniErrorData.clientErrorMessage];
   }
 
-  const defaultValues = UNI_ERROR_DEFAULT_VALUE;
-
-  const uniError = merge({}, defaultValues, uniErrorData);
+  const uniError = merge({}, UNI_ERROR_DEFAULT_VALUE, uniErrorData);
 
   uniError.uniCode = uniError.errorCode || uniError.responseStatusCode;
 
   uniError.uniMessage =
-    (uniErrorData.clientErrorMessages && uniErrorData.clientErrorMessages[0])
-    || uniErrorData.clientErrorMessage
-    || uniErrorData.clientErrorTitle
-    || uniErrorData.message
-    || defaultValues.clientErrorMessage;
-  uniError.uniMessages = uniErrorData.clientErrorMessages && uniErrorData.clientErrorMessages.length > 0
-    ? uniErrorData.clientErrorMessages
+    (uniError.clientErrorMessages && uniError.clientErrorMessages[0])
+    || uniError.clientErrorMessage
+    || uniError.clientErrorTitle
+    || uniError.message
+    || UNI_ERROR_DEFAULT_VALUE.uniMessage;
+  uniError.uniMessages = uniError.clientErrorMessages && uniError.clientErrorMessages.length > 0
+    ? uniError.clientErrorMessages
     : [uniError.uniMessage];
 
   uniError.isNotFound = uniError.isNotFound || ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
     || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode)
-    || uniError.uniMessage.indexOf('connect ECONNREFUSED') === 0;
+    || (uniError.uniMessage && uniError.uniMessage.indexOf('connect ECONNREFUSED') === 0);
 
   uniError.isNotAuth = uniError.isNotAuth || uniError.uniCode === 401;
 

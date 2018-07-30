@@ -4,12 +4,10 @@ import React from 'react';
 import { executeVariableMemoize } from '../utils/common';
 
 const COMPONENTS_BASE = {
-  replaceComponent(name, ComponentClass) {
+  replace(name, ComponentClass) {
     Object.defineProperty(this, name, {
       enumerable: true,
       configurable: true,
-      writable: false,
-      // value: ComponentClass,
       get() {
         // отложенная загрузка компонентов () => require('./Component);
         return executeVariableMemoize(name, ComponentClass);
@@ -77,6 +75,9 @@ const COMPONENTS_BASE = {
   },
   get Modal() {
     return null;
+  },
+  get Info404() {
+    return require('./Info404/Info404').default;
   },
 };
 

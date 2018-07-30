@@ -42,7 +42,6 @@ export default class CoreApp extends Component {
     children: PropTypes.node,
     themeProviderProps: PropTypes.shape(ThemeProvider.propTypes),
     modulesProviderProps: PropTypes.shape(ContextModulesProvider.propTypes),
-    NoticeComponentClass: Notifications.propTypes.NoticeComponentClass,
 
     // ======================================================
     // CONNECT
@@ -106,7 +105,6 @@ export default class CoreApp extends Component {
         title,
         metas,
       },
-      NoticeComponentClass,
     } = this.props;
 
 
@@ -135,9 +133,7 @@ export default class CoreApp extends Component {
 
             {
               clientConfig.common.features.notifications && clientConfig.common.features.notifications.ui && (
-                <Notifications
-                  NoticeComponentClass={ NoticeComponentClass }
-                />
+                <Notifications />
               )
             }
           </StickyContainer>

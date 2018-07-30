@@ -11,19 +11,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
    Перенес все что связано с авторизацией пока в отдельный псевдомодуль ```/src/modules/module-auth```
    Изменил роутинг с ```/login``` на ```/auth/signin``` и кое-где классы для компонентов -
    Поэтому проверьте у себя, чтобы ничего не отвалилось в авторизации
+1. Добавил /src/components/ComponentsBase - место отложенной инициализации компонентов. 
+Убрал из ```create-routes``` определение классов компонентов
+Если хотите их заменить, то инициализируйте в ComponentsBase:
+```
+NoticeComponentClass -> Notice в ComponentsBase
+LoginPageComponentClass -> Signin в ComponentsBase
+ModalLoginPageComponentClass -> Signin в ComponentsBase
+```
    
 ### API Dependencies:
     + ServiceAuth - @reagentum/auth-server@1.0.4
 
 ### Dependencies:
-    + "whatwg-fetch": "~2.0.4"
+    + normalize.css@8.0.0
     
 ### Dev Dependencies:
 
 ### Features:
 1.  OAuth авторизация с регистрацией и сбросом пароля через почту
+2.  ComponentsBase - для переопределения и поздней инициализации всех компонентов
 
 ### Commits:
+    - chore(*) patch version: 1.4.2
+    - feat(i18n, auth) - локализация для auth
+    - !!! feat(components): - перевел определение всех компонентов (NoticeComponentClass, LoginPageComponentClass, ModalLoginPageComponentClass) на CB
+    - feat(all): - отменил правило global-require \\ убрал старый react dts
+        \\ Link теперь подчекивается по умолчанию 
+    - feat(auth): - стилизовал форму логина
+        \\ перевел auth на CB (componentsBase)
+    - feat(components): - добавил ComponentsBase - мапу всех компонентов, в которой есть возможность заменить компоненты в дочерних проектах (к примеру, стили Form, Loading, Button) + чтобы не грузились лишние css стили сделана поздняя инициализация через require 
+    - !!! feat(css, depen): - normalize.css@8.0.0 для усреднения стилей - может поехать верстка 
+    - feat(components, form): - добавил CoreForm \ CoreField \ CoreInput \ CoreSelect и лайутинг для них FormLayout \ FieldLayout 
+    - bug(utils, i18n): - i18n поправил багу с defaultValue
+    - feat(utils): - executeVariableMemoize по первому специальному ключу сохраняет полученные из функции значения 
+    - chore(*) patch version: 1.4.1 
     - !!! feat(auth): - вынес авторизацию в отдельный псевдомодуль (src\common\modules\module-auth)
         \\ добавил signup (Регистрацию) и возможность сброса пароля через почту (forgot и reset)
     - chore(*) minor version: 1.4.0

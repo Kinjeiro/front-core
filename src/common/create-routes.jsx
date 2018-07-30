@@ -5,32 +5,29 @@ import {
   // IndexRedirect,
 } from 'react-router';
 
-import {
-  Info404,
-} from './components';
+import COMPONENTS_BASE from './components/ComponentsBase';
 
 import {
   CORE_ROUTES_NAMES,
 } from './constants/routes.pathes';
 
-import Notice from './components/Notifications/Notice';
-
-import {
-  CoreApp,
-  ErrorPage,
-  LoginPage,
-  StubPage,
-  AuthErrorContainer,
-} from './containers';
-// import TestPage from './containers/TestPage/TestPage';
-
 import getRouterAuth from './modules/module-auth/routes-auth';
+import initAuthComponents from './modules/module-auth/components/init-components';
+
+initAuthComponents(COMPONENTS_BASE);
 
 export default function createRoutes(
   store,
   projectLayout,
   options = {},
 ) {
+  const {
+    CoreApp,
+    ErrorPage,
+    StubPage,
+    AuthErrorContainer,
+  } = require('./containers');
+
   const {
     beforeRoutes = [],
     afterRoutes = [],
@@ -43,10 +40,6 @@ export default function createRoutes(
       }
      */
     rootAppComponentProps = {},
-
-    NoticeComponentClass = Notice,
-    LoginPageComponentClass = LoginPage,
-    ModalLoginPageComponentClass = LoginPageComponentClass,
   } = options;
 
   /* <IndexRedirect to="stub" />, */
@@ -54,7 +47,6 @@ export default function createRoutes(
   const rootComponent = rootAppComponent || ((props) => (
     <CoreApp
       { ...props }
-      NoticeComponentClass={ NoticeComponentClass }
       { ...rootAppComponentProps }
     />
   ));
@@ -64,7 +56,6 @@ export default function createRoutes(
    component={ TestPage }
    />
   */
-
 
   return (
     <Route
@@ -81,7 +72,6 @@ export default function createRoutes(
         component={ (props) => (
           <AuthErrorContainer
             { ...props }
-            LoginPageComponentClass={ ModalLoginPageComponentClass }
           />
         ) }
       >
@@ -98,7 +88,7 @@ export default function createRoutes(
           <Route
             path={ CORE_ROUTES_NAMES.auth }
           >
-            { getRouterAuth() }
+            { getRouterAuth(COMPONENTS_BASE) }
           </Route>
         )
       }
@@ -119,7 +109,7 @@ export default function createRoutes(
       <Route
         path="*"
         exact={ true }
-        component={ Info404 }
+        component={ COMPONENTS_BASE.Info404 }
       />
     </Route>
   );

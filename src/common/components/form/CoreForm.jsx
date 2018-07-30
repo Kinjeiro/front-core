@@ -102,7 +102,10 @@ export default class CoreForm extends PureComponent {
       onChangeField,
     } = this.props;
 
-    const labelFinal = label || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.label`, {}, '', i18n(`${i18nFieldPrefix}.${name}`))) || undefined;
+    let labelFinal = label || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.label`, {}, '', ''));
+    if (!labelFinal && i18nFieldPrefix) {
+      labelFinal = i18n(`${i18nFieldPrefix}.${name}`, {}, '', '');
+    }
     const placeholder = textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`, {}, '', ''));
     const hint = textHint || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.hint`, {}, '', ''));
 
@@ -118,7 +121,7 @@ export default class CoreForm extends PureComponent {
           onChange
           || (
             onChangeField
-            ? (event) => onChangeField({ [name]: event.target ? event.target.value : event })
+            ? (fieldName, value) => onChangeField({ [name]: value })
             : undefined
           )
         }

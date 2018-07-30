@@ -13,9 +13,11 @@ import {
 } from '../../app-redux/selectors';
 // import { actions } from '../../app-redux/reducers/app/last-uni-error';
 
-import Signin from '../../modules/module-auth/Signin/Signin';
+import COMPONENTS_BASE from '../../components/ComponentsBase';
 
 import './AuthErrorContainer.css';
+
+const { Signin } = COMPONENTS_BASE;
 
 // eslint-disable-next-line no-unused-vars
 const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
@@ -33,11 +35,6 @@ const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
 export default class AuthErrorContainer extends Component {
   static propTypes = {
     children: PropTypes.node,
-    LoginPageComponentClass: PropTypes.oneOfType([
-      PropTypes.instanceOf(Component),
-      PropTypes.func,
-    ]),
-
     // ======================================================
     // from router
     // ======================================================
@@ -54,7 +51,6 @@ export default class AuthErrorContainer extends Component {
   };
 
   static defaultProps = {
-    LoginPageComponentClass: Signin,
   };
 
   // ======================================================
@@ -122,12 +118,13 @@ export default class AuthErrorContainer extends Component {
 
   renderModalMessage() {
     const {
-      LoginPageComponentClass,
       lastUniError: {
         isNotAuth,
         linkForwardTo,
       },
     } = this.props;
+
+    // todo @ANKU @LOW - можно заменить Логин на контрол переключения Логин \ Регистрации
 
     return isNotAuth && (
       <div className="AuthErrorContainer__modal">
@@ -135,7 +132,7 @@ export default class AuthErrorContainer extends Component {
           {
             reLoginModalForm
               ? (
-                <LoginPageComponentClass
+                <Signin
                   { ...this.props }
                   inModal={ true }
                   urlReturn={ linkForwardTo || false }

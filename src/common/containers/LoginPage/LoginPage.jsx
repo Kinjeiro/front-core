@@ -1,6 +1,6 @@
-import Signin from '../../modules/module-auth/Signin/Signin';
+import ComponentsBase from '../../components/ComponentsBase';
 
 /**
  * @deprecated - используйте /src/modules/module-auth/Signin/Signin
  */
-export default Signin;
+export default ComponentsBase.Signin;

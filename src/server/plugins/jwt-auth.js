@@ -78,7 +78,7 @@ export function remoteJwt(server, pluginOptions) {
 
     return checkResult
       .then((credentials) => {
-        if (!credentials) {
+        if (!credentials.userInfo) {
           logger.warn(['info', 'auth'], 'Do not have a valid credentials');
           return continueWithoutCredentials(reply);
         }

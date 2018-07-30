@@ -184,7 +184,7 @@ export default class Signin extends Component {
             instanceChange: true,
           },
         ] }
-        onChangeField={ (name, value) => onUpdateForm({ [name]: value }) }
+        onChangeField={ onUpdateForm }
 
 
         isValid={ !!(username && password) }

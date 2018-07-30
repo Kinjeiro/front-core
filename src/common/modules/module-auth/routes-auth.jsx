@@ -9,18 +9,17 @@ import {
 import clientConfig from '../../client-config';
 
 import * as paths from './routes-paths-auth';
+import initComponents from './components/init-components';
 
-import COMPONENTS_BASE from '../../components/ComponentsBase';
+export default function getRouter(COMPONENTS_BASE) {
+  const {
+    AuthLayout,
+    Signup,
+    Signin,
+    Forgot,
+    Reset,
+  } = initComponents(COMPONENTS_BASE);
 
-const {
-  AuthLayout,
-  Signup,
-  Signin,
-  Forgot,
-  Reset,
-} = COMPONENTS_BASE;
-
-export default function getRouter() {
   return (
     <Route
       path=""

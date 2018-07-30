@@ -22,7 +22,7 @@ export function getI18Instance() {
 }
 
 
-export function translateWithNamespace(namespace, key, mapParams = {}, defaultValue = null) {
+export function translateWithNamespace(namespace, key, mapParams = {}, defaultValue = undefined) {
   // return i18nInstance.t(key, {
   //  defaultValue: defaultValue || key,
   //  ...mapParams
@@ -86,7 +86,7 @@ export function translateWithNamespace(namespace, key, mapParams = {}, defaultVa
  *
  * @returns {*}
  */
-export function translateDefault(key, mapParams = {}, namespace = '', defaultValue = null) {
+export function translateDefault(key, mapParams = {}, namespace = '', defaultValue = undefined) {
   return translateWithNamespace(namespace, key, mapParams, defaultValue);
 }
 
