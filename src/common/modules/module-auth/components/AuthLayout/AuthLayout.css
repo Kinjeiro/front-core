@@ -1,0 +1,84 @@
+@import "../../../../app-style/vars.css";
+
+:root {
+  //--color-background-auth: #3AAFAB;
+  --color-background-auth: var(--color-primary);
+  --color-text-auth: var(--color-main-background);
+  --color-primary-auth: #333;
+}
+
+.AuthLayout {
+  //background: var(--color-main-background);
+  background: var(--color-background-auth);
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  &__body {
+    background: var(--color-background-auth);
+    //color: var(--color-primary);
+    color: var(--color-text-auth);
+    padding: 20px;
+    width: 450px;
+  }
+
+
+  .FieldLayout__label {
+    font-weight: 300;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+  .FieldLayout__control {
+    input:not([type='checkbox']),
+    textarea {
+      border: none;
+    }
+  }
+
+  .FormLayout__actions,
+  .ActionStatus__error {
+    text-align: right;
+  }
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    background: var(--color-primary-auth);
+    color: var(--color-text-auth);
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    border-radius: 2px;
+
+    &:disabled {
+      background: color(var(--color-primary-auth) blackness(80%));
+      color: color(var(--color-text-auth) blackness(80%));
+    }
+  }
+
+  /*
+  .Signin {
+    //width: 100%;
+    //display: flex;
+    //align-self: center;
+    //margin-top: 100%;
+    //justify-content: center;
+    padding: 20px;
+
+    .LoginPage {
+
+      &__username,
+      &__password {
+        margin-bottom: 10px;
+
+        LABEL {
+          font-size: 1.2rem;
+          font-weight: bold;
+          min-width: 100px;
+          display: inline-block;
+        }
+      }
+    }
+  }*/
+}
+

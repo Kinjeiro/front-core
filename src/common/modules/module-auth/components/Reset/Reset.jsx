@@ -4,29 +4,35 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import reduxSimpleForm from '../../../utils/decorators/react-class/redux-simple-form';
-import titled from '../../../utils/decorators/react-class/titled';
-import bemDecorator from '../../../utils/decorators/bem-component';
-import i18n from '../../../utils/i18n-utils';
+import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simple-form';
+import titled from '../../../../utils/decorators/react-class/titled';
+import bemDecorator from '../../../../utils/decorators/bem-component';
+import i18n from '../../../../utils/i18n-utils';
 
 // ======================================================
 // REDUX
 // ======================================================
 import {
   getUserInfo,
-} from '../../../app-redux/selectors';
-import * as reduxUserInfo from '../../../app-redux/reducers/app/user-info';
+} from '../../../../app-redux/selectors';
+import * as reduxUserInfo from '../../../../app-redux/reducers/app/user-info';
 
-import { ACTION_STATUS_PROPS } from '../../../models/index';
-
-import ActionStatus from '../../../components/ActionStatus/ActionStatus';
-import Link from '../../../containers/Link/Link';
-
+import { ACTION_STATUS_PROPS } from '../../../../models/index';
 import {
-  PATH_INDEX,
-} from '../../../constants/routes.pathes';
+  SUB_TYPES,
+} from '../../../../models/model-field';
 
-import * as paths from '../routes-paths-auth';
+import COMPONENTS_BASE from '../../../../components/ComponentsBase';
+
+// import {
+//   PATH_INDEX,
+// } from '../../../constants/routes.pathes';
+
+import * as paths from '../../routes-paths-auth';
+
+// import './ForgotPage.css';
+
+const { Form } = COMPONENTS_BASE;
 
 // import './LoginPage.css';
 
@@ -73,7 +79,7 @@ export default class ResetPage extends Component {
     resetPasswordToken: PropTypes.string.required,
     actionResetPasswordStatus: ACTION_STATUS_PROPS,
     actionResetPassword: PropTypes.func,
-    actionGoTo: PropTypes.func,
+    // actionGoTo: PropTypes.func,
   };
 
   // ======================================================
@@ -88,7 +94,7 @@ export default class ResetPage extends Component {
   // HANDLERS
   // ======================================================
   @bind()
-  async handleSubmit(event) {
+  async handleSubmit() {
     const {
       resetPasswordToken,
       form: {
@@ -98,36 +104,36 @@ export default class ResetPage extends Component {
       actionResetPassword,
     } = this.props;
 
-    event.preventDefault();
-    event.stopPropagation();
-
     await actionResetPassword(resetPasswordToken, newPassword, emailOptions);
   }
 
   // ======================================================
   // RENDERS
   // ======================================================
-  renderForm() {
+  isValid() {
     const {
       form: {
         newPassword,
       },
-      onUpdateForm,
     } = this.props;
 
-    return (
-      <div className={ this.bem('fields') }>
-        <div className={ this.bem('newPassword') }>
-          <span>{i18n('core:pages.ResetPage.fields.newPassword')}</span>
-          <input
-            name="newPassword"
-            type="password"
-            value={ newPassword }
-            onChange={ (event) => onUpdateForm({ newPassword: event.target.value }) }
-          />
-        </div>
-      </div>
-    );
+    return !!(newPassword);
+  }
+
+  getFields() {
+    const {
+      form: {
+        newPassword,
+      },
+    } = this.props;
+    return [
+      {
+        name: 'newPassword',
+        subType: SUB_TYPES.PASSWORD,
+        value: newPassword,
+        instanceChange: true,
+      },
+    ];
   }
 
   // ======================================================
@@ -135,36 +141,27 @@ export default class ResetPage extends Component {
   // ======================================================
   render() {
     const {
-      form: {
-        newPassword,
-      },
+      onUpdateForm,
       actionResetPasswordStatus,
     } = this.props;
 
     return (
-      <form
+      <Form
         className={ this.fullClassName }
-        onSubmit={ this.handleSubmit }
-      >
-        <ActionStatus
-          actionStatus={ actionResetPasswordStatus }
-          textSuccess={ i18n('core:pages.ResetPage.submitSuccessMessage') }
-        >
-          <div className={ this.bem('form') }>
-            { this.renderForm() }
+        i18nFieldPrefix={ 'core:pages.ResetPage.fields' }
 
-            <div className={ this.bem('buttons') }>
-              <button
-                type="submit"
-                className={ `${this.bem('submit-button')}` }
-                disabled={ actionResetPasswordStatus.isFetching || !newPassword }
-              >
-                {i18n('core:pages.ResetPage.submitButton')}
-              </button>
-            </div>
-          </div>
-        </ActionStatus>
-      </form>
+        fields={ this.getFields() }
+        onChangeField={ onUpdateForm }
+
+        isValid={ this.isValid() }
+        useForm={ true }
+
+        onSubmit={ this.handleSubmit }
+        textActionSubmit={ i18n('core:pages.ResetPage.submitButton') }
+
+        actionStatus={ actionResetPasswordStatus }
+        textActionSuccess={ i18n('core:pages.ResetPage.submitSuccessMessage') }
+      />
     );
   }
 }

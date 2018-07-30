@@ -4,37 +4,45 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import reduxSimpleForm from '../../../utils/decorators/react-class/redux-simple-form';
-import titled from '../../../utils/decorators/react-class/titled';
-import bemDecorator from '../../../utils/decorators/bem-component';
-import i18n from '../../../utils/i18n-utils';
-import clientConfig from '../../../client-config';
+import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simple-form';
+import titled from '../../../../utils/decorators/react-class/titled';
+import bemDecorator from '../../../../utils/decorators/bem-component';
+import i18n from '../../../../utils/i18n-utils';
+import clientConfig from '../../../../client-config';
 
 // ======================================================
 // REDUX
 // ======================================================
 import {
   getUserInfo,
-} from '../../../app-redux/selectors';
-import * as reduxUserInfo from '../../../app-redux/reducers/app/user-info';
-import * as reduxLastUniError from '../../../app-redux/reducers/app/last-uni-error';
+} from '../../../../app-redux/selectors';
+import * as reduxUserInfo from '../../../../app-redux/reducers/app/user-info';
+import * as reduxLastUniError from '../../../../app-redux/reducers/app/last-uni-error';
 
 // ======================================================
 // COMPONENTS and STYLES
 // ======================================================
-import { ACTION_STATUS_PROPS } from '../../../models/index';
+import {
+  ACTION_STATUS_PROPS,
+} from '../../../../models';
+import {
+  SUB_TYPES,
+} from '../../../../models/model-field';
 
-import Link from '../../../containers/Link/Link';
-import ActionStatus from '../../../components/ActionStatus/ActionStatus';
+import COMPONENTS_BASE from '../../../../components/ComponentsBase';
 
 import {
   PATH_INDEX,
-  PARAM_RETURN_URL,
-} from '../../../constants/routes.pathes';
+} from '../../../../constants/routes.pathes';
 
-import * as paths from '../routes-paths-auth';
+import * as paths from '../../routes-paths-auth';
 
 // import './Signin.css';
+
+const {
+  Link,
+  Form,
+} = COMPONENTS_BASE;
 
 const PAGE_ID = 'Signin';
 
@@ -43,7 +51,7 @@ const PAGE_ID = 'Signin';
     actionChangeUserStatus: getUserInfo(globalState).actionChangeUserStatus,
     urlReturn: typeof ownProps.urlReturn !== 'undefined'
       ? ownProps.urlReturn
-      : ownProps.location.query[PARAM_RETURN_URL],
+      : ownProps.location.query[paths.PARAM__RETURN_URL],
   }),
   {
     actionChangeUser: reduxUserInfo.actions.actionChangeUser,
@@ -90,8 +98,8 @@ export default class Signin extends Component {
       PropTypes.bool,
     ]),
 
-    loginButtonClassName: PropTypes.string,
-    loginCancelButtonClassName: PropTypes.string,
+    // loginButtonClassName: PropTypes.string,
+    // loginCancelButtonClassName: PropTypes.string,
   };
 
   // ======================================================
@@ -106,7 +114,7 @@ export default class Signin extends Component {
   // HANDLERS
   // ======================================================
   @bind()
-  async handleLogin(event) {
+  async handleLogin() {
     const {
       form: {
         username,
@@ -118,9 +126,6 @@ export default class Signin extends Component {
       onLogin,
       actionClearLastError,
     } = this.props;
-
-    event.preventDefault();
-    event.stopPropagation();
 
     // todo @ANKU @CRIT @MAIN - тут сначала срабатывает promise, и если ответ возвращается без кода ошибки то сработает сначала then а потом запарсится uniError
     await actionChangeUser(username, password);
@@ -135,67 +140,9 @@ export default class Signin extends Component {
     }
   }
 
-  // ======================================================
-  // RENDERS
-  // ======================================================
-  renderForm() {
-    const {
-      form: {
-        username,
-        password,
-      },
-      onUpdateForm,
-    } = this.props;
-
-    return (
-      <div className={ this.bem('fields') }>
-        <div className={ this.bem('username') }>
-          <span>{i18n('core:pages.SigninPage.fields.userNameLabel')}</span>
-          <input
-            name="username"
-            value={ username }
-            type="text"
-            autoComplete="username"
-            autoCorrect="off"
-            spellCheck="false"
-            autoCapitalize="off"
-            autoFocus="autofocus"
-            onChange={ (event) => onUpdateForm({ username: event.target.value }) }
-          />
-        </div>
-        <div className={ this.bem('password') }>
-          <span>{i18n('core:pages.SigninPage.fields.passwordLabel')}</span>
-          <input
-            name="password"
-            type="password"
-            value={ password }
-            autoComplete="current-password"
-            onChange={ (event) => onUpdateForm({ password: event.target.value }) }
-          />
-        </div>
-      </div>
-    );
-  }
-
-  renderActionCancel() {
-    const {
-      actionChangeUserStatus: {
-        isFetching,
-      },
-      inModal,
-      loginCancelButtonClassName,
-      actionClearLastError,
-    } = this.props;
-
-    return inModal && (
-      <button
-        className={ `${this.bem('signin-cancel')} ${loginCancelButtonClassName || ''}` }
-        disabled={ isFetching }
-        onClick={ () => actionClearLastError() }
-      >
-        {i18n('core:pages.SigninPage.loginCancelButton')}
-      </button>
-    );
+  @bind()
+  handleChange(name, value) {
+    this.props.onUpdateForm({ [name]: value });
   }
 
   // ======================================================
@@ -205,44 +152,62 @@ export default class Signin extends Component {
     const {
       form: {
         username,
+        password,
       },
       actionChangeUserStatus,
       inModal,
-      loginButtonClassName,
       actionGoTo,
+      onUpdateForm,
+      actionClearLastError,
     } = this.props;
 
+    // чтобы кнопка была сразу доступна при вводе данных а не когда фокус переместатя
+    // уберем onChangeField={ onUpdateForm } и проставим явно onChange (вместо onChangeBlur)
+
     return (
-      <form
-        className={ `${this.fullClassName} ${this.bem({ inModal })}` }
-        onSubmit={ this.handleLogin }
-      >
-        { this.renderForm() }
+      <Form
+        className={ this.fullClassName }
+        i18nFieldPrefix={ 'core:pages.SigninPage.fields' }
 
-        <div className={ this.bem('buttons') }>
-          <button
-            type="submit"
-            className={ `${this.bem('submitButton')} ${loginButtonClassName || ''}` }
-            disabled={ actionChangeUserStatus.isFetching || !username }
-          >
-            {i18n('core:pages.SigninPage.loginButton')}
-          </button>
-
+        fields={ [
           {
-            clientConfig.common.features.auth.allowSignup && (
-              <button
-                className={ this.bem('signupButton') }
-                onClick={ () => actionGoTo(paths.PATH_AUTH_SIGNUP) }
-              >
-                {i18n('core:pages.SigninPage.signup')}
-              </button>
-            )
-          }
+            name: 'username',
+            subType: SUB_TYPES.LOGIN,
+            value: username,
+            instanceChange: true,
 
-          { this.renderActionCancel() }
-        </div>
+          },
+          {
+            name: 'password',
+            subType: SUB_TYPES.PASSWORD,
+            value: password,
+            instanceChange: true,
+          },
+        ] }
+        onChangeField={ (name, value) => onUpdateForm({ [name]: value }) }
 
-        {
+
+        isValid={ !!(username && password) }
+        inModal={ inModal }
+        useForm={ true }
+
+        actions={
+          clientConfig.common.features.auth.allowSignup && (
+            <button
+              key="signupButton"
+              className={ this.bem('signupButton') }
+              onClick={ () => actionGoTo(paths.PATH_AUTH_SIGNUP) }
+            >
+              {i18n('core:pages.SigninPage.signup')}
+            </button>
+          )
+        }
+        onSubmit={ this.handleLogin }
+        textActionSubmit={ i18n('core:pages.SigninPage.loginButton') }
+        onCancel={ inModal ? () => actionClearLastError() : undefined }
+        textActionCancel={ i18n('core:pages.SigninPage.loginCancelButton') }
+
+        postActions={
           clientConfig.common.features.auth.allowResetPasswordByEmail && (
             <div className={ this.bem('forgotPassword') }>
               <Link
@@ -254,8 +219,8 @@ export default class Signin extends Component {
           )
         }
 
-        <ActionStatus actionStatus={ actionChangeUserStatus } />
-      </form>
+        actionStatus={ actionChangeUserStatus }
+      />
     );
   }
 }
