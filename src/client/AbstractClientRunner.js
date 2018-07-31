@@ -94,6 +94,7 @@ export default class AbstractClientRunner {
       clientRunner: this,
       BaseApiClient,
       apiUtils,
+      CB: require('../common/components/ComponentsBase').default,
     };
   }
 

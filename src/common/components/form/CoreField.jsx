@@ -16,7 +16,11 @@ import {
   DATETIME_FORMAT,
 } from '../../utils/date-utils';
 
-import { FIELD_PROP_TYPE_MAP } from '../../models/model-field';
+import {
+  FIELD_PROP_TYPE_MAP,
+  TYPES,
+  SUB_TYPES,
+} from '../../models/model-field';
 
 import COMPONENTS_BASE from '../ComponentsBase';
 
@@ -27,32 +31,13 @@ import COMPONENTS_BASE from '../ComponentsBase';
 const {
   FieldLayout,
   Input,
+  TextArea,
   Select,
   DatePicker,
   Checkbox,
   Button,
+  Attachment,
 } = COMPONENTS_BASE;
-
-export const TYPES = {
-  STRING: 'text',
-  TEXT: 'textarea',
-  DATE: 'date',
-  DATETIME: 'datetime',
-  NUMERIC: 'number',
-  DECIMAL: 'decimal',
-  BOOLEAN: 'checkbox',
-  REFERENCE: 'radio',
-  LIST: 'select',
-  /* DYNAMIC,
-   BINARY*/
-};
-
-export const SUB_TYPES = {
-  LOGIN: 'login',
-  PASSWORD: 'password',
-  EMAIL: 'email',
-  PHONE: 'phone',
-};
 
 export default class CoreField extends PureComponent {
   static TYPES = TYPES;
@@ -151,6 +136,10 @@ export default class CoreField extends PureComponent {
       case TYPES.DECIMAL:
       case TYPES.TEXT:
         return value;
+
+      case TYPES.BINARY:
+        return (Attachment && Attachment.parseValueToString && Attachment.parseValueToString(value))
+          || value;
 
       default:
         console.warn('Field неизвестный тип поля', typeFinal);
@@ -398,6 +387,21 @@ export default class CoreField extends PureComponent {
         const onChangeBlur = instanceChange ? undefined : changeHandler;
         const onChangeFinal = instanceChange ? changeHandler : undefined;
 
+        if (type === TYPES.TEXT) {
+          return (
+            <TextArea
+              maxLength={ maxLength }
+              minLength={ minLength }
+              required={ required }
+              onChangedBlur={ onChangeBlur }
+              onChange={ onChangeFinal }
+              { ...controlPropsFinal }
+            >
+              { controlValue }
+            </TextArea>
+          );
+        }
+
         return (
           <Input
             value={ controlValue || '' }
@@ -415,20 +419,43 @@ export default class CoreField extends PureComponent {
           />
         );
       case TYPES.BOOLEAN:
+        // взято за основу Antd.Checkbox
         return (
           <Checkbox
             checked={ controlValue }
-            onChange={ (event) => this.handleChange(event.target.checked, index) }
+            onChange={
+              (event, props) =>
+                this.handleChange(
+                  props && typeof props.checked !== 'undefined'
+                    ? props.checked
+                    : typeof props.checked !== 'undefined'
+                      ? event.target.checked
+                      : event.target.value || event,
+                  index,
+                )
+            }
             { ...controlPropsFinal }
           />
         );
       // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
+      case TYPES.DATETIME:
       case TYPES.DATE: {
         const dateFormat = type === TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
+
+        // FC Components - DatePicker - https://github.com/airbnb/react-dates
+        // todo @ANKU @LOW - нету времени - showTime
+        // todo @ANKU @LOW - не проставлены границы - disabledDate
         return (
           <DatePicker
             value={ controlValue }
-            format={ dateFormat }
+            placeholder={ dateFormat }
+            displayFormat={ dateFormat }
+            onChange={ (event, time) => (
+              event.target
+                ? this.handleChange(time, index)
+                : this.handleChange(event, index)
+            ) }
+
             showTime={ type === TYPES.DATETIME }
             disabledDate={
               (minValue || maxValue)
@@ -440,10 +467,31 @@ export default class CoreField extends PureComponent {
                 }
                 : undefined
             }
-            onChange={ (date, stringDate) => this.handleChange(stringDate, index) }
+
             { ...controlPropsFinal }
           />
         );
+
+        // // взято за основу Antd.DatePicker
+        // return (
+        //   <DatePicker
+        //     value={ controlValue }
+        //     format={ dateFormat }
+        //     showTime={ type === TYPES.DATETIME }
+        //     disabledDate={
+        //       (minValue || maxValue)
+        //         ? (dateValue) => {
+        //           let disableDate = false;
+        //           disableDate = disableDate || (minValue && dateValue < minValue);
+        //           disableDate = disableDate || (maxValue && dateValue > maxValue);
+        //           return disableDate;
+        //         }
+        //         : undefined
+        //     }
+        //     onChange={ (date, stringDate) => this.handleChange(stringDate, index) }
+        //     { ...controlPropsFinal }
+        //   />
+        // );
       }
       case TYPES.LIST: {
         return (
@@ -451,6 +499,15 @@ export default class CoreField extends PureComponent {
             selectedValue={ controlValue }
             options={ options }
             onSelect={ (id) => this.handleChange(id, index) }
+            { ...controlPropsFinal }
+          />
+        );
+      }
+
+      case TYPES.BINARY: {
+        return (
+          <Attachment
+            onChange={ this.handleChange }
             { ...controlPropsFinal }
           />
         );

@@ -78,14 +78,17 @@ const COMPONENTS_BASE = {
   // FORM FIELDS
   // ======================================================
   BaseInput: (props) => <input { ...props } />,
-  BaseTextArea: (props) => <textarea { ...props } />,
   BaseNumberInput: (props) => <input { ...props } type="number" />,
   get Input() {
     return require('./form/fields/CoreInput').default;
   },
+  BaseTextArea: (props) => <textarea { ...props } />,
+  get TextArea() {
+    return require('./form/fields/CoreTextArea').default;
+  },
 
   BaseSelect: (props) => <select { ...props } />,
-  BaseOption: (props) => <option { ...props } />,
+  // BaseOption: (props) => <option { ...props } />,
   get Select() {
     return require('./form/fields/CoreSelect').default;
   },

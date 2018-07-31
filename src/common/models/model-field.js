@@ -13,7 +13,8 @@ export const TYPES = {
   REFERENCE: 'radio',
   LIST: 'select',
   /* DYNAMIC,
-   BINARY*/
+   */
+  BINARY: 'binary',
 };
 
 export const SUB_TYPES = {

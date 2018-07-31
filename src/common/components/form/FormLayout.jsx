@@ -23,11 +23,13 @@ export default class FormLayout extends PureComponent {
 
   renderElement(className, element) {
     const isNotEmpty = element && (!Array.isArray(element) || element.length);
-    return isNotEmpty && (
-      <div className={ className }>
-        { element }
-      </div>
-    );
+    return isNotEmpty
+      ? (
+        <div className={ className }>
+          { element }
+        </div>
+      )
+      : null;
   }
 
   render() {

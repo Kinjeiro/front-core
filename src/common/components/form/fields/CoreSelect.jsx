@@ -10,9 +10,12 @@ import componentsBase from '../../ComponentsBase';
 
 const {
   BaseSelect,
-  BaseOption,
+  // BaseOption,
 } = componentsBase;
 
+/**
+ * Нужно показывать только n первых элементов
+ */
 export default class CoreSelect extends PureComponent {
   static CUSTOM_FIELDS = [
     'selectedValue',
@@ -140,14 +143,24 @@ export default class CoreSelect extends PureComponent {
 
   @bind()
   handleSelect(label, optionNode) {
-    // todo @ANKU @LOW @BUG_OUT @antd - элемент при выборе показывает в input option.value а не children option
-    this.updateSelect(optionNode.props.optionValue, label);
+    if (typeof optionNode === 'object') {
+      if (optionNode.value) {
+        // semantic format
+        return this.updateSelect(optionNode.value);
+      }
+      // antd select format
+      // todo @ANKU @LOW @BUG_OUT @antd - элемент при выборе показывает в input option.value а не children option
+      return this.updateSelect(optionNode.props.optionValue, label);
+    } else if (label.target) {
+      return this.updateSelect(label.target.value);
+    }
+    throw new Error('Unknown handleSelect format');
   }
 
   // ======================================================
   // RENDERS
   // ======================================================
-  renderOptions() {
+  getOptions() {
     const {
       fieldLabel,
       fieldValue,
@@ -159,19 +172,26 @@ export default class CoreSelect extends PureComponent {
     return visibleOptions.map((option) => {
       const value = option[fieldValue];
       const label = option[fieldLabel];
-      const { disabled } = option;
+      // const { disabled } = option;
 
-      return (
-        <BaseOption
-          key={ value }
-          optionValue={ `${value}` }
-          value={ `${label}` }
-          title={ label }
-          disabled={ disabled }
-        >
-          { label === null ? value : label }
-        </BaseOption>
-      );
+      return {
+        ...option,
+        value,
+        label,
+      };
+
+      // взято за основу ANTDSelect.Option
+      // return (
+      //   <BaseOption
+      //     key={ value }
+      //     optionValue={ `${value}` }
+      //     value={ `${label}` }
+      //     title={ label }
+      //     disabled={ disabled }
+      //   >
+      //     { label === null ? value : label }
+      //   </BaseOption>
+      // );
     });
   }
 
@@ -189,11 +209,15 @@ export default class CoreSelect extends PureComponent {
       selectedLabel,
     } = this.state;
 
+    // взято за основу ANTDSelect
     return (
       <BaseSelect
         mode="combobox"
         className="CoreSelect"
+
+        options={ this.getOptions() }
         defaultValue={ selectedLabel || selectedValue || undefined }
+
         filterOption={ options.length < maxVisible }
         showSearch={ true }
         allowClear={ true }
@@ -203,9 +227,7 @@ export default class CoreSelect extends PureComponent {
         onSearch={ this.handleSearch }
 
         { ...omit(otherProps, ...CoreSelect.CUSTOM_FIELDS) }
-      >
-        { this.renderOptions() }
-      </BaseSelect>
+      />
     );
   }
 }
