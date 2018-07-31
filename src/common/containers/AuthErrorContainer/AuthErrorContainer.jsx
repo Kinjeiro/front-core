@@ -135,10 +135,10 @@ export default class AuthErrorContainer extends Component {
           {
             reLoginModalForm
               ? (
-                <AuthFormLayout isModal={ true }>
+                <AuthFormLayout inModal={ true }>
                   <AuthEnter
                     { ...this.props }
-                    isModal={ true }
+                    inModal={ true }
                     urlReturn={ linkForwardTo || false }
                   />
                 </AuthFormLayout>

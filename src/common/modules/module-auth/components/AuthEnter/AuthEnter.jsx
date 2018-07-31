@@ -45,7 +45,7 @@ export default class AuthEnter extends Component {
     // ======================================================
     // PROPS
     // ======================================================
-    isModal: PropTypes.bool,
+    inModal: PropTypes.bool,
     isSignup: PropTypes.bool,
 
     // ======================================================
@@ -69,13 +69,13 @@ export default class AuthEnter extends Component {
   @bind()
   async handleEnterTypeChange(isSignup = null) {
     const {
-      isModal,
+      inModal,
       actionClearLastError,
       urlReturn,
     } = this.props;
 
 
-    if (isModal) {
+    if (inModal) {
       if (isSignup === null) {
         // убираем любые ошибки тем самым закроется модалка
         actionClearLastError();
@@ -119,14 +119,14 @@ export default class AuthEnter extends Component {
   // ======================================================
   render() {
     const {
-      isModal,
+      inModal,
     } = this.props;
 
     const {
       isSignup,
     } = this.state;
 
-    const AuthTypeClass = isModal
+    const AuthTypeClass = inModal
       ? isSignup
         ? Signup
         : Signin
@@ -138,7 +138,7 @@ export default class AuthEnter extends Component {
       <AuthTypeClass
         { ...this.props }
         onEnterTypeChange={ this.handleEnterTypeChange }
-        onModalCancel={ isModal ? this.handleModalCancel : undefined }
+        onModalCancel={ inModal ? this.handleModalCancel : undefined }
       />
     );
   }

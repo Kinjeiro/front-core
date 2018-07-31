@@ -9,18 +9,18 @@ export default class AuthFormLayout extends PureComponent {
   static propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
-    isModal: PropTypes.bool,
+    inModal: PropTypes.bool,
   };
 
   render() {
     const {
       className,
       children,
-      isModal,
+      inModal,
     } = this.props;
 
     return (
-      <div className={ `AuthFormLayout ${className || ''} ${isModal ? 'AuthFormLayout--modal' : ''}` }>
+      <div className={ `AuthFormLayout ${className || ''} ${inModal ? 'AuthFormLayout--modal' : ''}` }>
         { children }
       </div>
     );
