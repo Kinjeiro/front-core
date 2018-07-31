@@ -25,6 +25,8 @@ const {
 
 @bemDecorator({ componentName: 'CoreForm', wrapper: false })
 export default class CoreForm extends PureComponent {
+  static FIELD_TYPES = Field.TYPES;
+
   static propTypes = {
     i18nFieldPrefix: PropTypes.string,
     fields: PropTypes.arrayOf(PropTypes.shape(Field.propTypes)),

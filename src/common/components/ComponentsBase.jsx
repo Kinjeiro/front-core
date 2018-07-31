@@ -1,18 +1,59 @@
 /* eslint-disable global-require */
 import React from 'react';
 
-import { executeVariableMemoize } from '../utils/common';
+import {
+  executeVariable,
+  executeVariableMemoize,
+} from '../utils/common';
 
 const COMPONENTS_BASE = {
-  replace(name, ComponentClass) {
+  replace(name, ComponentClass, funcIsClass = false) {
     Object.defineProperty(this, name, {
       enumerable: true,
       configurable: true,
       get() {
-        // отложенная загрузка компонентов () => require('./Component);
-        return executeVariableMemoize(name, ComponentClass);
+        return funcIsClass
+          ? ComponentClass
+          // отложенная загрузка компонентов () => require('./Component);
+          : executeVariableMemoize(name, ComponentClass);
       },
     });
+    return this;
+  },
+  wrap(name, ComponentClass, funcIsClass = false) {
+    const prev = this[name];
+    if (!prev) {
+      this.replace(name, ComponentClass, funcIsClass);
+    } else {
+      this.replace(
+        name,
+        (props) => React.createElement(
+          funcIsClass
+            ? ComponentClass
+            : executeVariable(ComponentClass),
+          props,
+          React.createElement(prev, props),
+        ),
+        true,
+      );
+    }
+    return this;
+  },
+  addClassName(name, className) {
+    const prev = this[name];
+    if (prev) {
+      this.replace(
+        name,
+        (props) => React.createElement(
+          prev,
+          {
+            ...props,
+            className: `${className} ${props.className || ''}`,
+          },
+        ),
+        true,
+      );
+    }
     return this;
   },
 
