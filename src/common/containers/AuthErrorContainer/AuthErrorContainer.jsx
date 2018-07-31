@@ -17,7 +17,10 @@ import COMPONENTS_BASE from '../../components/ComponentsBase';
 
 import './AuthErrorContainer.css';
 
-const { Signin } = COMPONENTS_BASE;
+const {
+  AuthFormLayout,
+  AuthEnter,
+} = COMPONENTS_BASE;
 
 // eslint-disable-next-line no-unused-vars
 const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
@@ -132,11 +135,13 @@ export default class AuthErrorContainer extends Component {
           {
             reLoginModalForm
               ? (
-                <Signin
-                  { ...this.props }
-                  inModal={ true }
-                  urlReturn={ linkForwardTo || false }
-                />
+                <AuthFormLayout isModal={ true }>
+                  <AuthEnter
+                    { ...this.props }
+                    isModal={ true }
+                    urlReturn={ linkForwardTo || false }
+                  />
+                </AuthFormLayout>
               )
               : this.renderNeedReLoginOnIndexPage()
           }

@@ -1,0 +1,39 @@
+@import "../../styles-auth.css";
+
+.AuthFormLayout {
+  height: 100%;
+  padding: 1em;
+
+  .FieldLayout__label {
+    font-weight: 300;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+  .FieldLayout__control {
+    input:not([type='checkbox']),
+    textarea {
+      border: none;
+    }
+  }
+
+  .FormLayout__actions,
+  .ActionStatus__error {
+    text-align: right;
+  }
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    background: var(--color-primary-auth);
+    color: var(--color-text-auth);
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    border-radius: 2px;
+
+    &:disabled {
+      background: color(var(--color-primary-auth) blackness(80%));
+      color: color(var(--color-text-auth) blackness(80%));
+    }
+  }
+}
+

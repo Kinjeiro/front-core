@@ -12,7 +12,7 @@ import {
 } from './constants/routes.pathes';
 
 import getRouterAuth from './modules/module-auth/routes-auth';
-import initAuthComponents from './modules/module-auth/components/init-components';
+import { initComponents as initAuthComponents } from './modules/module-auth/components/get-components';
 
 initAuthComponents(COMPONENTS_BASE);
 

@@ -9,13 +9,15 @@ import {
 import clientConfig from '../../client-config';
 
 import * as paths from './routes-paths-auth';
-import initComponents from './components/init-components';
+import { initComponents } from './components/get-components';
 
 export default function getRouter(COMPONENTS_BASE) {
   const {
-    AuthLayout,
-    Signup,
-    Signin,
+    AuthPageLayout,
+    // AuthFormLayout,
+    AuthEnter,
+    // Signup,
+    // Signin,
     Forgot,
     Reset,
   } = initComponents(COMPONENTS_BASE);
@@ -23,20 +25,20 @@ export default function getRouter(COMPONENTS_BASE) {
   return (
     <Route
       path=""
-      component={ AuthLayout }
+      component={ AuthPageLayout }
     >
       <IndexRedirect to={ paths.ROUTES_NAMES.signin } />
       {
         clientConfig.common.features.auth.allowSignup && (
           <Route
             path={ paths.ROUTES_NAMES.signup }
-            component={ Signup }
+            component={ (props) => <AuthEnter { ...props } isSignup={ true } /> }
           />
         )
       }
       <Route
         path={ paths.ROUTES_NAMES.signin }
-        component={ Signin }
+        component={ AuthEnter }
       />
       {
         clientConfig.common.features.auth.allowResetPasswordByEmail && (

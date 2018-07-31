@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+// import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
 import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simple-form';
-import titled from '../../../../utils/decorators/react-class/titled';
 import bemDecorator from '../../../../utils/decorators/bem-component';
 import i18n from '../../../../utils/i18n-utils';
 
@@ -16,7 +15,6 @@ import {
   getUserInfo,
 } from '../../../../app-redux/selectors';
 import * as reduxUserInfo from '../../../../app-redux/reducers/app/user-info';
-import * as reduxLastUniError from '../../../../app-redux/reducers/app/last-uni-error';
 
 // ======================================================
 // COMPONENTS and STYLES
@@ -28,31 +26,23 @@ import {
   SUB_TYPES,
 } from '../../../../models/model-field';
 
-import {
-  PATH_INDEX,
-} from '../../../../constants/routes.pathes';
-
-import * as paths from '../../routes-paths-auth';
-
 import COMPONENTS_BASE from '../../../../components/ComponentsBase';
 
 // import './LoginPage.css';
 
-const { Form } = COMPONENTS_BASE;
+const {
+  Form,
+  Button,
+} = COMPONENTS_BASE;
 
 const PAGE_ID = 'Signup';
 
 @connect(
-  (globalState, ownProps) => ({
+  (globalState) => ({
     actionSignupStatus: getUserInfo(globalState).actionSignupStatus,
-    urlReturn: typeof ownProps.urlReturn !== 'undefined'
-      ? ownProps.urlReturn
-      : ownProps.location.query[paths.PARAM__RETURN_URL],
   }),
   {
     ...reduxUserInfo.actions,
-    ...reduxLastUniError.actions,
-    actionGoTo: push,
   },
 )
 @reduxSimpleForm(
@@ -64,14 +54,15 @@ const PAGE_ID = 'Signup';
     displayName: '',
   },
 )
-@titled(PAGE_ID, i18n('core:pages.SignupPage.title'))
 @bemDecorator({ componentName: 'SignupPage', wrapper: false })
-export default class LoginPage extends Component {
+export default class Signup extends Component {
   static propTypes = {
     // ======================================================
     // PROPS
     // ======================================================
     inModal: PropTypes.bool,
+    onEnterTypeChange: PropTypes.func,
+    onModalCancel: PropTypes.func,
 
     // ======================================================
     // @reduxSimpleForm
@@ -87,12 +78,6 @@ export default class LoginPage extends Component {
     // ======================================================
     actionSignupStatus: ACTION_STATUS_PROPS,
     actionSignup: PropTypes.func,
-    actionGoTo: PropTypes.func,
-    // actionClearLastError: PropTypes.func,
-    urlReturn: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool,
-    ]),
   };
 
   // ======================================================
@@ -111,16 +96,12 @@ export default class LoginPage extends Component {
     const {
       form,
       actionSignup,
-      actionGoTo,
-      urlReturn,
+      onChangeEnterType,
     } = this.props;
 
-    // todo @ANKU @CRIT @MAIN - тут сначала срабатывает promise, и если ответ возвращается без кода ошибки то сработает сначала then а потом запарсится uniError
     await actionSignup(form);
 
-    if (urlReturn !== false) {
-      await actionGoTo(urlReturn || PATH_INDEX);
-    }
+    await onChangeEnterType(true);
   }
 
   // ======================================================
@@ -178,6 +159,8 @@ export default class LoginPage extends Component {
       actionSignupStatus,
       inModal,
       onUpdateForm,
+      onModalCancel,
+      onEnterTypeChange,
     } = this.props;
 
     return (
@@ -192,8 +175,21 @@ export default class LoginPage extends Component {
         inModal={ inModal }
         useForm={ true }
 
+        actions={
+          (
+            <Button
+              key="signinButton"
+              className={ this.bem('signinButton') }
+              onClick={ () => onEnterTypeChange(false) }
+            >
+              {i18n('core:pages.SignupPage.signinButton')}
+            </Button>
+          )
+        }
         onSubmit={ this.handleSubmit }
         textActionSubmit={ i18n('core:pages.SignupPage.submitButton') }
+        onCancel={ onModalCancel }
+        textActionCancel={ i18n('core:pages.SignupPage.cancelButton') }
 
         actionStatus={ actionSignupStatus }
       />

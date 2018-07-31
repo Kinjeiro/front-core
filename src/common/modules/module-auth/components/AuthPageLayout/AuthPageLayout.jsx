@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 // import i18n from '../../utils/i18n';
 
-import './AuthLayout.css';
+import './AuthPageLayout.css';
 
-export default class AuthLayout extends PureComponent {
+import getComponents from '../get-components';
+
+const {
+  AuthFormLayout,
+} = getComponents();
+
+export default class AuthPageLayout extends PureComponent {
   static propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
@@ -20,7 +26,9 @@ export default class AuthLayout extends PureComponent {
     return (
       <div className={ `AuthLayout ${className || ''}` }>
         <div className="AuthLayout__body">
-          { children }
+          <AuthFormLayout>
+            { children }
+          </AuthFormLayout>
         </div>
       </div>
     );

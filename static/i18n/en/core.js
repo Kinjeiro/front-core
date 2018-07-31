@@ -94,6 +94,8 @@ module.exports = {
         newPassword: 'New password',
       },
       submitButton: 'Update',
+      signinButton: 'Signin',
+      cancelButton: 'Close',
       submitSuccessMessage: 'Password has been updated',
       goToIndexPage: 'To index page',
     },

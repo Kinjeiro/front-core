@@ -1,0 +1,27 @@
+@import "../../styles-auth.css";
+
+:root {
+  //--color-background-auth: #3AAFAB;
+  --color-background-auth: var(--color-primary);
+  --color-text-auth: var(--color-main-background);
+  --color-primary-auth: #333;
+}
+
+.AuthLayout {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 100%;
+
+//background: var(--color-main-background);
+  background: var(--color-background-auth);
+
+  &__body {
+    background: var(--color-background-auth);
+    //color: var(--color-primary);
+    color: var(--color-text-auth);
+    width: 470px;
+  }
+}
+

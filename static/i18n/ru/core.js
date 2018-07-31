@@ -94,6 +94,8 @@ module.exports = {
         newPassword: 'Введите новый пароль',
       },
       submitButton: 'Обновить',
+      signinButton: 'Войти',
+      cancelButton: 'Закрыть',
       submitSuccessMessage: 'Пароль успешно изменен',
       goToIndexPage: 'На главную',
     },
