@@ -28,6 +28,8 @@ import
   }
 from '../common/app-redux/create-store';
 
+import COMPONENTS_BASE_CORE from '../common/components/ComponentsBase';
+
 import './AbstractClientRunner.css';
 
 /**
@@ -83,6 +85,10 @@ export default class AbstractClientRunner {
   }
   getApiClient(defaultEndpoint) {
     return createApiClientByEndpoint(defaultEndpoint);
+  }
+
+  initComponents(COMPONENTS_BASE) {
+    return COMPONENTS_BASE;
   }
 
   getGlobalWindowDebugVariables() {
@@ -152,6 +158,11 @@ export default class AbstractClientRunner {
     initApiClientClass(ApiClientClass);
     const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
     initApiClient(apiClient);
+
+    // ======================================================
+    // COMPONENTS
+    // ======================================================
+    this.initComponents(COMPONENTS_BASE_CORE);
 
     // ======================================================
     // DEBUG
