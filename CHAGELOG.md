@@ -19,6 +19,7 @@ NoticeComponentClass -> Notice в ComponentsBase
 LoginPageComponentClass -> Signin в ComponentsBase
 ModalLoginPageComponentClass -> Signin в ComponentsBase
 ```
+Инициализация происходит через ClientRunner::initComponents(COMPONENTS_BASE)
    
 ### API Dependencies:
     + ServiceAuth - @reagentum/auth-server@1.0.4

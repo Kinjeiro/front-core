@@ -241,7 +241,7 @@ export const register = function (server, options, next) {
       // create special mock route with mock prefix (this is allow redirect to this route if mock conditions valid)
       path,
     };
-    logger.debug('Mocking path', path);
+    logger.debug('Mocking path', appUrl(path));
 
     // hapi doesn't allow any no api parameters in route;
     delete serverRoute.mockFilterConditions;

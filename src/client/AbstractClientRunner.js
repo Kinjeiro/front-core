@@ -143,6 +143,12 @@ export default class AbstractClientRunner {
 
   init() {
     // ======================================================
+    // COMPONENTS
+    // ======================================================
+    // должны инициализироваться до роутев
+    this.initComponents(COMPONENTS_BASE_CORE);
+
+    // ======================================================
     // CREATE STORE + HISTORY + ROUTES
     // ======================================================
     const routeHistory = this.createHistory();
@@ -158,11 +164,6 @@ export default class AbstractClientRunner {
     initApiClientClass(ApiClientClass);
     const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
     initApiClient(apiClient);
-
-    // ======================================================
-    // COMPONENTS
-    // ======================================================
-    this.initComponents(COMPONENTS_BASE_CORE);
 
     // ======================================================
     // DEBUG

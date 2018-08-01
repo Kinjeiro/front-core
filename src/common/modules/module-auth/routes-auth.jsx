@@ -9,9 +9,9 @@ import {
 import clientConfig from '../../client-config';
 
 import * as paths from './routes-paths-auth';
-import { initComponents } from './components/get-components';
+import getComponents from './components/get-components';
 
-export default function getRouter(COMPONENTS_BASE) {
+export default function getRouter() {
   const {
     AuthPageLayout,
     // AuthFormLayout,
@@ -20,7 +20,7 @@ export default function getRouter(COMPONENTS_BASE) {
     // Signin,
     Forgot,
     Reset,
-  } = initComponents(COMPONENTS_BASE);
+  } = getComponents();
 
   return (
     <Route

@@ -2,12 +2,19 @@ import AbstractClientRunner from './AbstractClientRunner';
 
 import { getClientStoreInitialState as getStateFromPage } from './get-global-data';
 
+import { initComponents as initAuthComponents } from '../common/modules/module-auth/components/get-components';
+
 /**
  * Расширение для установки core зависимостей по redux и импорт данных, пришедших с сервера при отрисовки
  */
 export default class CoreClientRunner extends AbstractClientRunner {
   getEntityModels() {
     return require('../common/models/domains').default;
+  }
+
+  initComponents(COMPONENTS_BASE) {
+    super.initComponents(COMPONENTS_BASE);
+    return initAuthComponents(COMPONENTS_BASE);
   }
 
   /**

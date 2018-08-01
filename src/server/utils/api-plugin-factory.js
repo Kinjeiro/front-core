@@ -5,6 +5,7 @@ import { joinUri } from '../../common/utils/uri-utils';
 import i18n from '../../common/utils/i18n-utils';
 import generateId from '../../common/utils/generate-id';
 import createApiConfig from '../../common/utils/create-api-config';
+import { appUrl } from '../../common/helpers/app-urls';
 
 import {
   createUniError,
@@ -360,7 +361,7 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
     }
 
     methods.forEach((methodItem) => {
-      logger.debug(`init server route: [${methodItem}]\t\t${pathFinal}`);
+      logger.debug(`init server route: [${methodItem}]\t\t${appUrl(pathFinal)}`);
       server.route({
         method: methodItem,
         path: pathFinal,

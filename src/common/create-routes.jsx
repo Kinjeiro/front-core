@@ -12,9 +12,6 @@ import {
 } from './constants/routes.pathes';
 
 import getRouterAuth from './modules/module-auth/routes-auth';
-import { initComponents as initAuthComponents } from './modules/module-auth/components/get-components';
-
-initAuthComponents(COMPONENTS_BASE);
 
 export default function createRoutes(
   store,

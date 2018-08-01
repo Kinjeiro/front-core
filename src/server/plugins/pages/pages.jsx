@@ -24,6 +24,8 @@ import {
   cutContextPath,
 } from '../../../common/helpers/app-urls';
 
+import CB from '../../../common/components/ComponentsBase';
+
 // ======================================================
 // SERVER
 // ======================================================
@@ -58,6 +60,8 @@ export function register(server, pluginOptions, next) {
     loginPath,
     noAuthRequireMatcherFn,
   } = pluginOptions;
+
+  clientRunner.initComponents(CB);
 
   const handler = async function handlerFn(request, reply) {
     try {

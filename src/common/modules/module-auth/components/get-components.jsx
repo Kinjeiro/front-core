@@ -1,11 +1,6 @@
-let init = false;
 let CB = null;
 
 export function initComponents(COMPONENTS_BASE) {
-  if (init) {
-    return COMPONENTS_BASE;
-  }
-
   COMPONENTS_BASE.replace('AuthPageLayout', () => require('./AuthPageLayout/AuthPageLayout').default);
   COMPONENTS_BASE.replace('AuthFormLayout', () => require('./AuthFormLayout/AuthFormLayout').default);
   COMPONENTS_BASE.replace('AuthEnter', () => require('./AuthEnter/AuthEnter').default);
@@ -14,7 +9,6 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('Forgot', () => require('./Forgot/Forgot').default);
   COMPONENTS_BASE.replace('Reset', () => require('./Reset/Reset').default);
 
-  init = true;
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;
 }
