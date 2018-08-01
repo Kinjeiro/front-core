@@ -28,6 +28,7 @@ export default class CoreForm extends PureComponent {
   static FIELD_TYPES = Field.TYPES;
 
   static propTypes = {
+    id: PropTypes.string,
     i18nFieldPrefix: PropTypes.string,
     fields: PropTypes.arrayOf(PropTypes.shape(Field.propTypes)),
     onChangeField: PropTypes.func,
@@ -204,6 +205,7 @@ export default class CoreForm extends PureComponent {
   // ======================================================
   render() {
     const {
+      id,
       inModal,
       useForm,
       textActionSuccess,
@@ -212,6 +214,7 @@ export default class CoreForm extends PureComponent {
 
     let component = (
       <FormLayout
+        id={ id }
         inModal={ inModal }
 
         fields={ this.renderFields() }

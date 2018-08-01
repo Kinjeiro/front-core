@@ -40,7 +40,7 @@ const COMPONENTS_BASE = {
           ? ComponentClass
           : executeVariable(ComponentClass),
         props,
-        React.createElement(prev, props),
+        React.createElement(executeVariable(prev), props),
       ));
     }
     return this;
@@ -50,10 +50,10 @@ const COMPONENTS_BASE = {
     const prev = this[`_${name}`];
     if (prev) {
       this.replace(name, () => (props) => React.createElement(
-        prev,
+        executeVariable(prev),
         {
           ...props,
-          className: `${className} ${props.className || ''}`,
+          className: `${executeVariable(className)} ${props.className || ''}`,
         },
       ));
     }
@@ -68,8 +68,6 @@ COMPONENTS_BASE.replace('Form', () => require('./form/CoreForm').default);
 COMPONENTS_BASE.replace('FormLayout', () => require('./form/FormLayout').default);
 COMPONENTS_BASE.replace('Field', () => require('./form/CoreField').default);
 COMPONENTS_BASE.replace('FieldLayout', () => require('./form/FieldLayout').default);
-COMPONENTS_BASE.replace('Form', () => require('./form/CoreForm').default);
-COMPONENTS_BASE.replace('Form', () => require('./form/CoreForm').default);
 
 // ======================================================
 // FORM FIELDS

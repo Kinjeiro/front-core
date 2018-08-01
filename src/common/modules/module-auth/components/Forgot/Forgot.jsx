@@ -58,6 +58,7 @@ const PAGE_ID = 'Forgot';
 @titled(PAGE_ID, i18n('core:pages.ForgotPage.title'))
 @bemDecorator({ componentName: 'Forgot', wrapper: false })
 export default class Forgot extends Component {
+  static PAGE_ID = PAGE_ID;
   static propTypes = {
     // ======================================================
     // PROPS
@@ -154,6 +155,7 @@ export default class Forgot extends Component {
 
     return (
       <Form
+        id={ PAGE_ID }
         className={ this.fullClassName }
         i18nFieldPrefix={ 'core:pages.ForgotPage.fields' }
 

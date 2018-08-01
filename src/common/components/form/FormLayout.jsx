@@ -12,6 +12,7 @@ const ELEMENT_PROP_TYPE = PropTypes.oneOfType([
 
 export default class FormLayout extends PureComponent {
   static propTypes = {
+    id: PropTypes.string,
     className: PropTypes.string,
     inModal: PropTypes.bool,
 

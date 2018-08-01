@@ -58,10 +58,11 @@ module.exports = {
         },
       },
       submitButton: 'Sign up',
+      signinButton: 'Sign in',
       cancelButton: 'Cancel',
     },
     SigninPage: {
-      title: 'Login',
+      title: 'Sign in',
       description: 'Login page',
       fields: {
         username: {
@@ -75,7 +76,7 @@ module.exports = {
           hint: 'User password',
         },
       },
-      loginButton: 'Log in',
+      loginButton: 'Sign in',
       loginCancelButton: 'Cancel',
       signup: 'Sign up',
       forgotPassword: 'Forgot password',

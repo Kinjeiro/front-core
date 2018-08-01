@@ -56,6 +56,7 @@ const PAGE_ID = 'Signup';
 )
 @bemDecorator({ componentName: 'SignupPage', wrapper: false })
 export default class Signup extends Component {
+  static PAGE_ID = PAGE_ID;
   static propTypes = {
     // ======================================================
     // PROPS
@@ -165,6 +166,7 @@ export default class Signup extends Component {
 
     return (
       <Form
+        id={ PAGE_ID }
         className={ this.fullClassName }
         i18nFieldPrefix={ 'core:pages.SignupPage.fields' }
 

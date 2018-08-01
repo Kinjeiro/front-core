@@ -58,6 +58,7 @@ module.exports = {
         },
       },
       submitButton: 'Регистрация',
+      signinButton: 'Вход',
       cancelButton: 'Отменить',
     },
     SigninPage: {
