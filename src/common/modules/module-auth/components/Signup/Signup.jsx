@@ -7,6 +7,7 @@ import bind from 'lodash-decorators/bind';
 import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simple-form';
 import bemDecorator from '../../../../utils/decorators/bem-component';
 import i18n from '../../../../utils/i18n-utils';
+import clientConfig from '../../../../client-config';
 
 // ======================================================
 // REDUX
@@ -64,6 +65,7 @@ export default class Signup extends Component {
     inModal: PropTypes.bool,
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
+    emailAsLogin: PropTypes.bool,
 
     // ======================================================
     // @reduxSimpleForm
@@ -79,6 +81,10 @@ export default class Signup extends Component {
     // ======================================================
     actionSignupStatus: ACTION_STATUS_PROPS,
     actionSignup: PropTypes.func,
+  };
+
+  defaultProps = {
+    emailAsLogin: clientConfig.common.features.auth.emailAsLogin,
   };
 
   // ======================================================
@@ -97,10 +103,18 @@ export default class Signup extends Component {
     const {
       form,
       actionSignup,
+      emailAsLogin,
       onChangeEnterType,
     } = this.props;
+    const {
+      email,
+      username,
+    } = form;
 
-    await actionSignup(form);
+    await actionSignup({
+      ...form,
+      username: emailAsLogin ? email : username,
+    });
 
     await onChangeEnterType(true);
   }
@@ -108,18 +122,6 @@ export default class Signup extends Component {
   // ======================================================
   // RENDERS
   // ======================================================
-  isValid() {
-    const {
-      form: {
-        username,
-        password,
-        email,
-      },
-    } = this.props;
-
-    return !!(username && password && email);
-  }
-
   getFields() {
     const {
       form: {
@@ -128,28 +130,42 @@ export default class Signup extends Component {
         email,
         displayName,
       },
+      emailAsLogin,
     } = this.props;
-    return [
+
+    const fields = [];
+
+    if (!emailAsLogin) {
+      fields.push(
+        {
+          name: 'username',
+          subType: SUB_TYPES.LOGIN,
+          value: username,
+          required: true,
+        },
+      );
+    }
+
+    fields.push(
       {
-        name: 'username',
-        subType: SUB_TYPES.LOGIN,
-        value: username,
+        name: 'email',
+        subType: SUB_TYPES.EMAIL,
+        value: email,
+        required: true,
       },
       {
         name: 'password',
         subType: SUB_TYPES.PASSWORD,
         value: password,
-      },
-      {
-        name: 'email',
-        subType: SUB_TYPES.EMAIL,
-        value: email,
+        required: true,
       },
       {
         name: 'displayName',
         value: displayName,
       },
-    ];
+    );
+
+    return fields;
   }
 
   // ======================================================
@@ -173,7 +189,6 @@ export default class Signup extends Component {
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
 
-        isValid={ this.isValid() }
         inModal={ inModal }
         useForm={ true }
 

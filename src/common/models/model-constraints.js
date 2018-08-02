@@ -17,6 +17,7 @@ export const CONSTRAINTS_PROP_TYPE_MAP = {
     PropTypes.string,
     PropTypes.instanceOf(RegExp),
   ]),
+  required: PropTypes.bool,
 };
 
 export const CONSTRAINTS_PROP_TYPE = PropTypes.shape(CONSTRAINTS_PROP_TYPE_MAP);

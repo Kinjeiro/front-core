@@ -70,6 +70,11 @@ module.exports = {
           placeholder: 'Enter login',
           hint: 'User login',
         },
+        loginEmail: {
+          label: 'Email',
+          placeholder: 'Enter email',
+          hint: 'User email',
+        },
         password: {
           label: 'Password',
           placeholder: 'Enter password',
@@ -135,6 +140,11 @@ module.exports = {
     CoreForm: {
       textActionSubmit: 'Send',
       textActionCancel: 'Cancel',
+    },
+    CoreField: {
+      errors: {
+        requiredError: 'Field is required',
+      },
     },
     CoreSelect: {
       placeholder: 'Choice option...',

@@ -19,6 +19,7 @@ export const TYPES = {
 
 export const SUB_TYPES = {
   LOGIN: 'login',
+  LOGIN_EMAIL: 'loginEmail',
   PASSWORD: 'password',
   EMAIL: 'email',
   PHONE: 'phone',
@@ -53,8 +54,23 @@ export const FIELD_PROP_TYPE_MAP = {
    minBytes,
    value
    pattern
+   required,
    */
   constraints: CONSTRAINTS,
+  /**
+   * boolean true - значит не проводить никаких проверок
+   * либо функция (value, fieldProps) => [] // errors
+   */
+  validate: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func,
+  ]),
+  /**
+   * дублирует поле constraints.required для удобства
+   */
+  required: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
 
   textPlaceholder: PropTypes.node,
   textHint: PropTypes.node,

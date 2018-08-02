@@ -1,7 +1,16 @@
+@import "../../app-style/vars.css";
+
 .FieldLayout {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+
+  &--touched {
+    :invalid {
+      background: var(--color-error-background);
+      border: 1px solid var(--color-error-border);
+    }
+  }
 
   &__label {
     flex: 1 0 150px;
@@ -22,5 +31,10 @@
       width: 100%;
       padding: 0.5em;
     }
+
+  }
+
+  &__errorLabel {
+    color: var(--color-error-text);
   }
 }

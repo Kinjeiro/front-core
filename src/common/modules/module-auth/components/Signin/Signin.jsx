@@ -53,6 +53,7 @@ const PAGE_ID = 'Signin';
   PAGE_ID,
   {
     username: '',
+    loginEmail: '',
     password: '',
   },
 )
@@ -67,12 +68,14 @@ export default class Signin extends Component {
     inModal: PropTypes.bool,
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
+    emailAsLogin: PropTypes.bool,
 
     // ======================================================
     // @reduxSimpleForm
     // ======================================================
     form: PropTypes.shape({
       username: PropTypes.string,
+      loginEmail: PropTypes.string,
       password: PropTypes.string,
     }),
     onUpdateForm: PropTypes.func,
@@ -84,6 +87,49 @@ export default class Signin extends Component {
     actionChangeUser: PropTypes.func,
   };
 
+  defaultProps = {
+    emailAsLogin: clientConfig.common.features.auth.emailAsLogin,
+  };
+
+  // ======================================================
+  // UTILS
+  // ======================================================
+  getFields() {
+    const {
+      form: {
+        username,
+        loginEmail,
+        password,
+      },
+      emailAsLogin,
+    } = this.props;
+
+    return [
+      emailAsLogin
+        ? {
+          name: 'loginEmail',
+          subType: SUB_TYPES.EMAIL,
+          value: loginEmail,
+          instanceChange: true,
+          require: true,
+        }
+        : {
+          name: 'username',
+          subType: SUB_TYPES.LOGIN,
+          value: username,
+          instanceChange: true,
+          require: true,
+        },
+      {
+        name: 'password',
+        subType: SUB_TYPES.PASSWORD,
+        value: password,
+        instanceChange: true,
+        require: true,
+      },
+    ];
+  }
+
   // ======================================================
   // HANDLERS
   // ======================================================
@@ -92,19 +138,21 @@ export default class Signin extends Component {
     const {
       form: {
         username,
+        loginEmail,
         password,
       },
+      emailAsLogin,
       actionChangeUser,
       onLogin,
       onEnterTypeChange,
     } = this.props;
 
-    // todo @ANKU @CRIT @MAIN - тут сначала срабатывает promise, и если ответ возвращается без кода ошибки то сработает сначала then а потом запарсится uniError
-    await actionChangeUser(username, password);
+    const loginFinal = emailAsLogin ? loginEmail : username;
+    await actionChangeUser(loginFinal, password);
     await onEnterTypeChange(null);
 
     if (onLogin) {
-      await onLogin(username);
+      await onLogin(loginFinal);
     }
   }
 
@@ -113,10 +161,6 @@ export default class Signin extends Component {
   // ======================================================
   render() {
     const {
-      form: {
-        username,
-        password,
-      },
       actionChangeUserStatus,
       inModal,
       onUpdateForm,
@@ -133,25 +177,9 @@ export default class Signin extends Component {
         className={ this.fullClassName }
         i18nFieldPrefix={ 'core:pages.SigninPage.fields' }
 
-        fields={ [
-          {
-            name: 'username',
-            subType: SUB_TYPES.LOGIN,
-            value: username,
-            instanceChange: true,
-
-          },
-          {
-            name: 'password',
-            subType: SUB_TYPES.PASSWORD,
-            value: password,
-            instanceChange: true,
-          },
-        ] }
+        fields={ this.getFields() }
         onChangeField={ onUpdateForm }
 
-
-        isValid={ !!(username && password) }
         inModal={ inModal }
         useForm={ true }
 

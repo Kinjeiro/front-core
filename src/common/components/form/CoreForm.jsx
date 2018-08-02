@@ -8,6 +8,7 @@ import i18n from '../../utils/i18n-utils';
 import {
   executeVariable,
   wrapToArray,
+  isEmpty,
 } from '../../utils/common';
 import { ACTION_STATUS_PROPS } from '../../models';
 
@@ -64,9 +65,15 @@ export default class CoreForm extends PureComponent {
   isValid() {
     const {
       isValid,
+      fields,
     } = this.props;
 
-    return executeVariable(isValid, true, this.props);
+    let isValidFinal = executeVariable(isValid, null, this.props);
+    if (isValidFinal === null) {
+      isValidFinal = !fields.some(({ required, value, constraints = {} }) =>
+        (required || constraints.required) && !isEmpty(value));
+    }
+    return isValidFinal;
   }
 
   // ======================================================
@@ -99,6 +106,7 @@ export default class CoreForm extends PureComponent {
       textPlaceholder,
       textHint,
       onChange,
+      value,
     } = field;
     const {
       i18nFieldPrefix,
@@ -115,6 +123,7 @@ export default class CoreForm extends PureComponent {
     return (
       <Field
         { ...field }
+        value={ value }
         key={ name }
         className={ `${this.bem('field')} ${className || ''}` }
         label={ labelFinal }
@@ -124,7 +133,7 @@ export default class CoreForm extends PureComponent {
           onChange
           || (
             onChangeField
-            ? (fieldName, value) => onChangeField({ [name]: value })
+            ? (fieldName, newValue) => onChangeField({ [name]: newValue })
             : undefined
           )
         }

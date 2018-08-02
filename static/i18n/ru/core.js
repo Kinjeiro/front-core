@@ -70,6 +70,11 @@ module.exports = {
           placeholder: 'Введите логин',
           hint: 'Имя пользователя',
         },
+        loginEmail: {
+          label: 'Почта',
+          placeholder: 'Введите почту',
+          hint: 'Почта пользователя',
+        },
         password: {
           label: 'Пароль',
           placeholder: 'Введите пароль',
@@ -135,6 +140,11 @@ module.exports = {
     CoreForm: {
       textActionSubmit: 'Отправить',
       textActionCancel: 'Отмена',
+    },
+    CoreField: {
+      errors: {
+        requiredError: 'Поле обязательно к заполнению',
+      },
     },
     CoreSelect: {
       placeholder: 'Выберите значение...',

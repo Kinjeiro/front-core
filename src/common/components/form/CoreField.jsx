@@ -7,6 +7,8 @@ import isEqual from 'lodash/isEqual';
 
 import {
   executeVariable,
+  isEmpty,
+  wrapToArray,
 } from '../../utils/common';
 import {
   parseDate,
@@ -15,6 +17,8 @@ import {
   DATE_FORMAT,
   DATETIME_FORMAT,
 } from '../../utils/date-utils';
+
+import i18n from '../../utils/i18n-utils';
 
 import {
   FIELD_PROP_TYPE_MAP,
@@ -56,7 +60,11 @@ export default class CoreField extends PureComponent {
   state = {
     changing: false,
     lastValue: this.props.value,
+    errors: [],
+    touched: false,
   };
+
+  elementDom = null;
 
   // ======================================================
   // LIFECYCLE
@@ -147,6 +155,28 @@ export default class CoreField extends PureComponent {
     }
   }
 
+  static validate(value, props = {}) {
+    const {
+      name,
+      required: propsRequired,
+      constraints: {
+        required,
+      } = {},
+      validate,
+    } = props;
+
+    const customValidateErrors = executeVariable(validate, [], value, props);
+    if (customValidateErrors === true) {
+      return [];
+    }
+    const errors = wrapToArray(customValidateErrors);
+    if ((propsRequired || required) && isEmpty(value)) {
+      errors.push(i18n('core:components.CoreField.errors.requiredError', { fieldName: name }));
+    }
+
+    return errors;
+  }
+
   emitChanging(handlerPromise) {
     if (handlerPromise && handlerPromise.then) {
       this.setState({
@@ -198,6 +228,9 @@ export default class CoreField extends PureComponent {
     const {
       lastValue,
     } = this.state;
+    const {
+      elementDom,
+    } = this;
 
     let promiseChange = null;
     // eslint-disable-next-line eqeqeq
@@ -209,9 +242,16 @@ export default class CoreField extends PureComponent {
         context,
       );
 
+      const errors = CoreField.validate(value, this.props);
+      // todo @ANKU @LOW - promise не учитывается
       this.setState({
         lastValue: value,
+        errors,
       });
+      if (elementDom) {
+        // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
+        elementDom.setCustomValidity(errors.length ? errors[0] : '');
+      }
 
       return this.emitChanging(promiseChange);
     }
@@ -260,6 +300,20 @@ export default class CoreField extends PureComponent {
     return wrappers;
   }
 
+  @bind()
+  handleBlur(...args) {
+    const {
+      onBlur,
+      value,
+    } = this.props;
+
+    this.setState({
+      touched: true,
+      errors: CoreField.validate(value, this.props),
+    });
+    return onBlur && onBlur(...args);
+  }
+
   // ======================================================
   // RENDERS
   // ======================================================
@@ -279,6 +333,16 @@ export default class CoreField extends PureComponent {
           autoFocus: 'autofocus',
           ...props,
         };
+      case SUB_TYPES.LOGIN_EMAIL:
+        return {
+          autoComplete: 'username',
+          autoCorrect: 'off',
+          spellCheck: 'false',
+          autoCapitalize: 'off',
+          autoFocus: 'autofocus',
+          ...props,
+          type: 'email',
+        };
 
       case SUB_TYPES.PASSWORD: {
         return {
@@ -291,6 +355,12 @@ export default class CoreField extends PureComponent {
         return {
           ...props,
           type: 'email',
+        };
+      }
+      case SUB_TYPES.PHONE: {
+        return {
+          ...props,
+          type: 'tel',
         };
       }
       default:
@@ -310,9 +380,14 @@ export default class CoreField extends PureComponent {
       controlProps = {},
       onChange,
       instanceChange,
+      readOnly,
+      disabled,
+      required: propsRequired,
     } = this.props;
     const {
       changing,
+      errors,
+      touched,
     } = this.state;
 
     const {
@@ -331,11 +406,15 @@ export default class CoreField extends PureComponent {
     } = constraints;
 
     let controlPropsFinal = {
+      errors,
+      touched,
       ...controlProps,
       placeholder: textPlaceholder,
       title: textHint,
-      readOnly: controlProps.readOnly || !onChange || changing,
-      disabled: controlProps.disabled || changing,
+      readOnly: readOnly || !onChange || changing,
+      disabled: disabled || changing,
+      required: required || propsRequired,
+      onBlur: this.handleBlur,
       ...this.handlersWrapToPromiseChanging(controlProps, ['onMouseDown']),
     };
     controlPropsFinal = this.updatePropsBySubType(controlPropsFinal);
@@ -392,7 +471,6 @@ export default class CoreField extends PureComponent {
             <TextArea
               maxLength={ maxLength }
               minLength={ minLength }
-              required={ required }
               onChangedBlur={ onChangeBlur }
               onChange={ onChangeFinal }
               { ...controlPropsFinal }
@@ -404,6 +482,7 @@ export default class CoreField extends PureComponent {
 
         return (
           <Input
+            controlRef={ (element) => this.elementDom = element }
             value={ controlValue || '' }
             type={ type === TYPES.DECIMAL ? 'number' : type }
             min={ minValue }
@@ -411,7 +490,6 @@ export default class CoreField extends PureComponent {
             maxLength={ maxLength }
             minLength={ minLength }
             pattern={ pattern }
-            required={ required }
 
             onChangedBlur={ onChangeBlur }
             onChange={ onChangeFinal }
@@ -445,6 +523,7 @@ export default class CoreField extends PureComponent {
         // FC Components - DatePicker - https://github.com/airbnb/react-dates
         // todo @ANKU @LOW - нету времени - showTime
         // todo @ANKU @LOW - не проставлены границы - disabledDate
+        // todo @ANKU @LOW - проверить что свои инпуты они проставляют type 'date' или 'datetime'
         return (
           <DatePicker
             value={ controlValue }
@@ -594,7 +673,12 @@ export default class CoreField extends PureComponent {
       textOnAdd,
       onRemove,
       textOnRemove,
+      required: propsRequired,
     } = this.props;
+    const {
+      errors,
+      touched,
+    } = this.state;
 
     if (simpleText) {
       return this.renderSimpleText();
@@ -608,15 +692,17 @@ export default class CoreField extends PureComponent {
     } = constraints;
     const values = multiple ? value || [] : [value];
     const hasMin = (multipleMinSize !== null && values.length <= multipleMinSize)
-      || (required && values.length <= 1);
+      || ((required || propsRequired) && values.length <= 1);
     const hasMax = multiple && multipleMaxSize !== null && multipleMaxSize <= values.length;
 
     return (
       <FieldLayout
         className={ `CoreField ${className || ''}` }
         label={ this.renderLabel() }
-        required={ required }
+        required={ required || propsRequired }
         key={ name }
+        errors={ errors }
+        touched={ touched }
       >
         {
           values.map((itemValue, index) => (

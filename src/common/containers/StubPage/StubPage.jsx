@@ -44,7 +44,16 @@ import Link from '../../components/Link/Link';
 import contextModules from '../../contexts/ContextModules/decorator-context-modules';
 import ModuleLink from '../../containers/ModuleLink/ModuleLink';
 
+import CB from '../../components/ComponentsBase';
+
 import './StubPage.css';
+
+const {
+  Segment,
+  Form,
+} = CB;
+
+// const PAGE_ID = 'StubPage';
 
 @contextModules()
 @titled(
@@ -329,6 +338,64 @@ export default class StubPage extends Component {
             </Link>
           </h4>
         </div>
+
+        <Segment
+          label="Form"
+          className="TestPage"
+        >
+          <Form
+            fields={ [
+              {
+                name: 'string',
+                label: 'Text "test"',
+                type: Form.FIELD_TYPES.STRING,
+                required: true,
+                validate: (value) => (value !== 'test' ? 'Кастомная ошибка' : null),
+                onChange: () => {},
+              },
+              {
+                name: 'numeric',
+                label: 'numeric',
+                type: Form.FIELD_TYPES.NUMERIC,
+                constraints: {
+                  maxValue: 10,
+                },
+                onChange: () => {},
+              },
+              {
+                name: 'text',
+                lagel: 'text',
+                type: Form.FIELD_TYPES.TEXT,
+                onChange: () => {},
+              },
+              {
+                label: 'LIST',
+                name: 'list',
+                type: Form.FIELD_TYPES.LIST,
+                options: [
+                  {
+                    label: 'label 1',
+                    value: 'value 1',
+                  },
+                  {
+                    label: 'bbbb',
+                    value: 'bbbb',
+                  },
+                ],
+              },
+              {
+                name: 'datetime',
+                label: 'datetime',
+                type: Form.FIELD_TYPES.DATETIME,
+              },
+              {
+                name: 'boolean',
+                label: 'boolean',
+                type: Form.FIELD_TYPES.BOOLEAN,
+              },
+            ] }
+          />
+        </Segment>
       </div>
     );
   }

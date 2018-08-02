@@ -13,6 +13,7 @@ const {
 
 export default class CoreInput extends PureComponent {
   static propTypes = {
+    controlRef: PropTypes.func,
     withState: PropTypes.bool,
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -21,6 +22,8 @@ export default class CoreInput extends PureComponent {
     type: PropTypes.string,
     readOnly: PropTypes.bool,
     InputClass: PropTypes.func,
+    errors: PropTypes.arrayOf(PropTypes.string),
+    title: PropTypes.string,
 
     onChangedBlur: PropTypes.func,
     onChange: PropTypes.func,
@@ -158,6 +161,8 @@ export default class CoreInput extends PureComponent {
       InputClass,
       withState, // убираем из остальных пропертей
       onChangedBlur, // убираем из остальных пропертей
+      title,
+      errors,
       ...inputProps
     } = this.props;
 
@@ -178,6 +183,8 @@ export default class CoreInput extends PureComponent {
     return (
       <InputClassFinal
         { ...inputProps }
+        errors={ errors }
+        title={ errors.length > 0 ? errors[0] : title }
         value={ this.getControlValue() }
         type={ type }
         onChange={ this.handleChange }

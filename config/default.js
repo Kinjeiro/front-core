@@ -166,7 +166,11 @@ module.exports = {
          * чаше всего необходимо для открытых систем, а для enterprise обычно не надо
          */
         allowSignup: false,
-        allowResetPasswordByEmail: false
+        allowResetPasswordByEmail: false,
+        /**
+         * Вместо логина используется email и тогда логин не обязателен и не показывается при регистрации
+         */
+        emailAsLogin: false
       },
 
       date: {

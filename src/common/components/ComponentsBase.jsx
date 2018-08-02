@@ -1,12 +1,12 @@
-/* eslint-disable global-require */
+/* eslint-disable global-require,max-len */
 import React from 'react';
-
-import logger from '../helpers/client-logger';
 
 import {
   executeVariable,
   executeVariableMemoize,
 } from '../utils/common';
+import logger from '../helpers/client-logger';
+import clientConfig from '../client-config';
 
 const COMPONENTS_BASE = {
   replace(name, ComponentClass) {
@@ -22,7 +22,9 @@ const COMPONENTS_BASE = {
         get() {
           const CClass = this[`_${name}`];
           // отложенная загрузка компонентов () => require('./Component);
-          return executeVariableMemoize(name, CClass);
+          return clientConfig.common.isProduction
+            ? executeVariableMemoize(name, CClass)
+            : executeVariable(CClass);
         },
       });
     }
@@ -72,15 +74,15 @@ COMPONENTS_BASE.replace('FieldLayout', () => require('./form/FieldLayout').defau
 // ======================================================
 // FORM FIELDS
 // ======================================================
-COMPONENTS_BASE.replace('BaseInput', () => (props) => <input { ...props } />);
-COMPONENTS_BASE.replace('BaseNumberInput', () => (props) => <input { ...props } type="number" />);
+COMPONENTS_BASE.replace('BaseInput', () => (props) => <input ref={ props.controlRef } { ...props } />);
+COMPONENTS_BASE.replace('BaseNumberInput', () => (props) => <input ref={ props.controlRef } { ...props } type="number" />);
 COMPONENTS_BASE.replace('Input', () => require('./form/fields/CoreInput').default);
-COMPONENTS_BASE.replace('BaseTextArea', () => (props) => <textarea { ...props } />);
+COMPONENTS_BASE.replace('BaseTextArea', () => (props) => <textarea ref={ props.controlRef } { ...props } />);
 COMPONENTS_BASE.replace('TextArea', () => require('./form/fields/CoreTextArea').default);
 COMPONENTS_BASE.replace('BaseSelect', () => (props) => <select { ...props } />);
 COMPONENTS_BASE.replace('Select', () => require('./form/fields/CoreSelect').default);
-COMPONENTS_BASE.replace('DatePicker', () => null);
-COMPONENTS_BASE.replace('Checkbox', () => (props) => <input { ...props } type="checkbox" />);
+COMPONENTS_BASE.replace('DatePicker', () => (props) => <input ref={ props.controlRef } { ...props } />);
+COMPONENTS_BASE.replace('Checkbox', () => (props) => <input ref={ props.controlRef } { ...props } type="checkbox" />);
 
 // ======================================================
 // UI
@@ -92,6 +94,11 @@ COMPONENTS_BASE.replace('ActionStatus', () => require('./ActionStatus/ActionStat
 COMPONENTS_BASE.replace('Notifications', () => require('./Notifications/Notifications').default);
 COMPONENTS_BASE.replace('Notice', () => require('./Notifications/Notice').default);
 COMPONENTS_BASE.replace('Modal', () => null);
+COMPONENTS_BASE.replace('Segment', () => ({ children }) => (<div>{ children }</div>));
+
+// ======================================================
+// PAGES
+// ======================================================
 COMPONENTS_BASE.replace('Info404', () => require('./Info404/Info404').default);
 
 export default COMPONENTS_BASE;
