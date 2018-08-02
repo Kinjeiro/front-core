@@ -87,7 +87,7 @@ export default class Signin extends Component {
     actionChangeUser: PropTypes.func,
   };
 
-  defaultProps = {
+  static defaultProps = {
     emailAsLogin: clientConfig.common.features.auth.emailAsLogin,
   };
 
@@ -111,21 +111,21 @@ export default class Signin extends Component {
           subType: SUB_TYPES.EMAIL,
           value: loginEmail,
           instanceChange: true,
-          require: true,
+          required: true,
         }
         : {
           name: 'username',
           subType: SUB_TYPES.LOGIN,
           value: username,
           instanceChange: true,
-          require: true,
+          required: true,
         },
       {
         name: 'password',
         subType: SUB_TYPES.PASSWORD,
         value: password,
         instanceChange: true,
-        require: true,
+        required: true,
       },
     ];
   }
