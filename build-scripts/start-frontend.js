@@ -8,6 +8,7 @@ const context = tryLoadProjectFile('build-scripts/webpack-context');
 const WEBPACK_CONFIG_UTILS = tryLoadProjectFile('build-scripts/webpack-config');
 
 runner({
+  context,
   appConfig: context.appConfig,
   webpackConfig: WEBPACK_CONFIG_UTILS.getFrontendWebpackConfig(context)
 });

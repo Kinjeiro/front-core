@@ -25,13 +25,14 @@ function checkError(error, stats, next) {
 }
 
 function startBuild({
-                      context,
+  context,
   webpackFrontConfig,
   webpackBackendConfig
 }) {
   const {
     appConfig,
-    inProjectBuildAssets
+    inProjectBuildAssets,
+    appStyleConfig
   } = context;
 
   if (fs.existsSync(webpackFrontConfig.output.path)) {
@@ -50,6 +51,8 @@ function startBuild({
 
   const frontendCompiler = webpack(webpackFrontConfig);
   const backendCompiler = webpack(webpackBackendConfig);
+
+  console.log('=== APP STYLES ===\n', appStyleConfig, '\n');
 
   console.log('=== APP CONFIG (while build) ===\n', JSON.stringify(appConfig, null, 2));
   frontendCompiler.plugin('compile', () => console.log('Building frontend...'));

@@ -6,8 +6,12 @@ const WebpackDevServer = require('webpack-dev-server');
 function startFrontend({
   appConfig,
   webpackConfig,
-  webpackDevServerOptions
+  webpackDevServerOptions,
+  context,
 }) {
+  const {
+    appStyleConfig,
+  } = context;
   // console.debug('WEBPACK FRONTEND', JSON.stringify(webpackConfig, null, 2));
 
   const PROXY_ASSETS = appConfig.server.main.proxyAssets;
@@ -38,6 +42,8 @@ function startFrontend({
       chunkModules: false
     }
   }, webpackDevServerOptions);
+
+  console.log('=== APP STYLES ===\n', appStyleConfig, '\n');
 
   // ======================================================
   // COMPILE
