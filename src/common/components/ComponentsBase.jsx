@@ -74,15 +74,15 @@ COMPONENTS_BASE.replace('FieldLayout', () => require('./form/FieldLayout').defau
 // ======================================================
 // FORM FIELDS
 // ======================================================
-COMPONENTS_BASE.replace('BaseInput', () => (props) => <input ref={ props.controlRef } { ...props } />);
-COMPONENTS_BASE.replace('BaseNumberInput', () => (props) => <input ref={ props.controlRef } { ...props } type="number" />);
+COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } />);
+COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } type="number" />);
 COMPONENTS_BASE.replace('Input', () => require('./form/fields/CoreInput').default);
-COMPONENTS_BASE.replace('BaseTextArea', () => (props) => <textarea ref={ props.controlRef } { ...props } />);
+COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, ...props }) => <textarea ref={ controlRef } { ...props } />);
 COMPONENTS_BASE.replace('TextArea', () => require('./form/fields/CoreTextArea').default);
 COMPONENTS_BASE.replace('BaseSelect', () => (props) => <select { ...props } />);
 COMPONENTS_BASE.replace('Select', () => require('./form/fields/CoreSelect').default);
-COMPONENTS_BASE.replace('DatePicker', () => (props) => <input ref={ props.controlRef } { ...props } />);
-COMPONENTS_BASE.replace('Checkbox', () => (props) => <input ref={ props.controlRef } { ...props } type="checkbox" />);
+COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } />);
+COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } type="checkbox" />);
 
 // ======================================================
 // UI
@@ -93,7 +93,7 @@ COMPONENTS_BASE.replace('Link', () => require('./Link/Link').default);
 COMPONENTS_BASE.replace('ActionStatus', () => require('./ActionStatus/ActionStatus').default);
 COMPONENTS_BASE.replace('Notifications', () => require('./Notifications/Notifications').default);
 COMPONENTS_BASE.replace('Notice', () => require('./Notifications/Notice').default);
-COMPONENTS_BASE.replace('Modal', () => null);
+COMPONENTS_BASE.replace('Modal', () => require('./Modal/Modal').default);
 COMPONENTS_BASE.replace('Segment', () => ({ children }) => (<div>{ children }</div>));
 
 // ======================================================

@@ -1,25 +1,5 @@
 @block AuthErrorContainer {
   height: 100%;
-
-  @element modal {
-    position: fixed;
-    z-index: 10000;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background: color(#000 alpha(-20%));
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  @element modalContent {
-    background: #fff;
-    //padding: 1em;
-    border-radius: 5px;
-  }
 }
 
 @block GoToLogin {

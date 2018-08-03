@@ -20,6 +20,7 @@ import './AuthErrorContainer.css';
 const {
   AuthFormLayout,
   AuthEnter,
+  Modal,
 } = COMPONENTS_BASE;
 
 // eslint-disable-next-line no-unused-vars
@@ -127,26 +128,22 @@ export default class AuthErrorContainer extends Component {
       },
     } = this.props;
 
-    // todo @ANKU @LOW - можно заменить Логин на контрол переключения Логин \ Регистрации
-
     return isNotAuth && (
-      <div className="AuthErrorContainer__modal">
-        <div className="AuthErrorContainer__modalContent">
-          {
-            reLoginModalForm
-              ? (
-                <AuthFormLayout inModal={ true }>
-                  <AuthEnter
-                    { ...this.props }
-                    inModal={ true }
-                    urlReturn={ linkForwardTo || false }
-                  />
-                </AuthFormLayout>
-              )
-              : this.renderNeedReLoginOnIndexPage()
-          }
-        </div>
-      </div>
+      <Modal>
+        {
+          reLoginModalForm
+            ? (
+              <AuthFormLayout inModal={ true }>
+                <AuthEnter
+                  { ...this.props }
+                  inModal={ true }
+                  urlReturn={ linkForwardTo || false }
+                />
+              </AuthFormLayout>
+            )
+            : this.renderNeedReLoginOnIndexPage()
+        }
+      </Modal>
     );
   }
 
