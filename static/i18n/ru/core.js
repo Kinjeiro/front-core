@@ -71,7 +71,7 @@ module.exports = {
           hint: 'Имя пользователя',
         },
         loginEmail: {
-          label: 'Почта',
+          label: 'Email',
           placeholder: 'Введите почту',
           hint: 'Почта пользователя',
         },
@@ -84,7 +84,7 @@ module.exports = {
       loginButton: 'Войти',
       loginCancelButton: 'Отмена',
       signup: 'Регистрация',
-      forgotPassword: 'Забыли пароль',
+      forgotPassword: 'Забыли пароль?',
     },
     ForgotPage: {
       title: 'Восстановление пароля',

@@ -84,7 +84,7 @@ module.exports = {
       loginButton: 'Sign in',
       loginCancelButton: 'Cancel',
       signup: 'Sign up',
-      forgotPassword: 'Forgot password',
+      forgotPassword: 'Forgot password?',
     },
     ForgotPage: {
       title: 'Forgot password',

@@ -70,8 +70,8 @@ export default class CoreForm extends PureComponent {
 
     let isValidFinal = executeVariable(isValid, null, this.props);
     if (isValidFinal === null) {
-      isValidFinal = !fields.some(({ required, value, constraints = {} }) =>
-        (required || constraints.required) && !isEmpty(value));
+      isValidFinal = fields.every((field) =>
+        Field.validate(field.value, field).length === 0);
     }
     return isValidFinal;
   }

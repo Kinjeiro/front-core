@@ -34,8 +34,14 @@ export default class FieldLayout extends PureComponent {
             errors.length > 0 && (
               <div className="FieldLayout__errors">
                 {
-                  errors.map((error) =>
-                    <div className="FieldLayout__errorLabel">{ error }</div>)
+                  errors.map((error) => (
+                    <div
+                      key={ error }
+                      className="FieldLayout__errorLabel"
+                    >
+                      { error }
+                    </div>
+                  ))
                 }
               </div>
             )

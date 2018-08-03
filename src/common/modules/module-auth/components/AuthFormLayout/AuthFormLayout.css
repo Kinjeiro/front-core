@@ -4,17 +4,17 @@
   height: 100%;
   padding: 1em;
 
-  .FieldLayout__label {
+  /*.FieldLayout__label {
     font-weight: 300;
     letter-spacing: .09em;
     text-transform: uppercase;
-  }
-  .FieldLayout__control {
+  }*/
+  /*.FieldLayout__control {
     input:not([type='checkbox']),
     textarea {
       border: none;
     }
-  }
+  }*/
 
   .FormLayout__actions,
   .ActionStatus__error {
