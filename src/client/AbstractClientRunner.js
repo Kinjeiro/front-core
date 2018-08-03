@@ -234,6 +234,7 @@ export default class AbstractClientRunner {
   }
   @bind()
   reloadUi() {
+    this.initComponents(COMPONENTS_BASE_CORE);
     this.routes = this.getRoutes(this.store);
     this.renderDOM(true);
   }

@@ -16,6 +16,7 @@ import {
   downloadFile,
 } from './api-utils';
 import createApiConfig from './create-api-config';
+import { cutContextPath } from '../helpers/app-urls';
 
 import { getCookie } from './cookie';
 
@@ -414,7 +415,10 @@ class BaseApiClientClass {
           requestOptions.retryWhenNotAuthErrorAttempts += 1;
           setTimeout(() => {
             // возможно уже отработал refresh_token и пришли на клиент обновленные токены
-            this.proceedRequest(requestOptions)
+            this.proceedRequest({
+              ...requestOptions,
+              url: cutContextPath(requestOptions.url),
+            })
               .then((result) => resolve(result))
               .catch((result) => reject(result));
           }, this.apiClientOptions.retryWhenNotAuthErrorTimeout);
