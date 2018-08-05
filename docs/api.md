@@ -60,83 +60,84 @@
 -   [constraints][56]
 -   [validate][57]
 -   [required][58]
--   [instanceChange][59]
--   [FROM_BOOM][60]
--   [FROM_BOOM_RESPONSE][61]
--   [FROM_BOOM_ERROR][62]
--   [clientErrorMessage][63]
--   [uniMessage][64]
--   [parseFromBoom][65]
--   [parseFromBoomResponse][66]
--   [parseFromBoomError][67]
--   [DEFAULT_VALUES][68]
--   [user-info][69]
--   [STUB_ROUTES_NAMES][70]
--   [PARAM_RETURN_URL][71]
--   [pathGetLoginPage][72]
--   [PATH_LOGIN_PAGE][73]
--   [createJsonPatchOperation][74]
--   [BaseApiClientClass][75]
-    -   [ajaxGet][76]
-    -   [ajaxPost][77]
-    -   [proceedRequest][78]
--   [valueFromRange][79]
--   [findInTree][80]
+-   [controlRef][59]
+-   [instanceChange][60]
+-   [FROM_BOOM][61]
+-   [FROM_BOOM_RESPONSE][62]
+-   [FROM_BOOM_ERROR][63]
+-   [clientErrorMessage][64]
+-   [uniMessage][65]
+-   [parseFromBoom][66]
+-   [parseFromBoomResponse][67]
+-   [parseFromBoomError][68]
+-   [DEFAULT_VALUES][69]
+-   [user-info][70]
+-   [STUB_ROUTES_NAMES][71]
+-   [PARAM_RETURN_URL][72]
+-   [pathGetLoginPage][73]
+-   [PATH_LOGIN_PAGE][74]
+-   [createJsonPatchOperation][75]
+-   [BaseApiClientClass][76]
+    -   [ajaxGet][77]
+    -   [ajaxPost][78]
+    -   [proceedRequest][79]
+-   [valueFromRange][80]
 -   [findInTree][81]
--   [arrayToTree][82]
--   [createApiConfig][83]
+-   [findInTree][82]
+-   [arrayToTree][83]
 -   [createApiConfig][84]
--   [reduxSimpleFormDecorator][85]
--   [reduxTableDecorator][86]
--   [titledDecorator][87]
--   [updatePathIfChange][88]
--   [onPropsUpdate][89]
--   [onStatusPropUpdate][90]
--   [formatDate][91]
--   [formatStringInner][92]
--   [formatString][93]
--   [formatStringWithoutAutoSpaces][94]
--   [generateId][95]
--   [init][96]
--   [translateDefault][97]
--   [i18nContextProvider][98]
--   [apiClient][99]
--   [isEmpty][100]
--   [parseUrlParameters][101]
--   [formatUrlParameters][102]
--   [joinPath][103]
--   [joinPathSimple][104]
--   [joinUri][105]
--   [getModuleFullPath][106]
--   [DEFAULT_LOGGER_IDS][107]
--   [contextData][108]
--   [register][109]
--   [method][110]
+-   [createApiConfig][85]
+-   [reduxSimpleFormDecorator][86]
+-   [reduxTableDecorator][87]
+-   [titledDecorator][88]
+-   [updatePathIfChange][89]
+-   [onPropsUpdate][90]
+-   [onStatusPropUpdate][91]
+-   [formatDate][92]
+-   [formatStringInner][93]
+-   [formatString][94]
+-   [formatStringWithoutAutoSpaces][95]
+-   [generateId][96]
+-   [init][97]
+-   [translateDefault][98]
+-   [i18nContextProvider][99]
+-   [apiClient][100]
+-   [isEmpty][101]
+-   [parseUrlParameters][102]
+-   [formatUrlParameters][103]
+-   [joinPath][104]
+-   [joinPathSimple][105]
+-   [joinUri][106]
+-   [getModuleFullPath][107]
+-   [DEFAULT_LOGGER_IDS][108]
+-   [contextData][109]
+-   [register][110]
 -   [method][111]
--   [remoteJwt][112]
--   [onPreResponse][113]
--   [prepare-state][114]
--   [createServices][115]
--   [ServiceAuth][116]
-    -   [authForgot][117]
-    -   [authResetPassword][118]
--   [createProxyWrapperCallback][119]
--   [apiPluginFullFactory][120]
--   [apiPluginFactory][121]
--   [proxyRoute][122]
--   [proxyRoutePluginFactory][123]
--   [createEndpointServiceConfig][124]
--   [HOST][125]
+-   [method][112]
+-   [remoteJwt][113]
+-   [onPreResponse][114]
+-   [prepare-state][115]
+-   [createServices][116]
+-   [ServiceAuth][117]
+    -   [authForgot][118]
+    -   [authResetPassword][119]
+-   [createProxyWrapperCallback][120]
+-   [apiPluginFullFactory][121]
+-   [apiPluginFactory][122]
+-   [proxyRoute][123]
+-   [proxyRoutePluginFactory][124]
+-   [createEndpointServiceConfig][125]
 -   [HOST][126]
--   [SERVICES_HOST][127]
+-   [HOST][127]
 -   [SERVICES_HOST][128]
--   [REQUEST_TIMEOUT][129]
+-   [SERVICES_HOST][129]
 -   [REQUEST_TIMEOUT][130]
--   [createEndpointFactoryFromEnv][131]
--   [sendSimpleRequest][132]
--   [sendEndpointMethodRequest][133]
--   [factoryEndpointServiceMethodRequest][134]
--   [proceedRequest][135]
+-   [REQUEST_TIMEOUT][131]
+-   [createEndpointFactoryFromEnv][132]
+-   [sendSimpleRequest][133]
+-   [sendEndpointMethodRequest][134]
+-   [factoryEndpointServiceMethodRequest][135]
+-   [proceedRequest][136]
 
 ## Runners
 
@@ -439,7 +440,7 @@ Returns **any**
 
 Компонент для того, чтобы не писать bind функции c ключом
 В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][136]
+См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][137]
 
 ## theme
 
@@ -612,6 +613,11 @@ boolean true - значит не проводить никаких провер�
 
 дублирует поле constraints.required для удобства
 
+## controlRef
+
+ссылка на DOM
+(field, dom) => {}
+
 ## instanceChange
 
 обычно для больших форм, чтобы сэкономить ресурсы значение применяется после потери фокуса или Enter
@@ -622,7 +628,7 @@ boolean true - значит не проводить никаких провер�
 
 ## FROM_BOOM
 
-[https://github.com/hapijs/boom][137]
+[https://github.com/hapijs/boom][138]
 
 ## FROM_BOOM_RESPONSE
 
@@ -654,7 +660,7 @@ boolean true - значит не проводить никаких провер�
 
 ## parseFromBoom
 
-[https://github.com/hapijs/boom][137]
+[https://github.com/hapijs/boom][138]
 
 -   isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
 -   isServer - convenience bool indicating status code >= 500.
@@ -716,7 +722,7 @@ boolean true - значит не проводить никаких провер�
 
 ## STUB_ROUTES_NAMES
 
-Type: {ACCESS_DENIED: [string][138], ERROR: [string][138], LOGIN: [string][138], STUB: [string][138]}
+Type: {ACCESS_DENIED: [string][139], ERROR: [string][139], LOGIN: [string][139], STUB: [string][139]}
 
 **Meta**
 
@@ -756,7 +762,7 @@ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
 -   `operationType`  
 -   `itemIds`  
 
-Returns **{path: [string][138], value: any, op: [string][138]}** 
+Returns **{path: [string][139], value: any, op: [string][139]}** 
 
 ## BaseApiClientClass
 
@@ -814,7 +820,7 @@ object of that fields
     other - result
 -   `mockFilter`  function(requestOptions, error, response) {}
 
-Returns **[Promise][139]** 
+Returns **[Promise][140]** 
 
 ## valueFromRange
 
@@ -864,7 +870,7 @@ Returns **[Promise][139]**
 -   `path`   (optional, default `[]`)
 -   `pathStr`   (optional, default `''`)
 
-Returns **{result: any, isRoot: [boolean][140], pathStr: [string][138]}** 
+Returns **{result: any, isRoot: [boolean][141], pathStr: [string][139]}** 
 
 ## arrayToTree
 
@@ -970,7 +976,7 @@ Returns **any** возвращает true - если нужно прервать
     -   если function - функция вызывается дважды, один раз для newProps второй раз для oldProps - на вход который подаются пропсы, вернуть должна часть props по которой будет deep equals
     -   если string - путь в props для объектов которые будут сравниваться
     -   если string array - если больше 1 то singleRun по умолчанию true
--   `$1` **[Object][141]**  (optional, default `{}`)
+-   `$1` **[Object][142]**  (optional, default `{}`)
     -   `$1.deepEqual`   (optional, default `true`)
     -   `$1.singleRun`   (optional, default `true`)
     -   `$1.oldPropsNotNull`   (optional, default `true`)
@@ -999,7 +1005,7 @@ accountId: PropTypes.number,
 
 -   `statusPropPath`  
 
-Returns **[function][142]** 
+Returns **[function][143]** 
 
 ## formatDate
 
@@ -1007,12 +1013,12 @@ Returns **[function][142]**
 
 **Parameters**
 
--   `date` **[String][138]** Строка даты в формате `YYYY-MM-DD`
--   `options` **[Object][141]?** Список опций
-    -   `options.fullMonth` **[Boolean][140]** Если `true`, то название месяца, иначе номер (optional, default `true`)
-    -   `options.cutCurrentYear` **[Boolean][140]** Если `true`, то дата без указания года (optional, default `true`)
+-   `date` **[String][139]** Строка даты в формате `YYYY-MM-DD`
+-   `options` **[Object][142]?** Список опций
+    -   `options.fullMonth` **[Boolean][141]** Если `true`, то название месяца, иначе номер (optional, default `true`)
+    -   `options.cutCurrentYear` **[Boolean][141]** Если `true`, то дата без указания года (optional, default `true`)
 
-Returns **[String][138]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+Returns **[String][139]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
 
 ## formatStringInner
 
@@ -1051,7 +1057,7 @@ Returns **any**
 
 ## generateId
 
-Returns **[string][138]** 
+Returns **[string][139]** 
 
 **Meta**
 
@@ -1123,7 +1129,7 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
 -   `context`  
 
-Returns **[Function][142]** 
+Returns **[Function][143]** 
 
 ## apiClient
 
@@ -1164,7 +1170,7 @@ Returns **{}**
 -   `url`  
 -   `hash`  
 
-Returns **[string][138]** 
+Returns **[string][139]** 
 
 ## joinPath
 
@@ -1185,7 +1191,7 @@ Returns **any**
 
 -   `paths` **...any** 
 
-Returns **[string][138]** 
+Returns **[string][139]** 
 
 ## joinUri
 
@@ -1290,7 +1296,7 @@ Returns **{}**
 
 **Parameters**
 
--   `endpointServiceConfig` **[Object][141]** 
+-   `endpointServiceConfig` **[Object][142]** 
     -   `endpointServiceConfig.endpointServiceConfig`  
     -   `endpointServiceConfig.urls`  
 
@@ -1318,7 +1324,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][139]&lt;any>** 
+Returns **[Promise][140]&lt;any>** 
 
 ## createProxyWrapperCallback
 
@@ -1362,8 +1368,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][143] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][144]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][144] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][145]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `otherOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -1392,7 +1398,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 
 **Parameters**
 
--   `$0` **[Object][141]** 
+-   `$0` **[Object][142]** 
     -   `$0.protocol`  
     -   `$0.host`  
     -   `$0.port`  
@@ -1407,7 +1413,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   `endpoint`  
 -   `timeout`  
 
-Returns **{protocol: [string][138], host: [string][138], port: [number][145], endpoint: [string][138], fullUrl: [string][138], timeout: any}** 
+Returns **{protocol: [string][139], host: [string][139], port: [number][146], endpoint: [string][139], fullUrl: [string][139], timeout: any}** 
 
 ## HOST
 
@@ -1450,9 +1456,9 @@ Returns **function (any, any?)**
 
 **Parameters**
 
--   `requestOptions`  [https://www.npmjs.com/package/request][146]
+-   `requestOptions`  [https://www.npmjs.com/package/request][147]
 
-Returns **[Promise][139]** 
+Returns **[Promise][140]** 
 
 ## sendEndpointMethodRequest
 
@@ -1478,7 +1484,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][146]
+-   `requestOptions`  [https://www.npmjs.com/package/request][147]
 -   `logger`  
 
 Returns **any** 
@@ -1496,13 +1502,13 @@ Returns **any**
 -   `requestOptions`  
 -   `logger`  
 
-Returns **[Promise][139]&lt;any>** 
+Returns **[Promise][140]&lt;any>** 
 
 ## proceedRequest
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][147]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][148]
 -   `server`  
 
 Returns **any** Promise
@@ -1623,180 +1629,182 @@ Returns **any** Promise
 
 [58]: #required
 
-[59]: #instancechange
+[59]: #controlref
 
-[60]: #from_boom
+[60]: #instancechange
 
-[61]: #from_boom_response
+[61]: #from_boom
 
-[62]: #from_boom_error
+[62]: #from_boom_response
 
-[63]: #clienterrormessage
+[63]: #from_boom_error
 
-[64]: #unimessage
+[64]: #clienterrormessage
 
-[65]: #parsefromboom
+[65]: #unimessage
 
-[66]: #parsefromboomresponse
+[66]: #parsefromboom
 
-[67]: #parsefromboomerror
+[67]: #parsefromboomresponse
 
-[68]: #default_values
+[68]: #parsefromboomerror
 
-[69]: #user-info
+[69]: #default_values
 
-[70]: #stub_routes_names
+[70]: #user-info
 
-[71]: #param_return_url
+[71]: #stub_routes_names
 
-[72]: #pathgetloginpage
+[72]: #param_return_url
 
-[73]: #path_login_page
+[73]: #pathgetloginpage
 
-[74]: #createjsonpatchoperation
+[74]: #path_login_page
 
-[75]: #baseapiclientclass
+[75]: #createjsonpatchoperation
 
-[76]: #ajaxget
+[76]: #baseapiclientclass
 
-[77]: #ajaxpost
+[77]: #ajaxget
 
-[78]: #proceedrequest
+[78]: #ajaxpost
 
-[79]: #valuefromrange
+[79]: #proceedrequest
 
-[80]: #findintree
+[80]: #valuefromrange
 
-[81]: #findintree-1
+[81]: #findintree
 
-[82]: #arraytotree
+[82]: #findintree-1
 
-[83]: #createapiconfig
+[83]: #arraytotree
 
-[84]: #createapiconfig-1
+[84]: #createapiconfig
 
-[85]: #reduxsimpleformdecorator
+[85]: #createapiconfig-1
 
-[86]: #reduxtabledecorator
+[86]: #reduxsimpleformdecorator
 
-[87]: #titleddecorator
+[87]: #reduxtabledecorator
 
-[88]: #updatepathifchange
+[88]: #titleddecorator
 
-[89]: #onpropsupdate
+[89]: #updatepathifchange
 
-[90]: #onstatuspropupdate
+[90]: #onpropsupdate
 
-[91]: #formatdate
+[91]: #onstatuspropupdate
 
-[92]: #formatstringinner
+[92]: #formatdate
 
-[93]: #formatstring
+[93]: #formatstringinner
 
-[94]: #formatstringwithoutautospaces
+[94]: #formatstring
 
-[95]: #generateid
+[95]: #formatstringwithoutautospaces
 
-[96]: #init
+[96]: #generateid
 
-[97]: #translatedefault
+[97]: #init
 
-[98]: #i18ncontextprovider
+[98]: #translatedefault
 
-[99]: #apiclient
+[99]: #i18ncontextprovider
 
-[100]: #isempty
+[100]: #apiclient
 
-[101]: #parseurlparameters
+[101]: #isempty
 
-[102]: #formaturlparameters
+[102]: #parseurlparameters
 
-[103]: #joinpath
+[103]: #formaturlparameters
 
-[104]: #joinpathsimple
+[104]: #joinpath
 
-[105]: #joinuri
+[105]: #joinpathsimple
 
-[106]: #getmodulefullpath
+[106]: #joinuri
 
-[107]: #default_logger_ids
+[107]: #getmodulefullpath
 
-[108]: #contextdata
+[108]: #default_logger_ids
 
-[109]: #register
+[109]: #contextdata
 
-[110]: #method
+[110]: #register
 
-[111]: #method-1
+[111]: #method
 
-[112]: #remotejwt
+[112]: #method-1
 
-[113]: #onpreresponse
+[113]: #remotejwt
 
-[114]: #prepare-state
+[114]: #onpreresponse
 
-[115]: #createservices
+[115]: #prepare-state
 
-[116]: #serviceauth
+[116]: #createservices
 
-[117]: #authforgot
+[117]: #serviceauth
 
-[118]: #authresetpassword
+[118]: #authforgot
 
-[119]: #createproxywrappercallback
+[119]: #authresetpassword
 
-[120]: #apipluginfullfactory
+[120]: #createproxywrappercallback
 
-[121]: #apipluginfactory
+[121]: #apipluginfullfactory
 
-[122]: #proxyroute
+[122]: #apipluginfactory
 
-[123]: #proxyroutepluginfactory
+[123]: #proxyroute
 
-[124]: #createendpointserviceconfig
+[124]: #proxyroutepluginfactory
 
-[125]: #host
+[125]: #createendpointserviceconfig
 
-[126]: #host-1
+[126]: #host
 
-[127]: #services_host
+[127]: #host-1
 
-[128]: #services_host-1
+[128]: #services_host
 
-[129]: #request_timeout
+[129]: #services_host-1
 
-[130]: #request_timeout-1
+[130]: #request_timeout
 
-[131]: #createendpointfactoryfromenv
+[131]: #request_timeout-1
 
-[132]: #sendsimplerequest
+[132]: #createendpointfactoryfromenv
 
-[133]: #sendendpointmethodrequest
+[133]: #sendsimplerequest
 
-[134]: #factoryendpointservicemethodrequest
+[134]: #sendendpointmethodrequest
 
-[135]: #proceedrequest-1
+[135]: #factoryendpointservicemethodrequest
 
-[136]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+[136]: #proceedrequest-1
 
-[137]: https://github.com/hapijs/boom
+[137]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
 
-[138]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[138]: https://github.com/hapijs/boom
 
-[139]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[139]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[140]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[140]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[141]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[141]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[142]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[142]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[143]: https://github.com/hapijs/h2o2
+[143]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[144]: http://localhost:
+[144]: https://github.com/hapijs/h2o2
 
-[145]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[145]: http://localhost:
 
-[146]: https://www.npmjs.com/package/request
+[146]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[147]: https://hapijs.com/api#serverinjectoptions-callback
+[147]: https://www.npmjs.com/package/request
+
+[148]: https://hapijs.com/api#serverinjectoptions-callback
