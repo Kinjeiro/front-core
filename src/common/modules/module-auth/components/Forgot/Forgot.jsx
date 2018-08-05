@@ -133,6 +133,7 @@ export default class Forgot extends Component {
     } = this.props;
     return [
       {
+        id: 'email',
         name: 'email',
         subType: SUB_TYPES.EMAIL,
         value: email,

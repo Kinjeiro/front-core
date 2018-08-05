@@ -138,6 +138,7 @@ export default class Signup extends Component {
     if (!emailAsLogin) {
       fields.push(
         {
+          id: 'username',
           name: 'username',
           subType: SUB_TYPES.LOGIN,
           value: username,
@@ -148,12 +149,14 @@ export default class Signup extends Component {
 
     fields.push(
       {
+        id: 'email',
         name: 'email',
         subType: SUB_TYPES.EMAIL,
         value: email,
         required: true,
       },
       {
+        id: 'password',
         name: 'password',
         subType: SUB_TYPES.PASSWORD,
         value: password,

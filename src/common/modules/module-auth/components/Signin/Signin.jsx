@@ -107,13 +107,20 @@ export default class Signin extends Component {
     return [
       emailAsLogin
         ? {
+          /*
+           id необходим для корректной работы автозаполнению
+           Chrome will only save the autocomplete information on submit.
+           https://stackoverflow.com/questions/15462991/trigger-autocomplete-without-submitting-a-form
+          */
+          id: 'email',
           name: 'loginEmail',
-          subType: SUB_TYPES.EMAIL,
+          subType: SUB_TYPES.LOGIN_EMAIL,
           value: loginEmail,
           instanceChange: true,
           required: true,
         }
         : {
+          id: 'username',
           name: 'username',
           subType: SUB_TYPES.LOGIN,
           value: username,
@@ -121,6 +128,7 @@ export default class Signin extends Component {
           required: true,
         },
       {
+        id: 'password',
         name: 'password',
         subType: SUB_TYPES.PASSWORD,
         value: password,

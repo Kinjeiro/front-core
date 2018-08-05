@@ -155,7 +155,7 @@ export default class CoreField extends PureComponent {
     }
   }
 
-  static validate(value, props = {}) {
+  static validate(value, props = {}, domRef = null) {
     const {
       name,
       required: propsRequired,
@@ -170,8 +170,38 @@ export default class CoreField extends PureComponent {
       return [];
     }
     const errors = wrapToArray(customValidateErrors);
-    if ((propsRequired || required) && isEmpty(value)) {
-      errors.push(i18n('core:components.CoreField.errors.requiredError', { fieldName: name }));
+    if (domRef && domRef.checkValidity) {
+      /*
+       https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#The_HTML5_constraint_validation_API
+
+       - validationMessage
+       A localized message describing the validation constraints that the control does not satisfy (if any), or the empty string if the control is not a candidate for constraint validation (willValidate is false), or the element's value satisfies its constraints.
+
+       - validity
+       {
+         badInput
+         customError
+         patternMismatch
+         rangeOverflow
+         rangeUnderflow
+         stepMismatch
+         tooLong
+         tooShort
+         typeMismatch
+         valid
+         valueMissing
+       }
+      */
+      domRef.checkValidity();
+      if (domRef.validationMessage) {
+        errors.push(domRef.validationMessage);
+      }
+    } else {
+      // code checking
+      // eslint-disable-next-line no-lonely-if
+      if ((propsRequired || required) && isEmpty(value)) {
+        errors.push(i18n('core:components.CoreField.errors.requiredError', { fieldName: name }));
+      }
     }
 
     return errors;
@@ -216,6 +246,17 @@ export default class CoreField extends PureComponent {
   // HANDLERS
   // ======================================================
   @bind()
+  controlRef(domElement) {
+    const {
+      controlRef,
+    } = this.props;
+    this.elementDom = domElement;
+    if (controlRef) {
+      controlRef(this.props, domElement);
+    }
+  }
+
+  @bind()
   handleChange(value, index) {
     const {
       name,
@@ -242,13 +283,13 @@ export default class CoreField extends PureComponent {
         context,
       );
 
-      const errors = CoreField.validate(value, this.props);
+      const errors = CoreField.validate(value, this.props, elementDom);
       // todo @ANKU @LOW - promise не учитывается
       this.setState({
         lastValue: value,
         errors,
       });
-      if (elementDom) {
+      if (elementDom && !elementDom.validationMessage) {
         // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
         elementDom.setCustomValidity(errors.length ? errors[0] : '');
       }
@@ -309,7 +350,7 @@ export default class CoreField extends PureComponent {
 
     this.setState({
       touched: true,
-      errors: CoreField.validate(value, this.props),
+      errors: CoreField.validate(value, this.props, this.elementDom),
     });
     return onBlur && onBlur(...args);
   }
@@ -336,6 +377,7 @@ export default class CoreField extends PureComponent {
       case SUB_TYPES.LOGIN_EMAIL:
         return {
           autoComplete: 'username',
+          // autoComplete: 'email',
           autoCorrect: 'off',
           spellCheck: 'false',
           autoCapitalize: 'off',
@@ -370,6 +412,7 @@ export default class CoreField extends PureComponent {
 
   renderFieldItem(inValue, index, constraints) {
     const {
+      name,
       type,
       options,
       // value: inValue,
@@ -406,6 +449,7 @@ export default class CoreField extends PureComponent {
     } = constraints;
 
     let controlPropsFinal = {
+      name,
       errors,
       touched,
       ...controlProps,
@@ -482,7 +526,7 @@ export default class CoreField extends PureComponent {
 
         return (
           <Input
-            controlRef={ (element) => this.elementDom = element }
+            controlRef={ this.controlRef }
             value={ controlValue || '' }
             type={ type === TYPES.DECIMAL ? 'number' : type }
             min={ minValue }

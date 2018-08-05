@@ -80,6 +80,11 @@ export const FIELD_PROP_TYPE_MAP = {
   className: PropTypes.string,
 
   controlProps: PropTypes.object,
+  /**
+   * ссылка на DOM
+   * (field, dom) => {}
+   */
+  controlRef: PropTypes.func,
 
   onChange: PropTypes.func,
   /**

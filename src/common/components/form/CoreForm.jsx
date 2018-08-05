@@ -59,6 +59,9 @@ export default class CoreForm extends PureComponent {
     useForm: false,
   };
 
+  domForm = null;
+  domControls = {};
+
   // ======================================================
   // UTILS
   // ======================================================
@@ -67,11 +70,19 @@ export default class CoreForm extends PureComponent {
       isValid,
       fields,
     } = this.props;
+    const { domForm } = this;
 
     let isValidFinal = executeVariable(isValid, null, this.props);
     if (isValidFinal === null) {
-      isValidFinal = fields.every((field) =>
-        Field.validate(field.value, field).length === 0);
+      if (domForm && domForm.checkValidity) {
+        isValidFinal = domForm.checkValidity();
+      }
+      if (isValidFinal) {
+        isValidFinal = fields.every((field) => {
+          const domElement = this.domControls[field.name];
+          return Field.validate(field.value, field, domElement).length === 0;
+        });
+      }
     }
     return isValidFinal;
   }
@@ -79,6 +90,11 @@ export default class CoreForm extends PureComponent {
   // ======================================================
   // HANDLERS
   // ======================================================
+  @bind()
+  controlRef(field, domElement) {
+    this.domControls[field.name] = domElement;
+  }
+
   @bind()
   handleSubmit(event) {
     const {
@@ -92,7 +108,10 @@ export default class CoreForm extends PureComponent {
       event.stopPropagation();
     }
 
-    return onSubmit && onSubmit(event);
+    if (this.isValid()) {
+      return onSubmit && onSubmit(event);
+    }
+    return false;
   }
 
   // ======================================================
@@ -123,6 +142,7 @@ export default class CoreForm extends PureComponent {
     return (
       <Field
         { ...field }
+        controlRef={ this.controlRef }
         value={ value }
         key={ name }
         className={ `${this.bem('field')} ${className || ''}` }
@@ -248,6 +268,8 @@ export default class CoreForm extends PureComponent {
     if (useForm) {
       component = (
         <form
+          id={ id }
+          ref={ (domElement) => this.domForm = domElement }
           className={ this.fullClassName }
           onSubmit={ this.handleSubmit }
         >
