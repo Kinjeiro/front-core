@@ -24,8 +24,8 @@ export default class AuthPageLayout extends PureComponent {
     } = this.props;
 
     return (
-      <div className={ `AuthLayout ${className || ''}` }>
-        <div className="AuthLayout__body">
+      <div className={ `AuthPageLayout ${className || ''}` }>
+        <div className="AuthPageLayout__body">
           <AuthFormLayout>
             { children }
           </AuthFormLayout>

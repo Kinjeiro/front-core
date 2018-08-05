@@ -7,7 +7,7 @@
   --color-primary-auth: #333;
 }
 
-.AuthLayout {
+.AuthPageLayout {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -18,10 +18,11 @@
   background: var(--color-background-auth);
 
   &__body {
+    height: 100%;
+    max-width: 510px;
     background: var(--color-background-auth);
     //color: var(--color-primary);
     color: var(--color-text-auth);
-    width: 470px;
   }
 }
 
