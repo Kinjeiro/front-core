@@ -4,9 +4,36 @@ import React from 'react';
 import {
   executeVariable,
   executeVariableMemoize,
+  generateId,
 } from '../utils/common';
 import logger from '../helpers/client-logger';
-import clientConfig from '../client-config';
+
+function wrap(ComponentClass, PrevClassWrapper, funcIsClass = false) {
+  const prevClassId = generateId();
+  return () => (
+    PrevClassWrapper
+    ? ({ children, ...otherProps }) =>
+      React.createElement(
+        funcIsClass ? ComponentClass : executeVariable(ComponentClass),
+        otherProps,
+        React.createElement(executeVariableMemoize(prevClassId, PrevClassWrapper), otherProps, children),
+      )
+    : ComponentClass
+  );
+}
+
+function addClassName(CurrentClassWrapper, classNameAdditional) {
+  const prevClassId = generateId();
+  return () => ({ className, children, ...otherProps }) =>
+    React.createElement(
+      executeVariableMemoize(prevClassId, CurrentClassWrapper),
+      {
+        ...otherProps,
+        className: `${executeVariable(classNameAdditional)} ${className || ''}`,
+      },
+      children,
+    );
+}
 
 const COMPONENTS_BASE = {
   replace(name, ComponentClass) {
@@ -22,9 +49,7 @@ const COMPONENTS_BASE = {
         get() {
           const CClass = this[`_${name}`];
           // отложенная загрузка компонентов () => require('./Component);
-          return clientConfig.common.isProduction
-            ? executeVariableMemoize(name, CClass)
-            : executeVariable(CClass);
+          return executeVariable(CClass);
         },
       });
     }
@@ -32,33 +57,21 @@ const COMPONENTS_BASE = {
     return this;
   },
   wrap(name, ComponentClass, funcIsClass = false) {
-    const prev = this[`_${name}`];
-    logger.debug('[COMPONENTS BASE] wrap', name, ComponentClass, prev);
-    if (!prev) {
-      this.replace(name, ComponentClass);
-    } else {
-      this.replace(name, () => (props) => React.createElement(
-        funcIsClass
-          ? ComponentClass
-          : executeVariable(ComponentClass),
-        props,
-        React.createElement(executeVariable(prev), props),
-      ));
-    }
+    const PrevClassWrapper = this[`_${name}`];
+    logger.debug('[COMPONENTS BASE] wrap', name, ComponentClass, !!PrevClassWrapper);
+    this.replace(
+      name,
+      wrap(ComponentClass, PrevClassWrapper, funcIsClass),
+    );
     return this;
   },
-  addClassName(name, className) {
-    logger.debug('[COMPONENTS BASE] addClassName', name, className);
-    const prev = this[`_${name}`];
-    if (prev) {
-      this.replace(name, () => (props) => React.createElement(
-        executeVariable(prev),
-        {
-          ...props,
-          className: `${executeVariable(className)} ${props.className || ''}`,
-        },
-      ));
-    }
+  addClassName(name, classNameAdditional) {
+    const CurrentClassWrapper = this[`_${name}`];
+    logger.debug('[COMPONENTS BASE] addClassName', name, classNameAdditional, !!CurrentClassWrapper);
+    this.replace(
+      name,
+      addClassName(CurrentClassWrapper, classNameAdditional),
+    );
     return this;
   },
 };
@@ -74,15 +87,21 @@ COMPONENTS_BASE.replace('FieldLayout', () => require('./form/FieldLayout').defau
 // ======================================================
 // FORM FIELDS
 // ======================================================
-COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } />);
-COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } type="number" />);
+COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, ...props }) =>
+  <input ref={ controlRef } { ...props } />);
+COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, ...props }) =>
+  <input ref={ controlRef } { ...props } type="number" />);
 COMPONENTS_BASE.replace('Input', () => require('./form/fields/CoreInput').default);
-COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, ...props }) => <textarea ref={ controlRef } { ...props } />);
+COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, ...props }) =>
+  <textarea ref={ controlRef } { ...props } />);
 COMPONENTS_BASE.replace('TextArea', () => require('./form/fields/CoreTextArea').default);
-COMPONENTS_BASE.replace('BaseSelect', () => (props) => <select { ...props } />);
+COMPONENTS_BASE.replace('BaseSelect', () => (props) =>
+  <select { ...props } />);
 COMPONENTS_BASE.replace('Select', () => require('./form/fields/CoreSelect').default);
-COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } />);
-COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, ...props }) => <input ref={ controlRef } { ...props } type="checkbox" />);
+COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, touched, ...props }) =>
+  <input ref={ controlRef } { ...props } />);
+COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, ...props }) =>
+  <input ref={ controlRef } { ...props } type="checkbox" />);
 
 // ======================================================
 // UI
