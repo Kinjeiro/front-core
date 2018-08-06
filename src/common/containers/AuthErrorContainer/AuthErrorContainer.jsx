@@ -11,7 +11,7 @@ import {
   getLastUniError,
   getUser,
 } from '../../app-redux/selectors';
-// import { actions } from '../../app-redux/reducers/app/last-uni-error';
+import * as reduxLastUniError from '../../app-redux/reducers/app/last-uni-error';
 
 import COMPONENTS_BASE from '../../components/ComponentsBase';
 
@@ -32,7 +32,7 @@ const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
     user: getUser(globalState),
   }),
   {
-    // ...actions,
+    ...reduxLastUniError.actions,
     actionGoTo: push,
   },
 )
@@ -50,7 +50,7 @@ export default class AuthErrorContainer extends Component {
     lastUniError: PropTypes.object,
     user: PropTypes.string,
 
-    // actionClearLastError: PropTypes.func,
+    actionClearLastError: PropTypes.func,
     actionGoTo: PropTypes.func,
   };
 
@@ -126,10 +126,11 @@ export default class AuthErrorContainer extends Component {
         isNotAuth,
         linkForwardTo,
       },
+      actionClearLastError,
     } = this.props;
 
     return isNotAuth && (
-      <Modal>
+      <Modal onCancel={ () => actionClearLastError() }>
         {
           reLoginModalForm
             ? (

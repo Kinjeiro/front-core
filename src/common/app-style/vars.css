@@ -9,4 +9,7 @@
   --color-error-background: #ffc0cb;
   --color-error-border: #DB2828;
   --color-error-text: #912D2B;
+
+  --color-modal-background: color(#000 alpha(-20%));
+  --color-modal-body-background: var(--color-main-background);
 }
