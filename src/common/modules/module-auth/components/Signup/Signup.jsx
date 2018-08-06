@@ -83,7 +83,7 @@ export default class Signup extends Component {
     actionSignup: PropTypes.func,
   };
 
-  defaultProps = {
+  static defaultProps = {
     emailAsLogin: clientConfig.common.features.auth.emailAsLogin,
   };
 
