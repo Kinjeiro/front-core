@@ -10,29 +10,51 @@ import logger from '../helpers/client-logger';
 
 function wrap(ComponentClass, PrevClassWrapper, funcIsClass = false) {
   const prevClassId = generateId();
-  return () => (
-    PrevClassWrapper
-    ? ({ children, ...otherProps }) =>
-      React.createElement(
-        funcIsClass ? ComponentClass : executeVariable(ComponentClass),
+  return () => {
+    if (!PrevClassWrapper) {
+      return ComponentClass;
+    }
+    // нужно сначала его загрузить, чтобы сначала css их пременился, а потом css остальных
+    const PrevClass = executeVariableMemoize(prevClassId, PrevClassWrapper);
+    const ComponentClassFinal = funcIsClass ? ComponentClass : executeVariable(ComponentClass);
+
+    // render
+    return ({ children, ...otherProps }) => {
+      return React.createElement(
+        ComponentClassFinal,
         otherProps,
-        React.createElement(executeVariableMemoize(prevClassId, PrevClassWrapper), otherProps, children),
-      )
-    : ComponentClass
-  );
+        React.createElement(PrevClass, otherProps, children),
+      );
+    };
+  };
 }
 
 function addClassName(CurrentClassWrapper, classNameAdditional) {
-  const prevClassId = generateId();
-  return () => ({ className, children, ...otherProps }) =>
-    React.createElement(
-      executeVariableMemoize(prevClassId, CurrentClassWrapper),
-      {
-        ...otherProps,
-        className: `${executeVariable(classNameAdditional)} ${className || ''}`,
-      },
-      children,
-    );
+  const currentClassId = generateId();
+  return () => {
+    const CurrentClass = executeVariableMemoize(currentClassId, CurrentClassWrapper);
+    const classNameFinal = executeVariable(classNameAdditional);
+
+    // render
+    return ({ className, children, ...otherProps }) =>
+      React.createElement(
+        CurrentClass,
+        {
+          ...otherProps,
+          className: `${classNameFinal || ''} ${className || ''}`,
+        },
+        children,
+      );
+  };
+}
+
+function addCallback(CurrentClassWrapper, callback) {
+  const currentClassId = generateId();
+  return () => {
+    const CurrentClass = executeVariableMemoize(currentClassId, CurrentClassWrapper);
+    executeVariable(callback);
+    return CurrentClass;
+  };
 }
 
 const COMPONENTS_BASE = {
@@ -74,6 +96,15 @@ const COMPONENTS_BASE = {
     );
     return this;
   },
+  addInitCallback(name, initCallback) {
+    const CurrentClassWrapper = this[`_${name}`];
+    logger.debug('[COMPONENTS BASE] addInitCallback', name, initCallback, !!CurrentClassWrapper);
+    this.replace(
+      name,
+      addCallback(CurrentClassWrapper, initCallback),
+    );
+    return this;
+  },
 };
 
 // ======================================================
@@ -112,7 +143,7 @@ COMPONENTS_BASE.replace('Link', () => require('./Link/Link').default);
 COMPONENTS_BASE.replace('ActionStatus', () => require('./ActionStatus/ActionStatus').default);
 COMPONENTS_BASE.replace('Notifications', () => require('./Notifications/Notifications').default);
 COMPONENTS_BASE.replace('Notice', () => require('./Notifications/Notice').default);
-COMPONENTS_BASE.replace('Modal', () => require('./Modal/Modal').default);
+COMPONENTS_BASE.replace('Modal', () => require('./CoreModal/CoreModal').default);
 COMPONENTS_BASE.replace('Segment', () => ({ children }) => (<div>{ children }</div>));
 
 // ======================================================
