@@ -97,6 +97,20 @@ export default class CoreServerRunner extends AbstractServerRunner {
     );
   }
 
+  /**
+   * Определеяет какие куски приложения требуют авторизации
+   * В enterprise обычно все что не noAuthRequireMatcher
+   * Но других проектах помимо noAuthRequireMatcher (где указыавются просто файлы, статика, авторизация и подобное)
+   * еще позволительный страницы без юзера (к примеру лендинг)
+   *
+   * @param pathnameWithoutContextPath
+   * @return {boolean}
+   */
+  @bind()
+  noNeedCredentialsPageMatcher(pathnameWithoutContextPath) {
+    return false;
+  }
+
   getLoginPath() {
     return PATH_AUTH_SIGNIN;
   }
@@ -119,6 +133,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
         bodyHtml: this.getTemplateBody(),
         loginPath: this.getLoginPath(),
         noAuthRequireMatcherFn: this.noAuthRequireMatcher,
+        noNeedCredentialsPageMatcherFn: this.noNeedCredentialsPageMatcher,
       },
     };
   }

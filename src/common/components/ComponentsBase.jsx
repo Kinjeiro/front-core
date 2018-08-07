@@ -59,7 +59,7 @@ function addCallback(CurrentClassWrapper, callback) {
 
 const COMPONENTS_BASE = {
   replace(name, ComponentClass) {
-    logger.debug('[COMPONENTS BASE] replace', name, ComponentClass);
+    logger.debug('[COMPONENTS BASE] replace', name);
     if (!this[`_${name}`]) {
       Object.defineProperty(this, name, {
         enumerable: true,
@@ -80,7 +80,7 @@ const COMPONENTS_BASE = {
   },
   wrap(name, ComponentClass, funcIsClass = false) {
     const PrevClassWrapper = this[`_${name}`];
-    logger.debug('[COMPONENTS BASE] wrap', name, ComponentClass, !!PrevClassWrapper);
+    logger.debug('[COMPONENTS BASE] wrap', name, !!PrevClassWrapper);
     this.replace(
       name,
       wrap(ComponentClass, PrevClassWrapper, funcIsClass),
@@ -89,7 +89,7 @@ const COMPONENTS_BASE = {
   },
   addClassName(name, classNameAdditional) {
     const CurrentClassWrapper = this[`_${name}`];
-    logger.debug('[COMPONENTS BASE] addClassName', name, classNameAdditional, !!CurrentClassWrapper);
+    logger.debug('[COMPONENTS BASE] addClassName', name, !!CurrentClassWrapper);
     this.replace(
       name,
       addClassName(CurrentClassWrapper, classNameAdditional),
@@ -98,7 +98,7 @@ const COMPONENTS_BASE = {
   },
   addInitCallback(name, initCallback) {
     const CurrentClassWrapper = this[`_${name}`];
-    logger.debug('[COMPONENTS BASE] addInitCallback', name, initCallback, !!CurrentClassWrapper);
+    logger.debug('[COMPONENTS BASE] addInitCallback', name, !!CurrentClassWrapper);
     this.replace(
       name,
       addCallback(CurrentClassWrapper, initCallback),

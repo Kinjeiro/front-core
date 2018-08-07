@@ -59,6 +59,7 @@ export function register(server, pluginOptions, next) {
     createProjectPrepareState,
     loginPath,
     noAuthRequireMatcherFn,
+    noNeedCredentialsPageMatcherFn,
   } = pluginOptions;
 
   clientRunner.initComponents(CB);
@@ -106,9 +107,10 @@ export function register(server, pluginOptions, next) {
       // ACCESS REDIRECT
       // ======================================================
       const isAuthTurnOn = serverConfig.common.features.auth && serverConfig.common.features.auth.globalAuth !== false;
+      const routePath = cutContextPath(pathname);
 
       if (isAuthTurnOn) {
-        if (!noAuthRequireMatcherFn(cutContextPath(pathname))) {
+        if (!noAuthRequireMatcherFn(routePath) && !noNeedCredentialsPageMatcherFn(routePath)) {
           const isAuth = isAuthenticated(request);
           const authUniError = getAuthUniErrorFromRequest(request);
 
@@ -136,7 +138,7 @@ export function register(server, pluginOptions, next) {
               const returnUrlStr = notReturnUrl.includes(path)
                 ? ''
                 // нужно вырезать contextPath так как его будет использовать роутинг на клиенте
-                : `?${PARAM_RETURN_URL}=${encodeURIComponent(cutContextPath(path))}`;
+                : `?${PARAM_RETURN_URL}=${encodeURIComponent(routePath)}`;
               logger.warn(i18n('core:errors.notAuthorize'));
               return reply.redirect(`${appUrl(loginPath)}${returnUrlStr}`);
             }
