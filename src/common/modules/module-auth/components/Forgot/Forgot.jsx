@@ -8,7 +8,10 @@ import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simp
 import titled from '../../../../utils/decorators/react-class/titled';
 import bemDecorator from '../../../../utils/decorators/bem-component';
 import i18n from '../../../../utils/i18n-utils';
-import { getFullUrl } from '../../../../helpers/app-urls';
+import {
+  appUrl,
+  getFullUrl,
+} from '../../../../helpers/app-urls';
 
 // ======================================================
 // REDUX
@@ -25,18 +28,22 @@ import { ACTION_STATUS_PROPS } from '../../../../models/index';
 import {
   SUB_TYPES,
 } from '../../../../models/model-field';
+import {
+  PATH_INDEX,
+} from '../../../../constants/routes.pathes';
+import getCb from '../../../../components/get-components';
 
-import COMPONENTS_BASE from '../../../../components/ComponentsBase';
-
-// import {
-//   PATH_INDEX,
-// } from '../../../constants/routes.pathes';
-
+// ======================================================
+// MODULE
+// ======================================================
 import * as paths from '../../routes-paths-auth';
 
 // import './ForgotPage.css';
 
-const { Form } = COMPONENTS_BASE;
+const {
+  Form,
+  Link,
+} = getCb();
 
 export const PAGE_ID = 'Forgot';
 
@@ -170,19 +177,24 @@ export default class Forgot extends Component {
         textActionSubmit={ i18n('core:pages.ForgotPage.submitButton') }
 
         actionStatus={ actionForgotPasswordStatus }
-        textActionSuccess={
-          <div
-            dangerouslySetInnerHTML={{
-              __html: i18n(
-                'core:pages.ForgotPage.submitSuccessMessage',
-                {
-                  email: `<b className="${this.bem('email-text')}">${email}</b>`,
-                  // interpolation: {escapeValue: false},
-                },
-              ),
-            }}
-          />
-        }
+        textActionSuccess={ (
+          <div className={ this.bem('ActionSuccess') }>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: i18n(
+                  'core:pages.ForgotPage.submitSuccessMessage',
+                  {
+                    email: `<b className="${this.bem('email-text')}">${email}</b>`,
+                    // interpolation: {escapeValue: false},
+                  },
+                ),
+              }}
+            />
+            <a href={ appUrl(PATH_INDEX) }>
+              { i18n('core:pages.ForgotPage.goToIndexPage') }
+            </a>
+          </div>
+        ) }
       />
     );
   }

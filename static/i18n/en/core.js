@@ -93,6 +93,7 @@ module.exports = {
       },
       submitButton: 'Reset password',
       submitSuccessMessage: 'Message with reset password link send to your email {{email}}.',
+      goToIndexPage: 'Go to index page',
     },
     ResetPage: {
       title: 'Reset password',
@@ -103,7 +104,7 @@ module.exports = {
       signinButton: 'Signin',
       cancelButton: 'Close',
       submitSuccessMessage: 'Password has been updated',
-      goToIndexPage: 'To index page',
+      goToIndexPage: 'Go to index page',
     },
     ErrorPage: {
       returnTo: 'Return to',

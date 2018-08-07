@@ -93,6 +93,7 @@ module.exports = {
       },
       submitButton: 'Сбросить пароль',
       submitSuccessMessage: 'На вашу почту {{email}} отослано сообщение с ссылкой для смены пароля',
+      goToIndexPage: 'Вернуться на главную',
     },
     ResetPage: {
       title: 'Обновление пароля',
@@ -103,7 +104,7 @@ module.exports = {
       signinButton: 'Войти',
       cancelButton: 'Закрыть',
       submitSuccessMessage: 'Пароль успешно изменен',
-      goToIndexPage: 'На главную',
+      goToIndexPage: 'Вернуть на главную',
     },
     ErrorPage: {
       returnTo: 'Вернуться к ',

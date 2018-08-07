@@ -8,6 +8,7 @@ import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simp
 import titled from '../../../../utils/decorators/react-class/titled';
 import bemDecorator from '../../../../utils/decorators/bem-component';
 import i18n from '../../../../utils/i18n-utils';
+import appUrl from '../../../../helpers/app-urls';
 
 // ======================================================
 // REDUX
@@ -16,25 +17,26 @@ import {
   getUserInfo,
 } from '../../../../app-redux/selectors';
 import * as reduxUserInfo from '../../../../app-redux/reducers/app/user-info';
-
 import { ACTION_STATUS_PROPS } from '../../../../models/index';
 import {
   SUB_TYPES,
 } from '../../../../models/model-field';
+import {
+  PATH_INDEX,
+} from '../../../../constants/routes.pathes';
 
-import COMPONENTS_BASE from '../../../../components/ComponentsBase';
+import getCb from '../../../../components/get-components';
 
-// import {
-//   PATH_INDEX,
-// } from '../../../constants/routes.pathes';
-
+// ======================================================
+// MODULE
+// ======================================================
 import * as paths from '../../routes-paths-auth';
-
 // import './ForgotPage.css';
 
-const { Form } = COMPONENTS_BASE;
-
-// import './LoginPage.css';
+const {
+  Form,
+  Link,
+} = getCb();
 
 export const PAGE_ID = 'Reset';
 
@@ -162,7 +164,16 @@ export default class ResetPage extends Component {
         textActionSubmit={ i18n('core:pages.ResetPage.submitButton') }
 
         actionStatus={ actionResetPasswordStatus }
-        textActionSuccess={ i18n('core:pages.ResetPage.submitSuccessMessage') }
+        textActionSuccess={ (
+          <div className={ this.bem('ActionSuccess') }>
+            <p>
+              { i18n('core:pages.ResetPage.submitSuccessMessage') }
+            </p>
+            <a href={ appUrl(PATH_INDEX) }>
+              { i18n('core:pages.ResetPage.goToIndexPage') }
+            </a>
+          </div>
+        ) }
       />
     );
   }
