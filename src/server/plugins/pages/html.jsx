@@ -11,7 +11,6 @@ import i18nInstance from 'i18next';
 // UTILS
 // ======================================================
 import {
-  joinUri,
   isValidPath,
 } from '../../../common/utils/uri-utils';
 import { ASSETS } from '../../../common/constants/routes.pathes';
@@ -28,7 +27,7 @@ import { readFile } from '../../utils/file-utils';
 // ======================================================
 // COMPONENTS
 // ======================================================
-import { I18NProvider } from '../../../common/containers';
+import I18NProvider from '../../../common/containers/I18NProvider/I18NProvider';
 
 const template = require('./html.ejs');
 

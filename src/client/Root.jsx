@@ -6,7 +6,7 @@ import useScroll from 'react-router-scroll/lib/useScroll';
 
 // @guide - важно чтобы это было на первом месте, так как внутри идет инициализация i18n
 import { getI18Instance } from '../common/utils/i18n-utils';
-import { I18NProvider } from '../common/containers';
+import I18NProvider from '../common/containers/I18NProvider/I18NProvider';
 
 // ======================================================
 // CLIENT ROOT

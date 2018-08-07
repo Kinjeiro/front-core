@@ -38,7 +38,7 @@ import * as paths from '../../routes-paths-auth';
 
 const { Form } = COMPONENTS_BASE;
 
-const PAGE_ID = 'Forgot';
+export const PAGE_ID = 'Forgot';
 
 @connect(
   (globalState) => ({

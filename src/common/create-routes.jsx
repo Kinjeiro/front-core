@@ -18,12 +18,10 @@ export default function createRoutes(
   projectLayout,
   options = {},
 ) {
-  const {
-    CoreApp,
-    ErrorPage,
-    StubPage,
-    AuthErrorContainer,
-  } = require('./containers');
+  const CoreApp = require('./containers/CoreApp/CoreApp').default;
+  const ErrorPage = require('./containers/ErrorPage/ErrorPage').default;
+  const StubPage = require('./containers/StubPage/StubPage').default;
+  const AuthErrorContainer = require('./containers/AuthErrorContainer/AuthErrorContainer').default;
 
   const {
     beforeRoutes = [],

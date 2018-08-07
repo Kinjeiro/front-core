@@ -27,16 +27,16 @@ import {
   SUB_TYPES,
 } from '../../../../models/model-field';
 
-import COMPONENTS_BASE from '../../../../components/ComponentsBase';
-
 // import './LoginPage.css';
+
+import getComponents from '../get-components';
 
 const {
   Form,
   Button,
-} = COMPONENTS_BASE;
+} = getComponents();
 
-const PAGE_ID = 'Signup';
+export const PAGE_ID = 'Signup';
 
 @connect(
   (globalState) => ({
@@ -104,7 +104,7 @@ export default class Signup extends Component {
       form,
       actionSignup,
       emailAsLogin,
-      onChangeEnterType,
+      onEnterTypeChange,
     } = this.props;
     const {
       email,
@@ -116,7 +116,7 @@ export default class Signup extends Component {
       username: emailAsLogin ? email : username,
     });
 
-    await onChangeEnterType(true);
+    await onEnterTypeChange(true);
   }
 
   // ======================================================

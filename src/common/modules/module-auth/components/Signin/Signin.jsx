@@ -27,19 +27,19 @@ import {
   SUB_TYPES,
 } from '../../../../models/model-field';
 
-import COMPONENTS_BASE from '../../../../components/ComponentsBase';
-
 import * as paths from '../../routes-paths-auth';
 
 // import './Signin.css';
+
+import getComponents from '../get-components';
 
 const {
   Link,
   Form,
   Button,
-} = COMPONENTS_BASE;
+} = getComponents();
 
-const PAGE_ID = 'Signin';
+export const PAGE_ID = 'Signin';
 
 @connect(
   (globalState) => ({

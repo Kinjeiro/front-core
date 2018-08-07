@@ -1,3 +1,6 @@
+console.warn('Deprecated use /containters/index.jsx');
+console.trace();
+
 export CoreApp from './CoreApp/CoreApp';
 /**
  * @deprecated - user direct (without index)

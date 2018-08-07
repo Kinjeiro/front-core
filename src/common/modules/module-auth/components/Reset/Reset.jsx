@@ -36,7 +36,7 @@ const { Form } = COMPONENTS_BASE;
 
 // import './LoginPage.css';
 
-const PAGE_ID = 'Reset';
+export const PAGE_ID = 'Reset';
 
 @connect(
   (globalState, ownProps) => ({

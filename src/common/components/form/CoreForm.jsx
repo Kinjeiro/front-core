@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
@@ -12,7 +12,7 @@ import {
 } from '../../utils/common';
 import { ACTION_STATUS_PROPS } from '../../models';
 
-import COMPONENTS_BASE from '../ComponentsBase';
+import getComponents from '../get-components';
 
 // import './CoreForm.scss';
 
@@ -21,11 +21,11 @@ const {
   ActionStatus,
   Button,
   Field,
-} = COMPONENTS_BASE;
+} = getComponents();
 
 
 @bemDecorator({ componentName: 'CoreForm', wrapper: false })
-export default class CoreForm extends PureComponent {
+export default class CoreForm extends Component {
   static FIELD_TYPES = Field.TYPES;
 
   static propTypes = {

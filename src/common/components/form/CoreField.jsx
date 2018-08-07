@@ -26,7 +26,7 @@ import {
   SUB_TYPES,
 } from '../../models/model-field';
 
-import COMPONENTS_BASE from '../ComponentsBase';
+import getCb from '../get-components';
 
 // import i18n from '../../utils/i18n';
 
@@ -41,7 +41,7 @@ const {
   Checkbox,
   Button,
   Attachment,
-} = COMPONENTS_BASE;
+} = getCb();
 
 export default class CoreField extends PureComponent {
   static TYPES = TYPES;
