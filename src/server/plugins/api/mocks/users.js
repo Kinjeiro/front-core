@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 import { TEST_PERMISSION } from '../../../../common/constants/permissions';
 
+import serverConfig from '../../../server-config';
+
 export function createTestUser(username, name = null, otherProps = {}) {
   return {
     username,
@@ -53,7 +55,10 @@ export const TOKENS = {
 };
 
 export function getUser(username, password) {
-  const user = USERS[username];
+  const user = serverConfig.common.features.auth.emailAsLogin
+    ? USERS.find(({ email }) => email === username)
+    : USERS[username];
+
   if (user && user.password === password) {
     return {
       ...user,
