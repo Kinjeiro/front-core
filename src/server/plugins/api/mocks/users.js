@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import { TEST_PERMISSION } from '../../../../common/constants/permissions';
+import { objectValues } from '../../../../common/utils/common';
 
 import serverConfig from '../../../server-config';
 
@@ -56,7 +57,7 @@ export const TOKENS = {
 
 export function getUser(username, password) {
   const user = serverConfig.common.features.auth.emailAsLogin
-    ? USERS.find(({ email }) => email === username)
+    ? objectValues(USERS).find(({ email }) => email === username)
     : USERS[username];
 
   if (user && user.password === password) {
