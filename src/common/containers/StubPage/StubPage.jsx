@@ -47,6 +47,7 @@ import ModuleLink from '../../containers/ModuleLink/ModuleLink';
 import CB from '../../components/ComponentsBase';
 
 import './StubPage.css';
+import './StubPageSass.scss';
 
 const {
   Segment,
@@ -341,7 +342,7 @@ export default class StubPage extends Component {
 
         <Segment
           label="Form"
-          className="TestPage"
+          className="FormSegment"
         >
           <Form
             fields={ [

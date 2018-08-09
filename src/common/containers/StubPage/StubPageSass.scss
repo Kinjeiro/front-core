@@ -1,0 +1,9 @@
+$colorTest: yellow;
+$color-test: red;
+$color-test-background: orange;
+
+.FormSegment {
+  background: $color-test-background;
+  color: $color-test;
+  border: 5px solid $colorTest;
+}

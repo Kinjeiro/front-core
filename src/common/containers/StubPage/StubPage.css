@@ -7,7 +7,7 @@
 /* декараторы из postcss-bemed */
 @block StubPage {
   /* цвет из ../../app-style/vars.js */
-  background: var(--test-color);
+  background: var(--color-test);
 
   @element languageElement {
     @modifier lang {

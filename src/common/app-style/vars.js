@@ -1,4 +1,5 @@
 // используется в webpack - тут размещено для наглядности, либо нужно вынести на уровень root/config
 module.exports = {
-  'test-color': '#00ff07',
+  'color-test': '#00ff07',
+  'color-test-background': 'pink',
 };
