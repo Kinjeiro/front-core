@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const { urlJoin } = require('../../utils/path-utils');
 
 function pluginFrontendMain(webpackConfig, webpackContext) {
@@ -12,7 +13,7 @@ function pluginFrontendMain(webpackConfig, webpackContext) {
   } = webpackContext;
 
   // \src\common\routes.pathes.js::ASSETS
-  const PROXY_ASSETS = isLocalhost && appConfig.server.main.proxyAssets;
+  // const PROXY_ASSETS = isLocalhost && appConfig.server.main.proxyAssets;
 
   if (!webpackConfig.entry.index) {
     webpackConfig.entry.index = [];
@@ -20,16 +21,16 @@ function pluginFrontendMain(webpackConfig, webpackContext) {
   webpackConfig.entry.index.push(clientStartPath);
 
   /*
-   Template	Description
-   [hash]       - The hash of the module identifier
-   [chunkhash]  - The hash of the chunk content
-   [name]       - The module name
-   [id]         - The module identifier
-   [query]      - The module query, i.e., the string following ? in the filename
+    Template	Description
+    [hash]       - The hash of the module identifier
+    [chunkhash]  - The hash of the chunk content
+    [name]       - The module name
+    [id]         - The module identifier
+    [query]      - The module query, i.e., the string following ? in the filename
 
-   Note this options does not affect output files for on-demand-loaded chunks.
-   For these files the output.chunkFilename option is used.
-   It also doesn't affect files created by loaders. For these files see loader options.
+  Note this options does not affect output files for on-demand-loaded chunks.
+  For these files the output.chunkFilename option is used.
+  It also doesn't affect files created by loaders. For these files see loader options.
   */
   webpackConfig.output.filename = `${assetsDir}/[name].js`;
 
@@ -91,9 +92,13 @@ function pluginFrontendMain(webpackConfig, webpackContext) {
    // rest of your application entry
    See this discussion for more information on __webpack_public_path__.
   */
-  webpackConfig.output.publicPath = PROXY_ASSETS
-    ? `//${PROXY_ASSETS.host}:${PROXY_ASSETS.port}${urlJoin('/', publicPath)}`
-    : urlJoin('/', publicPath);
+
+  // проксируется на ноде на 9090 (webpack dev server)
+  webpackConfig.output.publicPath =
+    // PROXY_ASSETS
+    // ? `//${PROXY_ASSETS.host}:${PROXY_ASSETS.port}${urlJoin('/', publicPath)}`
+    // : urlJoin('/', publicPath);
+    urlJoin('/', publicPath);
 }
 
 module.exports = pluginFrontendMain;
