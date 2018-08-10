@@ -2,6 +2,7 @@ import { joinUri } from './utils/uri-utils';
 import * as authPaths from './modules/module-auth/routes-paths-auth';
 
 export const ASSETS = 'assets';
+export const HOT_RELOAD_PREFIX = 'hot';
 
 export const CORE_ROUTES_NAMES = {
   ACCESS_DENIED: 'access',

@@ -47,6 +47,7 @@ const context = {
   srcDir,
   buildDir,
   assetsDir,
+  HOT_RELOAD_PREFIX: 'hot',
 
   staticPaths: [
     // абсолютные, чтобы другие проекты могли добавлять свои
