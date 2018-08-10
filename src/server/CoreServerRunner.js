@@ -20,6 +20,7 @@ import {
   ASSETS,
   PATH_ERROR_PAGE,
   PATH_ACCESS_DENIED,
+  HOT_RELOAD_PREFIX,
 } from '../common/routes.pathes';
 import { PATH_AUTH_SIGNIN } from '../common/modules/module-auth/routes-paths-auth';
 
@@ -89,6 +90,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return testAppUrlStartWith(
       pathnameWithoutContextPath,
       ASSETS,
+      HOT_RELOAD_PREFIX,
       CORE_ROUTES_NAMES.auth,
       // this.getLoginPath(),
       PATH_ERROR_PAGE,

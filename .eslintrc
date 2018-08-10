@@ -18,7 +18,8 @@
     "expect": true,
     "geminiReact": true,
     "React": true,
-    "suite": true
+    "suite": true,
+    "require": true
   },
   "rules": {
     "max-len": ["error", 120, 4, {"ignoreComments": true}],
