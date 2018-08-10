@@ -26,7 +26,7 @@ import {
   SUB_TYPES,
 } from '../../models/model-field';
 
-import getCb from '../get-components';
+import getCb from '../../get-components';
 
 // import i18n from '../../utils/i18n';
 

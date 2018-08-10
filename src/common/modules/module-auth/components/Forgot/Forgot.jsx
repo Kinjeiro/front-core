@@ -31,7 +31,7 @@ import {
 import {
   PATH_INDEX,
 } from '../../../../constants/routes.pathes';
-import getCb from '../../../../components/get-components';
+import getCb from '../../../../get-components';
 
 // ======================================================
 // MODULE

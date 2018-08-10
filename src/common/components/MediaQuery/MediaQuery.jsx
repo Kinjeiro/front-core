@@ -40,6 +40,7 @@ export default class MediaQuery extends Component {
   static SIZES = MAX_SIZES;
 
   static propTypes = {
+    // component,
     ...Responsive.propTypes,
     maxSize: PropTypes.oneOf(SIZES_ARRAY),
     minSize: PropTypes.oneOf(SIZES_ARRAY),

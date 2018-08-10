@@ -1,4 +1,4 @@
-/* eslint-disable global-require,max-len */
+/* eslint-disable global-require,max-len,react/prop-types */
 import React from 'react';
 
 import {
@@ -51,12 +51,25 @@ function addClassName(CurrentClassWrapper, classNameAdditional) {
 function addCallback(CurrentClassWrapper, callback) {
   const currentClassId = generateId();
   return () => {
+    // сначала загружаются стили и импорты родительского компонента
     const CurrentClass = executeVariableMemoize(currentClassId, CurrentClassWrapper);
-    executeVariable(callback);
+    // а только потом вызывается колбек наш где грузится проектный css
+    executeVariable(callback, null, CurrentClass);
     return CurrentClass;
   };
 }
 
+/*
+ // todo @ANKU @LOW - Бага в том, что чтобы загрузить компонент нужно
+ 1) заимпортить getComponents
+ 2) потом обычно идет импорт css
+ 3) в const { MyComponent } = getComponents(); происходит первая загрузка родительского компонента и соотвественно css
+
+ Получается что css родителя загружается после css ребенка!
+
+ Workaround - для ребенка использовать require('child.css') после 3)
+
+ */
 const COMPONENTS_BASE = {
   replace(name, ComponentClass) {
     logger.debug('[COMPONENTS BASE] replace', name);
@@ -71,7 +84,12 @@ const COMPONENTS_BASE = {
         get() {
           const CClass = this[`_${name}`];
           // отложенная загрузка компонентов () => require('./Component);
-          return executeVariable(CClass);
+          const ComponentClassFinal = executeVariable(CClass);
+          if (!ComponentClassFinal) {
+            // можно на те которые не добавлены, но запращиваются - использовать new Proxy :: get(target, key) - https://stackoverflow.com/a/36111309/344172
+            logger.error(`Empty component class "${name}"`);
+          }
+          return ComponentClassFinal;
         },
       });
     }

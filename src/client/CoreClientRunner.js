@@ -2,7 +2,7 @@ import AbstractClientRunner from './AbstractClientRunner';
 
 import { getClientStoreInitialState as getStateFromPage } from './get-global-data';
 
-import { initComponents } from '../common/components/get-components';
+import { initComponents } from '../common/get-components';
 import { initComponents as initAuthComponents } from '../common/modules/module-auth/components/get-components';
 
 /**

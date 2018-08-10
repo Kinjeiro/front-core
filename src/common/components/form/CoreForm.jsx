@@ -12,7 +12,7 @@ import {
 } from '../../utils/common';
 import { ACTION_STATUS_PROPS } from '../../models';
 
-import getComponents from '../get-components';
+import getComponents from '../../get-components';
 
 // import './CoreForm.scss';
 
