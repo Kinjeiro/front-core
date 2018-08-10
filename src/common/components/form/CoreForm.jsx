@@ -190,6 +190,7 @@ export default class CoreForm extends Component {
           type="submit"
           className={ this.bem('submitButton') }
           disabled={ isFetching || !this.isValid() }
+          primary={ true }
           onClick={ useForm ? undefined : this.handleSubmit }
         >
           { textActionSubmit }
