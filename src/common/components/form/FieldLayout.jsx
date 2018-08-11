@@ -12,6 +12,7 @@ export default class FieldLayout extends PureComponent {
     children: PropTypes.node,
     errors: PropTypes.arrayOf(PropTypes.string),
     touched: PropTypes.bool,
+    textDescription: PropTypes.node,
   };
 
   render() {
@@ -21,6 +22,7 @@ export default class FieldLayout extends PureComponent {
       children,
       errors,
       touched,
+      textDescription,
     } = this.props;
 
     return (
@@ -28,8 +30,17 @@ export default class FieldLayout extends PureComponent {
         <label className="FieldLayout__label">
           { label }
         </label>
-        <div className="FieldLayout__control">
-          { children }
+        <div className="FieldLayout__content">
+          <div className="FieldLayout__control">
+            { children }
+          </div>
+          {
+            textDescription && (
+              <div className="FieldLayout__description">
+                { textDescription }
+              </div>
+            )
+          }
           {
             errors.length > 0 && (
               <div className="FieldLayout__errors">

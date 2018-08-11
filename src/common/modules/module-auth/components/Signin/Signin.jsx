@@ -69,6 +69,7 @@ export default class Signin extends Component {
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
     emailAsLogin: PropTypes.bool,
+    formProps: PropTypes.object,
 
     // ======================================================
     // @reduxSimpleForm
@@ -174,6 +175,7 @@ export default class Signin extends Component {
       onUpdateForm,
       onEnterTypeChange,
       onModalCancel,
+      formProps,
     } = this.props;
 
     // чтобы кнопка была сразу доступна при вводе данных а не когда фокус переместатя
@@ -218,6 +220,7 @@ export default class Signin extends Component {
         }
 
         actionStatus={ actionChangeUserStatus }
+        { ...formProps }
       />
     );
   }

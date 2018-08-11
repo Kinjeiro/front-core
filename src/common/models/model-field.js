@@ -74,6 +74,7 @@ export const FIELD_PROP_TYPE_MAP = {
 
   textPlaceholder: PropTypes.node,
   textHint: PropTypes.node,
+  textDescription: PropTypes.node,
 
   context: PropTypes.object,
   compareFn: PropTypes.func,
@@ -100,6 +101,18 @@ export const FIELD_PROP_TYPE_MAP = {
   textOnAdd: PropTypes.node,
   onRemove: PropTypes.func,
   textOnRemove: PropTypes.node,
+
+  /**
+   className
+
+   label
+   textDescription
+   errors
+
+   required
+   touched
+   */
+  Layout: PropTypes.any,
 };
 
 export function createField(name, value, otherProps = {}) {

@@ -8,7 +8,6 @@ import i18n from '../../utils/i18n-utils';
 import {
   executeVariable,
   wrapToArray,
-  isEmpty,
 } from '../../utils/common';
 import { ACTION_STATUS_PROPS } from '../../models';
 
@@ -17,10 +16,13 @@ import getComponents from '../../get-components';
 // import './CoreForm.scss';
 
 const {
+  // todo @ANKU @LOW - можно сделать отложенную чтобы не загружать если задали кастомный Layout
   FormLayout,
+
   ActionStatus,
   Button,
   Field,
+  ErrorBoundary,
 } = getComponents();
 
 
@@ -32,6 +34,10 @@ export default class CoreForm extends Component {
     id: PropTypes.string,
     i18nFieldPrefix: PropTypes.string,
     fields: PropTypes.arrayOf(PropTypes.shape(Field.propTypes)),
+    /**
+     * Для передачи в onSubmit
+     */
+    formData: PropTypes.object,
     onChangeField: PropTypes.func,
     isValid: PropTypes.oneOfType([
       PropTypes.bool,
@@ -51,12 +57,27 @@ export default class CoreForm extends Component {
 
     actionStatus: ACTION_STATUS_PROPS,
     textActionSuccess: PropTypes.node,
+
+    /**
+     * default - FormLayout
+     props:
+       id
+       inModal
+
+       fields
+       actions
+       postActions
+       actionStatus
+     */
+    Layout: PropTypes.any,
   };
 
   static defaultProps = {
+    Layout: FormLayout,
     textActionSubmit: i18n('components.CoreForm.textActionSubmit'),
     textActionCancel: i18n('components.CoreForm.textActionCancel'),
-    useForm: false,
+    // useForm: false,
+    useForm: true,
   };
 
   domForm = null;
@@ -100,6 +121,7 @@ export default class CoreForm extends Component {
     const {
       onSubmit,
       useForm,
+      formData,
     } = this.props;
 
     // если <form>
@@ -109,7 +131,7 @@ export default class CoreForm extends Component {
     }
 
     if (this.isValid()) {
-      return onSubmit && onSubmit(event);
+      return onSubmit && onSubmit(formData);
     }
     return false;
   }
@@ -124,6 +146,7 @@ export default class CoreForm extends Component {
       label,
       textPlaceholder,
       textHint,
+      textDescription,
       onChange,
       value,
     } = field;
@@ -138,26 +161,30 @@ export default class CoreForm extends Component {
     }
     const placeholder = textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`, {}, '', ''));
     const hint = textHint || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.hint`, {}, '', ''));
+    const textDescriptionFinal = textDescription || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.description`, {}, '', ''));
 
     return (
-      <Field
-        { ...field }
-        controlRef={ this.controlRef }
-        value={ value }
-        key={ name }
-        className={ `${this.bem('field')} ${className || ''}` }
-        label={ labelFinal }
-        textPlaceholder={ placeholder }
-        textHint={ hint }
-        onChange={
-          onChange
-          || (
-            onChangeField
-            ? (fieldName, newValue) => onChangeField({ [name]: newValue })
-            : undefined
-          )
-        }
-      />
+      <ErrorBoundary key={ name }>
+        <Field
+          { ...field }
+          controlRef={ this.controlRef }
+          value={ value }
+          key={ name }
+          className={ `${this.bem('field')} ${className || ''}` }
+          label={ labelFinal }
+          textPlaceholder={ placeholder }
+          textHint={ hint }
+          textDescription={ textDescriptionFinal }
+          onChange={
+            onChange
+            || (
+              onChangeField
+              ? (fieldName, newValue) => onChangeField({ [name]: newValue })
+              : undefined
+            )
+          }
+        />
+      </ErrorBoundary>
     );
   }
 
@@ -240,10 +267,11 @@ export default class CoreForm extends Component {
       useForm,
       textActionSuccess,
       actionStatus,
+      Layout,
     } = this.props;
 
     let component = (
-      <FormLayout
+      <Layout
         id={ id }
         inModal={ inModal }
 

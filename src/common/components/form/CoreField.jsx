@@ -55,6 +55,7 @@ export default class CoreField extends PureComponent {
     constraints: {},
     textOnAdd: '@@ Добавить',
     textOnRemove: undefined,
+    Layout: FieldLayout,
   };
 
   state = {
@@ -712,12 +713,15 @@ export default class CoreField extends PureComponent {
       // constraints,
 
       className,
+      textDescription,
 
       onAdd,
       textOnAdd,
       onRemove,
       textOnRemove,
       required: propsRequired,
+
+      Layout,
     } = this.props;
     const {
       errors,
@@ -740,12 +744,16 @@ export default class CoreField extends PureComponent {
     const hasMax = multiple && multipleMaxSize !== null && multipleMaxSize <= values.length;
 
     return (
-      <FieldLayout
-        className={ `CoreField ${className || ''}` }
-        label={ this.renderLabel() }
-        required={ required || propsRequired }
+      <Layout
         key={ name }
+
+        className={ `CoreField ${className || ''}` }
+
+        label={ this.renderLabel() }
+        textDescription={ textDescription }
         errors={ errors }
+
+        required={ required || propsRequired }
         touched={ touched }
       >
         {
@@ -780,7 +788,7 @@ export default class CoreField extends PureComponent {
             </Button>
           </div>
         ) }
-      </FieldLayout>
+      </Layout>
     );
   }
 }

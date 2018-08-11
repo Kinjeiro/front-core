@@ -66,6 +66,7 @@ export default class Signup extends Component {
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
     emailAsLogin: PropTypes.bool,
+    formProps: PropTypes.object,
 
     // ======================================================
     // @reduxSimpleForm
@@ -181,6 +182,7 @@ export default class Signup extends Component {
       onUpdateForm,
       onModalCancel,
       onEnterTypeChange,
+      formProps,
     } = this.props;
 
     return (
@@ -212,6 +214,7 @@ export default class Signup extends Component {
         textActionCancel={ i18n('core:pages.SignupPage.cancelButton') }
 
         actionStatus={ actionSignupStatus }
+        { ...formProps }
       />
     );
   }
