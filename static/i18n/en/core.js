@@ -150,5 +150,9 @@ module.exports = {
     CoreSelect: {
       placeholder: 'Choice option...',
     },
+    ErrorBoundary: {
+      header: 'Error occurs',
+      refreshButton: 'Refresh',
+    },
   },
 };

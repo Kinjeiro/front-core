@@ -3,3 +3,13 @@
 body {
   height: 100vh;
 }
+
+a {
+  /* ссылка будет блокирована */
+  &:disabled,
+  &[disabled] {
+    pointer-events: none; /* ie11+ support */
+    cursor: default;
+    opacity: 0.5;
+  }
+}

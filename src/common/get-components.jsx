@@ -4,6 +4,8 @@ import React from 'react';
 let CB = null;
 
 export function initComponents(COMPONENTS_BASE) {
+  require('./app-style/init.css');
+
   // ======================================================
   // FORM UI
   // ======================================================
@@ -36,6 +38,7 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   COMPONENTS_BASE.replace('ActionStatus', () => require('./components/ActionStatus/ActionStatus').default);
   COMPONENTS_BASE.replace('Modal', () => require('./components/CoreModal/CoreModal').default);
+  COMPONENTS_BASE.replace('ErrorBoundary', () => require('./components/ErrorBoundary/ErrorBoundary').default);
   COMPONENTS_BASE.replace('ListItem', () => require('./components/ListItem/ListItem').default);
   COMPONENTS_BASE.replace('Loading', () => require('./components/Loading/Loading').default);
   COMPONENTS_BASE.replace('MediaQuery', () => require('./components/MediaQuery/MediaQuery').default);
