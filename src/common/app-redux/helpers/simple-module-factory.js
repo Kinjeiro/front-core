@@ -1,3 +1,5 @@
+import merge from 'lodash/merge';
+
 import { objectValues } from '../../utils/common';
 import {
   createReducer,
@@ -100,20 +102,26 @@ export default function simpleModuleFactory(
       // а если уже загружаем уже существующие то uuid = serverId
       result[FIELD_ACTION_UUID] = id;
       if (typeof data !== 'undefined') {
-        result.data = data;
+        merge(result.data, data);
       }
     }
     result.initialized = true;
     return result;
   }
 
-  function initModuleItem(state, action, data) {
+  function initModuleItem(state, action, data = null) {
     // todo @ANKU @LOW - вынести это в action, добавить селектор и force
     const moduleItem = state[action[FIELD_ACTION_UUID]];
 
     // если существует ничего не нужно делать
     return moduleItem
-      ? state
+      ? data !== null
+        ? merge({}, state, {
+          [action[FIELD_ACTION_UUID]]: {
+            data,
+          },
+        })
+        : state
       : {
         ...state,
         [action[FIELD_ACTION_UUID]]: createModuleItem(action[FIELD_ACTION_UUID], data, action),

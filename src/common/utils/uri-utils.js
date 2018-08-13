@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import pathLib from 'path';
 import forOwn from 'lodash/forOwn';
+import merge from 'lodash/merge';
 import queryString from 'query-string';
 
 import { convertToString } from './common';
@@ -277,4 +278,12 @@ export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes 
   }
 
   return joinPath('/', prefix, relativeLocation);
+}
+
+export function updateLocationQueryParams(newQueryParams) {
+  if (typeof window !== 'undefined' && window.history.pushState) {
+    const params = parseUrlParameters(window.location.href);
+    merge(params, newQueryParams);
+    window.history.pushState('', '', `?${formatUrlParameters(params)}`);
+  }
 }

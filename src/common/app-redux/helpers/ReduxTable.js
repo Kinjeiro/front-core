@@ -1,9 +1,12 @@
 import uniq from 'lodash/uniq';
+import omit from 'lodash/omit';
 
 import {
   deepEquals,
   merge,
 } from '../../utils/common';
+import { updateLocationQueryParams } from '../../utils/uri-utils';
+import { DEFAULT_META } from '../../models/model-table';
 import { applyPatchOperations } from '../../utils/api-utils';
 
 import createStatusReducer from './create-status-reducer';
@@ -21,14 +24,7 @@ export default class ReduxTable extends ReduxUni {
     return {
       ...super.getInitialState(),
       records: [],
-      meta: {
-        search: undefined,
-        startPage: 0,
-        itemsPerPage: 10,
-        sortBy: undefined,
-        sortDesc: true,
-        total: undefined,
-      },
+      meta: DEFAULT_META,
       filters: {
         // field: value
       },
@@ -153,7 +149,7 @@ export default class ReduxTable extends ReduxUni {
             filters: currentFilters,
           } = state;
 
-          const newMeta = (meta === null || meta === false)
+          let newMeta = (meta === null || meta === false)
             ? initialMeta
             : meta
               ? merge({}, currentMeta, meta)
@@ -164,12 +160,33 @@ export default class ReduxTable extends ReduxUni {
               ? merge({}, currentFilters, filters)
               : currentFilters;
 
+          const hasFiltersChanged = !deepEquals(newFilters, currentFilters);
+
           if (
             forceUpdate
             || (!actionLoadRecordsStatus.isLoaded && !actionLoadRecordsStatus.isFetching)
             || !deepEquals(newMeta, currentMeta)
-            || !deepEquals(newFilters, currentFilters)
+            || hasFiltersChanged
           ) {
+            if (
+              newMeta.itemsPerPage !== currentMeta.itemsPerPage
+              || newMeta.sortBy !== currentMeta.sortBy
+              || newMeta.sortDesc !== currentMeta.sortDesc
+              || newMeta.search !== currentMeta.search
+              || hasFiltersChanged
+            ) {
+              // если меняется нужно страницу сбрасывать
+              newMeta = {
+                ...newMeta,
+                startPage: 0,
+              };
+            }
+
+            updateLocationQueryParams({
+              ...omit(newMeta, 'total'),
+              filters: newFilters,
+            });
+
             return dispatch({
               [FIELD_UUID]: tableUuid,
               meta: newMeta,
