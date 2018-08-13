@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.4.16 | Documentation</title>
+  <title>@reagentum/front-core 1.4.17 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.4.16</code></div>
+          <div class='mb1'><code>1.4.17</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -6839,7 +6839,7 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 Автоматически инициализирует в redux store под tables свои данные и при выходе их очищает</p>
 
 
-  <div class='pre p1 fill-light mt0'>reduxTableDecorator(tableId: any, clearOnUnmount: any)</div>
+  <div class='pre p1 fill-light mt0'>reduxTableDecorator(tableId: any, $1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, loadOnMount: any, clearOnUnmount: any, initMeta: any, initFilters: any, tableActions: any)</div>
   
   
 
@@ -6858,6 +6858,89 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
           <div>
             <span class='code bold'>tableId</span> <code class='quiet'>(any)</code>
 	    айди таблицы, или функция (props) => id
+<p>Options:</p>
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.loadOnMount</span> <code class='quiet'>any</code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.clearOnUnmount</span> <code class='quiet'>any</code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.initMeta</span> <code class='quiet'>any</code>
+  
+    (default <code>{}</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.initFilters</span> <code class='quiet'>any</code>
+  
+    (default <code>{}</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.tableActions</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>loadOnMount</span> <code class='quiet'>(any)</code>
+	    запускать загрузку данных при маунте
 
           </div>
           
@@ -6867,9 +6950,40 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
           <div>
             <span class='code bold'>clearOnUnmount</span> <code class='quiet'>(any)</code>
 	    очищать ли данные, когда компонент unmount
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>initMeta</span> <code class='quiet'>(any)</code>
+	    (объект или функция от props) - начальная мета, которая будет перезаписана из урл параметров
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>initFilters</span> <code class='quiet'>(any)</code>
+	    (объект или функция от props) - начальный фильтры
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>tableActions</span> <code class='quiet'>(any)</code>
+	    actions чтобы можно было запускать тут load 
+\
+ они все передадуться в пропсы (можно в @connect не передавать
 <p>Возвращает компонент с доп пропертями:</p>
 <ul>
 <li>table - текущая данные таблицы</li>
+<li>initMeta - начальная мета из options и урла</li>
+<li>initFilters - начальный фильтры из options и урла</li>
 </ul>
 
           </div>

@@ -960,8 +960,20 @@ Returns **({method, path, payload} | any)**
 
 **Parameters**
 
--   `tableId`  айди таблицы, или функция (props) => id
--   `clearOnUnmount`  очищать ли данные, когда компонент unmountВозвращает компонент с доп пропертями:-   table - текущая данные таблицы
+-   `tableId`  айди таблицы, или функция (props) => idOptions:
+-   `$1` **[Object][146]**  (optional, default `{}`)
+    -   `$1.loadOnMount`   (optional, default `true`)
+    -   `$1.clearOnUnmount`   (optional, default `true`)
+    -   `$1.initMeta`   (optional, default `{}`)
+    -   `$1.initFilters`   (optional, default `{}`)
+    -   `$1.tableActions`  
+-   `loadOnMount`  запускать загрузку данных при маунте
+-   `clearOnUnmount`  очищать ли данные, когда компонент unmount
+-   `initMeta`  (объект или функция от props) - начальная мета, которая будет перезаписана из урл параметров
+-   `initFilters`  (объект или функция от props) - начальный фильтры
+-   `tableActions`  actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect не передаватьВозвращает компонент с доп пропертями:-   table - текущая данные таблицы
+    -   initMeta - начальная мета из options и урла
+    -   initFilters - начальный фильтры из options и урла
 
 ## titledDecorator
 
