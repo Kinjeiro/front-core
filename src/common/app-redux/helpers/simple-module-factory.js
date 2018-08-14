@@ -102,7 +102,7 @@ export default function simpleModuleFactory(
       // а если уже загружаем уже существующие то uuid = serverId
       result[FIELD_ACTION_UUID] = id;
       if (typeof data !== 'undefined') {
-        merge(result.data, data);
+        result.data = merge({}, result.data, data);
       }
     }
     result.initialized = true;

@@ -24,7 +24,7 @@ export default class ReduxTable extends ReduxUni {
     return {
       ...super.getInitialState(),
       records: [],
-      meta: DEFAULT_META,
+      meta: { ...DEFAULT_META },
       filters: {
         // field: value
       },
@@ -154,6 +154,8 @@ export default class ReduxTable extends ReduxUni {
             : meta
               ? merge({}, currentMeta, meta)
               : currentMeta;
+          newMeta = omit(newMeta, 'total');
+
           const newFilters = (filters === null || filters === false)
             ? {}
             : filters
@@ -165,7 +167,7 @@ export default class ReduxTable extends ReduxUni {
           if (
             forceUpdate
             || (!actionLoadRecordsStatus.isLoaded && !actionLoadRecordsStatus.isFetching)
-            || !deepEquals(newMeta, currentMeta)
+            || !deepEquals(newMeta, omit(currentMeta, 'total'))
             || hasFiltersChanged
           ) {
             if (
@@ -183,7 +185,7 @@ export default class ReduxTable extends ReduxUni {
             }
 
             updateLocationQueryParams({
-              ...omit(newMeta, 'total'),
+              ...newMeta,
               filters: newFilters,
             });
 

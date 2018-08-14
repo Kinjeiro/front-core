@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import merge from 'lodash/merge';
-import omit from 'lodash/omit';
+// import omit from 'lodash/omit';
 
 import {
   generateId,
@@ -102,7 +102,7 @@ export default function reduxTableDecorator(
           },
         );
         updateLocationQueryParams({
-          ...omit(initMeta, 'total'),
+          ...initMeta,
           filters: initFilters,
         });
 
@@ -113,6 +113,15 @@ export default function reduxTableDecorator(
         if (loadOnMount && actionLoadRecords) {
           actionLoadRecords(TABLE_ID);
         }
+      }
+      componentWillReceiveProps(newProps) {
+        const {
+          initMeta,
+          initFilters,
+          actionLoadRecords,
+        } = newProps;
+
+        actionLoadRecords(executeVariable(tableId, null, this.props), initMeta, initFilters);
       }
       componentWillUnmount() {
         if (clearOnUnmount) {

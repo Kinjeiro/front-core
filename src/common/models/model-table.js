@@ -51,8 +51,8 @@ export const TABLE_PROP_TYPE_MAP = {
 export const TABLE_PROP_TYPE = PropTypes.shape(TABLE_PROP_TYPE_MAP);
 
 export const DEFAULT_META = {
-  search: undefined,
-  sortBy: undefined,
+  search: '',
+  sortBy: null,
   sortDesc: true,
 
   startPage: 0,
@@ -62,9 +62,9 @@ export const DEFAULT_META = {
 
 export function getMeta(query, defaultMeta = {}) {
   return {
-    search: query.search,
+    search: query.search || defaultMeta.search || DEFAULT_META.search,
 
-    sortBy: query.sortBy || defaultMeta.sortBy,
+    sortBy: query.sortBy || defaultMeta.sortBy || DEFAULT_META.sortBy,
     sortDesc: query.sortDesc
       ? query.sortDesc === true || query.sortDesc === 'true'
       : typeof defaultMeta.sortDesc !== 'undefined'
@@ -85,6 +85,13 @@ export function getMeta(query, defaultMeta = {}) {
       ? parseInt(query.total, 10)
       : defaultMeta.total,
   };
+}
+
+function searchInValue(value, search) {
+  if (Array.isArray(value)) {
+    return value.some((item) => searchInValue(item, search));
+  }
+  return `${value}`.toLowerCase().indexOf(search.toLowerCase()) >= 0;
 }
 
 export function filterAndSortDb(mockDb, query, searchFields = []) {
@@ -112,9 +119,9 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
 
   // search
   if (search) {
-    searchFields.forEach((searchField) => {
-      result = result.filter((object) => object[searchField].indexOf(search) >= 0);
-    });
+    result = result.filter((object) =>
+      searchFields.some((searchField) =>
+        searchInValue(object[searchField], search)));
   }
 
   // pagination
