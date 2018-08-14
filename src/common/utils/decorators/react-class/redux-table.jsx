@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import merge from 'lodash/merge';
 // import omit from 'lodash/omit';
 
@@ -11,7 +12,7 @@ import {
 } from '../../common';
 import {
   parseUrlParameters,
-  updateLocationQueryParams,
+  updateLocationSearch,
 } from '../../uri-utils';
 import {
   getMeta,
@@ -71,6 +72,7 @@ export default function reduxTableDecorator(
         actionModuleItemRemove,
         actionClearFilters,
         ...tableActions,
+        actionPushState: push,
       },
     )
     class ExtendedComponent extends Component {
@@ -82,15 +84,20 @@ export default function reduxTableDecorator(
         actionModuleItemRemove: PropTypes.func,
         actionClearFilters: PropTypes.func,
         actionLoadRecords: PropTypes.func,
+
+        location: PropTypes.object,
+        actionPushState: PropTypes.func,
       };
 
       componentWillMount() {
         const {
+          location,
           initMeta,
           initFilters,
           actionModuleItemInit,
           actionLoadRecords,
           // actionClearFilters,
+          actionPushState,
         } = this.props;
 
         const TABLE_ID = executeVariable(tableId, null, this.props);
@@ -101,10 +108,6 @@ export default function reduxTableDecorator(
             filters: initFilters,
           },
         );
-        updateLocationQueryParams({
-          ...initMeta,
-          filters: initFilters,
-        });
 
         // if (clearOnMount) {
         //   actionClearFilters(TABLE_ID);
@@ -112,6 +115,17 @@ export default function reduxTableDecorator(
 
         if (loadOnMount && actionLoadRecords) {
           actionLoadRecords(TABLE_ID);
+        } else {
+          // если не загружаем, то вручную обновим урл
+          actionPushState({
+            ...location,
+            search: updateLocationSearch(
+              location.search,
+              {
+                ...initMeta,
+                filters: initFilters,
+              }),
+          });
         }
       }
       componentWillReceiveProps(newProps) {

@@ -1,11 +1,12 @@
 import uniq from 'lodash/uniq';
 import omit from 'lodash/omit';
+import { push } from 'react-router-redux';
 
 import {
   deepEquals,
   merge,
 } from '../../utils/common';
-import { updateLocationQueryParams } from '../../utils/uri-utils';
+import { updateLocationSearch } from '../../utils/uri-utils';
 import { DEFAULT_META } from '../../models/model-table';
 import { applyPatchOperations } from '../../utils/api-utils';
 
@@ -184,10 +185,17 @@ export default class ReduxTable extends ReduxUni {
               };
             }
 
-            updateLocationQueryParams({
-              ...newMeta,
-              filters: newFilters,
-            });
+            dispatch(
+              push({
+                ...location,
+                search: updateLocationSearch(
+                  location.search,
+                  {
+                    ...newMeta,
+                    filters: newFilters,
+                  }),
+              }),
+            );
 
             return dispatch({
               [FIELD_UUID]: tableUuid,

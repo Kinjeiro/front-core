@@ -280,10 +280,13 @@ export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes 
   return joinPath('/', prefix, relativeLocation);
 }
 
-export function updateLocationQueryParams(newQueryParams) {
+export function updateLocationSearch(url, newQueryParams) {
+  const params = parseUrlParameters(url);
+  merge(params, newQueryParams);
+  return `?${formatUrlParameters(params)}`;
+}
+export function updateWindowLocationQueryParams(newQueryParams) {
   if (typeof window !== 'undefined' && window.history.pushState) {
-    const params = parseUrlParameters(window.location.href);
-    merge(params, newQueryParams);
-    window.history.pushState('', '', `?${formatUrlParameters(params)}`);
+    window.history.pushState('', '', updateLocationSearch(window.location.href, newQueryParams));
   }
 }
