@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.4.19 | Documentation</title>
+  <title>@reagentum/front-core 1.4.20 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.4.19</code></div>
+          <div class='mb1'><code>1.4.20</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -650,6 +650,36 @@
                   href='#controlref'
                   class="">
                   controlRef
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#controlclass'
+                  class="">
+                  controlClass
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#render'
+                  class="">
+                  render
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#parseoutvalue'
+                  class="">
+                  parseOutValue
                   
                 </a>
                 
@@ -4830,6 +4860,148 @@ required,</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='controlclass'>
+      controlClass
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Класс - замена стандартному для контрола</p>
+
+
+  <div class='pre p1 fill-light mt0'>controlClass</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='render'>
+      render
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Замена стандартной отрисовки
+(controlPropsFinal, fieldProps) => node</p>
+
+
+  <div class='pre p1 fill-light mt0'>render</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='parseoutvalue'>
+      parseOutValue
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(value, fieldProps, index) => parsedValue</p>
+
+
+  <div class='pre p1 fill-light mt0'>parseOutValue</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='instancechange'>
       instanceChange
     </h3>
@@ -6839,7 +7011,7 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 Автоматически инициализирует в redux store под tables свои данные и при выходе их очищает</p>
 
 
-  <div class='pre p1 fill-light mt0'>reduxTableDecorator(tableId: any, $1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, loadOnMount: any, clearOnUnmount: any, initMeta: any, initFilters: any, tableActions: any)</div>
+  <div class='pre p1 fill-light mt0'>reduxTableDecorator(tableId: any, $1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, loadOnMount: any, loadOnChange: any, clearOnUnmount: any, initMeta: any, initFilters: any, tableActions: any, useLoading: any)</div>
   
   
 
@@ -6895,6 +7067,16 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 
               
                 <tr>
+  <td class='break-word'><span class='code bold'>$1.loadOnChange</span> <code class='quiet'>any</code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
   <td class='break-word'><span class='code bold'>$1.clearOnUnmount</span> <code class='quiet'>any</code>
   
     (default <code>true</code>)
@@ -6932,6 +7114,16 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 
 
               
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.useLoading</span> <code class='quiet'>any</code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
             </tbody>
           </table>
           
@@ -6940,7 +7132,16 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>loadOnMount</span> <code class='quiet'>(any)</code>
-	    запускать загрузку данных при маунте
+	    запускать загрузку данных при маунте (componentWillMount)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>loadOnChange</span> <code class='quiet'>(any)</code>
+	    если изменилась мета или фильтры - запускает загрузку в componentWillReceiveProps
 
           </div>
           
@@ -6949,7 +7150,7 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>clearOnUnmount</span> <code class='quiet'>(any)</code>
-	    очищать ли данные, когда компонент unmount
+	    очищать ли данные, когда компонент unmount (componentWillUnmount)
 
           </div>
           
@@ -6979,9 +7180,19 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 	    actions чтобы можно было запускать тут load 
 \
  они все передадуться в пропсы (можно в @connect не передавать
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>useLoading</span> <code class='quiet'>(any)</code>
+	    использовать лоадинг для первоначальной загрузки
 <p>Возвращает компонент с доп пропертями:</p>
 <ul>
 <li>table - текущая данные таблицы</li>
+<li>tableId - id таблицы, удобно если он зависит от пропсов</li>
 <li>initMeta - начальная мета из options и урла</li>
 <li>initFilters - начальный фильтры из options и урла</li>
 </ul>
@@ -8327,7 +8538,7 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>url</span> <code class='quiet'>(any)</code>
-	    либо мапа параметров либо стринга
+	    либо объект location, либо мапа параметров, либо стринга
 
           </div>
           
