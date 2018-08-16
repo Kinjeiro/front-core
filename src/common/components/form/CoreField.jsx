@@ -28,6 +28,7 @@ import {
 import getCb from '../../get-components';
 
 const CB = getCb();
+const { FieldLayout } = CB;
 
 export default class CoreField extends PureComponent {
   static TYPES = TYPES;
@@ -41,7 +42,7 @@ export default class CoreField extends PureComponent {
     constraints: {},
     textOnAdd: '@@ Добавить',
     textOnRemove: undefined,
-    // Layout: FieldLayout,
+    Layout: FieldLayout,
   };
 
   state = {
