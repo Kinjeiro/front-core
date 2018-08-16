@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
    Перенес все что связано с авторизацией пока в отдельный псевдомодуль ```/src/modules/module-auth```
    Изменил роутинг с ```/login``` на ```/auth/signin``` и кое-где классы для компонентов -
    Поэтому проверьте у себя, чтобы ничего не отвалилось в авторизации
-1. Добавил /src/components/ComponentsBase - место отложенной инициализации компонентов. 
+
+2. Добавил /src/components/ComponentsBase - место отложенной инициализации компонентов. 
 Убрал из ```create-routes``` определение классов компонентов
 Если хотите их заменить, то инициализируйте в ComponentsBase:
 ```
@@ -20,7 +21,13 @@ LoginPageComponentClass -> Signin в ComponentsBase
 ModalLoginPageComponentClass -> Signin в ComponentsBase
 ```
 Инициализация происходит через ClientRunner::initComponents(COMPONENTS_BASE)
-   
+
+3. ```ReduxTable::actionLoadRecords``` при подачи фильтров - затирает их новым значением (а не мержит со старыми, как это было раньше)
+
+4. Декоратор ```redux-table``` - теперь по умолчанию загружает данные при моунте, перегружает их при recieve props и рисует Loading пока не загрузится
+Если нужно что-то изменить есть для него настройки
+    
+    
 ### API Dependencies:
     + ServiceAuth - @reagentum/auth-server@1.0.4
 
@@ -31,9 +38,84 @@ ModalLoginPageComponentClass -> Signin в ComponentsBase
 
 ### Features:
 1.  OAuth авторизация с регистрацией и сбросом пароля через почту
-2.  ComponentsBase - для переопределения и поздней инициализации всех компонентов
+2.  ComponentsBase - для переопределения и поздней инициализации всех компонентов (методы replace, wrap, addClassName, addCallback)
+3.  Компоненты для форм: Form и Field и лайуты для них FormLayout и FieldLayout (чтобы удобнее переопределять).
+    - начальная стилизация через reset.css
+    - базовые компоненты
+    - валидация (+ html5 валидация)
+4.  Убновленный ReduxTable и его декоратор redux-table - синхронизация меты с урлом и избавления от рутины методов
 
 ### Commits:
+    - feat(redux, table): - ReduxTable::actionLoadRecords при подачи фильтров - затирает их новым значением (а не мержит со старыми, как это было раньше)
+        \\ Декоратор redux-table теперь по умолчанию загружает данные при моунте, перегружает их при recieve props и рисует Loading пока не загрузится (есть настройкт)
+    - feat(Field): - новые методы кастомные render(controlPropsFinal, fieldProps) и controlClass
+        \\ parseOutValue(value, fieldProps, index) - парсинг перед сохранением значения
+        \\ новый тип TYPES.CUSTOM для общего формирования пропертей и передачи в кастомные render или controlClass
+    - feat(utils): - tree-utils::findPath
+        \\ мелкие доработки утилит
+    - chore(*) patch version: 1.4.19
+    - bug(redux-table): - redux location не обновлялось - перевел все на react-redux-router::push (push state)
+    - chore(*) patch version: 1.4.18
+    - bug(redux-table): - проблема с поиском search для моков
+        \\ сброс меты если урл изменился при componentWillReceiveProps
+    - chore(*) patch version: 1.4.17
+    - feat(redux-table): - добавил возможность указывать initMeta, initFilters
+        \\ добавил синхронизацию meta с url query
+        \\ startPage сбрасывается при изменении меты или фильтров
+        \\ пофиксил багу при actionInitModule когда передавали data
+    - chore(*) patch version: 1.4.16
+    - feat(Field): - textDescription
+    - feat(css): - вынес инит компонентов
+        \\ ErrorBoundary - для отловли ошибок
+    - chore(*) patch version: 1.4.15
+    - feat(Link): - Link disabled теперь ссылка не доступна
+    - feat(cb): - обновил компоненты
+        \\ добавил контейнеры
+    - chore(webpack): - добавил исключение авторизации для /hot - dev hot reload
+    - chore(*) patch version: 1.4.14
+    - bug(webpack): - на локалхосте нужно проксировать не только ассеты но hot reload запрос. Вынес их под префикс hot
+    - feat(cb, auth): - добавил к auth submit кнопке primary
+    - chore(*) patch version: 1.4.13
+    - feat(sass): - попытка пробросить переменный для sass
+    - feat(cb): - обновил компонентный корные
+    - bug(build): - убрал лишнее проксирование, которое допустимо только на статической сборке
+    - bug(auth): - неправильно искался мокированный юзер
+    - chore(*) patch version: 1.4.12
+    - feat(auth): - после сброса автоматически логин и переход на индекс страницу
+    - bug(cb): - оптимизация и унификация вызова компонентов
+        \\ запрет на вызов /containers/index.js
+    - feat(auth, server): - ServerRunner::noNeedCredentialsPageMatcher чтобы определять куски где можно просматривать страницы без авторизации
+    - bug(mock, auth): - если emailAsLogin искать по почте у тестового пользователя
+    - chore(*) patch version: 1.4.11
+    - bug(CB): - необходимо загружать сначала старые классы, а потом новые до рендера
+    - bug(Auth, Signup): - описка забыл static для defaultProps
+    - feat(CB, Modal): - модалка закрывается по клику вне и по ESC
+    - chore(eslint): - добавил разграничение по eslint для серверного и клиенского кода (по умолчанию)
+    - chore(*) patch version: 1.4.10
+    - bug(Form): - исправил ошибки в валидации (добавил checkValidity для ref dom контролов)
+    - bug(Auth): - подправил ошибку в стилях
+    - bug(CB): - постоянная перезагрузка элементов из-за расчета нового класса, сделал мемоизацию
+    - chore(*) patch version: 1.4.9
+    - bug(form): - фикс расчета валидации для формы
+    - feat(components, Modal): - компонент модальное + сделал со скроллингом
+    - bug(auth, clientApi, contextPath): - при повторном запросе на авторизацию добавлялся лишний contextPath
+    - chore(build): - вывод переменных для appStyles
+    - bug(auth, Signin): - описка required
+    - chore(*) patch version: 1.4.8
+    - feat(form): - валидация
+    - chore(*) patch version: 1.4.7
+    - feat(cb, form): - добавил к форме id - чтобы можно было удобно врапить ее через CB
+    - chore(*) patch version: 1.4.6
+    - bug(cb): - инициализация CB при серверном рендеринге
+    - chore(*) patch version: 1.4.5
+    - feat(cb): - инициализация компонентов в CliernRunner::initComponents(COMPONENTS_BASE)
+    - chore(*) patch version: 1.4.4
+    - feat(form): - добавил фикс по форме
+        \\ добавил BINARY - Attachment
+    - feat(auth): - переименовал пропсу в inModal
+    - chore(*) patch version: 1.4.3
+    - feat(auth): - Разбил auth на компоненты AuthPageLayout \ AuthFormLayout \ AuthEnter (для переключения Signin Signup на странице и в модалке)
+    - feat(ComponentsBase): - добавил методы wrap и addClassName
     - chore(*) patch version: 1.4.2
     - feat(i18n, auth) - локализация для auth
     - !!! feat(components): - перевел определение всех компонентов (NoticeComponentClass, LoginPageComponentClass, ModalLoginPageComponentClass) на CB

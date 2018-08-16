@@ -1,13 +1,22 @@
 import uniq from 'lodash/uniq';
 import omit from 'lodash/omit';
-import { push } from 'react-router-redux';
+import {
+  push,
+  replace as replaceLocation,
+} from 'react-router-redux';
 
 import {
   deepEquals,
   merge,
 } from '../../utils/common';
-import { updateLocationSearch } from '../../utils/uri-utils';
-import { DEFAULT_META } from '../../models/model-table';
+import {
+  parseUrlParameters,
+  formatUrlParameters,
+} from '../../utils/uri-utils';
+import {
+  DEFAULT_META,
+  getMeta,
+} from '../../models/model-table';
 import { applyPatchOperations } from '../../utils/api-utils';
 
 import createStatusReducer from './create-status-reducer';
@@ -134,7 +143,7 @@ export default class ReduxTable extends ReduxUni {
     if (apiLoadRecords) {
       const initialMeta = this.getInitialState().meta;
 
-      actions.actionLoadRecords = (tableUuid, meta = undefined, filters = undefined, forceUpdate = false) => {
+      actions.actionLoadRecords = (tableUuid, meta = undefined, filters = undefined, forceUpdate = false, isReplaceLocation = false) => {
         // return {
         //   types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
         //   uuid: tableUuid,
@@ -160,7 +169,9 @@ export default class ReduxTable extends ReduxUni {
           const newFilters = (filters === null || filters === false)
             ? {}
             : filters
-              ? merge({}, currentFilters, filters)
+              // неясно как перезаписывать фильтры, поэтому всегда будут перезаписываться, чтобы удобно было брать из query
+              // ? merge({}, currentFilters, filters)
+              ? filters
               : currentFilters;
 
           const hasFiltersChanged = !deepEquals(newFilters, currentFilters);
@@ -168,8 +179,8 @@ export default class ReduxTable extends ReduxUni {
           if (
             forceUpdate
             || (!actionLoadRecordsStatus.isLoaded && !actionLoadRecordsStatus.isFetching)
-            || !deepEquals(newMeta, omit(currentMeta, 'total'))
             || hasFiltersChanged
+            || !deepEquals(newMeta, omit(currentMeta, 'total'))
           ) {
             if (
               newMeta.itemsPerPage !== currentMeta.itemsPerPage
@@ -185,17 +196,22 @@ export default class ReduxTable extends ReduxUni {
               };
             }
 
-            dispatch(
-              push({
-                ...location,
-                search: updateLocationSearch(
-                  location.search,
-                  {
-                    ...newMeta,
-                    filters: newFilters,
-                  }),
-              }),
-            );
+            const currentUrlQuery = parseUrlParameters(location.search);
+            // обновляем location только если что-то поменялось
+            if (!deepEquals(newFilters, currentUrlQuery.filters) || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))) {
+              // todo @ANKU @LOW - вынести этот механизм проверки наверх (или в другой редукс), чтобы никто не мог менять если ничего не изменилось
+              const queryFinal = merge(currentUrlQuery, {
+                ...newMeta,
+                filters: newFilters,
+              });
+
+              dispatch(
+                (isReplaceLocation ? replaceLocation : push)({
+                  ...location,
+                  search: `?${formatUrlParameters(queryFinal)}`,
+                }),
+              );
+            }
 
             return dispatch({
               [FIELD_UUID]: tableUuid,

@@ -1,5 +1,9 @@
 import PropTypes from 'prop-types';
-import { objectValues } from '../utils/common';
+import {
+  objectValues,
+  includes,
+} from '../utils/common';
+import { parseUrlParameters } from '../utils/uri-utils';
 
 import ID_PROP_TYPE from './model-id';
 import ACTION_STATUS_PROP_TYPE from './model-action-status';
@@ -61,28 +65,30 @@ export const DEFAULT_META = {
 };
 
 export function getMeta(query, defaultMeta = {}) {
-  return {
-    search: query.search || defaultMeta.search || DEFAULT_META.search,
+  const queryFinal = parseUrlParameters(query);
 
-    sortBy: query.sortBy || defaultMeta.sortBy || DEFAULT_META.sortBy,
-    sortDesc: query.sortDesc
-      ? query.sortDesc === true || query.sortDesc === 'true'
+  return {
+    search: queryFinal.search || defaultMeta.search || DEFAULT_META.search,
+
+    sortBy: queryFinal.sortBy || defaultMeta.sortBy || DEFAULT_META.sortBy,
+    sortDesc: queryFinal.sortDesc
+      ? queryFinal.sortDesc === true || queryFinal.sortDesc === 'true'
       : typeof defaultMeta.sortDesc !== 'undefined'
         ? defaultMeta.sortDesc
         : DEFAULT_META.sortDesc,
 
-    startPage: query.startPage
-      ? parseInt(query.startPage, 10)
+    startPage: queryFinal.startPage
+      ? parseInt(queryFinal.startPage, 10)
       : typeof defaultMeta.startPage !== 'undefined'
         ? defaultMeta.startPage
         : DEFAULT_META.startPage,
-    itemsPerPage: query.itemsPerPage
-      ? parseInt(query.itemsPerPage, 10)
+    itemsPerPage: queryFinal.itemsPerPage
+      ? parseInt(queryFinal.itemsPerPage, 10)
       : typeof defaultMeta.itemsPerPage !== 'undefined'
         ? defaultMeta.itemsPerPage
         : DEFAULT_META.itemsPerPage,
-    total: query.total
-      ? parseInt(query.total, 10)
+    total: queryFinal.total
+      ? parseInt(queryFinal.total, 10)
       : defaultMeta.total,
   };
 }
@@ -114,7 +120,8 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
   // filters
   if (filters) {
     result = result.filter((record) =>
-      Object.keys(filters).every((filterKey) => record[filterKey] === filters[filterKey]));
+      Object.keys(filters).every((filterKey) =>
+        includes(filters[filterKey], record[filterKey], false, true)));
   }
 
   // search
