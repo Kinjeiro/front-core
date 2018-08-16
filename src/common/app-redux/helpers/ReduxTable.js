@@ -13,11 +13,13 @@ import {
   parseUrlParameters,
   formatUrlParameters,
 } from '../../utils/uri-utils';
+import { applyPatchOperations } from '../../utils/api-utils';
 import {
   DEFAULT_META,
   getMeta,
 } from '../../models/model-table';
-import { applyPatchOperations } from '../../utils/api-utils';
+import { cutContextPath } from '../../helpers/app-urls';
+
 
 import createStatusReducer from './create-status-reducer';
 import createActionStatusesMap from './create-action-statuses-map';
@@ -207,7 +209,8 @@ export default class ReduxTable extends ReduxUni {
 
               dispatch(
                 (isReplaceLocation ? replaceLocation : push)({
-                  ...location,
+                  // ...location,
+                  pathname: cutContextPath(location.pathname),
                   search: `?${formatUrlParameters(queryFinal)}`,
                 }),
               );

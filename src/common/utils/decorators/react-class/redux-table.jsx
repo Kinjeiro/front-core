@@ -17,6 +17,8 @@ import {
   parseUrlParameters,
   updateLocationSearch,
 } from '../../uri-utils';
+import { cutContextPath } from '../../../helpers/app-urls';
+
 import {
   getMeta,
   TABLE_PROP_TYPE,
@@ -137,7 +139,7 @@ export default function reduxTableDecorator(
         } else {
           // если не загружаем, то вручную обновим урл
           actionReplaceState({
-            ...location,
+            pathname: cutContextPath(location.pathname),
             search: updateLocationSearch(
               location.search,
               {
