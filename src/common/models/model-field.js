@@ -15,6 +15,7 @@ export const TYPES = {
   /* DYNAMIC,
    */
   BINARY: 'binary',
+  CUSTOM: 'custom',
 };
 
 export const SUB_TYPES = {
@@ -86,8 +87,24 @@ export const FIELD_PROP_TYPE_MAP = {
    * (field, dom) => {}
    */
   controlRef: PropTypes.func,
+  /**
+   * Класс - замена стандартному для контрола
+   */
+  controlClass: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.instanceOf(React.Component),
+  ]),
+  /**
+   * Замена стандартной отрисовки
+   * (controlPropsFinal, fieldProps) => node
+   */
+  render: PropTypes.func,
 
   onChange: PropTypes.func,
+  /**
+   * (value, fieldProps, index) => parsedValue
+   */
+  parseOutValue: PropTypes.func,
   /**
    * обычно для больших форм, чтобы сэкономить ресурсы значение применяется после потери фокуса или Enter
    * Это сделано и для input

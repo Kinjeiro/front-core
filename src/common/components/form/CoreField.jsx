@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
-// todo @ANKU @LOW - @toCore
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import isEqual from 'lodash/isEqual';
 
@@ -28,20 +27,7 @@ import {
 
 import getCb from '../../get-components';
 
-// import i18n from '../../utils/i18n';
-
-// import './CoreField.css';
-
-const {
-  FieldLayout,
-  Input,
-  TextArea,
-  Select,
-  DatePicker,
-  Checkbox,
-  Button,
-  Attachment,
-} = getCb();
+const CB = getCb();
 
 export default class CoreField extends PureComponent {
   static TYPES = TYPES;
@@ -55,7 +41,7 @@ export default class CoreField extends PureComponent {
     constraints: {},
     textOnAdd: '@@ Добавить',
     textOnRemove: undefined,
-    Layout: FieldLayout,
+    // Layout: FieldLayout,
   };
 
   state = {
@@ -132,8 +118,8 @@ export default class CoreField extends PureComponent {
       }
 
       case TYPES.LIST:
-        return Select.getSelectedOptionLabel
-          ? Select.getSelectedOptionLabel({
+        return CB.Select.getSelectedOptionLabel
+          ? CB.Select.getSelectedOptionLabel({
             selectedValue: value,
             options: props.options,
             ...props.controlProps,
@@ -144,10 +130,11 @@ export default class CoreField extends PureComponent {
       case TYPES.NUMERIC:
       case TYPES.DECIMAL:
       case TYPES.TEXT:
+      case TYPES.CUSTOM:
         return value;
 
       case TYPES.BINARY:
-        return (Attachment && Attachment.parseValueToString && Attachment.parseValueToString(value))
+        return (CB.Attachment && CB.Attachment.parseValueToString && CB.Attachment.parseValueToString(value))
           || value;
 
       default:
@@ -266,6 +253,7 @@ export default class CoreField extends PureComponent {
       multiple,
       context,
       compareFn,
+      parseOutValue,
     } = this.props;
     const {
       lastValue,
@@ -279,7 +267,9 @@ export default class CoreField extends PureComponent {
     if (onChange && compareFn(value, lastValue) !== 0) {
       promiseChange = onChange(
         name,
-        CoreField.parseOutValue(type, value),
+        parseOutValue
+          ? parseOutValue(value, this.props, index)
+          : CoreField.parseOutValue(type, value),
         multiple ? index : undefined,
         context,
       );
@@ -411,14 +401,14 @@ export default class CoreField extends PureComponent {
     }
   }
 
-  renderFieldItem(inValue, index, constraints) {
+  getControlProps(inValue, index, constraints) {
     const {
       name,
       type,
       options,
       // value: inValue,
-      valueName,
-      emptyValue,
+      // valueName,
+      // emptyValue,
       textPlaceholder,
       textHint,
       controlProps = {},
@@ -427,6 +417,7 @@ export default class CoreField extends PureComponent {
       readOnly,
       disabled,
       required: propsRequired,
+      // render,
     } = this.props;
     const {
       changing,
@@ -480,15 +471,15 @@ export default class CoreField extends PureComponent {
      error: errors,
      };*/
 
-    if (typeof valueName !== 'undefined' && valueName !== null) {
-      return valueName;
-    }
+    // if (typeof valueName !== 'undefined' && valueName !== null) {
+    //   return valueName;
+    // }
 
     const controlValue = CoreField.parseInValue(type, inValue);
 
-    if (controlValue === null && emptyValue) {
-      return emptyValue;
-    }
+    // if (controlValue === null && emptyValue) {
+    //   return emptyValue;
+    // }
 
     switch (type) {
       case TYPES.STRING:
@@ -497,14 +488,13 @@ export default class CoreField extends PureComponent {
       case TYPES.TEXT:
         if (constraintsValues) {
           // todo @ANKU @LOW - возможно формат constraintsValues будет приходить от бэка более сложным и нужно будет этот мапинг переделать
-          return (
-            <Select
-              selectedValue={ controlValue }
-              options={ constraintsValues.map((item) => ({ label: item, value: item })) }
-              onChange={ (value) => this.handleChange(value, index) }
-              { ...controlPropsFinal }
-            />
-          );
+          // Select
+          return {
+            selectedValue: controlValue,
+            options: constraintsValues.map((item) => ({ label: item, value: item })),
+            onChange: (value) => this.handleChange(value, index),
+            ...controlPropsFinal,
+          };
         }
 
         const changeHandler = (event, { value }) => this.handleChange(value, index);
@@ -512,54 +502,49 @@ export default class CoreField extends PureComponent {
         const onChangeFinal = instanceChange ? changeHandler : undefined;
 
         if (type === TYPES.TEXT) {
-          return (
-            <TextArea
-              maxLength={ maxLength }
-              minLength={ minLength }
-              onChangedBlur={ onChangeBlur }
-              onChange={ onChangeFinal }
-              { ...controlPropsFinal }
-            >
-              { controlValue }
-            </TextArea>
-          );
+          // TextArea
+          return {
+            maxLength,
+            minLength,
+            // value: controlValue,
+            onChangedBlur: onChangeBlur,
+            onChange: onChangeFinal,
+            ...controlPropsFinal,
+            children: controlValue,
+          };
         }
 
-        return (
-          <Input
-            controlRef={ this.controlRef }
-            value={ controlValue || '' }
-            type={ type === TYPES.DECIMAL ? 'number' : type }
-            min={ minValue }
-            max={ maxValue }
-            maxLength={ maxLength }
-            minLength={ minLength }
-            pattern={ pattern }
-
-            onChangedBlur={ onChangeBlur }
-            onChange={ onChangeFinal }
-            { ...controlPropsFinal }
-          />
-        );
+        // Input
+        return {
+          controlRef: this.controlRef,
+          value: controlValue || '',
+          type: type === TYPES.DECIMAL ? 'number' : type,
+          min: minValue,
+          max: maxValue,
+          maxLength,
+          minLength,
+          pattern,
+          onChangedBlur: onChangeBlur,
+          onChange: onChangeFinal,
+          ...controlPropsFinal,
+        };
       case TYPES.BOOLEAN:
         // взято за основу Antd.Checkbox
-        return (
-          <Checkbox
-            checked={ controlValue }
-            onChange={
-              (event, props) =>
-                this.handleChange(
-                  props && typeof props.checked !== 'undefined'
-                    ? props.checked
-                    : typeof props.checked !== 'undefined'
-                      ? event.target.checked
-                      : event.target.value || event,
-                  index,
-                )
-            }
-            { ...controlPropsFinal }
-          />
-        );
+        // Checkbox
+        return {
+          checked: controlValue,
+          onChange: (event, props) =>
+            this.handleChange(
+              props && typeof props.checked !== 'undefined'
+                ? props.checked
+                : typeof props.checked !== 'undefined'
+                ? event.target.checked
+                : event.target.value || event,
+              index,
+            ),
+          ...controlPropsFinal,
+        };
+
       // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
       case TYPES.DATETIME:
       case TYPES.DATE: {
@@ -569,32 +554,93 @@ export default class CoreField extends PureComponent {
         // todo @ANKU @LOW - нету времени - showTime
         // todo @ANKU @LOW - не проставлены границы - disabledDate
         // todo @ANKU @LOW - проверить что свои инпуты они проставляют type 'date' или 'datetime'
-        return (
-          <DatePicker
-            value={ controlValue }
-            placeholder={ dateFormat }
-            displayFormat={ dateFormat }
-            onChange={ (event, time) => (
-              event.target
-                ? this.handleChange(time, index)
-                : this.handleChange(event, index)
-            ) }
+        // DatePicker
+        return {
+          value: controlValue,
+          placeholder: dateFormat,
+          displayFormat: dateFormat,
+          onChange: (event, time) => (
+            event.target
+              ? this.handleChange(time, index)
+              : this.handleChange(event, index)
+          ),
 
-            showTime={ type === TYPES.DATETIME }
-            disabledDate={
-              (minValue || maxValue)
-                ? (dateValue) => {
-                  let disableDate = false;
-                  disableDate = disableDate || (minValue && dateValue < minValue);
-                  disableDate = disableDate || (maxValue && dateValue > maxValue);
-                  return disableDate;
-                }
-                : undefined
+          showTime: type === TYPES.DATETIME,
+          disabledDate: (minValue || maxValue)
+            ? (dateValue) => {
+              let disableDate = false;
+              disableDate = disableDate || (minValue && dateValue < minValue);
+              disableDate = disableDate || (maxValue && dateValue > maxValue);
+              return disableDate;
             }
+            : undefined,
+          ...controlPropsFinal,
+        };
+      }
+      case TYPES.LIST: {
+        // Select
+        return {
+          selectedValue: controlValue,
+          options,
+          onSelect: (id) => this.handleChange(id, index),
+          ...controlPropsFinal,
+        };
+      }
 
-            { ...controlPropsFinal }
-          />
-        );
+      case TYPES.BINARY: {
+        // Attachment
+        return {
+          onChange: this.handleChange,
+          ...controlPropsFinal,
+        };
+      }
+      default:
+        return {
+          value: controlValue,
+          ...controlPropsFinal,
+          onChange: (value) => this.handleChange(value, index),
+        };
+    }
+  }
+
+  getControlClass(constraints) {
+    const {
+      type,
+      controlClass,
+    } = this.props;
+
+    const {
+      values: constraintsValues,
+    } = constraints;
+
+    if (controlClass) {
+      return controlClass;
+    }
+
+    switch (type) {
+      case TYPES.STRING:
+      case TYPES.NUMERIC:
+      case TYPES.DECIMAL:
+      case TYPES.TEXT:
+        if (constraintsValues) {
+          // todo @ANKU @LOW - возможно формат constraintsValues будет приходить от бэка более сложным и нужно будет этот мапинг переделать
+          return CB.Select;
+        }
+
+        if (type === TYPES.TEXT) {
+          return CB.TextArea;
+        }
+
+        return CB.Input;
+
+      case TYPES.BOOLEAN:
+        // взято за основу Antd.Checkbox
+        return CB.Checkbox;
+
+      // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
+      case TYPES.DATETIME:
+      case TYPES.DATE: {
+        return CB.DatePicker;
 
         // // взято за основу Antd.DatePicker
         // return (
@@ -618,28 +664,48 @@ export default class CoreField extends PureComponent {
         // );
       }
       case TYPES.LIST: {
-        return (
-          <Select
-            selectedValue={ controlValue }
-            options={ options }
-            onSelect={ (id) => this.handleChange(id, index) }
-            { ...controlPropsFinal }
-          />
-        );
+        return CB.Select;
       }
 
       case TYPES.BINARY: {
-        return (
-          <Attachment
-            onChange={ this.handleChange }
-            { ...controlPropsFinal }
-          />
-        );
+        return CB.Attachment;
       }
       default:
         console.error('Field неизвестный тип поля', type);
         return null;
     }
+  }
+
+  renderFieldItem(inValue, index, constraints) {
+    const {
+      type,
+      valueName,
+      emptyValue,
+      render,
+    } = this.props;
+
+    if (typeof valueName !== 'undefined' && valueName !== null) {
+      return valueName;
+    }
+
+    const controlValue = CoreField.parseInValue(type, inValue);
+
+    if (controlValue === null && emptyValue) {
+      return emptyValue;
+    }
+
+    const controlPropsFinal = this.getControlProps(inValue, index, constraints);
+
+    if (render) {
+      return render(controlPropsFinal, this.props);
+    }
+
+    const ControlClass = this.getControlClass(constraints);
+
+    if (ControlClass) {
+      return React.createElement(ControlClass, controlPropsFinal);
+    }
+    return null;
   }
 
   getSimpleValue(value) {
@@ -721,7 +787,7 @@ export default class CoreField extends PureComponent {
       textOnRemove,
       required: propsRequired,
 
-      Layout,
+      Layout = CB.FieldLayout,
     } = this.props;
     const {
       errors,
@@ -747,7 +813,7 @@ export default class CoreField extends PureComponent {
       <Layout
         key={ name }
 
-        className={ `CoreField ${className || ''}` }
+        className={ `CoreField ${className || ''} ${multiple ? 'CoreField--multiple' : ''}` }
 
         label={ this.renderLabel() }
         textDescription={ textDescription }
@@ -760,18 +826,18 @@ export default class CoreField extends PureComponent {
           values.map((itemValue, index) => (
             <div
               key={ typeof itemValue !== 'object' || Math.random() }
-              className={ `CoreField__multiple ${multiple && onRemove ? 'CoreField--withRemoveButton' : ''}` }
+              className={ `CoreField__controlItem ${multiple && onRemove ? 'CoreField--withRemoveButton' : ''}` }
             >
               { this.renderFieldItem(itemValue, index, constraints) }
               {
                 multiple && onRemove && !hasMin && (
-                  <Button
+                  <CB.Button
                     className="CoreField__removeButton"
                     onClick={ () => this.handleRemove(index, itemValue) }
                     icon="minus"
                   >
                     { textOnRemove }
-                  </Button>
+                  </CB.Button>
                 )
               }
             </div>
@@ -780,12 +846,12 @@ export default class CoreField extends PureComponent {
 
         { multiple && onAdd && !hasMax && textOnAdd && (
           <div className="CoreField__addButton">
-            <Button
+            <CB.Button
               icon="plus"
               onClick={ this.handleAdd }
             >
               { textOnAdd }
-            </Button>
+            </CB.Button>
           </div>
         ) }
       </Layout>
