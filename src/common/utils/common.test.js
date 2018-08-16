@@ -22,5 +22,11 @@ describe('common utils', () => {
     it('should not find includes with difference arrays', () => {
       expect(includes(['1', '2'], [1, 2])).to.equal(false);
     });
+    it('should find all values', () => {
+      expect(includes([1, 2], [1, 2, 3, 4, 5], undefined, true)).to.equal(true);
+    });
+    it('should not find all requested values', () => {
+      expect(includes([1, 2], [1, 3, 4, 5], undefined, true)).to.equal(false);
+    });
   });
 });

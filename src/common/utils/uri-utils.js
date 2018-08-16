@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-undef,no-param-reassign */
 import pathLib from 'path';
 import forOwn from 'lodash/forOwn';
 import merge from 'lodash/merge';
@@ -66,12 +66,17 @@ function proceedDefaultValues(defaultValues) {
 
 /**
  *
- * @param url - либо мапа параметров либо стринга
+ * @param url - либо объект location, либо мапа параметров, либо стринга
  * @param defaultValues
  * @returns {{}}
  */
 export function parseUrlParameters(url, defaultValues = {}) {
   let params = url;
+
+  if (typeof url === 'object' && url.pathname) {
+    // это location
+    url = url.search;
+  }
   if (typeof url === 'string') {
     const extracted = queryString.extract(url);
 

@@ -39,15 +39,29 @@ export function translateWithNamespace(namespace, key, mapParams = {}, defaultVa
     key = `${namespace}:${key}`;
   }
 
-  const value = i18nInstance.t(key, {
-    defaultValue: typeof defaultValue !== 'undefined'
+
+  // неудобная особенность - если ключа нет но есть defaultValue i18next все равно кидается console.log ошибкой
+  // const value = i18nInstance.t(key, {
+  //   defaultValue: typeof defaultValue !== 'undefined'
+  //     ? defaultValue
+  //     : (clientConfig.common && !clientConfig.common.isProduction
+  //         ? `@@ ${key}`
+  //         : undefined
+  //                 ),
+  //   ...mapParams,
+  // });
+
+  let value;
+  if (i18nInstance.exists(key)) {
+    value = i18nInstance.t(key, mapParams);
+  } else {
+    value = typeof defaultValue !== 'undefined'
       ? defaultValue
-      : (clientConfig.common && !clientConfig.common.isProduction
-        ? `@@ ${key}`
-        : undefined
-    ),
-    ...mapParams,
-  });
+      : clientConfig.common && !clientConfig.common.isProduction
+          ? `@@ ${key}`
+          : undefined;
+  }
+
   return value;
 }
 

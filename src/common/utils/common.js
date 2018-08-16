@@ -238,7 +238,7 @@ export function wrapToArray(value = null) {
       : [value];
 }
 
-export function includes(first, second, emptyIsInclude = false) {
+export function includes(first, second, emptyIsInclude = false, allIncludes = false) {
   const firstA = wrapToArray(first);
   const secondA = wrapToArray(second);
 
@@ -249,7 +249,7 @@ export function includes(first, second, emptyIsInclude = false) {
     return false;
   }
 
-  return firstA.some((firstValue) => second.includes(firstValue));
+  return firstA[allIncludes ? 'every' : 'some']((firstValue) => secondA.includes(firstValue));
 }
 
 export function isEmpty(value, objectChecker = null) {
@@ -348,3 +348,4 @@ export function errorToJson(error) {
 
   return error;
 }
+

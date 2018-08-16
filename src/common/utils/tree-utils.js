@@ -108,6 +108,36 @@ export function findInTree(tree, filter, options = {}, deep = 0, path = [], path
   };
 }
 
+export function findPath(value, treeData, options = {}) {
+  const {
+    fieldValue = 'value',
+    fieldChildren = 'children',
+  } = options;
+
+  const sel = [];
+
+  function loop(selected, children) {
+    for (let i = 0; i < children.length; i++) {
+      const item = children[i];
+      if (selected === item[fieldValue]) {
+        sel.push(item);
+        return;
+      }
+      if (item[fieldChildren]) {
+        loop(selected, item[fieldChildren], item);
+        if (sel.length) {
+          sel.push(item);
+          return;
+        }
+      }
+    }
+  }
+
+  loop(value, treeData);
+  sel.reverse();
+  return sel;
+}
+
 export function arrayToTree(array, options = {}, parent = null, level = 0) {
   const {
     tree = [],
