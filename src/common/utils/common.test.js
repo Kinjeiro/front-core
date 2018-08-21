@@ -1,5 +1,6 @@
 import {
   includes,
+  valueFromRange,
 } from './common';
 
 describe('common utils', () => {
@@ -27,6 +28,23 @@ describe('common utils', () => {
     });
     it('should not find all requested values', () => {
       expect(includes([1, 2], [1, 3, 4, 5], undefined, true)).to.equal(false);
+    });
+  });
+  describe('[function] valueFromRange', () => {
+    it('should find start position', () => {
+      expect(valueFromRange(0, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y')).to.equal('a');
+    });
+    it('should find middle position', () => {
+      expect(valueFromRange(13, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y')).to.equal('c');
+    });
+    it('should find last position', () => {
+      expect(valueFromRange(20, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y')).to.equal('d');
+    });
+    it('should return out range value', () => {
+      expect(valueFromRange(25, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y')).to.equal('Y');
+    });
+    it('should return value from input values', () => {
+      expect(valueFromRange(13, [0, 5, 8, 15, 20])).to.equal(8);
     });
   });
 });

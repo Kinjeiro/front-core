@@ -134,18 +134,18 @@ export function deepEquals(obj1, obj2) {
 
 /**
  * Примеры
- *  valueFromRange( 0, [0, 5, 8, 15, 20], [a, b, c, d], 'Y') => 'a'
- *  valueFromRange(13, [0, 5, 8, 15, 20], [a, b, c, d], 'Y') => 'c'
- *  valueFromRange(20, [0, 5, 8, 15, 20], [a, b, c, d], 'Y') => 'd'
- *  valueFromRange(25, [0, 5, 8, 15, 20], [a, b, c, d], 'Y') => 'Y'
+ *  valueFromRange( 0, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y') => 'a'
+ *  valueFromRange(13, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y') => 'c'
+ *  valueFromRange(20, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y') => 'd'
+ *  valueFromRange(25, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y') => 'Y'
  *
  * @param inputValue
  * @param inputValueRanges
  * @param outputValueRanges - кол-во на одно меньше чем inputValueRanges
- * @param defaultValue
+ * @param outRangeValue
  */
-export function valueFromRange(inputValue, inputValueRanges, outputValueRanges, defaultValue = null) {
-  if (inputValueRanges.length !== outputValueRanges.length + 1) {
+export function valueFromRange(inputValue, inputValueRanges, outputValueRanges = null, outRangeValue = null) {
+  if (outputValueRanges && inputValueRanges.length !== outputValueRanges.length + 1) {
     throw new Error('Кол-во inputValueRanges не соответствует outputValueRanges');
   }
 
@@ -156,11 +156,13 @@ export function valueFromRange(inputValue, inputValueRanges, outputValueRanges, 
       const max = inputValueRanges[position + 1];
       const isLast = position + 1 === inputValueRanges.length - 1;
       if (min <= inputValue && (inputValue < max || (isLast && inputValue === max))) {
-        return outputValueRanges[position];
+        return outputValueRanges
+          ? outputValueRanges[position]
+          : inputValueRanges[position];
       }
     }
   }
-  return defaultValue;
+  return outRangeValue;
 }
 
 export function isDecimal(value) {
@@ -256,7 +258,11 @@ export function isEmpty(value, objectChecker = null) {
   if (objectChecker && typeof value === 'object') {
     return objectChecker(value);
   }
-  return value === null || typeof value === 'undefined' || value === '' || (Array.isArray(value) && value.length === 0);
+  return value === null
+    || typeof value === 'undefined'
+    || value === ''
+    || (Array.isArray(value) && value.length === 0)
+    || (typeof value === 'object' && Object.keys(value).length === 0);
 }
 
 
