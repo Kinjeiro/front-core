@@ -11,6 +11,7 @@ export default class FieldLayout extends PureComponent {
     label: PropTypes.node,
     children: PropTypes.node,
     errors: PropTypes.arrayOf(PropTypes.string),
+    warnings: PropTypes.arrayOf(PropTypes.string),
     touched: PropTypes.bool,
     textDescription: PropTypes.node,
   };
@@ -21,6 +22,7 @@ export default class FieldLayout extends PureComponent {
       label,
       children,
       errors,
+      warnings,
       touched,
       textDescription,
     } = this.props;
@@ -38,6 +40,22 @@ export default class FieldLayout extends PureComponent {
             textDescription && (
               <div className="FieldLayout__description">
                 { textDescription }
+              </div>
+            )
+          }
+          {
+            warnings.length > 0 && (
+              <div className="FieldLayout__warnings">
+                {
+                  warnings.map((warning) => (
+                    <div
+                      key={ warning }
+                      className="FieldLayout__warningLabel"
+                    >
+                      { warning }
+                    </div>
+                  ))
+                }
               </div>
             )
           }

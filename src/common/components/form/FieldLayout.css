@@ -43,4 +43,7 @@
   &__errorLabel {
     color: var(--color-error-text);
   }
+  &__warningLabel {
+    color: var(--color-warning-text);
+  }
 }

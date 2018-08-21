@@ -312,6 +312,7 @@ module.exports = {
           */
           payload: {
             maxBytes: 7000000 /* 7mb*/
+            // uploads: path.resolve(__dirname, '../temp')
           }
         }
       },

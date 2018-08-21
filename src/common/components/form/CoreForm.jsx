@@ -8,6 +8,7 @@ import i18n from '../../utils/i18n-utils';
 import {
   executeVariable,
   wrapToArray,
+  generateId,
 } from '../../utils/common';
 import { ACTION_STATUS_PROPS } from '../../models';
 
@@ -73,6 +74,7 @@ export default class CoreForm extends Component {
   };
 
   static defaultProps = {
+    id: generateId(),
     Layout: FormLayout,
     textActionSubmit: i18n('components.CoreForm.textActionSubmit'),
     textActionCancel: i18n('components.CoreForm.textActionCancel'),
@@ -151,6 +153,7 @@ export default class CoreForm extends Component {
       value,
     } = field;
     const {
+      id,
       i18nFieldPrefix,
       onChangeField,
     } = this.props;
@@ -166,6 +169,7 @@ export default class CoreForm extends Component {
     return (
       <ErrorBoundary key={ name }>
         <Field
+          id={ `${id}_${name}` }
           { ...field }
           controlRef={ this.controlRef }
           value={ value }

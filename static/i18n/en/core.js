@@ -144,7 +144,9 @@ module.exports = {
     },
     CoreField: {
       errors: {
-        requiredError: 'Field is required',
+        requiredError: 'Field "{{fieldName}}" is required.',
+        multipleMinSize: 'Field "{{fieldName}}" must contains at least {{multipleMinSize}} values.',
+        multipleMaxSize: 'Field "{{fieldName}}" must contains no more than {{multipleMaxSize}} values.',
       },
     },
     CoreSelect: {

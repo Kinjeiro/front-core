@@ -49,6 +49,7 @@ export default class CoreField extends PureComponent {
     changing: false,
     lastValue: this.props.value,
     errors: [],
+    warnings: [],
     touched: false,
   };
 
@@ -150,8 +151,11 @@ export default class CoreField extends PureComponent {
       required: propsRequired,
       constraints: {
         required,
+        multipleMaxSize,
+        multipleMinSize,
       } = {},
       validate,
+      multiple,
     } = props;
 
     const customValidateErrors = executeVariable(validate, [], value, props);
@@ -189,7 +193,25 @@ export default class CoreField extends PureComponent {
       // code checking
       // eslint-disable-next-line no-lonely-if
       if ((propsRequired || required) && isEmpty(value)) {
-        errors.push(i18n('core:components.CoreField.errors.requiredError', { fieldName: name }));
+        errors.push(i18n('core:components.CoreField.errors.requiredError', {
+          fieldName: name,
+        }));
+      }
+    }
+
+    if (multiple) {
+      const values = wrapToArray(value);
+      if (typeof multipleMinSize !== 'undefined' && values.length < multipleMinSize) {
+        errors.push(i18n('core:components.CoreField.errors.multipleMinSize', {
+          fieldName: name,
+          multipleMinSize,
+        }));
+      }
+      if (typeof multipleMaxSize !== 'undefined' && values.length > multipleMaxSize) {
+        errors.push(i18n('core:components.CoreField.errors.multipleMaxSize', {
+          fieldName: name,
+          multipleMaxSize,
+        }));
       }
     }
 
@@ -280,6 +302,7 @@ export default class CoreField extends PureComponent {
       this.setState({
         lastValue: value,
         errors,
+        warnings: [],
       });
       if (elementDom && !elementDom.validationMessage) {
         // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
@@ -347,6 +370,23 @@ export default class CoreField extends PureComponent {
     return onBlur && onBlur(...args);
   }
 
+  @bind()
+  handleErrors(errors, replace = false) {
+    this.setState({
+      errors: replace
+        ? wrapToArray(errors)
+        : [...this.state.errors, ...wrapToArray(errors)],
+    });
+  }
+  @bind()
+  handleWarnings(warnings, replace = false) {
+    this.setState({
+      warnings: replace
+        ? wrapToArray(warnings)
+        : [...this.state.warnings, ...wrapToArray(warnings)],
+    });
+  }
+
   // ======================================================
   // RENDERS
   // ======================================================
@@ -404,6 +444,7 @@ export default class CoreField extends PureComponent {
 
   getControlProps(inValue, index, constraints) {
     const {
+      id,
       name,
       type,
       options,
@@ -423,6 +464,7 @@ export default class CoreField extends PureComponent {
     const {
       changing,
       errors,
+      warnings,
       touched,
     } = this.state;
 
@@ -442,6 +484,7 @@ export default class CoreField extends PureComponent {
     } = constraints;
 
     let controlPropsFinal = {
+      id,
       name,
       errors,
       touched,
@@ -588,16 +631,17 @@ export default class CoreField extends PureComponent {
         };
       }
 
-      case TYPES.BINARY: {
-        // Attachment
-        return {
-          onChange: this.handleChange,
-          ...controlPropsFinal,
-        };
-      }
+      // case TYPES.CUSTOM:
+      // case TYPES.BINARY:
+      //   // Attachment
       default:
         return {
           value: controlValue,
+          constraints,
+          errors,
+          warnings,
+          onErrors: this.handleErrors,
+          onWarnings: this.handleWarnings,
           ...controlPropsFinal,
           onChange: (value) => this.handleChange(value, index),
         };
@@ -768,30 +812,108 @@ export default class CoreField extends PureComponent {
     // );
     return label;
   }
-  // ======================================================
-  // MAIN RENDER
-  // ======================================================
-  render() {
-    const {
-      name,
-      value,
-      simpleText,
-      multiple,
-      // constraints,
 
-      className,
-      textDescription,
+
+  renderMultiple(constraints) {
+    const {
+      type,
+      value = null,
+      multiple,
 
       onAdd,
       textOnAdd,
       onRemove,
       textOnRemove,
       required: propsRequired,
+    } = this.props;
+
+    const {
+      multipleMinSize = null,
+      multipleMaxSize = null,
+      required = null,
+    } = constraints;
+
+    switch (type) {
+      case TYPES.BINARY:
+        // эти типы сами разберутся с multiple
+        // todo @ANKU @LOW - а вообще пора уже выделять в Factory и добавлять как листнеры
+        return (
+          <div className="CoreField__controlItem">
+            { this.renderFieldItem(value, null, constraints) }
+          </div>
+        );
+
+      default: {
+        const values = multiple ? value || [] : [value];
+        // const values = Array.isArray(value)
+        //   ? value.length === 0
+        //                  // всегда должно быть одно значение, чтобы его изменяли
+        //                  ? [undefined]
+        //                  : value
+        //   : [value];
+
+        const hasMin = (multipleMinSize !== null && values.length <= multipleMinSize)
+          || ((required || propsRequired) && values.length <= 1);
+        const hasMax = multiple && multipleMaxSize !== null && multipleMaxSize <= values.length;
+
+        return (
+          <React.Fragment>
+            {
+              values.map((itemValue, index) => (
+                <div
+                  key={ JSON.stringify(itemValue) }
+                  className={ `CoreField__controlItem ${multiple && onRemove ? 'CoreField--withRemoveButton' : ''}` }
+                >
+                  { this.renderFieldItem(itemValue, index, constraints) }
+                  {
+                    multiple && onRemove && !hasMin && (
+                      <CB.Button
+                        className="CoreField__removeButton"
+                        onClick={ () => this.handleRemove(index, itemValue) }
+                        icon="minus"
+                      >
+                        { textOnRemove }
+                      </CB.Button>
+                    )
+                  }
+                </div>
+              ))
+            }
+
+            { multiple && onAdd && !hasMax && textOnAdd && (
+              <div className="CoreField__addButton">
+                <CB.Button
+                  icon="plus"
+                  onClick={ this.handleAdd }
+                >
+                  { textOnAdd }
+                </CB.Button>
+              </div>
+            ) }
+          </React.Fragment>
+        );
+      }
+    }
+  }
+  // ======================================================
+  // MAIN RENDER
+  // ======================================================
+  render() {
+    const {
+      name,
+      simpleText,
+      multiple,
+
+      className,
+      textDescription,
+
+      required: propsRequired,
 
       Layout = CB.FieldLayout,
     } = this.props;
     const {
       errors,
+      warnings,
       touched,
     } = this.state;
 
@@ -801,14 +923,8 @@ export default class CoreField extends PureComponent {
 
     const constraints = this.getConstrains();
     const {
-      multipleMinSize = null,
-      multipleMaxSize = null,
       required = null,
     } = constraints;
-    const values = multiple ? value || [] : [value];
-    const hasMin = (multipleMinSize !== null && values.length <= multipleMinSize)
-      || ((required || propsRequired) && values.length <= 1);
-    const hasMax = multiple && multipleMaxSize !== null && multipleMaxSize <= values.length;
 
     return (
       <Layout
@@ -819,42 +935,12 @@ export default class CoreField extends PureComponent {
         label={ this.renderLabel() }
         textDescription={ textDescription }
         errors={ errors }
+        warnings={ warnings }
 
         required={ required || propsRequired }
         touched={ touched }
       >
-        {
-          values.map((itemValue, index) => (
-            <div
-              key={ typeof itemValue !== 'object' || Math.random() }
-              className={ `CoreField__controlItem ${multiple && onRemove ? 'CoreField--withRemoveButton' : ''}` }
-            >
-              { this.renderFieldItem(itemValue, index, constraints) }
-              {
-                multiple && onRemove && !hasMin && (
-                  <CB.Button
-                    className="CoreField__removeButton"
-                    onClick={ () => this.handleRemove(index, itemValue) }
-                    icon="minus"
-                  >
-                    { textOnRemove }
-                  </CB.Button>
-                )
-              }
-            </div>
-          ))
-        }
-
-        { multiple && onAdd && !hasMax && textOnAdd && (
-          <div className="CoreField__addButton">
-            <CB.Button
-              icon="plus"
-              onClick={ this.handleAdd }
-            >
-              { textOnAdd }
-            </CB.Button>
-          </div>
-        ) }
+        { this.renderMultiple(constraints) }
       </Layout>
     );
   }

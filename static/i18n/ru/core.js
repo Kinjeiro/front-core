@@ -144,7 +144,9 @@ module.exports = {
     },
     CoreField: {
       errors: {
-        requiredError: 'Поле обязательно к заполнению',
+        requiredError: 'Поле "{{fieldName}}" обязательно к заполнению.',
+        multipleMinSize: 'Поле "{{fieldName}}" должно содержать не более {{multipleMinSize}} значений.',
+        multipleMaxSize: 'Поле "{{fieldName}}" не должно содержать более {{multipleMaxSize}} значений.',
       },
     },
     CoreSelect: {
