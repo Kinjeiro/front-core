@@ -2,6 +2,9 @@
 import FileSaver from 'file-saver';
 import { applyPatch } from 'fast-json-patch';
 
+import {
+  wrapToArray,
+} from './common';
 import apiConfig from './create-api-config';
 
 // https://tools.ietf.org/html/rfc6902
@@ -419,7 +422,7 @@ export function downloadFile(blob, fileName, type = null) {
   // anchor.download = fileName;
   // anchor.click();
   // window.URL.revokeObjectURL(objectUrl);
-  return Promise.resolve();
+  return Promise.resolve(blob);
 }
 
 export function downloadText(text, fileName = null) {
@@ -430,7 +433,38 @@ export function downloadFileFromResponse(response, fileName) {
   return downloadFile(response.data || response.text, fileName, response.type);
 }
 
-export function createCrudApi(API_PREFIX, sendApiFn) {
+export const DEFAULT_FILES_PARAM_NAME = 'file';
+
+export function convertToFormData(params = {}, filesMap = {}, options) {
+  const {
+    fieldFile = DEFAULT_FILES_PARAM_NAME,
+  } = options;
+
+  let filesMapFinal = filesMap;
+  // файл - это мапа, нужно проверить если это собственно файл - его нужно в массив обернгуть
+  if (typeof filesMapFinal !== 'object' || filesMapFinal instanceof File) {
+    const files = wrapToArray(filesMapFinal);
+    filesMapFinal = {};
+    filesMapFinal[fieldFile] = files;
+  }
+
+  const formData = new FormData();
+
+  Object.keys(params).forEach((paramKey) => {
+    formData.append(paramKey, params[paramKey]);
+  });
+
+  Object.keys(filesMapFinal).forEach((fileField) => {
+    const files = wrapToArray(filesMapFinal[fileField]);
+    files.forEach((file) =>
+      // formData.append(`${fileField}[]`, file, file.name));
+      formData.append(`${fileField}`, file, file.name));
+  });
+
+  return formData;
+}
+
+export function createCrudApi(API_PREFIX, sendApiFn, isFormDataOnCreate = false) {
   const API_CONFIGS = {
     loadRecords: apiConfig(`/${API_PREFIX}`, 'GET'),
 
@@ -447,7 +481,18 @@ export function createCrudApi(API_PREFIX, sendApiFn) {
       filters,
     });
   }
-  function apiCreateRecord(data) {
+
+  /**
+   *
+   * @param data
+   * @param filesMap - может быть File, массивом File, либо мапой <имя поля>: File|[...File]
+   * @return {*}
+   */
+  function apiCreateRecord(data, filesMap = null) {
+    if (isFormDataOnCreate || filesMap !== null) {
+      // если передается даже пустая мапа - это говорит, что использовать механизм formData
+      data = convertToFormData(data, filesMap);
+    }
     return sendApiFn(API_CONFIGS.createRecord, data);
   }
   function apiReadRecord(id) {

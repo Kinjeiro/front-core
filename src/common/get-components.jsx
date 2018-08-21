@@ -32,6 +32,8 @@ export function initComponents(COMPONENTS_BASE) {
     <input ref={ controlRef } value={ value } type="datetime" />);
   COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, ...props }) =>
     <input ref={ controlRef } { ...props } type="checkbox" />);
+  COMPONENTS_BASE.replace('Attachment', () => ({ controlRef, touched, ...props }) =>
+    <input ref={ controlRef } { ...props } type="file" />);
 
   // ======================================================
   // UI
@@ -51,7 +53,7 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // FUTURE UI
   // ======================================================
-  COMPONENTS_BASE.replace('Button', () => (props) => (<button { ...props } />));
+  COMPONENTS_BASE.replace('Button', () => (props) => (<button type="button" { ...props } />));
   COMPONENTS_BASE.replace('Segment', () => ({ children, className }) => (<div className={ className }>{ children }</div>));
 
   // ======================================================

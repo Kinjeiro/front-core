@@ -14,6 +14,7 @@ import {
   parseToJsonPatch,
   replacePathIndexToItemId,
   downloadFile,
+  convertToFormData,
 } from './api-utils';
 import createApiConfig from './create-api-config';
 import { cutContextPath } from '../helpers/app-urls';
@@ -127,20 +128,17 @@ class BaseApiClientClass {
     return this[method.toLowerCase()](path, paramsOrData, options);
   }
 
-  uploadFile(apiConfig, file, params = {}, options = {}) {
-    const {
-      fieldName = 'name',
-      fieldFile = 'file',
-    } = options;
+  uploadFiles(apiConfig, filesMap, params = {}, options = {}) {
+    return this.api(
+      apiConfig,
+      convertToFormData(params, filesMap, options),
+      options,
+    );
+  }
 
-    const formData = new FormData();
-    formData.append(fieldName, file.name);
-    formData.append(fieldFile, file);
-    Object.keys(params).forEach((paramKey) => {
-      formData.append(paramKey, params[paramKey]);
-    });
-
-    return this.api(apiConfig, formData, options);
+  uploadFile(apiConfig, filesMap, params = {}, options = {}) {
+    return this.uploadFiles(apiConfig, filesMap, params, options)
+      .then((result) => Array.isArray(result) ? result[0] : result);
   }
 
   downloadFile(apiConfig, fileName, paramsOrData = null, options = {}) {
@@ -152,6 +150,7 @@ class BaseApiClientClass {
         isFile: true,
       },
     )
+      // todo @ANKU @LOW - может брать из headers ответа?
       .then((blob) => downloadFile(blob, fileName));
   }
 
@@ -262,6 +261,7 @@ class BaseApiClientClass {
       // type = 'json',
       type,
       isFile = false,
+      onUploadProgress = null,
       binaryType, // blob, arraybuffer
       acceptType = 'application/json',
       headers = {},
@@ -305,6 +305,9 @@ class BaseApiClientClass {
       request.type(type);
     }
 
+    if (onUploadProgress) {
+      request.on('progress', onUploadProgress);
+    }
     if (isFile || binaryType || acceptType === 'blob' || acceptType === 'arraybuffer' || acceptType === '*/*') {
       request.responseType((isFile && 'blob') || binaryType || acceptType);
     } else {
