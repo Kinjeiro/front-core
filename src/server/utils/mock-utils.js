@@ -10,7 +10,7 @@ export function createMockRoute(
   { path, method = 'get' }, // apiConfig
   handler,
   mockFilterConditions = {},
-  ...otherRouteConfig
+  otherRouteConfig,
 ) {
   return {
     method,

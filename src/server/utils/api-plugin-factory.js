@@ -476,14 +476,14 @@ export const PROXY_WILDCARD_NAME = 'proxyWildcardPath';
  * @param path - you can user wildcard (*) or h2o2 format: \path\{otherPart}
  * @param proxy - string \ mapUri function \ h2o2 options (proxyOptions) - https://github.com/hapijs/h2o2 (add support { apiPrefix: 'serviceApiPath' })
  *          server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: 'http://localhost:' + upstream.info.port + '/item/{a}/{b}' } } });
- * @param otherOptions - если только функция, значит это handler
+ * @param routeOptions - если только функция, значит это handler
    - handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
    - permissions
    - checkPermissionStrategy
    - routeConfig
    - isLogging
  */
-export function proxyRoute(path, proxy, otherOptions = {}) {
+export function proxyRoute(path, proxy, routeOptions = {}) {
   let apiConfig = path;
   if (typeof apiConfig === 'string') {
     apiConfig = {
@@ -492,10 +492,10 @@ export function proxyRoute(path, proxy, otherOptions = {}) {
     };
   }
 
-  if (typeof otherOptions === 'function') {
+  if (typeof routeOptions === 'function') {
     // eslint-disable-next-line no-param-reassign
-    otherOptions = {
-      handler: otherOptions,
+    routeOptions = {
+      handler: routeOptions,
     };
   }
 
@@ -506,7 +506,7 @@ export function proxyRoute(path, proxy, otherOptions = {}) {
     },
     {
       proxy,
-      ...otherOptions,
+      ...routeOptions,
     },
   );
 }
