@@ -45,24 +45,26 @@ export default class AuthCheckWrapper extends Component {
   };
 
   static defaultProps = {
-    checkAuth: true,
+    checkAuth: false,
+    permissions: null,
   };
 
-  divRef = null;
+  // elementDom = null;
 
   // ======================================================
   // LIFECYCLE
   // ======================================================
   // componentWllMount() {
   // }
-  componentDidMount() {
-    // true - catch while down
-    this.divRef.addEventListener('click', this.handleClick, true);
-  }
-
-  componentWillUnmount() {
-    this.divRef.removeEventListener('click', this.handleClick);
-  }
+  // componentDidMount() {
+  //   // ReactDom.findDOMNode(this)
+  //   // true - catch while down
+  //   this.elementDom.addEventListener('click', this.handleClick, true);
+  // }
+  //
+  // componentWillUnmount() {
+  //   this.elementDom.removeEventListener('click', this.handleClick);
+  // }
 
   // ======================================================
   // HANDLERS
@@ -86,6 +88,7 @@ export default class AuthCheckWrapper extends Component {
     }
     if (isNotAuth) {
       actionThrowNotAuthError(linkForwardTo);
+      return false;
     } else if (isNotPermission) {
       notifyError(i18n(
         'containers.AuthCheckWrapper.notPermissions',
@@ -93,14 +96,10 @@ export default class AuthCheckWrapper extends Component {
           permissions: wrapToArray(permissions).join(', '),
         },
       ));
+      return false;
     }
+    return true;
   }
-
-
-  // ======================================================
-  // RENDERS
-  // ======================================================
-
 
   // ======================================================
   // MAIN RENDER
@@ -108,16 +107,38 @@ export default class AuthCheckWrapper extends Component {
   render() {
     const {
       children,
+
+      userInfo,
+      checkAuth,
+      permissions,
     } = this.props;
 
-    return (
-      <div
-        className="AuthCheckWrapper"
-        ref={ (element) => { this.divRef = element; } }
-      >
-        { children }
-      </div>
-    );
+    if (!checkAuth && !permissions) {
+      return children;
+    }
+
+    const isNotAuth = checkAuth && !userInfo.username;
+    const isNotPermission = permissions && permissions.length > 0 && !includes(userInfo.permissions, permissions);
+
+    return React.Children.map(children, (child) => {
+      if (!React.isValidElement(child)) {
+        return child;
+      }
+
+      const {
+        className,
+        onClick,
+      } = child.props;
+
+      return React.cloneElement(children, {
+        className: `AuthCheckWrapper ${isNotAuth ? 'AuthCheckWrapper--notAuth' : ''} ${isNotPermission ? 'AuthCheckWrapper--notPermission' : ''} ${className || ''}`,
+        onClick: (event) => {
+          if (this.handleClick(event) && onClick) {
+            onClick(event);
+          }
+        },
+      });
+    });
   }
 }
 

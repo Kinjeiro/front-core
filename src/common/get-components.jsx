@@ -53,7 +53,6 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // FUTURE UI
   // ======================================================
-  COMPONENTS_BASE.replace('Button', () => (props) => (<button type="button" { ...props } />));
   COMPONENTS_BASE.replace('Segment', () => ({ children, className }) => (<div className={ className }>{ children }</div>));
 
   // ======================================================
@@ -64,13 +63,16 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // CONTAINERS
   // ======================================================
+  COMPONENTS_BASE.replace('BaseButton', () => (props) => (<button type="button" { ...props } />));
+  COMPONENTS_BASE.replace('Button', () => require('./containers/CoreButton/CoreButton').default);
+  COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
+  COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
+
   COMPONENTS_BASE.replace('AuthCheckWrapper', () => require('./containers/AuthCheckWrapper/AuthCheckWrapper').default);
   COMPONENTS_BASE.replace('AuthErrorContainer', () => require('./containers/AuthErrorContainer/AuthErrorContainer').default);
   COMPONENTS_BASE.replace('CoreApp', () => require('./containers/CoreApp/CoreApp').default);
   COMPONENTS_BASE.replace('ErrorPage', () => require('./containers/ErrorPage/ErrorPage').default);
   COMPONENTS_BASE.replace('I18NProvider', () => require('./containers/I18NProvider/I18NProvider').default);
-  COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
-  COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
 
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;

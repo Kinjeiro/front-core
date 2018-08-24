@@ -1,40 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router';
+
+import AuthCheckWrapper from '../AuthCheckWrapper/AuthCheckWrapper';
 
 import getComponents from '../../get-components';
 
-const { AuthCheckWrapper } = getComponents();
-
-require('./Link.css');
+const { BaseButton } = getComponents();
 
 /*
 * Обертка над react-router чтобы потом при перехода на 4 версию ничего не отвалилвалось
 */
-export default class Link extends Component {
+export default class CoreButton extends Component {
   static propTypes = {
-    /*
-     to: oneOfType([string, object, func]),
-     activeStyle: object,
-     activeClassName: string,
-     onlyActiveOnIndex: bool.isRequired,
-     onClick: func,
-     target: string
-    */
-    ...RouterLink.propTypes,
+    children: PropTypes.node,
     className: PropTypes.string,
     checkAuth: PropTypes.bool,
     permissions: AuthCheckWrapper.propTypes.permissions,
   };
-
-  static defaultProps = RouterLink.getDefaultProps();
 
   render() {
     const {
       children,
       checkAuth,
       permissions,
-      to,
       className,
       ...otherProps
     } = this.props;
@@ -43,15 +31,13 @@ export default class Link extends Component {
       <AuthCheckWrapper
         checkAuth={ checkAuth }
         permissions={ permissions }
-        linkForwardTo={ to }
       >
-        <RouterLink
+        <BaseButton
           { ...otherProps }
-          to={ to }
-          className={ `Link ${className || ''}` }
+          className={ `CoreButton ${className || ''}` }
         >
           { children }
-        </RouterLink>
+        </BaseButton>
       </AuthCheckWrapper>
     );
   }

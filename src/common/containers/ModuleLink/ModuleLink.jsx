@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Link from '../../components/Link/Link';
 import contextModules from '../../contexts/ContextModules/decorator-context-modules';
+
+import getComponents from '../../get-components';
+
+const {
+  Link,
+} = getComponents();
 
 @contextModules()
 export default class ModuleLink extends Component {
@@ -19,6 +24,7 @@ export default class ModuleLink extends Component {
     // @contextModules
     // ======================================================
     getFullPath: PropTypes.func,
+    onGoTo: PropTypes.func,
   };
 
   static defaultProps = Link.defaultProps;
