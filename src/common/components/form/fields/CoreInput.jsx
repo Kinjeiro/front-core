@@ -13,6 +13,7 @@ const {
 
 export default class CoreInput extends PureComponent {
   static propTypes = {
+    // ...input.propTypes
     controlRef: PropTypes.func,
     withState: PropTypes.bool,
     value: PropTypes.oneOfType([
@@ -33,6 +34,8 @@ export default class CoreInput extends PureComponent {
 
   static defaultProps = {
     withState: true,
+    type: 'text',
+    errors: [],
   };
 
   state = {
@@ -45,8 +48,21 @@ export default class CoreInput extends PureComponent {
   // ======================================================
   // componentDidMount() {
   // }
-  // componentWillReceiveProps(newProps) {
-  // }
+  componentWillReceiveProps(newProps) {
+    const {
+      withState,
+      value,
+    } = newProps;
+    const {
+      tempValue,
+    } = this.state;
+    // eslint-disable-next-line eqeqeq
+    if (withState && value != tempValue) {
+      this.setState({
+        tempValue: value,
+      });
+    }
+  }
 
   getValueFromEvent(event) {
     // todo @ANKU @LOW - или проверить с типом эвент
@@ -184,7 +200,7 @@ export default class CoreInput extends PureComponent {
       <InputClassFinal
         { ...inputProps }
         errors={ errors }
-        title={ errors.length > 0 ? errors[0] : title }
+        title={ errors && errors.length > 0 ? errors[0] : title }
         value={ this.getControlValue() }
         type={ type }
         onChange={ this.handleChange }
