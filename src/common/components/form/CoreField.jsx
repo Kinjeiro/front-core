@@ -930,7 +930,7 @@ export default class CoreField extends PureComponent {
       <Layout
         key={ name }
 
-        className={ `CoreField ${className || ''} ${multiple ? 'CoreField--multiple' : ''}` }
+        className={ `CoreField ${className || ''} ${multiple ? 'CoreField--multiple' : ''} ${propsRequired || required ? 'CoreField--required' : ''}` }
 
         label={ this.renderLabel() }
         textDescription={ textDescription }

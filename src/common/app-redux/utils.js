@@ -1,9 +1,7 @@
-import {
-  forOwn,
-  isNil,
-  mergeWith,
-  uniqueId,
-} from 'lodash';
+import forOwn from 'lodash/forOwn';
+import isNil from 'lodash/isNil';
+import mergeWith from 'lodash/mergeWith';
+import uniqueId from 'lodash/uniqueId';
 
 import { objectValues } from '../utils/common';
 
