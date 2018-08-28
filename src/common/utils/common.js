@@ -3,6 +3,7 @@ import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoize from 'lodash/memoize';
+import lodashDifference from 'lodash/difference';
 import uuid from 'uuid';
 // import uniqueId from 'lodash/uniqueId';
 
@@ -252,6 +253,15 @@ export function includes(first, second, emptyIsInclude = false, allIncludes = fa
   }
 
   return firstA[allIncludes ? 'every' : 'some']((firstValue) => secondA.includes(firstValue));
+}
+
+export function difference(source, minusValues) {
+  // _.difference([2, 1], [2, 3]);
+  // => [1]
+  return lodashDifference(
+    wrapToArray(source),
+    wrapToArray(minusValues),
+  );
 }
 
 export function isEmpty(value, objectChecker = null) {

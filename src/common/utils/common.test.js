@@ -1,6 +1,7 @@
 import {
   includes,
   valueFromRange,
+  difference,
 } from './common';
 
 describe('common utils', () => {
@@ -30,6 +31,7 @@ describe('common utils', () => {
       expect(includes([1, 2], [1, 3, 4, 5], undefined, true)).to.equal(false);
     });
   });
+
   describe('[function] valueFromRange', () => {
     it('should find start position', () => {
       expect(valueFromRange(0, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y')).to.equal('a');
@@ -45,6 +47,24 @@ describe('common utils', () => {
     });
     it('should return value from input values', () => {
       expect(valueFromRange(13, [0, 5, 8, 15, 20])).to.equal(8);
+    });
+  });
+
+  describe('[function] difference', () => {
+    it('should return diff from minus', () => {
+      expect(difference([1, 2, 3], [3, 4, 5])).to.deep.equal([1, 2]);
+    });
+    it('should part array if minus one', () => {
+      expect(difference([1, 2, 3], [3])).to.deep.equal([1, 2]);
+    });
+    it('should full array if search empty', () => {
+      expect(difference([1, 2, 3])).to.deep.equal([1, 2, 3]);
+    });
+    it('should equal array if minus has other values', () => {
+      expect(difference([3], [1, 2, 4])).to.deep.equal([3]);
+    });
+    it('should empty array if minus has one correct value from other', () => {
+      expect(difference([3], [1, 2, 3])).to.deep.equal([]);
     });
   });
 });

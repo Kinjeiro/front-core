@@ -63,7 +63,7 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // CONTAINERS
   // ======================================================
-  COMPONENTS_BASE.replace('BaseButton', () => (props) => (<button type="button" { ...props } />));
+  COMPONENTS_BASE.replace('BaseButton', () => ({ primary, ...props }) => (<button type="button" { ...props } />));
   COMPONENTS_BASE.replace('Button', () => require('./containers/CoreButton/CoreButton').default);
   COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
   COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
