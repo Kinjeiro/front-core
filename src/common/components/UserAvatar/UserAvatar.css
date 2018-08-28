@@ -1,7 +1,8 @@
 .UserAvatar {
   position: relative;
   //float: left;
-  display: block;
+  //display: block;
+  display: inline-block;
   width: 2em;
   height: 2em;
 
