@@ -1,4 +1,5 @@
 const {
+  pathJoin,
   urlJoin,
   pathResolve
 } = require('./utils/path-utils');
@@ -20,7 +21,7 @@ const clientStartPath = './src/client/index.js';
 const serverStartPath = './src/server/index.js';
 
 // const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
-const useFromFrontCore = CURRENT_FILE_PATH.indexOf(PROCESS_PATH) >= 0;
+const useFromFrontCore = CURRENT_FILE_PATH.indexOf(pathJoin(PROCESS_PATH, 'src')) >= 0;
 
 function inCoreProject(...args) {
   return pathResolve(CURRENT_FILE_PATH, '..', ...args);
