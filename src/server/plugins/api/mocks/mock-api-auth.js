@@ -1,4 +1,4 @@
-import { API_CONFIGS } from '../../../../common/api/api-user';
+import { API_CONFIGS } from '../../../../common/api/api-auth';
 
 import { createMockRoute } from '../../../utils/mock-utils';
 import {
@@ -16,6 +16,7 @@ import {
   TOKENS,
 } from './users';
 
+// todo @ANKU @LOW - перенести в отдельный мок сервис
 export default [
   createMockRoute(API_CONFIGS.login, (requestData, request, reply) => {
     logger.debug('MOCK LOGIN', requestData.username);

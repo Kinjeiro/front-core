@@ -122,6 +122,7 @@
     "longjohn": "~0.2.12",
     "matches-selector-polyfill": "~1.0.0",
     "matchmedia-polyfill": "~0.3.0",
+    "mime": "~2.3.1",
     "moment": "~2.10.6",
     "node-noop": "~1.0.0",
     "node-sass": "~4.6.0",

@@ -19,7 +19,7 @@ import { notifyError } from '../../helpers/notifications';
 // ======================================================
 // REDUX
 // ======================================================
-import apiUser from '../../api/api-user';
+import apiAuth from '../../api/api-auth';
 
 import {
   getI18NInfo,
@@ -31,6 +31,7 @@ import * as reduxI18nInfo from '../../app-redux/reducers/app/i18n-info';
 import * as reduxUserInfo from '../../app-redux/reducers/app/user-info';
 import * as reduxTest from '../../app-redux/reducers/app/test';
 import * as reduxLastUniError from '../../app-redux/reducers/app/last-uni-error';
+import * as reduxUsers from '../../app-redux/reducers/app/users';
 
 import TestDomain from '../../models/domains/TestDomain';
 
@@ -44,7 +45,7 @@ import Link from '../../components/Link/Link';
 import contextModules from '../../contexts/ContextModules/decorator-context-modules';
 import ModuleLink from '../../containers/ModuleLink/ModuleLink';
 
-import CB from '../../components/ComponentsBase';
+import getComponents from '../../get-components';
 
 import './StubPage.css';
 import './StubPageSass.scss';
@@ -52,7 +53,11 @@ import './StubPageSass.scss';
 const {
   Segment,
   Form,
-} = CB;
+  Attachment,
+} = getComponents();
+
+
+const { getUserAvatarUrl } = reduxUsers;
 
 // const PAGE_ID = 'StubPage';
 
@@ -82,13 +87,14 @@ const {
       apiI18NChangeLanguage: changeLanguagePromise,
     }),
     ...reduxUserInfo.getBindActions({
-      apiChangeUser: apiUser.apiLogin,
-      apiUserLogout: apiUser.apiLogout,
+      apiChangeUser: apiAuth.apiLogin,
+      apiUserLogout: apiAuth.apiLogout,
     }),
     ...TestDomain.getActions(),
     ...reduxTest.actions,
     actionGoto: push,
     ...reduxLastUniError.actions,
+    ...reduxUsers.actions,
   },
 )
 @bemDecorator({ componentName: 'StubPage', wrapper: false })
@@ -121,6 +127,8 @@ export default class StubPage extends Component {
     actionLoadTestGet: PropTypes.func,
     actionGoto: PropTypes.func,
     actionThrowNotAuthError: PropTypes.func,
+
+    actionChangeUserAvatar: PropTypes.func,
   };
 
   state = {
@@ -166,6 +174,47 @@ export default class StubPage extends Component {
   @bind()
   handleClickRemoveTestDomain(id) {
     this.props.actionDeleteTestDomain(id);
+  }
+
+  // ======================================================
+  // RENDER
+  // ======================================================
+  renderTestChangeAvatar() {
+    const {
+      userInfo: {
+        username,
+        displayName,
+      },
+      actionChangeUserAvatar,
+    } = this.props;
+
+    const otherUser = username === 'ivanovI' ? 'korolevaU' : 'ivanovI';
+
+    return (
+      <Segment
+        label="Test avatars"
+      >
+        <div>
+          <h3>{ username }</h3>
+          <img
+            src={ getUserAvatarUrl(username) }
+            alt={ username }
+          />
+        </div>
+        <div>
+          <h3>{ otherUser }</h3>
+          <img
+            src={ getUserAvatarUrl(otherUser) }
+            alt={ otherUser }
+          />
+        </div>
+        <Attachment
+          onChange={ (event) => {
+            return actionChangeUserAvatar(event.target.files[0]);
+          } }
+        />
+      </Segment>
+    );
   }
 
   // ======================================================
@@ -231,16 +280,12 @@ export default class StubPage extends Component {
         <div>
           <div>
             <p>{ i18n('core:pages.StubPage.currentUserTitle') }:</p>
-            {
-              profileImageURI && (
-                <div>
-                  <img
-                    src={ profileImageURI }
-                    alt={ username || displayName }
-                  />
-                </div>
-              )
-            }
+            <div>
+              <img
+                src={ getUserAvatarUrl(username) }
+                alt={ username || displayName }
+              />
+            </div>
             <p>{ username || displayName }</p>
           </div>
 
@@ -397,6 +442,9 @@ export default class StubPage extends Component {
             ] }
           />
         </Segment>
+
+        { this.renderTestChangeAvatar() }
+
       </div>
     );
   }

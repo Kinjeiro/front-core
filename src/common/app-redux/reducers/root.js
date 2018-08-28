@@ -10,6 +10,7 @@ import currentPage from './app/current-page';
 import i18nInfo from './app/i18n-info';
 import tables from './app/redux-tables';
 import modules from './app/redux-modules';
+import users from './app/users';
 import test from './app/test';
 
 import uiDomains from './ui-domains';
@@ -34,6 +35,7 @@ export const coreReduces = {
   i18nInfo,
   tables,
   modules,
+  users,
   test,
 
   // ======================================================

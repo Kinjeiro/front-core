@@ -2,7 +2,7 @@ import { createApiConfig as api } from '../utils/create-api-config';
 
 import sendApiRequest from '../utils/send-api-request';
 
-export const API_PREFIX = 'apiUserInfo';
+export const API_PREFIX = 'auth';
 export const API_CONFIGS = {
   signup: api(`${API_PREFIX}/signup`, 'POST'),
   login: api(`${API_PREFIX}/login`, 'POST'),

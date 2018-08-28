@@ -1,12 +1,21 @@
 import ServiceAuth from './ServiceAuth';
+import ServiceUsers from './ServiceUsers';
 
 /**
  * Метод для создания сервисов
  */
 export default function createServices(endpointServiceConfigs) {
-  return {
-    authUserService: new ServiceAuth({
-      endpointServiceConfig: endpointServiceConfigs.authApiService,
-    }),
-  };
+  const services = {};
+
+  services.authUserService = new ServiceAuth({
+    endpointServiceConfig: endpointServiceConfigs.authApiService,
+    services,
+  });
+
+  services.usersService = new ServiceUsers({
+    endpointServiceConfig: endpointServiceConfigs.usersService,
+    services,
+  });
+
+  return services;
 }

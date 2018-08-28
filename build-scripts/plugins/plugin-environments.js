@@ -35,7 +35,9 @@ function pluginEnvironments(webpackConfig, {
 
           SERVICES_PROTOCOL: JSON.stringify(ENV.SERVICES_PROTOCOL),
           SERVICES_HOST: JSON.stringify(ENV.SERVICES_HOST),
-          SERVICES_PORT: ENV.SERVICES_PORT
+          SERVICES_PORT: ENV.SERVICES_PORT,
+
+          PROTECTOR_PASSWORD: JSON.stringify(ENV.PROTECTOR_PASSWORD)
         } : null,
         customEnvironments
       )

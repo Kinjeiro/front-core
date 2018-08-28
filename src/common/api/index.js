@@ -1,1 +1,2 @@
-export apiUser from './api-user';
+export apiAuth from './api-auth';
+export apiUsers from './api-users';

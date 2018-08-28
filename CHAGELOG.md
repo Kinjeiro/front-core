@@ -26,18 +26,27 @@ ModalLoginPageComponentClass -> Signin в ComponentsBase
 
 4. Декоратор ```redux-table``` - теперь по умолчанию загружает данные при моунте, перегружает их при recieve props и рисует Loading пока не загрузится
 Если нужно что-то изменить есть для него настройки
-    
+   
+5. Теперь profileImageURI явно не передается внутри userInfo. Аватарка пользователя теперь получается по специальному урлу
+```
+import { getUserAvatarUrl } from '@reagentum/front-core/lib/common/app-redux/reducers/app/users';
+
+<img src={ getUserAvatarUrl(username) } />
+```
     
 ### API Dependencies:
-    + ServiceAuth - @reagentum/auth-server@1.0.4
+    + ServiceAuth - @reagentum/auth-server@1.1.1
+    + ServiceUsers - @reagentum/auth-server@1.1.1
 
 ### Dependencies:
-    + normalize.css@8.0.0
+    + normalize.css@8.0.0 - общий знаменатель для css
+    + mime@2.3.1 - чтобы по расширению файла получать тип контента
     
 ### Dev Dependencies:
 
 ### Features:
 1.  OAuth авторизация с регистрацией и сбросом пароля через почту
+2.  Управление базой пользователей, с возможность загрузкой аватара и получение protected данных других пользователь
 2.  ComponentsBase - для переопределения и поздней инициализации всех компонентов (методы replace, wrap, addClassName, addCallback)
 3.  Компоненты для форм: Form и Field и лайуты для них FormLayout и FieldLayout (чтобы удобнее переопределять).
     - начальная стилизация через reset.css

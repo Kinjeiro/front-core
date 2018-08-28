@@ -6,6 +6,7 @@ import { parseToUniError } from '../../common/models/uni-error';
 import { joinUri } from '../../common/utils/uri-utils';
 
 import serverConfig from '../server-config';
+import { getHeadersByAuthType } from './auth-utils';
 import logger, { logObject } from '../helpers/server-logger';
 
 
@@ -24,13 +25,25 @@ export function getHeaders(/* apiRequest */) {
 // COMMON REQUEST
 // ======================================================
 /**
- * @param requestOptions - https://www.npmjs.com/package/request
+ * @param requestOptions - https://github.com/request/request#requestoptions-callback
+ *
+ * !!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
+ * https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+   нужно установить в настройках:
+   encoding: null,
+ *
  * @returns {Promise}
  */
 export function sendSimpleRequest(requestOptions) {
+  // const {
+  //   pipeStream,
+  //   ...requestOptionsFinal
+  // } = requestOptions;
+
   return new Promise((resolve, reject) => {
-    console.info(`==== [${requestOptions.url}] ====`);
-    requestAgent(requestOptions, (error, response) => {
+    logger.log(`==== [${requestOptions.url}] ====`);
+
+    function callback(error, response) {
       logger.log('[from server REQUEST]');
       logObject(requestOptions, ['method', 'url']);
       logObject(requestOptions, ['qs', 'payload', 'body', 'timeout', 'headers'], 'debug', true);
@@ -50,7 +63,25 @@ export function sendSimpleRequest(requestOptions) {
         logger.debug(response.body, '\n\n');
         resolve(response);
       }
-    });
+    }
+
+    const req = requestAgent(requestOptions, callback);
+    req
+      .on('data', (data) => {
+        // decompressed data as it is received
+        console.log(`decoded chunk: ${data}`);
+      })
+      .on('response', (response) => {
+        // unmodified http.IncomingMessage object
+        response.on('data', (data) => {
+          // compressed data as it is received
+          console.log(`received ${data.length} bytes of compressed data`);
+        });
+      });
+
+    // if (pipeStream) {
+    //   req.pipe(pipeStream);
+    // }
   });
 }
 
@@ -152,7 +183,7 @@ export function getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath =
  * @param logger
  * @returns {*}
  */
-export function sendEndpointMethodRequest(
+export async function sendEndpointMethodRequest(
   endpointServiceConfig,
   serviceMethodPath,
   method = 'GET',
@@ -160,11 +191,15 @@ export function sendEndpointMethodRequest(
   apiRequest = null,
   requestOptions = {},
 ) {
+  const {
+    returnResponse,
+  } = requestOptions;
+
   const url = getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath, data);
 
   const isGet = method.toUpperCase() === 'GET';
 
-  const requestPromise = sendSimpleRequest(
+  return sendSimpleRequest(
     {
       method,
       url,
@@ -178,9 +213,32 @@ export function sendEndpointMethodRequest(
       headers: Object.assign({}, getHeaders(apiRequest), requestOptions.headers),
     },
   )
-    .then((response) => response.body);
+    .then((response) => (returnResponse ? response : response.body));
+}
 
-  return requestPromise;
+export async function sendWithAuth(
+  token,
+  endpointServiceConfig,
+  serviceMethodPath,
+  method = 'GET',
+  data,
+  apiRequest = null,
+  requestOptions = {},
+) {
+  return sendEndpointMethodRequest(
+    endpointServiceConfig,
+    serviceMethodPath,
+    method,
+    data,
+    apiRequest,
+    {
+      headers: {
+        ...getHeadersByAuthType(token),
+        ...requestOptions.headers,
+      },
+      ...requestOptions,
+    },
+  );
 }
 
 export function sendEndpointMethodFormDataRequest(

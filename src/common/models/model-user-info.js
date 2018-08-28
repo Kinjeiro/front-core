@@ -11,6 +11,9 @@ import PropTypes from 'prop-types';
   lastName: 'Ivanov',
   displayName: 'Ivanov I. I.',
   email: 'ivanovi@local.com',
+  profileImageURI: undefined,
+  phone: undefined,
+  address: undefined,
 
   provider: 'local',
 
@@ -35,6 +38,8 @@ export const USER_INFO_PROP_TYPE_MAP = {
   displayName: PropTypes.string,
   email: PropTypes.string,
   phone: PropTypes.string,
+  address: PropTypes.string,
+  // profileImageURI: PropTypes.string,
 
   provider: PropTypes.string,
 
@@ -58,8 +63,9 @@ export const USER_INFO_DEFAULT_VALUES = {
   lastName: '',
   displayName: '',
   email: undefined,
-  profileImageURI: undefined,
   phone: undefined,
+  address: undefined,
+  // profileImageURI: undefined,
 
   provider: undefined,
 

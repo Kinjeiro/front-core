@@ -145,7 +145,7 @@ export default class ServiceAuth {
       null,
       null,
       {
-        headers: getHeadersByAuthType(authType, token),
+        headers: getHeadersByAuthType(token, authType),
       },
     );
   }
@@ -156,7 +156,7 @@ export default class ServiceAuth {
       null,
       null,
       {
-        headers: getHeadersByAuthType(authType, token),
+        headers: getHeadersByAuthType(token, authType),
       },
     );
   }

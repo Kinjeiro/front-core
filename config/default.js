@@ -85,7 +85,9 @@ const {
   USE_MOCKS,
   /** Первый запуск мидловых сервисов бывает до 20 сек*/
   REQUEST_TIMEOUT = 120000,
-  LOGS_PATH = path.join(process.cwd(), '/logs/all.log')
+  LOGS_PATH = path.join(process.cwd(), '/logs/all.log'),
+
+  PROTECTOR_PASSWORD
 } = process.env;
 
 // console.warn('Server process.env', process.env);
@@ -332,6 +334,12 @@ module.exports = {
           client_id: APP_ID,
           client_secret: `${APP_ID}${APP_ID}`
           // credentials: {}
+        },
+
+        // auth-server@1.1.1 - специальная роль для получени защищенных данных других пользователей
+        protectorUser: {
+          username: 'protector',
+          password: PROTECTOR_PASSWORD
         }
       },
 
@@ -422,6 +430,10 @@ module.exports = {
       // AUTH Services - front-core-auth server
       // ======================================================
       authApiService: createEndpointServiceConfig({
+        port: 1337,
+        endpoint: 'api'
+      }),
+      usersService: createEndpointServiceConfig({
         port: 1337,
         endpoint: 'api'
       }),

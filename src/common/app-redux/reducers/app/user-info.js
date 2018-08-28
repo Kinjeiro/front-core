@@ -3,7 +3,7 @@ import { USER_INFO_DEFAULT_VALUES } from '../../../models/model-user-info';
 import { createReducer } from '../../utils';
 import { createStatusReducer } from '../../helpers';
 
-import * as api from '../../../api/api-user';
+import * as api from '../../../api/api-auth';
 
 // ======================================================
 // INITIAL STATE

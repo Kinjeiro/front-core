@@ -38,6 +38,7 @@ import pluginMocking from './plugins/mocking';
 import pluginApiHealthmonitor from './plugins/api/healthmonitor';
 import pluginsApiTest from './plugins/api/plugin-api-test';
 import pluginsApiAuthUser from './plugins/api/plugin-api-auth-user';
+import pluginsApiUsers from './plugins/api/plugin-api-users';
 
 import AbstractServerRunner from './AbstractServerRunner';
 
@@ -164,6 +165,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
       pluginsApiTest,
       ...pluginsApiAuthUser(services, strategies),
       this.getIndexPagePlugin(services, strategies),
+      ...pluginsApiUsers(services, strategies),
     );
 
     if (PROXY_ASSETS) {

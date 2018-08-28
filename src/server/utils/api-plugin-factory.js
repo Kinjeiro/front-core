@@ -522,7 +522,7 @@ export function defaultHeadersExtractor(clientRequest, proxyFullUrl = null) {
   // proxyFullUrl - нежун для hawk токенов
   const token = getToken(clientRequest);
   const authType = getAuthType(clientRequest);
-  return getHeadersByAuthType(authType, token);
+  return getHeadersByAuthType(token, authType);
 }
 
 export function proxyRouteFactory(middlewareEndpointConfig, headersExtractor = defaultHeadersExtractor) {

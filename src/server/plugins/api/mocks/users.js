@@ -14,6 +14,8 @@ export function createTestUser(username, name = null, otherProps = {}) {
     middleName: 'Testovich',
     lastName: 'Testov',
     email: `${username}@local.com`,
+    phone: null,
+    address: null,
     profileImageURI: null,
 
     provider: 'local',
@@ -55,10 +57,14 @@ export const TOKENS = {
   [USERS.korolevaU.username]: 'fakeKorolevaUToken',
 };
 
-export function getUser(username, password) {
-  const user = serverConfig.common.features.auth.emailAsLogin
+function getUserInner(username) {
+  return serverConfig.common.features.auth.emailAsLogin
     ? objectValues(USERS).find(({ email }) => email === username)
     : USERS[username];
+}
+
+export function getUser(username, password) {
+  const user = getUserInner(username);
 
   if (user && user.password === password) {
     return {
@@ -72,6 +78,20 @@ export function getUser(username, password) {
 export function getUserByToken(token) {
   const resultUsername = Object.keys(TOKENS).filter((username) => TOKENS[username] === token);
   return resultUsername && USERS[resultUsername];
+}
+
+export function editUser(token, newData) {
+  const user = getUserByToken(token);
+  Object.apply(user, newData);
+}
+export function deleteUser(token) {
+  const user = getUserByToken(token);
+  delete USERS[user.username];
+}
+
+export function getUserAvatar(username) {
+  const user = getUserInner(username);
+  return user ? user.profileImageURI : null;
 }
 
 export default USERS;

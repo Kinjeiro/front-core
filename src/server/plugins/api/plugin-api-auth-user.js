@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { API_CONFIGS } from '../../../common/api/api-user';
+import { API_CONFIGS } from '../../../common/api/api-auth';
 
 import serverConfig from '../../server-config';
 import apiPluginFactory from '../../utils/api-plugin-factory';
