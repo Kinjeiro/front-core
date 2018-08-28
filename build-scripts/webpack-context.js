@@ -1,6 +1,6 @@
 const {
   urlJoin,
-  pathResolve,
+  pathResolve
 } = require('./utils/path-utils');
 const appConfig = require('../config/utils/get-full-config');
 
@@ -19,7 +19,8 @@ const staticPath = './static';
 const clientStartPath = './src/client/index.js';
 const serverStartPath = './src/server/index.js';
 
-const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
+// const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
+const useFromFrontCore = CURRENT_FILE_PATH.indexOf(PROCESS_PATH) >= 0;
 
 function inCoreProject(...args) {
   return pathResolve(CURRENT_FILE_PATH, '..', ...args);
