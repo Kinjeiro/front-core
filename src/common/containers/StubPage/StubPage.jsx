@@ -54,6 +54,7 @@ const {
   Segment,
   Form,
   Attachment,
+  UserAvatar,
 } = getComponents();
 
 
@@ -196,16 +197,14 @@ export default class StubPage extends Component {
       >
         <div>
           <h3>{ username }</h3>
-          <img
-            src={ getUserAvatarUrl(username) }
-            alt={ username }
+          <UserAvatar
+            username={ username }
           />
         </div>
         <div>
           <h3>{ otherUser }</h3>
-          <img
-            src={ getUserAvatarUrl(otherUser) }
-            alt={ otherUser }
+          <UserAvatar
+            username={ otherUser }
           />
         </div>
         <Attachment

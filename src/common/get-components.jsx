@@ -49,6 +49,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('ReadMore', () => require('./components/ReadMore/ReadMore').default);
   COMPONENTS_BASE.replace('ThemeProvider', () => require('./components/ThemeProvider/ThemeProvider').default);
   COMPONENTS_BASE.replace('UniError', () => require('./components/UniError/UniError').default);
+  COMPONENTS_BASE.replace('UserAvatar', () => require('./components/UserAvatar/UserAvatar').default);
 
   // ======================================================
   // FUTURE UI
