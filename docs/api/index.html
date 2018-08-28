@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.4.24 | Documentation</title>
+  <title>@reagentum/front-core 1.4.25 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.4.24</code></div>
+          <div class='mb1'><code>1.4.25</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -120,6 +120,16 @@
                   href='#navigation'
                   class="h5 bold black caps">
                   Navigation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#apigetuseravatarurl'
+                  class="">
+                  apiGetUserAvatarUrl
                   
                 </a>
                 
@@ -1117,6 +1127,16 @@
               
                 
                 <li><a
+                  href='#imagetools'
+                  class="">
+                  ImageTools
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#apiclient'
                   class="">
                   apiClient
@@ -1326,6 +1346,16 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getprotectedinfobytoken'
+                  class="">
+                  getProtectedInfoByToken
+                  
+                </a>
                 
                 </li>
               
@@ -1941,6 +1971,66 @@
   
 </section>
 </div>
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='apigetuseravatarurl'>
+      apiGetUserAvatarUrl
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>синхронный метод, дает только урл, по которому вернется картинка</p>
+
+
+  <div class='pre p1 fill-light mt0'>apiGetUserAvatarUrl(username: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>username</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
           
         
           
@@ -8539,6 +8629,61 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='imagetools'>
+      ImageTools
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>from <a href="https://gist.github.com/dcollien/312bce1270a5f511bf4a">https://gist.github.com/dcollien/312bce1270a5f511bf4a</a></p>
+<p>ImageTools.resize(this.files[0], {
+width: 320, // maximum width
+height: 240 // maximum height
+}, function(blob, didItResize) {
+// didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
+document.getElementById('preview').src = window.URL.createObjectURL(blob);
+// you can also now upload this blob using an XHR.
+});</p>
+
+
+  <div class='pre p1 fill-light mt0'>new ImageTools()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='apiclient'>
       apiClient
     </h3>
@@ -10029,6 +10174,82 @@ and avoid cache pollution)</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getprotectedinfobytoken'>
+      getProtectedInfoByToken
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>getProtectedInfoByToken(token: any, username: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>token</span> <code class='quiet'>(any)</code>
+	    нужен пользователь с ролью 'protector'
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>username</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='createproxywrappercallback'>
       createProxyWrapperCallback
     </h3>
@@ -11052,7 +11273,11 @@ server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>requestOptions</span> <code class='quiet'>(any)</code>
-	    <a href="https://www.npmjs.com/package/request">https://www.npmjs.com/package/request</a>
+	    <a href="https://github.com/request/request#requestoptions-callback">https://github.com/request/request#requestoptions-callback</a>
+<p>!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
+<a href="https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request">https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request</a>
+нужно установить в настройках:
+encoding: null,</p>
 
           </div>
           
