@@ -26,7 +26,6 @@ const {
   ErrorBoundary,
 } = getComponents();
 
-
 @bemDecorator({ componentName: 'CoreForm', wrapper: false })
 export default class CoreForm extends Component {
   static FIELD_TYPES = Field.TYPES;
@@ -59,6 +58,8 @@ export default class CoreForm extends Component {
     actionStatus: ACTION_STATUS_PROPS,
     textActionSuccess: PropTypes.node,
 
+    firstFocus: PropTypes.bool,
+
     /**
      * default - FormLayout
      props:
@@ -80,10 +81,41 @@ export default class CoreForm extends Component {
     textActionCancel: i18n('components.CoreForm.textActionCancel'),
     // useForm: false,
     useForm: true,
+    firstFocus: true,
   };
 
   domForm = null;
   domControls = {};
+
+  // ======================================================
+  // LIFECYCLE
+  // ======================================================
+  // componentDidMount() {
+  //   const { domForm } = this;
+  //   if (domForm) {
+  //     /**
+  //      * todo @ANKU @LOW @BUG_OUT @react - в браузере \ реаке \ редуксе при автозаполнении не дергается редукс и соотвественно считается форма пустой
+  //      * https://github.com/facebook/react/issues/1159
+  //      * https://stackoverflow.com/questions/50204235/chrome-rises-autofill-input-event-after-clicking-the-page-only
+  //      */
+  //     // todo @ANKU @LOW @WORKAROUND - при малых таймауте не срабатывает - поэтому нестабильное решение
+  //     setTimeout(() => {
+  //       console.warn('ANKU click');
+  //       // domForm.click();
+  //       // console.warn('ANKU , ', domForm.querySelector('[name="username"]'));
+  //       // domForm.querySelector('[name="username"]').focus();
+  //       // document.body.click();
+  //
+  //       const evt = document.createEvent('HTMLEvents');
+  //       // evt.initEvent('input', true, true);
+  //       evt.initEvent('blur', true, true);
+  //       domForm.querySelector('[name="username"]').dispatchEvent(evt);
+  //       setTimeout(() => {
+  //         domForm.querySelector('[name="username"]').focus();
+  //       }, 2000);
+  //     }, 2000);
+  //   }
+  // }
 
   // ======================================================
   // UTILS
@@ -141,7 +173,7 @@ export default class CoreForm extends Component {
   // ======================================================
   // RENDERS
   // ======================================================
-  renderField(field) {
+  renderField(field, index) {
     const {
       className,
       name,
@@ -156,6 +188,7 @@ export default class CoreForm extends Component {
       id,
       i18nFieldPrefix,
       onChangeField,
+      firstFocus,
     } = this.props;
 
     let labelFinal = label || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.label`, {}, '', ''));
@@ -171,6 +204,14 @@ export default class CoreForm extends Component {
         <Field
           id={ `${id}_${name}` }
           { ...field }
+          controlProps={
+            firstFocus && index === 0
+              ? {
+                autoFocus: true,
+                ...field.controlProps,
+              }
+              : field.controlProps
+          }
           controlRef={ this.controlRef }
           value={ value }
           key={ name }
@@ -197,7 +238,7 @@ export default class CoreForm extends Component {
       fields,
     } = this.props;
 
-    return wrapToArray(fields).map((field) => this.renderField(field));
+    return wrapToArray(fields).map((field, index) => this.renderField(field, index));
   }
   renderActions() {
     const {
