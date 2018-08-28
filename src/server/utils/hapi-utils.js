@@ -1,5 +1,6 @@
+import path from 'path';
+import fs from 'fs';
 import { URL } from 'url';
-
 import Response from 'hapi/lib/response';
 
 import {
@@ -7,6 +8,8 @@ import {
   formatUrlParameters,
 } from '../../common/utils/uri-utils';
 import { parseToUniError } from '../../common/models/uni-error';
+
+import { getMimeType } from './file-utils';
 
 export function getRequestData(hapiRequest) {
   return hapiRequest.method.toUpperCase() === 'GET'
@@ -133,4 +136,48 @@ export function getRequestCookieFromResponse(response) {
       return result;
     }, [])
     .join('; ');
+}
+
+export function downloadFile(reply, serverPath, fileName = null, type = null) {
+  // если data:image base64
+  // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAE
+  const parts = serverPath.match(/data:(.*);base64,(.*)/i);
+  if (parts && parts[0]) {
+    // eslint-disable-next-line no-param-reassign
+    type = parts[1];
+    const buffer = Buffer.from(parts[2], 'base64');
+
+    const response = reply(buffer)
+      .header('Content-Type', type)
+      .header('Content-Length', buffer.length)
+      .header('Content-Encoding', 'utf8');
+    if (fileName) {
+      response.header('content-disposition', `attachment; filename=${fileName};`);
+    }
+    return response;
+  }
+
+  if (path.isAbsolute(serverPath)) {
+    const extension = path.extname(serverPath);
+    // eslint-disable-next-line no-param-reassign
+    fileName = fileName || path.basename(serverPath, extension);
+    if (!type) {
+      // eslint-disable-next-line no-param-reassign
+      type = extension
+        ? getMimeType(extension)
+        : 'application/octet-stream';
+    }
+
+    // const fileData = ; // get file content;
+    // const fileBuffer = new Buffer(fileData, 'base64');
+    const fileBuffer = fs.readFileSync(serverPath);
+
+    return reply(fileBuffer)
+      .encoding('binary')
+      .type(type)
+      .header('content-length', fileBuffer.length)
+      .header('content-disposition', `attachment; filename=${fileName};`);
+  }
+
+  throw new Error(`Не понятный формат "${serverPath}"`);
 }

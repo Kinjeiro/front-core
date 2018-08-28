@@ -3,6 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const rmdir = require('rimraf');
 
+// ModuleNotFoundError: Module not found: Error: Can't resolve './types/standard' in 'H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\node_modules\mime'
+// const mime = require('mime/lite');
+const mime = require('mime');
+
 // const pathModule = path.posix || path;
 
 function ensureDirectoryExistence(filePath) {
@@ -69,6 +73,13 @@ function inProject(relativePath) {
   return path.resolve(getProjectDir(), relativePath);
 }
 
+function getMimeType(filePath) {
+  return mime.getType(filePath);
+}
+function getExtension(mimeType) {
+  return mime.getExtension(mimeType);
+}
+
 module.exports = {
   ensureDirectoryExistence,
   removeDir,
@@ -80,5 +91,8 @@ module.exports = {
   getAbsolutePath,
   getCurrentDir,
   getProjectDir,
-  inProject
+  inProject,
+
+  getMimeType,
+  getExtension
 };
