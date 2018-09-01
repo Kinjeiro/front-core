@@ -9,7 +9,10 @@ import {
 } from '../../common/utils/uri-utils';
 import { parseToUniError } from '../../common/models/uni-error';
 
-import { getMimeType } from './file-utils';
+import {
+  getMimeType,
+  base64ToBuffer,
+} from './file-utils';
 
 export function getRequestData(hapiRequest) {
   return hapiRequest.method.toUpperCase() === 'GET'
@@ -139,21 +142,20 @@ export function getRequestCookieFromResponse(response) {
 }
 
 export function downloadFile(reply, serverPath, fileName = null, type = null) {
-  // если data:image base64
-  // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAE
-  const parts = serverPath.match(/data:(.*);base64,(.*)/i);
-  if (parts && parts[0]) {
-    // eslint-disable-next-line no-param-reassign
-    type = parts[1];
-    const buffer = Buffer.from(parts[2], 'base64');
+  if (!serverPath) {
+    return reply().code(404);
+  }
 
-    const response = reply(buffer)
-      .header('Content-Type', type)
-      .header('Content-Length', buffer.length)
-      .header('Content-Encoding', 'utf8');
-    if (fileName) {
-      response.header('content-disposition', `attachment; filename=${fileName};`);
-    }
+  const result = base64ToBuffer(serverPath, fileName);
+  if (result) {
+    const {
+      buffer,
+      headers,
+    } = result;
+
+    const response = reply(buffer);
+    Object.keys(headers).forEach((headerKey) =>
+      response.header(headerKey, headers[headerKey]));
     return response;
   }
 
@@ -180,4 +182,14 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
   }
 
   throw new Error(`Не понятный формат "${serverPath}"`);
+}
+
+export function cookie(request, name, value = null) {
+  if (value !== null) {
+    request.state(name, value);
+    return value;
+  }
+  return typeof request.state === 'function'
+    ? request.state(name)
+    : request.state[name];
 }
