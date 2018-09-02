@@ -8,6 +8,7 @@ import * as api from '../../../api/api-users';
 // INITIAL STATE
 // ======================================================
 const initialState = {
+  avatarKey: undefined,
   actionUpdateUserStatus: undefined,
   actionChangeUserAvatarStatus: undefined,
   actionDeleteUserStatus: undefined,
@@ -50,6 +51,7 @@ export function getBindActions({
     },
     actionChangeUserAvatar(file) {
       return {
+        uuid: Math.random(),
         types: [TYPES.CHANGE_USER_AVATAR_FETCH, TYPES.CHANGE_USER_AVATAR_SUCCESS, TYPES.CHANGE_USER_AVATAR_FAIL],
         payload: apiChangeUserAvatar(file),
       };
@@ -72,7 +74,13 @@ export const getUserAvatarUrl = api.apiGetUserAvatarUrl;
 // ======================================================
 const reducer = createReducer(
   initialState,
-  {},
+  {
+    [TYPES.CHANGE_USER_AVATAR_SUCCESS]:
+      (state, { uuid }) => ({
+        ...state,
+        avatarKey: uuid,
+      }),
+  },
   {
     actionUpdateUserStatus: createStatusReducer(
       TYPES.UPDATE_USER_FETCH, TYPES.UPDATE_USER_SUCCESS, TYPES.UPDATE_USER_FAIL,

@@ -16,9 +16,11 @@ export const API_CONFIGS = {
  * синхронный метод, дает только урл, по которому вернется картинка
  *
  * @param username
+ * @param key
  */
-export function apiGetUserAvatarUrl(username) {
-  return API_CONFIGS.avatar.path.replace(/{username}/gi, username);
+export function apiGetUserAvatarUrl(username, key = null) {
+  return `${API_CONFIGS.avatar.path.replace(/{username}/gi, username)}\
+  ${key ? `?key=${encodeURI(key)}` : ''}`;
 }
 export function apiEditUser(userData) {
   return sendApiRequest(API_CONFIGS.editUser, userData);

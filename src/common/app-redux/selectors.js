@@ -43,6 +43,15 @@ export function hasRole(globalState, role) {
   return user && includes(user.roles, role);
 }
 
+// ======================================================
+// USERS
+// ======================================================
+export function getUsersData(globalState) {
+  return globalState.users;
+}
+
+
+
 export function getGlobalUniError(globalState) {
   return globalState.globalUniError;
 }
