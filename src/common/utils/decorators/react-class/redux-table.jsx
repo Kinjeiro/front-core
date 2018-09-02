@@ -8,6 +8,7 @@ import {
 } from 'react-router-redux';
 import merge from 'lodash/merge';
 // import omit from 'lodash/omit';
+import bind from 'lodash-decorators/bind';
 
 import {
   generateId,
@@ -42,7 +43,7 @@ const {
 /**
  * Декорирует компонент для отображения таблицы с данными
  * Автоматически инициализирует в redux store под tables свои данные и при выходе их очищает
- * @param tableId - айди таблицы, или функция (props) => id
+ * @param tableId - айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)
  *
  * Options:
  * @param loadOnMount - запускать загрузку данных при маунте (componentWillMount)
@@ -55,9 +56,12 @@ const {
  *
  * Возвращает компонент с доп пропертями:
  * - table - текущая данные таблицы
- * - tableId - id таблицы, удобно если он зависит от пропсов
+ * - tableId - id таблицы
+ * - getTableId - (props = this.props) => {} id таблицы, удобно если он зависит от пропсов
  * - initMeta - начальная мета из options и урла
  * - initFilters - начальный фильтры из options и урла
+ * - onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры тут не замекняеются, а мержатся
+ * - onUpdateTableMeta - (newMeta, replaceAll = false) начальный фильтры из options и урла
  */
 export default function reduxTableDecorator(
   tableId = generateId(),
@@ -78,7 +82,6 @@ export default function reduxTableDecorator(
         const tableIdFinal = executeVariable(tableId, null, props);
         return {
           table: getTableInfo(globalState, tableIdFinal),
-          tableId: tableIdFinal,
           initMeta: getMeta(query, executeVariable(initMeta, {}, props)),
           initFilters: merge({}, executeVariable(initFilters, {}, props), query.filters),
         };
@@ -92,10 +95,9 @@ export default function reduxTableDecorator(
         actionReplaceState: replace,
       },
     )
-    class ExtendedComponent extends Component {
+    class ReduxTableExtendedComponent extends Component {
       static propTypes = {
         table: TABLE_PROP_TYPE,
-        tableId: PropTypes.string,
         initMeta: META_PROP,
         initFilters: PropTypes.object,
         actionModuleItemInit: PropTypes.func,
@@ -108,21 +110,20 @@ export default function reduxTableDecorator(
         actionReplaceState: PropTypes.func,
       };
 
-      componentWillMount() {
+      componentWillMount(props = this.props) {
         const {
-          tableId,
-          location,
           initMeta,
           initFilters,
           actionModuleItemInit,
           actionLoadRecords,
           // actionClearFilters,
           // actionPushState,
-          actionReplaceState,
-        } = this.props;
+        } = props;
+
+        const tableIdFinal = this.getTableId(props);
 
         actionModuleItemInit(
-          tableId,
+          tableIdFinal,
           {
             meta: initMeta,
             filters: initFilters,
@@ -135,43 +136,99 @@ export default function reduxTableDecorator(
 
         if (loadOnMount && actionLoadRecords) {
           // replace
-          actionLoadRecords(tableId, undefined, undefined, false, true);
+          actionLoadRecords(tableIdFinal, undefined, undefined, false, true);
         } else {
           // если не загружаем, то вручную обновим урл
-          actionReplaceState({
-            pathname: cutContextPath(location.pathname),
-            search: updateLocationSearch(
-              location.search,
-              {
-                ...initMeta,
-                filters: initFilters,
-              }),
-          });
+          this.updateUrl(initMeta, initFilters);
         }
       }
       componentWillReceiveProps(newProps) {
         const {
-          tableId,
           initMeta,
           initFilters,
           // actionClearFilters,
           actionLoadRecords,
         } = newProps;
 
-        if (loadOnChange && actionLoadRecords) {
-          actionLoadRecords(tableId, initMeta, initFilters);
+        const oldTableId = this.getTableId();
+        const newTableId = this.getTableId(newProps);
+        if (newTableId !== oldTableId) {
+          this.componentWillUnmount(this.props);
+          // this.componentWillMount(newProps);
+        } else if (loadOnChange && actionLoadRecords) {
+          actionLoadRecords(newTableId, initMeta, initFilters);
         }
       }
-      componentWillUnmount() {
+      componentWillUnmount(props = this.props) {
         const {
-          tableId,
           actionModuleItemRemove,
-        } = this.props;
+        } = props;
         if (clearOnUnmount) {
-          actionModuleItemRemove(tableId);
+          actionModuleItemRemove(this.getTableId(props));
         }
       }
 
+      // ======================================================
+      // UTILS
+      // ======================================================
+      getTableId(props = this.props) {
+        return executeVariable(tableId, null, props);
+      }
+
+      updateUrl(meta, filters = undefined) {
+        const {
+          location,
+          actionReplaceState,
+        } = this.props;
+
+        actionReplaceState({
+          pathname: cutContextPath(location.pathname),
+          search: updateLocationSearch(
+            location.search,
+            {
+              ...meta,
+              filters,
+            },
+            true, // assign = replace
+          ),
+        });
+      }
+
+      // ======================================================
+      // HANDLERS
+      // ======================================================
+      @bind()
+      handleUpdateTableMeta(newMeta, replace = false) {
+        // делаем через обновления урла, так как есть случаи когда tableId зависит от меты и фильтров, а если сразу запустить actionLoadRecords c новыми фильтрами то tableId еще не поменяется ибо урл еще не поменялся
+        return this.updateUrl(
+          replace
+            ? getMeta(newMeta)
+            : newMeta,
+        );
+      }
+
+      @bind()
+      handleUpdateTableFilters(newFilters, replace = false) {
+        const {
+          table: {
+            filters,
+          },
+        } = this.props;
+
+        return this.updateUrl(
+          undefined,
+          replace
+            ? newFilters
+            : {
+              ...filters,
+              ...newFilters,
+            },
+        );
+      }
+
+      // ======================================================
+      // MAIN RENDER
+      // ======================================================
       render() {
         const {
           table: {
@@ -189,10 +246,18 @@ export default function reduxTableDecorator(
           );
         }
 
-        return <ReactComponentClass { ...this.props } />;
+        return (
+          <ReactComponentClass
+            { ...this.props }
+            onUpdateTableFilters={ this.handleUpdateTableFilters }
+            onUpdateTableMeta={ this.handleUpdateTableMeta }
+            tableId={ this.getTableId() }
+            getTableId={ this.getTableId }
+          />
+        );
       }
     }
 
-    return ExtendedComponent;
+    return ReduxTableExtendedComponent;
   };
 }
