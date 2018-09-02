@@ -9,9 +9,14 @@ import RequestID from 'hapi-request-id';
 // import pluginYar from 'yar';
 
 import { joinPath } from '../common/utils/uri-utils';
+import { parseToUniError } from '../common/models/uni-error';
 
 import logger from './helpers/server-logger';
 import serverConfig from './server-config';
+
+import pluginServicesContext from './services/utils/plugin-services-context';
+import ServicesContext from './services/utils/ServicesContext';
+
 
 if (!serverConfig.common.isProduction) {
   // для длинных call stack с async
@@ -51,15 +56,19 @@ export default class AbstractServerRunner {
   // ======================================================
   // for OVERRIDE
   // ======================================================
-  createServices(/* endpointServices */) {
+  createServices(/* endpointServices, servicesContext */) {
     return {};
   }
 
-  createStrategies(services) {
+  createMockServices(/* endpointServices, servicesContext*/) {
     return {};
   }
 
-  getPlugins(services, strategies) {
+  createStrategies(servicesContext) {
+    return {};
+  }
+
+  getPlugins(services, strategies, servicesContext) {
     // server.inject({
     //   method: 'OPTIONS',
     //   url: '/',
@@ -108,7 +117,14 @@ export default class AbstractServerRunner {
           skip: (req, res) => serverConfig.common.env === 'test',
         },
       },
-      inert, /* ,
+      inert,
+      {
+        register: pluginServicesContext,
+        options: {
+          servicesContext,
+        },
+      },
+      /* ,
       {
         register: pluginYar,
         options: serverConfig.server.features.session.yarOptions
@@ -119,6 +135,10 @@ export default class AbstractServerRunner {
   // ======================================================
   // SERVER LIFECYCLE
   // ======================================================
+  createServicesContext() {
+    return new ServicesContext();
+  }
+
   connection() {
     const { server } = this;
 
@@ -140,9 +160,9 @@ export default class AbstractServerRunner {
     }, serverConfig.server.features.serverFeatures.serverConnectionOptions));
   }
 
-  registerPlugins(services, strategies) {
+  registerPlugins(services, strategies, servicesContext) {
     const { server } = this;
-    const hapiServerPlugins = this.getPlugins(services, strategies);
+    const hapiServerPlugins = this.getPlugins(services, strategies, servicesContext);
     const contextPath = serverConfig.common.app.contextRoot;
 
     return new Promise(
@@ -226,6 +246,25 @@ export default class AbstractServerRunner {
         '[END\tany response]\t',
         request.info && `${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.path} --> ${code}\n`,
       );
+
+      if (response.isBoom) {
+        /*
+         HAPI ERROR BOOM - https://hapijs.com/api/16.5.1#error-transformation
+         - isBoom - if true, indicates this is a Boom object instance.
+         - message - the error message.
+         - output - the formatted response. Can be directly manipulated after object construction to return a custom error response. Allowed root keys:
+           - statusCode - the HTTP status code (typically 4xx or 5xx).
+           - headers - an object containing any HTTP headers where each key is a header name and value is the header content.
+           - payload - the formatted object used as the response payload (stringified). Can be directly manipulated but any changes will be lost if reformat() is called. Any content allowed and by default includes the following content:
+             - statusCode - the HTTP status code, derived from error.output.statusCode.
+             - error - the HTTP status message (e.g. 'Bad Request', 'Internal Server Error') derived from statusCode.
+             - message - the error message derived from error.message.
+         ...inherited Error properties (stack, message)
+        */
+        logger.error(`Boom error response sent for request: ${request.id} at ${request.url.path} because:\n\t${response.trace || response.stack || response}`);
+        return reply(parseToUniError(response)).code(code);
+      }
+
       return reply.continue();
     });
 
@@ -259,13 +298,20 @@ export default class AbstractServerRunner {
 
       this.init();
 
-      const services = this.createServices(serverConfig.server.endpointServices);
-      const strategies = this.createStrategies(services);
+      const servicesContext = this.createServicesContext();
+      const services = this.createServices(serverConfig.server.endpointServices, servicesContext);
+      const mockServices = this.createMockServices(serverConfig.server.endpointServices, servicesContext);
+      const strategies = this.createStrategies(servicesContext);
+
+      servicesContext.register({
+        services,
+        mockServices,
+      });
 
       this.connection();
       this.monitorRequests();
 
-      await this.registerPlugins(services, strategies);
+      await this.registerPlugins(services, strategies, servicesContext);
       await this.initServerAuthStrategy(services, strategies);
       await this.startServer();
 

@@ -233,7 +233,7 @@ export async function sendWithAuth(
     apiRequest,
     {
       headers: {
-        ...getHeadersByAuthType(token),
+        ...getHeadersByAuthType(token, requestOptions.authType),
         ...requestOptions.headers,
       },
       ...requestOptions,

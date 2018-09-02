@@ -10,23 +10,20 @@ import {
 } from '../utils/auth-utils';
 import { sendEndpointMethodRequest } from '../utils/send-server-request';
 
-
 import serverConfig from '../server-config';
+
+import CoreService from './utils/CoreService';
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
  * @param endpointServiceConfig
  * @returns {{ authValidate, authLogin }}
  */
-export default class ServiceAuth {
-  endpointServiceConfig = null;
+export default class ServiceAuth extends CoreService {
   urls = {};
 
-  constructor({
-    endpointServiceConfig,
-    urls,
-  }) {
-    this.endpointServiceConfig = endpointServiceConfig;
+  constructor(endpointServiceConfig, urls, options) {
+    super(endpointServiceConfig, options);
 
     this.urls = {
       authSignup: '/auth/signup',
@@ -48,8 +45,10 @@ export default class ServiceAuth {
   }
 
   async authSignup(userData, emailOptions = null) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authSignup, 'post',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authSignup,
+      'post',
       {
         userData,
         ...this.getClientInfo(),

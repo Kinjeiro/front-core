@@ -5,7 +5,7 @@ import logger from '../../helpers/server-logger';
 
 import checkPermissionDefault from './default';
 
-export default function factoryCheckPermissionStrategy(services, otherStrategies, strategyOptions) {
+export default function factoryCheckPermissionStrategy(servicesContext) {
   return async (apiRequest, permission, errorMsg) => {
     let isActionPermitted = true;
     const configPermissions = serverConfig.common.features.auth && serverConfig.common.features.auth.permissions;

@@ -11,23 +11,23 @@ import {
 /*
  https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
 */
-export default async function authStrategyOAuth2(request, response, services) {
-  const { authUserService } = services;
-
+export default async function authStrategyOAuth2(request, response, servicesContext) {
   const accessToken = getToken(request);
   const authType = getAuthType(request);
   const refreshToken = getRefreshToken(request);
 
   logger.debug(`Auth strategy. authType: ${authType}, accessToken:\n${accessToken}`);
+  const serviceAuth = request.services.serviceAuth;
 
   async function tryRefresh() {
     let userInfo;
-    if (authUserService.authRefresh && refreshToken) {
+
+    if (serviceAuth.authRefresh && refreshToken) {
       logger.debug(`Auth strategy error. Try to reLogin by refresh_token:\n${refreshToken}`);
-      const newAuthInfo = await authUserService.authRefresh(refreshToken);
+      const newAuthInfo = await serviceAuth.authRefresh(refreshToken);
 
       logger.debug(`Auth strategy reLogin. Get userInfo by new access_token:\n${newAuthInfo.access_token}`);
-      userInfo = await authUserService.authValidate(newAuthInfo.access_token);
+      userInfo = await serviceAuth.authValidate(newAuthInfo.access_token);
 
       setAuthCookies(
         response,
@@ -46,7 +46,7 @@ export default async function authStrategyOAuth2(request, response, services) {
     userInfo = await tryRefresh();
   } else {
     try {
-      userInfo = await authUserService.authValidate(accessToken, authType);
+      userInfo = await serviceAuth.authValidate(accessToken, authType);
     } catch (error) {
       const uniError = parseToUniError(error);
       if (uniError.isNotAuth) {

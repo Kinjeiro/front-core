@@ -13,13 +13,13 @@ import {
 
 export const API = API_CONFIGS;
 
-async function login(username, password, services, reply) {
+async function login(username, password, serviceAuth, reply) {
   const {
     access_token,
     refresh_token,
     expires_in,
-  } = await services.authUserService.authLogin(username, password);
-  const userInfo = await services.authUserService.authValidate(access_token);
+  } = await serviceAuth.authLogin(username, password);
+  const userInfo = await serviceAuth.authValidate(access_token);
   return setAuthCookies(
     reply(userInfo),
     access_token,
@@ -38,17 +38,16 @@ export default function createApiPlugins(services/* , strategies*/) {
     plugins.push(
       apiPluginFactory(
         API.signup,
-        async (requestData, apiRequest, reply) => {
+        async (requestData, request, reply) => {
           const {
             username,
             password,
           } = requestData;
           logger.log('SIGNUP: ', username);
-          console.warn('ANKU , requestData', requestData.password);
-          await services.authUserService.authSignup(requestData);
+          await request.services.serviceAuth.authSignup(requestData);
 
           logger.log('-- done. Now login');
-          return login(username, password, services, reply);
+          return login(username, password, request.services, reply);
         },
         {
           routeConfig: {
@@ -63,13 +62,13 @@ export default function createApiPlugins(services/* , strategies*/) {
   plugins.push(
     apiPluginFactory(
       API.login,
-      async (requestData, apiRequest, reply) => {
+      async (requestData, request, reply) => {
         const {
           username,
           password,
         } = requestData;
         logger.log('LOGIN: ', username);
-        return login(username, password, services, reply);
+        return login(username, password, request.services.serviceAuth, reply);
       },
       {
         routeConfig: {
@@ -80,13 +79,13 @@ export default function createApiPlugins(services/* , strategies*/) {
     ),
     apiPluginFactory(
       API.refreshLogin,
-      async (requestData, apiRequest, reply) => {
+      async (requestData, request, reply) => {
         logger.log('refreshLogin');
         const {
           access_token,
           refresh_token,
           expires_in,
-        } = await services.authUserService.authRefresh(getRefreshToken(apiRequest));
+        } = await request.services.serviceAuth.authRefresh(getRefreshToken(request));
 
         return setAuthCookies(
           reply(),
@@ -99,9 +98,9 @@ export default function createApiPlugins(services/* , strategies*/) {
     ),
     apiPluginFactory(
       API.logout,
-      async (requestData, apiRequest, reply) => {
+      async (requestData, request, reply) => {
         logger.log('LOGOUT');
-        await services.authUserService.authLogout(getToken(apiRequest));
+        await request.services.serviceAuth.authLogout(getToken(request));
         return clearAuthCookie(reply());
       },
     ),
@@ -111,14 +110,14 @@ export default function createApiPlugins(services/* , strategies*/) {
     plugins.push(
       apiPluginFactory(
         API.forgot,
-        async (requestData, apiRequest, reply) => {
+        async (requestData, request, reply) => {
           const {
             email,
             resetPasswordPageUrl,
             emailOptions,
           } = requestData;
           logger.log('[FORGOT PASSWORD]', email);
-          await services.authUserService.authForgot(email, resetPasswordPageUrl, emailOptions);
+          await request.services.serviceAuth.authForgot(email, resetPasswordPageUrl, emailOptions);
           return reply();
         },
         {
@@ -131,7 +130,7 @@ export default function createApiPlugins(services/* , strategies*/) {
 
       apiPluginFactory(
         API.resetPassword,
-        async (requestData, apiRequest, reply) => {
+        async (requestData, request, reply) => {
           const {
             resetPasswordToken,
             newPassword,
@@ -140,7 +139,7 @@ export default function createApiPlugins(services/* , strategies*/) {
           logger.log('[RESET PASSWORD]');
           const {
             username,
-          } = await services.authUserService.authResetPassword(resetPasswordToken, newPassword, emailOptions);
+          } = await request.services.serviceAuth.authResetPassword(resetPasswordToken, newPassword, emailOptions);
 
           logger.log(`-- done for user "${username}". Now login`);
           return login(username, newPassword, services, reply);

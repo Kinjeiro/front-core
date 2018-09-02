@@ -429,11 +429,18 @@ module.exports = {
       // ======================================================
       // AUTH Services - front-core-auth server
       // ======================================================
+      /**
+       * @deprecated - используйте serviceAuth
+       */
       authApiService: createEndpointServiceConfig({
         port: 1337,
         endpoint: 'api'
       }),
-      usersService: createEndpointServiceConfig({
+      serviceAuth: createEndpointServiceConfig({
+        port: 1337,
+        endpoint: 'api'
+      }),
+      serviceUsers: createEndpointServiceConfig({
         port: 1337,
         endpoint: 'api'
       }),

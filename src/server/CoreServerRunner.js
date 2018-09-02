@@ -14,6 +14,7 @@ import serverConfig from './server-config';
 import CoreClientRunner from '../client/CoreClientRunner';
 
 import createServices from './services';
+import createMockServices from './services/mocks';
 import createStrategies from './strategies';
 import {
   CORE_ROUTES_NAMES,
@@ -34,6 +35,8 @@ import pluginProxyAssets from './plugins/proxy-assets';
 import pluginStaticAssets from './plugins/static-assets';
 import pluginI18n from './plugins/i18n';
 import pluginMocking from './plugins/mocking';
+import pluginsRequestUser from './plugins/plugin-request-user';
+
 // plugin api
 import pluginApiHealthmonitor from './plugins/api/healthmonitor';
 import pluginsApiTest from './plugins/api/plugin-api-test';
@@ -42,7 +45,7 @@ import pluginsApiUsers from './plugins/api/plugin-api-users';
 
 import AbstractServerRunner from './AbstractServerRunner';
 
-import coreMockRoutes from './plugins/api/mocks';
+import getMockRoutes from './plugins/api/mocks';
 
 /**
  * Расширение для установки core зависимостей
@@ -51,17 +54,24 @@ export default class CoreServerRunner extends AbstractServerRunner {
   // ======================================================
   // for OVERRIDE
   // ======================================================
-  createServices(endpointServices) {
+  createServices(endpointServices, servicesContext) {
     return {
-      ...super.createServices(endpointServices),
-      ...createServices(endpointServices),
+      ...super.createServices(endpointServices, servicesContext),
+      ...createServices(endpointServices, servicesContext),
     };
   }
 
-  createStrategies(services) {
+  createMockServices(endpointServices, servicesContext) {
     return {
-      ...super.createStrategies(services),
-      ...createStrategies(services),
+      ...super.createMockServices(endpointServices, servicesContext),
+      ...createMockServices(endpointServices, servicesContext),
+    };
+  }
+
+  createStrategies(servicesContext) {
+    return {
+      ...super.createStrategies(servicesContext),
+      ...createStrategies(servicesContext),
     };
   }
 
@@ -75,8 +85,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return reduxGlobalState;
   }
 
-  getMockRoutes() {
-    return coreMockRoutes;
+  getMockRoutes(services, strategies, servicesContext) {
+    return getMockRoutes(services, strategies, servicesContext);
   }
 
   getTemplateHead() {
@@ -141,10 +151,10 @@ export default class CoreServerRunner extends AbstractServerRunner {
     };
   }
 
-  getPlugins(services, strategies) {
+  getPlugins(services, strategies, servicesContext) {
     const PROXY_ASSETS = serverConfig.server.main.proxyAssets;
 
-    const hapiServerPlugins = super.getPlugins(services, strategies);
+    const hapiServerPlugins = super.getPlugins(services, strategies, servicesContext);
 
     // ======================================================
     // HAPI SERVER PLUGINS
@@ -154,11 +164,12 @@ export default class CoreServerRunner extends AbstractServerRunner {
       // loggerPlugin,
       pluginI18n,
       pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
+      pluginsRequestUser,
       {
         register: pluginMocking,
         options: {
           ...serverConfig.server.features.mocking,
-          mockRoutes: this.getMockRoutes(),
+          mockRoutes: this.getMockRoutes(services, strategies, servicesContext),
         },
       },
       pluginApiHealthmonitor,

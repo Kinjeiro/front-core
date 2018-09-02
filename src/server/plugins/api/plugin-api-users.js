@@ -3,42 +3,48 @@ import { API_CONFIGS } from '../../../common/api/api-users';
 
 import apiPluginFactory from '../../utils/api-plugin-factory';
 import logger from '../../helpers/server-logger';
-import {
-  getToken,
-} from '../../utils/auth-utils';
 
-export default function createApiPlugins(services/* , strategies*/) {
-  const { usersService } = services;
-
+export default function createApiPlugins() {
   return [
     apiPluginFactory(
       API_CONFIGS.editUser,
-      async (userData, apiRequest, reply) => {
+      async (userData, request, reply) => {
         logger.debug('editUser: ', userData);
-        await usersService.editUser(getToken(apiRequest), userData);
+        await request.services.serviceUsers.editUser(userData);
         return reply();
       },
     ),
     apiPluginFactory(
       API_CONFIGS.deleteUser,
-      async (requestData, apiRequest, reply) => {
+      async (requestData, request, reply) => {
         logger.debug('deleteUser');
-        await usersService.deleteUser(getToken(apiRequest));
+        await request.services.serviceUsers.deleteUser();
         return reply();
       },
     ),
     apiPluginFactory(
       API_CONFIGS.avatar,
-      async (requestData, apiRequest, reply) => {
-        const { username } = apiRequest.params;
+      async (requestData, request, reply) => {
+        const { key } = requestData;
+        const { username } = request.params;
         logger.debug('avatar for', username);
+
+        let result;
+        try {
+          result = await request.services.serviceUsers.getAvatar(username, key);
+        } catch (error) {
+          if (error.uniCode !== 404) {
+            logger.error(error);
+          }
+          return reply().code(error.uniCode);
+        }
+
         const {
           headers,
           buffer,
-        } = await usersService.getAvatar(getToken(apiRequest), username);
+        } = result;
 
         const response = reply(buffer);
-
         Object.keys(headers).forEach((headerKey) => {
           response.header(headerKey, headers[headerKey]);
         });

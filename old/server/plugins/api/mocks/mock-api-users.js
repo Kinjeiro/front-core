@@ -1,8 +1,8 @@
-import { API_CONFIGS } from '../../../../common/api/api-users';
+import { API_CONFIGS } from '../../../../../src/common/api/api-users';
 
-import { createMockRoute } from '../../../utils/mock-utils';
-import { downloadFile } from '../../../utils/hapi-utils';
-import { getToken } from '../../../utils/auth-utils';
+import { createMockRoute } from '../../../../../src/server/utils/mock-utils';
+import { downloadFile } from '../../../../../src/server/utils/hapi-utils';
+import { getToken } from '../../../../../src/server/utils/auth-utils';
 
 import {
   editUser,
@@ -19,6 +19,7 @@ export default [
   }),
   createMockRoute(API_CONFIGS.avatar, (requestData, request, reply) => {
     const { username } = request.params;
-    return downloadFile(reply, getUserAvatar(username));
+    const avatar = getUserAvatar(username);
+    return downloadFile(reply, avatar);
   }),
 ];
