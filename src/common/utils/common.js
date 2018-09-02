@@ -221,12 +221,28 @@ export class ExtendableError extends Error {
   }
 }
 
+export function isClass(v) {
+  if (!v) {
+    return false;
+  }
+  const toString = v.toString();
+  return typeof v === 'function' && (
+    // babel
+    toString.indexOf('_classCallCheck') >= 0
+    // es6
+    || /^\s*class\s+/.test(toString)
+  );
+}
+
 export function executeVariable(fn, defaultValue = undefined, ...args) {
-  return typeof fn === 'function'
-    ? fn(...args)
-    : typeof fn === 'undefined' || fn === null
-      ? defaultValue
-      : fn;
+  return isClass(fn)
+    // eslint-disable-next-line new-cap
+    ? new fn(...args)
+    : typeof fn === 'function'
+      ? fn(...args)
+      : typeof fn === 'undefined' || fn === null
+        ? defaultValue
+        : fn;
 }
 
 export const executeVariableMemoize = memoize(
@@ -365,3 +381,57 @@ export function errorToJson(error) {
   return error;
 }
 
+/**
+ * https://stackoverflow.com/a/45332959/344172
+ *
+ * @param BaseClass
+ * @param Mixins
+ * @return {base}
+
+
+  class Person{
+   constructor(n){
+      this.name=n;
+   }
+  }
+  class Male{
+   constructor(s='male'){
+      this.sex=s;
+   }
+  }
+  class Child{
+   constructor(a=12){
+      this.age=a;
+   }
+   tellAge(){console.log(this.name+' is '+this.age+' years old.');}
+  }
+  class Boy extends aggregation(Person,Male,Child){}
+  var m = new Boy('Mike');
+  m.tellAge(); // Mike is 12 years old.
+
+ */
+export function aggregation(BaseClass, ...Mixins) {
+  function copyProps(target, source) {  // this function copies all properties and symbols, filtering out some special ones
+    Object.getOwnPropertyNames(source)
+      .concat(Object.getOwnPropertySymbols(source))
+      .forEach((prop) => {
+        if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
+          Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
+        }
+      });
+  }
+
+  class Base extends BaseClass {
+    constructor(...args) {
+      super(...args);
+      Mixins.forEach((Mixin) => copyProps(this, (new Mixin())));
+    }
+  }
+
+  Mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+    copyProps(Base.prototype, mixin.prototype);
+    copyProps(Base, mixin);
+  });
+
+  return Base;
+}
