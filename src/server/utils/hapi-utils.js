@@ -178,7 +178,7 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
       .encoding('binary')
       .type(type)
       .header('content-length', fileBuffer.length)
-      .header('content-disposition', `attachment; filename=${fileName};`);
+      .header('content-disposition', `attachment; filename=${encodeURI(fileName)};`);
   }
 
   throw new Error(`Не понятный формат "${serverPath}"`);

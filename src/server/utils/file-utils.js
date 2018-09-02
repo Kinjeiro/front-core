@@ -16,7 +16,7 @@ export function base64ToBuffer(base65Url, fileName = null) {
       'Content-Length': buffer.length,
     };
     if (fileName) {
-      headers['content-disposition'] = `attachment; filename=${fileName};`;
+      headers['content-disposition'] = `attachment; filename=${encodeURI(fileName)};`;
     }
 
     return {
