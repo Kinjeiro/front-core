@@ -395,29 +395,36 @@ export function parseFromError(error, uniErrorData = {}) {
 
  // - message - the error message.
  // - typeof - the constructor used to create the error (e.g. Boom.badRequest).
- - inherited Error properties.
+   - inherited Error properties (message, stack)
  */
 export function parseFromBoom(errorOrResponse, uniErrorData = {}) {
   if (checkProperties(errorOrResponse, 'isBoom') && errorOrResponse.isBoom) {
-    const boomResponse = errorOrResponse;
-    const {
-      output: {
-        statusCode,
-        payload: {
-          message,
-          error,
-        },
-      },
-    } = boomResponse;
+    // унаследовано от Error
+    // const boomResponse = errorOrResponse;
+    // const {
+    //   output: {
+    //     statusCode,
+    //     payload: {
+    //       message,
+    //       error,
+    //     },
+    //   },
+    //   stack,
+    // } = boomResponse;
+    //
+    // return createUniError({
+    //   responseStatusCode: statusCode,
+    //   clientErrorMessage: error,
+    //   message,
+    //   stack,
+    //   originalObject: boomResponse,
+    //   errorFrom: UNI_ERROR_FROM.FROM_BOOM,
+    //   ...uniErrorData,
+    // });
 
-    return createUniError({
-      responseStatusCode: statusCode,
-      clientErrorMessage: error,
-      message,
-      originalObject: boomResponse,
-      errorFrom: UNI_ERROR_FROM.FROM_BOOM,
-      ...uniErrorData,
-    });
+    const uniError = parseFromError(errorOrResponse, uniErrorData);
+    uniError.errorFrom = UNI_ERROR_FROM.FROM_BOOM;
+    return uniError;
   }
   return null;
 }
