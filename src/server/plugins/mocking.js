@@ -70,7 +70,7 @@ export function validateRoutePath(request, templatePath, {
   const requestPathWithoutContextPath = cutContextPath(requestPath);
 
   // parse hapi route format "/abs/{pathParam}" to router parser format "/abs/:pathParam"
-  const requestTryParams = new RouteParser(templatePath.replace(/\{((\w|-)+)\}/g, ':$1'))
+  const requestTryParams = new RouteParser(templatePath.replace(/\{((\w|-|@|\.)+)\}/g, ':$1'))
     .match(requestPathWithoutContextPath);
 
   /*
@@ -85,7 +85,7 @@ export function validateRoutePath(request, templatePath, {
 
   if (validation) {
     // todo @ANKU @LOW - сделать поддержку таких урлов path: '/hello/{user*2}', (/hello/john/doe)
-    const reqexpPathResult = reqexpPath || new RegExp(`^\/?${templatePath.replace(/\{((\w|-)+)\}/g, '((\\w|-)+)')}\/?$`);
+    const reqexpPathResult = reqexpPath || new RegExp(`^\/?${templatePath.replace(/\{((\w|-|@|\.)+)\}/g, '((\\w|-|@|\\.)+)')}\/?$`);
     validation = reqexpPathResult.test(requestPathWithoutContextPath);
   }
 
