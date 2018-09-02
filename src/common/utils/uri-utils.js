@@ -71,6 +71,10 @@ function proceedDefaultValues(defaultValues) {
  * @returns {{}}
  */
 export function parseUrlParameters(url, defaultValues = {}) {
+  if (!url) {
+    return {};
+  }
+
   let params = url;
 
   if (typeof url === 'object' && url.pathname) {
@@ -285,9 +289,14 @@ export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes 
   return joinPath('/', prefix, relativeLocation);
 }
 
-export function updateLocationSearch(url, newQueryParams) {
+export function updateLocationSearch(url, newQueryParams, assign = false) {
   const params = parseUrlParameters(url);
-  merge(params, newQueryParams);
+  if (assign) {
+    // полностью заменит сложные объекты (к примеру, filters для таблицы
+    Object.assign(params, newQueryParams);
+  } else {
+    merge(params, newQueryParams);
+  }
   return `?${formatUrlParameters(params)}`;
 }
 export function updateWindowLocationQueryParams(newQueryParams) {
