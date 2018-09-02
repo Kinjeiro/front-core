@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.4.28 | Documentation</title>
+  <title>@reagentum/front-core 1.4.29 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.4.28</code></div>
+          <div class='mb1'><code>1.4.29</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -967,6 +967,16 @@
               
                 
                 <li><a
+                  href='#aggregation'
+                  class="">
+                  aggregation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#createapiconfig'
                   class="">
                   createApiConfig
@@ -1317,6 +1327,60 @@
               
                 
                 <li><a
+                  href='#authuserservice'
+                  class="">
+                  authUserService
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createmockservices'
+                  class="">
+                  createMockServices
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#serviceauthmock'
+                  class=" toggle-sibling">
+                  ServiceAuthMock
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#serviceauthmockauthforgot'
+                        class='regular pre-open'>
+                        #authForgot
+                      </a></li>
+                      
+                      <li><a
+                        href='#serviceauthmockauthresetpassword'
+                        class='regular pre-open'>
+                        #authResetPassword
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#serviceauth'
                   class=" toggle-sibling">
                   ServiceAuth
@@ -1354,6 +1418,26 @@
                   href='#getprotectedinfobytoken'
                   class="">
                   getProtectedInfoByToken
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#pluginservicescontext'
+                  class="">
+                  pluginServicesContext
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#registerservice'
+                  class="">
+                  registerService
                   
                 </a>
                 
@@ -1990,7 +2074,7 @@
   <p>синхронный метод, дает только урл, по которому вернется картинка</p>
 
 
-  <div class='pre p1 fill-light mt0'>apiGetUserAvatarUrl(username: any)</div>
+  <div class='pre p1 fill-light mt0'>apiGetUserAvatarUrl(username: any, key: any)</div>
   
   
 
@@ -2008,6 +2092,14 @@
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>username</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>key</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -5519,7 +5611,7 @@ touched</p>
 <p>// - message - the error message.
 // - typeof - the constructor used to create the error (e.g. Boom.badRequest).</p>
 <ul>
-<li>inherited Error properties.</li>
+<li>inherited Error properties (message, stack)</li>
 </ul>
 
 
@@ -6991,6 +7083,100 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='aggregation'>
+      aggregation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="https://stackoverflow.com/a/45332959/344172">https://stackoverflow.com/a/45332959/344172</a></p>
+
+
+  <div class='pre p1 fill-light mt0'>aggregation(BaseClass: any, Mixins: ...any): base</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>BaseClass</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>Mixins</span> <code class='quiet'>(...any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>base</code>:
+        class Person{
+constructor(n){
+this.name=n;
+}
+}
+class Male{
+constructor(s='male'){
+this.sex=s;
+}
+}
+class Child{
+constructor(a=12){
+this.age=a;
+}
+tellAge(){console.log(this.name+' is '+this.age+' years old.');}
+}
+class Boy extends aggregation(Person,Male,Child){}
+var m = new Boy('Mike');
+m.tellAge(); // Mike is 12 years old.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='createapiconfig'>
       createApiConfig
     </h3>
@@ -7265,7 +7451,7 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>tableId</span> <code class='quiet'>(any)</code>
-	    айди таблицы, или функция (props) => id
+	    айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)
 <p>Options:</p>
 
           </div>
@@ -7428,9 +7614,12 @@ equalConstraint = EQUAL_CONSTRAINTS.EQUAL,
 <p>Возвращает компонент с доп пропертями:</p>
 <ul>
 <li>table - текущая данные таблицы</li>
-<li>tableId - id таблицы, удобно если он зависит от пропсов</li>
+<li>tableId - id таблицы</li>
+<li>getTableId - (props = this.props) => {} id таблицы, удобно если он зависит от пропсов</li>
 <li>initMeta - начальная мета из options и урла</li>
 <li>initFilters - начальный фильтры из options и урла</li>
+<li>onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры тут не замекняеются, а мержатся</li>
+<li>onUpdateTableMeta - (newMeta, replaceAll = false) начальный фильтры из options и урла</li>
 </ul>
 
           </div>
@@ -9902,8 +10091,102 @@ and avoid cache pollution)</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='serviceauth'>
-      ServiceAuth
+    <h3 class='fl m0' id='authuserservice'>
+      authUserService
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>authUserService()</div>
+  
+  
+
+  <div>Deprecated: используйте serviceAuth
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createmockservices'>
+      createMockServices
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Метод для создания сервисов</p>
+
+
+  <div class='pre p1 fill-light mt0'>createMockServices()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='serviceauthmock'>
+      ServiceAuthMock
     </h3>
     
     
@@ -9913,7 +10196,77 @@ and avoid cache pollution)</p>
   <p>Клиенсткая реализация протокола OAuth 2.0 Bearer</p>
 
 
-  <div class='pre p1 fill-light mt0'>new ServiceAuth(endpointServiceConfig: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): {authValidate, authLogin}</div>
+  <div class='pre p1 fill-light mt0'>new ServiceAuthMock(endpointServiceConfig: any): {authValidate, authLogin}</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#serviceauth">ServiceAuth</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>endpointServiceConfig</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{authValidate, authLogin}</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='serviceauthmockauthforgot'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>authForgot(email, resetPasswordPageUrl, emailOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Протокол для @reagentum/auth-server@1.0.4</p>
+
+
+  <div class='pre p1 fill-light mt0'>authForgot(email: any, resetPasswordPageUrl: any, emailOptions: any): any</div>
   
   
 
@@ -9930,41 +10283,209 @@ and avoid cache pollution)</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>endpointServiceConfig</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+            <span class='code bold'>email</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>endpointServiceConfig.endpointServiceConfig</span> <code class='quiet'>any</code>
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>resetPasswordPageUrl</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>emailOptions</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='serviceauthmockauthresetpassword'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>authResetPassword(resetPasswordToken, newPassword, emailOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Протокол для @reagentum/auth-server@1.0.4</p>
 
 
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>endpointServiceConfig.urls</span> <code class='quiet'>any</code>
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
+  <div class='pre p1 fill-light mt0'>authResetPassword(resetPasswordToken: any, newPassword: any, emailOptions: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>resetPasswordToken</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>newPassword</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>emailOptions</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='serviceauth'>
+      ServiceAuth
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Клиенсткая реализация протокола OAuth 2.0 Bearer</p>
 
 
-              
-            </tbody>
-          </table>
+  <div class='pre p1 fill-light mt0'>new ServiceAuth(endpointServiceConfig: any, urls: any, options: any): {authValidate, authLogin}</div>
+  
+  
+    <p>
+      Extends
+      
+        CoreService
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>endpointServiceConfig</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>urls</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
           
         </div>
       
@@ -10184,7 +10705,7 @@ and avoid cache pollution)</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>getProtectedInfoByToken(token: any, username: any): any</div>
+  <div class='pre p1 fill-light mt0'>getProtectedInfoByToken(username: any, token: any): any</div>
   
   
 
@@ -10201,17 +10722,17 @@ and avoid cache pollution)</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>token</span> <code class='quiet'>(any)</code>
-	    нужен пользователь с ролью 'protector'
-
+            <span class='code bold'>username</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>username</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>token</span> <code class='quiet'>(any)</code>
+	    нужен пользователь с ролью 'protector'
+
           </div>
           
         </div>
@@ -10229,6 +10750,158 @@ and avoid cache pollution)</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='pluginservicescontext'>
+      pluginServicesContext
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Обогощает request "servicesContext" и "services" еще перед авторизацией</p>
+
+
+  <div class='pre p1 fill-light mt0'>pluginServicesContext(server: any, options: any, next: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>server</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>next</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='registerservice'>
+      registerService
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>registerService(serviceName: any, getServiceFn: any, isMock: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>serviceName</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>getServiceFn</span> <code class='quiet'>(any)</code>
+	    функция (endpoint) => инстанса сервиса, который унаследован от CoreService (есть setRequest, setServicesContext)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>isMock</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
