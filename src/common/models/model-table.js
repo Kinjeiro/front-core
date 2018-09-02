@@ -71,7 +71,7 @@ export function getMeta(query, defaultMeta = {}) {
     search: queryFinal.search || defaultMeta.search || DEFAULT_META.search,
 
     sortBy: queryFinal.sortBy || defaultMeta.sortBy || DEFAULT_META.sortBy,
-    sortDesc: queryFinal.sortDesc
+    sortDesc: typeof queryFinal.sortDesc !== 'undefined'
       ? queryFinal.sortDesc === true || queryFinal.sortDesc === 'true'
       : typeof defaultMeta.sortDesc !== 'undefined'
         ? defaultMeta.sortDesc
@@ -103,7 +103,8 @@ function searchInValue(value, search) {
 export function filterAndSortDb(mockDb, query, searchFields = []) {
   const {
     filters,
-  } = query;
+  } = query || {};
+
   const meta = getMeta(query);
   const {
     search,
@@ -131,10 +132,6 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
         searchInValue(object[searchField], search)));
   }
 
-  // pagination
-  const total = result.length;
-  result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
-
   // sorting
   if (sortBy) {
     result.sort((objectA, objectB) => {
@@ -149,6 +146,10 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
         );
     });
   }
+
+  // pagination
+  const total = result.length;
+  result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
 
   return {
     records: result,

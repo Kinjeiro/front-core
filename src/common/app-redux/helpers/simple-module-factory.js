@@ -160,7 +160,7 @@ export default function simpleModuleFactory(
         let stateFinal = state;
         if (ENTITY_TYPES_VALUES.includes(action.type)) {
           const sliceState = stateFinal[action[FIELD_ACTION_UUID]];
-          // auto init
+          // auto init if not exist
           if (!sliceState) {
             stateFinal = initModuleItem(stateFinal, action, data);
           }

@@ -19,6 +19,7 @@ import {
   getMeta,
 } from '../../models/model-table';
 import { cutContextPath } from '../../helpers/app-urls';
+import logger from '../../helpers/client-logger';
 
 
 import createStatusReducer from './create-status-reducer';
@@ -154,7 +155,19 @@ export default class ReduxTable extends ReduxUni {
         //   payload: apiLoadRecords(tableUuid, meta, filters),
         // };
         return (dispatch, getState) => {
-          const state = this.getSliceState(getState(), tableUuid);
+          let state = this.getSliceState(getState(), tableUuid);
+          if (!state) {
+            logger.debug(`State for tableUuid "${tableUuid}" doesn't found.`);
+            // eslint-disable-next-line no-param-reassign
+            forceUpdate = true;
+            // eslint-disable-next-line no-param-reassign
+            state = {
+              actionLoadRecordsStatus: {},
+              meta: initialMeta,
+              filters: {},
+            };
+          }
+
           const {
             actionLoadRecordsStatus,
             meta: currentMeta,
