@@ -759,7 +759,7 @@ describe('api-plugin-factory', () => {
       ]);
 
       const res = await server.inject('/api/testUnits');
-      expect(res.statusCode).to.equal(502);
+      expect(res.statusCode).to.equal(500);
       expect(res.result.isUniError).to.equal(true);
       expect(res.result.errorFrom).to.equal(UNI_ERROR_FROM.FROM_BOOM);
       expect(res.result.isNotFound).to.equal(true);
