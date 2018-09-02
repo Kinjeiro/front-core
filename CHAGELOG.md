@@ -11,6 +11,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
    Перенес все что связано с авторизацией пока в отдельный псевдомодуль ```/src/modules/module-auth```
    Изменил роутинг с ```/login``` на ```/auth/signin``` и кое-где классы для компонентов -
    Поэтому проверьте у себя, чтобы ничего не отвалилось в авторизации
+   
+Теперь достаточно указывать ProjectLayout и все
+```
+  const projectLayout = (
+    // ======================================================
+    // APP
+    // ======================================================
+    <Route
+      key="appLayout"
+      component={ ProjectApp }
+    >
+      <IndexRoute component={ Landing } />
+
+      <Route path={ paths.ROUTES_NAMES.products }>
+        { moduleProducts.getRoutes() }
+      </Route>
+      <Route path={ paths.ROUTES_NAMES.profile }>
+        { moduleProfile.getRoutes() }
+      </Route>
+    </Route>
+  );
+
+  return createParentRoutes(
+    store,
+    projectLayout,
+    {
+      rootAppComponentProps: {
+        modulesProviderProps: {
+          moduleToRoutePrefixMap: paths.MODULES_PREFIXES,
+        },
+      },
+    },
+  );
+```
 
 2. Добавил /src/components/ComponentsBase - место отложенной инициализации компонентов. 
 Убрал из ```create-routes``` определение классов компонентов
@@ -53,6 +87,7 @@ import { getUserAvatarUrl } from '@reagentum/front-core/lib/common/app-redux/red
     - базовые компоненты
     - валидация (+ html5 валидация)
 4.  Убновленный ReduxTable и его декоратор redux-table - синхронизация меты с урлом и избавления от рутины методов
+5.  Удобная система сервисов и сервис моков, доступных в любом request
 
 ### Commits:
     - feat(redux, table): - ReduxTable::actionLoadRecords при подачи фильтров - затирает их новым значением (а не мержит со старыми, как это было раньше)

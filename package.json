@@ -28,7 +28,7 @@
     "lint": "./node_modules/.bin/eslint --ext js,jsx .",
     "build-docs-md": "documentation build src/** --config docs/api-documentation.yml --format md --output docs/api.md",
     "build-docs-html": "documentation build src/** --config docs/api-documentation.yml --format html --output docs/api",
-    "compile": "npm run update-babelrc && rimraf lib/* -f && babel src --out-dir lib --copy-files",
+    "compile": "npm run update-babelrc && rimraf lib/* -f && babel src --out-dir lib --copy-files --include-dotfiles",
     "publish-patch": "npm run release-patch && npm publish",
     "publish-patch-r": "git push --follow-tags && npm publish",
     "release-patch": "npm version patch -m \"chore(*) patch version: %s\"",
@@ -187,7 +187,7 @@
   "devDependencies": {
     "autoprefixer": "~6.3.1",
     "awesome-typescript-loader": "~1.0.0",
-    "babel-cli": "~6.24.1",
+    "babel-cli": "~6.26.0",
     "babel-eslint": "~7.2.3",
     "chai": "~3.5.0",
     "chai-as-promised": "~5.3.0",
