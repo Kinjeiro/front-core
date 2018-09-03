@@ -1,5 +1,6 @@
 import { filterAndSortDb } from '../../../common/models/model-table';
 import { generateId as utilsGenerateId } from '../../../common/utils/common';
+import { applyPatchOperations } from '../../../common/utils/api-utils';
 
 import CoreService from './CoreService';
 
@@ -27,12 +28,9 @@ export default class CoreServiceMock extends CoreService {
     return record;
   }
 
-  async editRecord(id, record) {
+  async editRecord(id, data) {
     const records = await this.getData();
-    records[id] = {
-      ...records[id],
-      record,
-    };
+    records[id] = applyPatchOperations(records[id], data);
     return records[id];
   }
 
