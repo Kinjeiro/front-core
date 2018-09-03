@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
 
 import { executeVariable } from '../../common';
+import ID_PROP_TYPE from '../../../models/model-id';
 
 import {
   getForm,
@@ -17,8 +18,12 @@ import * as reduxUiForm from '../../../app-redux/reducers/ui-domains/forms';
  * @param formId - айди форма, или функция (props) => id
  * @param defaultValues - дефолтные значения
  *
+ * Плюс в пропертях можно передать initValues - дефолтные значения из значений
+ *
  * Возвращает компонент с доп пропертями:
  * - form - текущие данные формы
+ * - formId - id формы
+ * - getFormId - (props = this.props) => {}
  * - onUpdateForm - метод обновления данных
 */
 export default function reduxSimpleFormDecorator(
@@ -30,9 +35,17 @@ export default function reduxSimpleFormDecorator(
 
   return (ReactComponentClass) => {
     @connect(
-      (globalState, ownProps) => ({
-        form: getForm(globalState, executeVariable(formId, null, ownProps)) || defaultValues,
-      }),
+      (globalState, ownProps) => {
+        const {
+          initValues,
+        } = ownProps;
+        const formIdFinal = executeVariable(formId, null, ownProps);
+        const initValuesFinal = executeVariable(initValues, null, ownProps);
+        return {
+          formId: formIdFinal,
+          form: getForm(globalState, formIdFinal) || initValuesFinal || defaultValues,
+        };
+      },
       {
         ...reduxUiForm.actions,
       },
@@ -40,9 +53,18 @@ export default function reduxSimpleFormDecorator(
     class ExtendedComponent extends Component {
       static propTypes = {
         // ======================================================
+        // PROPS
+        // ======================================================
+        initValues: PropTypes.oneOfType([
+          PropTypes.func,
+          PropTypes.object,
+        ]),
+
+        // ======================================================
         // CONNECT
         // ======================================================
         // eslint-disable-next-line react/no-unused-prop-types
+        formId: ID_PROP_TYPE,
         form: PropTypes.object,
         actionFormInit: PropTypes.func,
         actionFormUpdate: PropTypes.func,
@@ -52,18 +74,24 @@ export default function reduxSimpleFormDecorator(
       // ======================================================
       // UTILS
       // ======================================================
-      getFormId() {
-        return executeVariable(formId, null, this.props);
+      @bind()
+      getFormId(props = this.props) {
+        return executeVariable(formId, null, props);
       }
 
       // ======================================================
       // LIFECYCLE
       // ======================================================
       componentWillMount() {
-        this.props.actionFormInit(this.getFormId(), defaultValues);
+        const {
+          form,
+          formId: formIdFinal,
+          actionFormInit,
+        } = this.props;
+        actionFormInit(formIdFinal, form);
       }
       componentWillUnmount() {
-        this.props.actionFormRemove(this.getFormId());
+        this.props.actionFormRemove(this.props.formId);
       }
 
       // ======================================================
@@ -71,7 +99,7 @@ export default function reduxSimpleFormDecorator(
       // ======================================================
       @bind()
       handleUpdateForm(data) {
-        this.props.actionFormUpdate(this.getFormId(), data);
+        this.props.actionFormUpdate(this.props.formId, data);
       }
 
       // ======================================================
@@ -81,6 +109,7 @@ export default function reduxSimpleFormDecorator(
         return (
           <ReactComponentClass
             { ...this.props }
+            getFormId={ this.getFormId }
             onUpdateForm={ this.handleUpdateForm }
           />
         );
