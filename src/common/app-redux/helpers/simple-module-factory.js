@@ -92,7 +92,7 @@ export default function simpleModuleFactory(
         ...state,
         data: entityReducer(state.data, action),
       }
-      : state;
+      : { ...state };
   };
 
   function createModuleItem(id, data, action) {
