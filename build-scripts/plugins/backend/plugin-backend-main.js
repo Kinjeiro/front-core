@@ -97,6 +97,16 @@ function pluginBackendMain(webpackConfig, {
   //     }
   //   })
   // );
+
+
+  /*
+   __dirname returns '/' when js file is built with webpack
+   https://github.com/webpack/webpack/issues/1599#issuecomment-417948725
+   */
+  webpackConfig.node = {
+    // __filename: false,
+    __dirname: true
+  };
 }
 
 module.exports = pluginBackendMain;
