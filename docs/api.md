@@ -1030,7 +1030,9 @@ Returns **({method, path, payload} | any)**
 **Parameters**
 
 -   `formId`  айди форма, или функция (props) => id
--   `defaultValues`  дефолтные значенияВозвращает компонент с доп пропертями:-   form - текущие данные формы
+-   `defaultValues`  дефолтные значенияПлюс в пропертях можно передать initValues - дефолтные значения из значенийВозвращает компонент с доп пропертями:-   form - текущие данные формы
+    -   formId - id формы
+    -   getFormId - (props = this.props) => {}
     -   onUpdateForm - метод обновления данных
 
 ## reduxTableDecorator
