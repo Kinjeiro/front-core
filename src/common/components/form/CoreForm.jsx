@@ -16,6 +16,11 @@ import getComponents from '../../get-components';
 
 // import './CoreForm.scss';
 
+import {
+  FIELD_PROP_TYPE,
+  TYPES,
+} from '../../models/model-field';
+
 const {
   // todo @ANKU @LOW - можно сделать отложенную чтобы не загружать если задали кастомный Layout
   FormLayout,
@@ -28,12 +33,12 @@ const {
 
 @bemDecorator({ componentName: 'CoreForm', wrapper: false })
 export default class CoreForm extends Component {
-  static FIELD_TYPES = Field.TYPES;
+  static FIELD_TYPES = TYPES;
 
   static propTypes = {
     id: PropTypes.string,
     i18nFieldPrefix: PropTypes.string,
-    fields: PropTypes.arrayOf(PropTypes.shape(Field.propTypes)),
+    fields: PropTypes.arrayOf(FIELD_PROP_TYPE),
     /**
      * Для передачи в onSubmit
      */
