@@ -10,6 +10,7 @@ const paths = [
   // '/common/models/**/*.js'
 ];
 
+// todo @ANKU @LOW - если компилить через lib то он везде проставляет any везде, если через src - нужно декораторы абсолютно все переделывать + незаглядывает в наследуемые propTypes так как анализирует строчки в файле
 function generateDts() {
   paths.forEach((globRegexp) => {
     // https://github.com/isaacs/node-glob#options - options is optional

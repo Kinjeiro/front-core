@@ -156,6 +156,15 @@ export default class CoreForm extends Component {
   }
 
   @bind()
+  handleChange(fieldName, newValue) {
+    const {
+      onChangeField,
+    } = this.props;
+
+    return onChangeField({ [fieldName]: newValue });
+  }
+
+  @bind()
   handleSubmit(event) {
     const {
       onSubmit,
@@ -226,12 +235,7 @@ export default class CoreForm extends Component {
           textHint={ hint }
           textDescription={ textDescriptionFinal }
           onChange={
-            onChange
-            || (
-              onChangeField
-              ? (fieldName, newValue) => onChangeField({ [name]: newValue })
-              : undefined
-            )
+            onChange || (onChangeField ? this.handleChange : undefined)
           }
         />
       </ErrorBoundary>

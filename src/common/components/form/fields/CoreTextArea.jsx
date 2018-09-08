@@ -12,6 +12,7 @@ const { BaseTextArea } = CB;
 export default class CoreTextArea extends PureComponent {
   static propTypes = {
     value: PropTypes.any,
+    indexItem: PropTypes.number,
     withState: PropTypes.bool,
     readOnly: PropTypes.bool,
 
@@ -109,6 +110,7 @@ export default class CoreTextArea extends PureComponent {
       value,
       withState,
       onChangedBlur,
+      indexItem,
       ...inputProps
     } = this.props;
 

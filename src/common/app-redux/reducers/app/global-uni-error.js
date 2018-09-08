@@ -41,7 +41,7 @@ const reducer = createReducer(
     [TYPES.CHANGE_GLOBAL_UNI_ERROR]:
       (state, action, globalUniError) => globalUniError,
     [TYPES.CLEAR_GLOBAL_UNI_ERROR]:
-      (state, action) => initialState,
+      () => initialState,
   },
 );
 

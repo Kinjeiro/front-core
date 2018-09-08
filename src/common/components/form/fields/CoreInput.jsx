@@ -3,13 +3,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import componentsBase from '../../ComponentsBase';
+import getComponents from '../../../get-components';
 
 const {
   BaseNumberInput,
   BaseTextArea,
   BaseInput,
-} = componentsBase;
+} = getComponents();
 
 export default class CoreInput extends PureComponent {
   static propTypes = {
@@ -20,6 +20,7 @@ export default class CoreInput extends PureComponent {
       PropTypes.string,
       PropTypes.number,
     ]),
+    indexItem: PropTypes.number,
     type: PropTypes.string,
     readOnly: PropTypes.bool,
     InputClass: PropTypes.func,
@@ -177,6 +178,7 @@ export default class CoreInput extends PureComponent {
       InputClass,
       withState, // убираем из остальных пропертей
       onChangedBlur, // убираем из остальных пропертей
+      indexItem,
       title,
       errors,
       ...inputProps

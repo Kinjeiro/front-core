@@ -267,6 +267,12 @@ export default class CoreField extends PureComponent {
     }
   }
 
+  // todo @ANKU @LOW - вынести в отдельные фабричные филды
+  @bind()
+  handleInputChange(event, { value, indexItem }) {
+    return this.handleChange(value, indexItem, event);
+  }
+
   @bind()
   handleChange(value, index) {
     const {
@@ -359,7 +365,9 @@ export default class CoreField extends PureComponent {
   @bind()
   handleBlur(...args) {
     const {
-      onBlur,
+      controlProps: {
+        onBlur,
+      } = {},
       value,
     } = this.props;
 
@@ -541,9 +549,8 @@ export default class CoreField extends PureComponent {
           };
         }
 
-        const changeHandler = (event, { value }) => this.handleChange(value, index);
-        const onChangeBlur = instanceChange ? undefined : changeHandler;
-        const onChangeFinal = instanceChange ? changeHandler : undefined;
+        const onChangeBlur = instanceChange ? undefined : this.handleInputChange;
+        const onChangeFinal = instanceChange ? this.handleInputChange : undefined;
 
         if (type === TYPES.TEXT) {
           // TextArea
@@ -553,6 +560,8 @@ export default class CoreField extends PureComponent {
             // value: controlValue,
             onChangedBlur: onChangeBlur,
             onChange: onChangeFinal,
+            indexItem: index,
+            withState: !instanceChange,
             ...controlPropsFinal,
             children: controlValue,
           };
@@ -562,6 +571,7 @@ export default class CoreField extends PureComponent {
         return {
           controlRef: this.controlRef,
           value: controlValue || '',
+          withState: !instanceChange,
           type: type === TYPES.DECIMAL ? 'number' : type,
           min: minValue,
           max: maxValue,
@@ -570,6 +580,7 @@ export default class CoreField extends PureComponent {
           pattern,
           onChangedBlur: onChangeBlur,
           onChange: onChangeFinal,
+          indexItem: index,
           ...controlPropsFinal,
         };
       case TYPES.BOOLEAN:
@@ -581,8 +592,8 @@ export default class CoreField extends PureComponent {
             this.handleChange(
               props && typeof props.checked !== 'undefined'
                 ? props.checked
-                : typeof props.checked !== 'undefined'
-                ? event.target.checked
+                  : typeof props.checked !== 'undefined'
+                  ? event.target.checked
                 : event.target.value || event,
               index,
             ),
@@ -819,6 +830,7 @@ export default class CoreField extends PureComponent {
       type,
       value = null,
       multiple,
+      instanceChange,
 
       onAdd,
       textOnAdd,
@@ -861,7 +873,7 @@ export default class CoreField extends PureComponent {
             {
               values.map((itemValue, index) => (
                 <div
-                  key={ JSON.stringify(itemValue) }
+                  key={ multiple && !instanceChange ? JSON.stringify(itemValue) : index }
                   className={ `CoreField__controlItem ${multiple && onRemove ? 'CoreField--withRemoveButton' : ''}` }
                 >
                   { this.renderFieldItem(itemValue, index, constraints) }
