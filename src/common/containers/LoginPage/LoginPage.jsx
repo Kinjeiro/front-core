@@ -1,6 +1,10 @@
-import ComponentsBase from '../../components/ComponentsBase';
+import getComponents from '../../get-components';
+
+const {
+  Signin,
+} = getComponents();
 
 /**
  * @deprecated - используйте /src/modules/module-auth/Signin/Signin
  */
-export default ComponentsBase.Signin;
+export default Signin;

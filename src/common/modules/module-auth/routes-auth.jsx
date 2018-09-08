@@ -9,7 +9,7 @@ import {
 import clientConfig from '../../client-config';
 
 import * as paths from './routes-paths-auth';
-import getComponents from './components/get-components';
+import getComponents from './get-components';
 
 export default function getRouter() {
   const {

@@ -19,7 +19,7 @@ import {
 } from '../../routes-paths-auth';
 
 // import './AuthEnter.scss';
-import getComponents from '../get-components';
+import getComponents from '../../get-components';
 
 const {
   Signin,

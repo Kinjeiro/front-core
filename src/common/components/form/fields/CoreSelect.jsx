@@ -6,12 +6,12 @@ import omit from 'lodash/omit';
 
 import i18n from '../../../utils/i18n-utils';
 
-import componentsBase from '../../ComponentsBase';
+import getComponents from '../../../get-components';
 
 const {
   BaseSelect,
   // BaseOption,
-} = componentsBase;
+} = getComponents();
 
 /**
  * Нужно показывать только n первых элементов

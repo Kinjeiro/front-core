@@ -69,11 +69,14 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
   COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
 
-  COMPONENTS_BASE.replace('AuthCheckWrapper', () => require('./containers/AuthCheckWrapper/AuthCheckWrapper').default);
-  COMPONENTS_BASE.replace('AuthErrorContainer', () => require('./containers/AuthErrorContainer/AuthErrorContainer').default);
   COMPONENTS_BASE.replace('CoreApp', () => require('./containers/CoreApp/CoreApp').default);
   COMPONENTS_BASE.replace('ErrorPage', () => require('./containers/ErrorPage/ErrorPage').default);
   COMPONENTS_BASE.replace('I18NProvider', () => require('./containers/I18NProvider/I18NProvider').default);
+
+  // ======================================================
+  // CORE PAGES
+  // ======================================================
+  COMPONENTS_BASE.replace('StubPage', () => require('./containers/StubPage/StubPage').default);
 
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;

@@ -5,7 +5,7 @@ import {
   // IndexRedirect,
 } from 'react-router';
 
-import COMPONENTS_BASE from './components/ComponentsBase';
+import getComponents from './get-components';
 
 import {
   CORE_ROUTES_NAMES,
@@ -18,10 +18,15 @@ export default function createRoutes(
   projectLayout,
   options = {},
 ) {
-  const CoreApp = require('./containers/CoreApp/CoreApp').default;
-  const ErrorPage = require('./containers/ErrorPage/ErrorPage').default;
-  const StubPage = require('./containers/StubPage/StubPage').default;
-  const AuthErrorContainer = require('./containers/AuthErrorContainer/AuthErrorContainer').default;
+  const {
+    Info404,
+
+    CoreApp,
+    ErrorPage,
+    StubPage,
+
+    AuthErrorContainer, // module-auth
+  } = getComponents();
 
   const {
     beforeRoutes = [],
@@ -83,7 +88,7 @@ export default function createRoutes(
           <Route
             path={ CORE_ROUTES_NAMES.auth }
           >
-            { getRouterAuth(COMPONENTS_BASE) }
+            { getRouterAuth() }
           </Route>
         )
       }
@@ -104,7 +109,7 @@ export default function createRoutes(
       <Route
         path="*"
         exact={ true }
-        component={ COMPONENTS_BASE.Info404 }
+        component={ Info404 }
       />
     </Route>
   );

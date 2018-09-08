@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import './AuthPageLayout.css';
 
-import getComponents from '../get-components';
+import getComponents from '../../get-components';
 
 const {
   AuthFormLayout,

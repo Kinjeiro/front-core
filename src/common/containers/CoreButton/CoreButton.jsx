@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import AuthCheckWrapper from '../AuthCheckWrapper/AuthCheckWrapper';
-
 import getComponents from '../../get-components';
 
-const { BaseButton } = getComponents();
+const {
+  BaseButton,
+
+  AuthCheckWrapper, // module-auth
+} = getComponents();
 
 /*
 * Обертка над react-router чтобы потом при перехода на 4 версию ничего не отвалилвалось

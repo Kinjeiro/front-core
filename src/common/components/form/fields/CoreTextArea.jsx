@@ -3,11 +3,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import CB from '../../ComponentsBase';
+import getComponents from '../../../get-components';
 
 // import './InputWithState.css';
 
-const { BaseTextArea } = CB;
+const { BaseTextArea } = getComponents();
 
 export default class CoreTextArea extends PureComponent {
   static propTypes = {

@@ -21,4 +21,4 @@ export I18NProvider from './I18NProvider/I18NProvider';
 /**
  * @deprecated - user direct (without index)
  */
-export AuthErrorContainer from './AuthErrorContainer/AuthErrorContainer';
+export AuthErrorContainer from '../modules/module-auth/AuthErrorContainer/AuthErrorContainer';

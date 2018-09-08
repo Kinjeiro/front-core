@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 import AbstractClientRunner from './AbstractClientRunner';
 
 import { getClientStoreInitialState as getStateFromPage } from './get-global-data';
 
 import { initComponents } from '../common/get-components';
-import { initComponents as initAuthComponents } from '../common/modules/module-auth/components/get-components';
+import { initComponents as initAuthComponents } from '../common/modules/module-auth/get-components';
 
 /**
  * Расширение для установки core зависимостей по redux и импорт данных, пришедших с сервера при отрисовки
