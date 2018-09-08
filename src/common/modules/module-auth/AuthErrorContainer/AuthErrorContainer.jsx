@@ -4,24 +4,26 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { translateCore as i18n } from '../../utils/i18n-utils';
-import clientConfig from '../../client-config';
-import { pathGetLoginPage } from '../../constants/routes.pathes';
+import { translateCore as i18n } from '../../../utils/i18n-utils';
+import clientConfig from '../../../client-config';
 import {
   getLastUniError,
   getUser,
-} from '../../app-redux/selectors';
-import * as reduxLastUniError from '../../app-redux/reducers/app/last-uni-error';
+} from '../../../app-redux/selectors';
+import * as reduxLastUniError from '../../../app-redux/reducers/app/last-uni-error';
 
-import COMPONENTS_BASE from '../../components/ComponentsBase';
+import { pathGetSigninPage } from '../routes-paths-auth';
 
-import './AuthErrorContainer.css';
+import getComponents from '../get-components';
 
 const {
+  Modal,
+
   AuthFormLayout,
   AuthEnter,
-  Modal,
-} = COMPONENTS_BASE;
+} = getComponents();
+
+require('./AuthErrorContainer.css');
 
 // eslint-disable-next-line no-unused-vars
 const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
@@ -57,6 +59,10 @@ export default class AuthErrorContainer extends Component {
   static defaultProps = {
   };
 
+  state = {
+    authError: null,
+  };
+
   // ======================================================
   // LIFECYCLE
   // ======================================================
@@ -65,11 +71,16 @@ export default class AuthErrorContainer extends Component {
   // }
   // // componentDidMount() {
   // // }
-  // componentWillReceiveProps(newProps) {
-  //   if (newProps.lastUniError !== this.props.lastUniError) {
-  //     this.checkReload(newProps);
-  //   }
-  // }
+  componentWillReceiveProps(newProps) {
+    const {
+      lastUniError,
+    } = newProps;
+    if (lastUniError !== this.props.lastUniError && lastUniError && lastUniError.isNotAuth) {
+      this.setState({
+        authError: lastUniError,
+      });
+    }
+  }
 
   // ======================================================
   // HANDLERS
@@ -90,7 +101,7 @@ export default class AuthErrorContainer extends Component {
     } = this.props;
 
     // if (!reLoginModalForm && lastUniError && lastUniError.isNotAuth) {
-    actionGoTo(pathGetLoginPage(linkForwardTo || `${pathname}${search}${hash}`));
+    actionGoTo(pathGetSigninPage(linkForwardTo || `${pathname}${search}${hash}`));
     // }
   }
 
@@ -122,15 +133,11 @@ export default class AuthErrorContainer extends Component {
 
   renderModalMessage() {
     const {
-      lastUniError: {
-        isNotAuth,
-        linkForwardTo,
-      },
-      actionClearLastError,
-    } = this.props;
+      authError,
+    } = this.state;
 
-    return isNotAuth && (
-      <Modal onCancel={ () => actionClearLastError() }>
+    return authError && (
+      <Modal onCancel={ () => this.setState({ authError: null }) }>
         {
           reLoginModalForm
             ? (
@@ -138,7 +145,8 @@ export default class AuthErrorContainer extends Component {
                 <AuthEnter
                   { ...this.props }
                   inModal={ true }
-                  urlReturn={ linkForwardTo || false }
+                  urlReturn={ authError.linkForwardTo || false }
+                  onSubmit={ () => this.setState({ authError: null }) }
                 />
               </AuthFormLayout>
             )
@@ -153,7 +161,6 @@ export default class AuthErrorContainer extends Component {
   // ======================================================
   render() {
     const {
-      lastUniError,
       children,
       user,
       // actionClearLastError,
@@ -164,7 +171,7 @@ export default class AuthErrorContainer extends Component {
         className="AuthErrorContainer"
         key={ user }
       >
-        { lastUniError && this.renderModalMessage() }
+        { this.renderModalMessage() }
 
         { children }
       </div>

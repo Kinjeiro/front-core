@@ -29,7 +29,7 @@ import {
 
 // import './LoginPage.css';
 
-import getComponents from '../get-components';
+import getComponents from '../../get-components';
 
 const {
   Form,
@@ -62,6 +62,7 @@ export default class Signup extends Component {
     // ======================================================
     // PROPS
     // ======================================================
+    onSubmit: PropTypes.func,
     inModal: PropTypes.bool,
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
@@ -106,6 +107,7 @@ export default class Signup extends Component {
       actionSignup,
       emailAsLogin,
       onEnterTypeChange,
+      onSubmit,
     } = this.props;
     const {
       email,
@@ -118,6 +120,10 @@ export default class Signup extends Component {
     });
 
     await onEnterTypeChange(true);
+
+    if (onSubmit) {
+      await onSubmit();
+    }
   }
 
   // ======================================================

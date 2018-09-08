@@ -31,7 +31,7 @@ import * as paths from '../../routes-paths-auth';
 
 // import './Signin.css';
 
-import getComponents from '../get-components';
+import getComponents from '../../get-components';
 
 const {
   Link,
@@ -64,7 +64,7 @@ export default class Signin extends Component {
     // ======================================================
     // PROPS
     // ======================================================
-    onLogin: PropTypes.func,
+    onSubmit: PropTypes.func,
     inModal: PropTypes.bool,
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
@@ -152,7 +152,7 @@ export default class Signin extends Component {
       },
       emailAsLogin,
       actionChangeUser,
-      onLogin,
+      onSubmit,
       onEnterTypeChange,
     } = this.props;
 
@@ -160,8 +160,8 @@ export default class Signin extends Component {
     await actionChangeUser(loginFinal, password);
     await onEnterTypeChange(null);
 
-    if (onLogin) {
-      await onLogin(loginFinal);
+    if (onSubmit) {
+      await onSubmit(loginFinal);
     }
   }
 
