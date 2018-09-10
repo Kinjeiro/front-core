@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.4.31",
+  "version": "1.4.32",
   "description": "front-core",
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
   "main": "./build-scripts/start.js",
@@ -9,12 +9,10 @@
     "start-localhost": "cross-env NODE_ENV=localhost HOT_LOADER=1 APP_MOCKS=1 USE_MOCKS=1 node ./build-scripts/start.js",
     "start-localhost-other-port": "cross-env SERVER_PORT=8082 PROXY_PORT=9092 npm run start-localhost",
     "start": "npm run start-localhost",
-
     "----- START DAEMON -----": "----------",
     "start-daemon": "pm2 start ./.build/server.js --name front-core",
     "stop-daemon": "pm2 stop front-core || echo 'pm2 app not started'",
     "start-production-daemon": "cross-env NODE_ENV=production npm run start-daemon",
-
     "----- START -----": "----------",
     "start-build": "node ./.build/server.js",
     "start-static-build": "cd ./.build && live-server --entry-file=./index.html",
@@ -27,12 +25,10 @@
     "start-without-SSR": "cross-env CLIENT_SIDE_RENDERING=1 npm run start-localhost",
     "start-frontend-server": "node ./build-scripts/start-frontend.js",
     "start-backend-server": "node ./build-scripts/start-backend.js",
-
     "----- BUILD -----": "----------",
     "build": "cross-env NODE_ENV=production node ./build-scripts/build.js",
     "build-development": "cross-env NODE_ENV=development node ./build-scripts/build.js",
     "test-build": "npm run build && npm run start-production",
-
     "----- TEST -----": "----------",
     "test-client": "cross-env NODE_ENV=test SERVER_PORT=8082 karma start ./test/client/run-client-tests.js",
     "test-client:watch": "npm run test-client -- --watch",
@@ -41,8 +37,6 @@
     "test-scripts": "cross-env NODE_ENV=test mocha ./test/scripts/run-scripts-tests.js",
     "test-with-auth": "npm run test-scripts && npm run test-server && npm run test-client",
     "test": "npm run test-scripts && npm run test-server && npm run test-client",
-
-
     "----- VERSION -----": "----------",
     "generate-dts": "node ./build-scripts/generate-dts.js",
     "lint": "./node_modules/.bin/eslint --ext js,jsx .",
@@ -62,13 +56,11 @@
     "postversion": "git push --follow-tags",
     "postversion-hg": "hg add package.json && hg commit package.json -m \"front-core new version\" && hg push",
     "postversion-git": "git push --follow-tags",
-
     "----- DOCKER -----": "----------",
     "docker-build": "sh docker/docker-build.sh",
     "docker-push": "sh docker/docker-push.sh",
     "docker-test-run": "sh docker/docker-test-run.sh",
     "docker-build-test-push": "sh docker/build-test-push-to-devops.sh",
-
     "----- UTILS -----": "----------",
     "update-babelrc": "node ./build-scripts/update-babelrc.js",
     "sync-work-branch": "sh ./build-scripts/sync-work-branch.sh",
