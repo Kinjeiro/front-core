@@ -48,11 +48,13 @@ export default class AbstractClientRunner {
    */
   constructor(runnerOptions = {}) {
     const {
-      htmlContainerId = 'react-app',
+      htmlContainerId,
     } = runnerOptions;
 
-    this.htmlContainerId = htmlContainerId;
+    // todo @ANKU @LOW - вынести в константы
+    this.htmlContainerId = htmlContainerId || 'react-app';
   }
+
 
   // ======================================================
   // for OVERRIDE
@@ -71,7 +73,7 @@ export default class AbstractClientRunner {
   getEntityModels() {
     return {};
   }
-  getRoutes(store) {
+  getRoutes(/* store */) {
     throw new Error('need override "AbstractClientRunner.getRoutes"');
   }
   getApi() {
@@ -103,6 +105,12 @@ export default class AbstractClientRunner {
       CB: require('../common/components/ComponentsBase').default,
     };
   }
+
+  hotReloadListeners() {
+    module.hot.accept('./Root', this.reloadUi);
+  }
+
+
 
   // ======================================================
   // INIT
@@ -143,6 +151,14 @@ export default class AbstractClientRunner {
 
   init() {
     // ======================================================
+    // API CLIENT
+    // ======================================================
+    const ApiClientClass = this.getApiClientClass();
+    initApiClientClass(ApiClientClass);
+    const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
+    initApiClient(apiClient);
+
+    // ======================================================
     // COMPONENTS
     // ======================================================
     // должны инициализироваться до роутев
@@ -156,25 +172,22 @@ export default class AbstractClientRunner {
     this.history = syncHistoryWithStore(routeHistory, this.store);
     this.routes = this.getRoutes(this.store);
     this.api = this.getApi();
+  }
 
-    // ======================================================
-    // API CLIENT
-    // ======================================================
-    const ApiClientClass = this.getApiClientClass();
-    initApiClientClass(ApiClientClass);
-    const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
-    initApiClient(apiClient);
 
+  // ======================================================
+  // AFTER INIT
+  // ======================================================
+  printDebugInfo() {
     // ======================================================
     // DEBUG
     // ======================================================
-    logger.warn(`
-      ================================\n
-      ======= ${clientConfig.common.appId}:${clientConfig.common.appVersion} ========\n
-      ================================
-    `);
-
     if (!clientConfig.common.isProduction) {
+      logger.warn(`
+        ================================\n
+        ======= ${clientConfig.common.appId}:${clientConfig.common.appVersion} ========\n
+        ================================
+      `);
       logger.log('=====[ COMMON CONFIG ]=====', clientConfig.common);
       logger.log('=====[ CLIENT CONFIG ]=====', clientConfig.client);
 
@@ -188,17 +201,25 @@ export default class AbstractClientRunner {
     }
   }
 
+
   // ======================================================
-  // AFTER INIT
+  // RENDER
   // ======================================================
   createRootComponent() {
     const Root = require('./Root').default;
-    return (
-      <Root
-        store={ this.store }
-        history={ this.history }
-        routes={ this.routes }
-      />
+    const {
+      store,
+      history,
+      routes,
+    } = this;
+
+    return React.createElement(
+      Root,
+      {
+        store,
+        history,
+        routes,
+      },
     );
   }
 
@@ -217,7 +238,40 @@ export default class AbstractClientRunner {
     return container;
   }
 
+  renderDOM(isUseHot = undefined) {
+    let reactRootComponent = this.createRootComponent();
 
+    const isHot = typeof isUseHot === 'undefined'
+      ? clientConfig.common.hotLoader
+      : isUseHot;
+
+    if (isHot) {
+      // todo @ANKU @BUG_OUT @react-hot-loader - при отключенном SERVER_SIDE_RENDER, если явно
+      // не задать errorReporter, то внутри он берет RedBox через required но
+      // без default (может быть связано с тем что работает компилятор TypeScript) соотвественно
+      // получает объект а не функцию - создание компонента и падает с ошибкой, не показывая оригинальную ошибку
+      // поэтому пришлось самому инсталить его и подавать правильно
+      reactRootComponent = React.createElement(
+        AppContainer,
+        {
+          errorReporter: clientConfig.common.isProduction ? undefined : RedBox,
+        },
+        reactRootComponent,
+      );
+    }
+
+    const reactAppDiv = this.getHtmlContainer();
+
+    ReactDOM.render(
+      reactRootComponent,
+      reactAppDiv,
+    );
+  }
+
+
+  // ======================================================
+  // RELOAD
+  // ======================================================
   @bind()
   reloadAll() {
     this.reloadModels();
@@ -239,40 +293,6 @@ export default class AbstractClientRunner {
     this.renderDOM(true);
   }
 
-  hotReloadListeners() {
-    module.hot.accept('./Root', this.reloadUi);
-  }
-
-  // ======================================================
-  // RENDER
-  // ======================================================
-  renderDOM(isUseHot = undefined) {
-    let reactRootComponent = this.createRootComponent();
-
-    const isHot = typeof isUseHot === 'undefined'
-      ? clientConfig.common.hotLoader
-      : isUseHot;
-
-    if (isHot) {
-      reactRootComponent = (
-        // todo @ANKU @BUG_OUT @react-hot-loader - при отключенном SERVER_SIDE_RENDER, если явно
-        // не задать errorReporter, то внутри он берет RedBox через required но
-        // без default (может быть связано с тем что работает компилятор TypeScript) соотвественно
-        // получает объект а не функцию - создание компонента и падает с ошибкой, не показывая оригинальную ошибку
-        // поэтому пришлось самому инсталить его и подавать правильно
-        <AppContainer errorReporter={ clientConfig.common.isProduction ? undefined : RedBox }>
-          {reactRootComponent}
-        </AppContainer>
-      );
-    }
-
-    const reactAppDiv = this.getHtmlContainer();
-
-    ReactDOM.render(
-      reactRootComponent,
-      reactAppDiv,
-    );
-  }
 
   // ======================================================
   // MAIN RUN
@@ -283,6 +303,7 @@ export default class AbstractClientRunner {
       // INITIALIZATION
       // ======================================================
       this.init();
+      this.printDebugInfo();
 
 
       // ======================================================
@@ -300,6 +321,7 @@ export default class AbstractClientRunner {
       this.renderDOM();
     } catch (error) {
       logger.error(error);
+      throw error;
     }
   }
 }

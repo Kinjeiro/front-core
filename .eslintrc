@@ -19,7 +19,8 @@
     "geminiReact": true,
     "React": true,
     "suite": true,
-    "require": true
+    "require": true,
+    "module": true // webpack hot loader
   },
   "rules": {
     "max-len": ["error", 120, 4, {"ignoreComments": true}],

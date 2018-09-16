@@ -17,6 +17,7 @@ export default class CoreClientRunner extends AbstractClientRunner {
   initComponents(COMPONENTS_BASE) {
     super.initComponents(COMPONENTS_BASE);
     initComponents(COMPONENTS_BASE);
+    // todo @ANKU @LOW - переделать на модули
     return initAuthComponents(COMPONENTS_BASE);
   }
 
