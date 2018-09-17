@@ -57,7 +57,7 @@ export default class ContextModulesProvider extends Component {
   // ======================================================
   // LIFECYCLE
   // ======================================================
-  componentWllMount() {
+  componentWillMount() {
     const {
       moduleToRoutePrefixMap,
       actionInitModulesRoutePrefixes,
