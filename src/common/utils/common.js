@@ -435,3 +435,18 @@ export function aggregation(BaseClass, ...Mixins) {
 
   return Base;
 }
+
+export function aggregateArrayFn(array, field) {
+  return (...args) => array.reduce((result, arrayItem) => {
+    result.push(...wrapToArray(executeVariable(arrayItem[field], [], ...args)));
+    return result;
+  }, []);
+}
+
+export function aggregateObjectFn(array, field) {
+  return (...args) => array.reduce((result, arrayItem) => {
+    const object = executeVariable(arrayItem[field], {}, ...args);
+    Object.assign(result, object);
+    return result;
+  }, {});
+}
