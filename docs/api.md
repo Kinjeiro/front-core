@@ -5,159 +5,164 @@
 -   [Runners][1]
 -   [AbstractClientRunner][2]
     -   [getReducers][3]
-    -   [getApiClientClass][4]
--   [CoreClientRunner][5]
-    -   [getReducers][6]
--   [AbstractServerRunner][7]
--   [CoreServerRunner][8]
--   [Navigation][9]
--   [apiGetUserAvatarUrl][10]
--   [createStatusesReducer][11]
--   [createTablesModule][12]
--   [getBindActions][13]
--   [apiLoadRecords][14]
--   [getBindActions][15]
--   [getTableInfo][16]
--   [createFilteredReducer][17]
--   [createReducer][18]
--   [clientConfig][19]
--   [initConfig][20]
--   [parseValueToString][21]
--   [formData][22]
--   [Layout][23]
--   [update][24]
--   [CoreSelect][25]
--   [update][26]
--   [Info404][27]
--   [ThemeProvider][28]
+    -   [getModuleToRoutePrefixMap][4]
+    -   [getApiClientClass][5]
+-   [CoreClientRunner][6]
+    -   [getReducers][7]
+-   [AbstractServerRunner][8]
+-   [CoreServerRunner][9]
+-   [Navigation][10]
+-   [apiGetUserAvatarUrl][11]
+-   [createStatusesReducer][12]
+-   [createTablesModule][13]
+-   [getBindActions][14]
+-   [apiLoadRecords][15]
+-   [getBindActions][16]
+-   [getTableInfo][17]
+-   [createFilteredReducer][18]
+-   [createReducer][19]
+-   [clientConfig][20]
+-   [initConfig][21]
+-   [parseValueToString][22]
+-   [formData][23]
+-   [Layout][24]
+-   [update][25]
+-   [CoreSelect][26]
+-   [update][27]
+-   [Info404][28]
 -   [ThemeProvider][29]
--   [UniError][30]
--   [ListItem][31]
--   [Notifications][32]
--   [Loading][33]
--   [Link][34]
+-   [ThemeProvider][30]
+-   [UniError][31]
+-   [ListItem][32]
+-   [Notifications][33]
+-   [Loading][34]
 -   [Link][35]
--   [MediaQuery][36]
--   [ReadMore][37]
--   [bemDecorator][38]
--   [theme][39]
--   [className][40]
--   [ErrorPage][41]
--   [LoginPage][42]
+-   [Link][36]
+-   [MediaQuery][37]
+-   [ReadMore][38]
+-   [bemDecorator][39]
+-   [theme][40]
+-   [className][41]
+-   [ErrorPage][42]
 -   [LoginPage][43]
--   [StubPage][44]
--   [I18NProvider][45]
--   [AuthErrorContainer][46]
--   [decoratorContextModules][47]
--   [rootAppComponentProps][48]
--   [appUrl][49]
--   [MAP][50]
--   [MAP][51]
+-   [LoginPage][44]
+-   [StubPage][45]
+-   [I18NProvider][46]
+-   [AuthErrorContainer][47]
+-   [decoratorContextModules][48]
+-   [rootAppComponentProps][49]
+-   [appUrl][50]
+-   [getModuleFullPath][51]
 -   [MAP][52]
--   [STATUS_PROP][53]
--   [action-status][54]
--   [ACTION_STATUS_PROPS][55]
--   [UNI_ERROR_PROPS][56]
--   [USER_INFO_PROPS][57]
--   [id][58]
--   [valueName][59]
--   [constraints][60]
--   [validate][61]
--   [required][62]
--   [controlRef][63]
--   [controlClass][64]
--   [render][65]
--   [parseOutValue][66]
--   [instanceChange][67]
--   [Layout][68]
--   [FROM_BOOM][69]
--   [FROM_BOOM_RESPONSE][70]
--   [FROM_BOOM_ERROR][71]
--   [clientErrorMessage][72]
--   [uniMessage][73]
--   [parseFromBoom][74]
--   [parseFromBoomResponse][75]
--   [parseFromBoomError][76]
--   [DEFAULT_VALUES][77]
--   [user-info][78]
--   [STUB_ROUTES_NAMES][79]
--   [PARAM_RETURN_URL][80]
--   [pathGetLoginPage][81]
--   [PATH_LOGIN_PAGE][82]
--   [createJsonPatchOperation][83]
--   [apiCreateRecord][84]
--   [BaseApiClientClass][85]
-    -   [ajaxGet][86]
-    -   [ajaxPost][87]
-    -   [proceedRequest][88]
--   [valueFromRange][89]
--   [findInTree][90]
+-   [MAP][53]
+-   [MAP][54]
+-   [STATUS_PROP][55]
+-   [action-status][56]
+-   [ACTION_STATUS_PROPS][57]
+-   [UNI_ERROR_PROPS][58]
+-   [USER_INFO_PROPS][59]
+-   [id][60]
+-   [valueName][61]
+-   [constraints][62]
+-   [validate][63]
+-   [required][64]
+-   [controlRef][65]
+-   [controlClass][66]
+-   [render][67]
+-   [parseOutValue][68]
+-   [instanceChange][69]
+-   [Layout][70]
+-   [FROM_BOOM][71]
+-   [FROM_BOOM_RESPONSE][72]
+-   [FROM_BOOM_ERROR][73]
+-   [clientErrorMessage][74]
+-   [uniMessage][75]
+-   [parseFromBoom][76]
+-   [parseFromBoomResponse][77]
+-   [parseFromBoomError][78]
+-   [DEFAULT_VALUES][79]
+-   [user-info][80]
+-   [PARAM_RETURN_URL][81]
+-   [pathGetLoginPage][82]
+-   [PATH_LOGIN_PAGE][83]
+-   [createJsonPatchOperation][84]
+-   [apiCreateRecord][85]
+-   [BaseApiClientClass][86]
+    -   [ajaxGet][87]
+    -   [ajaxPost][88]
+    -   [proceedRequest][89]
+-   [valueFromRange][90]
 -   [findInTree][91]
--   [arrayToTree][92]
--   [aggregation][93]
--   [createApiConfig][94]
+-   [findInTree][92]
+-   [arrayToTree][93]
+-   [aggregation][94]
 -   [createApiConfig][95]
--   [reduxSimpleFormDecorator][96]
--   [reduxTableDecorator][97]
--   [titledDecorator][98]
--   [updatePathIfChange][99]
--   [onPropsUpdate][100]
--   [onStatusPropUpdate][101]
--   [formatDate][102]
--   [formatStringInner][103]
--   [formatString][104]
--   [formatStringWithoutAutoSpaces][105]
--   [generateId][106]
--   [init][107]
--   [translateDefault][108]
--   [i18nContextProvider][109]
--   [ImageTools][110]
--   [apiClient][111]
--   [isEmpty][112]
--   [parseUrlParameters][113]
--   [formatUrlParameters][114]
--   [joinPath][115]
--   [joinPathSimple][116]
--   [joinUri][117]
--   [getModuleFullPath][118]
--   [bind][119]
--   [DEFAULT_LOGGER_IDS][120]
--   [contextData][121]
--   [register][122]
--   [method][123]
--   [method][124]
--   [remoteJwt][125]
--   [onPreResponse][126]
--   [prepare-state][127]
--   [createServices][128]
--   [authUserService][129]
--   [createMockServices][130]
--   [ServiceAuthMock][131]
-    -   [authForgot][132]
-    -   [authResetPassword][133]
--   [ServiceAuth][134]
-    -   [authForgot][135]
-    -   [authResetPassword][136]
--   [getProtectedInfoByToken][137]
--   [pluginServicesContext][138]
--   [registerService][139]
--   [createProxyWrapperCallback][140]
--   [apiPluginFullFactory][141]
--   [apiPluginFactory][142]
--   [proxyRoute][143]
--   [proxyRoutePluginFactory][144]
--   [createEndpointServiceConfig][145]
--   [HOST][146]
--   [HOST][147]
--   [SERVICES_HOST][148]
--   [SERVICES_HOST][149]
--   [REQUEST_TIMEOUT][150]
--   [REQUEST_TIMEOUT][151]
--   [createEndpointFactoryFromEnv][152]
--   [sendSimpleRequest][153]
--   [sendEndpointMethodRequest][154]
--   [factoryEndpointServiceMethodRequest][155]
--   [proceedRequest][156]
+-   [createApiConfig][96]
+-   [reduxSimpleFormDecorator][97]
+-   [reduxTableDecorator][98]
+-   [titledDecorator][99]
+-   [updatePathIfChange][100]
+-   [onPropsUpdate][101]
+-   [onStatusPropUpdate][102]
+-   [formatDate][103]
+-   [formatStringInner][104]
+-   [formatString][105]
+-   [formatStringWithoutAutoSpaces][106]
+-   [generateId][107]
+-   [init][108]
+-   [translateDefault][109]
+-   [i18nContextProvider][110]
+-   [ImageTools][111]
+-   [apiClient][112]
+-   [isEmpty][113]
+-   [parseUrlParameters][114]
+-   [formatUrlParameters][115]
+-   [joinPath][116]
+-   [joinPathSimple][117]
+-   [joinUri][118]
+-   [SUB_MODULE_FACTORY][119]
+    -   [COMMON_SUB_MODULE_REGEXP][120]
+    -   [loadSubModules][121]
+    -   [createCommonSubModule][122]
+    -   [createServerSubModule][123]
+-   [bind][124]
+-   [DEFAULT_LOGGER_IDS][125]
+-   [contextData][126]
+-   [register][127]
+-   [method][128]
+-   [method][129]
+-   [remoteJwt][130]
+-   [onPreResponse][131]
+-   [prepare-state][132]
+-   [createServices][133]
+-   [authUserService][134]
+-   [createMockServices][135]
+-   [ServiceAuthMock][136]
+    -   [authForgot][137]
+    -   [authResetPassword][138]
+-   [ServiceAuth][139]
+    -   [authForgot][140]
+    -   [authResetPassword][141]
+-   [getProtectedInfoByToken][142]
+-   [pluginServicesContext][143]
+-   [registerService][144]
+-   [createProxyWrapperCallback][145]
+-   [apiPluginFullFactory][146]
+-   [apiPluginFactory][147]
+-   [proxyRoute][148]
+-   [proxyRoutePluginFactory][149]
+-   [createEndpointServiceConfig][150]
+-   [HOST][151]
+-   [HOST][152]
+-   [SERVICES_HOST][153]
+-   [SERVICES_HOST][154]
+-   [REQUEST_TIMEOUT][155]
+-   [REQUEST_TIMEOUT][156]
+-   [createEndpointFactoryFromEnv][157]
+-   [sendSimpleRequest][158]
+-   [sendEndpointMethodRequest][159]
+-   [factoryEndpointServiceMethodRequest][160]
+-   [proceedRequest][161]
 
 ## Runners
 
@@ -178,6 +183,10 @@
 для hot reload необходимо загружать через require
 
 Returns **{}** 
+
+### getModuleToRoutePrefixMap
+
+Маппинг модуля на путь
 
 ### getApiClientClass
 
@@ -485,7 +494,7 @@ actionStatus
 
 Компонент для того, чтобы не писать bind функции c ключом
 В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][157]
+См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][162]
 
 ## theme
 
@@ -571,6 +580,18 @@ moduleToRoutePrefixMap: {}
 
 -   `pathname`   (optional, default `''`)
 -   `otherPaths` **...any** 
+
+## getModuleFullPath
+
+Полный путь до ресурса с учетом префикса различных модулей
+
+**Parameters**
+
+-   `relativeLocation`  LocationDescription - @see model-location.js
+-   `moduleName`  
+-   `modulesPrefixes`  мапа: moduleName => prefix
+
+Returns **any** 
 
 ## MAP
 
@@ -701,7 +722,7 @@ touched
 
 ## FROM_BOOM
 
-[https://github.com/hapijs/boom][158]
+[https://github.com/hapijs/boom][163]
 
 ## FROM_BOOM_RESPONSE
 
@@ -733,7 +754,7 @@ touched
 
 ## parseFromBoom
 
-[https://github.com/hapijs/boom][158]
+[https://github.com/hapijs/boom][163]
 
 -   isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
 -   isServer - convenience bool indicating status code >= 500.
@@ -793,15 +814,6 @@ touched
 -   **deprecated**: use model-user-info
 
 
-## STUB_ROUTES_NAMES
-
-Type: {ACCESS_DENIED: [string][159], ERROR: [string][159], LOGIN: [string][159], STUB: [string][159]}
-
-**Meta**
-
--   **deprecated**: use CORE_ROUTES_NAMES
-
-
 ## PARAM_RETURN_URL
 
 **Meta**
@@ -835,7 +847,7 @@ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
 -   `operationType`  
 -   `itemIds`  
 
-Returns **{path: [string][159], value: any, op: [string][159]}** 
+Returns **{path: [string][164], value: any, op: [string][164]}** 
 
 ## apiCreateRecord
 
@@ -902,7 +914,7 @@ object of that fields
     other - result
 -   `mockFilter`  function(requestOptions, error, response) {}
 
-Returns **[Promise][160]** 
+Returns **[Promise][165]** 
 
 ## valueFromRange
 
@@ -952,7 +964,7 @@ Returns **[Promise][160]**
 -   `path`   (optional, default `[]`)
 -   `pathStr`   (optional, default `''`)
 
-Returns **{result: any, isRoot: [boolean][161], pathStr: [string][159]}** 
+Returns **{result: any, isRoot: [boolean][166], pathStr: [string][164]}** 
 
 ## arrayToTree
 
@@ -970,7 +982,7 @@ Returns **{result: any, isRoot: [boolean][161], pathStr: [string][159]}**
 
 ## aggregation
 
-[https://stackoverflow.com/a/45332959/344172][162]
+[https://stackoverflow.com/a/45332959/344172][167]
 
 **Parameters**
 
@@ -1043,7 +1055,7 @@ Returns **({method, path, payload} | any)**
 **Parameters**
 
 -   `tableId`  айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)Options:
--   `$1` **[Object][163]**  (optional, default `{}`)
+-   `$1` **[Object][168]**  (optional, default `{}`)
     -   `$1.loadOnMount`   (optional, default `true`)
     -   `$1.loadOnChange`   (optional, default `true`)
     -   `$1.clearOnUnmount`   (optional, default `true`)
@@ -1109,7 +1121,7 @@ Returns **any** возвращает true - если нужно прервать
     -   если function - функция вызывается дважды, один раз для newProps второй раз для oldProps - на вход который подаются пропсы, вернуть должна часть props по которой будет deep equals
     -   если string - путь в props для объектов которые будут сравниваться
     -   если string array - если больше 1 то singleRun по умолчанию true
--   `$1` **[Object][163]**  (optional, default `{}`)
+-   `$1` **[Object][168]**  (optional, default `{}`)
     -   `$1.deepEqual`   (optional, default `true`)
     -   `$1.singleRun`   (optional, default `true`)
     -   `$1.oldPropsNotNull`   (optional, default `true`)
@@ -1138,7 +1150,7 @@ accountId: PropTypes.number,
 
 -   `statusPropPath`  
 
-Returns **[function][164]** 
+Returns **[function][169]** 
 
 ## formatDate
 
@@ -1146,12 +1158,12 @@ Returns **[function][164]**
 
 **Parameters**
 
--   `date` **[String][159]** Строка даты в формате `YYYY-MM-DD`
--   `options` **[Object][163]?** Список опций
-    -   `options.fullMonth` **[Boolean][161]** Если `true`, то название месяца, иначе номер (optional, default `true`)
-    -   `options.cutCurrentYear` **[Boolean][161]** Если `true`, то дата без указания года (optional, default `true`)
+-   `date` **[String][164]** Строка даты в формате `YYYY-MM-DD`
+-   `options` **[Object][168]?** Список опций
+    -   `options.fullMonth` **[Boolean][166]** Если `true`, то название месяца, иначе номер (optional, default `true`)
+    -   `options.cutCurrentYear` **[Boolean][166]** Если `true`, то дата без указания года (optional, default `true`)
 
-Returns **[String][159]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+Returns **[String][164]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
 
 ## formatStringInner
 
@@ -1190,7 +1202,7 @@ Returns **any**
 
 ## generateId
 
-Returns **[string][159]** 
+Returns **[string][164]** 
 
 **Meta**
 
@@ -1262,11 +1274,11 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
 -   `context`  
 
-Returns **[Function][164]** 
+Returns **[Function][169]** 
 
 ## ImageTools
 
-from [https://gist.github.com/dcollien/312bce1270a5f511bf4a][165]
+from [https://gist.github.com/dcollien/312bce1270a5f511bf4a][170]
 
 ImageTools.resize(this.files[0], {
 width: 320, // maximum width
@@ -1316,7 +1328,7 @@ Returns **{}**
 -   `url`  
 -   `hash`  
 
-Returns **[string][159]** 
+Returns **[string][164]** 
 
 ## joinPath
 
@@ -1337,7 +1349,7 @@ Returns **any**
 
 -   `paths` **...any** 
 
-Returns **[string][159]** 
+Returns **[string][164]** 
 
 ## joinUri
 
@@ -1352,17 +1364,82 @@ Returns **any**
 -   **deprecated**: renaming - use joinPath
 
 
-## getModuleFullPath
+## SUB_MODULE_FACTORY
 
-Полный путь до ресурса с учетом префикса различных модулей
+Упрощенный модуль выглядит так:
+src/modules/module
+common/
+subModule/
+api/
+components/
+containers/
+models/
+stores/
+redux-reducers.js
+redux-selectors.js
+mobx-stores.js
+index.js
+get-components.js
+routes.jsx
+routes.paths.js
+module-name.js
+server/
+subModule/
+services/
+mockServices/
+plugins/
+mockRoutes/
+api-routes/
+index.js
+module-name.js
+package.json
+
+### COMMON_SUB_MODULE_REGEXP
+
+ПРИМЕР
+только для require.context нужно явно regexp задавать а не через переменную
+
+### loadSubModules
 
 **Parameters**
 
--   `relativeLocation`  LocationDescription - @see model-location.js
--   `moduleName`  
--   `modulesPrefixes`  мапа: moduleName => prefix
+-   `webpackRequireContext`  require.context('./', true, SUB_MODULE_FACTORY.COMMON_SUB_MODULE_REGEXP);
+-   `type`  
 
-Returns **any** 
+### createCommonSubModule
+
+-   MODULE_NAME: null,
+-   initComponents: (componentsBase) => componentsBase,
+-   paths: {},
+
+-   getRoutes: (moduleRoutePrefix) => null,
+-   getApi: () => \[],
+-   getRootReducers: () => ({}),
+
+-   hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
+    // module.hot.accept('./routes-products', reloadUi);
+    },
+
+**Parameters**
+
+-   `options`  
+
+Returns **any** options
+
+### createServerSubModule
+
+-   getServerPlugins: (services, strategies, servicesContext) => \[],
+-   getServerApi: (services, strategies, servicesContext) => \[],
+-   getServerMocks: (services, strategies, servicesContext) => \[],
+-   getServerServices: (endpointServices, servicesContext) => ({}),
+-   getServerMockServices: (endpointServices, servicesContext) => ({}),
+-   getServerStrategies: (servicesContext) => ({}),
+
+**Parameters**
+
+-   `options`  
+
+Returns **{options: any}** 
 
 ## bind
 
@@ -1374,8 +1451,9 @@ Returns **any**
 **Parameters**
 
 -   `pathnameWithoutContextPath`  
+-   `moduleToRoutePrefixMap`  
 
-Returns **[boolean][161]** 
+Returns **[boolean][166]** 
 
 ## DEFAULT_LOGGER_IDS
 
@@ -1494,7 +1572,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][160]&lt;any>** 
+Returns **[Promise][165]&lt;any>** 
 
 ## ServiceAuth
 
@@ -1532,7 +1610,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][160]&lt;any>** 
+Returns **[Promise][165]&lt;any>** 
 
 ## getProtectedInfoByToken
 
@@ -1603,8 +1681,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][166] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][167]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][171] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][172]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `routeOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -1633,7 +1711,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 
 **Parameters**
 
--   `$0` **[Object][163]** 
+-   `$0` **[Object][168]** 
     -   `$0.protocol`  
     -   `$0.host`  
     -   `$0.port`  
@@ -1648,7 +1726,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   `endpoint`  
 -   `timeout`  
 
-Returns **{protocol: [string][159], host: [string][159], port: [number][168], endpoint: [string][159], fullUrl: [string][159], timeout: any}** 
+Returns **{protocol: [string][164], host: [string][164], port: [number][173], endpoint: [string][164], fullUrl: [string][164], timeout: any}** 
 
 ## HOST
 
@@ -1691,12 +1769,12 @@ Returns **function (any, any?)**
 
 **Parameters**
 
--   `requestOptions`  [https://github.com/request/request#requestoptions-callback][169]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
-    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][170]
+-   `requestOptions`  [https://github.com/request/request#requestoptions-callback][174]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
+    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][175]
     нужно установить в настройках:
     encoding: null,
 
-Returns **[Promise][160]** 
+Returns **[Promise][165]** 
 
 ## sendEndpointMethodRequest
 
@@ -1722,7 +1800,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][171]
+-   `requestOptions`  [https://www.npmjs.com/package/request][176]
 -   `logger`  
 
 Returns **any** 
@@ -1740,13 +1818,13 @@ Returns **any**
 -   `requestOptions`  
 -   `logger`  
 
-Returns **[Promise][160]&lt;any>** 
+Returns **[Promise][165]&lt;any>** 
 
 ## proceedRequest
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][172]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][177]
 -   `server`  
 
 Returns **any** Promise
@@ -1757,340 +1835,350 @@ Returns **any** Promise
 
 [3]: #getreducers
 
-[4]: #getapiclientclass
+[4]: #getmoduletorouteprefixmap
 
-[5]: #coreclientrunner
+[5]: #getapiclientclass
 
-[6]: #getreducers-1
+[6]: #coreclientrunner
 
-[7]: #abstractserverrunner
+[7]: #getreducers-1
 
-[8]: #coreserverrunner
+[8]: #abstractserverrunner
 
-[9]: #navigation
+[9]: #coreserverrunner
 
-[10]: #apigetuseravatarurl
+[10]: #navigation
 
-[11]: #createstatusesreducer
+[11]: #apigetuseravatarurl
 
-[12]: #createtablesmodule
+[12]: #createstatusesreducer
 
-[13]: #getbindactions
+[13]: #createtablesmodule
 
-[14]: #apiloadrecords
+[14]: #getbindactions
 
-[15]: #getbindactions-1
+[15]: #apiloadrecords
 
-[16]: #gettableinfo
+[16]: #getbindactions-1
 
-[17]: #createfilteredreducer
+[17]: #gettableinfo
 
-[18]: #createreducer
+[18]: #createfilteredreducer
 
-[19]: #clientconfig
+[19]: #createreducer
 
-[20]: #initconfig
+[20]: #clientconfig
 
-[21]: #parsevaluetostring
+[21]: #initconfig
 
-[22]: #formdata
+[22]: #parsevaluetostring
 
-[23]: #layout
+[23]: #formdata
 
-[24]: #update
+[24]: #layout
 
-[25]: #coreselect
+[25]: #update
 
-[26]: #update-1
+[26]: #coreselect
 
-[27]: #info404
+[27]: #update-1
 
-[28]: #themeprovider
+[28]: #info404
 
-[29]: #themeprovider-1
+[29]: #themeprovider
 
-[30]: #unierror
+[30]: #themeprovider-1
 
-[31]: #listitem
+[31]: #unierror
 
-[32]: #notifications
+[32]: #listitem
 
-[33]: #loading
+[33]: #notifications
 
-[34]: #link
+[34]: #loading
 
-[35]: #link-1
+[35]: #link
 
-[36]: #mediaquery
+[36]: #link-1
 
-[37]: #readmore
+[37]: #mediaquery
 
-[38]: #bemdecorator
+[38]: #readmore
 
-[39]: #theme
+[39]: #bemdecorator
 
-[40]: #classname
+[40]: #theme
 
-[41]: #errorpage
+[41]: #classname
 
-[42]: #loginpage
+[42]: #errorpage
 
-[43]: #loginpage-1
+[43]: #loginpage
 
-[44]: #stubpage
+[44]: #loginpage-1
 
-[45]: #i18nprovider
+[45]: #stubpage
 
-[46]: #autherrorcontainer
+[46]: #i18nprovider
 
-[47]: #decoratorcontextmodules
+[47]: #autherrorcontainer
 
-[48]: #rootappcomponentprops
+[48]: #decoratorcontextmodules
 
-[49]: #appurl
+[49]: #rootappcomponentprops
 
-[50]: #map
+[50]: #appurl
 
-[51]: #map-1
+[51]: #getmodulefullpath
 
-[52]: #map-2
+[52]: #map
 
-[53]: #status_prop
+[53]: #map-1
 
-[54]: #action-status
+[54]: #map-2
 
-[55]: #action_status_props
+[55]: #status_prop
 
-[56]: #uni_error_props
+[56]: #action-status
 
-[57]: #user_info_props
+[57]: #action_status_props
 
-[58]: #id
+[58]: #uni_error_props
 
-[59]: #valuename
+[59]: #user_info_props
 
-[60]: #constraints
+[60]: #id
 
-[61]: #validate
+[61]: #valuename
 
-[62]: #required
+[62]: #constraints
 
-[63]: #controlref
+[63]: #validate
 
-[64]: #controlclass
+[64]: #required
 
-[65]: #render
+[65]: #controlref
 
-[66]: #parseoutvalue
+[66]: #controlclass
 
-[67]: #instancechange
+[67]: #render
 
-[68]: #layout-1
+[68]: #parseoutvalue
 
-[69]: #from_boom
+[69]: #instancechange
 
-[70]: #from_boom_response
+[70]: #layout-1
 
-[71]: #from_boom_error
+[71]: #from_boom
 
-[72]: #clienterrormessage
+[72]: #from_boom_response
 
-[73]: #unimessage
+[73]: #from_boom_error
 
-[74]: #parsefromboom
+[74]: #clienterrormessage
 
-[75]: #parsefromboomresponse
+[75]: #unimessage
 
-[76]: #parsefromboomerror
+[76]: #parsefromboom
 
-[77]: #default_values
+[77]: #parsefromboomresponse
 
-[78]: #user-info
+[78]: #parsefromboomerror
 
-[79]: #stub_routes_names
+[79]: #default_values
 
-[80]: #param_return_url
+[80]: #user-info
 
-[81]: #pathgetloginpage
+[81]: #param_return_url
 
-[82]: #path_login_page
+[82]: #pathgetloginpage
 
-[83]: #createjsonpatchoperation
+[83]: #path_login_page
 
-[84]: #apicreaterecord
+[84]: #createjsonpatchoperation
 
-[85]: #baseapiclientclass
+[85]: #apicreaterecord
 
-[86]: #ajaxget
+[86]: #baseapiclientclass
 
-[87]: #ajaxpost
+[87]: #ajaxget
 
-[88]: #proceedrequest
+[88]: #ajaxpost
 
-[89]: #valuefromrange
+[89]: #proceedrequest
 
-[90]: #findintree
+[90]: #valuefromrange
 
-[91]: #findintree-1
+[91]: #findintree
 
-[92]: #arraytotree
+[92]: #findintree-1
 
-[93]: #aggregation
+[93]: #arraytotree
 
-[94]: #createapiconfig
+[94]: #aggregation
 
-[95]: #createapiconfig-1
+[95]: #createapiconfig
 
-[96]: #reduxsimpleformdecorator
+[96]: #createapiconfig-1
 
-[97]: #reduxtabledecorator
+[97]: #reduxsimpleformdecorator
 
-[98]: #titleddecorator
+[98]: #reduxtabledecorator
 
-[99]: #updatepathifchange
+[99]: #titleddecorator
 
-[100]: #onpropsupdate
+[100]: #updatepathifchange
 
-[101]: #onstatuspropupdate
+[101]: #onpropsupdate
 
-[102]: #formatdate
+[102]: #onstatuspropupdate
 
-[103]: #formatstringinner
+[103]: #formatdate
 
-[104]: #formatstring
+[104]: #formatstringinner
 
-[105]: #formatstringwithoutautospaces
+[105]: #formatstring
 
-[106]: #generateid
+[106]: #formatstringwithoutautospaces
 
-[107]: #init
+[107]: #generateid
 
-[108]: #translatedefault
+[108]: #init
 
-[109]: #i18ncontextprovider
+[109]: #translatedefault
 
-[110]: #imagetools
+[110]: #i18ncontextprovider
 
-[111]: #apiclient
+[111]: #imagetools
 
-[112]: #isempty
+[112]: #apiclient
 
-[113]: #parseurlparameters
+[113]: #isempty
 
-[114]: #formaturlparameters
+[114]: #parseurlparameters
 
-[115]: #joinpath
+[115]: #formaturlparameters
 
-[116]: #joinpathsimple
+[116]: #joinpath
 
-[117]: #joinuri
+[117]: #joinpathsimple
 
-[118]: #getmodulefullpath
+[118]: #joinuri
 
-[119]: #bind
+[119]: #sub_module_factory
 
-[120]: #default_logger_ids
+[120]: #common_sub_module_regexp
 
-[121]: #contextdata
+[121]: #loadsubmodules
 
-[122]: #register
+[122]: #createcommonsubmodule
 
-[123]: #method
+[123]: #createserversubmodule
 
-[124]: #method-1
+[124]: #bind
 
-[125]: #remotejwt
+[125]: #default_logger_ids
 
-[126]: #onpreresponse
+[126]: #contextdata
 
-[127]: #prepare-state
+[127]: #register
 
-[128]: #createservices
+[128]: #method
 
-[129]: #authuserservice
+[129]: #method-1
 
-[130]: #createmockservices
+[130]: #remotejwt
 
-[131]: #serviceauthmock
+[131]: #onpreresponse
 
-[132]: #authforgot
+[132]: #prepare-state
 
-[133]: #authresetpassword
+[133]: #createservices
 
-[134]: #serviceauth
+[134]: #authuserservice
 
-[135]: #authforgot-1
+[135]: #createmockservices
 
-[136]: #authresetpassword-1
+[136]: #serviceauthmock
 
-[137]: #getprotectedinfobytoken
+[137]: #authforgot
 
-[138]: #pluginservicescontext
+[138]: #authresetpassword
 
-[139]: #registerservice
+[139]: #serviceauth
 
-[140]: #createproxywrappercallback
+[140]: #authforgot-1
 
-[141]: #apipluginfullfactory
+[141]: #authresetpassword-1
 
-[142]: #apipluginfactory
+[142]: #getprotectedinfobytoken
 
-[143]: #proxyroute
+[143]: #pluginservicescontext
 
-[144]: #proxyroutepluginfactory
+[144]: #registerservice
 
-[145]: #createendpointserviceconfig
+[145]: #createproxywrappercallback
 
-[146]: #host
+[146]: #apipluginfullfactory
 
-[147]: #host-1
+[147]: #apipluginfactory
 
-[148]: #services_host
+[148]: #proxyroute
 
-[149]: #services_host-1
+[149]: #proxyroutepluginfactory
 
-[150]: #request_timeout
+[150]: #createendpointserviceconfig
 
-[151]: #request_timeout-1
+[151]: #host
 
-[152]: #createendpointfactoryfromenv
+[152]: #host-1
 
-[153]: #sendsimplerequest
+[153]: #services_host
 
-[154]: #sendendpointmethodrequest
+[154]: #services_host-1
 
-[155]: #factoryendpointservicemethodrequest
+[155]: #request_timeout
 
-[156]: #proceedrequest-1
+[156]: #request_timeout-1
 
-[157]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+[157]: #createendpointfactoryfromenv
 
-[158]: https://github.com/hapijs/boom
+[158]: #sendsimplerequest
 
-[159]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[159]: #sendendpointmethodrequest
 
-[160]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[160]: #factoryendpointservicemethodrequest
 
-[161]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[161]: #proceedrequest-1
 
-[162]: https://stackoverflow.com/a/45332959/344172
+[162]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
 
-[163]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[163]: https://github.com/hapijs/boom
 
-[164]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[164]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[165]: https://gist.github.com/dcollien/312bce1270a5f511bf4a
+[165]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[166]: https://github.com/hapijs/h2o2
+[166]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[167]: http://localhost:
+[167]: https://stackoverflow.com/a/45332959/344172
 
-[168]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[168]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[169]: https://github.com/request/request#requestoptions-callback
+[169]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[170]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+[170]: https://gist.github.com/dcollien/312bce1270a5f511bf4a
 
-[171]: https://www.npmjs.com/package/request
+[171]: https://github.com/hapijs/h2o2
 
-[172]: https://hapijs.com/api#serverinjectoptions-callback
+[172]: http://localhost:
+
+[173]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[174]: https://github.com/request/request#requestoptions-callback
+
+[175]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+
+[176]: https://www.npmjs.com/package/request
+
+[177]: https://hapijs.com/api#serverinjectoptions-callback
