@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { joinPath } from '../../../../utils/uri-utils';
-import i18n from '../../../../utils/i18n-utils';
-import titled from '../../../../utils/decorators/react-class/titled';
-import * as reduxLastUniError from '../../../../app-redux/reducers/app/last-uni-error';
+import { joinPath } from '../../../../../../common/utils/uri-utils';
+import i18n from '../../../../../../common/utils/i18n-utils';
+import titled from '../../../../../../common/utils/decorators/react-class/titled';
+import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
 import {
   PATH_INDEX,
-} from '../../../../constants/routes.pathes';
+} from '../../../../../../common/constants/routes.pathes';
 
 import {
   PARAM__RETURN_URL,

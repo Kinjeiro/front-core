@@ -73,11 +73,6 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('ErrorPage', () => require('./containers/ErrorPage/ErrorPage').default);
   COMPONENTS_BASE.replace('I18NProvider', () => require('./containers/I18NProvider/I18NProvider').default);
 
-  // ======================================================
-  // CORE PAGES
-  // ======================================================
-  COMPONENTS_BASE.replace('StubPage', () => require('./containers/StubPage/StubPage').default);
-
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;
 }

@@ -4,28 +4,28 @@ import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simple-form';
-import bemDecorator from '../../../../utils/decorators/bem-component';
-import i18n from '../../../../utils/i18n-utils';
-import clientConfig from '../../../../client-config';
+import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+import i18n from '../../../../../../common/utils/i18n-utils';
+import clientConfig from '../../../../../../common/client-config';
 
 // ======================================================
 // REDUX
 // ======================================================
 import {
   getUserInfo,
-} from '../../../../app-redux/selectors';
-import * as reduxUserInfo from '../../../../app-redux/reducers/app/user-info';
+} from '../../../../../../common/app-redux/selectors';
+import * as reduxUserInfo from '../../../../../../common/app-redux/reducers/app/user-info';
 
 // ======================================================
 // COMPONENTS and STYLES
 // ======================================================
 import {
   ACTION_STATUS_PROPS,
-} from '../../../../models';
+} from '../../../../../../common/models/index';
 import {
   SUB_TYPES,
-} from '../../../../models/model-field';
+} from '../../../../../../common/models/model-field';
 
 // import './LoginPage.css';
 

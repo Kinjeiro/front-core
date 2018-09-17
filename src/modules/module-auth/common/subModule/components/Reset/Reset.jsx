@@ -1,91 +1,87 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { push } from 'react-router-redux';
+import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import reduxSimpleForm from '../../../../utils/decorators/react-class/redux-simple-form';
-import titled from '../../../../utils/decorators/react-class/titled';
-import bemDecorator from '../../../../utils/decorators/bem-component';
-import i18n from '../../../../utils/i18n-utils';
-import {
-  appUrl,
-  getFullUrl,
-} from '../../../../helpers/app-urls';
+import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
+import titled from '../../../../../../common/utils/decorators/react-class/titled';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+import i18n from '../../../../../../common/utils/i18n-utils';
+import appUrl from '../../../../../../common/helpers/app-urls';
 
 // ======================================================
 // REDUX
 // ======================================================
 import {
   getUserInfo,
-} from '../../../../app-redux/selectors';
-import * as reduxUserInfo from '../../../../app-redux/reducers/app/user-info';
-
-// ======================================================
-// COMPONENTS and STYLES
-// ======================================================
-import { ACTION_STATUS_PROPS } from '../../../../models/index';
+} from '../../../../../../common/app-redux/selectors';
+import * as reduxUserInfo from '../../../../../../common/app-redux/reducers/app/user-info';
+import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
 import {
   SUB_TYPES,
-} from '../../../../models/model-field';
+} from '../../../../../../common/models/model-field';
 import {
   PATH_INDEX,
-} from '../../../../constants/routes.pathes';
-import getCb from '../../../../get-components';
+} from '../../../../../../common/constants/routes.pathes';
+
+import getCb from '../../../../../../common/get-components';
 
 // ======================================================
 // MODULE
 // ======================================================
 import * as paths from '../../routes-paths-auth';
-
 // import './ForgotPage.css';
 
 const {
   Form,
-  Link,
+  // Link,
 } = getCb();
 
-export const PAGE_ID = 'Forgot';
+export const PAGE_ID = 'Reset';
 
 @connect(
-  (globalState) => ({
-    actionForgotPasswordStatus: getUserInfo(globalState).actionForgotPasswordStatus,
+  (globalState, ownProps) => ({
+    actionResetPasswordStatus: getUserInfo(globalState).actionResetPasswordStatus,
+    resetPasswordToken: ownProps.location.query[paths.PARAM__RESET_PASSWORD_TOKEN],
   }),
   {
     ...reduxUserInfo.actions,
-    // actionGoTo: push,
+    actionGoTo: push,
   },
 )
 @reduxSimpleForm(
   PAGE_ID,
   {
-    email: '',
+    newPassword: '',
   },
 )
-@titled(PAGE_ID, i18n('core:pages.ForgotPage.title'))
-@bemDecorator({ componentName: 'Forgot', wrapper: false })
-export default class Forgot extends Component {
+@titled(PAGE_ID, i18n('core:pages.ResetPage.title'))
+@bemDecorator({ componentName: 'Reset', wrapper: false })
+export default class ResetPage extends Component {
   static PAGE_ID = PAGE_ID;
   static propTypes = {
     // ======================================================
     // PROPS
     // ======================================================
-    // todo @ANKU @LOW - emailOptions
-    emailOptions: PropTypes.object,
+    // todo @ANKU @CRIT @MAIN - emailOptions
+    emailOptions: PropTypes.shape({
+    }),
 
     // ======================================================
     // @reduxSimpleForm
     // ======================================================
     form: PropTypes.shape({
-      email: PropTypes.string,
+      newPassword: PropTypes.string,
     }),
     onUpdateForm: PropTypes.func,
 
     // ======================================================
     // CONNECT
     // ======================================================
-    actionForgotPasswordStatus: ACTION_STATUS_PROPS,
-    actionForgotPassword: PropTypes.func,
+    resetPasswordToken: PropTypes.string.required,
+    actionResetPasswordStatus: ACTION_STATUS_PROPS,
+    actionResetPassword: PropTypes.func,
     // actionGoTo: PropTypes.func,
   };
 
@@ -103,47 +99,41 @@ export default class Forgot extends Component {
   @bind()
   async handleSubmit() {
     const {
+      resetPasswordToken,
       form: {
-        email,
+        newPassword,
       },
       emailOptions,
-      actionForgotPassword,
-      // actionGoTo,
+      actionResetPassword,
     } = this.props;
 
-    return actionForgotPassword(
-      email,
-      getFullUrl(paths.PATH_AUTH_RESET),
-      emailOptions,
-    );
-    // await actionGoTo(PATH_INDEX);
+    await actionResetPassword(resetPasswordToken, newPassword, emailOptions);
   }
 
   // ======================================================
-  // RENDER
+  // RENDERS
   // ======================================================
   isValid() {
     const {
       form: {
-        email,
+        newPassword,
       },
     } = this.props;
 
-    return !!(email);
+    return !!(newPassword);
   }
 
   getFields() {
     const {
       form: {
-        email,
+        newPassword,
       },
     } = this.props;
     return [
       {
-        id: 'email',
-        name: 'email',
-        subType: SUB_TYPES.EMAIL,
-        value: email,
+        name: 'newPassword',
+        subType: SUB_TYPES.PASSWORD,
+        value: newPassword,
         instanceChange: true,
       },
     ];
@@ -154,18 +144,15 @@ export default class Forgot extends Component {
   // ======================================================
   render() {
     const {
-      form: {
-        email,
-      },
       onUpdateForm,
-      actionForgotPasswordStatus,
+      actionResetPasswordStatus,
     } = this.props;
 
     return (
       <Form
         id={ PAGE_ID }
         className={ this.fullClassName }
-        i18nFieldPrefix={ 'core:pages.ForgotPage.fields' }
+        i18nFieldPrefix={ 'core:pages.ResetPage.fields' }
 
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
@@ -174,24 +161,16 @@ export default class Forgot extends Component {
         useForm={ true }
 
         onSubmit={ this.handleSubmit }
-        textActionSubmit={ i18n('core:pages.ForgotPage.submitButton') }
+        textActionSubmit={ i18n('core:pages.ResetPage.submitButton') }
 
-        actionStatus={ actionForgotPasswordStatus }
+        actionStatus={ actionResetPasswordStatus }
         textActionSuccess={ (
           <div className={ this.bem('ActionSuccess') }>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: i18n(
-                  'core:pages.ForgotPage.submitSuccessMessage',
-                  {
-                    email: `<b className="${this.bem('email-text')}">${email}</b>`,
-                    // interpolation: {escapeValue: false},
-                  },
-                ),
-              }}
-            />
+            <p>
+              { i18n('core:pages.ResetPage.submitSuccessMessage') }
+            </p>
             <a href={ appUrl(PATH_INDEX) }>
-              { i18n('core:pages.ForgotPage.goToIndexPage') }
+              { i18n('core:pages.ResetPage.goToIndexPage') }
             </a>
           </div>
         ) }

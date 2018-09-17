@@ -9,15 +9,21 @@ import bind from 'lodash-decorators/bind';
 
 import clientConfig from '../common/client-config';
 
+import {
+  // aggregateArrayFn,
+  aggregateObjectFn,
+} from '../common/utils/common';
 import { joinUri } from '../common/utils/uri-utils';
+import BaseApiClient from '../common/utils/BaseApiClient';
+import * as apiUtils from '../common/utils/api-utils';
+
 import logger from '../common/helpers/client-logger';
 import getApiClient, {
   initApiClient,
   initApiClientClass,
   createApiClientByEndpoint,
 } from '../common/helpers/get-api-client';
-import BaseApiClient from '../common/utils/BaseApiClient';
-import * as apiUtils from '../common/utils/api-utils';
+
 
 import { registerModels as registerOrmModels } from '../common/models/domains/utils/orm';
 import
@@ -38,6 +44,8 @@ import './AbstractClientRunner.css';
 export default class AbstractClientRunner {
   htmlContainerId;
 
+  commonSubModules = null;
+
   store;
   history;
   routes;
@@ -57,10 +65,26 @@ export default class AbstractClientRunner {
 
 
   // ======================================================
+  // UTILS
+  // ======================================================
+  getCommonSubModules() {
+    if (!this.commonSubModules) {
+      // todo @ANKU @LOW - проверить: перегружать hot reload если изменится что-то внутри
+      this.commonSubModules = this.loadCommonSubModules();
+    }
+    return this.commonSubModules;
+  }
+
+  getComponents() {
+    return COMPONENTS_BASE_CORE;
+  }
+
+
+  // ======================================================
   // for OVERRIDE
   // ======================================================
-  getInitialState() {
-    return {};
+  loadCommonSubModules() {
+    return [];
   }
 
   /**
@@ -68,17 +92,49 @@ export default class AbstractClientRunner {
    * @returns {{}}
    */
   getReducers() {
-    return {};
+    return aggregateObjectFn(this.getCommonSubModules(), 'getRootReducers')();
   }
+  // todo @ANKU @LOW - переименовать в reduxOrmModels
   getEntityModels() {
     return {};
   }
-  getRoutes(/* store */) {
+  getApi() {
+    return aggregateObjectFn(this.getCommonSubModules(), 'getApi')();
+  }
+  hotReloadListeners() {
+    module.hot.accept('./Root', this.reloadUi);
+    this.getCommonSubModules().forEach((subModule) =>
+      subModule.hotReloadFunc(this.reloadUi, this.reloadStore, this.reloadAll));
+  }
+  initComponents(COMPONENTS_BASE) {
+    this.getCommonSubModules().forEach((subModule) =>
+      subModule.initComponents(COMPONENTS_BASE));
+    return COMPONENTS_BASE;
+  }
+
+
+  /**
+   * Маппинг модуля на путь
+   */
+  getModuleToRoutePrefixMap() {
+    // по умолчанию роутинг будет равен названию модуля
+    return this.getCommonSubModules().reduce((result, commonSubModule) => {
+      const moduleName = commonSubModule.MODULE_NAME;
+      // eslint-disable-next-line no-param-reassign
+      result[moduleName] = moduleName;
+      return result;
+    }, {});
+  }
+
+  @bind()
+  getModuleRoutePrefix(moduleName) {
+    return this.getModuleToRoutePrefixMap()[moduleName];
+  }
+
+  getRoutes(/* store, options */) {
     throw new Error('need override "AbstractClientRunner.getRoutes"');
   }
-  getApi() {
-    return {};
-  }
+
   /**
    * место для переопределения и инициализации инстанса BaseApiClient
    */
@@ -87,10 +143,6 @@ export default class AbstractClientRunner {
   }
   getApiClient(defaultEndpoint) {
     return createApiClientByEndpoint(defaultEndpoint);
-  }
-
-  initComponents(COMPONENTS_BASE) {
-    return COMPONENTS_BASE;
   }
 
   getGlobalWindowDebugVariables() {
@@ -106,11 +158,9 @@ export default class AbstractClientRunner {
     };
   }
 
-  hotReloadListeners() {
-    module.hot.accept('./Root', this.reloadUi);
+  getInitialState() {
+    return {};
   }
-
-
 
   // ======================================================
   // INIT
@@ -151,14 +201,6 @@ export default class AbstractClientRunner {
 
   init() {
     // ======================================================
-    // API CLIENT
-    // ======================================================
-    const ApiClientClass = this.getApiClientClass();
-    initApiClientClass(ApiClientClass);
-    const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
-    initApiClient(apiClient);
-
-    // ======================================================
     // COMPONENTS
     // ======================================================
     // должны инициализироваться до роутев
@@ -172,6 +214,15 @@ export default class AbstractClientRunner {
     this.history = syncHistoryWithStore(routeHistory, this.store);
     this.routes = this.getRoutes(this.store);
     this.api = this.getApi();
+
+    // ======================================================
+    // API CLIENT
+    // (после store чтобы дать доступ к контекстным данным, к примеру текущему пользователю)
+    // ======================================================
+    const ApiClientClass = this.getApiClientClass();
+    initApiClientClass(ApiClientClass);
+    const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
+    initApiClient(apiClient);
   }
 
 

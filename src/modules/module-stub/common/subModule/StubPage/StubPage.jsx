@@ -8,44 +8,44 @@ import { push } from 'react-router-redux';
 // ======================================================
 // UTILS
 // ======================================================
-import bemDecorator from '../../utils/decorators/bem-component';
-import loading from '../../utils/decorators/react-class/loading';
-import titled from '../../utils/decorators/react-class/titled';
-import i18n, { changeLanguagePromise } from '../../utils/i18n-utils';
-import { PATH_INDEX } from '../../routes.pathes';
+import bemDecorator from '../../../../../common/utils/decorators/bem-component';
+import loading from '../../../../../common/utils/decorators/react-class/loading';
+import titled from '../../../../../common/utils/decorators/react-class/titled';
+import i18n, { changeLanguagePromise } from '../../../../../common/utils/i18n-utils';
+import { PATH_INDEX } from '../../../../../common/routes.pathes';
 
-import { notifyError } from '../../helpers/notifications';
+import { notifyError } from '../../../../../common/helpers/notifications';
 
 // ======================================================
 // REDUX
 // ======================================================
-import apiAuth from '../../api/api-auth';
+import apiAuth from '../../../../../common/api/api-auth';
 
 import {
   getI18NInfo,
   getUserInfo,
   hasPermission,
   getTestDomains,
-} from '../../app-redux/selectors';
-import * as reduxI18nInfo from '../../app-redux/reducers/app/i18n-info';
-import * as reduxUserInfo from '../../app-redux/reducers/app/user-info';
-import * as reduxTest from '../../app-redux/reducers/app/test';
-import * as reduxLastUniError from '../../app-redux/reducers/app/last-uni-error';
-import * as reduxUsers from '../../app-redux/reducers/app/users';
+} from '../../../../../common/app-redux/selectors';
+import * as reduxI18nInfo from '../../../../../common/app-redux/reducers/app/i18n-info';
+import * as reduxUserInfo from '../../../../../common/app-redux/reducers/app/user-info';
+import * as reduxTest from '../../../../../common/app-redux/reducers/app/test';
+import * as reduxLastUniError from '../../../../../common/app-redux/reducers/app/last-uni-error';
+import * as reduxUsers from '../../../../../common/app-redux/reducers/app/users';
 
-import TestDomain from '../../models/domains/TestDomain';
+import TestDomain from '../../../../../common/models/domains/TestDomain';
 
 // ======================================================
 // COMPONENTS and STYLES
 // ======================================================
-import { TEST_PERMISSION } from '../../constants/permissions';
-import { USER_INFO_PROPS } from '../../models';
-import ListItem from '../../components/ListItem/ListItem';
-import Link from '../../components/Link/Link';
-import contextModules from '../../contexts/ContextModules/decorator-context-modules';
-import ModuleLink from '../../containers/ModuleLink/ModuleLink';
+import { TEST_PERMISSION } from '../../../../../common/constants/permissions';
+import { USER_INFO_PROPS } from '../../../../../common/models/index';
+import ListItem from '../../../../../common/components/ListItem/ListItem';
+import Link from '../../../../../common/components/Link/Link';
+import contextModules from '../../../../../common/contexts/ContextModules/decorator-context-modules';
+import ModuleLink from '../../../../../common/containers/ModuleLink/ModuleLink';
 
-import getComponents from '../../get-components';
+import getComponents from '../../../../../common/get-components';
 
 import './StubPage.css';
 import './StubPageSass.scss';
@@ -184,7 +184,7 @@ export default class StubPage extends Component {
     const {
       userInfo: {
         username,
-        displayName,
+        // displayName,
       },
       actionChangeUserAvatar,
     } = this.props;
@@ -229,7 +229,7 @@ export default class StubPage extends Component {
       userInfo: {
         username,
         displayName,
-        profileImageURI,
+        // profileImageURI,
       },
       testDomains,
       showTestPermission,

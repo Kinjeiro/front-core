@@ -1,5 +1,5 @@
 import { joinUri } from './utils/uri-utils';
-import * as authPaths from './modules/module-auth/routes-paths-auth';
+import * as authPaths from '../modules/module-auth/common/subModule/routes-paths-auth';
 
 export const ASSETS = 'assets';
 export const HOT_RELOAD_PREFIX = 'hot';
@@ -11,12 +11,6 @@ export const CORE_ROUTES_NAMES = {
   STUB: 'stub',
   auth: 'auth',
 };
-
-/**
- * @deprecated - use CORE_ROUTES_NAMES
- * @type {{ACCESS_DENIED: string, ERROR: string, LOGIN: string, STUB: string}}
- */
-export const STUB_ROUTES_NAMES = CORE_ROUTES_NAMES;
 
 // не нужно дергать и добавлять contextPath так как он уже при history basename добавляется автоматом
 // export const PATH_INDEX = appUrl('/');

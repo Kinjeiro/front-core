@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
 
-import i18n from '../../../utils/i18n-utils';
+import i18n from '../../../../../common/utils/i18n-utils';
 import {
   includes,
   wrapToArray,
-} from '../../../utils/common';
-import USER_PROP_TYPE from '../../../models/model-user-info';
-import { getUserInfo } from '../../../app-redux/selectors';
-import { actions } from '../../../app-redux/reducers/app/last-uni-error';
-import { notifyError } from '../../../helpers/notifications';
+} from '../../../../../common/utils/common';
+import USER_PROP_TYPE from '../../../../../common/models/model-user-info';
+import { getUserInfo } from '../../../../../common/app-redux/selectors';
+import { actions } from '../../../../../common/app-redux/reducers/app/last-uni-error';
+import { notifyError } from '../../../../../common/helpers/notifications';
 
 // import './AuthCheckWrapper.scss';
 

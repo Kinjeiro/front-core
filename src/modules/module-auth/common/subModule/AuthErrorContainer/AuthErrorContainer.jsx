@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { translateCore as i18n } from '../../../utils/i18n-utils';
-import clientConfig from '../../../client-config';
+import { translateCore as i18n } from '../../../../../common/utils/i18n-utils';
+import clientConfig from '../../../../../common/client-config';
 import {
   getLastUniError,
-  getUser,
-} from '../../../app-redux/selectors';
-import * as reduxLastUniError from '../../../app-redux/reducers/app/last-uni-error';
+  getUserId,
+} from '../../../../../common/app-redux/selectors';
+import * as reduxLastUniError from '../../../../../common/app-redux/reducers/app/last-uni-error';
 
 import { pathGetSigninPage } from '../routes-paths-auth';
 
@@ -31,7 +31,7 @@ const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
 @connect(
   (globalState) => ({
     lastUniError: getLastUniError(globalState),
-    user: getUser(globalState),
+    username: getUserId(globalState),
   }),
   {
     ...reduxLastUniError.actions,
@@ -50,7 +50,7 @@ export default class AuthErrorContainer extends Component {
     // CONNECT
     // ======================================================
     lastUniError: PropTypes.object,
-    user: PropTypes.string,
+    username: PropTypes.string,
 
     actionClearLastError: PropTypes.func,
     actionGoTo: PropTypes.func,
@@ -162,14 +162,14 @@ export default class AuthErrorContainer extends Component {
   render() {
     const {
       children,
-      user,
+      username,
       // actionClearLastError,
     } = this.props;
 
     return (
       <div
         className="AuthErrorContainer"
-        key={ user }
+        key={ username }
       >
         { this.renderModalMessage() }
 

@@ -6,12 +6,12 @@ import {
   // Redirect,
 } from 'react-router';
 
-import clientConfig from '../../client-config';
+import clientConfig from '../../../../common/client-config';
 
 import * as paths from './routes-paths-auth';
 import getComponents from './get-components';
 
-export default function getRouter() {
+export default function getRoutes(/* moduleRoutePrefix */) {
   const {
     AuthPageLayout,
     // AuthFormLayout,
@@ -24,7 +24,6 @@ export default function getRouter() {
 
   return (
     <Route
-      path=""
       component={ AuthPageLayout }
     >
       <IndexRedirect to={ paths.ROUTES_NAMES.signin } />

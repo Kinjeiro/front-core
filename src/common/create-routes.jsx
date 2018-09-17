@@ -1,9 +1,13 @@
 import React from 'react';
 import {
   Route,
-  // IndexRoute,
-  // IndexRedirect,
+  IndexRoute,
+  IndexRedirect,
 } from 'react-router';
+
+import moduleAuth from '../modules/module-auth/common/subModule';
+
+import { executeVariable } from './utils/common';
 
 import getComponents from './get-components';
 
@@ -11,87 +15,136 @@ import {
   CORE_ROUTES_NAMES,
 } from './constants/routes.pathes';
 
-import getRouterAuth from './modules/module-auth/routes-auth';
+export function renderCommonSubModule(moduleToRoutePrefixMap, commonSubModule) {
+  const moduleName = commonSubModule.MODULE_NAME;
+  // все кроме авторизации, так как она была раньше уже подключена
+  if (moduleName === moduleAuth.MODULE_NAME) {
+    return null;
+  }
+
+  const routePath = moduleToRoutePrefixMap[moduleName];
+  const subModuleRoutes = commonSubModule.getRoutes(routePath);
+
+  // если есть роуты добавляем их
+  return routePath && subModuleRoutes && (
+    <Route
+      key={ moduleName }
+      path={ routePath }
+    >
+      { subModuleRoutes }
+    </Route>
+  );
+}
 
 export default function createRoutes(
   store,
-  projectLayout,
+  ProjectLayoutComponent,
+  indexRoute,
   options = {},
 ) {
-  const {
-    Info404,
-
-    CoreApp,
-    ErrorPage,
-    StubPage,
-
-    AuthErrorContainer, // module-auth
-  } = getComponents();
-
   const {
     beforeRoutes = [],
     afterRoutes = [],
     authLayout,
     rootAppComponent,
+    renderProjectLayoutComponent,
+
+    commonSubModules = [],
+    moduleToRoutePrefixMap = {},
+
     /**
-      themeProviderProps: {},
-      modulesProviderProps: {
+     themeProviderProps: {},
+     modulesProviderProps: {
         moduleToRoutePrefixMap: {}
       }
      */
     rootAppComponentProps = {},
   } = options;
 
+  const {
+    Info404,
+
+    CoreApp,
+    ErrorPage,
+
+    AuthErrorContainer, // module-auth
+  } = getComponents();
+
   /* <IndexRedirect to="stub" />, */
 
-  const rootComponent = rootAppComponent || ((props) => (
-    <CoreApp
-      { ...props }
-      { ...rootAppComponentProps }
-    />
-  ));
+  const rootAppComponentPropsFinal = {
+    ...rootAppComponentProps,
+    modulesProviderProps: {
+      moduleToRoutePrefixMap,
+      ...rootAppComponentProps.modulesProviderProps,
+    },
+  };
 
-  /*
-   <IndexRoute
-   component={ TestPage }
-   />
-  */
+  const RootComponent = rootAppComponent
+    ? React.cloneElement(rootAppComponent, rootAppComponentPropsFinal)
+    : ((props) => (
+      <CoreApp
+        { ...props }
+        { ...rootAppComponentPropsFinal }
+      />
+    ));
+
+  const subModules = commonSubModules.map(renderCommonSubModule.bind(null, moduleToRoutePrefixMap));
 
   return (
     <Route
       path="/"
-      component={ rootComponent }
+      component={ RootComponent }
     >
       {
         beforeRoutes
       }
 
-      { authLayout }
-
-      <Route
-        component={ (props) => (
-          <AuthErrorContainer
-            { ...props }
-          />
-        ) }
-      >
-        { projectLayout }
-
-        <Route
-          path={ CORE_ROUTES_NAMES.STUB }
-          component={ StubPage }
-        />
-      </Route>
-
       {
-        !authLayout && (
+        authLayout || (
           <Route
-            path={ CORE_ROUTES_NAMES.auth }
+            path={ moduleToRoutePrefixMap[moduleAuth.MODULE_NAME] }
           >
-            { getRouterAuth() }
+            { moduleAuth.getRoutes() }
           </Route>
         )
       }
+
+      <Route
+        component={ AuthErrorContainer }
+      >
+        {
+          renderProjectLayoutComponent
+          ? (
+            executeVariable(
+              renderProjectLayoutComponent,
+              null,
+              subModules,
+            )
+          )
+          : (
+            <Route
+              component={ ProjectLayoutComponent || (({ children }) => children) }
+            >
+              {
+                typeof indexRoute === 'string'
+                  ? (
+                    <IndexRedirect to={ indexRoute } />
+                  )
+                  : indexRoute && (
+                    <IndexRoute component={ indexRoute } />
+                  )
+              }
+              { subModules }
+            </Route>
+          )
+        }
+      </Route>
+
+      {
+        afterRoutes
+      }
+
       <Route
         path={ CORE_ROUTES_NAMES.ACCESS_DENIED }
         component={ ErrorPage }
@@ -101,10 +154,6 @@ export default function createRoutes(
         component={ ErrorPage }
         showDetail={ true }
       />
-
-      {
-        afterRoutes
-      }
 
       <Route
         path="*"

@@ -7,11 +7,12 @@ import { syncHistoryWithStore } from 'react-router-redux';
 // COMMON
 // ======================================================
 // import { joinUri } from '../../../common/utils/uri-utils';
+import { executeVariable } from '../../../common/utils/common';
 import i18n from '../../../common/utils/i18n-utils';
+
 import clientConfig from '../../../common/client-config';
 import {
   PATH_ERROR_PAGE,
-  PARAM_RETURN_URL,
 } from '../../../common/constants/routes.pathes';
 import {
   ThrowableUniError,
@@ -23,6 +24,9 @@ import {
   appUrl,
   cutContextPath,
 } from '../../../common/helpers/app-urls';
+
+import moduleAuth from '../../../modules/module-auth/common/subModule';
+
 
 import CB from '../../../common/components/ComponentsBase';
 
@@ -64,6 +68,7 @@ export function register(server, pluginOptions, next) {
 
   clientRunner.initComponents(CB);
 
+  // eslint-disable-next-line consistent-return
   const handler = async function handlerFn(request, reply) {
     try {
       // const {
@@ -77,7 +82,7 @@ export function register(server, pluginOptions, next) {
             [CONTEXT_ID_PARAM]: contextIdParam,
           },
         },
-        originalUrl,
+        // originalUrl,
       } = request;
 
       logger.log(i18n('core:Start render index page'));
@@ -129,18 +134,19 @@ export function register(server, pluginOptions, next) {
               // logger.warn(i18n('core:Не авторизован, redirect на страницу нехватки прав'));
               // return reply.redirect(`${joinUri('/', contextPath, PATH_ACCESS_DENIED)}?${CONTEXT_ID_PARAM}=${contextId}`);
 
+              const loginPathFinal = appUrl(executeVariable(loginPath));
               const notReturnUrl = [
                 appUrl(''),
                 appUrl('/'),
-                appUrl(loginPath),
+                loginPathFinal,
               ];
 
               const returnUrlStr = notReturnUrl.includes(path)
                 ? ''
                 // нужно вырезать contextPath так как его будет использовать роутинг на клиенте
-                : `?${PARAM_RETURN_URL}=${encodeURIComponent(routePath)}`;
+                : `?${moduleAuth.paths.PARAM__RETURN_URL}=${encodeURIComponent(routePath)}`;
               logger.warn(i18n('core:errors.notAuthorize'));
-              return reply.redirect(`${appUrl(loginPath)}${returnUrlStr}`);
+              return reply.redirect(`${loginPathFinal}${returnUrlStr}`);
             }
           }
         }

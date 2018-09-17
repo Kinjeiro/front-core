@@ -5,7 +5,68 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## [last version][1.4.0 - ] (2018.07.28)
+## [last version][1.5.0 - ] (2018.09.17)
+### !!! Breaking changes:
+1. Изменилась система создания раутов для CoreClientRunner
+- убрать ProjectClientRunner::getRoutes
+- убрать использования модулей, для api, initComponents они уже внутри корного раннера
+```
+  /**
+   * @override
+   * роутинг приложений (пока на react-router@3)
+   * @param store
+   * @returns {*}
+   */
+  getRoutes(store, projectLayout, options) {
+    const projectCreateRoutes = require('../common/create-routes').default;
+    return projectCreateRoutes(store);
+  }
+```
+стало:
+- добавить getCommonSubModules
+- добавить getProjectLayoutComponent - компонент layout
+- добавить getIndexRoute
+```
+todo
+```
+2. getModuleFullPath перенес в helpers/app-urls - ибо зависит от contextPath из настроек
+
+### API Dependencies:
+
+### Dependencies:
+    
+### Dev Dependencies:
+
+### Features:
+1. Система изолированных проектных модулей, упрощенных модулей и сабмодулей (CommonSubModule и ServerSubModule). Они позволяют описать как проектные код, так и любые фичи на любом этапе приложений.
+Описание модуля:
+```
+модуль
+- name
+- order (start, end, middle (default), before, after)
+- stages
+    - config
+    - build (webpack config)
+    - clientInit
+    - clientRunner
+    - commonSubModule
+    - serverInit
+    - serverRunner
+    - serverSubModule
+    - clientTestInit
+    - clientTestRun
+    - serverTestInit
+    - serverTestRun
+    - static
+```
+2. Упрощенная настройка ClientRunner и ServerRunner
+
+### Commits:
+    - !!! feat(utils, uri-utils): - breaking changes! переместил getModuleFullPath в helpers/app-urls так как нужен полный путь учитывающий contextPath из настроек 
+    - chore(*) minor version: 1.5.0
+    
+
+## [1.4.0 - 1.4.32] (2018.07.28)
 ### !!! Breaking changes:
 1. Настроил ServiceAuth на работу с сервером ```@reagentum/auth-server@1.0.4```. Добавил Signup \ Forgot password \ Reset password фунционал
    Перенес все что связано с авторизацией пока в отдельный псевдомодуль ```/src/modules/module-auth```
@@ -90,6 +151,88 @@ import { getUserAvatarUrl } from '@reagentum/front-core/lib/common/app-redux/red
 5.  Удобная система сервисов и сервис моков, доступных в любом request
 
 ### Commits:
+    - feat(utils, common-utils): - добавил агрегирующие функции для сбора массивов и объектов aggregateArrayFn и aggregateObjectFn
+    - feat(ClientRunner): - небольшие корректировки в инициализации
+    - chore(*) patch version: 1.4.32
+    - feat(cb): - переместил get-components
+		\\ убрал лишнее использование
+    - bug(auth): - если в модалке неправильно вбить логин то окно закрывалось
+    - bug(CB, Form): - бага с тем что при instanceChange терялся фокус - ключ для CoreField__controlItem неправильно считался
+    - chore(dts): - генерация typescript definitions (d.ts) для компонентов и контейнеров по propTypes
+    - chore(*) patch version: 1.4.31
+    - feat(redux, form): - redux-simple-form декоратор теперь обрабатывыает если подается проперть initValues - удобно для формы редактирования
+		\\ также внутрь подается formId
+    - bug(redux): - в одном месте state был мутабельный
+    - bug(server, service): - edit операции по умолчанию работают через patch операции
+    - chore(*) patch version: 1.4.30
+    - bug(server, file): - в webpack не работал __dirname
+    - chore(*) patch version: 1.4.29
+    - bug(server, api): - пофиксил текст
+    - chore(docs): - небольшое уточнение
+    - feat(server, services): - сделал класс для всех сервисов CoreService: в нем реализовано получение текущего пользователя и другого актуального сервиса (getUser, getRequest, getUserToken, getService), есть метод sendWithAuth - отправляет запрос с токеном авторизации
+		\\ добавил в request services чтобы получить любой сервис сервис
+		\\ убрал моки роуты и заменил их на переключение между сервисами и моками сервисов (через mock=true в урле, хранится в куках и использует старый plugin-mocks)
+		\\ моки роуты теперь лучше использовать для точечных случаев или для мелких модулей
+		\\ класс CoreServiceMock - который содержит методы управления мапой моков в памяти
+		\\ ServicesContext - тот серверный синглтон, который и создает инстансы сервисов вместе с request для каждого запроса
+		\\ теперь сервисы создаются либо через класс (автоматом подасться с таким же именем endpointConfig из конфигов, либо как функция от (endpoint) => new ServiceMy(endpoint)
+		\\ добавил в ServerRunner::createMockServices
+    - feat(server, request): - добавил в request user и userToken для удобства
+    - bug(server, mocking): - в урле в pathParams могут быть и спец символы @-\.
+    - feat(ReduxTable): - добавил для декорируемых классов onUpdateTableMeta \ onUpdateTableFilters которые работают через смену урла и поэтому для таких компонентов можно делать tableId зависящий от table.meta или table.filters - новый id сам перерасчитается и правильно применится с обновлением
+    - bug(cb, redux, UserAvatar): - key для освежения аватарки пробрасывается в редуксе
+    - feat(utils, uri-utils): - updateLocationSearch третьим параментром получает возможность не мержить, а assign чтобы затирать внутренние мапы (к примеру, фильтры для таблицы)
+    - feat(utils): - добавил проверку isClass в executeVariable
+    - feat(uni-error): - откорректировал handler для hapi boom ошибок
+    - bug(redux, ReduxTable): - бага с тем, что при переключении id таблицы без смены компонента падала ошибка
+		\\ не работала смена sortDesc
+    - bug(cb, UserAvatar): - key для того чтобы явно освежить аватар после его изменения
+		\\ и no user картинка не растягивалась по всей высоте и ширине
+    - bug(server, utils): - content-disposition требует энкодить filename
+    - feat(server, utils): - выделил метод base64ToBuffer
+    - chore(build): - фикс чтобы можно было кору разворачивать не только из node_modules 2
+    - chore(*) patch version: 1.4.28
+    - feat(UserAvatar): - css 2
+    - chore(build): - фикс чтобы можно было кору разворачивать не только из node_modules
+    - feat(UserAvatar): - css
+    - chore(*) patch version: 1.4.27
+    - chore(*) patch version: 1.4.26
+    - chore(*) patch version: 1.4.26
+    - feat(cb, user, avatar): - UserAvatar компонент
+    - chore(*) patch version: 1.4.25
+    - !!! feat(api, users): - profileImageURI теперь явно не передается в userInfo нужно использовать getUserAvatarUrl
+		\\ usersService, ServiceUsers - editUser, deleteUser, getAvatar, getPublicInfo, getProtectedInfo
+		\\ синхронизация с протколом auth-server@1.1.1
+		\\ добавил mime@2.3.1
+    - feat(utils): image-utils::ImageTools::resize
+    - feat(utils): api-utils::readAsDataURL
+		\\ api-utils::dataURLtoBlob
+		\\ common:difference
+    - feat(cb, form): - firstFocus - автоматический фокус первого поля
+		\\ наработки как исправить багу что данные с автозаполнением не попадают в редукс до первого клика
+    - feat(server, utils, hapi): - downloadFile для hapi reply - можно подавать как путь до файла так и base64
+    - chore(build): - можно разместить кору не только в npm но и в отдельной папке, поэтому билд скрипты могут быть запущены не только в node_modules
+    - chore(*) patch version: 1.4.24
+    - feat(CB, AuthCheck, Button): - добавил CoreButton и BaseButton внутри которых встроен authCheck
+    - bug(form, CoreInput): - бага если не подать errors и бага если в другом месте менялись value не менялся state
+    - feat(form, CoreField): - добавил CoreField--required
+    - chore(*) patch version: 1.4.23
+    - bug(utils, mock-utils): - otherRouteConfig раньше передовались как массив, исправил на мапу
+    - feat(utils, api-utils): - api-utils convertToFormData
+		\\ apiCreateRecord вторым параметром можно передать мапу файлов
+		\\ BaseApiClient::uploadFiles
+		\\ BaseApiClient onUploadProgress опция для отлавливания прогресса загрузки аттача
+    - feat(utils): - valueFromRange - может работать без третьего параметра, добавил тесты
+		\\ isEmpty пустой объект тоже обознает пусто
+    - feat(CB, CoreField): - добавил проверку multipleMaxSize
+		\ multipleMinSize
+		\\ onError, onWarnings и warnings для показа сообщений из контролов
+    - feat(file-utils): - добавил removeDir, createDir, inProject
+    - chore(*) patch version: 1.4.22
+    - bug(CoreField): - почему-то, если лайаут явно не прописывается - то происходит обертывание в анонимную функцию и при любых изменения при использовании кастомного render перерисовывается весь компонент и сбрасываются state
+    - chore(*) patch version: 1.4.21
+    - bug(redux, table): - бага с contextPath
+    - chore(*) patch version: 1.4.20
     - feat(redux, table): - ReduxTable::actionLoadRecords при подачи фильтров - затирает их новым значением (а не мержит со старыми, как это было раньше)
         \\ Декоратор redux-table теперь по умолчанию загружает данные при моунте, перегружает их при recieve props и рисует Loading пока не загрузится (есть настройкт)
     - feat(Field): - новые методы кастомные render(controlPropsFinal, fieldProps) и controlClass

@@ -4,6 +4,7 @@ import bind from 'lodash-decorators/bind';
 // ======================================================
 // UTILS
 // ======================================================
+import { joinPath } from '../common/utils/uri-utils';
 import { testAppUrlStartWith } from '../common/helpers/app-urls';
 
 import serverConfig from './server-config';
@@ -17,13 +18,13 @@ import createServices from './services';
 import createMockServices from './services/mocks';
 import createStrategies from './strategies';
 import {
-  CORE_ROUTES_NAMES,
   ASSETS,
   PATH_ERROR_PAGE,
   PATH_ACCESS_DENIED,
   HOT_RELOAD_PREFIX,
 } from '../common/routes.pathes';
-import { PATH_AUTH_SIGNIN } from '../common/modules/module-auth/routes-paths-auth';
+
+import moduleAuth from '../modules/module-auth/common/subModule';
 
 
 // ======================================================
@@ -78,6 +79,12 @@ export default class CoreServerRunner extends AbstractServerRunner {
   getClientRunner() {
     return new CoreClientRunner();
   }
+  getModuleToRoutePrefixMap() {
+    return this.getClientRunner().getModuleToRoutePrefixMap();
+  }
+  getModuleRoutePrefix(moduleName) {
+    return this.getClientRunner().getModuleRoutePrefix(moduleName);
+  }
 
   @bind()
   // eslint-disable-next-line no-unused-vars
@@ -102,7 +109,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
       pathnameWithoutContextPath,
       ASSETS,
       HOT_RELOAD_PREFIX,
-      CORE_ROUTES_NAMES.auth,
+      // CORE_ROUTES_NAMES.auth,
+      this.getModuleRoutePrefix(moduleAuth.MODULE_NAME),
       // this.getLoginPath(),
       PATH_ERROR_PAGE,
       PATH_ACCESS_DENIED,
@@ -117,6 +125,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
    * еще позволительный страницы без юзера (к примеру лендинг)
    *
    * @param pathnameWithoutContextPath
+   * @param moduleToRoutePrefixMap
    * @return {boolean}
    */
   @bind()
@@ -124,8 +133,9 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return false;
   }
 
+  @bind()
   getLoginPath() {
-    return PATH_AUTH_SIGNIN;
+    return joinPath(this.getModuleRoutePrefix(moduleAuth.MODULE_NAME), moduleAuth.paths.PATH_AUTH_SIGNIN);
   }
 
   // ======================================================
@@ -144,7 +154,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
         createProjectPrepareState: this.createProjectPrepareState,
         headHtml: this.getTemplateHead(),
         bodyHtml: this.getTemplateBody(),
-        loginPath: this.getLoginPath(),
+        loginPath: this.getLoginPath,
         noAuthRequireMatcherFn: this.noAuthRequireMatcher,
         noNeedCredentialsPageMatcherFn: this.noNeedCredentialsPageMatcher,
       },

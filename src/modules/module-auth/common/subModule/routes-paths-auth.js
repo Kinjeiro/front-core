@@ -1,4 +1,4 @@
-import { joinPath } from '../../utils/uri-utils';
+import { joinPath } from '../../../../common/utils/uri-utils';
 
 export const ROUTES_NAMES = {
   signin: 'signin',
@@ -7,9 +7,7 @@ export const ROUTES_NAMES = {
   reset: 'reset',
 };
 
-// todo @ANKU @LOW - так как это не полноценный модуль пока, то у него индекс будет явно задан
-// export const PATH_AUTH_INDEX = '/';
-export const PATH_AUTH_INDEX = '/auth';
+export const PATH_AUTH_INDEX = '/';
 
 export const PATH_AUTH_SIGNIN = joinPath(PATH_AUTH_INDEX, ROUTES_NAMES.signin);
 
