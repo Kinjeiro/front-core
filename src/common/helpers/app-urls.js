@@ -1,5 +1,5 @@
 import {
-  joinUri,
+  joinPath,
   formatUrlParameters,
 } from '../utils/uri-utils';
 import config from '../client-config';
@@ -9,10 +9,10 @@ import config from '../client-config';
 * учитывает contextPath (basepath) приложения
 */
 export function appUrl(pathname = '', ...otherPaths) {
-  const contextPath = joinUri('/', config.common.app.contextRoot);
+  const contextPath = joinPath('/', config.common.app.contextRoot);
   let resultUrl = pathname;
   if (resultUrl.indexOf(contextPath) < 0) {
-    resultUrl = joinUri(contextPath, resultUrl);
+    resultUrl = joinPath(contextPath, resultUrl);
   }
 
   const lastUrlParameters = otherPaths && otherPaths[otherPaths.length - 1];
@@ -20,27 +20,53 @@ export function appUrl(pathname = '', ...otherPaths) {
     // url parameters
     return formatUrlParameters(
       lastUrlParameters,
-      joinUri('/', resultUrl, ...otherPaths.slice(0, otherPaths.length - 1)),
+      joinPath('/', resultUrl, ...otherPaths.slice(0, otherPaths.length - 1)),
     );
   }
 
-  return joinUri('/', resultUrl, ...otherPaths);
+  return joinPath('/', resultUrl, ...otherPaths);
 }
 
 export function testAppUrlStartWith(pathname, ...testUrls) {
-  return testUrls.some((testUri) => pathname.indexOf(joinUri('/', testUri)) === 0);
+  return testUrls.some((testUri) => pathname.indexOf(joinPath('/', testUri)) === 0);
 }
 
 export function cutContextPath(requestPath) {
   const contextPath = config.common.app.contextRoot;
   return contextPath && contextPath !== '/'
-    ? requestPath.replace(new RegExp(`^${joinUri('/', contextPath).replace(/\//gi, '\\/')}`, 'gi'), '')
+    ? requestPath.replace(new RegExp(`^${joinPath('/', contextPath).replace(/\//gi, '\\/')}`, 'gi'), '')
     // на всякий случай проверяем если впереди /
-    : joinUri('/', requestPath);
+    : joinPath('/', requestPath);
 }
 
 export function getFullUrl(routePath, queryParams = undefined) {
-  return `${window.location.origin}${joinUri(config.common.app.contextRoot, routePath, queryParams)}`;
+  return `${window.location.origin}${joinPath(config.common.app.contextRoot, routePath, queryParams)}`;
+}
+
+
+/**
+ * Полный путь до ресурса с учетом префикса различных модулей
+ *
+ * @param relativeLocation - LocationDescription - @see model-location.js
+ * @param moduleName
+ * @param modulesPrefixes - мапа: moduleName => prefix
+ * @returns {*}
+ */
+export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes = {}) {
+  const prefix = modulesPrefixes[moduleName];
+
+  if (!prefix) {
+    return relativeLocation;
+  }
+
+  if (typeof relativeLocation === 'object') {
+    return {
+      ...relativeLocation,
+      pathname: appUrl(prefix, relativeLocation.pathname),
+    };
+  }
+
+  return appUrl(prefix, relativeLocation);
 }
 
 export default appUrl;

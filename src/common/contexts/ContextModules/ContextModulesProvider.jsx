@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { getModuleFullPath } from '../../utils/uri-utils';
+import { getModuleFullPath } from '../../helpers/app-urls';
 
 import { actions as modulesActions } from '../../app-redux/reducers/app/redux-modules';
 // import i18n from '../../utils/i18n';

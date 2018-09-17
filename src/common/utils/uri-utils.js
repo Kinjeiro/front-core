@@ -264,31 +264,6 @@ export function getHash() {
   return window.location.hash.replace(/^#/, '');
 }
 
-/**
- * Полный путь до ресурса с учетом префикса различных модулей
- *
- * @param relativeLocation - LocationDescription - @see model-location.js
- * @param moduleName
- * @param modulesPrefixes - мапа: moduleName => prefix
- * @returns {*}
- */
-export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes = {}) {
-  const prefix = modulesPrefixes[moduleName];
-
-  if (!prefix) {
-    return relativeLocation;
-  }
-
-  if (typeof relativeLocation === 'object') {
-    return {
-      ...relativeLocation,
-      pathname: joinPath('/', prefix, relativeLocation.pathname),
-    };
-  }
-
-  return joinPath('/', prefix, relativeLocation);
-}
-
 export function updateLocationSearch(url, newQueryParams, assign = false) {
   const params = parseUrlParameters(url);
   if (assign) {
