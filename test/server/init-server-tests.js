@@ -11,8 +11,12 @@
  */
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
+
 // 1) Генерим .babelrc для es6
 require('../../build-scripts/init-babel')(true);
+// если используется webpack require.context - нужно полифил для него
+require('babel-plugin-require-context-hook/register')();
+
 
 // 2) Инициализирируем тестовую среду (проставляются глобальные переменные) (+ к примеру игнорит css, ejs правя babel и require)
 require('./init/init-test-server-enviroment');

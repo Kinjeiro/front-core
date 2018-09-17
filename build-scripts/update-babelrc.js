@@ -18,7 +18,15 @@ const babelLoader = webpackConfig.module.rules
 
 // Если указывать просто все options, почему-то ругается, если указывать с другими опциями что неправильно назван preset
 // JSON.stringify(babelLoader.options, null, 2),
-writeToFile(context.inProject('.babelrc'), {
+
+const babelRcFinal = {
   presets: babelLoader.options.presets,
   plugins: babelLoader.options.plugins
-});
+};
+
+if (process.env.NODE_ENV === 'test') {
+  // require.context для mocha
+  babelRcFinal.plugins.push('babel-plugin-require-context-hook');
+}
+
+writeToFile(context.inProject('.babelrc'), babelRcFinal);
