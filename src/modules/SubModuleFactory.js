@@ -1,4 +1,35 @@
 /* eslint-disable no-unused-vars */
+
+/**
+ Упрощенный модуль выглядит так:
+ src/modules/module
+   common/
+    subModule/
+      api/
+      components/
+      containers/
+      models/
+      stores/
+        redux-reducers.js
+        redux-selectors.js
+        mobx-stores.js
+      index.js
+      get-components.js
+      routes.jsx
+      routes.paths.js
+      module-name.js
+   server/
+    subModule/
+       services/
+       mockServices/
+       plugins/
+       mockRoutes/
+       api-routes/
+       index.js
+       module-name.js
+   package.json
+
+ */
 export const SUB_MODULE_FACTORY = {
   SUB_MODULE_TYPES: {
     COMMON: 'common',
@@ -6,6 +37,7 @@ export const SUB_MODULE_FACTORY = {
   },
 
   /**
+   * ПРИМЕР
    * только для require.context нужно явно regexp задавать а не через переменную
    */
   COMMON_SUB_MODULE_REGEXP: /^\.\/(.*)\/common\/subModule\/index\.js/gi,
@@ -49,7 +81,7 @@ export const SUB_MODULE_FACTORY = {
 
    - getRoutes: (moduleRoutePrefix) => null,
    - getApi: () => [],
-   - getStores: () => ({}),
+   - getRootReducers: () => ({}),
 
    - hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
       // module.hot.accept('./routes-products', reloadUi);
@@ -65,17 +97,21 @@ export const SUB_MODULE_FACTORY = {
   },
 
   DEFAULT_SERVER_SUB_MODULE_OPTIONS: {
+    getServerPlugins: (services, strategies, servicesContext) => [],
     getServerApi: (services, strategies, servicesContext) => [],
     getServerMocks: (services, strategies, servicesContext) => [],
     getServerServices: (endpointServices, servicesContext) => ({}),
     getServerMockServices: (endpointServices, servicesContext) => ({}),
+    getServerStrategies: (servicesContext) => ({}),
   },
 
   /**
+   - getServerPlugins: (services, strategies, servicesContext) => [],
    - getServerApi: (services, strategies, servicesContext) => [],
    - getServerMocks: (services, strategies, servicesContext) => [],
    - getServerServices: (endpointServices, servicesContext) => ({}),
    - getServerMockServices: (endpointServices, servicesContext) => ({}),
+   - getServerStrategies: (servicesContext) => ({}),
 
    * @param options
    * @return {{options: *}}

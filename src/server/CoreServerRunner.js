@@ -4,6 +4,7 @@ import bind from 'lodash-decorators/bind';
 // ======================================================
 // UTILS
 // ======================================================
+import { aggregateArrayFn } from '../common/utils/common';
 import { joinPath } from '../common/utils/uri-utils';
 import { testAppUrlStartWith } from '../common/helpers/app-urls';
 
@@ -13,6 +14,7 @@ import serverConfig from './server-config';
 // COMMON
 // ======================================================
 import CoreClientRunner from '../client/CoreClientRunner';
+import SubModuleFactory from '../modules/SubModuleFactory';
 
 import createServices from './services';
 import createMockServices from './services/mocks';
@@ -48,13 +50,42 @@ import AbstractServerRunner from './AbstractServerRunner';
 
 import getMockRoutes from './plugins/api/mocks';
 
+// нужно статически обозначить контекст + необходим regexp без переменных
+const serverSubModulesContext = require.context('../modules', true, /^\.\/(.*)\/server\/subModule\/index\.js/gi);
+
 /**
  * Расширение для установки core зависимостей
  */
 export default class CoreServerRunner extends AbstractServerRunner {
+  clientRunner = null;
+
+  // ======================================================
+  // UTILS
+  // ======================================================
+  getModuleToRoutePrefixMap() {
+    return this.getClientRunner().getModuleToRoutePrefixMap();
+  }
+  getModuleRoutePrefix(moduleName) {
+    return this.getClientRunner().getModuleRoutePrefix(moduleName);
+  }
+
+  getClientRunner() {
+    if (!this.clientRunner) {
+      this.clientRunner = this.createClientRunner();
+    }
+    return this.clientRunner;
+  }
+
   // ======================================================
   // for OVERRIDE
   // ======================================================
+  loadServerSubModules() {
+    return [
+      ...super.loadServerSubModules(),
+      ...SubModuleFactory.loadSubModules(serverSubModulesContext, SubModuleFactory.SUB_MODULE_TYPES.SERVER),
+    ];
+  }
+
   createServices(endpointServices, servicesContext) {
     return {
       ...super.createServices(endpointServices, servicesContext),
@@ -76,14 +107,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
     };
   }
 
-  getClientRunner() {
+  createClientRunner() {
     return new CoreClientRunner();
-  }
-  getModuleToRoutePrefixMap() {
-    return this.getClientRunner().getModuleToRoutePrefixMap();
-  }
-  getModuleRoutePrefix(moduleName) {
-    return this.getClientRunner().getModuleRoutePrefix(moduleName);
   }
 
   @bind()
@@ -93,7 +118,10 @@ export default class CoreServerRunner extends AbstractServerRunner {
   }
 
   getMockRoutes(services, strategies, servicesContext) {
-    return getMockRoutes(services, strategies, servicesContext);
+    return [
+      ...aggregateArrayFn(this.getServerSubModules(), 'getServerMocks')(services, strategies, servicesContext),
+      ...getMockRoutes(services, strategies, servicesContext),
+    ];
   }
 
   getTemplateHead() {
@@ -175,6 +203,10 @@ export default class CoreServerRunner extends AbstractServerRunner {
       pluginI18n,
       pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
       pluginsRequestUser,
+
+      // ======================================================
+      // API additional
+      // ======================================================
       {
         register: pluginMocking,
         options: {
@@ -182,10 +214,14 @@ export default class CoreServerRunner extends AbstractServerRunner {
           mockRoutes: this.getMockRoutes(services, strategies, servicesContext),
         },
       },
+      this.getIndexPagePlugin(services, strategies),
+
+      // ======================================================
+      // API
+      // ======================================================
       pluginApiHealthmonitor,
       pluginsApiTest,
       ...pluginsApiAuthUser(services, strategies),
-      this.getIndexPagePlugin(services, strategies),
       ...pluginsApiUsers(services, strategies),
     );
 

@@ -8,6 +8,10 @@ import crumb from 'crumb';
 import RequestID from 'hapi-request-id';
 // import pluginYar from 'yar';
 
+import {
+  aggregateArrayFn,
+  aggregateObjectFn,
+} from '../common/utils/common';
 import { joinPath } from '../common/utils/uri-utils';
 import { parseToUniError } from '../common/models/uni-error';
 
@@ -34,6 +38,8 @@ process.on('unhandledRejection', error => {
 export default class AbstractServerRunner {
   hapiServerOptions;
 
+  serverSubModules = null;
+
   server = null;
 
   constructor(runnerOptions = {}) {
@@ -49,23 +55,43 @@ export default class AbstractServerRunner {
     );
   }
 
+  // ======================================================
+  // UTILS
+  // ======================================================
+  getServerSubModules() {
+    if (!this.serverSubModules) {
+      // todo @ANKU @LOW - проверить: перегружать hot reload если изменится что-то внутри
+      this.serverSubModules = this.loadServerSubModules();
+    }
+    return this.serverSubModules;
+  }
+
+
+  // ======================================================
+  // INIT
+  // ======================================================
   init() {
     this.server = new Hapi.Server(this.hapiServerOptions);
   }
 
+
   // ======================================================
   // for OVERRIDE
   // ======================================================
-  createServices(/* endpointServices, servicesContext */) {
-    return {};
+  loadServerSubModules() {
+    return [];
   }
 
-  createMockServices(/* endpointServices, servicesContext*/) {
-    return {};
+  createServices(endpointServices, servicesContext) {
+    return aggregateObjectFn(this.getServerSubModules(), 'getServerServices')(endpointServices, servicesContext);
+  }
+
+  createMockServices(endpointServices, servicesContext) {
+    return aggregateObjectFn(this.getServerSubModules(), 'getServerMockServices')(endpointServices, servicesContext);
   }
 
   createStrategies(servicesContext) {
-    return {};
+    return aggregateObjectFn(this.getServerSubModules(), 'getServerStrategies')(servicesContext);
   }
 
   getPlugins(services, strategies, servicesContext) {
@@ -129,6 +155,10 @@ export default class AbstractServerRunner {
         register: pluginYar,
         options: serverConfig.server.features.session.yarOptions
       }*/
+
+      ...aggregateArrayFn(this.getServerSubModules(), 'getServerPlugins')(services, strategies, servicesContext),
+      // todo @ANKU @LOW - вынести в отдельный метод?
+      ...aggregateArrayFn(this.getServerSubModules(), 'getServerApi')(services, strategies, servicesContext),
     ];
   }
 

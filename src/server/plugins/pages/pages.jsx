@@ -66,7 +66,7 @@ export function register(server, pluginOptions, next) {
     noNeedCredentialsPageMatcherFn,
   } = pluginOptions;
 
-  clientRunner.initComponents(CB);
+  clientRunner.initAllComponents(CB);
 
   // eslint-disable-next-line consistent-return
   const handler = async function handlerFn(request, reply) {

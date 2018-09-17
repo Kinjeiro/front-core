@@ -7,9 +7,7 @@ import { initComponents } from '../common/get-components';
 
 import SubModuleFactory from '../modules/SubModuleFactory';
 
-// нужно статически обозначить контекст
-// const commonSubModulesContext = require.context('../modules', true, SubModuleFactory.COMMON_SUB_MODULE_REGEXP);
-// необходим regexp без переменных
+// нужно статически обозначить контекст + необходим regexp без переменных
 const commonSubModulesContext = require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi);
 
 /**
@@ -31,9 +29,8 @@ export default class CoreClientRunner extends AbstractClientRunner {
   }
 
   initComponents(COMPONENTS_BASE) {
-    // todo @ANKU @LOW - гипотетическая может быть проблема что сначала грузятся модули, а потом основа (то есть если сначала в основе класс, а в модуле его переопределяют)
-    initComponents(COMPONENTS_BASE);
-    return super.initComponents(COMPONENTS_BASE);
+    super.initComponents(COMPONENTS_BASE);
+    return initComponents(COMPONENTS_BASE);
   }
 
   /**

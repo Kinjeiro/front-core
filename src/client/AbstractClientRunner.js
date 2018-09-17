@@ -107,6 +107,9 @@ export default class AbstractClientRunner {
       subModule.hotReloadFunc(this.reloadUi, this.reloadStore, this.reloadAll));
   }
   initComponents(COMPONENTS_BASE) {
+    return COMPONENTS_BASE;
+  }
+  initSubModulesComponents(COMPONENTS_BASE) {
     this.getCommonSubModules().forEach((subModule) =>
       subModule.initComponents(COMPONENTS_BASE));
     return COMPONENTS_BASE;
@@ -165,6 +168,12 @@ export default class AbstractClientRunner {
   // ======================================================
   // INIT
   // ======================================================
+  initAllComponents(COMPONENTS_BASE) {
+    this.initComponents(COMPONENTS_BASE);
+    this.initSubModulesComponents(COMPONENTS_BASE);
+    return COMPONENTS_BASE;
+  }
+
   getContextRootBasename() {
     const basename = joinUri('/', clientConfig.common.app.contextRoot);
     return basename === '/' ? undefined : basename;
@@ -204,7 +213,7 @@ export default class AbstractClientRunner {
     // COMPONENTS
     // ======================================================
     // должны инициализироваться до роутев
-    this.initComponents(COMPONENTS_BASE_CORE);
+    this.initAllComponents(COMPONENTS_BASE_CORE);
 
     // ======================================================
     // CREATE STORE + HISTORY + ROUTES
@@ -339,7 +348,7 @@ export default class AbstractClientRunner {
   }
   @bind()
   reloadUi() {
-    this.initComponents(COMPONENTS_BASE_CORE);
+    this.initAllComponents(COMPONENTS_BASE_CORE);
     this.routes = this.getRoutes(this.store);
     this.renderDOM(true);
   }

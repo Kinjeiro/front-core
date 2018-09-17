@@ -27,9 +27,105 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - добавить getProjectLayoutComponent - компонент layout
 - добавить getIndexRoute
 ```
-todo
+import ParentClientRunner from '@reagentum/front-core/lib/client/CoreClientRunner';
+import SubModuleFactory from '@reagentum/front-core/lib/modules/SubModuleFactory';
+
+import { initComponents as fcComponentsInitComponents } from '@reagentum/frontCore_Components/lib/common/get-components';
+
+import { initComponents } from '../common/get-components';
+import { initComponents as toCoreInitComponents } from '../module-to-front-core/common/get-components';
+
+// нужно статически обозначить контекст + необходим regexp без переменных
+const commonSubModulesContext = require.context('../modules', true, /^\.\/(.*)\/common\/index\.js/gi);
+
+export default class ClientRunner extends ParentClientRunner {
+  loadCommonSubModules() {
+    return [
+      ...super.loadCommonSubModules(),
+      ...SubModuleFactory.loadSubModules(commonSubModulesContext),
+    ];
+  }
+
+  initComponents(COMPONENTS_BASE) {
+    super.initComponents(COMPONENTS_BASE);
+    toCoreInitComponents(COMPONENTS_BASE);
+    fcComponentsInitComponents(COMPONENTS_BASE);
+    return initComponents(COMPONENTS_BASE);
+  }
+
+  getProjectLayoutComponent() {
+    return this.getComponents().ProjectApp;
+  }
+  getIndexRoute() {
+    return this.getComponents().Landing;
+  }
+
+  hotReloadListeners() {
+    super.hotReloadListeners();
+    module.hot.accept('../common/get-components', this.reloadUi);
+  }
+}
 ```
-2. getModuleFullPath перенес в helpers/app-urls - ибо зависит от contextPath из настроек
+И для ServerRunner
+```
+const serverSubModulesContext = require.context('../modules', true, /^\.\/(.*)\/server\/index\.js/gi);
+
+export default class ServerRunner extends ParentServerRunner {
+  loadServerSubModules() {
+    return [
+      ...super.loadServerSubModules(),
+      ...SubModuleFactory.loadSubModules(serverSubModulesContext, SubModuleFactory.SUB_MODULE_TYPES.SERVER),
+    ];
+  }
+  ...
+}
+```
+2. Для получения данных о маппинге модуля на route path prefix используются ```moduleToRoutePrefixMap```
+На клиенте, добавляются в функции меню, либо через контекст ContextModulesProvider, либо через рудекс selectors::getModulesRoutePrefixes
+На сервере через методы раннера:
+```
+  getRoutePath(moduleName, path) {
+    return joinPath(this.getModuleRoutePrefix(moduleName), path);
+  }
+
+  @bind()
+  noNeedCredentialsPageMatcher(pathnameWithoutContextPath) {
+    const need = this.getRoutePath(moduleProfile.MODULE_NAME, moduleProfile.paths.PATH_PROFILE_INDEX) === pathnameWithoutContextPath
+      || testAppUrlStartWith(pathnameWithoutContextPath,
+        this.getRoutePath(moduleProfile.MODULE_NAME, moduleProfile.paths.PATH_PROFILE_SETTINGS),
+      );
+
+    return !need || super.noNeedCredentialsPageMatcher(pathnameWithoutContextPath);
+  }
+```
+3. Если уже были модули, проверте путь до ваших сабмодулей и regexp для контекста.
+Также необходимо обренуть создание в index через SubModuleFactory.createCommonSubModule и SubModuleFactory.createServerSubModule:
+```
+import SubModuleFactory from '@reagentum/front-core/lib/modules/SubModuleFactory';
+
+import MODULE_NAME from './module-name';
+import * as paths from './routes-paths-profile';
+import { initComponents } from './get-components';
+
+export default SubModuleFactory.createCommonSubModule({
+  MODULE_NAME,
+  paths,
+  initComponents,
+
+  getRoutes: () => require('./routes-profile').default,
+  getApi: () => require('./api-profile'),
+  getRootReducers: () => require('./redux-profile').default,
+
+  hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
+    module.hot.accept('./routes-profile', reloadUi);
+    module.hot.accept('./api-profile', reloadAll);
+    module.hot.accept('./redux-profile', reloadStore);
+    module.hot.accept('./get-components', reloadUi);
+  },
+});
+```
+4. Вместо ServerRunner::getClientRunner нужно переопределять createClientRunner
+5. getModuleFullPath перенес в helpers/app-urls - ибо зависит от contextPath из настроек
 
 ### API Dependencies:
 
