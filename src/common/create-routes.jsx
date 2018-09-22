@@ -22,14 +22,14 @@ export function renderCommonSubModule(moduleToRoutePrefixMap, commonSubModule) {
     return null;
   }
 
-  const routePath = moduleToRoutePrefixMap[moduleName];
-  const subModuleRoutes = commonSubModule.getRoutes(routePath);
+  const moduleRoutePath = moduleToRoutePrefixMap[moduleName];
+  const subModuleRoutes = executeVariable(commonSubModule.getRoutes(moduleRoutePath), null, moduleRoutePath);
 
   // если есть роуты добавляем их
-  return routePath && subModuleRoutes && (
+  return moduleRoutePath && subModuleRoutes && (
     <Route
       key={ moduleName }
-      path={ routePath }
+      path={ moduleRoutePath }
     >
       { subModuleRoutes }
     </Route>

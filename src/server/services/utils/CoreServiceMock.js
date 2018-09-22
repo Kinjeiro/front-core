@@ -1,12 +1,22 @@
-import { filterAndSortDb } from '../../../common/models/model-table';
-import { generateId as utilsGenerateId } from '../../../common/utils/common';
+import {
+  generateId as utilsGenerateId,
+  objectValues,
+} from '../../../common/utils/common';
 import { applyPatchOperations } from '../../../common/utils/api-utils';
+
+import { filterAndSortDb } from '../../../common/models/model-table';
 
 import CoreService from './CoreService';
 
+const DEFAULT_DATA = {};
+
 export default class CoreServiceMock extends CoreService {
   async getData() {
-    throw new Error('Not implemented');
+    return DEFAULT_DATA;
+  }
+
+  async getValues() {
+    return objectValues(this.getData());
   }
 
   async loadRecords(query, searchFields) {

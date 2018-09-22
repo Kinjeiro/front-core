@@ -71,6 +71,9 @@ export default class AbstractClientRunner {
     if (!this.commonSubModules) {
       // todo @ANKU @LOW - проверить: перегружать hot reload если изменится что-то внутри
       this.commonSubModules = this.loadCommonSubModules();
+      this.commonSubModules.forEach((module) => {
+        logger.log(`Init module "${module.MODULE_NAME}"`);
+      });
     }
     return this.commonSubModules;
   }
@@ -158,6 +161,7 @@ export default class AbstractClientRunner {
       BaseApiClient,
       apiUtils,
       CB: require('../common/components/ComponentsBase').default,
+      routes: this.routes,
     };
   }
 

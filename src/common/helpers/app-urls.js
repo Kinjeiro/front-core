@@ -5,13 +5,14 @@ import {
 import config from '../client-config';
 
 /**
- * осторожно!!! contextPath (basename) уже учитывается во всех роутингах, дополнительно не нужно. Поэтому пользуйтесь аккуратно
-* учитывает contextPath (basepath) приложения
+ * осторожно!!! contextPath (basename) уже учитывается во всех роутингах, дополнительно в path его задавать не нужно. Поэтому пользуйтесь аккуратно
+ * учитывает contextPath (basepath) приложения
 */
-export function appUrl(pathname = '', ...otherPaths) {
+export function appUrl(pathname, ...otherPaths) {
   const contextPath = joinPath('/', config.common.app.contextRoot);
-  let resultUrl = pathname;
+  let resultUrl = pathname || '';
   if (resultUrl.indexOf(contextPath) < 0) {
+    // если впереди нету contextPath - добавим его
     resultUrl = joinPath(contextPath, resultUrl);
   }
 
@@ -52,11 +53,11 @@ export function getFullUrl(routePath, queryParams = undefined) {
  * @param modulesPrefixes - мапа: moduleName => prefix
  * @returns {*}
  */
-export function getModuleFullPath(relativeLocation, moduleName, modulesPrefixes = {}) {
-  const prefix = modulesPrefixes[moduleName];
+export function getModuleFullPath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
+  const prefix = moduleName ? modulesPrefixes[moduleName] : null;
 
   if (!prefix) {
-    return relativeLocation;
+    return appUrl(relativeLocation || undefined);
   }
 
   if (typeof relativeLocation === 'object') {
