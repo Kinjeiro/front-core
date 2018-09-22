@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
 import { joinPath } from '../../../../../../common/utils/uri-utils';
 import i18n from '../../../../../../common/utils/i18n-utils';
 import titled from '../../../../../../common/utils/decorators/react-class/titled';
 import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
-import {
-  PATH_INDEX,
-} from '../../../../../../common/constants/routes.pathes';
+import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
 
+import MODULE_NAME from '../../module-name';
 import {
   PARAM__RETURN_URL,
   PATH_AUTH_SIGNIN,
@@ -29,6 +27,7 @@ const {
 const SigninPage = titled('Signin', i18n('core:pages.SigninPage.title'))(Signin);
 const SignupPage = titled('Signup', i18n('core:pages.SignupPage.title'))(Signup);
 
+@contextModules
 @connect(
   (globalState, ownProps) => ({
     urlReturn: typeof ownProps.urlReturn !== 'undefined'
@@ -37,7 +36,6 @@ const SignupPage = titled('Signup', i18n('core:pages.SignupPage.title'))(Signup)
   }),
   {
     ...reduxLastUniError.actions,
-    actionGoTo: push,
   },
 )
 export default class AuthEnter extends Component {
@@ -51,12 +49,16 @@ export default class AuthEnter extends Component {
     // ======================================================
     // CONNECT
     // ======================================================
-    actionGoTo: PropTypes.func,
     actionClearLastError: PropTypes.func,
     urlReturn: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.bool,
     ]),
+
+    // ======================================================
+    // @contextModules
+    // ======================================================
+    onGoTo: PropTypes.func,
   };
 
   state = {
@@ -66,12 +68,14 @@ export default class AuthEnter extends Component {
   // ======================================================
   // HANDLERS
   // ======================================================
+  // todo @ANKU @LOW - переделать из true, false и null на более понятную систему, к примеру статусов
   @bind()
   async handleEnterTypeChange(isSignup = null) {
     const {
       inModal,
       actionClearLastError,
       urlReturn,
+      onGoTo,
     } = this.props;
 
 
@@ -86,17 +90,20 @@ export default class AuthEnter extends Component {
       // убираем любые ошибки
       actionClearLastError();
 
-      await this.props.actionGoTo(
-        isSignup === null
-          ? urlReturn || PATH_INDEX
-          : joinPath(
-            isSignup ? PATH_AUTH_SIGNUP : PATH_AUTH_SIGNIN,
-            {
-              // не забываем urlReturn если он есть
-              [PARAM__RETURN_URL]: urlReturn,
-            },
-          ),
-      );
+      const goTo = isSignup === null
+        // выходим из авторизации - если urlReturn нету - то будет переадрисовка на index
+        ? onGoTo(urlReturn) // в urlReturn уже может учитываться contextPath но внутри метода есть такая проверка
+        : onGoTo(joinPath(
+          isSignup
+            ? PATH_AUTH_SIGNUP
+            : PATH_AUTH_SIGNIN,
+          {
+            // не забываем urlReturn если он есть
+            [PARAM__RETURN_URL]: urlReturn,
+          },
+        ), MODULE_NAME);
+
+      await goTo;
     }
   }
 
