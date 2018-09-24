@@ -11,7 +11,6 @@ import { push } from 'react-router-redux';
 import bemDecorator from '../../../../../common/utils/decorators/bem-component';
 import loading from '../../../../../common/utils/decorators/react-class/loading';
 import titled from '../../../../../common/utils/decorators/react-class/titled';
-import i18n, { changeLanguagePromise } from '../../../../../common/utils/i18n-utils';
 import { PATH_INDEX } from '../../../../../common/routes.pathes';
 
 import { notifyError } from '../../../../../common/helpers/notifications';
@@ -45,7 +44,11 @@ import Link from '../../../../../common/components/Link/Link';
 import contextModules from '../../../../../common/contexts/ContextModules/decorator-context-modules';
 import ModuleLink from '../../../../../common/containers/ModuleLink/ModuleLink';
 
-import getComponents from '../../../../../common/get-components';
+// ======================================================
+// MODULE
+// ======================================================
+import i18n from '../i18n';
+import getComponents from '../get-components';
 
 import './StubPage.css';
 import './StubPageSass.scss';
@@ -84,9 +87,7 @@ const { getUserAvatarUrl } = reduxUsers;
     };
   },
   {
-    ...reduxI18nInfo.getBindActions({
-      apiI18NChangeLanguage: changeLanguagePromise,
-    }),
+    ...reduxI18nInfo.actions,
     ...reduxUserInfo.getBindActions({
       apiChangeUser: apiAuth.apiLogin,
       apiUserLogout: apiAuth.apiLogout,

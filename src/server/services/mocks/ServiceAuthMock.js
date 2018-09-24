@@ -66,6 +66,7 @@ export default class ServiceAuthMock extends ServiceAuth {
         token_type: 'Bearer',
       };
     }
+    // todo @ANKU @LOW - локализация
     throw new Error(`Среди моков пользователь "${username}" не найден`);
   }
 

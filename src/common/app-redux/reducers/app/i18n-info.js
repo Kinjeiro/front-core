@@ -1,3 +1,5 @@
+import { changeLanguagePromise } from '../../../utils/i18n-utils';
+
 import { createReducer } from '../../utils';
 import { createStatusReducer } from '../../helpers';
 
@@ -28,34 +30,33 @@ export const TYPES = {
 // ======================================================
 // ACTION CREATORS
 // ======================================================
-export const actions = {
-  actionI18nInfoInit(whitelist, language = undefined) {
-    return {
-      type: TYPES.I18N_INFO_INIT,
-      payload: {
-        whitelist,
-        language,
-      },
-    };
-  },
-
-  actionI18NChangeLanguage(apiI18NChangeLanguage, language) {
-    return {
-      types: [TYPES.I18N_CHANGE_LANGUAGE_FETCH, TYPES.I18N_CHANGE_LANGUAGE_SUCCESS, TYPES.I18N_CHANGE_LANGUAGE_FAIL],
-      payload: apiI18NChangeLanguage(language)
-        .then((newLanguage) => newLanguage || language),
-    };
-  },
-};
-
 export function getBindActions({
   apiI18NChangeLanguage,
 } = {}) {
   return {
-    ...actions,
-    actionI18NChangeLanguage: actions.actionI18NChangeLanguage.bind(this, apiI18NChangeLanguage),
+    actionI18nInfoInit(whitelist, language = undefined) {
+      return {
+        type: TYPES.I18N_INFO_INIT,
+        payload: {
+          whitelist,
+          language,
+        },
+      };
+    },
+
+    actionI18NChangeLanguage(language) {
+      return {
+        types: [TYPES.I18N_CHANGE_LANGUAGE_FETCH, TYPES.I18N_CHANGE_LANGUAGE_SUCCESS, TYPES.I18N_CHANGE_LANGUAGE_FAIL],
+        payload: apiI18NChangeLanguage(language)
+          .then((newLanguage) => newLanguage || language),
+      };
+    },
   };
 }
+
+export const actions = getBindActions({
+  apiI18NChangeLanguage: changeLanguagePromise,
+});
 
 // ======================================================
 // REDUCER
