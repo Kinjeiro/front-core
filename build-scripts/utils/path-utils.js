@@ -27,7 +27,8 @@ function getProjectDir() {
   return PROCESS_DIR;
 }
 function inProject(...relativePath) {
-  return pathResolve(getProjectDir(), ...relativePath);
+  // return pathResolve(getProjectDir(), ...relativePath);
+  return pathJoin(getProjectDir(), ...relativePath);
 }
 
 // ======================================================
@@ -96,13 +97,21 @@ function getModulesDirectories() {
 /**
  *
  * @param globRegexp - https://www.npmjs.com/package/glob#glob-primer
+ * @param useFromCore
  * @return {Array}
  */
-function inModules(globRegexp) {
+function inModules(globRegexp = null, useFromCore = isUseFromCore()) {
   const moduleFiles = [];
-  moduleFiles.push(...glob.sync(globRegexp, { root: inProject(inCoreSrcRelative('modules')) }));
-  if (!isUseFromCore()) {
+  if (globRegexp) {
+    if (!useFromCore) {
+      moduleFiles.push(...glob.sync(globRegexp, { root: inProject(inCoreSrcRelative('modules')) }));
+    }
     moduleFiles.push(...glob.sync(globRegexp, { root: inProject('src/modules') }));
+  } else {
+    if (!useFromCore) {
+      moduleFiles.push(inProject(inCoreSrcRelative('modules')));
+    }
+    moduleFiles.push(inProject('src/modules'));
   }
 
   return moduleFiles;

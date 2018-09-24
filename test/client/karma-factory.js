@@ -6,6 +6,7 @@ import {
   inSrc,
   inNodeModules,
   inCoreRoot,
+  inModules,
 } from '../../build-scripts/utils/path-utils';
 
 function getTestsGlobs(testPaths, postfix = 'test') {
@@ -32,6 +33,7 @@ export default function (webpackContext, webpackConfigUtils) {
       : [
         inSrc('common'),
         inSrc('client'),
+        ...inModules(null, false), // false - только файлы проекта, без корных
       ];
 
     const SETUP_CLIENT_FILE = inCoreRoot('test/client/setup-client.js');
