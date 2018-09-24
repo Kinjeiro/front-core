@@ -11,16 +11,36 @@ import SubModuleFactory from '../modules/SubModuleFactory';
  * Расширение для установки core зависимостей по redux и импорт данных, пришедших с сервера при отрисовки
  */
 export default class CoreClientRunner extends AbstractClientRunner {
-  subModulesContextId = null;
+  // ======================================================
+  // FOR OVERRIDE
+  // ======================================================
+  /**
+   * нужно выделить отдельный метод с контекстами, для hot reload (чтобы там id их использовать)
+   * @return {[*]}
+   */
+  loadCommonSubModulesContexts() {
+    return [
+      require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi),
+    ];
+  }
+
+  // ======================================================
+  // INNER
+  // ======================================================
+  subModulesContexts = null;
+
+  getCommonSubModulesContexts(force = false) {
+    if (force || !this.subModulesContexts) {
+      this.subModulesContexts = this.loadCommonSubModulesContexts();
+    }
+    return this.subModulesContexts;
+  }
 
   loadCommonSubModules() {
-    const subModulesContext = require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi);
-    this.subModulesContextId = subModulesContext.id;
-    return [
-      ...super.loadCommonSubModules(),
-      // нужно статически обозначить контекст + необходим regexp без переменных
-      ...SubModuleFactory.loadSubModules(subModulesContext),
-    ];
+    const contexts = this.getCommonSubModulesContexts(true);
+    const subModules = super.loadCommonSubModules();
+    contexts.forEach((context) => subModules.push(...SubModuleFactory.loadSubModules(context)));
+    return subModules;
   }
 
   getEntityModels() {
@@ -94,7 +114,9 @@ export default class CoreClientRunner extends AbstractClientRunner {
      */
     // https://github.com/webpack/webpack/issues/834#issuecomment-76590576
     // ./src/modules recursive ^\.\/(.*)\/common\/index\.js/g
-    module.hot.accept(this.subModulesContextId, this.reloadUi);
+    this.getCommonSubModulesContexts().forEach((context) => {
+      module.hot.accept(context.id, this.reloadUi);
+    });
     module.hot.accept('../common/create-routes', () => {});
 
     module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);

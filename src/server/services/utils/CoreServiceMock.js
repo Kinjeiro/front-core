@@ -31,7 +31,7 @@ export default class CoreServiceMock extends CoreService {
     return utilsGenerateId(...args);
   }
 
-  async addRecord(record, id = this.generateId()) {
+  async addRecord(record, id = record.id || this.generateId()) {
     // eslint-disable-next-line no-param-reassign
     record.id = id;
     (await this.getData())[id] = record;

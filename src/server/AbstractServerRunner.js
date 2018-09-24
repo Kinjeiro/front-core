@@ -157,7 +157,7 @@ export default class AbstractServerRunner {
       }*/
 
       ...aggregateArrayFn(this.getServerSubModules(), 'getServerPlugins')(services, strategies, servicesContext),
-      // todo @ANKU @LOW - вынести в отдельный метод?
+      // todo @ANKU @LOW - вынести в отдельный метод вне getPlugins?
       ...aggregateArrayFn(this.getServerSubModules(), 'getServerApi')(services, strategies, servicesContext),
     ];
   }
