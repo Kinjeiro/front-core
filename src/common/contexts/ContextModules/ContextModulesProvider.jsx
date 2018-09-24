@@ -107,6 +107,7 @@ export default class ContextModulesProvider extends Component {
       children,
       match,
       location,
+      moduleToRoutePrefixMap,
     } = this.props;
 
     return (
@@ -116,6 +117,7 @@ export default class ContextModulesProvider extends Component {
           onGoTo: this.onGoTo,
           match,
           location,
+          moduleToRoutePrefixMap,
         }}
       >
         { children }

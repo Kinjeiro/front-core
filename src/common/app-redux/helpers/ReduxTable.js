@@ -189,7 +189,7 @@ export default class ReduxTable extends ReduxUni {
               ? filters
               : currentFilters;
 
-          const hasFiltersChanged = !deepEquals(newFilters, currentFilters);
+          const hasFiltersChanged = !deepEquals(newFilters, currentFilters || {});
 
           if (
             forceUpdate
@@ -213,7 +213,7 @@ export default class ReduxTable extends ReduxUni {
 
             const currentUrlQuery = parseUrlParameters(location.search);
             // обновляем location только если что-то поменялось
-            if (!deepEquals(newFilters, currentUrlQuery.filters) || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))) {
+            if (!deepEquals(newFilters, currentUrlQuery.filters || {}) || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))) {
               // todo @ANKU @LOW - вынести этот механизм проверки наверх (или в другой редукс), чтобы никто не мог менять если ничего не изменилось
               const queryFinal = merge(currentUrlQuery, {
                 ...newMeta,

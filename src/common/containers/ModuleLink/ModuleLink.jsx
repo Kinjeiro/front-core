@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
 import contextModules from '../../contexts/ContextModules/decorator-context-modules';
 
@@ -35,13 +36,11 @@ export default class ModuleLink extends Component {
       getFullPath,
       modulePath,
       moduleName,
-      onGoTo,
-      ...otherProps
     } = this.props;
 
     return (
       <Link
-        { ...otherProps }
+        { ...pick(this.props, Object.keys(Link.propTypes)) }
         to={ getFullPath(modulePath, moduleName) }
       >
         { children }

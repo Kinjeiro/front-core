@@ -8,6 +8,7 @@ import createContextDecorator from '../../utils/decorators/utils/create-context-
     - onGoTo(location, moduleName)
     - match
     - location
+    - moduleToRoutePrefixMap
 
    location - LocationDescriptor (see \src\common\models\model-location.js)
  */
