@@ -4,11 +4,15 @@ import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
 
 import { joinPath } from '../../../../../../common/utils/uri-utils';
-import i18n from '../../../../../../common/utils/i18n-utils';
+
 import titled from '../../../../../../common/utils/decorators/react-class/titled';
 import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
 import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
 
+// ======================================================
+// MODULE
+// ======================================================
+import i18n from '../../i18n';
 import MODULE_NAME from '../../module-name';
 import {
   PARAM__RETURN_URL,
@@ -27,7 +31,7 @@ const {
 const SigninPage = titled('Signin', i18n('core:pages.SigninPage.title'))(Signin);
 const SignupPage = titled('Signup', i18n('core:pages.SignupPage.title'))(Signup);
 
-@contextModules
+@contextModules()
 @connect(
   (globalState, ownProps) => ({
     urlReturn: typeof ownProps.urlReturn !== 'undefined'

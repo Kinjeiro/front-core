@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { translateCore as i18n } from '../../../../../common/utils/i18n-utils';
 import clientConfig from '../../../../../common/client-config';
 import {
   getLastUniError,
@@ -12,6 +11,10 @@ import {
 } from '../../../../../common/app-redux/selectors';
 import * as reduxLastUniError from '../../../../../common/app-redux/reducers/app/last-uni-error';
 
+// ======================================================
+// MODULE
+// ======================================================
+import i18n from '../i18n';
 import { pathGetSigninPage } from '../routes-paths-auth';
 
 import getComponents from '../get-components';

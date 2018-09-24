@@ -6,7 +6,6 @@ import bind from 'lodash-decorators/bind';
 
 import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
-import i18n from '../../../../../../common/utils/i18n-utils';
 import clientConfig from '../../../../../../common/client-config';
 
 // ======================================================
@@ -27,8 +26,10 @@ import {
   SUB_TYPES,
 } from '../../../../../../common/models/model-field';
 
-// import './LoginPage.css';
-
+// ======================================================
+// MODULE
+// ======================================================
+import i18n, { NAMESPACE } from '../../i18n';
 import getComponents from '../../get-components';
 
 const {
@@ -195,7 +196,7 @@ export default class Signup extends Component {
       <Form
         id={ PAGE_ID }
         className={ this.fullClassName }
-        i18nFieldPrefix={ 'core:pages.SignupPage.fields' }
+        i18nFieldPrefix={ `${NAMESPACE}:pages.SignupPage.fields` }
 
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
@@ -210,14 +211,14 @@ export default class Signup extends Component {
               className={ this.bem('signinButton') }
               onClick={ () => onEnterTypeChange(false) }
             >
-              {i18n('core:pages.SignupPage.signinButton')}
+              {i18n('pages.SignupPage.signinButton')}
             </Button>
           )
         }
         onSubmit={ this.handleSubmit }
-        textActionSubmit={ i18n('core:pages.SignupPage.submitButton') }
+        textActionSubmit={ i18n('pages.SignupPage.submitButton') }
         onCancel={ onModalCancel }
-        textActionCancel={ i18n('core:pages.SignupPage.cancelButton') }
+        textActionCancel={ i18n('pages.SignupPage.cancelButton') }
 
         actionStatus={ actionSignupStatus }
         { ...formProps }

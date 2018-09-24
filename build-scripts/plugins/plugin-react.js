@@ -5,7 +5,7 @@ const webpack = require('webpack');
  * // todo @ANKU @QUESTION - Добавляем автоматически import React from 'react' в каждый jsx файл, чтобы не писать самим
  * @param webpackConfig
  */
-function pluginReact(webpackConfig, { inProject, inCoreProject }) {
+function pluginReact(webpackConfig) {
   /*
   Multiple react instance problem:
     Uncaught Error: Invariant Violation: addComponentAsRefTo(...): Only a ReactOwner can have refs

@@ -6,7 +6,7 @@ const fs = require('fs');
  * @param webpackConfig
  * @param context
  */
-function pluginCodeBabelOptions(webpackConfig, { inCoreProject }) {
+function pluginCodeBabelOptions(webpackConfig) {
   const babelLoader = webpackConfig.module.rules
     .find((rule) => rule.loader === 'babel-loader');
 
@@ -24,7 +24,7 @@ function pluginCodeBabelOptions(webpackConfig, { inCoreProject }) {
    пока временно отказываемся от options
 
    const babelOptions = JSON.parse(fs.readFileSync(
-     inCoreProject('.babelrc'),
+    inCoreRoot('.babelrc'),
      'utf8'
    ));
   */

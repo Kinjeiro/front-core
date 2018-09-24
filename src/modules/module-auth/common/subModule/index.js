@@ -11,8 +11,8 @@ export default SubModuleFactory.createCommonSubModule({
 
   getRoutes: (...args) => require('./routes-auth').default(...args),
 
-  hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
-    module.hot.accept('./routes-auth', reloadUi);
-    module.hot.accept('./get-components', reloadUi);
-  },
+  // hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
+  //   // module.hot.accept('./routes-auth', reloadUi);
+  //   // module.hot.accept('./get-components', reloadUi);
+  // },
 });

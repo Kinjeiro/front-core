@@ -963,7 +963,7 @@ export default function factoryAuthStrategy(services/* , otherStrategies, strate
         \\ исправил ошибку с ThrolableUniError
     - feat(test): - авторизационные тесты требуеют отдельного сервера, чтобы при комите не падали ошибки используйте TEST_SKIP_AUTH \ добавил env-utils
     - feat(extend, test): - оптимизация тестов - достаточно разместить у себя файл test/server/init/get-project-server-runner-class.js \ убрал лишние run-server.js
-    - feat(extend, test, path): - автоматическое тестирование в дочерних проектах. Достаточно в package.json прописать "cross-env NODE_ENV=test karma start ./node_modules/@efive/front-core/test/client/run-client-tests.js"
+    - feat(extend, test, path): - автоматическое тестирование в дочерних проектах. Достаточно в package.json прописать "cross-env NODE_ENV=test karma start ./node_modules/@reagentum/front-core/test/client/run-client-tests.js"
     - bug(extend, config): - заиспользовал lorenwest/node-config для конфигов (у них webpack:compiler на require не ругается)
     - bug(extend, config): - для каждого проекта нужно вручную конфиги импортировать, чтобы были прямые ссылки в require
     - bug(extend, test): - адаптация для наследников тестов

@@ -10,9 +10,9 @@ import { init as initI18nUtils } from '../../common/utils/i18n-utils';
 import config from '../server-config';
 
 export const DEFAULT_I18NEXT_OPTIONS = {
-  whitelist: ['ru', 'en'],
-  fallbackLng: 'en',
-  ns: ['core'],
+  // whitelist: ['ru', 'en'],
+  // fallbackLng: 'en',
+  // ns: ['core'],
 
   backend: {
     // loadPath: 'assets/i18n/{{lng}}/{{ns}}.json',

@@ -7,7 +7,6 @@ import bind from 'lodash-decorators/bind';
 import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
 import titled from '../../../../../../common/utils/decorators/react-class/titled';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
-import i18n from '../../../../../../common/utils/i18n-utils';
 import appUrl from '../../../../../../common/helpers/app-urls';
 
 // ======================================================
@@ -30,6 +29,7 @@ import getCb from '../../../../../../common/get-components';
 // ======================================================
 // MODULE
 // ======================================================
+import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 // import './ForgotPage.css';
 
@@ -152,7 +152,7 @@ export default class ResetPage extends Component {
       <Form
         id={ PAGE_ID }
         className={ this.fullClassName }
-        i18nFieldPrefix={ 'core:pages.ResetPage.fields' }
+        i18nFieldPrefix={ `${NAMESPACE}:pages.ResetPage.fields` }
 
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
@@ -161,16 +161,16 @@ export default class ResetPage extends Component {
         useForm={ true }
 
         onSubmit={ this.handleSubmit }
-        textActionSubmit={ i18n('core:pages.ResetPage.submitButton') }
+        textActionSubmit={ i18n('pages.ResetPage.submitButton') }
 
         actionStatus={ actionResetPasswordStatus }
         textActionSuccess={ (
           <div className={ this.bem('ActionSuccess') }>
             <p>
-              { i18n('core:pages.ResetPage.submitSuccessMessage') }
+              { i18n('pages.ResetPage.submitSuccessMessage') }
             </p>
             <a href={ appUrl(PATH_INDEX) }>
-              { i18n('core:pages.ResetPage.goToIndexPage') }
+              { i18n('pages.ResetPage.goToIndexPage') }
             </a>
           </div>
         ) }

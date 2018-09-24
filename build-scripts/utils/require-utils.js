@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const {
-  inFrontCoreRoot,
+  inCoreRoot,
   inRoot
 } = require('./path-utils');
 
@@ -33,7 +33,7 @@ function requireSafe(modulePath) {
 function tryLoadProjectFile(fromRootPath) {
   let result = requireSafe(inRoot(fromRootPath));
   if (!result) {
-    result = require(inFrontCoreRoot(fromRootPath));
+    result = require(inCoreRoot(fromRootPath));
   }
 
   if (!result) {

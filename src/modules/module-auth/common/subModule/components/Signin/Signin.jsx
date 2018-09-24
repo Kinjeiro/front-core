@@ -6,7 +6,6 @@ import bind from 'lodash-decorators/bind';
 
 import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
-import i18n from '../../../../../../common/utils/i18n-utils';
 import clientConfig from '../../../../../../common/client-config';
 
 // ======================================================
@@ -27,6 +26,11 @@ import {
   SUB_TYPES,
 } from '../../../../../../common/models/model-field';
 
+
+// ======================================================
+// MODULE
+// ======================================================
+import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 
 // import './Signin.css';
@@ -185,7 +189,7 @@ export default class Signin extends Component {
       <Form
         id={ PAGE_ID }
         className={ this.fullClassName }
-        i18nFieldPrefix={ 'core:pages.SigninPage.fields' }
+        i18nFieldPrefix={ `${NAMESPACE}:pages.SigninPage.fields` }
 
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
@@ -200,20 +204,20 @@ export default class Signin extends Component {
               className={ this.bem('signupButton') }
               onClick={ () => onEnterTypeChange(true) }
             >
-              {i18n('core:pages.SigninPage.signup')}
+              {i18n('pages.SigninPage.signup')}
             </Button>
           )
         }
         onSubmit={ this.handleLogin }
-        textActionSubmit={ i18n('core:pages.SigninPage.loginButton') }
+        textActionSubmit={ i18n('pages.SigninPage.loginButton') }
         onCancel={ onModalCancel }
-        textActionCancel={ i18n('core:pages.SigninPage.loginCancelButton') }
+        textActionCancel={ i18n('pages.SigninPage.loginCancelButton') }
 
         postActions={
           clientConfig.common.features.auth.allowResetPasswordByEmail && (
             <div className={ this.bem('forgotPassword') }>
               <Link to={ paths.PATH_AUTH_FORGOT }>
-                {i18n('core:pages.SigninPage.forgotPassword')}
+                {i18n('pages.SigninPage.forgotPassword')}
               </Link>
             </div>
           )

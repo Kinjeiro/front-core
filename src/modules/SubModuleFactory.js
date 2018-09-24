@@ -65,7 +65,8 @@ export const SUB_MODULE_FACTORY = {
     initComponents: (componentsBase) => componentsBase,
     paths: {},
 
-    getRoutes: (moduleRoutePrefix) => null,
+    // getRoutes: (moduleRoutePrefix) => null,
+    getRoutes: null,
     getApi: () => [],
     getRootReducers: () => ({}),
 

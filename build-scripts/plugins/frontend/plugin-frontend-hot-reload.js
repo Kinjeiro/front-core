@@ -17,10 +17,11 @@ function pluginFinishFrontendHotReload(webpackConfig, {
         const currentEntry = webpackConfig.entry[entryKey];
         const newEntry = [];
 
-        if (isHotLoader) {
-          // should be first
-          newEntry.push('react-hot-loader/patch');
-        }
+        // переход на react-hot-loader v4 - это уже не нужно
+        // if (isHotLoader) {
+        //   // should be first
+        //   newEntry.push('react-hot-loader/patch');
+        // }
 
         if (PROXY_ASSETS) {
           newEntry.push(

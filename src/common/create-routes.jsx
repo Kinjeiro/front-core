@@ -23,7 +23,7 @@ export function renderCommonSubModule(moduleToRoutePrefixMap, commonSubModule) {
   }
 
   const moduleRoutePath = moduleToRoutePrefixMap[moduleName];
-  const subModuleRoutes = executeVariable(commonSubModule.getRoutes(moduleRoutePath), null, moduleRoutePath);
+  const subModuleRoutes = commonSubModule.getRoutes && executeVariable(commonSubModule.getRoutes(moduleRoutePath), null, moduleRoutePath);
 
   // если есть роуты добавляем их
   return moduleRoutePath && subModuleRoutes && (
@@ -131,8 +131,8 @@ export default function createRoutes(
                   ? (
                     <IndexRedirect to={ indexRoute } />
                   )
-                  : indexRoute && (
-                    <IndexRoute component={ indexRoute } />
+                  : (
+                    <IndexRoute component={ indexRoute || (() => (<div />)) } />
                   )
               }
               { subModules }

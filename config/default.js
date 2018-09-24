@@ -1,7 +1,11 @@
 /* eslint-disable no-param-reassign,no-shadow,import/no-dynamic-require,no-unused-vars */
 const path = require('path');
 
-const { urlJoin } = require('../build-scripts/utils/path-utils');
+const {
+  urlJoin,
+  isUseFromCore,
+  inModules
+} = require('../build-scripts/utils/path-utils');
 
 const {
   FRONT_UI_SERVER_API_PREFIX,
@@ -9,6 +13,14 @@ const {
   // createApiConfigWithService,
   createEndpointServiceConfig
 } = require('./utils/create-config');
+
+function getI18nModules() {
+  return inModules('/*/static/i18n').map((dir) => {
+    // \FrontCore\src\modules\module-auth\static\i18n
+    // H:/FrontCore/src/modules/module-auth/static/i18n
+    return dir.replace(/^.*[/\\]([\w-]*)[/\\]static[/\\]i18n$/gi, '$1');
+  });
+}
 
 /*
  @guide - КОНФИГИ только для NODE СЕРВЕРА
@@ -188,7 +200,11 @@ module.exports = {
         i18nextOptions: {
           whitelist: ['ru', 'en'],
           fallbackLng: 'en',
-          ns: ['core'],
+          ns: [
+            'core',
+            ...(isUseFromCore() ? [] : ['project']),
+            ...getI18nModules()
+          ],
           useCookieForDetect: true,
           // todo @ANKU @LOW - вынести сюда название куки - I18N_LANGUAGE_COOKIE_NAME
 

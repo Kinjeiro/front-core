@@ -13,9 +13,7 @@ function pluginIndexHtml(webpackConfig, context) {
   const {
     appConfig,
     assetsDir,
-    inProjectSrc,
-    inCoreProjectSrcRelative,
-    inProjectBuildAssets
+    inCoreSrcRelative
   } = context;
 
   const contextPath = appConfig.common.app.contextRoot.replace(/^\//g, '');
@@ -47,7 +45,7 @@ function pluginIndexHtml(webpackConfig, context) {
     new HtmlWebpackPlugin({
       // './node-modules/@reagentum/front-core/lib/static-client/index.template.ejs'
       // template:  './src/static-client/index.template.ejs',
-      template:  inCoreProjectSrcRelative('static-client/index.template.ejs'),
+      template:  inCoreSrcRelative('static-client/index.template.ejs'),
       // filename: './.build/assets/index.html', // relative to root of the application
       filename: 'index.html', // relative to build root
       // template: inProjectSrc('index.template.html'),

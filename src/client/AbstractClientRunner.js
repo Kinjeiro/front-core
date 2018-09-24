@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import RedBox from 'redbox-react';
+import { hot } from 'react-hot-loader';
+// import RedBox from 'redbox-react';
 import { useRouterHistory } from 'react-router';
 // import { createHistory } from 'history'; // через require
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -67,8 +67,8 @@ export default class AbstractClientRunner {
   // ======================================================
   // UTILS
   // ======================================================
-  getCommonSubModules() {
-    if (!this.commonSubModules) {
+  getCommonSubModules(force = false) {
+    if (!this.commonSubModules || force) {
       // todo @ANKU @LOW - проверить: перегружать hot reload если изменится что-то внутри
       this.commonSubModules = this.loadCommonSubModules();
       this.commonSubModules.forEach((module) => {
@@ -107,7 +107,7 @@ export default class AbstractClientRunner {
   hotReloadListeners() {
     module.hot.accept('./Root', this.reloadUi);
     this.getCommonSubModules().forEach((subModule) =>
-      subModule.hotReloadFunc(this.reloadUi, this.reloadStore, this.reloadAll));
+      subModule.hotReloadFunc(this.reloadUi, this.reloadStore, this.reloadAll, this.reloadModels));
   }
   initComponents(COMPONENTS_BASE) {
     return COMPONENTS_BASE;
@@ -125,9 +125,12 @@ export default class AbstractClientRunner {
   getModuleToRoutePrefixMap() {
     // по умолчанию роутинг будет равен названию модуля
     return this.getCommonSubModules().reduce((result, commonSubModule) => {
-      const moduleName = commonSubModule.MODULE_NAME;
-      // eslint-disable-next-line no-param-reassign
-      result[moduleName] = moduleName;
+      if (commonSubModule.getRoutes) {
+        // добавляем лишь те, у которых есть роуты
+        const moduleName = commonSubModule.MODULE_NAME;
+        // eslint-disable-next-line no-param-reassign
+        result[moduleName] = moduleName;
+      }
       return result;
     }, {});
   }
@@ -269,13 +272,35 @@ export default class AbstractClientRunner {
   // ======================================================
   // RENDER
   // ======================================================
-  createRootComponent() {
-    const Root = require('./Root').default;
+  createRootComponent(isUseHot = undefined) {
+    let Root = require('./Root').default;
     const {
       store,
       history,
       routes,
     } = this;
+
+    const isHot = typeof isUseHot === 'undefined'
+      ? clientConfig.common.hotLoader
+      : isUseHot;
+
+    if (isHot) {
+      // переход на react-hot-reload v4 - https://github.com/gaearon/react-hot-loader/blob/master/README.md#appcontainer-vs-hot
+      // // todo @ANKU @BUG_OUT @react-hot-loader - при отключенном SERVER_SIDE_RENDER, если явно
+      // // не задать errorReporter, то внутри он берет RedBox через required но
+      // // без default (может быть связано с тем что работает компилятор TypeScript) соотвественно
+      // // получает объект а не функцию - создание компонента и падает с ошибкой, не показывая оригинальную ошибку
+      // // поэтому пришлось самому инсталить его и подавать правильно
+      // reactRootComponent = React.createElement(
+      //   AppContainer,
+      //   {
+      //     errorReporter: clientConfig.common.isProduction ? undefined : RedBox,
+      //   },
+      //   reactRootComponent,
+      // );
+
+      Root = hot(module)(Root);
+    }
 
     return React.createElement(
       Root,
@@ -303,27 +328,7 @@ export default class AbstractClientRunner {
   }
 
   renderDOM(isUseHot = undefined) {
-    let reactRootComponent = this.createRootComponent();
-
-    const isHot = typeof isUseHot === 'undefined'
-      ? clientConfig.common.hotLoader
-      : isUseHot;
-
-    if (isHot) {
-      // todo @ANKU @BUG_OUT @react-hot-loader - при отключенном SERVER_SIDE_RENDER, если явно
-      // не задать errorReporter, то внутри он берет RedBox через required но
-      // без default (может быть связано с тем что работает компилятор TypeScript) соотвественно
-      // получает объект а не функцию - создание компонента и падает с ошибкой, не показывая оригинальную ошибку
-      // поэтому пришлось самому инсталить его и подавать правильно
-      reactRootComponent = React.createElement(
-        AppContainer,
-        {
-          errorReporter: clientConfig.common.isProduction ? undefined : RedBox,
-        },
-        reactRootComponent,
-      );
-    }
-
+    const reactRootComponent = this.createRootComponent(isUseHot);
     const reactAppDiv = this.getHtmlContainer();
 
     ReactDOM.render(
@@ -352,6 +357,7 @@ export default class AbstractClientRunner {
   }
   @bind()
   reloadUi() {
+    this.commonSubModules = null;
     this.initAllComponents(COMPONENTS_BASE_CORE);
     this.routes = this.getRoutes(this.store);
     this.renderDOM(true);

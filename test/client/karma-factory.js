@@ -5,7 +5,7 @@ import { argv } from 'yargs';
 import {
   inSrc,
   inNodeModules,
-  inFrontCoreRoot,
+  inCoreRoot,
 } from '../../build-scripts/utils/path-utils';
 
 function getTestsGlobs(testPaths, postfix = 'test') {
@@ -34,13 +34,13 @@ export default function (webpackContext, webpackConfigUtils) {
         inSrc('client'),
       ];
 
-    const SETUP_CLIENT_FILE = inFrontCoreRoot('test/client/setup-client.js');
+    const SETUP_CLIENT_FILE = inCoreRoot('test/client/setup-client.js');
     const SRC_FILES_MASK = inSrc('/**/*');
 
     const testsFiles = [
       SETUP_CLIENT_FILE,
       // пока не нужно, так как мы используем webpack с babel а внутри ключен polyfill: true. Phantom все прекрасно распознает
-      // inFrontCoreRoot('src/client/vendor-fixes/polyfills/polyfills.js'),
+      // inCoreRoot('src/client/vendor-fixes/polyfills/polyfills.js'),
       ...getTestsGlobs(TEST_FILES_PATHS),
     ];
 

@@ -66,6 +66,7 @@ function getCurrentDir() {
   return path.dirname(require.main.filename);
 }
 
+// todo @ANKU @LOW - убрать дублирование здесь и в path-utils
 function getProjectDir() {
   return process.cwd();
 }

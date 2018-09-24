@@ -7,7 +7,6 @@ import bind from 'lodash-decorators/bind';
 import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
 import titled from '../../../../../../common/utils/decorators/react-class/titled';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
-import i18n from '../../../../../../common/utils/i18n-utils';
 import {
   appUrl,
   getFullUrl,
@@ -36,6 +35,7 @@ import getCb from '../../../../../../common/get-components';
 // ======================================================
 // MODULE
 // ======================================================
+import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 
 // import './ForgotPage.css';
@@ -165,7 +165,7 @@ export default class Forgot extends Component {
       <Form
         id={ PAGE_ID }
         className={ this.fullClassName }
-        i18nFieldPrefix={ 'core:pages.ForgotPage.fields' }
+        i18nFieldPrefix={ `${NAMESPACE}:pages.ForgotPage.fields` }
 
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
@@ -174,7 +174,7 @@ export default class Forgot extends Component {
         useForm={ true }
 
         onSubmit={ this.handleSubmit }
-        textActionSubmit={ i18n('core:pages.ForgotPage.submitButton') }
+        textActionSubmit={ i18n('pages.ForgotPage.submitButton') }
 
         actionStatus={ actionForgotPasswordStatus }
         textActionSuccess={ (
@@ -182,7 +182,7 @@ export default class Forgot extends Component {
             <div
               dangerouslySetInnerHTML={{
                 __html: i18n(
-                  'core:pages.ForgotPage.submitSuccessMessage',
+                  'pages.ForgotPage.submitSuccessMessage',
                   {
                     email: `<b className="${this.bem('email-text')}">${email}</b>`,
                     // interpolation: {escapeValue: false},
@@ -191,7 +191,7 @@ export default class Forgot extends Component {
               }}
             />
             <a href={ appUrl(PATH_INDEX) }>
-              { i18n('core:pages.ForgotPage.goToIndexPage') }
+              { i18n('pages.ForgotPage.goToIndexPage') }
             </a>
           </div>
         ) }

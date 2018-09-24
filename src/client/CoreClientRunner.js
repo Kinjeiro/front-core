@@ -7,17 +7,19 @@ import { initComponents } from '../common/get-components';
 
 import SubModuleFactory from '../modules/SubModuleFactory';
 
-// нужно статически обозначить контекст + необходим regexp без переменных
-const commonSubModulesContext = require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi);
-
 /**
  * Расширение для установки core зависимостей по redux и импорт данных, пришедших с сервера при отрисовки
  */
 export default class CoreClientRunner extends AbstractClientRunner {
+  subModulesContextId = null;
+
   loadCommonSubModules() {
+    const subModulesContext = require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi);
+    this.subModulesContextId = subModulesContext.id;
     return [
       ...super.loadCommonSubModules(),
-      ...SubModuleFactory.loadSubModules(commonSubModulesContext),
+      // нужно статически обозначить контекст + необходим regexp без переменных
+      ...SubModuleFactory.loadSubModules(subModulesContext),
     ];
   }
 
@@ -87,7 +89,14 @@ export default class CoreClientRunner extends AbstractClientRunner {
   hotReloadListeners() {
     super.hotReloadListeners();
 
-    module.hot.accept('../common/create-routes', this.reloadUi);
+    /**
+     * // todo @ANKU @LOW - только в связке они работают, поэтому приходится добавлять пустой метод, ибо без него проскакивает контекст
+     */
+    // https://github.com/webpack/webpack/issues/834#issuecomment-76590576
+    // ./src/modules recursive ^\.\/(.*)\/common\/index\.js/g
+    module.hot.accept(this.subModulesContextId, this.reloadUi);
+    module.hot.accept('../common/create-routes', () => {});
+
     module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);
     module.hot.accept('../common/models/domains', this.reloadAll);
     module.hot.accept('../common/api', this.reloadAll);

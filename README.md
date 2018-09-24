@@ -45,6 +45,7 @@ ___Front Core (FC) - коробка для быстрого развертыва
 - настроенные автотесты для сервера (mocha)
 - настроенные докеры с минимальными образами (двухэтапные сборки)
 - eslint (на базе airbnb)
+- модульная структура частей приложения и фич
 
 ### CLIENT
 - расширяемость роутингов \ редуксов \ orm моделей с помощью наследования от CoreClientRunner.js
@@ -114,10 +115,9 @@ ___Front Core (FC) - коробка для быстрого развертыва
 ## Roadmap
 - добавить yoman скрипт вместо frontCore-Stub
 - data entity relations (допилить rest redux-orm или mobx)
-- hot reload (webpack неоптимально компилирует новые изменения)
+- перейти на react-scripts
 - добавить websocket из коробки
 - разбить на асинхронные chunk modules (react-router@4 + import + webpack chunks)
-- найти альтернативу redux-form
 
 ## Описание структуры Front Core
 TODO

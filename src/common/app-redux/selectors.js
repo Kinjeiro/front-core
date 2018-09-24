@@ -91,6 +91,9 @@ export const getTestDomains = createOrmSelector(session => {
   // });
 });
 
+// ======================================================
+// MODULES
+// ======================================================
 export function getModules(globalState) {
   return globalState.modules;
 }

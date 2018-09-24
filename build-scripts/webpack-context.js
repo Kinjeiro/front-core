@@ -1,12 +1,19 @@
+const glob = require('glob');
+
 const {
-  pathJoin,
   urlJoin,
-  pathResolve
+  pathResolve,
+
+  getProjectDir,
+
+  inProject,
+  inCoreRoot,
+  inCoreSrcRelative,
+  inModules
 } = require('./utils/path-utils');
 const appConfig = require('../config/utils/get-full-config');
 
 const ENV = process.env;
-const PROCESS_PATH = process.cwd();
 const CURRENT_FILE_PATH = __dirname;
 
 const srcDir = 'src';
@@ -20,30 +27,11 @@ const staticPath = './static';
 const clientStartPath = './src/client/index.js';
 const serverStartPath = './src/server/index.js';
 
-// const useFromFrontCore = CURRENT_FILE_PATH.indexOf('node_modules') < 0;
-const useFromFrontCore = CURRENT_FILE_PATH.indexOf(pathJoin(PROCESS_PATH, 'build-scripts')) >= 0;
-
-function inCoreProject(...args) {
-  return pathResolve(CURRENT_FILE_PATH, '..', ...args);
-}
-function inCoreProjectSrcRelative(srcPath) {
-  return useFromFrontCore
-    ? `src/${srcPath}`
-    : `node_modules/@reagentum/front-core/lib/${srcPath}`;
-}
-
-function inProject(...args) {
-  return pathResolve(PROCESS_PATH, ...args);
-}
-
 // todo @ANKU @LOW - если запускаем кору из коры нужно писать src/ path.cwd === __dirname
-const appStyleConfig = require(useFromFrontCore
-  ? inCoreProject('src/common/app-style/vars.js')
-  : inCoreProject('lib/common/app-style/vars.js')
-);
+const coreAppStyleConfig = require(inProject(inCoreSrcRelative('common/app-style/vars.js')));
 
 const context = {
-  PROCESS_PATH,
+  PROCESS_PATH: getProjectDir(),
   ENV,
 
   srcDir,
@@ -53,7 +41,9 @@ const context = {
 
   staticPaths: [
     // абсолютные, чтобы другие проекты могли добавлять свои
-    pathResolve(CURRENT_FILE_PATH, '..', staticPath)
+    pathResolve(CURRENT_FILE_PATH, '..', staticPath),
+    // todo @ANKU @CRIT @MAIN - сделать локализацию модулей через js а не обычным копированием
+    ...inModules('/*/static')
   ],
 
   publicPath,
@@ -61,8 +51,8 @@ const context = {
   serverStartPath,
 
   inProject,
-  inCoreProject,
-  inCoreProjectSrcRelative,
+  inCoreRoot,
+  inCoreSrcRelative,
   // делаем внутри, так как если переопределят srcDir чтобы подхватилось новое значение
   inProjectSrc(...args) {
     return this.inProject(this.srcDir, ...args);
@@ -75,7 +65,7 @@ const context = {
   },
 
   appConfig,
-  appStyleConfig,
+  appStyleConfig: coreAppStyleConfig,
 
   // todo @ANKU @LOW - сделать методом, чтобы если переопределят assetsDir чтобы и тут менялось
   ASSETS_BASE_QUERY: {

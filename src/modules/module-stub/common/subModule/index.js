@@ -9,8 +9,8 @@ export default SubModuleFactory.createCommonSubModule({
 
   getRoutes: (...args) => require('./routes-stub').default(...args),
 
-  hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
-    module.hot.accept('./routes-stub', reloadUi);
-    module.hot.accept('./get-components', reloadUi);
-  },
+  // hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
+  //   // module.hot.accept('./routes-stub', reloadUi);
+  //   // module.hot.accept('./get-components', reloadUi);
+  // },
 });
