@@ -56,7 +56,7 @@ export const PAGE_ID = 'Reset';
     newPassword: '',
   },
 )
-@titled(PAGE_ID, i18n('core:pages.ResetPage.title'))
+@titled(PAGE_ID, i18n('pages.ResetPage.title'))
 @bemDecorator({ componentName: 'Reset', wrapper: false })
 export default class ResetPage extends Component {
   static PAGE_ID = PAGE_ID;

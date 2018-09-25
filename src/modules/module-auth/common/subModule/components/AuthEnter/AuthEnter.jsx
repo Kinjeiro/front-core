@@ -28,8 +28,8 @@ const {
   Signup,
 } = getComponents();
 
-const SigninPage = titled('Signin', i18n('core:pages.SigninPage.title'))(Signin);
-const SignupPage = titled('Signup', i18n('core:pages.SignupPage.title'))(Signup);
+const SigninPage = titled('Signin', i18n('pages.SigninPage.title'))(Signin);
+const SignupPage = titled('Signup', i18n('pages.SignupPage.title'))(Signup);
 
 @contextModules()
 @connect(
