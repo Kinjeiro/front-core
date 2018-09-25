@@ -3,6 +3,7 @@ const path = require('path');
 
 const {
   urlJoin,
+  isUseFromCore,
   inCoreSrc,
   getI18nModules
 } = require('../build-scripts/utils/path-utils');
@@ -147,6 +148,7 @@ module.exports = {
     serverApiPrefix: FRONT_UI_SERVER_API_PREFIX,
 
     app: {
+      isCore: isUseFromCore(),
       contextRoot: CONTEXT_PATH || CONTEXT_ROOT
         ? urlJoin('/', CONTEXT_PATH || CONTEXT_ROOT)
         : ''

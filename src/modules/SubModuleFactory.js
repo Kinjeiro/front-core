@@ -57,11 +57,14 @@ export const SUB_MODULE_FACTORY = {
       (type === this.SUB_MODULE_TYPES.COMMON
         ? this.createCommonSubModule(module)
         : this.createServerSubModule(module)),
-    );
+    )
+      .filter((module) => !module.isTurnOff);
   },
 
   DEFAULT_COMMON_SUB_MODULE_OPTIONS: {
     MODULE_NAME: null,
+    isTurnOff: false,
+    isSystem: false,
     initComponents: (componentsBase) => componentsBase,
     paths: {},
 
@@ -98,6 +101,7 @@ export const SUB_MODULE_FACTORY = {
   },
 
   DEFAULT_SERVER_SUB_MODULE_OPTIONS: {
+    isTurnOff: false,
     getServerPlugins: (services, strategies, servicesContext) => [],
     getServerApi: (services, strategies, servicesContext) => [],
     getServerMocks: (services, strategies, servicesContext) => [],

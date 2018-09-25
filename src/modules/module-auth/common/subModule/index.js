@@ -6,6 +6,7 @@ import { initComponents } from './get-components';
 
 export default SubModuleFactory.createCommonSubModule({
   MODULE_NAME,
+  isSystem: true,
   initComponents,
   paths,
 
