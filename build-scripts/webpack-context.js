@@ -8,8 +8,9 @@ const {
 
   inProject,
   inCoreRoot,
+  inCoreSrc,
   inCoreSrcRelative,
-  inModules
+  getModulesStatic
 } = require('./utils/path-utils');
 const appConfig = require('../config/utils/get-full-config');
 
@@ -43,7 +44,7 @@ const context = {
     // абсолютные, чтобы другие проекты могли добавлять свои
     pathResolve(CURRENT_FILE_PATH, '..', staticPath),
     // todo @ANKU @CRIT @MAIN - сделать локализацию модулей через js а не обычным копированием
-    ...inModules('/*/static')
+    ...getModulesStatic(inCoreSrc())
   ],
 
   publicPath,
@@ -53,6 +54,7 @@ const context = {
   inProject,
   inCoreRoot,
   inCoreSrcRelative,
+  inCoreSrc,
   // делаем внутри, так как если переопределят srcDir чтобы подхватилось новое значение
   inProjectSrc(...args) {
     return this.inProject(this.srcDir, ...args);

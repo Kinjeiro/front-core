@@ -33,7 +33,7 @@ export default function (webpackContext, webpackConfigUtils) {
       : [
         inSrc('common'),
         inSrc('client'),
-        ...inModules(null, false), // false - только файлы проекта, без корных
+        ...inModules(),
       ];
 
     const SETUP_CLIENT_FILE = inCoreRoot('test/client/setup-client.js');

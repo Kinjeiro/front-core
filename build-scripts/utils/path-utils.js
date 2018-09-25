@@ -76,46 +76,61 @@ function inCoreRoot(...args) {
     : pathJoin(FRONT_CORE_ROOT_DIR, ...args);
 }
 
-function inCoreSrcRelative(srcPath) {
+function inCoreSrcRelative(...args) {
   return isUseFromCore()
-    ? `src/${srcPath}`
-    : `node_modules/@reagentum/front-core/lib/${srcPath}`;
+    ? pathJoin('src', ...args)
+    : pathJoin('node_modules/@reagentum/front-core/lib', ...args);
+}
+
+function inCoreSrc() {
+  return inProject(inCoreSrcRelative());
 }
 
 
 // ======================================================
 // MODULES
 // ======================================================
-function getModulesDirectories() {
-  const dirs = [];
-  dirs.push(inProject(inCoreSrcRelative('modules')));
-  if (!isUseFromCore()) {
-    dirs.push(inProject('src/modules'));
+function getModulesDirectories(projectSrcPath = undefined) {
+  if (projectSrcPath) {
+    return [
+      path.join(projectSrcPath, 'modules')
+    ];
   }
+  return [
+    inProject('src/modules')
+  ];
 }
 
 /**
  *
  * @param globRegexp - https://www.npmjs.com/package/glob#glob-primer
- * @param useFromCore
+ * @param projectSrcPath
  * @return {Array}
  */
-function inModules(globRegexp = null, useFromCore = isUseFromCore()) {
+function inModules(globRegexp = null, projectSrcPath = undefined) {
   const moduleFiles = [];
-  if (globRegexp) {
-    if (!useFromCore) {
-      moduleFiles.push(...glob.sync(globRegexp, { root: inProject(inCoreSrcRelative('modules')) }));
+  getModulesDirectories(projectSrcPath).forEach((dir) => {
+    if (globRegexp) {
+      moduleFiles.push(...glob.sync(globRegexp, { root: dir }));
+    } else {
+      moduleFiles.push(dir);
     }
-    moduleFiles.push(...glob.sync(globRegexp, { root: inProject('src/modules') }));
-  } else {
-    if (!useFromCore) {
-      moduleFiles.push(inProject(inCoreSrcRelative('modules')));
-    }
-    moduleFiles.push(inProject('src/modules'));
-  }
-
+  });
   return moduleFiles;
 }
+
+function getModulesStatic(projectSrcPath = undefined) {
+  return inModules('/*/static', projectSrcPath);
+}
+
+function getI18nModules(projectSrcPath = undefined) {
+  return inModules('/*/static/i18n', projectSrcPath).map((dir) => {
+    // \FrontCore\src\modules\module-auth\static\i18n
+    // H:/FrontCore/src/modules/module-auth/static/i18n
+    return dir.replace(/^.*[/\\]([\w-]*)[/\\]static[/\\]i18n$/gi, '$1');
+  });
+}
+
 
 module.exports = {
   PROCESS_DIR,
@@ -137,6 +152,10 @@ module.exports = {
   isUseFromCore,
   inCoreRoot,
   inCoreSrcRelative,
+  inCoreSrc,
 
-  inModules
+  getModulesDirectories,
+  inModules,
+  getI18nModules,
+  getModulesStatic
 };
