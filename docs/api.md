@@ -1784,7 +1784,7 @@ Returns **function (any, any?)**
 **Parameters**
 
 -   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][177]
--   `useFromCore`  
+-   `projectSrcPath`  
 
 Returns **[Array][178]** 
 
