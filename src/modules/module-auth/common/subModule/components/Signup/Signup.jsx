@@ -120,7 +120,7 @@ export default class Signup extends Component {
       username: emailAsLogin ? email : username,
     });
 
-    await onEnterTypeChange(true);
+    await onEnterTypeChange(null);
 
     if (onSubmit) {
       await onSubmit();

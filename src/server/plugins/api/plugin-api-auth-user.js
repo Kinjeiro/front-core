@@ -47,7 +47,7 @@ export default function createApiPlugins(services/* , strategies*/) {
           await request.services.serviceAuth.authSignup(requestData);
 
           logger.log('-- done. Now login');
-          return login(username, password, request.services, reply);
+          return login(username, password, request.services.serviceAuth, reply);
         },
         {
           routeConfig: {
