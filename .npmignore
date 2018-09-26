@@ -11,6 +11,7 @@ test/client/coverage/
 test/client/test-results.xml
 .babelrc
 npm-debug.log.*
+minimizedPackage/
 
 src/
 docs/api/assets/fonts/

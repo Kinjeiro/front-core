@@ -21,7 +21,8 @@ const babelLoader = webpackConfig.module.rules
 
 const babelRcFinal = {
   presets: babelLoader.options.presets,
-  plugins: babelLoader.options.plugins
+  plugins: babelLoader.options.plugins,
+  comments: babelLoader.options.comments
 };
 
 if (process.env.NODE_ENV === 'test') {

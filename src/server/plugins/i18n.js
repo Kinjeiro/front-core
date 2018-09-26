@@ -63,52 +63,49 @@ function register(server, options = {}, next) {
     (key, lng, opts) => i18n.t(key, opts));
 
 
+  function isLanguageSupported(language) {
+    const supported = i18n.options.whitelist;
+    if ((!supported.length && language) || (supported.indexOf(language) > -1)) {
+      return true;
+    }
+    return false;
+  }
+
+  function trySetLanguage(language) {
+    return isLanguageSupported(language) ? language : undefined;
+  }
+
+  function detectLanguageFromHeaders(request) {
+    let langs;
+    const langHeader = request.headers['accept-language'];
+
+    if (langHeader) {
+      langs = acceptLanguageParser.parse(langHeader);
+      langs.sort((a, b) => b.q - a.q);
+      return langs.map((lang) => lang.code);
+    }
+
+    return [];
+  }
+
+  function detectLanguageFromQS(request) {
+    // Use the query param name specified in options, defaults to lang
+    return request.query[finalI18nextOptions.detectLngQS];
+  }
+
+  function detectLanguageFromPath(request) {
+    const parts = request.url.path.slice(1).split('/');
+    if (parts.length > finalI18nextOptions.detectLngFromPath) {
+      return parts[finalI18nextOptions.detectLngFromPath];
+    }
+  }
+
+  function detectLanguageFromCookie(request) {
+    return request.state[finalI18nextOptions.cookieName] || null;
+  }
 
   server.ext('onPreHandler', (request, reply) => {
     try {
-      function isLanguageSupported(language) {
-        const supported = i18n.options.whitelist;
-        if ((!supported.length && language) || (supported.indexOf(language) > -1)) {
-          return true;
-        }
-        return false;
-      }
-
-      function trySetLanguage(language) {
-        return isLanguageSupported(language) ? language : undefined;
-      }
-
-      function detectLanguageFromHeaders(request) {
-        let langs;
-        const langHeader = request.headers['accept-language'];
-
-        if (langHeader) {
-          langs = acceptLanguageParser.parse(langHeader);
-          langs.sort((a, b) => b.q - a.q);
-          return langs.map((lang) => lang.code);
-        }
-
-        return [];
-      }
-
-      function detectLanguageFromQS(request) {
-        // Use the query param name specified in options, defaults to lang
-        return request.query[finalI18nextOptions.detectLngQS];
-      }
-
-      function detectLanguageFromPath(request) {
-        const parts = request.url.path.slice(1).split('/');
-        if (parts.length > finalI18nextOptions.detectLngFromPath) {
-          return parts[finalI18nextOptions.detectLngFromPath];
-        }
-      }
-
-      function detectLanguageFromCookie(request) {
-        return request.state[finalI18nextOptions.cookieName] || null;
-      }
-
-
-
       // todo @ANKU @LOW @BUG_OUT @hapi - если внутри server.ext падает ошибка - то падает неинформативная "UnhandledPromiseRejectionWarning: Unhandled promise rejection" и приходится все в try catch оборачивать
       let headerLangs;
       let language;

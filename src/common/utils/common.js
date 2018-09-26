@@ -67,12 +67,21 @@ export function getRoundedValue(value) {
   return Math.round(value * 100) / 100;
 }
 
+function arrayMin(arr) {
+  return arr.reduce((result, item) => (result < item ? result : item));
+}
 
 export function getMinMax(series) {
   const allValues = flattenDeep(series);
 
   return {
-    min: Math.min(...allValues),
+    /*
+     // todo @ANKU @LOW @BUG_OUT @babel-minify - не может минимизировать Math.min O_O
+     Couldn't find intersection
+     at NodePath.getDeepestCommonAncestorFrom (H:\FrontCore\node_modules\babel-traverse\lib\path\ancestry.js:173:11)
+     */
+    // min: Math.min(...allValues),
+    min: arrayMin(allValues),
     max: Math.max(...allValues),
   };
 }

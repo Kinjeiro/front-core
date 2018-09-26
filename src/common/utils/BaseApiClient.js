@@ -42,7 +42,7 @@ export const DEFAULT_API_CLIENT_OPTIONS = {
 /**
  * Класс для отсылки запросов на сервер
  */
-class BaseApiClientClass {
+export default class BaseApiClientClass {
   apiClientOptions;
 
   getContextDataFn = null;
@@ -524,5 +524,3 @@ class BaseApiClientClass {
    */
   empty() {}
 }
-
-export default BaseApiClientClass;

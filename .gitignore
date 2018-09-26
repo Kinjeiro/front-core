@@ -10,5 +10,6 @@ docker/tmp-package.json
 test/client/coverage/
 test/client/test-results.xml
 .babelrc
+minimizedPackage/
 
 lib/

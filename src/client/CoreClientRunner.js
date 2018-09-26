@@ -69,6 +69,7 @@ export default class CoreClientRunner extends AbstractClientRunner {
   getProjectLayoutComponent() {
     return null;
   }
+
   getIndexRoute() {
     return null;
   }
@@ -95,37 +96,50 @@ export default class CoreClientRunner extends AbstractClientRunner {
 
   getApiClientClass() {
     const { store } = this;
+
+    /*
+      todo @ANKU @LOW @BUG_OUT @babel-minify - не умеет минимизировать файл если есть динамическое наследование внутри методов
+      Cannot read property 'end' of null
+      at _evaluate (H:\__CODER__\_W_Reagentum_\__Gasprom__\Project_Rascenka\formRascenka_FrontCore\node_modules\babel-traverse\lib\
+      path\evaluation.js:159:58)
+    */
     // чтобы получать redux данные внутри апи (удобно для userId), чтобы не передавать глобальные контекстные данные во все методы апи
     const SuperClass = super.getApiClientClass();
-    class ApiClientWithContextClass extends SuperClass {
+    // class ApiClientWithContextClass extends SuperClass {
+    //   constructor(...args) {
+    //     super(...args);
+    //     this.setGetContextDataFn(store.getState.bind(store));
+    //   }
+    // }
+    // return ApiClientWithContextClass;
+    return class extends SuperClass {
       constructor(...args) {
         super(...args);
         this.setGetContextDataFn(store.getState.bind(store));
       }
-    }
-    return ApiClientWithContextClass;
+    };
   }
-
-  hotReloadListeners() {
-    super.hotReloadListeners();
-
-    /**
-     * // todo @ANKU @LOW - только в связке они работают, поэтому приходится добавлять пустой метод, ибо без него проскакивает контекст
-     */
-    // https://github.com/webpack/webpack/issues/834#issuecomment-76590576
-    // ./src/modules recursive ^\.\/(.*)\/common\/index\.js/g
-    this.getCommonSubModulesContexts().forEach((context) => {
-      module.hot.accept(context.id, this.reloadUi);
-    });
-    module.hot.accept('../common/create-routes', () => {});
-
-    module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);
-    module.hot.accept('../common/models/domains', this.reloadAll);
-    module.hot.accept('../common/api', this.reloadAll);
-  }
-
-  getInitialState() {
-    // данные преходящие с серверного рендеринга, смотри \src\server\plugins\pages\index.html.ejs
-    return getStateFromPage();
-  }
+  //
+  // hotReloadListeners() {
+  //   super.hotReloadListeners();
+  //
+  //   /**
+  //    * // todo @ANKU @LOW - только в связке они работают, поэтому приходится добавлять пустой метод, ибо без него проскакивает контекст
+  //    */
+  //   // https://github.com/webpack/webpack/issues/834#issuecomment-76590576
+  //   // ./src/modules recursive ^\.\/(.*)\/common\/index\.js/g
+  //   this.getCommonSubModulesContexts().forEach((context) => {
+  //     module.hot.accept(context.id, this.reloadUi);
+  //   });
+  //   module.hot.accept('../common/create-routes', () => {});
+  //
+  //   module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);
+  //   module.hot.accept('../common/models/domains', this.reloadAll);
+  //   module.hot.accept('../common/api', this.reloadAll);
+  // }
+  //
+  // getInitialState() {
+  //   // данные преходящие с серверного рендеринга, смотри \src\server\plugins\pages\index.html.ejs
+  //   return getStateFromPage();
+  // }
 }

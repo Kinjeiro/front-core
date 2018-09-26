@@ -6,7 +6,13 @@ const fs = require('fs');
  * @param webpackConfig
  * @param context
  */
-function pluginCodeBabelOptions(webpackConfig) {
+function pluginCodeBabelOptions(webpackConfig, context) {
+  const {
+    ENV: {
+      MINIMIZED
+    }
+  } = context;
+
   const babelLoader = webpackConfig.module.rules
     .find((rule) => rule.loader === 'babel-loader');
 
@@ -29,6 +35,65 @@ function pluginCodeBabelOptions(webpackConfig) {
    ));
   */
 
+  const presets = [
+    'babel-preset-react',
+    [
+      'babel-preset-env', {
+        /*
+         webpack 2 doesn't support module.exports but we need use get-config in node (before webpack, commonJs) and in app (es6)
+         modules: false, - break our logic
+         See: Cannot assign to read only property 'exports' of object '#<Object>' (mix require and export)
+         https://github.com/webpack/webpack/issues/4039#issuecomment-283501082
+         */
+        // modules: false,
+
+        targets: {
+          ie9: true
+        },
+        uglify: true
+      }
+    ]
+  ];
+
+  if (MINIMIZED) {
+    // минификация кода для компиляции через babel (для репозитория lib)
+    presets.push('babel-preset-minify');
+  }
+
+  const plugins = [
+    'babel-plugin-transform-class-properties',
+    'babel-plugin-syntax-dynamic-import',
+    [
+      'babel-plugin-transform-runtime',
+      {
+        helpers: true,
+        // если не выключить не компилятся export * from './test'; конструкции
+        polyfill: false,
+
+        // polyfill: true,
+
+        regenerator: true
+      }
+    ],
+
+    // [
+    //  'babel-plugin-transform-object-rest-spread',
+    //  {
+    //    useBuiltIns: true // we polyfill Object.assign in src/normalize.js
+    //  }
+    // ],
+    'babel-plugin-transform-object-rest-spread',
+
+    // Для декараторов @myDecorator
+    'babel-plugin-transform-decorators-legacy',
+
+    /*
+     for export * as ns from 'mod';
+     https://github.com/babel/babel/issues/2877#issuecomment-156031685
+     */
+    'babel-plugin-transform-export-extensions'
+  ];
+
   babelLoader.options = Object.assign(
     {},
     babelLoader.options,
@@ -41,59 +106,10 @@ function pluginCodeBabelOptions(webpackConfig) {
       // не используем файл .babelrc (чтобы было более удобное наследование проектов)
       babelrc: false,
 
-      presets: [
-        'babel-preset-react',
-        [
-          'babel-preset-env', {
-            /*
-            webpack 2 doesn't support module.exports but we need use get-config in node (before webpack, commonJs) and in app (es6)
-            modules: false, - break our logic
-            See: Cannot assign to read only property 'exports' of object '#<Object>' (mix require and export)
-            https://github.com/webpack/webpack/issues/4039#issuecomment-283501082
-            */
-            // modules: false,
+      presets,
+      plugins,
 
-            targets: {
-              ie9: true
-            },
-            uglify: true
-          }
-        ]
-      ],
-
-      plugins: [
-        'babel-plugin-transform-class-properties',
-        'babel-plugin-syntax-dynamic-import',
-        [
-          'babel-plugin-transform-runtime',
-          {
-            helpers: true,
-            // если не выключить не компилятся export * from './test'; конструкции
-            polyfill: false,
-
-            // polyfill: true,
-
-            regenerator: true
-          }
-        ],
-
-        // [
-        //  'babel-plugin-transform-object-rest-spread',
-        //  {
-        //    useBuiltIns: true // we polyfill Object.assign in src/normalize.js
-        //  }
-        // ],
-        'babel-plugin-transform-object-rest-spread',
-
-        // Для декараторов @myDecorator
-        'babel-plugin-transform-decorators-legacy',
-
-        /*
-         for export * as ns from 'mod';
-         https://github.com/babel/babel/issues/2877#issuecomment-156031685
-         */
-        'babel-plugin-transform-export-extensions'
-      ]
+      comments: !MINIMIZED
     }
   );
 }
