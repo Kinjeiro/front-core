@@ -132,6 +132,9 @@ export default SubModuleFactory.createCommonSubModule({
 ### Dependencies:
     
 ### Dev Dependencies:
+    + babel-minify@0.5.0 - минификация build-scrtips
+    + babel-preset-minify@0.5.0 - минификация при компиляции src
+    + cpr@3.0.1 - копирование в npm
 
 ### Features:
 1. Система изолированных проектных модулей, упрощенных модулей и сабмодулей (CommonSubModule и ServerSubModule). Они позволяют описать как проектные код, так и любые фичи на любом этапе приложений.
@@ -156,6 +159,16 @@ export default SubModuleFactory.createCommonSubModule({
     - static
 ```
 2. Упрощенная настройка ClientRunner и ServerRunner
+3. Создание скомпилированной минимизированной версии библиотеки, которую можно подкладывать не используя private npm
+Запустите ```npm run minimized``` и получите в папке ```/minimizedPackage/front-core``` скомпилированные минимизированные исходники
+И можно подключать в проекте без private npm в ```package.json```:
+```
+  "dependencies": {
+    "@reagentum/front-core": "file:./coreLibs/front-core",
+    "@reagentum/frontCore_Components": "file:./coreLibs/frontCore_Components"
+  },
+```
+
 
 ### Commits:
     - !!! feat(utils, uri-utils): - breaking changes! переместил getModuleFullPath в helpers/app-urls так как нужен полный путь учитывающий contextPath из настроек 

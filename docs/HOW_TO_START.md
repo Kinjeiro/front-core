@@ -1,7 +1,7 @@
 ## Оглавление
 * [Подготовка](#prestart)
-* [Шаблон - заготовка приложения](#stubTemplate)
-* [Сборка](#build-scripts)
+* [Генератор приложения](#stubTemplate)
+* [Подробнее о внутренностях (актуально для версии 1.2.9)](#build-scripts)
 * [Точки входа приложения](#points)
 * [Конфигурации](#config)
 * [package.json](#packageJson)
@@ -10,14 +10,33 @@
 ## Подготовка
 1. Установить Node JS 9.0.0+
 
-## Шаблон - заготовка приложения
-1. Скачать шаблон https://bitbucket.org/kinjeiro/frontcore_stub
-1. Запустить `npm install` для установки зависимостей
+## Генератор приложения
+1. Установить [Yeoman](http://yeoman.io) и наш генератор [generator-front-core](https://github.com/kinjeiro/generator-front-core)
+```
+npm i -g yeoman generator-front-core
+```
+2. Создатей пустую папку с проектом и внутри нее запустить генерацию проекта
+```
+yo front-core    
+```
+Вам зададут ряд вопросов. Самый главный: как подключить корные библиотеки 
+- либо использовать ключ для private npm репозитория вида ```LtPoPitN+ORS2NczScMn2OYCk8U2t2uY/Pux2S0vCkl=```, который используется в ```.npmrc```:
+```
+registry=http://npm.reagentum.ru/
+//npm.reagentum.ru/:_authToken="LtPoPitN+ORS2NczScMn2OYCk8U2t2uY/Pux2S0vCkl="
+```
+- либо локально использовать скомпилированные версии библиотек. Их можно получить запустив внутри корных компонентов скрипт```npm run minimized``` и взяв из папки ```/minimizedPackage``` результат.
 
-`@reagentum/front-core` поставляется в скомпилированном виде без исходников и соотвественно все файлы приложения используются от `@reagentum/front-core/lib/*`
-<br/> Исходники - https://bitbucket.org/kinjeiro/frontcore
+3. Создание модуля
+```
+yo front-core:module
+```
+4. Запуск
+```
+npm run start
+```
 
-## Сборка
+## Подробнее о внутренностях (актуально для версии 1.2.9)
 Теперь необходимо определить входные точки для будущего приложения.
 Все точки подхватываются автоматически, когда Front Core анализирует проект.
 Начнем со сборки.
