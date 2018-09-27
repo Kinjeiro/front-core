@@ -67,8 +67,27 @@ export function getRoundedValue(value) {
   return Math.round(value * 100) / 100;
 }
 
-function arrayMin(arr) {
-  return arr.reduce((result, item) => (result < item ? result : item));
+export function min(...items) {
+  /*
+   // todo @ANKU @LOW @BUG_OUT @babel-minify - не может минимизировать Math.min O_O
+   Couldn't find intersection
+   at NodePath.getDeepestCommonAncestorFrom (H:\FrontCore\node_modules\babel-traverse\lib\path\ancestry.js:173:11)
+   */
+  // return Math.min(...items),
+  return items.reduce((result, item) => (result < item ? result : item));
+}
+export function ceil(value) {
+  /*
+   // todo @ANKU @LOW @BUG_OUT @babel-minify - плохо реагирует на Math.min и Math.ceil (а Math.max работает нормально)
+   Cannot read property 'contexts' of null
+   at NodePath._getQueueContexts (H:\FrontCore_Components\node_modules\babel-traverse\lib\path\context.js:279:21)
+   */
+  // return Math.ceil(value);
+  let result = ~~(value);
+  if (value > result) {
+    result += 1;
+  }
+  return result;
 }
 
 export function getMinMax(series) {
@@ -81,7 +100,7 @@ export function getMinMax(series) {
      at NodePath.getDeepestCommonAncestorFrom (H:\FrontCore\node_modules\babel-traverse\lib\path\ancestry.js:173:11)
      */
     // min: Math.min(...allValues),
-    min: arrayMin(allValues),
+    min: min(...allValues),
     max: Math.max(...allValues),
   };
 }
