@@ -291,7 +291,7 @@ export default class AbstractServerRunner {
              - message - the error message derived from error.message.
          ...inherited Error properties (stack, message)
         */
-        logger.error(`Boom error response sent for request: ${request.id} at ${request.url.path} because:\n\t${response.trace || response.stack || response}`);
+        logger.error(`Boom error response sent for request: ${request.id} at ${request.url.path} because:\n\t`, response.trace, '\n\t', response.stack || response);
         return reply(parseToUniError(response)).code(code);
       }
 

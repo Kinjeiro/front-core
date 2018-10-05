@@ -56,18 +56,20 @@ export function getFullUrl(routePath, queryParams = undefined) {
 export function getModuleFullPath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
   const prefix = moduleName ? modulesPrefixes[moduleName] : null;
 
-  if (!prefix) {
-    return appUrl(relativeLocation || undefined);
-  }
-
   if (typeof relativeLocation === 'object') {
+    // location object
     return {
       ...relativeLocation,
-      pathname: appUrl(prefix, relativeLocation.pathname),
+      pathname: relativeLocation.pathname
+        ? prefix
+          ? appUrl(prefix, relativeLocation.pathname)
+          : appUrl(relativeLocation.pathname)
+        : undefined,
     };
   }
-
-  return appUrl(prefix, relativeLocation);
+  return prefix
+    ? appUrl(prefix, relativeLocation)
+    : appUrl(relativeLocation || undefined);
 }
 
 export default appUrl;

@@ -274,8 +274,8 @@ export function updateLocationSearch(url, newQueryParams, assign = false) {
   }
   return `?${formatUrlParameters(params)}`;
 }
-export function updateWindowLocationQueryParams(newQueryParams) {
+export function updateWindowLocationQueryParams(newQueryParams, ...args) {
   if (typeof window !== 'undefined' && window.history.pushState) {
-    window.history.pushState('', '', updateLocationSearch(window.location.href, newQueryParams));
+    window.history.pushState('', '', updateLocationSearch(window.location.href, newQueryParams, ...args));
   }
 }

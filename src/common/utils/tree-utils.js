@@ -57,7 +57,11 @@ export function findInTree(tree, filter, options = {}, deep = 0, path = [], path
 
   if (typeof filter !== 'function') {
     if (filter === null || typeof filter === 'undefined' || filter === '') {
-      return { result: undefined, path: [], pathStr: '' };
+      return {
+        result: undefined,
+        path: [],
+        pathStr: '',
+      };
     }
     filter = findInTreeDefaultFilter.bind(null, filter);
   }
@@ -114,19 +118,19 @@ export function findPath(value, treeData, options = {}) {
     fieldChildren = 'children',
   } = options;
 
-  const sel = [];
+  const treePath = [];
 
   function loop(selected, children) {
     for (let i = 0; i < children.length; i++) {
       const item = children[i];
       if (selected === item[fieldValue]) {
-        sel.push(item);
+        treePath.push(item);
         return;
       }
       if (item[fieldChildren]) {
         loop(selected, item[fieldChildren], item);
-        if (sel.length) {
-          sel.push(item);
+        if (treePath.length) {
+          treePath.push(item);
           return;
         }
       }
@@ -134,8 +138,8 @@ export function findPath(value, treeData, options = {}) {
   }
 
   loop(value, treeData);
-  sel.reverse();
-  return sel;
+  treePath.reverse();
+  return treePath;
 }
 
 export function arrayToTree(array, options = {}, parent = null, level = 0) {
