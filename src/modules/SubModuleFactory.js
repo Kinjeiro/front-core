@@ -72,6 +72,8 @@ export const SUB_MODULE_FACTORY = {
     getRoutes: null,
     getApi: () => [],
     getRootReducers: () => ({}),
+    reduxSelectors: {},
+    reduxActions: () => ({}),
 
     hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
       // module.hot.accept('./routes-products', reloadUi);
@@ -86,6 +88,8 @@ export const SUB_MODULE_FACTORY = {
    - getRoutes: (moduleRoutePrefix) => null,
    - getApi: () => [],
    - getRootReducers: () => ({}),
+   - reduxSelectors: {},
+   - reduxActions: (api) => ({}),
 
    - hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
       // module.hot.accept('./routes-products', reloadUi);
