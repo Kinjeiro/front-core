@@ -1424,6 +1424,8 @@ package.json
 -   getRoutes: (moduleRoutePrefix) => null,
 -   getApi: () => \[],
 -   getRootReducers: () => ({}),
+-   reduxSelectors: {},
+-   reduxActions: (api) => ({}),
 
 -   hotReloadFunc: (reloadUi, reloadStore, reloadAll) => {
     // module.hot.accept('./routes-products', reloadUi);
