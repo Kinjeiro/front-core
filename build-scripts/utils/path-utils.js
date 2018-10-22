@@ -148,6 +148,7 @@ module.exports = {
   pathJoin,
   urlJoin,
   pathResolve,
+  dirnameNormalize,
 
   getProjectDir,
   inProject,

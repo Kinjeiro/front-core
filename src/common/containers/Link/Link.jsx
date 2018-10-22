@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router';
 
+// import { cutContextPath } from '../../helpers/app-urls';
+
 import getComponents from '../../get-components';
 
 const { AuthCheckWrapper } = getComponents();
@@ -38,6 +40,15 @@ export default class Link extends Component {
       className,
       ...otherProps
     } = this.props;
+
+    // const toFinal = typeof to === 'string'
+    //   ? cutContextPath(to)
+    //   : typeof to === 'object'
+    //     ? {
+    //       ...to,
+    //       pathname: to.pathname ? cutContextPath(to.pathname) : to.pathname,
+    //     }
+    //     : to;
 
     return (
       <AuthCheckWrapper

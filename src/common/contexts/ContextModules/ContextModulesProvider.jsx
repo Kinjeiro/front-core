@@ -5,7 +5,12 @@ import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import { getModuleFullPath } from '../../helpers/app-urls';
+import {
+  getModuleFullPath,
+} from '../../helpers/app-urls';
+import {
+  getModuleRoutePath,
+} from '../../utils/uri-utils';
 
 import { actions as modulesActions } from '../../app-redux/reducers/app/redux-modules';
 // import i18n from '../../utils/i18n';
@@ -14,6 +19,7 @@ import { actions as modulesActions } from '../../app-redux/reducers/app/redux-mo
 
 const ContextModules = React.createContext({
   getFullPath: null,
+  getRoutePath: null,
   goTo: null,
 });
 
@@ -80,13 +86,21 @@ export default class ContextModulesProvider extends Component {
     } = this.props;
     return getModuleFullPath(relativeLocation, moduleName, moduleToRoutePrefixMap);
   }
+  @bind()
+  getRoutePath(relativeLocation, moduleName = null) {
+    const {
+      moduleToRoutePrefixMap,
+    } = this.props;
+    return getModuleRoutePath(relativeLocation, moduleName, moduleToRoutePrefixMap);
+  }
 
   @bind()
   onGoTo(relativeLocation, moduleName = null) {
     const {
       actionGoTo,
     } = this.props;
-    return actionGoTo(this.getFullPath(relativeLocation, moduleName));
+    // роутинг нужно делать без контекст паса
+    return actionGoTo(this.getRoutePath(relativeLocation, moduleName));
   }
 
   // ======================================================
@@ -114,6 +128,7 @@ export default class ContextModulesProvider extends Component {
       <ContextModules.Provider
         value={{
           getFullPath: this.getFullPath,
+          getRoutePath: this.getRoutePath,
           onGoTo: this.onGoTo,
           match,
           location,

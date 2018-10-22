@@ -1,5 +1,6 @@
 import {
   joinPath,
+  getModuleRoutePath,
   formatUrlParameters,
 } from '../utils/uri-utils';
 import config from '../client-config';
@@ -44,9 +45,8 @@ export function getFullUrl(routePath, queryParams = undefined) {
   return `${window.location.origin}${joinPath(config.common.app.contextRoot, routePath, queryParams)}`;
 }
 
-
 /**
- * Полный путь до ресурса с учетом префикса различных модулей
+ * Полный путь до ресурса с учетом префикса различных модулей и contextPath
  *
  * @param relativeLocation - LocationDescription - @see model-location.js
  * @param moduleName
@@ -54,22 +54,7 @@ export function getFullUrl(routePath, queryParams = undefined) {
  * @returns {*}
  */
 export function getModuleFullPath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
-  const prefix = moduleName ? modulesPrefixes[moduleName] : null;
-
-  if (typeof relativeLocation === 'object') {
-    // location object
-    return {
-      ...relativeLocation,
-      pathname: relativeLocation.pathname
-        ? prefix
-          ? appUrl(prefix, relativeLocation.pathname)
-          : appUrl(relativeLocation.pathname)
-        : undefined,
-    };
-  }
-  return prefix
-    ? appUrl(prefix, relativeLocation)
-    : appUrl(relativeLocation || undefined);
+  return appUrl(getModuleRoutePath(relativeLocation, moduleName, modulesPrefixes));
 }
 
 export default appUrl;

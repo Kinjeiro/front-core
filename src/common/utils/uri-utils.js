@@ -279,3 +279,30 @@ export function updateWindowLocationQueryParams(newQueryParams, ...args) {
     window.history.pushState('', '', updateLocationSearch(window.location.href, newQueryParams, ...args));
   }
 }
+
+/**
+ * Путь до ресурса с учетом префикса различных модулей для роутинг (без учета contextPath)
+ *
+ * @param relativeLocation - LocationDescription - @see model-location.js
+ * @param moduleName
+ * @param modulesPrefixes - мапа: moduleName => prefix
+ * @returns {*}
+ */
+export function getModuleRoutePath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
+  const prefix = moduleName ? modulesPrefixes[moduleName] : null;
+
+  if (typeof relativeLocation === 'object') {
+    // location object
+    return {
+      ...relativeLocation,
+      pathname: relativeLocation.pathname
+        ? prefix
+          ? joinPath(prefix, relativeLocation.pathname)
+          : joinPath(relativeLocation.pathname)
+        : undefined,
+    };
+  }
+  return prefix
+    ? joinPath(prefix, relativeLocation)
+    : joinPath(relativeLocation || undefined);
+}

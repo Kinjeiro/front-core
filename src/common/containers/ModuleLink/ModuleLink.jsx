@@ -24,7 +24,7 @@ export default class ModuleLink extends Component {
     // ======================================================
     // @contextModules
     // ======================================================
-    getFullPath: PropTypes.func,
+    getRoutePath: PropTypes.func,
     onGoTo: PropTypes.func,
   };
 
@@ -33,7 +33,7 @@ export default class ModuleLink extends Component {
   render() {
     const {
       children,
-      getFullPath,
+      getRoutePath,
       modulePath,
       moduleName,
     } = this.props;
@@ -41,7 +41,7 @@ export default class ModuleLink extends Component {
     return (
       <Link
         { ...pick(this.props, Object.keys(Link.propTypes)) }
-        to={ getFullPath(modulePath, moduleName) }
+        to={ getRoutePath(modulePath, moduleName) }
       >
         { children }
       </Link>

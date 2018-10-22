@@ -5,6 +5,7 @@ import createContextDecorator from '../../utils/decorators/utils/create-context-
 /**
  * Декорирует компонент и добавляет в него:
     - getFullPath(location, moduleName)
+    - getRoutePath(location, moduleName)
     - onGoTo(location, moduleName)
     - match
     - location
