@@ -20,6 +20,16 @@ function pathResolve(...args) {
   return path.resolve(...args);
 }
 
+/**
+ * https://github.com/webpack/webpack/issues/1599
+ * С любыми настройками webpack на сервере__dirname на unix выдает src\... а __filename /index.js в любом варианте
+ * @param dirname
+ * @return {string}
+ */
+function dirnameNormalize(dirname) {
+  return path.resolve(dirname.replace(/\\/g, path.sep));
+}
+
 // ======================================================
 // GET INFO
 // ======================================================
