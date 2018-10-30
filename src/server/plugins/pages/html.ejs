@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <%/*
+     Мета тэг X-UA-Compatible должен идти раньше других тэгов, иначе в большинстве случаев IE его просто игнорирует.
+     https://habr.com/post/201358/#comment_6954672
+     Подробнее схема о режимах совместимости:
+     https://stackoverflow.com/a/26348511/344172
+    */%>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta charset="utf-8"/>
     <meta name="viewport"
           content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <link rel="shortcut icon" href="<%= assetsDir %>/favicon.ico">
     <link rel="manifest" href="<%= assetsDir %>/manifest.json">
 
     <% if (staticAssets) { %>
-        <!--
-        // todo @ANKU @CRIT @MAIN - если ни одного нету файла из node_modules - то не создасться файл vendor.css и будет ошибка
-        // todo @ANKU @LOW - а вообще нужно создавать линки на файлы по инфе от webpack
-        -->
+        <%/*
+         // todo @ANKU @CRIT @MAIN - если ни одного нету файла из node_modules - то не создасться файл vendor.css и будет ошибка
+         // todo @ANKU @LOW - а вообще нужно создавать линки на файлы по инфе от webpack
+         */%>
         <link rel="stylesheet" href="<%= assetsDir %>/vendor.css" />
         <link rel="stylesheet" href="<%= assetsDir %>/index.css" />
     <% } %>
