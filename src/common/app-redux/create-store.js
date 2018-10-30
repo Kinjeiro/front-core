@@ -16,7 +16,11 @@ import { routerMiddleware } from 'react-router-redux';
  import { createLogger } from 'redux-logger';
  "redux-logger": "git+https://github.com/thiamsantos/redux-logger.git#ddiff",
 */
-import { createLogger } from 'redux-logger/src';
+/*
+ не скомпилированная версия падает в браузерах
+ import { createLogger } from 'redux-logger/src';
+*/
+import { createLogger } from './plugins/redux-logger';
 
 import clientConfig from '../client-config';
 

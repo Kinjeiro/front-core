@@ -79,7 +79,7 @@ const context = {
   isLocalhost: ENV.NODE_ENV === 'localhost',
 
   compileNodeModules: [
-    'redux-logger'
+    // 'redux-logger'
   ]
 };
 context.inProjectSrc = context.inProjectSrc.bind(context);
