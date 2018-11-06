@@ -131,7 +131,7 @@ export function parseUrlParameters(url, defaultValues = {}) {
 
 
 function pushEncodedKeyValuePair(pairs, key, val) {
-  if (val != null) {
+  if (val !== null && typeof val !== 'undefined') {
     if (Array.isArray(val)) {
       val.forEach((v) => {
         pushEncodedKeyValuePair(pairs, key, v);

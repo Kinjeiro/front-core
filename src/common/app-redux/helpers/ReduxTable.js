@@ -111,12 +111,6 @@ export default class ReduxTable extends ReduxUni {
 
     const actions = {
       ...super.getBindActions(api, TYPES),
-      actionClearFilters(tableUuid) {
-        return {
-          [FIELD_UUID]: tableUuid,
-          type: TYPES.CLEAR_FILTERS,
-        };
-      },
 
       actionChangeRecordsSelected(tableUuid, recordIds, selected) {
         return {
@@ -146,7 +140,22 @@ export default class ReduxTable extends ReduxUni {
     if (apiLoadRecords) {
       const initialMeta = this.getInitialState().meta;
 
-      actions.actionLoadRecords = (tableUuid, meta = undefined, filters = undefined, forceUpdate = false, isReplaceLocation = false) => {
+      /**
+       *
+       * @param tableUuid
+       * @param meta - мержится к текушей
+       * @param filters - полностью заменяется (чтобы можно было очистить)
+       * @param forceUpdate
+       * @param isReplaceLocation
+       * @return {function(*, *)}
+       */
+      actions.actionLoadRecords = (
+        tableUuid,
+        meta = undefined,
+        filters = undefined,
+        forceUpdate = false,
+        isReplaceLocation = false,
+      ) => {
         // return {
         //   types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
         //   uuid: tableUuid,
@@ -213,12 +222,18 @@ export default class ReduxTable extends ReduxUni {
 
             const currentUrlQuery = parseUrlParameters(location.search);
             // обновляем location только если что-то поменялось
-            if (!deepEquals(newFilters, currentUrlQuery.filters || {}) || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))) {
+            if (
+              !deepEquals(newFilters, currentUrlQuery.filters || {})
+              || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))
+            ) {
               // todo @ANKU @LOW - вынести этот механизм проверки наверх (или в другой редукс), чтобы никто не мог менять если ничего не изменилось
-              const queryFinal = merge(currentUrlQuery, {
+              const queryFinal = {
+                ...currentUrlQuery,
+                // мержим мету
                 ...newMeta,
-                filters: newFilters,
-              });
+                // заменяем фильтры польностью
+                filters: Object.keys(newFilters).length === 0 ? undefined : newFilters,
+              };
 
               dispatch(
                 (isReplaceLocation ? replaceLocation : push)({
@@ -249,6 +264,18 @@ export default class ReduxTable extends ReduxUni {
             });
           }
           return Promise.resolve();
+        };
+      };
+
+      actions.actionClearFilters = (tableUuid) => {
+        return (dispatch) => {
+          // dispatch({
+          //   [FIELD_UUID]: tableUuid,
+          //   type: TYPES.CLEAR_FILTERS,
+          // });
+
+          // чтобы обновился урл
+          return dispatch(actions.actionLoadRecords(tableUuid, undefined, null));
         };
       };
     }
