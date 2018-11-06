@@ -31,6 +31,7 @@ import * as reduxTables from '../../../app-redux/reducers/app/redux-tables';
 
 import getComponents from '../../../get-components';
 
+// используется Loading
 const CB = getComponents();
 
 // эти методы можно и без апи использовать
@@ -53,6 +54,7 @@ const {
  * @param initFilters - (объект или функция от props) - начальный фильтры
  * @param tableActions - actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect не передавать
  * @param useLoading - использовать лоадинг для первоначальной загрузки
+ * @param urlFilterValueNormalizers - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
  *
  * Возвращает компонент с доп пропертями:
  * - table - текущая данные таблицы
@@ -73,12 +75,21 @@ export default function reduxTableDecorator(
     initFilters = {},
     tableActions,
     useLoading = true,
+    urlFilterValueNormalizers,
   } = {},
 ) {
   return (ReactComponentClass) => {
     @connect(
       (globalState, props) => {
-        const query = parseUrlParameters(props.location.search);
+        const filterNormalizers = urlFilterValueNormalizers
+          ? Object.keys(urlFilterValueNormalizers).reduce((result, filterParamName) => {
+            // eslint-disable-next-line no-param-reassign
+            result[`filters.${filterParamName}`] = urlFilterValueNormalizers[filterParamName];
+            return result;
+          }, {})
+          : undefined;
+
+        const query = parseUrlParameters(props.location.search, filterNormalizers);
         const tableIdFinal = executeVariable(tableId, null, props);
         return {
           table: getTableInfo(globalState, tableIdFinal),

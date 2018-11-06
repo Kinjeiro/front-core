@@ -2,6 +2,7 @@
 import pathLib from 'path';
 import forOwn from 'lodash/forOwn';
 import merge from 'lodash/merge';
+import set from 'lodash/set';
 import queryString from 'query-string';
 
 import { convertToString } from './common';
@@ -59,18 +60,22 @@ function proceedDefaultValues(defaultValues) {
     });
   }
 
-  return Object.keys(defaultValues).length > 0 ?
-    { ...defaultValues, ...calculatedDefValues } :
-         defaultValues;
+  return Object.keys(defaultValues).length > 0
+    ? {
+      ...defaultValues,
+      ...calculatedDefValues,
+    }
+    : defaultValues;
 }
 
 /**
  *
  * @param url - либо объект location, либо мапа параметров, либо стринга
  * @param defaultValues
+ * @param customNormalizersMap - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
  * @returns {{}}
  */
-export function parseUrlParameters(url, defaultValues = {}) {
+export function parseUrlParameters(url, defaultValues = {}, customNormalizersMap = {}) {
   if (!url) {
     return {};
   }
@@ -94,6 +99,8 @@ export function parseUrlParameters(url, defaultValues = {}) {
     );
   }
 
+  const defaultValuesFinal = proceedDefaultValues(defaultValues);
+
   /*
     Чтобы парсить объекты в query
     http://localhost:8080/api/products?type=products&meta%5Bsearch%5D&meta%5BstartPage%5D=0&meta%5BitemsPerPage%5D=10&meta%5BsortBy%5D&meta%5BsortDesc%5D=true&meta%5Btotal%5D&filters%5Btype%5D=goods
@@ -106,26 +113,31 @@ export function parseUrlParameters(url, defaultValues = {}) {
      meta[total]:
      filters[type]: goods
   */
-  const paramsFinal = {};
-  Object.keys(params).forEach((key) => {
+  return Object.keys(params).reduce((paramsFinal, key) => {
     const value = params[key];
     const result = /^(\S+)\[(\S+)\]$/i.exec(key);
     const firstPart = result && result[1];
     const innerPart = result && result[2];
+    let paramPath;
     if (innerPart) {
       if (typeof paramsFinal[firstPart] === 'undefined') {
         paramsFinal[firstPart] = {};
       }
-      paramsFinal[firstPart][innerPart] = value;
+      paramPath = `${firstPart}.${innerPart}`;
     } else {
-      paramsFinal[key] = value;
+      paramPath = key;
     }
-  });
 
-  return {
-    ...proceedDefaultValues(defaultValues),
-    ...paramsFinal,
-  };
+    let valueFinal = typeof value !== 'undefined'
+      ? value
+      : defaultValuesFinal[paramPath];
+
+    const normalizer = customNormalizersMap[paramPath];
+    valueFinal = normalizer ? normalizer(valueFinal) : valueFinal;
+
+    set(paramsFinal, paramPath, valueFinal);
+    return paramsFinal;
+  }, {});
 }
 
 
