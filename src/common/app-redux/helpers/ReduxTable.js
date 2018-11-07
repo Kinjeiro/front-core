@@ -147,6 +147,7 @@ export default class ReduxTable extends ReduxUni {
        * @param filters - полностью заменяется (чтобы можно было очистить)
        * @param forceUpdate
        * @param isReplaceLocation
+       * @param syncWithUrlParameters - синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
        * @return {function(*, *)}
        */
       actions.actionLoadRecords = (
@@ -155,6 +156,7 @@ export default class ReduxTable extends ReduxUni {
         filters = undefined,
         forceUpdate = false,
         isReplaceLocation = false,
+        syncWithUrlParameters = false,
       ) => {
         // return {
         //   types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
@@ -220,28 +222,30 @@ export default class ReduxTable extends ReduxUni {
               };
             }
 
-            const currentUrlQuery = parseUrlParameters(location.search);
-            // обновляем location только если что-то поменялось
-            if (
-              !deepEquals(newFilters, currentUrlQuery.filters || {})
-              || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))
-            ) {
-              // todo @ANKU @LOW - вынести этот механизм проверки наверх (или в другой редукс), чтобы никто не мог менять если ничего не изменилось
-              const queryFinal = {
-                ...currentUrlQuery,
-                // мержим мету
-                ...newMeta,
-                // заменяем фильтры польностью
-                filters: Object.keys(newFilters).length === 0 ? undefined : newFilters,
-              };
+            if (syncWithUrlParameters) {
+              const currentUrlQuery = parseUrlParameters(location.search);
+              // обновляем location только если что-то поменялось
+              if (
+                !deepEquals(newFilters, currentUrlQuery.filters || {})
+                || !deepEquals(getMeta(currentUrlQuery), getMeta(newMeta))
+              ) {
+                // todo @ANKU @LOW - вынести этот механизм проверки наверх (или в другой редукс), чтобы никто не мог менять если ничего не изменилось
+                const queryFinal = {
+                  ...currentUrlQuery,
+                  // мержим мету
+                  ...newMeta,
+                  // заменяем фильтры польностью
+                  filters: Object.keys(newFilters).length === 0 ? undefined : newFilters,
+                };
 
-              dispatch(
-                (isReplaceLocation ? replaceLocation : push)({
-                  // ...location,
-                  pathname: cutContextPath(location.pathname),
-                  search: `?${formatUrlParameters(queryFinal)}`,
-                }),
-              );
+                dispatch(
+                  (isReplaceLocation ? replaceLocation : push)({
+                    // ...location,
+                    pathname: cutContextPath(location.pathname),
+                    search: `?${formatUrlParameters(queryFinal)}`,
+                  }),
+                );
+              }
             }
 
             return dispatch({

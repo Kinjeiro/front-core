@@ -19,6 +19,7 @@ import {
   updateLocationSearch,
 } from '../../uri-utils';
 import { cutContextPath } from '../../../helpers/app-urls';
+import clientLogger from '../../../helpers/client-logger';
 
 import {
   getMeta,
@@ -55,6 +56,7 @@ const {
  * @param tableActions - actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect не передавать
  * @param useLoading - использовать лоадинг для первоначальной загрузки
  * @param urlFilterValueNormalizers - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
+ * @param syncWithUrlParameters - синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
  *
  * Возвращает компонент с доп пропертями:
  * - table - текущая данные таблицы
@@ -76,25 +78,35 @@ export default function reduxTableDecorator(
     tableActions,
     useLoading = true,
     urlFilterValueNormalizers,
+    syncWithUrlParameters = true,
   } = {},
 ) {
   return (ReactComponentClass) => {
     @connect(
       (globalState, props) => {
-        const filterNormalizers = urlFilterValueNormalizers
-          ? Object.keys(urlFilterValueNormalizers).reduce((result, filterParamName) => {
-            // eslint-disable-next-line no-param-reassign
-            result[`filters.${filterParamName}`] = urlFilterValueNormalizers[filterParamName];
-            return result;
-          }, {})
-          : undefined;
+        let query;
+        if (syncWithUrlParameters) {
+          const filterNormalizers = urlFilterValueNormalizers
+            ? Object.keys(urlFilterValueNormalizers).reduce((result, filterParamName) => {
+              // eslint-disable-next-line no-param-reassign
+              result[`filters.${filterParamName}`] = urlFilterValueNormalizers[filterParamName];
+              return result;
+            }, {})
+            : undefined;
+          query = parseUrlParameters(props.location.search, filterNormalizers);
+        }
 
-        const query = parseUrlParameters(props.location.search, filterNormalizers);
         const tableIdFinal = executeVariable(tableId, null, props);
+        const table = getTableInfo(globalState, tableIdFinal);
+
+        const projectInitMeta = executeVariable(initMeta, {}, props);
+        const projectInitFilters = executeVariable(initFilters, {}, props);
+
         return {
-          table: getTableInfo(globalState, tableIdFinal),
-          initMeta: getMeta(query, executeVariable(initMeta, {}, props)),
-          initFilters: merge({}, executeVariable(initFilters, {}, props), query.filters),
+          syncWithUrlParameters,
+          table,
+          initMeta: getMeta(query, projectInitMeta),
+          initFilters: query ? merge({}, projectInitFilters, query.filters) : projectInitFilters,
         };
       },
       {
@@ -111,6 +123,8 @@ export default function reduxTableDecorator(
         table: TABLE_PROP_TYPE,
         initMeta: META_PROP,
         initFilters: PropTypes.object,
+        syncWithUrlParameters: PropTypes.bool,
+
         actionModuleItemInit: PropTypes.func,
         actionModuleItemRemove: PropTypes.func,
         actionClearFilters: PropTypes.func,
@@ -127,6 +141,7 @@ export default function reduxTableDecorator(
           initFilters,
           actionModuleItemInit,
           actionLoadRecords,
+          syncWithUrlParameters,
           // actionClearFilters,
           // actionPushState,
         } = props;
@@ -147,8 +162,8 @@ export default function reduxTableDecorator(
 
         if (loadOnMount && actionLoadRecords) {
           // replace
-          actionLoadRecords(tableIdFinal, undefined, undefined, false, true);
-        } else {
+          actionLoadRecords(tableIdFinal, undefined, undefined, false, true, syncWithUrlParameters);
+        } else if (syncWithUrlParameters) {
           // если не загружаем, то вручную обновим урл
           this.updateUrl(initMeta, initFilters);
         }
@@ -159,6 +174,7 @@ export default function reduxTableDecorator(
           initFilters,
           // actionClearFilters,
           actionLoadRecords,
+          syncWithUrlParameters,
         } = newProps;
 
         const oldTableId = this.getTableId();
@@ -166,8 +182,9 @@ export default function reduxTableDecorator(
         if (newTableId !== oldTableId) {
           this.componentWillUnmount(this.props);
           // this.componentWillMount(newProps);
-        } else if (loadOnChange && actionLoadRecords) {
-          actionLoadRecords(newTableId, initMeta, initFilters);
+        } else if (loadOnChange && actionLoadRecords && syncWithUrlParameters) {
+          // если обновился урл (через updateUrl) - нужно обновиться загрузку
+          actionLoadRecords(newTableId, initMeta, initFilters, false, false, syncWithUrlParameters);
         }
       }
       componentWillUnmount(props = this.props) {
@@ -210,12 +227,20 @@ export default function reduxTableDecorator(
       // ======================================================
       @bind()
       handleUpdateTableMeta(newMeta, replace = false) {
-        // делаем через обновления урла, так как есть случаи когда tableId зависит от меты и фильтров, а если сразу запустить actionLoadRecords c новыми фильтрами то tableId еще не поменяется ибо урл еще не поменялся
-        return this.updateUrl(
-          replace
-            ? getMeta(newMeta)
-            : newMeta,
-        );
+        const {
+          actionLoadRecords,
+          syncWithUrlParameters,
+        } = this.props;
+
+        const newMetaFinal = replace
+          ? getMeta(newMeta)
+          : newMeta;
+
+        if (syncWithUrlParameters) {
+          // делаем через обновления урла, так как есть случаи когда tableId зависит от меты и фильтров, а если сразу запустить actionLoadRecords c новыми фильтрами то tableId еще не поменяется ибо урл еще не поменялся
+          return this.updateUrl(newMetaFinal);
+        }
+        return actionLoadRecords(this.getTableId(), newMetaFinal);
       }
 
       @bind()
@@ -224,17 +249,33 @@ export default function reduxTableDecorator(
           table: {
             filters,
           },
+          syncWithUrlParameters,
+          actionLoadRecords,
         } = this.props;
 
-        return this.updateUrl(
-          undefined,
-          replace
-            ? newFilters
-            : {
-              ...filters,
-              ...newFilters,
-            },
-        );
+        const newFiltersFinal = replace
+          ? newFilters
+          : {
+            ...filters,
+            ...newFilters,
+          };
+
+        if (syncWithUrlParameters) {
+          return this.updateUrl(undefined, newFiltersFinal);
+        }
+
+        return actionLoadRecords(this.getTableId(), undefined, newFiltersFinal);
+      }
+
+      @bind()
+      handleWrapActionLoadRecords(...args) {
+        clientLogger.error('@deprecated: Use "onUpdateTableFilters" or "onUpdateTableMeta" instead of "actionLoadRecords"');
+        return this.props.actionLoadRecords(...args);
+      }
+      @bind()
+      handleWrapActionClearFilters(...args) {
+        clientLogger.error('@deprecated: Use "onUpdateTableFilters" instead of "actionClearFilters"');
+        return this.props.actionClearFilters(...args);
       }
 
       // ======================================================
@@ -257,13 +298,18 @@ export default function reduxTableDecorator(
           );
         }
 
+        // убираем, ибо нужно использовать onUpdateTableFilters и onUpdateTableMeta вместо. Так чтобы не учитывать там всегда флаг синхронизации с урл параметрами
         return (
           <ReactComponentClass
             { ...this.props }
-            onUpdateTableFilters={ this.handleUpdateTableFilters }
-            onUpdateTableMeta={ this.handleUpdateTableMeta }
+
             tableId={ this.getTableId() }
             getTableId={ this.getTableId }
+
+            actionLoadRecords={ this.handleWrapActionLoadRecords }
+            actionClearFilters={ this.handleWrapActionClearFilters }
+            onUpdateTableFilters={ this.handleUpdateTableFilters }
+            onUpdateTableMeta={ this.handleUpdateTableMeta }
           />
         );
       }
