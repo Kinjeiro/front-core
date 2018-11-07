@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.5.9 | Documentation</title>
+  <title>@reagentum/front-core 1.5.10 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.5.9</code></div>
+          <div class='mb1'><code>1.5.10</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -2621,7 +2621,7 @@
 
   
 
-  <div class='pre p1 fill-light mt0'>actionLoadRecords(tableUuid: any, meta: any, filters: any, forceUpdate: any, isReplaceLocation: any): function (any, any)</div>
+  <div class='pre p1 fill-light mt0'>actionLoadRecords(tableUuid: any, meta: any, filters: any, forceUpdate: any, isReplaceLocation: any, syncWithUrlParameters: any): function (any, any)</div>
   
   
 
@@ -2674,6 +2674,15 @@
           <div>
             <span class='code bold'>isReplaceLocation</span> <code class='quiet'>(any)</code>
 	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>syncWithUrlParameters</span> <code class='quiet'>(any)</code>
+	    синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
+
           </div>
           
         </div>
@@ -8069,7 +8078,7 @@ m.tellAge(); // Mike is 12 years old.
 Автоматически инициализирует в redux store под tables свои данные и при выходе их очищает</p>
 
 
-  <div class='pre p1 fill-light mt0'>reduxTableDecorator(tableId: any, $1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, loadOnMount: any, loadOnChange: any, clearOnUnmount: any, initMeta: any, initFilters: any, tableActions: any, useLoading: any, urlFilterValueNormalizers: any)</div>
+  <div class='pre p1 fill-light mt0'>reduxTableDecorator(tableId: any, $1: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, loadOnMount: any, loadOnChange: any, clearOnUnmount: any, initMeta: any, initFilters: any, tableActions: any, useLoading: any, urlFilterValueNormalizers: any, syncWithUrlParameters: any)</div>
   
   
 
@@ -8190,6 +8199,16 @@ m.tellAge(); // Mike is 12 years old.
 
 
               
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.syncWithUrlParameters</span> <code class='quiet'>any</code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
             </tbody>
           </table>
           
@@ -8266,6 +8285,15 @@ m.tellAge(); // Mike is 12 years old.
 	    мапа 
 <filterName>
 : (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>syncWithUrlParameters</span> <code class='quiet'>(any)</code>
+	    синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
 <p>Возвращает компонент с доп пропертями:</p>
 <ul>
 <li>table - текущая данные таблицы</li>

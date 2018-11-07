@@ -293,6 +293,7 @@ Returns **any**
 -   `filters`  полностью заменяется (чтобы можно было очистить)
 -   `forceUpdate`  
 -   `isReplaceLocation`  
+-   `syncWithUrlParameters`  синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
 
 Returns **function (any, any)** 
 
@@ -1125,6 +1126,7 @@ Returns **({method, path, payload} | any)**
     -   `$1.tableActions`  
     -   `$1.useLoading`   (optional, default `true`)
     -   `$1.urlFilterValueNormalizers`  
+    -   `$1.syncWithUrlParameters`   (optional, default `true`)
 -   `loadOnMount`  запускать загрузку данных при маунте (componentWillMount)
 -   `loadOnChange`  если изменилась мета или фильтры - запускает загрузку в componentWillReceiveProps
 -   `clearOnUnmount`  очищать ли данные, когда компонент unmount (componentWillUnmount)
@@ -1132,7 +1134,8 @@ Returns **({method, path, payload} | any)**
 -   `initFilters`  (объект или функция от props) - начальный фильтры
 -   `tableActions`  actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect не передавать
 -   `useLoading`  использовать лоадинг для первоначальной загрузки
--   `urlFilterValueNormalizers`  мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значенийВозвращает компонент с доп пропертями:-   table - текущая данные таблицы
+-   `urlFilterValueNormalizers`  мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
+-   `syncWithUrlParameters`  синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)Возвращает компонент с доп пропертями:-   table - текущая данные таблицы
     -   tableId - id таблицы
     -   getTableId - (props = this.props) => {} id таблицы, удобно если он зависит от пропсов
     -   initMeta - начальная мета из options и урла
