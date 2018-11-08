@@ -6,7 +6,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import createStore from '../common/app-redux/create-store';
 import { initConfig } from '../common/client-config';
 
-import Root from '../client/root';
+import Root from '../client/Root';
 
 const PAGE_PATH = './server/plugins/pages/index';
 
