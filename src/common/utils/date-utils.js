@@ -116,6 +116,10 @@ export function getCurrentTime() {
   return parseToSystem(Date.now());
 }
 
+export function fromNow (date, format = 'days') {
+  return moment().diff(moment(date), format);
+}
+
 export function compareDate(dateA, dateB, withoutTime = true) {
   const momentDateA = normalizeDate(dateA);
   const filterParam = withoutTime ? 'day' : undefined;
