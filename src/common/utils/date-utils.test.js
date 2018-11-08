@@ -3,6 +3,7 @@ import moment from 'moment';
 import {
   parseDate,
   compareDate,
+  fromNow
 } from './date-utils';
 
 describe('date-utils', () => {
@@ -52,6 +53,12 @@ describe('date-utils', () => {
       const dateB = new Date();
 
       expect(compareDate(dateA, dateB)).to.equal(0);
+    });
+
+    it('should calculate time from now', () => {
+      const dateA = moment().subtract(1, 'days');
+
+      expect(fromNow(dateA)).to.equal(1);
     });
   });
 });
