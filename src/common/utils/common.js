@@ -41,17 +41,17 @@ export function generateId(uuidOptions = null, version = 'v1') {
   return uuid[version](uuidOptions);
 }
 
-export function getRandomInt(min = 0, max = Number.MAX_VALUE) {
-  return Math.floor(Math.random() * ((max - min) + 1)) + min;
+export function getRandomInt(minValue = 0, maxValue = Number.MAX_VALUE) {
+  return Math.floor(Math.random() * ((maxValue - minValue) + 1)) + minValue;
 }
 
-export function getRandomValue(min, max = null) {
-  if (max === null) {
-    return min;
+export function getRandomValue(minValue, maxValue = null) {
+  if (maxValue === null) {
+    return minValue;
   }
-  return min % 1 !== 0 || max % 1 !== 0
-    ? min + (Math.random() * (max - min))
-    : getRandomInt(min, max);
+  return minValue % 1 !== 0 || maxValue % 1 !== 0
+    ? minValue + (Math.random() * (maxValue - minValue))
+    : getRandomInt(minValue, maxValue);
 }
 
 export function dispersionValue(number, percentDispersion = 0) {
@@ -83,6 +83,7 @@ export function ceil(value) {
    at NodePath._getQueueContexts (H:\FrontCore_Components\node_modules\babel-traverse\lib\path\context.js:279:21)
    */
   // return Math.ceil(value);
+  // eslint-disable-next-line no-bitwise
   let result = ~~(value);
   if (value > result) {
     result += 1;
@@ -181,10 +182,10 @@ export function valueFromRange(inputValue, inputValueRanges, outputValueRanges =
   if (typeof inputValue !== 'undefined' && inputValue !== null) {
     // eslint-disable-next-line no-plusplus
     for (let position = 0; position < inputValueRanges.length - 1; position++) {
-      const min = inputValueRanges[position];
-      const max = inputValueRanges[position + 1];
+      const minValue = inputValueRanges[position];
+      const maxValue = inputValueRanges[position + 1];
       const isLast = position + 1 === inputValueRanges.length - 1;
-      if (min <= inputValue && (inputValue < max || (isLast && inputValue === max))) {
+      if (minValue <= inputValue && (inputValue < maxValue || (isLast && inputValue === maxValue))) {
         return outputValueRanges
           ? outputValueRanges[position]
           : inputValueRanges[position];
