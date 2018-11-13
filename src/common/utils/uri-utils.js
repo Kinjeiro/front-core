@@ -303,7 +303,7 @@ export function updateWindowLocationQueryParams(newQueryParams, ...args) {
 export function getModuleRoutePath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
   const prefix = moduleName ? modulesPrefixes[moduleName] : null;
 
-  if (typeof relativeLocation === 'object') {
+  if (relativeLocation && typeof relativeLocation === 'object') {
     // location object
     return {
       ...relativeLocation,
@@ -316,5 +316,7 @@ export function getModuleRoutePath(relativeLocation, moduleName = null, modulesP
   }
   return prefix
     ? joinPath(prefix, relativeLocation)
-    : joinPath(relativeLocation || undefined);
+    : relativeLocation
+      ? joinPath(relativeLocation)
+      : '/';
 }
