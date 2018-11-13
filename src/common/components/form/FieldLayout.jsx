@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 
 // import i18n from '../../utils/i18n';
 
-import './FieldLayout.css';
+import getComponents from '../../get-components';
+
+const { UnescapedHtml } = getComponents();
+
+require('./FieldLayout.css');
 
 export default class FieldLayout extends PureComponent {
   static propTypes = {
@@ -38,9 +42,10 @@ export default class FieldLayout extends PureComponent {
           </div>
           {
             textDescription && (
-              <div className="FieldLayout__description">
-                { textDescription }
-              </div>
+              <UnescapedHtml
+                className="FieldLayout__description"
+                html={ textDescription }
+              />
             )
           }
           {

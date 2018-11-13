@@ -49,7 +49,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('ReadMore', () => require('./components/ReadMore/ReadMore').default);
   COMPONENTS_BASE.replace('ThemeProvider', () => require('./components/ThemeProvider/ThemeProvider').default);
   COMPONENTS_BASE.replace('UniError', () => require('./components/UniError/UniError').default);
-  COMPONENTS_BASE.replace('UserAvatar', () => require('./containers/UserAvatar/UserAvatar').default);
+  COMPONENTS_BASE.replace('UnescapedHtml', () => require('./components/UnescapedHtml/UnescapedHtml').default);
 
   // ======================================================
   // FUTURE UI
@@ -68,6 +68,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('Button', () => require('./containers/CoreButton/CoreButton').default);
   COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
   COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
+  COMPONENTS_BASE.replace('UserAvatar', () => require('./containers/UserAvatar/UserAvatar').default);
 
   COMPONENTS_BASE.replace('CoreApp', () => require('./containers/CoreApp/CoreApp').default);
   COMPONENTS_BASE.replace('ErrorPage', () => require('./containers/ErrorPage/ErrorPage').default);
