@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Необходимо у себя в api проверить, что получение avatar \ publicInfo \ protectedInfo проходит через userId
 
 ### API Dependencies:
-    - auth-server@2.0.0
+    - auth-server@2.0.1
 
 ### Dependencies:
     
