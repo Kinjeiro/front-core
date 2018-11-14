@@ -242,8 +242,9 @@ Returns **any**
 
 **Parameters**
 
--   `username`  
+-   `userIdOrAliasId`  
 -   `key`  
+-   `userId`  
 
 ## createStatusesReducer
 
@@ -1697,7 +1698,7 @@ Returns **[Promise][176]&lt;any>**
 
 **Parameters**
 
--   `username`  
+-   `userIdOrAliasId`  
 -   `token`  нужен пользователь с ролью 'protector'
 
 Returns **any** 
