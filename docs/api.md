@@ -125,30 +125,30 @@
 -   [joinPathSimple][121]
 -   [joinUri][122]
 -   [getModuleRoutePath][123]
--   [SUB_MODULE_FACTORY][124]
-    -   [COMMON_SUB_MODULE_REGEXP][125]
-    -   [loadSubModules][126]
-    -   [createCommonSubModule][127]
-    -   [createServerSubModule][128]
--   [bind][129]
--   [DEFAULT_LOGGER_IDS][130]
--   [contextData][131]
--   [register][132]
--   [method][133]
--   [method][134]
--   [remoteJwt][135]
--   [onPreResponse][136]
--   [prepare-state][137]
--   [createServices][138]
--   [authUserService][139]
--   [createMockServices][140]
--   [ServiceAuthMock][141]
-    -   [authForgot][142]
-    -   [authResetPassword][143]
--   [ServiceAuth][144]
-    -   [authForgot][145]
-    -   [authResetPassword][146]
--   [getProtectedInfoByToken][147]
+-   [ServiceAuth][124]
+    -   [authForgot][125]
+    -   [authResetPassword][126]
+-   [ServiceAuthMock][127]
+    -   [authForgot][128]
+    -   [authResetPassword][129]
+-   [getProtectedInfoByToken][130]
+-   [getProtectedInfo][131]
+-   [SUB_MODULE_FACTORY][132]
+    -   [COMMON_SUB_MODULE_REGEXP][133]
+    -   [loadSubModules][134]
+    -   [createCommonSubModule][135]
+    -   [createServerSubModule][136]
+-   [bind][137]
+-   [DEFAULT_LOGGER_IDS][138]
+-   [contextData][139]
+-   [register][140]
+-   [method][141]
+-   [method][142]
+-   [remoteJwt][143]
+-   [onPreResponse][144]
+-   [prepare-state][145]
+-   [createServices][146]
+-   [createMockServices][147]
 -   [pluginServicesContext][148]
 -   [registerService][149]
 -   [createProxyWrapperCallback][150]
@@ -621,6 +621,7 @@ actionStatus
 -   getFullPath(location, moduleName)
 -   getRoutePath(location, moduleName)
 -   onGoTo(location, moduleName)
+-   onReplaceLocation(location, moduleName)
 -   match
 -   location
 -   moduleToRoutePrefixMap
@@ -1444,6 +1445,97 @@ Returns **any**
 
 Returns **any** 
 
+## ServiceAuth
+
+**Extends CoreService**
+
+Клиенсткая реализация протокола OAuth 2.0 Bearer
+
+**Parameters**
+
+-   `endpointServiceConfig`  
+-   `urls`  
+-   `options`  
+
+Returns **{authValidate, authLogin}** 
+
+### authForgot
+
+Протокол для @reagentum/auth-server@1.0.4
+
+**Parameters**
+
+-   `email`  
+-   `resetPasswordPageUrl`  
+-   `emailOptions`  
+
+Returns **any** 
+
+### authResetPassword
+
+Протокол для @reagentum/auth-server@1.0.4
+
+**Parameters**
+
+-   `resetPasswordToken`  
+-   `newPassword`  
+-   `emailOptions`  
+
+Returns **[Promise][176]&lt;any>** 
+
+## ServiceAuthMock
+
+**Extends ServiceAuth**
+
+Клиенсткая реализация протокола OAuth 2.0 Bearer
+
+**Parameters**
+
+-   `endpointServiceConfig`  
+
+Returns **{authValidate, authLogin}** 
+
+### authForgot
+
+Протокол для @reagentum/auth-server@1.0.4
+
+**Parameters**
+
+-   `email`  
+-   `resetPasswordPageUrl`  
+-   `emailOptions`  
+
+Returns **any** 
+
+### authResetPassword
+
+Протокол для @reagentum/auth-server@1.0.4
+
+**Parameters**
+
+-   `resetPasswordToken`  
+-   `newPassword`  
+-   `emailOptions`  
+
+Returns **[Promise][176]&lt;any>** 
+
+## getProtectedInfoByToken
+
+**Parameters**
+
+-   `userIdOrAliasId`  
+-   `token`  нужен пользователь с ролью 'protector'
+
+Returns **any** 
+
+## getProtectedInfo
+
+**Parameters**
+
+-   `userIdOrAliasId`  
+
+Returns **[Promise][176]&lt;\[`"userId"`, `"displayName"`, `"aliasId"`, `"description"`, `"username"`, `"firstName"`, `"lastName"`, `"middleName"`, `"email"`, `"phone"`, `"address"`]>** 
+
 ## SUB_MODULE_FACTORY
 
 Упрощенный модуль выглядит так:
@@ -1609,99 +1701,9 @@ Returns **{}**
 
 -   `endpointServiceConfigs`  
 
-## authUserService
-
-**Meta**
-
--   **deprecated**: используйте serviceAuth
-
-
 ## createMockServices
 
 Метод для создания сервисов
-
-## ServiceAuthMock
-
-**Extends ServiceAuth**
-
-Клиенсткая реализация протокола OAuth 2.0 Bearer
-
-**Parameters**
-
--   `endpointServiceConfig`  
-
-Returns **{authValidate, authLogin}** 
-
-### authForgot
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `email`  
--   `resetPasswordPageUrl`  
--   `emailOptions`  
-
-Returns **any** 
-
-### authResetPassword
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `resetPasswordToken`  
--   `newPassword`  
--   `emailOptions`  
-
-Returns **[Promise][176]&lt;any>** 
-
-## ServiceAuth
-
-**Extends CoreService**
-
-Клиенсткая реализация протокола OAuth 2.0 Bearer
-
-**Parameters**
-
--   `endpointServiceConfig`  
--   `urls`  
--   `options`  
-
-Returns **{authValidate, authLogin}** 
-
-### authForgot
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `email`  
--   `resetPasswordPageUrl`  
--   `emailOptions`  
-
-Returns **any** 
-
-### authResetPassword
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `resetPasswordToken`  
--   `newPassword`  
--   `emailOptions`  
-
-Returns **[Promise][176]&lt;any>** 
-
-## getProtectedInfoByToken
-
-**Parameters**
-
--   `userIdOrAliasId`  
--   `token`  нужен пользователь с ролью 'protector'
-
-Returns **any** 
 
 ## pluginServicesContext
 
@@ -2177,53 +2179,53 @@ Returns **any** Promise
 
 [123]: #getmoduleroutepath
 
-[124]: #sub_module_factory
+[124]: #serviceauth
 
-[125]: #common_sub_module_regexp
+[125]: #authforgot
 
-[126]: #loadsubmodules
+[126]: #authresetpassword
 
-[127]: #createcommonsubmodule
+[127]: #serviceauthmock
 
-[128]: #createserversubmodule
+[128]: #authforgot-1
 
-[129]: #bind
+[129]: #authresetpassword-1
 
-[130]: #default_logger_ids
+[130]: #getprotectedinfobytoken
 
-[131]: #contextdata
+[131]: #getprotectedinfo
 
-[132]: #register
+[132]: #sub_module_factory
 
-[133]: #method
+[133]: #common_sub_module_regexp
 
-[134]: #method-1
+[134]: #loadsubmodules
 
-[135]: #remotejwt
+[135]: #createcommonsubmodule
 
-[136]: #onpreresponse
+[136]: #createserversubmodule
 
-[137]: #prepare-state
+[137]: #bind
 
-[138]: #createservices
+[138]: #default_logger_ids
 
-[139]: #authuserservice
+[139]: #contextdata
 
-[140]: #createmockservices
+[140]: #register
 
-[141]: #serviceauthmock
+[141]: #method
 
-[142]: #authforgot
+[142]: #method-1
 
-[143]: #authresetpassword
+[143]: #remotejwt
 
-[144]: #serviceauth
+[144]: #onpreresponse
 
-[145]: #authforgot-1
+[145]: #prepare-state
 
-[146]: #authresetpassword-1
+[146]: #createservices
 
-[147]: #getprotectedinfobytoken
+[147]: #createmockservices
 
 [148]: #pluginservicescontext
 
