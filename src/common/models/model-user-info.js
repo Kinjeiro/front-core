@@ -28,33 +28,36 @@ import PropTypes from 'prop-types';
 
 // данные берутся из \src\stub\server\models\credentials.js
 export const USER_INFO_PROP_TYPE_MAP = {
-  // userId: PropTypes.string,
+  userId: PropTypes.string,
   username: PropTypes.string,
   userType: PropTypes.string,
+  email: PropTypes.string,
 
   firstName: PropTypes.string,
   middleName: PropTypes.string,
   lastName: PropTypes.string,
   displayName: PropTypes.string,
-  email: PropTypes.string,
   phone: PropTypes.string,
   address: PropTypes.string,
   // profileImageURI: PropTypes.string,
+  aliasId: PropTypes.string,
 
   provider: PropTypes.string,
+  providerScopes: PropTypes.arrayOf(PropTypes.string),
+  providerData: PropTypes.object,
 
   created: PropTypes.string,
   updated: PropTypes.string,
 
   roles: PropTypes.arrayOf(PropTypes.string),
   permissions: PropTypes.arrayOf(PropTypes.string),
-  scope: PropTypes.string,
+  // scope: PropTypes.string,
 
   contextData: PropTypes.object,
 };
 
 export const USER_INFO_DEFAULT_VALUES = {
-  // userId: undefined,
+  userId: undefined,
   username: undefined,
   userType: undefined,
 
@@ -65,16 +68,19 @@ export const USER_INFO_DEFAULT_VALUES = {
   email: undefined,
   phone: undefined,
   address: undefined,
+  aliasId: undefined,
   // profileImageURI: undefined,
 
   provider: undefined,
+  providerScopes: [],
+  providerData: {},
 
   created: undefined,
   updated: undefined,
 
   roles: [],
   permissions: [],
-  scope: undefined,
+  // scope: undefined,
 
   contextData: {},
 };

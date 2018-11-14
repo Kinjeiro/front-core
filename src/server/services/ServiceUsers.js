@@ -25,13 +25,13 @@ export default class ServiceUsers extends CoreService {
       editUser: '/users',
       deleteUser: '/users',
 
-      editUserByAdmin: '/users/{username}',
-      deleteUserByAdmin: '/users/{username}',
+      editUserByAdmin: '/users/{userId}',
+      deleteUserByAdmin: '/users/{userId}',
       deleteAllByAdmin: '/users/all',
 
-      getAvatar: '/users/avatar/{username}',
-      getPublicInfo: '/users/public/{username}',
-      getProtectedInfo: '/users/protected/{username}',
+      getAvatar: '/users/avatar/{userIdOrAliasId}',
+      getPublicInfo: '/users/public/{userIdOrAliasId}',
+      getProtectedInfo: '/users/protected/{userIdOrAliasId}',
       ...urls,
     };
   }
@@ -58,12 +58,12 @@ export default class ServiceUsers extends CoreService {
   }
 
 
-  async getAvatar(username, key = undefined) {
-    logger.debug('ServiceUsers', 'getAvatar', username, key);
+  async getAvatar(userIdOrAliasId, key = undefined) {
+    logger.debug('ServiceUsers', 'getAvatar', userIdOrAliasId, key);
     const response = await this.sendWithAuth(
       this.urls.getAvatar,
       {
-        username,
+        userIdOrAliasId,
         key,
       },
       {
@@ -80,12 +80,12 @@ export default class ServiceUsers extends CoreService {
     };
   }
 
-  async getPublicInfo(username) {
-    logger.log('ServiceUsers', 'getPublicInfo', username);
+  async getPublicInfo(userIdOrAliasId) {
+    logger.log('ServiceUsers', 'getPublicInfo', userIdOrAliasId);
     return this.sendWithAuth(
       this.urls.getPublicInfo,
       {
-        username,
+        userIdOrAliasId,
       },
     );
   }
@@ -93,15 +93,15 @@ export default class ServiceUsers extends CoreService {
   /**
    *
    * @param token - нужен пользователь с ролью 'protector'
-   * @param username
+   * @param userIdOrAliasId
    * @return {*}
    */
-  async getProtectedInfoByToken(username, token = undefined) {
-    logger.log('ServiceUsers', 'getProtectedInfoByToken', username);
+  async getProtectedInfoByToken(userIdOrAliasId, token = undefined) {
+    logger.log('ServiceUsers', 'getProtectedInfoByToken', userIdOrAliasId);
     return this.sendWithAuth(
       this.urls.getProtectedInfo,
       {
-        username,
+        userIdOrAliasId,
       },
       {
         token,
@@ -109,8 +109,8 @@ export default class ServiceUsers extends CoreService {
     );
   }
 
-  async getProtectedInfo(username) {
-    logger.log('ServiceUsers', 'getProtectedInfo', username);
+  async getProtectedInfo(userIdOrAliasId) {
+    logger.log('ServiceUsers', 'getProtectedInfo', userIdOrAliasId);
     const serviceAuth = this.getService('serviceAuth');
     const {
       username: protector,
@@ -127,16 +127,16 @@ export default class ServiceUsers extends CoreService {
 
     const { access_token } = await serviceAuth.authLogin(protector, password);
 
-    return this.getProtectedInfoByToken(username, access_token);
+    return this.getProtectedInfoByToken(userIdOrAliasId, access_token);
   }
 
 
-  async editUserByAdmin(username, userData, token = undefined) {
-    logger.log('ServiceUsers', 'editUserByAdmin', username);
+  async editUserByAdmin(userId, userData, token = undefined) {
+    logger.log('ServiceUsers', 'editUserByAdmin', userId);
     return this.sendWithAuth(
       this.urls.editUserByAdmin,
       {
-        username,
+        userId,
         ...userData,
       },
       {
@@ -145,12 +145,12 @@ export default class ServiceUsers extends CoreService {
       },
     );
   }
-  async deleteUserByAdmin(username, token = undefined) {
-    logger.log('ServiceUsers', 'deleteUserByAdmin', username);
+  async deleteUserByAdmin(userId, token = undefined) {
+    logger.log('ServiceUsers', 'deleteUserByAdmin', userId);
     return this.sendWithAuth(
       this.urls.deleteUserByAdmin,
       {
-        username,
+        userId,
       },
       {
         method: 'DELETE',

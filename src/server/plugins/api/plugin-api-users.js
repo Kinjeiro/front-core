@@ -26,12 +26,12 @@ export default function createApiPlugins() {
       API_CONFIGS.avatar,
       async (requestData, request, reply) => {
         const { key } = requestData;
-        const { username } = request.params;
-        logger.debug('avatar for', username);
+        const { userId } = request.params;
+        logger.debug('avatar for', userId);
 
         let result;
         try {
-          result = await request.services.serviceUsers.getAvatar(username, key);
+          result = await request.services.serviceUsers.getAvatar(userId, key);
         } catch (error) {
           if (error.uniCode !== 404) {
             logger.error(error);

@@ -184,13 +184,15 @@ export default class StubPage extends Component {
   renderTestChangeAvatar() {
     const {
       userInfo: {
+        userId,
         username,
         // displayName,
       },
       actionChangeUserAvatar,
     } = this.props;
 
-    const otherUser = username === 'ivanovI' ? 'korolevaU' : 'ivanovI';
+    // by aliasId
+    const otherUserId = username === 'ivanovI' ? 'korolevaU' : 'ivanovI';
 
     return (
       <Segment
@@ -199,19 +201,17 @@ export default class StubPage extends Component {
         <div>
           <h3>{ username }</h3>
           <UserAvatar
-            username={ username }
+            userId={ userId }
           />
         </div>
         <div>
-          <h3>{ otherUser }</h3>
+          <h3>{ otherUserId }</h3>
           <UserAvatar
-            username={ otherUser }
+            userId={ otherUserId }
           />
         </div>
         <Attachment
-          onChange={ (event) => {
-            return actionChangeUserAvatar(event.target.files[0]);
-          } }
+          onChange={ (event) => actionChangeUserAvatar(event.target.files[0]) }
         />
       </Segment>
     );
@@ -228,6 +228,7 @@ export default class StubPage extends Component {
         whitelist,
       },
       userInfo: {
+        userId,
         username,
         displayName,
         // profileImageURI,
@@ -282,7 +283,7 @@ export default class StubPage extends Component {
             <p>{ i18n('core:pages.StubPage.currentUserTitle') }:</p>
             <div>
               <img
-                src={ getUserAvatarUrl(username) }
+                src={ getUserAvatarUrl(userId) }
                 alt={ username || displayName }
               />
             </div>
@@ -398,6 +399,12 @@ export default class StubPage extends Component {
                 required: true,
                 validate: (value) => (value !== 'test' ? 'Кастомная ошибка' : null),
                 onChange: () => {},
+              },
+              {
+                name: 'string',
+                label: 'Required text',
+                type: Form.FIELD_TYPES.STRING,
+                required: true,
               },
               {
                 name: 'numeric',

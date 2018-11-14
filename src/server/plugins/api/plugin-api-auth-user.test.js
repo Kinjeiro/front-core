@@ -9,14 +9,17 @@ import { proceedApiRequest } from '../../../test/server/test-server-utils';
 
 import serverConfig from '../../server-config';
 
+import { ivanovI } from '../../services/mocks/data-users';
+
 import { API } from './plugin-api-auth-user';
 
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
 const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
 
 const TEST_USER = {
-  username: 'ivanovI',
-  password: '123456',
+  userId: ivanovI.userId,
+  username: ivanovI.username,
+  password: ivanovI.password,
 };
 
 function skipIntegrationTest(result) {

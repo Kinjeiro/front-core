@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { generateId } from '../../../common/utils/common';
+import {
+  getRandomInt,
+  generateId,
+} from '../../../common/utils/common';
 
 import logger from '../../helpers/server-logger';
 import { AUTH_TYPES } from '../../utils/auth-utils';
@@ -9,31 +12,13 @@ import ServiceAuth from '../ServiceAuth';
 import {
   USERS,
   TOKENS,
+  getUser,
+  getToken,
+  getUserByToken,
 } from './data-users';
 
-function getUserInner(username) {
-  // return serverConfig.common.features.auth.emailAsLogin
-  //   ? objectValues(USERS).find(({ email }) => email === username)
-  //   : USERS[username];
-  return USERS[username];
-}
 
-function getUser(username, password) {
-  const user = getUserInner(username);
 
-  if (user && user.password === password) {
-    return {
-      ...user,
-      password: null,
-    };
-  }
-  return null;
-}
-
-function getUserByToken(token) {
-  const resultUsername = Object.keys(TOKENS).filter((username) => TOKENS[username] === token);
-  return resultUsername && USERS[resultUsername];
-}
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
@@ -42,10 +27,15 @@ function getUserByToken(token) {
  */
 export default class ServiceAuthMock extends ServiceAuth {
   async authSignup(userData) {
-    logger.log('ServiceAuthMock', 'authSignup', userData);
-    USERS[userData.username] = userData;
-    TOKENS[userData.username] = generateId();
-    return userData;
+    // eslint-disable-next-line no-param-reassign
+    const userDataFinal = {
+      userId: `${getRandomInt()}`,
+      ...userData,
+    };
+    logger.log('ServiceAuthMock', 'authSignup', userDataFinal);
+    USERS[userDataFinal.userId] = userDataFinal;
+    TOKENS[userDataFinal.userId] = generateId();
+    return userDataFinal;
   }
 
   /*
@@ -57,7 +47,7 @@ export default class ServiceAuthMock extends ServiceAuth {
   async authLogin(username, password) {
     logger.log('ServiceAuthMock', 'authLogin', username);
     const user = getUser(username, password);
-    const token = user ? TOKENS[user.username] : null;
+    const token = user ? getToken(user.userId) : null;
     if (token) {
       return {
         access_token: token,

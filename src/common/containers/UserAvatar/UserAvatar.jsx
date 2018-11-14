@@ -23,7 +23,7 @@ export default class UserAvatar extends PureComponent {
     // ======================================================
     // PROPS
     // ======================================================
-    username: PropTypes.string,
+    userId: PropTypes.string,
     className: PropTypes.string,
     avatarKey: PropTypes.any,
 
@@ -50,14 +50,14 @@ export default class UserAvatar extends PureComponent {
   // ======================================================
   render() {
     const {
-      username,
+      userId,
       className,
       avatarKey,
       currentUserId,
       currentAvatarKey,
     } = this.props;
 
-    const avatarKeyFinal = avatarKey || (username === currentUserId ? currentAvatarKey : null);
+    const avatarKeyFinal = avatarKey || (userId === currentUserId ? currentAvatarKey : null);
 
     /*
     Основная проблема: как подсунуть дефолтную картинку, если аватарки нет
@@ -76,7 +76,7 @@ export default class UserAvatar extends PureComponent {
      - не растягивается если нет изображение after на 100%
     */
 
-    return (
+    return (userId || currentUserId) && (
       <div
         ref={ (domElement) => this.domElement = domElement }
         key={ avatarKeyFinal }
@@ -84,8 +84,8 @@ export default class UserAvatar extends PureComponent {
       >
         <img
           className="UserAvatar__image"
-          src={ getUserAvatarUrl(username || currentUserId, avatarKeyFinal) }
-          alt={ `${username}'s avatar` }
+          src={ getUserAvatarUrl(userId || currentUserId, avatarKeyFinal) }
+          alt={ `${userId}'s avatar` }
           onError={ this.handle404Image }
         />
       </div>

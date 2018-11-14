@@ -25,10 +25,8 @@ export function apiRefreshLogin() {
   return sendApiRequest(API_CONFIGS.refreshLogin);
 }
 
-export function apiLogout(username) {
-  return sendApiRequest(API_CONFIGS.logout, {
-    username,
-  });
+export function apiLogout() {
+  return sendApiRequest(API_CONFIGS.logout);
 }
 
 export function apiForgotPassword(email, resetPasswordPageUrl, emailOptions) {

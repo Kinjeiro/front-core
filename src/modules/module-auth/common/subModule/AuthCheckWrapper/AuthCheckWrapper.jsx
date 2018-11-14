@@ -83,7 +83,7 @@ export default class AuthCheckWrapper extends Component {
       actionThrowNotAuthError,
     } = this.props;
 
-    const isNotAuth = checkAuth && !userInfo.username;
+    const isNotAuth = checkAuth && !userInfo.userId;
     const isNotPermission = permissions && permissions.length > 0 && !includes(userInfo.permissions, permissions);
 
     if (isNotAuth || isNotPermission) {

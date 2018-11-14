@@ -22,14 +22,14 @@ export function getUserInfo(globalState) {
 
 export function getUser(globalState) {
   const userInfo = getUserInfo(globalState);
-  return userInfo && userInfo.username
+  return userInfo && userInfo.userId
     ? userInfo
     : null;
 }
 export function getUserId(globalState) {
   const userInfo = getUserInfo(globalState);
-  return userInfo && userInfo.username
-    ? userInfo.username
+  return userInfo && userInfo.userId
+    ? userInfo.userId
     : null;
 }
 

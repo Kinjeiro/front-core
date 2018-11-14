@@ -68,6 +68,7 @@ export default class Signup extends Component {
     onEnterTypeChange: PropTypes.func,
     onModalCancel: PropTypes.func,
     emailAsLogin: PropTypes.bool,
+    aliasIdAsUsername: PropTypes.bool,
     formProps: PropTypes.object,
 
     // ======================================================
@@ -88,6 +89,7 @@ export default class Signup extends Component {
 
   static defaultProps = {
     emailAsLogin: clientConfig.common.features.auth.emailAsLogin,
+    aliasIdAsUsername: clientConfig.common.features.auth.aliasIdAsUsername,
   };
 
   // ======================================================
@@ -107,6 +109,7 @@ export default class Signup extends Component {
       form,
       actionSignup,
       emailAsLogin,
+      aliasIdAsUsername,
       onEnterTypeChange,
       onSubmit,
     } = this.props;
@@ -118,6 +121,7 @@ export default class Signup extends Component {
     await actionSignup({
       ...form,
       username: emailAsLogin ? email : username,
+      aliasId: !emailAsLogin && aliasIdAsUsername ? username : undefined,
     });
 
     await onEnterTypeChange(null);

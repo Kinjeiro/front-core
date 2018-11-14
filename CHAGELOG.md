@@ -4,8 +4,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Меню
+* [[last version][1.6.0 - ] (2018.11.14)](#1_6)
+* [[1.5.0 - 1.5.14] (2018.09.17)](#1_5)
+* [[1.4.0 - 1.4.32] (2018.07.28)](#1_4)
+* [[1.3.0 - 1.3.38] (2018.05.16)](#1_3)
+* [[1.2.24] - 2018-05-15](#1_2_24)
+* [[1.2.0] - 2018-03-01](#1_2)
+* [[1.1.0] - 2018-02-27](#1_1)
+* [[1.0.0] - 2017.12.26](#1_0)
+* [[0.2.16] - 2017.11.17](#0_2)
 
-## [last version][1.5.0 - ] (2018.09.17)
+
+## [last version][1.6.0 - ] (2018.11.14)
+### !!! Breaking changes:
+1. Адаптация под обновленное апи auth-server@2.0.0
+- у любого пользователя главным идентификатором теперь является не username, а userId
+Это связано с кейсами, когда регистрируется пользователь, но другим пользователям нельзя знать ни его email ни username (login)
+Поэтому показывается только userId и displayName, либо если специально задано aliasId
+- теперь пользовательские данные доступны либо по userId, либо по aliasId
+- при логине ищется сразу по нескольким местам userId / aliasId / username / email
+Необходимо у себя в api проверить, что получение avatar \ publicInfo \ protectedInfo проходит через userId
+
+### API Dependencies:
+    - auth-server@2.0.0
+
+### Dependencies:
+    
+### Dev Dependencies:
+
+### Features:
+1. Новое апи для работы с пользователем auth-server
+- у любого пользователя главным идентификатором теперь является не username, а userId
+Это связано с кейсами, когда регистрируется пользователь, но другим пользователям нельзя знать ни его email ни username (login)
+Поэтому показывается только userId и displayName, либо если специально задано aliasId
+- теперь пользовательские данные доступны либо по userId, либо по aliasId
+- при логине ищется сразу по нескольким местам userId / aliasId / username / email
+
+
+
+### Commits:
+    
+    
+    
+
+## [1.5.0 - 1.5.14] (2018.09.17)
 ### !!! Breaking changes:
 1. Изменилась система создания раутов для CoreClientRunner
 - убрать ProjectClientRunner::getRoutes
@@ -169,8 +212,69 @@ export default SubModuleFactory.createCommonSubModule({
   },
 ```
 
-
 ### Commits:
+    - chore(*) patch version: 1.5.13
+    - bug(redux): - !!! важная бага - не подгружался начальный state на страницу (пользователя не было) - случайно закомител строчку ранее
+    - chore(old): - удалил старый код
+    - bug(utils, uri-utils): undefined в урле, если не было returnUrl
+    - bug(utils): небольшие переименования и чистка переменных
+    - feat(CB, Field): новый компонент UnescapedHtml (обертка над html выводом) 
+        \\ У поля description отображается как unescape html
+    - chore(*) patch version: 1.5.12
+    - Merge branch 'v1.5.11' into 'master' Andrey 08.11.2018 10:13 
+    - chore(*) patch version: 1.5.11 Alexander Penkin 08.11.2018 9:54 
+    - feat(date & pluralize) tests Alexander Penkin 08.11.2018 9:53 
+    - feat(ReduxTable): склонятор числительных и функция для сравнения даты от текущего момента Alexander Penkin 08.11.2018 9:25 
+    - chore(*) patch version: 1.5.10
+    - feat(ReduxTable): добавил настройку для декоратора syncWithUrlParameters - по умолчанию true - синхронизирует state в redux и url, но делается scroll to top и не подходит для load more и нескольких таблиц на странице 
+        \\ actionLoadRecords и actionClearFilters при использовании декоратора лучше заменить на onUpdateTableMeta и onUpdateTableFilters
+    - chore(*) patch version: 1.5.9
+    - chore(karma): coverage for statements - 50%
+    - feat(ReduxTable): redux-table urlFilterValueNormalizers - для нормализации параметров из урла (чтобы все в стрингах не было) 
+        \\ parseUrlParameters - третим параметром мапу нормалайзеров принимает
+    - bug(ReduxTable): actionClearFilters не отрабатывал из-за того, что не синхронизирован был с урлом
+    - feat(redux): переместил фиксанутый redux-logger к нам в репу, ибо нужна скомпилированная версия (cherry picked from commit cb85bc4)
+    - feat(redux): переместил фиксанутый redux-logger к нам в репу, ибо нужна скомпилированная версия
+    - chore(*) patch version: 1.5.8
+    - bug(ie): - ie игнорирует мета тег X-UA-Compatible если он не в начале
+    - chore(*) patch version: 1.5.7
+    - feat(Link, ContextModulesProvider): - добавил метод для роутов (без контекст паса) getRoutePath
+    - bug(server, path): - __dirname и __filename неправильный на unix - добавил метод path-utils::dirnameNormalize для корректировки
+    - chore(*) patch version: 1.5.6
+    - bug(utils, app-urls): - небольшие доработки getModuleFullPath
+    - feat(module): - добавил к common модулю reduxSelectors и reduxActions
+    - chore(*) patch version: 1.5.5
+    - chore(generator): - добавил информацию о нашем генераторе проектов и модулей https://github.com/kinjeiro/generator-front-core
+    - bug(minimized): - babel-minify иммет багу - не может минимизировать файлы в которых есть Math.ceil и Math.min - пришлось писать аналоги: min, ceil
+    - chore(minimized): - добавил возможность создать минимизированнную копию библиотеки npm run minimized -> положит все в папку minimizedPackage
+    - chore(modules): - isTurnOff, isSystem для модулей
+    - bug(auth): - не работала регистрация и не было перехода после регистрации
+    - chore(*) patch version: 1.5.4
+    - bug(auth, i18n): - бага с локализацией на странице авторизации
+    - chore(build): - язык по умолчанию русский 
+        \\ добавил методы inCoreSrc и для файлов в модулях getModulesDirectories, inModules, getI18nModules, getModulesStatic
+    - chore(*) patch version: 1.5.3
+    - feat(modules, hot): - добавил для расширения loadCommonSubModulesContexts (вместо loadCommonSubModules) чтобы hot reload работал (при попытке вынести это в AbstractClientRunner hor reload перестает на второй раз работать)
+    - chore(*) patch version: 1.5.2
+    - feat(test): - добавил тестирование модулей
+    - feat(utils, i18n-info): - упростил по умолчанию метод смены локализации apiI18NChangeLanguage
+    - feat(modules, i18n, build-scripts): - добавил в модули поддержку i18n - необходимо добавить static\i18n\en\module-my-module.js для локализаций и i18n с namespace module-my-module 
+        \\ модули теперь могут и не содержать getRoutes 
+        \\ обновил react-hot-reload@ 
+        \\ пофиксил багу когда модульные файлы во второй раз не подцеплялись 
+        \\ переименования ради единообразия inCoreProject -> inCoreRoot, inCoreProjectSrcRelative -> inCoreSrcRelative 
+        \\ \build-scripts\utils\path-utils добавил inModules, getProjectDir, inProject, isUseFromCore, inCoreRoot, inCoreSrcRelative 
+        \\ бага в авторизации, когда неправильно путь до регистрации проставлялся
+    - feat(modules, contextModules): - добавил moduleToRoutePrefixMap в декораторе decorator-context-modules
+    - bug(modules, auth): - не учитывался префикс модуля auth для перехода на Signup
+    - feat(modules, route): - роуты могут быть как компонентом так и функцией
+    - chore(*) patch version: 1.5.1
+    - feat(test): - поддержка require.context в коде для mocha
+    - bug(redux, moduleToRoutePrefixMap): - moduleToRoutePrefixMap не попадал в редукс, так как описка в методе была
+    - !!! feat(subModules): - breaking changes: добавлена возможность модулей через ClientRunner::getCommonSubModules и modules\SubModuleFactory 
+        \\ убрать ProjectClientRunner::getRoutes, у себя переопредилить ProjectClientRunner::getCommonSubModules \ ::getProjectLayoutComponent \ ::getIndexRoute
+    - !!! feat(subModules): - breaking changes: добавлена возможность модулей через ClientRunner::getCommonSubModules и modules\SubModuleFactory 
+        \\ убрать ProjectClientRunner::getRoutes, у себя переопредилить ProjectClientRunner::getCommonSubModules \ ::getProjectLayoutComponent \ ::getIndexRoute
     - !!! feat(utils, uri-utils): - breaking changes! переместил getModuleFullPath в helpers/app-urls так как нужен полный путь учитывающий contextPath из настроек 
     - chore(*) minor version: 1.5.0
     
@@ -431,7 +535,7 @@ import { getUserAvatarUrl } from '@reagentum/front-core/lib/common/app-redux/red
     
  
 
-## [last version][1.3.0 - 1.3.38] (2018.07.28)
+## [1.3.0 - 1.3.38] (2018.05.16)
 ### !!! Breaking changes:
 1. Теперь конфиги клиента подгружаются асинхронно. Это необходимо, если код используется как статические ассеты на другом сервере (к примеру, на weblogic).
 Необходимо свои src\client\index.js переписать на асинхронный режим

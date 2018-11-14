@@ -9,17 +9,17 @@ export const API_CONFIGS = {
   editUser: api(`${API_PREFIX}/`, 'PUT'),
   deleteUser: api(`${API_PREFIX}/`, 'DELETE'),
 
-  avatar: api(`${API_PREFIX}/avatar/{username}`, 'GET'),
+  avatar: api(`${API_PREFIX}/avatar/{userIdOrAliasId}`, 'GET'),
 };
 
 /**
  * синхронный метод, дает только урл, по которому вернется картинка
  *
- * @param username
+ * @param userId
  * @param key
  */
-export function apiGetUserAvatarUrl(username, key = null) {
-  return `${API_CONFIGS.avatar.path.replace(/{username}/gi, username)}\
+export function apiGetUserAvatarUrl(userIdOrAliasId, key = null) {
+  return `${API_CONFIGS.avatar.path.replace(/{userIdOrAliasId}/gi, userIdOrAliasId)}\
   ${key ? `?key=${encodeURI(key)}` : ''}`;
 }
 export function apiEditUser(userData) {

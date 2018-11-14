@@ -11,6 +11,7 @@ import ServiceUsers from '../ServiceUsers';
 
 import {
   USERS,
+  getUserInner,
 } from './data-users';
 
 export const PUBLIC_TO_ALL_ATTRS = [
@@ -53,34 +54,34 @@ export default class ServiceMockUsers extends ServiceUsers {
     delete USERS[user.username];
   }
 
-  async getAvatar(username, key = undefined) {
-    logger.debug('ServiceMockUsers', 'getAvatar', username);
-    const user = USERS[username];
+  async getAvatar(userIdOrAliasId, key = undefined) {
+    logger.debug('ServiceMockUsers', 'getAvatar', userIdOrAliasId);
+    const user = getUserInner(userIdOrAliasId);
     return base64ToBuffer(user.profileImageURI);
   }
 
-  async getPublicInfo(username) {
-    logger.log('ServiceMockUsers', 'getPublicInfo', username);
-    return pick(USERS[username], PUBLIC_TO_ALL_ATTRS);
+  async getPublicInfo(userIdOrAliasId) {
+    logger.log('ServiceMockUsers', 'getPublicInfo', userIdOrAliasId);
+    return pick(getUserInner(userIdOrAliasId), PUBLIC_TO_ALL_ATTRS);
   }
 
-  async getProtectedInfoByToken(username, token = this.getUserToken()) {
-    logger.log('ServiceMockUsers', 'getProtectedInfoByToken', username);
-    return pick(USERS[username], PROTECTED_ATTRS);
+  async getProtectedInfoByToken(userIdOrAliasId, token = this.getUserToken()) {
+    logger.log('ServiceMockUsers', 'getProtectedInfoByToken', userIdOrAliasId);
+    return pick(getUserInner(userIdOrAliasId), PROTECTED_ATTRS);
   }
 
-  async getProtectedInfo(username) {
-    logger.log('ServiceMockUsers', 'getProtectedInfo', username);
-    return this.getProtectedInfoByToken(username);
+  async getProtectedInfo(userIdOrAliasId) {
+    logger.log('ServiceMockUsers', 'getProtectedInfo', userIdOrAliasId);
+    return this.getProtectedInfoByToken(userIdOrAliasId);
   }
 
 
-  async editUserByAdmin(username, userData) {
-    logger.log('ServiceMockUsers', 'editUserByAdmin', username);
+  async editUserByAdmin(userId, userData) {
+    logger.log('ServiceMockUsers', 'editUserByAdmin', userId);
     throw new Error('Not implemented');
   }
-  async deleteUserByAdmin(username) {
-    logger.log('ServiceMockUsers', 'deleteUserByAdmin', username);
+  async deleteUserByAdmin(userId) {
+    logger.log('ServiceMockUsers', 'deleteUserByAdmin', userId);
     throw new Error('Not implemented');
   }
   async deleteAllByAdmin() {

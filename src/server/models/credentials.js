@@ -4,7 +4,9 @@ export default class CredentialsModel {
   // практически соответствует модели \src\common\models\user-info.js
   /*
   {
+    userId,
     username,
+    email,
     permissions
   }
   */

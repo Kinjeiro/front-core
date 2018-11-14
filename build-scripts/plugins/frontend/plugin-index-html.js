@@ -28,6 +28,7 @@ function pluginIndexHtml(webpackConfig, context) {
 
   // @guide - пример авторизациооных данных с сервера
   // const userInfo = {
+  //   userId: '1111sd',
   //   username: 'ivanov',
   //   userType: null,
   //

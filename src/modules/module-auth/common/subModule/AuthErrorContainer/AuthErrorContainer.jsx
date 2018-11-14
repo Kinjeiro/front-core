@@ -34,7 +34,7 @@ const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
 @connect(
   (globalState) => ({
     lastUniError: getLastUniError(globalState),
-    username: getUserId(globalState),
+    userId: getUserId(globalState),
   }),
   {
     ...reduxLastUniError.actions,
@@ -53,7 +53,7 @@ export default class AuthErrorContainer extends Component {
     // CONNECT
     // ======================================================
     lastUniError: PropTypes.object,
-    username: PropTypes.string,
+    userId: PropTypes.string,
 
     actionClearLastError: PropTypes.func,
     actionGoTo: PropTypes.func,
@@ -165,14 +165,14 @@ export default class AuthErrorContainer extends Component {
   render() {
     const {
       children,
-      username,
+      userId,
       // actionClearLastError,
     } = this.props;
 
     return (
       <div
         className="AuthErrorContainer"
-        key={ username }
+        key={ userId }
       >
         { this.renderModalMessage() }
 
