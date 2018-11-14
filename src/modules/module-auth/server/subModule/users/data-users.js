@@ -1,6 +1,5 @@
-import { TEST_PERMISSION } from '../../../common/constants/permissions';
-import { objectValues } from '../../../common/utils/common';
-import { USER_INFO_DEFAULT_VALUES } from '../../../common/models/model-user-info';
+import { TEST_PERMISSION } from '../../../../../common/constants/permissions';
+import { USER_INFO_DEFAULT_VALUES } from '../../../../../common/models/model-user-info';
 
 // import serverConfig from '../../server-config';
 
@@ -29,7 +28,7 @@ export function createTestUser(
 }
 
 export const ivanovI = createTestUser(
-  '11TplPdS',
+  '11AaaAaa',
   'ivanovI',
   'Ivanov I. I.',
   {
@@ -42,7 +41,7 @@ export const ivanovI = createTestUser(
 );
 
 export const korolevaU = createTestUser(
-  '22TplPdS',
+  '22BbbBbb',
   'korolevaU',
   'Koroleva U. A.',
   {
@@ -73,36 +72,3 @@ export const TOKENS = {
   [ivanovI.userId]: 'fakeIvanovIToken',
   [korolevaU.userId]: 'fakeKorolevaUToken',
 };
-
-export function getUserInner(userId) {
-  // return serverConfig.common.features.auth.emailAsLogin
-  //   ? objectValues(USERS).find(({ email }) => email === username)
-  //   : USERS[username];
-  let user = USERS[userId];
-  if (!user) {
-    user = objectValues(USERS).find(({ username, email }) => username === userId || email === userId);
-  }
-  return user;
-}
-
-export function getUser(userId, password) {
-  const user = getUserInner(userId);
-
-  if (user && user.password === password) {
-    return {
-      ...user,
-      password: null,
-    };
-  }
-  return null;
-}
-
-export function getToken(userId) {
-  return TOKENS[userId];
-}
-
-export function getUserByToken(token) {
-  const resultUserId = Object.keys(TOKENS).filter((userId) => TOKENS[userId] === token);
-  return resultUserId && getUserInner(resultUserId);
-}
-

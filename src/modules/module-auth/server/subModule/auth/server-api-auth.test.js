@@ -1,17 +1,17 @@
 import {
   getRequestCookieFromResponse,
   getCookiesValues,
-} from '../../utils/hapi-utils';
+} from '../../../../../server/utils/hapi-utils';
 
-import { getBoolEnv } from '../../utils/env-utils';
+import { getBoolEnv } from '../../../../../server/utils/env-utils';
 
-import { proceedApiRequest } from '../../../test/server/test-server-utils';
+import { proceedApiRequest } from '../../../../../test/server/test-server-utils';
 
-import serverConfig from '../../server-config';
+import serverConfig from '../../../../../server/server-config';
 
-import { ivanovI } from '../../services/mocks/data-users';
+import { ivanovI } from '../users/data-users';
 
-import { API } from './plugin-api-auth-user';
+import { API } from './server-api-auth';
 
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
 const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;

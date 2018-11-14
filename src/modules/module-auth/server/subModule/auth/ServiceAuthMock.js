@@ -2,23 +2,18 @@
 import {
   getRandomInt,
   generateId,
-} from '../../../common/utils/common';
+  objectValues,
+} from '../../../../../common/utils/common';
 
-import logger from '../../helpers/server-logger';
-import { AUTH_TYPES } from '../../utils/auth-utils';
+import logger from '../../../../../server/helpers/server-logger';
+import { AUTH_TYPES } from '../../../../../server/utils/auth-utils';
 
-import ServiceAuth from '../ServiceAuth';
+import ServiceAuth from './ServiceAuth';
 
 import {
   USERS,
   TOKENS,
-  getUser,
-  getToken,
-  getUserByToken,
-} from './data-users';
-
-
-
+} from '../users/data-users';
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
@@ -26,6 +21,45 @@ import {
  * @returns {{ authValidate, authLogin }}
  */
 export default class ServiceAuthMock extends ServiceAuth {
+  getUsers() {
+    return USERS;
+  }
+  getTokens() {
+    return TOKENS;
+  }
+
+  getUserInner(userId) {
+    // return serverConfig.common.features.auth.emailAsLogin
+    //   ? objectValues(USERS).find(({ email }) => email === username)
+    //   : USERS[username];
+    let user = this.getUsers()[userId];
+    if (!user) {
+      user = objectValues(this.getUsers()).find(({ username, email }) => username === userId || email === userId);
+    }
+    return user;
+  }
+  getUser(userId, password) {
+    const user = this.getUserInner(userId);
+    if (user && user.password === password) {
+      return {
+        ...user,
+        password: null,
+      };
+    }
+    return null;
+  }
+  getToken(userId) {
+    return this.getTokens()[userId];
+  }
+  getUserByToken(token) {
+    const resultUserId = Object.keys(this.getTokens()).filter((userId) => this.getTokens()[userId] === token);
+    return resultUserId && this.getUserInner(resultUserId);
+  }
+
+
+
+
+
   async authSignup(userData) {
     // eslint-disable-next-line no-param-reassign
     const userDataFinal = {
@@ -33,8 +67,8 @@ export default class ServiceAuthMock extends ServiceAuth {
       ...userData,
     };
     logger.log('ServiceAuthMock', 'authSignup', userDataFinal);
-    USERS[userDataFinal.userId] = userDataFinal;
-    TOKENS[userDataFinal.userId] = generateId();
+    this.getUsers()[userDataFinal.userId] = userDataFinal;
+    this.getTokens()[userDataFinal.userId] = generateId();
     return userDataFinal;
   }
 
@@ -46,8 +80,8 @@ export default class ServiceAuthMock extends ServiceAuth {
    */
   async authLogin(username, password) {
     logger.log('ServiceAuthMock', 'authLogin', username);
-    const user = getUser(username, password);
-    const token = user ? getToken(user.userId) : null;
+    const user = this.getUser(username, password);
+    const token = user ? this.getToken(user.userId) : null;
     if (token) {
       return {
         access_token: token,
@@ -78,7 +112,7 @@ export default class ServiceAuthMock extends ServiceAuth {
 
   async authValidate(token, authType = AUTH_TYPES.BEARER) {
     logger.log('ServiceAuthMock', 'authValidate', token);
-    return getUserByToken(token);
+    return this.getUserByToken(token);
   }
 
   async authLogout(token, authType = AUTH_TYPES.BEARER) {

@@ -2,44 +2,20 @@
 import pick from 'lodash/pick';
 
 // import { aggregation } from '../../../common/utils/common';
+import {
+  PUBLIC_USER_INFO_PROP_TYPE_MAP,
+  PROTECTED_USER_INFO_PROP_TYPE_MAP,
+  PUBLIC_EDITABLE_ATTRS,
+} from '../../../../../common/models/model-user-info';
 
-import logger from '../../helpers/server-logger';
-import { base64ToBuffer } from '../../utils/file-utils';
+import logger from '../../../../../server/helpers/server-logger';
+import { base64ToBuffer } from '../../../../../server/utils/file-utils';
 
 // import CoreMockService from '../utils/CoreMockService';
-import ServiceUsers from '../ServiceUsers';
+import ServiceUsers from './ServiceUsers';
 
-import {
-  USERS,
-  getUserInner,
-} from './data-users';
-
-export const PUBLIC_TO_ALL_ATTRS = [
-  'username',
-  'displayName',
-  // 'profileImageURI',
-];
-export const PROTECTED_ATTRS = [
-  ...PUBLIC_TO_ALL_ATTRS,
-  'firstName',
-  'lastName',
-  'middleName',
-  'email',
-  'phone',
-  'address',
-];
-
-export const PUBLIC_EDITABLE_ATTRS = [
-  'firstName',
-  'lastName',
-  'middleName',
-  'displayName',
-  'email',
-  'phone',
-  'address',
-  'profileImageURI',
-  'contextData',
-];
+export const PUBLIC_TO_ALL_ATTRS = Object.keys(PUBLIC_USER_INFO_PROP_TYPE_MAP);
+export const PROTECTED_ATTRS = Object.keys(PROTECTED_USER_INFO_PROP_TYPE_MAP);
 
 export default class ServiceMockUsers extends ServiceUsers {
   async editUser(newData) {
@@ -51,23 +27,23 @@ export default class ServiceMockUsers extends ServiceUsers {
   async deleteUser() {
     logger.debug('ServiceMockUsers', 'deleteUser');
     const user = await this.getService('serviceAuth').authValidate(this.getUserToken());
-    delete USERS[user.username];
+    delete this.getService('serviceAuth').getUsers()[user.username];
   }
 
   async getAvatar(userIdOrAliasId, key = undefined) {
     logger.debug('ServiceMockUsers', 'getAvatar', userIdOrAliasId);
-    const user = getUserInner(userIdOrAliasId);
+    const user = this.getService('serviceAuth').getUserInner(userIdOrAliasId);
     return base64ToBuffer(user.profileImageURI);
   }
 
   async getPublicInfo(userIdOrAliasId) {
     logger.log('ServiceMockUsers', 'getPublicInfo', userIdOrAliasId);
-    return pick(getUserInner(userIdOrAliasId), PUBLIC_TO_ALL_ATTRS);
+    return pick(this.getService('serviceAuth').getUserInner(userIdOrAliasId), PUBLIC_TO_ALL_ATTRS);
   }
 
   async getProtectedInfoByToken(userIdOrAliasId, token = this.getUserToken()) {
     logger.log('ServiceMockUsers', 'getProtectedInfoByToken', userIdOrAliasId);
-    return pick(getUserInner(userIdOrAliasId), PROTECTED_ATTRS);
+    return pick(this.getService('serviceAuth').getUserInner(userIdOrAliasId), PROTECTED_ATTRS);
   }
 
   async getProtectedInfo(userIdOrAliasId) {

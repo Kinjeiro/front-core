@@ -1,7 +1,7 @@
-import logger from '../helpers/server-logger';
-import serverConfig from '../server-config';
+import logger from '../../../../../server/helpers/server-logger';
+import serverConfig from '../../../../../server/server-config';
 
-import CoreService from './utils/CoreService';
+import CoreService from '../../../../../server/services/utils/CoreService';
 
 export default class ServiceUsers extends CoreService {
   urls = {};
@@ -109,6 +109,22 @@ export default class ServiceUsers extends CoreService {
     );
   }
 
+  /**
+   * @param userIdOrAliasId
+   * @return {Promise.<[
+     'userId',
+     'displayName',
+     'aliasId',
+     'description',
+     'username',
+     'firstName',
+     'lastName',
+     'middleName',
+     'email',
+     'phone',
+     'address',
+   ]>}
+   */
   async getProtectedInfo(userIdOrAliasId) {
     logger.log('ServiceUsers', 'getProtectedInfo', userIdOrAliasId);
     const serviceAuth = this.getService('serviceAuth');

@@ -1,15 +1,15 @@
 /* eslint-disable camelcase */
-import { API_CONFIGS } from '../../../common/api/api-auth';
+import { API_CONFIGS } from '../../../../../common/api/api-auth';
 
-import serverConfig from '../../server-config';
-import apiPluginFactory from '../../utils/api-plugin-factory';
-import logger from '../../helpers/server-logger';
+import serverConfig from '../../../../../server/server-config';
+import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
+import logger from '../../../../../server/helpers/server-logger';
 import {
   setAuthCookies,
   getToken,
   getRefreshToken,
   clearAuthCookie,
-} from '../../utils/auth-utils';
+} from '../../../../../server/utils/auth-utils';
 
 export const API = API_CONFIGS;
 
@@ -31,7 +31,7 @@ async function login(username, password, serviceAuth, reply) {
   );
 }
 
-export default function createApiPlugins(services/* , strategies*/) {
+export default function createApiPlugins() {
   const plugins = [];
 
   if (serverConfig.common.features.auth.allowSignup) {
@@ -142,7 +142,7 @@ export default function createApiPlugins(services/* , strategies*/) {
           } = await request.services.serviceAuth.authResetPassword(resetPasswordToken, newPassword, emailOptions);
 
           logger.log(`-- done for user "${username}". Now login`);
-          return login(username, newPassword, services, reply);
+          return login(username, newPassword, request.services.serviceAuth, reply);
         },
         {
           routeConfig: {

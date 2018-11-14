@@ -1,18 +1,18 @@
-import i18n from '../../common/utils/i18n-utils';
+import i18n from '../../../../../common/utils/i18n-utils';
 import {
   parseToUniError,
   ThrowableUniError,
-} from '../../common/models/uni-error';
+} from '../../../../../common/models/uni-error';
 
 import {
   AUTH_TYPES,
   getHeadersByAuthType,
-} from '../utils/auth-utils';
-import { sendEndpointMethodRequest } from '../utils/send-server-request';
+} from '../../../../../server/utils/auth-utils';
+import { sendEndpointMethodRequest } from '../../../../../server/utils/send-server-request';
 
-import serverConfig from '../server-config';
+import serverConfig from '../../../../../server/server-config';
 
-import CoreService from './utils/CoreService';
+import CoreService from '../../../../../server/services/utils/CoreService';
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer

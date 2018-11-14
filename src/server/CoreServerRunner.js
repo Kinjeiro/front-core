@@ -43,8 +43,6 @@ import pluginsRequestUser from './plugins/plugin-request-user';
 // plugin api
 import pluginApiHealthmonitor from './plugins/api/healthmonitor';
 import pluginsApiTest from './plugins/api/plugin-api-test';
-import pluginsApiAuthUser from './plugins/api/plugin-api-auth-user';
-import pluginsApiUsers from './plugins/api/plugin-api-users';
 
 import AbstractServerRunner from './AbstractServerRunner';
 
@@ -221,8 +219,6 @@ export default class CoreServerRunner extends AbstractServerRunner {
       // ======================================================
       pluginApiHealthmonitor,
       pluginsApiTest,
-      ...pluginsApiAuthUser(services, strategies),
-      ...pluginsApiUsers(services, strategies),
     );
 
     if (PROXY_ASSETS) {
