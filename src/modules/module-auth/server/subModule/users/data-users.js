@@ -1,6 +1,8 @@
 import { TEST_PERMISSION } from '../../../../../common/constants/permissions';
 import { USER_INFO_DEFAULT_VALUES } from '../../../../../common/models/model-user-info';
 
+import serverConfig from '../../../../../server/server-config';
+
 // import serverConfig from '../../server-config';
 
 export function createTestUser(
@@ -22,13 +24,14 @@ export function createTestUser(
     firstName: 'Test',
     middleName: 'Testovich',
     lastName: 'Testov',
+    computedDisplayName: displayName || otherProps.aliasId || userId,
 
     ...otherProps,
   };
 }
 
 export const ivanovI = createTestUser(
-  '11AaaAaa',
+  serverConfig.common.features.auth.mockUsers.ivanovIUserId,
   'ivanovI',
   'Ivanov I. I.',
   {
@@ -41,7 +44,7 @@ export const ivanovI = createTestUser(
 );
 
 export const korolevaU = createTestUser(
-  '22BbbBbb',
+  serverConfig.common.features.auth.mockUsers.korolevaUUserId,
   'korolevaU',
   'Koroleva U. A.',
   {

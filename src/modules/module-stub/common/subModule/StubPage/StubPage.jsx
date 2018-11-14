@@ -5,6 +5,8 @@ import bind from 'lodash-decorators/bind';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
+import clientConfig from '../../../../../common/client-config';
+
 // ======================================================
 // UTILS
 // ======================================================
@@ -158,9 +160,9 @@ export default class StubPage extends Component {
   @bind()
   handleChangeUser() {
     this.props.actionChangeUser(
-      this.props.userInfo.username === 'ivanovI'
-        ? 'korolevaU'
-        : 'ivanovI',
+      this.props.userInfo.userId === clientConfig.common.features.auth.mochUsers.ivanovIUserId
+        ? clientConfig.common.features.auth.mochUsers.korolevaUUserId
+        : clientConfig.common.features.auth.mochUsers.ivanovIUserId,
       '123456',
     );
   }
@@ -185,21 +187,24 @@ export default class StubPage extends Component {
     const {
       userInfo: {
         userId,
-        username,
+        // username,
         // displayName,
+        computedDisplayName,
       },
       actionChangeUserAvatar,
     } = this.props;
 
     // by aliasId
-    const otherUserId = username === 'ivanovI' ? 'korolevaU' : 'ivanovI';
+    const otherUserId = userId === clientConfig.common.features.auth.mochUsers.ivanovIUserId
+      ? clientConfig.common.features.auth.mochUsers.korolevaUUserId
+      : clientConfig.common.features.auth.mochUsers.ivanovIUserId;
 
     return (
       <Segment
         label="Test avatars"
       >
         <div>
-          <h3>{ username }</h3>
+          <h3>{ computedDisplayName }</h3>
           <UserAvatar
             userId={ userId }
           />
