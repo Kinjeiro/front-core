@@ -1,13 +1,23 @@
 import glob from 'glob';
 
-import { inSrc } from '../../build-scripts/utils/path-utils';
+import {
+  inSrc,
+  inModules,
+} from '../../build-scripts/utils/path-utils';
 
 // ======================================================
 // Tests Importer
 // ======================================================
-const testFiles = glob.sync('/**/*.test.js', {
-  root: inSrc('server'),
-});
+const testFiles = [
+  ...glob.sync('/**/*.test.js', {
+    root: inSrc('server'),
+  }),
+  ...inModules('/*/server/**/*.test.js'),
+];
+
+console.warn('ANKU , testFiles', testFiles);
+
+
 testFiles.forEach((testFile) => require(testFile));
 // or mocha --require test/test-runner.js /src/server/**/*.test.js
 
