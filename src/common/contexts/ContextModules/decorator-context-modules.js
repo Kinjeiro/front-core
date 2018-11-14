@@ -7,6 +7,7 @@ import createContextDecorator from '../../utils/decorators/utils/create-context-
     - getFullPath(location, moduleName)
     - getRoutePath(location, moduleName)
     - onGoTo(location, moduleName)
+    - onReplaceLocation(location, moduleName)
     - match
     - location
     - moduleToRoutePrefixMap

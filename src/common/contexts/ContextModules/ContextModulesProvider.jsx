@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { push } from 'react-router-redux';
+import {
+  push,
+  replace as replaceLocation,
+} from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
 import {
@@ -20,7 +23,10 @@ import { actions as modulesActions } from '../../app-redux/reducers/app/redux-mo
 const ContextModules = React.createContext({
   getFullPath: null,
   getRoutePath: null,
-  goTo: null,
+  onGoTo: null,
+  onReplaceLocation: null,
+  location: null,
+  moduleToRoutePrefixMap: {},
 });
 
 export const ContextModulesConsumer = ContextModules.Consumer;
@@ -32,6 +38,7 @@ export const ContextModulesConsumer = ContextModules.Consumer;
   {
     ...modulesActions,
     actionGoTo: push,
+    actionReplaceLocation: replaceLocation,
   },
 )
 export default class ContextModulesProvider extends Component {
@@ -54,6 +61,7 @@ export default class ContextModulesProvider extends Component {
     // ======================================================
     actionInitModulesRoutePrefixes: PropTypes.func,
     actionGoTo: PropTypes.func,
+    actionReplaceLocation: PropTypes.func,
   };
 
   static defaultProps = {
@@ -102,6 +110,14 @@ export default class ContextModulesProvider extends Component {
     // роутинг нужно делать без контекст паса
     return actionGoTo(this.getRoutePath(relativeLocation, moduleName));
   }
+  @bind()
+  onReplaceLocation(relativeLocation, moduleName = null) {
+    const {
+      actionReplaceLocation,
+    } = this.props;
+    // роутинг нужно делать без контекст паса
+    return actionReplaceLocation(this.getRoutePath(relativeLocation, moduleName));
+  }
 
   // ======================================================
   // HANDLERS
@@ -130,6 +146,7 @@ export default class ContextModulesProvider extends Component {
           getFullPath: this.getFullPath,
           getRoutePath: this.getRoutePath,
           onGoTo: this.onGoTo,
+          onReplaceLocation: this.onReplaceLocation,
           match,
           location,
           moduleToRoutePrefixMap,
