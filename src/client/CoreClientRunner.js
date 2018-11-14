@@ -119,6 +119,12 @@ export default class CoreClientRunner extends AbstractClientRunner {
       }
     };
   }
+
+  getInitialState() {
+    // данные преходящие с серверного рендеринга, смотри \src\server\plugins\pages\index.html.ejs
+    return getStateFromPage();
+  }
+
   //
   // hotReloadListeners() {
   //   super.hotReloadListeners();
@@ -138,8 +144,4 @@ export default class CoreClientRunner extends AbstractClientRunner {
   //   module.hot.accept('../common/api', this.reloadAll);
   // }
   //
-  // getInitialState() {
-  //   // данные преходящие с серверного рендеринга, смотри \src\server\plugins\pages\index.html.ejs
-  //   return getStateFromPage();
-  // }
 }
