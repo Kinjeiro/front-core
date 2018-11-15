@@ -15,9 +15,6 @@ const testFiles = [
   ...inModules('/*/server/**/*.test.js'),
 ];
 
-console.warn('ANKU , testFiles', testFiles);
-
-
 testFiles.forEach((testFile) => require(testFile));
 // or mocha --require test/test-runner.js /src/server/**/*.test.js
 

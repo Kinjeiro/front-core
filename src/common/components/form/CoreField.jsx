@@ -467,6 +467,8 @@ export default class CoreField extends PureComponent {
       readOnly,
       disabled,
       required: propsRequired,
+      defaultValue,
+      multiple,
       // render,
     } = this.props;
     const {
@@ -496,6 +498,8 @@ export default class CoreField extends PureComponent {
       name,
       errors,
       touched,
+      defaultValue,
+      multiple,
       ...controlProps,
       placeholder: textPlaceholder,
       title: textHint,
