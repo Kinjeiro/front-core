@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import pick from 'lodash/pick';
 
-// import { aggregation } from '../../../common/utils/common';
+import { objectValues } from '../../../../../common/utils/common';
 import {
   PUBLIC_USER_INFO_PROP_TYPE_MAP,
   PROTECTED_USER_INFO_PROP_TYPE_MAP,
@@ -22,6 +22,22 @@ export default class ServiceMockUsers extends ServiceUsers {
     logger.debug('ServiceMockUsers', 'editUser');
     const user = await this.getService('serviceAuth').authValidate(this.getUserToken());
     Object.apply(user, pick(newData, PUBLIC_EDITABLE_ATTRS));
+  }
+  async changeUserPassword(newPassword, oldPassword) {
+    logger.debug('ServiceMockUsers', 'changeUserPassword');
+    const user = await this.getService('serviceAuth').authValidate(this.getUserToken());
+    if (user.password === oldPassword) {
+      Object.apply(user, {
+        password: newPassword,
+      });
+    } else {
+      throw new Error('Неверный старый пароль');
+    }
+  }
+  async checkUnique(field, value) {
+    logger.debug('ServiceMockUsers', 'checkUnique');
+    return objectValues(this.getService('serviceAuth').getUsers())
+      .every((user) => user[field] !== value);
   }
 
   async deleteUser() {

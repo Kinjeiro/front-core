@@ -8,6 +8,8 @@ export const API_PREFIX = 'users';
 export const API_CONFIGS = {
   editUser: api(`${API_PREFIX}/`, 'PUT'),
   deleteUser: api(`${API_PREFIX}/`, 'DELETE'),
+  changePassword: api(`${API_PREFIX}/changePassword`, 'PUT'),
+  checkUnique: api(`${API_PREFIX}/checkUnique`, 'GET'),
 
   avatar: api(`${API_PREFIX}/avatar/{userIdOrAliasId}`, 'GET'),
 };
@@ -55,6 +57,18 @@ export async function apiChangeUserAvatar(file) {
     return support;
   });
 }
+export function apiChangeUserPassword(newPassword, oldPassword) {
+  return sendApiRequest(API_CONFIGS.changePassword, {
+    newPassword,
+    oldPassword,
+  });
+}
+export function apiCheckUnique(field, value) {
+  return sendApiRequest(API_CONFIGS.checkUnique, {
+    field,
+    value,
+  });
+}
 export function apiDeleteUser() {
   return sendApiRequest(API_CONFIGS.deleteUser);
 }
@@ -63,5 +77,6 @@ export default {
   apiGetUserAvatarUrl,
 
   apiEditUser,
+  apiChangeUserPassword,
   apiDeleteUser,
 };

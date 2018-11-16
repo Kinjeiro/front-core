@@ -23,6 +23,28 @@ export default function createApiPlugins() {
       },
     ),
     apiPluginFactory(
+      API_CONFIGS.changePassword,
+      async (userData, request, reply) => {
+        logger.debug('changePassword: ', userData);
+        const {
+          newPassword,
+          oldPassword,
+        } = userData;
+        return reply(request.services.serviceUsers.changeUserPassword(newPassword, oldPassword));
+      },
+    ),
+    apiPluginFactory(
+      API_CONFIGS.checkUnique,
+      async (userData, request, reply) => {
+        logger.debug('checkUnique: ', userData);
+        const {
+          field,
+          value,
+        } = userData;
+        return reply(request.services.serviceUsers.checkUnique(field, value));
+      },
+    ),
+    apiPluginFactory(
       API_CONFIGS.avatar,
       async (requestData, request, reply) => {
         const { key } = requestData;

@@ -23,7 +23,9 @@ export default class ServiceUsers extends CoreService {
     // - [DELETE] /api/users/all - удаление всех пользователей админом
 
       editUser: '/users',
+      changeUserPassword: '/users/changePassword',
       deleteUser: '/users',
+      checkUnique: '/unique',
 
       editUserByAdmin: '/users/{userId}',
       deleteUserByAdmin: '/users/{userId}',
@@ -41,6 +43,29 @@ export default class ServiceUsers extends CoreService {
     return this.sendWithAuth(
       this.urls.editUser,
       userData,
+      {
+        method: 'PUT',
+      },
+    );
+  }
+  async checkUnique(field, value) {
+    logger.debug('ServiceUsers', 'checkUnique');
+    return this.sendWithAuth(
+      this.urls.checkUnique,
+      {
+        field,
+        value,
+      },
+    );
+  }
+  async changeUserPassword(newPassword, oldPassword) {
+    logger.debug('ServiceUsers', 'changeUserPassword');
+    return this.sendWithAuth(
+      this.urls.changeUserPassword,
+      {
+        newPassword,
+        oldPassword,
+      },
       {
         method: 'PUT',
       },
