@@ -203,6 +203,7 @@ export default class CoreForm extends Component {
       i18nFieldPrefix,
       onChangeField,
       firstFocus,
+      formData,
     } = this.props;
 
     let labelFinal = label || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.label`, {}, '', ''));
@@ -227,7 +228,7 @@ export default class CoreForm extends Component {
               : field.controlProps
           }
           controlRef={ this.controlRef }
-          value={ value }
+          value={ typeof value === 'undefined' ? formData[name] : value }
           key={ name }
           className={ `${this.bem('field')} ${className || ''}` }
           label={ labelFinal }
