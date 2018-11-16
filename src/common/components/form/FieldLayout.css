@@ -38,6 +38,7 @@
 
   &__description {
     font-size: 0.7em;
+    line-height: 1.3em;
   }
 
   &__errorLabel {

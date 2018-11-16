@@ -145,7 +145,7 @@ export default class CoreField extends PureComponent {
     }
   }
 
-  static validate(value, props = {}, domRef = null) {
+  static async validate(value, props = {}, domRef = null) {
     const {
       name,
       required: propsRequired,
@@ -158,7 +158,7 @@ export default class CoreField extends PureComponent {
       multiple,
     } = props;
 
-    const customValidateErrors = executeVariable(validate, [], value, props);
+    const customValidateErrors = await executeVariable(validate, [], value, props);
     if (customValidateErrors === true) {
       return [];
     }
@@ -215,7 +215,7 @@ export default class CoreField extends PureComponent {
       }
     }
 
-    return errors;
+    return Promise.all(errors);
   }
 
   emitChanging(handlerPromise) {
@@ -303,19 +303,21 @@ export default class CoreField extends PureComponent {
         context,
       );
 
-      const errors = CoreField.validate(value, this.props, elementDom);
-      // todo @ANKU @LOW - promise не учитывается
-      this.setState({
-        lastValue: value,
-        errors,
-        warnings: [],
-      });
-      if (elementDom && !elementDom.validationMessage) {
-        // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
-        elementDom.setCustomValidity(errors.length ? errors[0] : '');
-      }
+      const errorPromise = CoreField.validate(value, this.props, elementDom)
+        .then((errors) => {
+          // todo @ANKU @LOW - promise не учитывается
+          this.setState({
+            lastValue: value,
+            errors,
+            warnings: [],
+          });
+          if (elementDom && !elementDom.validationMessage) {
+            // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
+            elementDom.setCustomValidity(errors.length ? errors[0] : '');
+          }
+        });
 
-      return this.emitChanging(promiseChange);
+      return this.emitChanging(Promise.all(promiseChange, errorPromise));
     }
     return promiseChange;
   }
@@ -363,7 +365,7 @@ export default class CoreField extends PureComponent {
   }
 
   @bind()
-  handleBlur(...args) {
+  async handleBlur(...args) {
     const {
       controlProps: {
         onBlur,
@@ -371,11 +373,15 @@ export default class CoreField extends PureComponent {
       value,
     } = this.props;
 
-    this.setState({
-      touched: true,
-      errors: CoreField.validate(value, this.props, this.elementDom),
-    });
-    return onBlur && onBlur(...args);
+    const errorPromise = CoreField.validate(value, this.props, this.elementDom)
+      .then((errors) => {
+        this.setState({
+          touched: true,
+          errors,
+        });
+        return onBlur && onBlur(...args);
+      });
+    return this.emitChanging(errorPromise);
   }
 
   @bind()
