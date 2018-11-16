@@ -1,4 +1,8 @@
 const config = require('config');
+const {
+  extendDeep,
+  loadFileConfigs
+} = require('config/lib/util');
 
 // /* eslint-disable global-require,import/no-dynamic-require */
 // const fs = require('fs');
@@ -185,6 +189,8 @@ function getFullConfig() {
   return config;
 }
 
+
+
 module.exports = {
   nodeEnv: getNodeEnv(),
   // getNodeEnv,
@@ -193,5 +199,7 @@ module.exports = {
   // getNodeConfig,
   // getConfigFromDir,
   // getParentConfigs,
-  getFullConfig
+  getFullConfig,
+  extendDeep,
+  loadFileConfigs
 };
