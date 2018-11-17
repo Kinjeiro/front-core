@@ -34,7 +34,7 @@ import
   }
 from '../common/app-redux/create-store';
 
-import COMPONENTS_BASE_CORE from '../common/components/ComponentsBase';
+import { createComponentBase } from '../common/components/ComponentsBase';
 
 import './AbstractClientRunner.css';
 
@@ -49,6 +49,8 @@ export default class AbstractClientRunner {
   store;
   history;
   routes;
+
+  componentsBase = null;
 
   /**
    * Мапа options
@@ -79,7 +81,7 @@ export default class AbstractClientRunner {
   }
 
   getComponents() {
-    return COMPONENTS_BASE_CORE;
+    return this.componentsBase;
   }
 
 
@@ -178,6 +180,7 @@ export default class AbstractClientRunner {
   initAllComponents(COMPONENTS_BASE) {
     this.initComponents(COMPONENTS_BASE);
     this.initSubModulesComponents(COMPONENTS_BASE);
+    this.componentsBase = COMPONENTS_BASE;
     return COMPONENTS_BASE;
   }
 
@@ -220,7 +223,7 @@ export default class AbstractClientRunner {
     // COMPONENTS
     // ======================================================
     // должны инициализироваться до роутев
-    this.initAllComponents(COMPONENTS_BASE_CORE);
+    this.initAllComponents(createComponentBase());
 
     // ======================================================
     // CREATE STORE + HISTORY + ROUTES
@@ -358,7 +361,7 @@ export default class AbstractClientRunner {
   @bind()
   reloadUi() {
     this.commonSubModules = null;
-    this.initAllComponents(COMPONENTS_BASE_CORE);
+    this.initAllComponents(createComponentBase());
     this.routes = this.getRoutes(this.store);
     this.renderDOM(true);
   }
