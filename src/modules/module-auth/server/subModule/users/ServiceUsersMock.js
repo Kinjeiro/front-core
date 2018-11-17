@@ -7,6 +7,7 @@ import {
   PROTECTED_USER_INFO_PROP_TYPE_MAP,
   PUBLIC_EDITABLE_ATTRS,
 } from '../../../../../common/models/model-user-info';
+import { ThrowableUniError } from '../../../../../common/models/uni-error';
 
 import logger from '../../../../../server/helpers/server-logger';
 import { base64ToBuffer } from '../../../../../server/utils/file-utils';
@@ -49,6 +50,9 @@ export default class ServiceMockUsers extends ServiceUsers {
   async getAvatar(userIdOrAliasId, key = undefined) {
     logger.debug('ServiceMockUsers', 'getAvatar', userIdOrAliasId);
     const user = this.getService('serviceAuth').getUserInner(userIdOrAliasId);
+    if (!user || !user.profileImageURI) {
+      throw new ThrowableUniError({ errorCode: 404 });
+    }
     return base64ToBuffer(user.profileImageURI);
   }
 
