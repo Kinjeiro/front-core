@@ -9,13 +9,29 @@ function pluginOptimizeProdVendors(webpackConfig, {
   const splitVendorCss = true;
 
   /*
-    // todo @ANKU @CRITICAL @BUG_OUT @ExtractTextPlugin - бага в том, что не сохраняет порядок css файлов
+   // todo @ANKU @CRITICAL @BUG_OUT @ExtractTextPlugin - бага в том, что не сохраняет порядок css файлов
 
-    Пофиксили только для webpack@3.5.0
-     https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/200
-     https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/548#issuecomment-313991243
-     https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/581#issuecomment-318968988
-  */
+   Пофиксили только для webpack@3.5.0
+   https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/200
+   https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/548#issuecomment-313991243
+   https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/581#issuecomment-318968988
+   */
+  // webpackConfig.optimization = {
+  //   runtimeChunk: 'single',
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'all'
+  //       }
+  //     }
+  //   }
+  // };
+  //
+  // webpackConfig.plugins.push(
+  //   new webpack.HashedModuleIdsPlugin()
+  // );
 
   webpackConfig.plugins.push(
     new webpack.optimize.CommonsChunkPlugin({
@@ -46,13 +62,13 @@ function pluginOptimizeProdVendors(webpackConfig, {
   /*
    плюс нужно чтобы было [name]:
    // todo @ANKU @LOW - можно потом поискать по плагинам и удалить и заменить новым с filnename другим
-     webpackConfig.plugins.push(
-       new ExtractTextPlugin({
-         filename: assetsDir + '/[name].css',
-         allChunks: true
-       })
-     );
-  */
+   webpackConfig.plugins.push(
+   new ExtractTextPlugin({
+   filename: assetsDir + '/[name].css',
+   allChunks: true
+   })
+   );
+   */
 
   // }
 }

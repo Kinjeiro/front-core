@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+// const ManifestPlugin = require('webpack-manifest-plugin');
+
 const { urlJoin } = require('../../utils/path-utils');
 
 function pluginFrontendMain(webpackConfig, webpackContext) {
@@ -33,6 +35,8 @@ function pluginFrontendMain(webpackConfig, webpackContext) {
   It also doesn't affect files created by loaders. For these files see loader options.
   */
   webpackConfig.output.filename = `${assetsDir}/[name].js`;
+  // webpackConfig.output.filename = `${assetsDir}/[name].[contenthash].js`;
+  // webpackConfig.output.filename = `${assetsDir}/[name].[chunkhash].js`;
 
   // todo @ANKU @LOW @BUG_OUT @webpack - динамически чанки через import \ require.ensure подключаются просто тупым сложением publicPath + chunkFilename без нормализации
   // <script type="text/javascript" charset="utf-8" async="" src="\./assets/0.js"></script>
@@ -99,6 +103,12 @@ function pluginFrontendMain(webpackConfig, webpackContext) {
     // ? `//${PROXY_ASSETS.host}:${PROXY_ASSETS.port}${urlJoin('/', publicPath)}`
     // : urlJoin('/', publicPath);
     urlJoin('/', publicPath);
+
+  // webpackConfig.plugins.push(
+  //   // https://www.npmjs.com/package/webpack-manifest-plugin#optionsfilename
+  //   // чтобы hashcontent узнать при ejs темплейтинге - сохраняет файл в билде manifest.json
+  //   new ManifestPlugin(),
+  // );
 }
 
 module.exports = pluginFrontendMain;

@@ -3,6 +3,7 @@ import Boom from 'boom';
 import { RouterContext } from 'react-router';
 import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
+// import { readFileSync } from 'jsonfile';
 
 // init into \src\server\plugins\i18n.js
 import i18nInstance from 'i18next';
@@ -30,6 +31,9 @@ import { readFile } from '../../utils/file-utils';
 import I18NProvider from '../../../common/containers/I18NProvider/I18NProvider';
 
 const template = require('./html.ejs');
+
+// // todo @ANKU @LOW - в константы
+// const manifestPath = `${process.cwd()}/.build/assets/manifest.json`;
 
 function formatHtml(code) {
   if (Array.isArray(code)) {
@@ -71,6 +75,8 @@ export default function createRenderHandler(reply, store, server = null, options
 
       try {
         let appCode = null;
+        // const assetsManifest = readFileSync(manifestPath);
+        // console.warn('ANKU , assetsManifest', assetsManifest);
 
         if (serverConfig.common.isServerSideRendering) {
           appCode = (
@@ -122,6 +128,7 @@ export default function createRenderHandler(reply, store, server = null, options
           // contextRoot: appUrl(),
           unescapedHeadHtml: formatHtml(headHtml),
           unescapedBodyHtml: formatHtml(bodyHtml),
+          // assetsManifest,
         });
       } catch (error) {
         logger.error('error during render process', error.stackTrace || error);
