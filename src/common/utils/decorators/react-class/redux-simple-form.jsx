@@ -40,10 +40,14 @@ export default function reduxSimpleFormDecorator(
           initValues,
         } = ownProps;
         const formIdFinal = executeVariable(formId, null, ownProps);
-        const initValuesFinal = executeVariable(initValues, null, ownProps);
+        const initValuesFinal = {
+          ...executeVariable(defaultValues, null, ownProps),
+          ...executeVariable(initValues, null, ownProps),
+        };
         return {
           formId: formIdFinal,
-          form: getForm(globalState, formIdFinal) || initValuesFinal || defaultValues,
+          form: getForm(globalState, formIdFinal) || initValuesFinal,
+          initValues: initValuesFinal,
         };
       },
       {
