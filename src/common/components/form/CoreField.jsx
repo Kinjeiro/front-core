@@ -145,7 +145,7 @@ export default class CoreField extends PureComponent {
     }
   }
 
-  static async validate(value, props = {}, domRef = null) {
+  static async validate(value, props = {}, domRef = null, formData = {}) {
     const {
       name,
       required: propsRequired,
@@ -158,7 +158,7 @@ export default class CoreField extends PureComponent {
       multiple,
     } = props;
 
-    const customValidateErrors = await executeVariable(validate, [], value, props);
+    const customValidateErrors = await executeVariable(validate, [], value, props, formData);
     if (customValidateErrors === true) {
       return [];
     }
@@ -317,7 +317,7 @@ export default class CoreField extends PureComponent {
           }
         });
 
-      return this.emitChanging(Promise.all(promiseChange, errorPromise));
+      return this.emitChanging(Promise.all([promiseChange, errorPromise]));
     }
     return promiseChange;
   }
@@ -762,16 +762,17 @@ export default class CoreField extends PureComponent {
 
     const controlPropsFinal = this.getControlProps(inValue, index, constraints);
 
-    if (render) {
-      return render(controlPropsFinal, this.props);
-    }
-
+    let resultControl = null;
     const ControlClass = this.getControlClass(constraints);
-
     if (ControlClass) {
-      return React.createElement(ControlClass, controlPropsFinal);
+      resultControl = React.createElement(ControlClass, controlPropsFinal);
     }
-    return null;
+
+    if (render) {
+      resultControl = render(controlPropsFinal, resultControl, this.props);
+    }
+
+    return resultControl;
   }
 
   getSimpleValue(value) {

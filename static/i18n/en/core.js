@@ -50,6 +50,7 @@ module.exports = {
     CoreForm: {
       textActionSubmit: 'Send',
       textActionCancel: 'Cancel',
+      textDefaultFormErrorText: 'Form has errors',
     },
     CoreField: {
       errors: {

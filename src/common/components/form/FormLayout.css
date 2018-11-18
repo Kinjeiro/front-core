@@ -13,6 +13,9 @@
       margin-right: 10px;
     }
   }
+  &__formErrors {
+    color: #710800;
+  }
 
   & > *:not(:last-child) {
     margin-bottom: 10px;

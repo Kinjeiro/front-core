@@ -25,7 +25,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - теперь пользовательские данные доступны либо по userId, либо по aliasId
 - при логине ищется сразу по нескольким местам userId / aliasId / username / email
 Необходимо у себя в api проверить, что получение avatar \ publicInfo \ protectedInfo проходит через userId
-
+2. CoreField::render - вместо ```(controlPropsFinal, this.props)``` теперь принимает 2ым параметром ```controlPropsFinal, resultControl, this.props```, гдe resultControl - это результат дефолтного рендеринга 
+3. CoreForm::isValid => CoreForm::validate с новым форматом и возможность ассинхронных валидаций
+```
+/**
+* либо boolean
+* либо фунция: (fieldErrors, formData, props) => result
+*  где
+*  - fieldErrors: - [...string|{field, fieldLabel, errors}]
+*  - result: - [...string|{field, fieldLabel, errors}]
+*/
+```
 ### API Dependencies:
     - auth-server@2.0.1
 

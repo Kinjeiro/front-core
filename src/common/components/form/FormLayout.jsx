@@ -20,6 +20,7 @@ export default class FormLayout extends PureComponent {
     actions: ELEMENT_PROP_TYPE,
     postActions: ELEMENT_PROP_TYPE,
     actionStatus: PropTypes.object,
+    formErrors: PropTypes.array,
   };
 
   renderElement(className, element) {
@@ -42,6 +43,7 @@ export default class FormLayout extends PureComponent {
       actions,
       postActions,
       actionStatus,
+      formErrors,
     } = this.props;
 
     return (
@@ -50,6 +52,7 @@ export default class FormLayout extends PureComponent {
         { this.renderElement('FormLayout__actions', actions) }
         { this.renderElement('FormLayout__postActions', postActions) }
         { this.renderElement('FormLayout__actionStatus', actionStatus) }
+        { this.renderElement('FormLayout__formErrors', formErrors) }
       </div>
     );
   }

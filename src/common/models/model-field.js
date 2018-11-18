@@ -64,7 +64,9 @@ export const FIELD_PROP_TYPE_MAP = {
   constraints: CONSTRAINTS,
   /**
    * boolean true - значит не проводить никаких проверок
-   * либо функция (value, fieldProps) => [] // errors
+   * либо функция (value, fieldProps, formData) => [] | string | boolean
+   * - если функция вернет true - больше никаких проверок (даже require и multiple)
+   * - если вернут string - обернется в массив
    */
   validate: PropTypes.oneOfType([
     PropTypes.bool,
@@ -100,7 +102,7 @@ export const FIELD_PROP_TYPE_MAP = {
   ]),
   /**
    * Замена стандартной отрисовки
-   * (controlPropsFinal, fieldProps) => node
+   * (controlPropsFinal, resultNode, fieldProps) => node
    */
   render: PropTypes.func,
 
