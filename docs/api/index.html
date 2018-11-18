@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.5 | Documentation</title>
+  <title>@reagentum/front-core 1.6.6 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.5</code></div>
+          <div class='mb1'><code>1.6.6</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -292,6 +292,16 @@
                   href='#formdata'
                   class="">
                   formData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#validate'
+                  class="">
+                  validate
                   
                 </a>
                 
@@ -3598,6 +3608,57 @@ actionEditRecordStatusMap: {}
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='validate'>
+      validate
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(fieldErrors, formData, props) => result</p>
+<ul>
+<li>fieldErrors: - [...string|{field, fieldLabel, errors}]</li>
+<li>result: - [...string|{field, fieldLabel, errors}]</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>validate</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='layout'>
       Layout
     </h3>
@@ -5678,7 +5739,11 @@ required,</p>
   
 
   <p>boolean true - значит не проводить никаких проверок
-либо функция (value, fieldProps) => [] // errors</p>
+либо функция (value, fieldProps, formData) => [] | string | boolean</p>
+<ul>
+<li>если функция вернет true - больше никаких проверок (даже require и multiple)</li>
+<li>если вернут string - обернется в массив</li>
+</ul>
 
 
   <div class='pre p1 fill-light mt0'>validate</div>
@@ -5868,7 +5933,7 @@ required,</p>
   
 
   <p>Замена стандартной отрисовки
-(controlPropsFinal, fieldProps) => node</p>
+(controlPropsFinal, resultNode, fieldProps) => node</p>
 
 
   <div class='pre p1 fill-light mt0'>render</div>
