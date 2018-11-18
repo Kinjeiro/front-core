@@ -2,7 +2,8 @@
 import flattenDeep from 'lodash/flattenDeep';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
-import memoize from 'lodash/memoize';
+import memoizeLodash from 'lodash/memoize';
+import promiseMemoize from 'promise-memoize';
 import lodashDifference from 'lodash/difference';
 import uuid from 'uuid';
 // import uniqueId from 'lodash/uniqueId';
@@ -235,6 +236,21 @@ export function objectValues(object = {}) {
 
 export function merge(...args) {
   return mergeLib(...args);
+}
+
+export function memoize(...args) {
+  return memoizeLodash(...args);
+}
+function defaultMemoizePromiseKeyFn(value) {
+  return value;
+}
+export function memoizePromise(promise, keyFn = defaultMemoizePromiseKeyFn) {
+  return promiseMemoize(
+    promise,
+    {
+      resolve: keyFn,
+    },
+  );
 }
 
 
