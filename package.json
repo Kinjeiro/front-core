@@ -6,7 +6,7 @@
   "main": "./build-scripts/start.js",
   "scripts": {
     "----- LOCALHOST -----": "----------",
-    "start-localhost": "cross-env NODE_ENV=localhost HOT_LOADER=1 APP_MOCKS=1 USE_MOCKS=1 node ./build-scripts/start.js",
+    "start-localhost": "cross-env NODE_ENV=localhost HOT_LOADER=1 CLIENT_SIDE_RENDERING=1 APP_MOCKS=1 USE_MOCKS=1 node ./build-scripts/start.js",
     "start-localhost-other-port": "cross-env SERVER_PORT=8082 PROXY_PORT=9092 npm run start-localhost",
     "start": "npm run start-localhost",
     "----- START DAEMON -----": "----------",

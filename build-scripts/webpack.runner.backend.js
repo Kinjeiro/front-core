@@ -88,7 +88,12 @@ function startBackend({
     }
   });
 
-  backendCompiler.watch(100, backendCompilerCallback);
+  // https://github.com/webpack/docs/wiki/node.js-api#the-long-way
+  if (webpackConfig.watch === false) {
+    backendCompiler.run(backendCompilerCallback);
+  } else {
+    backendCompiler.watch(webpackConfig.watchOptions, backendCompilerCallback);
+  }
 }
 
 module.exports = startBackend;

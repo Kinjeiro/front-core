@@ -8,8 +8,10 @@ function pluginBackendMain(webpackConfig, {
   publicPath,
   serverStartPath, // ./src/server/index.js
   // inProject,
+  // inProjectSrc,
   inProjectBuild,
-  isLocalhost
+  isLocalhost,
+  ENV
 }) {
   // The target: 'node' option tells webpack not to touch any built-in modules like fs or path.
   webpackConfig.target = 'node';
@@ -74,18 +76,75 @@ function pluginBackendMain(webpackConfig, {
         entryOnly: false
       })
     );
+
+    if (!ENV.WATCH_CLIENT_FILES) {
+      webpackConfig.watchOptions = {
+        ignored: [
+          /node_modules/,
+          /[/\\]static[/\\]/,
+          /[/\\]src[/\\]client[/\\]/,
+          /[/\\]src[/\\]common[/\\]app-redux[/\\]/,
+          /[/\\]src[/\\]common[/\\]app-style[/\\]/,
+          /[/\\]src[/\\]common[/\\]app-styles[/\\]/,
+          /[/\\]src[/\\]common[/\\]components[/\\]/,
+          /[/\\]src[/\\]common[/\\]containers[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]static[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]containers[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]components[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]subModule[/\\]containers[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]subModule[/\\]components[/\\]/
+          // api, model, routes не игнорируем, потому что сервер может от этого плясать
+
+          // function (string) {
+          //   console.warn('ANKU , string', string);
+          //   return false;
+          // },
+        ]
+        // todo @ANKU @LOW - НЕ РАБОТАЮТ blob
+        // ignored: [
+        //   /*
+        //    // https://github.com/micromatch/anymatch#anymatch-matchers-teststring-returnindex-startindex-endindex
+        //    // chokidar options
+        //
+        //    // using globs to match directories and their children
+        //    anymatch('node_modules', 'node_modules'); // true
+        //    anymatch('node_modules', 'node_modules/somelib/index.js'); // false
+        //    anymatch('node_modules/**', 'node_modules/somelib/index.js'); // true
+        //    anymatch('node_modules/**', '/absolute/path/to/node_modules/somelib/index.js'); // false
+        //   */
+        //   // anymatch('**/node_modules/**', '/absolute/path/to/node_modules/somelib/index.js'); // true
+        //
+        //   // 'node_modules',
+        //   // /node_modules/,
+        //   inProject('node_modules'),
+        //
+        //     // если localhost то для клиенских скриптов уже запущен webpackDevServer на который настроен прокси и не нужно еще раз перезагружать сервак
+        //     // это относится ко всему что содержится в common и static (в модулях и корне)
+        //
+        //     // /src/,
+        //     // /src\\common/,
+        //   inProjectSrc('**'),
+        //
+        //   // inProjectSrc('client', '**', '*'),
+        //   // inProjectSrc('common', '**', '*'),
+        //   // inProject('static', '**', '*'),
+        //   // inProjectSrc('modules', '**', 'common', '**', '*'),
+        //   // inProjectSrc('modules', '**', 'static', '**', '*')
+        // ]
+      };
+    }
   }
 
 
   /*
-    todo @ANKU @LOW - хорошей идеей было бы вынести .result-config.json в отдельный файл,
-    но при попытке сделать чанк, он server.js компилирует просто как набор модулей, без инфы о запуске
+   todo @ANKU @LOW - хорошей идеей было бы вынести .result-config.json в отдельный файл,
+   но при попытке сделать чанк, он server.js компилирует просто как набор модулей, без инфы о запуске
 
-    // Load entry module and return exports
-    return __webpack_require__(__webpack_require__.s = 245);
+   // Load entry module and return exports
+   return __webpack_require__(__webpack_require__.s = 245);
 
-    Нужно подумать как это обойти
-  */
+   Нужно подумать как это обойти
+   */
   // webpackConfig.output.filename = '[name].js';
   //
   // webpackConfig.plugins.push(

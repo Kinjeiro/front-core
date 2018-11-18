@@ -28,6 +28,7 @@ function pluginEnvironments(webpackConfig, {
           CONTEXT_PATH: JSON.stringify(ENV.CONTEXT_PATH),
           CONTEXT_ROOT: JSON.stringify(ENV.CONTEXT_ROOT),
           CLIENT_SIDE_RENDERING: JSON.stringify(ENV.CLIENT_SIDE_RENDERING),
+          WATCH_CLIENT_FILES: JSON.stringify(ENV.WATCH_CLIENT_FILES),
           APP_MOCKS: JSON.stringify(ENV.APP_MOCKS),
           USE_MOCKS: JSON.stringify(ENV.USE_MOCKS),
           HOT_LOADER: JSON.stringify(ENV.HOT_LOADER),
