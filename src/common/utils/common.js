@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign,no-continue,no-restricted-syntax */
 import flattenDeep from 'lodash/flattenDeep';
+import shallowEqualLib from 'shallowEqual';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoizeLodash from 'lodash/memoize';
@@ -130,15 +131,26 @@ export function arrayContainsArray(superset, subset) {
   return subset.every((value) => superset.indexOf(value) >= 0);
 }
 
+// ======================================================
+// PROMISE
+// ======================================================
+export function isPromise(promise) {
+  return promise && !!promise.then;
+}
 
-export function delayPromise(delay = 0, ...args) {
+export function delayPromiseSilence(silence = false, delay = 0, ...args) {
   return delay > 0
     ? new Promise((resolve) => {
       // todo @ANKU @LOW - подумать над логгером в utils
-      console.log('delayPromise', delay);
+      if (!silence) {
+        console.log('delayPromise', delay);
+      }
       setTimeout(resolve.bind(this, ...args), delay);
     })
     : Promise.resolve(...args);
+}
+export function delayPromise(delay = 0, ...args) {
+  return delayPromiseSilence(false, delay, ...args);
 }
 
 export function delayPromiseThen(delay = 0, maxValue = undefined) {
@@ -158,11 +170,88 @@ export function promiseMap(nameToPromiseMap) {
       }, {}));
 }
 
+export const PROMISE_STATUS = {
+  PENDING: 'pending',
+  FULFILLED: 'fulfilled',
+  REJECTED: 'rejected',
+};
+export async function promiseState(promise) {
+  const fakeValue = {};
+  return Promise.race([promise, fakeValue])
+    .then(
+      (value) => (
+        value === fakeValue
+        ? PROMISE_STATUS.PENDING
+        : PROMISE_STATUS.FULFILLED
+      ),
+      () => PROMISE_STATUS.REJECTED,
+    );
+}
+export async function promiseStatusSwitch(
+  promise,
+  pendingFunc = null,
+  resolvedFunc = null,
+  rejectedFunc = null,
+  timeout = null,
+) {
+  if (timeout) {
+    await delayPromiseSilence(true, timeout);
+  }
+  const status = await promiseState(promise);
+  const func = status === PROMISE_STATUS.PENDING
+    ? pendingFunc
+    : status === PROMISE_STATUS.FULFILLED
+      ? resolvedFunc
+      : rejectedFunc;
+  return func ? func(promise) : promise;
+}
+
+/**
+ * Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)
+ *
+ * @param handlerPromise
+ * @param componentWithSetState
+ * @param processingStateVariable
+ * @return {*}
+ */
+export function emitProcessing(handlerPromise, componentWithSetState, processingStateVariable = 'isProcessing') {
+  if (isPromise(handlerPromise) && componentWithSetState && componentWithSetState.setState) {
+    /*
+     бывает так, что промис - лишь обертка над Promise.resolve а setState заставляете перирисоваться ради этой милисекунды
+     поэтому сделаем setTimeout и проверим значение на следующем тике
+     */
+    return promiseStatusSwitch(
+      handlerPromise,
+      (promise) => {
+        console.warn('ANKU , setProcessing');
+        componentWithSetState.setState({ [processingStateVariable]: true });
+        return promise
+        // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+          .then(() => componentWithSetState.setState({ [processingStateVariable]: false }))
+          .catch(() => componentWithSetState.setState({ [processingStateVariable]: false }));
+      },
+      null,
+      null,
+      10,
+    );
+  }
+  return handlerPromise;
+}
+
+// ======================================================
+// COMPARATOR
+// ======================================================
+export function shallowEqual(obj1, obj2) {
+  return shallowEqualLib(obj1, obj2);
+}
 export function deepEquals(obj1, obj2) {
   // return shallowequal(obj1, obj2);
   return isEqual(obj1, obj2);
 }
 
+// ======================================================
+// NUMERIC ARRAYS
+// ======================================================
 /**
  * Примеры
  *  valueFromRange( 0, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y') => 'a'

@@ -200,7 +200,8 @@
   },
   "peerDependencies": {
     "react": ">=16.4.0",
-    "react-dom": ">=16.4.0"
+    "react-dom": ">=16.4.0",
+    "shallowEqual": ">=1"
   },
   "devDependencies": {
     "autoprefixer": "~6.3.1",
