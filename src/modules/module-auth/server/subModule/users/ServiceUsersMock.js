@@ -32,13 +32,19 @@ export default class ServiceMockUsers extends ServiceUsers {
         password: newPassword,
       });
     } else {
+      // todo @ANKU @LOW - @@loc
       throw new Error('Неверный старый пароль');
     }
   }
   async checkUnique(field, value) {
     logger.debug('ServiceMockUsers', 'checkUnique');
-    return objectValues(this.getService('serviceAuth').getUsers())
+    const result = objectValues(this.getService('serviceAuth').getUsers())
       .every((user) => user[field] !== value);
+    if (result === false) {
+      // todo @ANKU @LOW - @@loc
+      throw new Error(`Значение "${value}" для поля "${field}" уже используется.`);
+    }
+    return result;
   }
 
   async deleteUser() {
