@@ -63,10 +63,63 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   constraints: CONSTRAINTS,
   /**
-   * boolean true - значит не проводить никаких проверок
-   * либо функция (value, fieldProps, formData) => [] | string | boolean
-   * - если функция вернет true - больше никаких проверок (даже require и multiple)
-   * - если вернут string - обернется в массив
+    Дополнительная кастомная валидация, срабатывает после всех автоматических проверок (html5 валидации, required, constraints)
+
+    То есть если поле required, то вам не нужно дополнительного его проверять на пустоту. Если только вы не хотите переделать дефолтное сообщение о пустоте.
+    В таком случаем нужно будет вернуть массив (это полностью заменит уже найденные ошибки defaultErrors)
+
+    (value, fieldProps, formDependentData, formData, defaultErrors) => result
+
+    где result:
+    - если false - если нет других ошибок, то добавляет "Ошибку"
+    - если true | null | undefined - никак не влияет, возвращает другие автоматически найденные ошибки
+    - если массив - полность перезаписывает автоматические найденные ошибки
+
+    Пример:
+      {
+        label: 'Старый пароль',
+        name: 'oldPassword',
+        subType: SUB_TYPES.PASSWORD,
+        required: true,
+      },
+      {
+        label: 'Новый пароль',
+        name: 'newPassword',
+        subType: SUB_TYPES.PASSWORD,
+        required: true,
+        formDependentFields: ['oldPassword'],
+        validate: (value, props, formDependentData) => (
+          !value
+          || value !== formDependentData.oldPassword
+          || 'Новый пароль должен отличаться от старого'
+        ),
+      },
+
+    Механизм:
+      const customValidateErrors = await executeVariable(
+        validate,
+        null,
+        value,
+        fieldProps,
+        formDependentData,
+        formDataFinal,
+        errors,
+      );
+      if (customValidateErrors === false) {
+        if (errors.length === 0) {
+          // если нет никаких ошибок - добавляется
+          // если есть - не проставляем, пока другие не уберутся
+          errors.push('Ошибка');
+        }
+      } else if (customValidateErrors === true || customValidateErrors === null) {
+        // возвращаем errors, какие есть
+      } else if (typeof customValidateErrors === 'string') {
+        // добавляем к текущим
+        errors.push(customValidateErrors);
+      } else if (Array.isArray(customValidateErrors)) {
+        // польностью заменяем массив
+        errors = customValidateErrors;
+      }
    */
   validate: PropTypes.oneOfType([
     PropTypes.bool,

@@ -70,13 +70,14 @@ export default class CoreField extends Component {
       ...otherProps
     } = nextProps;
 
-    const isShallowEqual = shallowEqual(
-      otherProps,
-      omit(this.props, 'context', 'controlProps', 'formDependentData'),
-    )
+    const isShallowEqual =
+      shallowEqual(nextState, this.state)
+      && shallowEqual(
+        otherProps,
+        omit(this.props, 'context', 'controlProps', 'formDependentData'),
+      )
       && shallowEqual(context, this.props.context)
-      && shallowEqual(controlProps, this.props.controlProps)
-      && shallowEqual(nextState, this.nextState);
+      && shallowEqual(controlProps, this.props.controlProps);
     const isDeepEquals = deepEquals(formDependentData, this.props.formDependentData);
     return !isShallowEqual || !isDeepEquals;
   }
@@ -188,23 +189,7 @@ export default class CoreField extends Component {
       formDependentData,
     } = fieldProps;
 
-    let customValidateErrors = null;
-    if (validate) {
-      try {
-        const formDataFinal = {
-          ...(await executeVariable(getFormData, null, {})),
-          [name]: value,
-        };
-        customValidateErrors = await executeVariable(validate, [], value, fieldProps, formDependentData, formDataFinal);
-      } catch (uniError) {
-        customValidateErrors = uniError.uniMessages || uniError.message;
-      }
-    }
-
-    if (customValidateErrors === true) {
-      return [];
-    }
-    const errors = wrapToArray(customValidateErrors);
+    let errors = [];
     if (domRef && domRef.checkValidity) {
       /*
        https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#The_HTML5_constraint_validation_API
@@ -266,7 +251,45 @@ export default class CoreField extends Component {
       }
     }
 
-    return Promise.all(errors);
+
+    if (validate) {
+      try {
+        const formDataFinal = {
+          ...(await executeVariable(getFormData, null, {})),
+          [name]: value,
+        };
+        const customValidateErrors = await executeVariable(
+          validate,
+          null,
+          value,
+          fieldProps,
+          formDependentData,
+          formDataFinal,
+          errors,
+        );
+        if (customValidateErrors === false) {
+          if (errors.length === 0) {
+            // если нет никаких ошибок - добавляется
+            // если есть - не проставляем, пока другие не уберутся
+            // todo @ANKU @LOW - @@loc
+            errors.push('Ошибка');
+          }
+        } else if (customValidateErrors === true || customValidateErrors === null) {
+          // возвращаем errors, какие есть
+        } else if (typeof customValidateErrors === 'string') {
+          // добавляем к текущим
+          errors.push(customValidateErrors);
+        } else if (Array.isArray(customValidateErrors)) {
+          // польностью заменяем массив
+          errors = customValidateErrors;
+        }
+      } catch (uniError) {
+        console.debug('Field validate error', uniError);
+        errors.push(uniError.uniMessages || uniError.message);
+      }
+    }
+
+    return errors;
   }
 
   // ======================================================

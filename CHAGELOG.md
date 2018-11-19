@@ -25,17 +25,81 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - теперь пользовательские данные доступны либо по userId, либо по aliasId
 - при логине ищется сразу по нескольким местам userId / aliasId / username / email
 Необходимо у себя в api проверить, что получение avatar \ publicInfo \ protectedInfo проходит через userId
-2. CoreField::render - вместо ```(controlPropsFinal, this.props)``` теперь принимает 2ым параметром ```controlPropsFinal, resultControl, this.props```, гдe resultControl - это результат дефолтного рендеринга 
-3. CoreForm::isValid => CoreForm::validate с новым форматом и возможность ассинхронных валидаций
+2. Field::render - вместо ```(controlPropsFinal, this.props)``` теперь принимает 2ым параметром ```controlPropsFinal, resultControl, this.props```, гдe resultControl - это результат дефолтного рендеринга 
+3. Field::validate - изменился формат и реакция на возвращаемый ответ
+```
+Дополнительная кастомная валидация, срабатывает после всех автоматических проверок (html5 валидации, required, constraints)
+
+То есть если поле required, то вам не нужно дополнительного его проверять на пустоту. Если только вы не хотите переделать дефолтное сообщение о пустоте.
+В таком случаем нужно будет вернуть массив (это полностью заменит уже найденные ошибки defaultErrors)
+
+(value, fieldProps, formDependentData, formData, defaultErrors) => result
+
+где result:
+- если false - если нет других ошибок, то добавляет "Ошибку"
+- если true | null | undefined - никак не влияет, возвращает другие автоматически найденные ошибки
+- если массив - полность перезаписывает автоматические найденные ошибки
+
+Пример:
+  {
+    label: 'Старый пароль',
+    name: 'oldPassword',
+    subType: SUB_TYPES.PASSWORD,
+    required: true,
+  },
+  {
+    label: 'Новый пароль',
+    name: 'newPassword',
+    subType: SUB_TYPES.PASSWORD,
+    required: true,
+    formDependentFields: ['oldPassword'],
+    validate: (value, props, formDependentData) => (
+      !value
+      || value !== formDependentData.oldPassword
+      || 'Новый пароль должен отличаться от старого'
+    ),
+  },
+
+Механизм:
+  const customValidateErrors = await executeVariable(
+    validate,
+    null,
+    value,
+    fieldProps,
+    formDependentData,
+    formDataFinal,
+    errors,
+  );
+  if (customValidateErrors === false) {
+    if (errors.length === 0) {
+      // если нет никаких ошибок - добавляется
+      // если есть - не проставляем, пока другие не уберутся
+      errors.push('Ошибка');
+    }
+  } else if (customValidateErrors === true || customValidateErrors === null) {
+    // возвращаем errors, какие есть
+  } else if (typeof customValidateErrors === 'string') {
+    // добавляем к текущим
+    errors.push(customValidateErrors);
+  } else if (Array.isArray(customValidateErrors)) {
+    // польностью заменяем массив
+    errors = customValidateErrors;
+  }
+```
+4. Form::isValid => Form::validate с новым форматом и возможность ассинхронных валидаций
 ```
 /**
-* либо boolean
-* либо фунция: (fieldErrors, formData, props) => result
-*  где
-*  - fieldErrors: - [...string|{field, fieldLabel, errors}]
-*  - result: - [...string|{field, fieldLabel, errors}]
+(fieldErrors, formData, props) => result
+ Где fieldErrors: [...string|{field, fieldLabel, errors}]
+
+ Где result: string|boolean|[...string|{field, fieldLabel, errors}]
+ - если false: ошибка с текстом textDefaultFormErrorText
+ - если true | null | undefined: не будет ошибок (не смотря на fieldErrors)
+ - если массив: выведется массив ошибок
 */
 ```
+5. Field::validate и Form::validate - поддерживают асинхронную валидацию и возвращают Promise
+
 ### API Dependencies:
     - auth-server@2.0.1
 

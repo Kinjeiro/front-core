@@ -47,9 +47,13 @@ export default class CoreForm extends Component {
     formData: PropTypes.object,
     onChangeField: PropTypes.func,
     /**
-     * (fieldErrors, formData, props) => result
-     * - fieldErrors: - [...string|{field, fieldLabel, errors}]
-     * - result: - [...string|{field, fieldLabel, errors}]
+     (fieldErrors, formData, props) => result
+     Где fieldErrors: [...string|{field, fieldLabel, errors}]
+
+     Где result: string|boolean|[...string|{field, fieldLabel, errors}]
+     - если false: ошибка с текстом textDefaultFormErrorText
+     - если true | null | undefined: не будет ошибок (не смотря на fieldErrors)
+     - если массив: выведется массив ошибок
      */
     validate: PropTypes.oneOfType([
       PropTypes.bool,
@@ -154,7 +158,6 @@ export default class CoreForm extends Component {
     } = this;
 
     let fieldsErrors = null;
-    const domCheckValidityErrors = [];
     if (domForm && domForm.checkValidity && !domForm.checkValidity()) {
       // domCheckValidityErrors = [textDefaultFormErrorText];
       // fieldsErrors = domCheckValidityErrors;
@@ -191,8 +194,8 @@ export default class CoreForm extends Component {
     const formErrorsFinal = formErrors === false
       ? [textDefaultFormErrorText]
       : formErrors === true || formErrors === null
-        ? domCheckValidityErrors
-        : [...domCheckValidityErrors, ...formErrors];
+        ? []
+        : formErrors;
 
     this.setState({
       formErrors: formErrorsFinal,
