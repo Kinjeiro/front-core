@@ -10,6 +10,7 @@ import {
   executeVariable,
   wrapToArray,
   generateId,
+  emitProcessing,
 } from '../../utils/common';
 import { ACTION_STATUS_PROPS } from '../../models';
 
@@ -46,9 +47,13 @@ export default class CoreForm extends Component {
     formData: PropTypes.object,
     onChangeField: PropTypes.func,
     /**
-     * (fieldErrors, formData, props) => result
-     * - fieldErrors: - [...string|{field, fieldLabel, errors}]
-     * - result: - [...string|{field, fieldLabel, errors}]
+     (fieldErrors, formData, props) => result
+     Где fieldErrors: [...string|{field, fieldLabel, errors}]
+
+     Где result: string|boolean|[...string|{field, fieldLabel, errors}]
+     - если false: ошибка с текстом textDefaultFormErrorText
+     - если true | null | undefined: не будет ошибок (не смотря на fieldErrors)
+     - если массив: выведется массив ошибок
      */
     validate: PropTypes.oneOfType([
       PropTypes.bool,
@@ -100,7 +105,9 @@ export default class CoreForm extends Component {
   state = {
     formErrors: [],
     hasError: false,
-    processing: false,
+    isProcessing: false,
+    touched: false,
+    dependentFieldsHashes: {},
   };
 
   domForm = null;
@@ -139,7 +146,7 @@ export default class CoreForm extends Component {
   // ======================================================
   // UTILS
   // ======================================================
-  async isValid() {
+  async isValid(newValues = {}) {
     const {
       validate,
       fields,
@@ -150,19 +157,28 @@ export default class CoreForm extends Component {
       domForm,
     } = this;
 
-    let fieldsErrors;
-    let domCheckValidityErrors = [];
+    let fieldsErrors = null;
     if (domForm && domForm.checkValidity && !domForm.checkValidity()) {
-      domCheckValidityErrors = [textDefaultFormErrorText];
-      fieldsErrors = domCheckValidityErrors;
+      // domCheckValidityErrors = [textDefaultFormErrorText];
+      // fieldsErrors = domCheckValidityErrors;
+      fieldsErrors = [textDefaultFormErrorText];
     } else {
       // isValidFinal = fields.every(async (field) => {
       //   const domElement = this.domControls[field.name];
       //   return await Field.validate(field.value, field, domElement).length === 0;
       // });
-      fieldsErrors = (await Promise.all(fields.map(async (field) => {
+      fieldsErrors = (await Promise.all(fields.map(async (field, index) => {
         const domElement = this.domControls[field.name];
-        const errors = await Field.validate(field.value, field, domElement, formData);
+        let value = newValues[field.name];
+        if (typeof value === 'undefined') {
+          value = field.value;
+        }
+        const errors = await Field.validate(
+          value,
+          this.gerFieldProps(field, index),
+          domElement,
+          this.getFormData,
+        );
         return errors && errors.length > 0
           ? {
             field: field.name,
@@ -178,8 +194,8 @@ export default class CoreForm extends Component {
     const formErrorsFinal = formErrors === false
       ? [textDefaultFormErrorText]
       : formErrors === true || formErrors === null
-        ? domCheckValidityErrors
-        : [...domCheckValidityErrors, ...formErrors];
+        ? []
+        : formErrors;
 
     this.setState({
       formErrors: formErrorsFinal,
@@ -193,27 +209,9 @@ export default class CoreForm extends Component {
     return this.props.fields.find(({ name }) => fieldName === name);
   }
 
-  emitChanging(handlerPromise) {
-    if (handlerPromise && handlerPromise.then) {
-      this.setState({
-        processing: true,
-      });
-      handlerPromise
-        .then(() => {
-          /*
-           // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-           */
-          this.setState({
-            processing: false,
-          });
-        })
-        .catch(() => {
-          this.setState({
-            processing: false,
-          });
-        });
-    }
-    return handlerPromise;
+  @bind()
+  getFormData() {
+    return this.props.formData;
   }
 
   // ======================================================
@@ -230,14 +228,29 @@ export default class CoreForm extends Component {
       onChangeField,
     } = this.props;
     const {
+      touched,
+    } = this.state;
+    const {
       onChange,
     } = this.getFieldByName(fieldName);
 
+    if (!touched) {
+      this.setState({
+        touched: true,
+      });
+    }
+
+    // todo @ANKU @LOW - нужно onChange тоже включить в процессинг, но почему-то падают странности
     const result = await onChange
       ? onChange(fieldName, newValue)
       : onChangeField && onChangeField({ [fieldName]: newValue });
 
-    this.emitChanging(this.isValid());
+    emitProcessing(
+      this.isValid({
+        [fieldName]: newValue,
+      }),
+      this,
+    );
 
     return result;
   }
@@ -256,7 +269,7 @@ export default class CoreForm extends Component {
       event.stopPropagation();
     }
 
-    if (await this.emitChanging(this.isValid())) {
+    if (await emitProcessing(this.isValid(), this)) {
       return onSubmit && onSubmit(formData);
     }
     return false;
@@ -280,7 +293,7 @@ export default class CoreForm extends Component {
     return labelFinal;
   }
 
-  renderField(field, index) {
+  gerFieldProps(field, index) {
     const {
       className,
       name,
@@ -289,43 +302,65 @@ export default class CoreForm extends Component {
       textDescription,
       onChange,
       value,
+      formDependentFields = [],
     } = field;
     const {
       id,
       i18nFieldPrefix,
       onChangeField,
-      firstFocus,
+      // firstFocus,
       formData,
     } = this.props;
 
     const label = this.getFieldLabel(field);
-    const placeholder = textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`, {}, '', ''));
+    const placeholder = textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`,
+        {},
+        '',
+        ''));
     const hint = textHint || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.hint`, {}, '', ''));
-    const textDescriptionFinal = textDescription || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.description`, {}, '', ''));
+    const textDescriptionFinal = textDescription || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.description`,
+        {},
+        '',
+        ''));
+
+    const formDependentData = wrapToArray(formDependentFields)
+      .reduce((result, otherFieldName) => {
+        // eslint-disable-next-line no-param-reassign
+        result[otherFieldName] = formData[otherFieldName];
+        return result;
+      }, {});
+
+    return {
+      id: `${id}_${name}`,
+      ...field,
+      // controlProps: firstFocus && index === 0
+      //   ? {
+      //     autoFocus: true,
+      //     ...field.controlProps,
+      //   }
+      //   : field.controlProps,
+      controlRef: this.controlRef,
+      value: typeof value === 'undefined' ? formData[name] : value,
+      key: name,
+      className: `${this.bem('field')} ${className || ''}`,
+      label,
+      textPlaceholder: placeholder,
+      textHint: hint,
+      textDescription: textDescriptionFinal,
+      onChange: onChange || (onChangeField ? this.handleChange : undefined),
+      formDependentData,
+      getFormData: this.getFormData,
+    };
+  }
+
+  renderField(field, index) {
+    const {
+      name,
+    } = field;
 
     let fieldCmp = (
       <Field
-        id={ `${id}_${name}` }
-        { ...field }
-        controlProps={
-          firstFocus && index === 0
-          ? {
-            autoFocus: true,
-            ...field.controlProps,
-          }
-          : field.controlProps
-        }
-        controlRef={ this.controlRef }
-        value={ typeof value === 'undefined' ? formData[name] : value }
-        key={ name }
-        className={ `${this.bem('field')} ${className || ''}` }
-        label={ label }
-        textPlaceholder={ placeholder }
-        textHint={ hint }
-        textDescription={ textDescriptionFinal }
-        onChange={
-          onChange || (onChangeField ? this.handleChange : undefined)
-        }
+        { ...this.gerFieldProps(field, index) }
       />
     );
 
@@ -345,7 +380,9 @@ export default class CoreForm extends Component {
       fields,
     } = this.props;
 
-    return wrapToArray(fields).map((field, index) => this.renderField(field, index));
+    return wrapToArray(fields)
+      .map((field, index) =>
+        this.renderField(field, index));
   }
   renderActions() {
     const {
@@ -361,7 +398,8 @@ export default class CoreForm extends Component {
     } = this.props;
     const {
       hasError,
-      processing,
+      isProcessing,
+      touched,
     } = this.state;
 
     const actionsFinal = [];
@@ -372,8 +410,9 @@ export default class CoreForm extends Component {
           key="submitButton"
           type="submit"
           className={ this.bem('submitButton') }
-          disabled={ isFetching || hasError }
           primary={ true }
+          disabled={ isProcessing || isFetching || hasError || !touched }
+          loading={ isProcessing || isFetching }
           onClick={ useForm ? undefined : this.handleSubmit }
         >
           { textActionSubmit }
@@ -388,9 +427,8 @@ export default class CoreForm extends Component {
         <Button
           key="cancelButton"
           className={ `${this.bem('cancelButton')}` }
-          disabled={ processing || isFetching }
+          disabled={ isFetching }
           onClick={ onCancel }
-          loading={ processing }
         >
           { textActionCancel }
         </Button>
@@ -457,10 +495,16 @@ export default class CoreForm extends Component {
       Layout,
     } = this.props;
     const {
+      touched,
       hasError,
+      isProcessing,
     } = this.state;
 
-    const className = `${this.fullClassName} ${hasError ? 'CoreForm--error' : ''}`;
+    const className = `\
+      ${this.fullClassName}\
+      ${touched && hasError ? 'CoreForm--error' : ''}\
+      ${isProcessing ? 'CoreForm--processing' : ''}\
+    `;
 
     let component = (
       <Layout
@@ -471,7 +515,7 @@ export default class CoreForm extends Component {
         actions={ this.renderActions() }
         postActions={ this.renderPostActions() }
         actionStatus={ this.renderActionStatus() }
-        formErrors={ this.renderFormError() }
+        formErrors={ touched && this.renderFormError() }
       />
     );
 

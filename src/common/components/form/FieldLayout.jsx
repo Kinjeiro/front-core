@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 
 import getComponents from '../../get-components';
 
-const { UnescapedHtml } = getComponents();
+const {
+  UnescapedHtml,
+  Loading,
+} = getComponents();
 
 require('./FieldLayout.css');
 
@@ -17,6 +20,7 @@ export default class FieldLayout extends PureComponent {
     errors: PropTypes.arrayOf(PropTypes.string),
     warnings: PropTypes.arrayOf(PropTypes.string),
     touched: PropTypes.bool,
+    isProcessing: PropTypes.bool,
     textDescription: PropTypes.node,
   };
 
@@ -29,6 +33,7 @@ export default class FieldLayout extends PureComponent {
       warnings,
       touched,
       textDescription,
+      isProcessing,
     } = this.props;
 
     return (
@@ -38,6 +43,13 @@ export default class FieldLayout extends PureComponent {
         </label>
         <div className="FieldLayout__content">
           <div className="FieldLayout__control">
+            {
+              isProcessing && (
+                <div className="FieldLayout__processingWrapper">
+                  <Loading className="FieldLayout__processing" />
+                </div>
+              )
+            }
             { children }
           </div>
           {
@@ -65,7 +77,7 @@ export default class FieldLayout extends PureComponent {
             )
           }
           {
-            errors.length > 0 && (
+            errors && errors.length > 0 && (
               <div className="FieldLayout__errors">
                 {
                   errors.map((error) => (

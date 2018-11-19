@@ -201,7 +201,7 @@ export default class CoreInput extends PureComponent {
     return (
       <InputClassFinal
         { ...inputProps }
-        errors={ errors }
+        errors={ Array.isArray(errors) && errors.length === 0 ? undefined : errors }
         title={ errors && errors.length > 0 ? errors[0] : title }
         value={ this.getControlValue() }
         type={ type }
