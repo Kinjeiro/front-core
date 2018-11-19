@@ -1,13 +1,16 @@
 /* eslint-disable no-param-reassign */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
-import isEqual from 'lodash/isEqual';
+import omit from 'lodash/omit';
 
 import {
   executeVariable,
   isEmpty,
   wrapToArray,
+  emitProcessing,
+  shallowEqual,
+  deepEquals,
 } from '../../utils/common';
 import {
   parseDate,
@@ -30,7 +33,7 @@ import getCb from '../../get-components';
 const CB = getCb();
 const { FieldLayout } = CB;
 
-export default class CoreField extends PureComponent {
+export default class CoreField extends Component {
   static TYPES = TYPES;
   static SUB_TYPES = SUB_TYPES;
 
@@ -46,7 +49,7 @@ export default class CoreField extends PureComponent {
   };
 
   state = {
-    changing: false,
+    isProcessing: false,
     lastValue: this.props.value,
     errors: [],
     warnings: [],
@@ -59,10 +62,36 @@ export default class CoreField extends PureComponent {
   // LIFECYCLE
   // ======================================================
   // static
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      context,
+      controlProps,
+      formDependentData,
+      ...otherProps
+    } = nextProps;
 
+    const isShallowEqual = shallowEqual(
+      otherProps,
+      omit(this.props, 'context', 'controlProps', 'formDependentData'),
+    )
+      && shallowEqual(context, this.props.context)
+      && shallowEqual(controlProps, this.props.controlProps)
+      && shallowEqual(nextState, this.nextState);
+    const isDeepEquals = deepEquals(formDependentData, this.props.formDependentData);
+    return !isShallowEqual || !isDeepEquals;
+  }
+
+  componentWillReceiveProps(newProps) {
+    const {
+      formDependentData,
+    } = newProps;
+    if (!deepEquals(formDependentData, this.props.formDependentData)) {
+      this.validateComponent(newProps);
+    }
+  }
 
   // ======================================================
-  // UTILS
+  // STATIC
   // ======================================================
   static defaultCompareFn(newValue = null, oldValue = null/* , field = null */) {
     // undefined === null === ''
@@ -70,7 +99,7 @@ export default class CoreField extends PureComponent {
     newValue = newValue === '' ? null : newValue;
     // eslint-disable-next-line no-param-reassign
     oldValue = oldValue === '' ? null : oldValue;
-    return isEqual(newValue, oldValue) ? 0 : 1;
+    return deepEquals(newValue, oldValue) ? 0 : 1;
   }
   static parseInValue(type, value) {
     switch (type) {
@@ -145,7 +174,7 @@ export default class CoreField extends PureComponent {
     }
   }
 
-  static async validate(value, props = {}, domRef = null, formData = {}) {
+  static async validate(value, fieldProps = {}, domRef = null, getFormData = null) {
     const {
       name,
       required: propsRequired,
@@ -156,9 +185,22 @@ export default class CoreField extends PureComponent {
       } = {},
       validate,
       multiple,
-    } = props;
+      formDependentData,
+    } = fieldProps;
 
-    const customValidateErrors = await executeVariable(validate, [], value, props, formData);
+    let customValidateErrors = null;
+    if (validate) {
+      try {
+        const formDataFinal = {
+          ...(await executeVariable(getFormData, null, {})),
+          [name]: value,
+        };
+        customValidateErrors = await executeVariable(validate, [], value, fieldProps, formDependentData, formDataFinal);
+      } catch (uniError) {
+        customValidateErrors = uniError.uniMessages || uniError.message;
+      }
+    }
+
     if (customValidateErrors === true) {
       return [];
     }
@@ -185,10 +227,19 @@ export default class CoreField extends PureComponent {
          valueMissing
        }
       */
+      // todo @ANKU @LOW @HACK @BUG_OUT @html5 - если поле readOnly или disabled то проверка не проходит
+      const {
+        disabled,
+        readOnly,
+      } = domRef;
+      domRef.disabled = false;
+      domRef.readOnly = false;
       domRef.checkValidity();
-      if (domRef.validationMessage) {
+      if (domRef.validationMessage && domRef.validationMessage !== errors[0]) {
         errors.push(domRef.validationMessage);
       }
+      domRef.disabled = disabled;
+      domRef.readOnly = readOnly;
     } else {
       // code checking
       // eslint-disable-next-line no-lonely-if
@@ -218,27 +269,40 @@ export default class CoreField extends PureComponent {
     return Promise.all(errors);
   }
 
-  emitChanging(handlerPromise) {
-    if (handlerPromise && handlerPromise.then) {
-      this.setState({
-        changing: true,
-      });
-      handlerPromise
-        .then(() => {
-          /*
-           // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-           */
-          this.setState({
-            changing: false,
-          });
-        })
-        .catch(() => {
-          this.setState({
-            changing: false,
-          });
-        });
+  // ======================================================
+  // UTILS
+  // ======================================================
+  validateComponent(props = this.props, value = undefined, state = this.state) {
+    const {
+      elementDom,
+    } = this;
+    const {
+      getFormData,
+    } = props;
+
+    const valueFinal = typeof value === 'undefined' ? props.value : value;
+
+    if (elementDom && elementDom.validity.customError) {
+      // убираем кастомное сообщение перед проверкой
+      elementDom.setCustomValidity('');
     }
-    return handlerPromise;
+    this.setState({
+      errors: [],
+      warnings: [],
+    });
+    const validatePromise = CoreField.validate(valueFinal, props, elementDom, getFormData)
+      .then((errors) => {
+        this.setState({
+          lastValue: valueFinal,
+          errors,
+        });
+        if (elementDom && !elementDom.validationMessage) {
+          // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
+          elementDom.setCustomValidity(errors.length > 0 ? errors[0] : '');
+        }
+      });
+
+    return validatePromise;
   }
 
   getConstrains() {
@@ -287,9 +351,6 @@ export default class CoreField extends PureComponent {
     const {
       lastValue,
     } = this.state;
-    const {
-      elementDom,
-    } = this;
 
     let promiseChange = null;
     // eslint-disable-next-line eqeqeq
@@ -303,21 +364,13 @@ export default class CoreField extends PureComponent {
         context,
       );
 
-      const errorPromise = CoreField.validate(value, this.props, elementDom)
-        .then((errors) => {
-          // todo @ANKU @LOW - promise не учитывается
-          this.setState({
-            lastValue: value,
-            errors,
-            warnings: [],
-          });
-          if (elementDom && !elementDom.validationMessage) {
-            // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
-            elementDom.setCustomValidity(errors.length ? errors[0] : '');
-          }
-        });
-
-      return this.emitChanging(Promise.all([promiseChange, errorPromise]));
+      return emitProcessing(
+        Promise.all([
+          promiseChange,
+          this.validateComponent(this.props, value),
+        ]),
+        this,
+      );
     }
     return promiseChange;
   }
@@ -358,30 +411,35 @@ export default class CoreField extends PureComponent {
     eventNames.forEach((eventName) => {
       const prevHandler = controlProps[eventName];
       if (prevHandler) {
-        wrappers[eventName] = (...args) => this.emitChanging(prevHandler(...args));
+        wrappers[eventName] = (...args) => emitProcessing(prevHandler(...args), this);
       }
     });
     return wrappers;
   }
 
   @bind()
-  async handleBlur(...args) {
+  async handleBlur(event, controlProps) {
     const {
       controlProps: {
         onBlur,
       } = {},
-      value,
+      // value,
     } = this.props;
+    const {
+      touched,
+    } = this.state;
+    const newValue = controlProps.value;
 
-    const errorPromise = CoreField.validate(value, this.props, this.elementDom)
-      .then((errors) => {
-        this.setState({
-          touched: true,
-          errors,
-        });
-        return onBlur && onBlur(...args);
+    // для первой валидации
+    if (!touched) {
+      emitProcessing(this.validateComponent(this.props, newValue), this);
+
+      this.setState({
+        touched: true,
       });
-    return this.emitChanging(errorPromise);
+    }
+
+    return onBlur && onBlur(event, controlProps);
   }
 
   @bind()
@@ -478,7 +536,7 @@ export default class CoreField extends PureComponent {
       // render,
     } = this.props;
     const {
-      changing,
+      isProcessing,
       errors,
       warnings,
       touched,
@@ -502,16 +560,17 @@ export default class CoreField extends PureComponent {
     let controlPropsFinal = {
       id,
       name,
-      errors,
+      errors: Array.isArray(errors) && errors.length === 0 ? null : errors,
       touched,
       defaultValue,
       multiple,
       ...controlProps,
       placeholder: textPlaceholder,
       title: textHint,
-      readOnly: readOnly || !onChange || changing,
-      disabled: disabled || changing,
+      readOnly: readOnly || !onChange || isProcessing,
+      disabled: disabled || isProcessing,
       required: required || propsRequired,
+      isProcessing,
       onBlur: this.handleBlur,
       ...this.handlersWrapToPromiseChanging(controlProps, ['onMouseDown']),
     };
@@ -659,7 +718,6 @@ export default class CoreField extends PureComponent {
         return {
           value: controlValue,
           constraints,
-          errors,
           warnings,
           onErrors: this.handleErrors,
           onWarnings: this.handleWarnings,
@@ -938,6 +996,7 @@ export default class CoreField extends PureComponent {
       errors,
       warnings,
       touched,
+      isProcessing,
     } = this.state;
 
     if (simpleText) {
@@ -949,19 +1008,29 @@ export default class CoreField extends PureComponent {
       required = null,
     } = constraints;
 
+    const classNameFinal = `\
+      CoreField\
+      ${className || ''}\
+      ${multiple ? 'CoreField--multiple' : ''}\
+      ${propsRequired || required ? 'CoreField--required' : ''}\
+      ${isProcessing ? 'CoreField--isProcessing' : ''}\
+      ${touched && errors && errors.length > 0 ? 'CoreField--error' : ''}\
+    `;
+
     return (
       <Layout
         key={ name }
 
-        className={ `CoreField ${className || ''} ${multiple ? 'CoreField--multiple' : ''} ${propsRequired || required ? 'CoreField--required' : ''}` }
+        className={ classNameFinal }
 
         label={ this.renderLabel() }
         textDescription={ textDescription }
-        errors={ errors }
+        errors={ touched ? errors : undefined }
         warnings={ warnings }
 
         required={ required || propsRequired }
         touched={ touched }
+        isProcessing={ isProcessing }
       >
         { this.renderMultiple(constraints) }
       </Layout>

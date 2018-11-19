@@ -17,16 +17,17 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // FORM FIELDS
   // ======================================================
-  COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, ...props }) =>
+  COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, isProcessing, ...props }) =>
     <input ref={ controlRef } { ...props } />);
-  COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, ...props }) =>
+  COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, isProcessing, ...props }) =>
     <input ref={ controlRef } { ...props } type="number" />);
-  COMPONENTS_BASE.replace('Input', () => require('./components/form/fields/CoreInput').default);
-  COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, ...props }) =>
+  COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, isProcessing, ...props }) =>
     <textarea ref={ controlRef } { ...props } />);
-  COMPONENTS_BASE.replace('TextArea', () => require('./components/form/fields/CoreTextArea').default);
   COMPONENTS_BASE.replace('BaseSelect', () => ({ options, value }) =>
     <select value={ value } />);
+
+  COMPONENTS_BASE.replace('Input', () => require('./components/form/fields/CoreInput').default);
+  COMPONENTS_BASE.replace('TextArea', () => require('./components/form/fields/CoreTextArea').default);
   COMPONENTS_BASE.replace('Select', () => require('./components/form/fields/CoreSelect').default);
   COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
     <input ref={ controlRef } value={ value } type="datetime" />);

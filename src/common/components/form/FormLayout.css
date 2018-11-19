@@ -1,3 +1,5 @@
+@import "../../app-style/vars.css";
+
 .FormLayout {
   width: 100%;
   max-width: 800px;
@@ -14,7 +16,7 @@
     }
   }
   &__formErrors {
-    color: #710800;
+    color: var(--color-error-text);
   }
 
   & > *:not(:last-child) {

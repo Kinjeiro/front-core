@@ -136,6 +136,24 @@ export const FIELD_PROP_TYPE_MAP = {
    touched
    */
   Layout: PropTypes.any,
+
+  /**
+   * Список других полей на форме от которых зависит текущее поле
+   * Если есть - то будет подаваться formData в виде объекта и обновлять
+   */
+  formDependentFields: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
+  /**
+   * значение зависимых полей
+   */
+  formDependentData: PropTypes.object,
+  /**
+   * Метод с формы, чтобы получить остальные контекстные формы
+   * - функция - чтобы не перезагружать компонент, при смене других значений
+   */
+  getFormData: PropTypes.func,
 };
 
 export function createField(name, value, otherProps = {}) {
