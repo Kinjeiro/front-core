@@ -102,7 +102,9 @@ export function register(server, pluginOptions, next) {
         app: {
           error: false,
         },
-        userInfo: null,
+        userInfo: {
+          userData: null,
+        },
         [STATE_CLIENT_CONFIG_PARAM]: finalClientConfig,
       };
 

@@ -25,16 +25,16 @@ export function initComponents(COMPONENTS_BASE) {
     <textarea ref={ controlRef } { ...props } />);
   COMPONENTS_BASE.replace('BaseSelect', () => ({ options, value }) =>
     <select value={ value } />);
+  COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
+    <input ref={ controlRef } value={ value } type="datetime" />);
+  COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, isProcessing, ...props }) =>
+    <input ref={ controlRef } { ...props } type="checkbox" />);
+  COMPONENTS_BASE.replace('Attachment', () => ({ controlRef, touched, isProcessing, ...props }) =>
+    <input ref={ controlRef } { ...props } type="file" />);
 
   COMPONENTS_BASE.replace('Input', () => require('./components/form/fields/CoreInput').default);
   COMPONENTS_BASE.replace('TextArea', () => require('./components/form/fields/CoreTextArea').default);
   COMPONENTS_BASE.replace('Select', () => require('./components/form/fields/CoreSelect').default);
-  COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
-    <input ref={ controlRef } value={ value } type="datetime" />);
-  COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, ...props }) =>
-    <input ref={ controlRef } { ...props } type="checkbox" />);
-  COMPONENTS_BASE.replace('Attachment', () => ({ controlRef, touched, ...props }) =>
-    <input ref={ controlRef } { ...props } type="file" />);
 
   // ======================================================
   // UI
@@ -69,7 +69,6 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('Button', () => require('./containers/CoreButton/CoreButton').default);
   COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
   COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
-  COMPONENTS_BASE.replace('UserAvatar', () => require('./containers/UserAvatar/UserAvatar').default);
 
   COMPONENTS_BASE.replace('CoreApp', () => require('./containers/CoreApp/CoreApp').default);
   COMPONENTS_BASE.replace('ErrorPage', () => require('./containers/ErrorPage/ErrorPage').default);

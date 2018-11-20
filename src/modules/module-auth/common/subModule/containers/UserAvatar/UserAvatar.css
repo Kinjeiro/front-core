@@ -18,7 +18,7 @@
       display: none;
     }
 
-    background: url('./no_user.jpg') no-repeat center;
+    background: url('no_user.jpg') no-repeat center;
     background-size: cover;
   }
 

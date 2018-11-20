@@ -15,7 +15,7 @@ import appUrl from '../../../../../../common/helpers/app-urls';
 import {
   getUserInfo,
 } from '../../../../../../common/app-redux/selectors';
-import * as reduxUserInfo from '../../../../../../common/app-redux/reducers/app/user-info';
+import * as reduxUserInfo from '../../redux-user-info';
 import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
 import {
   SUB_TYPES,

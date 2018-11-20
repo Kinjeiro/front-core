@@ -6,16 +6,16 @@ import bind from 'lodash-decorators/bind';
 import {
   includes,
   wrapToArray,
-} from '../../../../../common/utils/common';
-import USER_PROP_TYPE from '../../../../../common/models/model-user-info';
-import { getUserInfo } from '../../../../../common/app-redux/selectors';
-import { actions } from '../../../../../common/app-redux/reducers/app/last-uni-error';
-import { notifyError } from '../../../../../common/helpers/notifications';
+} from '../../../../../../common/utils/common';
+import USER_PROP_TYPE from '../../../../../../common/models/model-user-info';
+import { getUserInfo } from '../../../../../../common/app-redux/selectors';
+import { actions } from '../../../../../../common/app-redux/reducers/app/last-uni-error';
+import { notifyError } from '../../../../../../common/helpers/notifications';
 
 // ======================================================
 // MODULE
 // ======================================================
-import i18n from '../i18n';
+import i18n from '../../i18n';
 
 // import './AuthCheckWrapper.scss';
 

@@ -4,20 +4,20 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import bind from 'lodash-decorators/bind';
 
-import clientConfig from '../../../../../common/client-config';
+import clientConfig from '../../../../../../common/client-config';
 import {
   getLastUniError,
   getUserId,
-} from '../../../../../common/app-redux/selectors';
-import * as reduxLastUniError from '../../../../../common/app-redux/reducers/app/last-uni-error';
+} from '../../../../../../common/app-redux/selectors';
+import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
 
 // ======================================================
 // MODULE
 // ======================================================
-import i18n from '../i18n';
-import { pathGetSigninPage } from '../routes-paths-auth';
+import i18n from '../../i18n';
+import { pathGetSigninPage } from '../../routes-paths-auth';
 
-import getComponents from '../get-components';
+import getComponents from '../../get-components';
 
 const {
   Modal,

@@ -1,8 +1,8 @@
-import { createApiConfig as api } from '../utils/create-api-config';
-import { readAsDataURL } from '../utils/api-utils';
-import sendApiRequest from '../utils/send-api-request';
-import ImageTools from '../utils/image-utils';
-import logger from '../helpers/client-logger';
+import { createApiConfig as api } from '../../../../common/utils/create-api-config';
+import { readAsDataURL } from '../../../../common/utils/api-utils';
+import sendApiRequest from '../../../../common/utils/send-api-request';
+import ImageTools from '../../../../common/utils/image-utils';
+import logger from '../../../../common/helpers/client-logger';
 
 export const API_PREFIX = 'users';
 export const API_CONFIGS = {
