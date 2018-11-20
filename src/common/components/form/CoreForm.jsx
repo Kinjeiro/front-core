@@ -40,7 +40,10 @@ export default class CoreForm extends Component {
   static propTypes = {
     id: PropTypes.string,
     i18nFieldPrefix: PropTypes.string,
-    fields: PropTypes.arrayOf(FIELD_PROP_TYPE),
+    fields: PropTypes.arrayOf(PropTypes.oneOfType([
+      FIELD_PROP_TYPE,
+      PropTypes.node,
+    ])),
     /**
      * Для передачи в onSubmit
      */
@@ -100,6 +103,7 @@ export default class CoreForm extends Component {
     useForm: true,
     firstFocus: true,
     textDefaultFormErrorText: i18n('components.CoreForm.textDefaultFormErrorText'),
+    formData: {},
   };
 
   state = {
@@ -270,7 +274,12 @@ export default class CoreForm extends Component {
     }
 
     if (await emitProcessing(this.isValid(), this)) {
-      return onSubmit && onSubmit(formData);
+      if (onSubmit) {
+        await onSubmit(formData);
+      }
+      this.setState({
+        touched: false,
+      });
     }
     return false;
   }
@@ -358,11 +367,16 @@ export default class CoreForm extends Component {
       name,
     } = field;
 
-    let fieldCmp = (
-      <Field
-        { ...this.gerFieldProps(field, index) }
-      />
-    );
+    let fieldCmp;
+    if (typeof field === 'string' || React.isValidElement(field)) {
+      fieldCmp = field;
+    } else {
+      fieldCmp = (
+        <Field
+          { ...this.gerFieldProps(field, index) }
+        />
+      );
+    }
 
     if (!clientConfig.common.isProduction) {
       fieldCmp = (
@@ -515,7 +529,7 @@ export default class CoreForm extends Component {
         actions={ this.renderActions() }
         postActions={ this.renderPostActions() }
         actionStatus={ this.renderActionStatus() }
-        formErrors={ touched && this.renderFormError() }
+        formErrors={ touched ? this.renderFormError() : undefined }
       />
     );
 
