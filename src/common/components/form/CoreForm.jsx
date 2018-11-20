@@ -77,6 +77,7 @@ export default class CoreForm extends Component {
 
     actionStatus: ACTION_STATUS_PROPS,
     textActionSuccess: PropTypes.node,
+    actionStatusComponentProps: PropTypes.shape(ActionStatus.propTypes),
 
     firstFocus: PropTypes.bool,
 
@@ -506,6 +507,7 @@ export default class CoreForm extends Component {
       useForm,
       textActionSuccess,
       actionStatus,
+      actionStatusComponentProps,
       Layout,
     } = this.props;
     const {
@@ -539,6 +541,8 @@ export default class CoreForm extends Component {
           actionStatus={ actionStatus }
           textSuccess={ textActionSuccess }
           showError={ false }
+          replaceForm={ false }
+          { ...actionStatusComponentProps }
         >
           { component }
         </ActionStatus>

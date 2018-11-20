@@ -15,9 +15,11 @@ export default class ActionStatus extends PureComponent {
     children: PropTypes.node,
     textSuccess: PropTypes.node,
     showError: PropTypes.bool,
+    replaceForm: PropTypes.bool,
   };
 
   static defaultProps = {
+    replaceForm: true,
     showError: true,
   };
 
@@ -32,9 +34,10 @@ export default class ActionStatus extends PureComponent {
       children,
       textSuccess,
       showError,
+      replaceForm,
     } = this.props;
 
-    let component = !isFetching && isFailed && showError && (
+    const errorComponent = showError && !isFetching && isFailed && (
       <div className={ this.bem('error') }>
         {
           error
@@ -45,31 +48,17 @@ export default class ActionStatus extends PureComponent {
         }
       </div>
     );
+    const successComponent = textSuccess && !isFetching && !isFailed && (
+      <div className={ this.bem('successText') }>
+        { textSuccess }
+      </div>
+    );
 
-    if (children) {
-      component = (
-        <React.Fragment>
-          {
-            textSuccess && !isFetching && isLoaded
-            ? (
-              <div className={ this.bem('successText') }>
-                { textSuccess }
-              </div>
-            )
-            : children
-          }
-          {
-            component
-          }
-        </React.Fragment>
-      );
-    }
-
-    return component && (
+    return (
       <div className={ `${this.fullClassName} ${this.bem({ isSuccess: isLoaded, isFailed })}` }>
-        {
-          component
-        }
+        { replaceForm ? null : children }
+        { errorComponent }
+        { successComponent }
       </div>
     );
   }
