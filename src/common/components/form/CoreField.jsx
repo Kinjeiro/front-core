@@ -282,6 +282,12 @@ export default class CoreField extends Component {
         } else if (Array.isArray(customValidateErrors)) {
           // польностью заменяем массив
           errors = customValidateErrors;
+        } else if (typeof customValidateErrors === 'object') {
+          /*
+           процесс валидации может закончиться с warnings и successMessages
+           к примеру, мы проверяем уникальность нового email и если успешно проверили - то нужно показать пользователю зеленое сообщение что адрес свободен
+          */
+          // todo @ANKU @LOW -
         }
       } catch (uniError) {
         console.debug('Field validate error', uniError);
@@ -528,6 +534,7 @@ export default class CoreField extends Component {
       }
       case SUB_TYPES.PHONE: {
         return {
+          pattern: '^((\\+7|7|8)+([0-9]){10})$',
           ...props,
           type: 'tel',
         };

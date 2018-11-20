@@ -20,11 +20,11 @@ export default class FormLayout extends PureComponent {
     actions: ELEMENT_PROP_TYPE,
     postActions: ELEMENT_PROP_TYPE,
     actionStatus: PropTypes.object,
-    formErrors: PropTypes.array,
+    formErrors: PropTypes.node,
   };
 
   renderElement(className, element) {
-    const isNotEmpty = element && (!Array.isArray(element) || element.length);
+    const isNotEmpty = element && (!Array.isArray(element) || element.length > 0);
     return isNotEmpty
       ? (
         <div className={ className }>
