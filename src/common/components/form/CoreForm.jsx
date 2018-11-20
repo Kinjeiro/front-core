@@ -278,9 +278,13 @@ export default class CoreForm extends Component {
       if (onSubmit) {
         await onSubmit(formData);
       }
-      this.setState({
-        touched: false,
-      });
+      try {
+        this.setState({
+          touched: false,
+        });
+      } catch (error) {
+        // может получится так, что после submit будет редирект и компонент заанмаунтится, поэтому setState будет падать с ошибкой - это нормально
+      }
     }
     return false;
   }
@@ -539,7 +543,7 @@ export default class CoreForm extends Component {
       component = (
         <ActionStatus
           actionStatus={ actionStatus }
-          textSuccess={ textActionSuccess }
+          textSuccess={ !touched && textActionSuccess }
           showError={ false }
           replaceForm={ false }
           { ...actionStatusComponentProps }

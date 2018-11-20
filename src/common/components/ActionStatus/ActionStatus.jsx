@@ -48,7 +48,7 @@ export default class ActionStatus extends PureComponent {
         }
       </div>
     );
-    const successComponent = textSuccess && !isFetching && !isFailed && (
+    const successComponent = textSuccess && isLoaded && !isFetching && !isFailed && (
       <div className={ this.bem('successText') }>
         { textSuccess }
       </div>
