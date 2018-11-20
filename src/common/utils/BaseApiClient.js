@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign,no-undef,no-unused-vars */
 import requestAgent from 'superagent';
 
+import { getUser } from '../app-redux/selectors';
+
 import clientConfig from '../client-config';
 
 import {
@@ -65,10 +67,19 @@ export default class BaseApiClientClass {
     }
     return this.getContextDataFn(...args);
   }
-  getUserInfo(...args) {
+  getUser(...args) {
     const context = this.getContextData(...args);
-    // обычно у нас в качестве контекста redux state и в нем есть userInfo
-    return context ? context.userInfo : null;
+    // обычно у нас в качестве контекста redux globalState и в нем есть userInfo.userData
+    // return context ? context.userInfo.userData : null;
+    return context ? getUser(context) : null;
+  }
+  /**
+   * @deprecated - use getUser
+   * @param args
+   * @return {*}
+   */
+  getUserInfo(...args) {
+    return this.getUser(...args);
   }
 
   getContextRoot() {
@@ -112,10 +123,11 @@ export default class BaseApiClientClass {
       data: patchOperations,
     });
   }
-  del(url, data, options = {}) {
+  // delete - зарезервированное слово
+  delete1(url, data, options = {}) {
     return this.proceedRequest({
       ...options,
-      method: 'del',
+      method: 'delete',
       url,
       data,
     });
@@ -125,7 +137,11 @@ export default class BaseApiClientClass {
       method = 'get',
       path,
     } = createApiConfig(apiConfig);
-    return this[method.toLowerCase()](path, paramsOrData, options);
+    const httpMethod = method.toLowerCase();
+    const clientMethod = httpMethod === 'delete'
+      ? 'delete1'
+      : httpMethod;
+    return this[clientMethod](path, paramsOrData, options);
   }
 
   uploadFiles(apiConfig, filesMap, params = {}, options = {}) {
