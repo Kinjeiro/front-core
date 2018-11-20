@@ -1,6 +1,6 @@
-import { createApiConfig as api } from '../utils/create-api-config';
+import { createApiConfig as api } from '../../../../common/utils/create-api-config';
 
-import sendApiRequest from '../utils/send-api-request';
+import sendApiRequest from '../../../../common/utils/send-api-request';
 
 export const API_PREFIX = 'auth';
 export const API_CONFIGS = {

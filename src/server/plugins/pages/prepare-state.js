@@ -16,8 +16,11 @@ export default async function prepareState(request, server, defaultState = {}, p
 
   return {
     ...defaultState,
-    userInfo: isAuthenticated(request)
-      ? await strategies.userInfoStrategy(request)
-      : {},
+    userInfo: {
+      ...defaultState.userInfo,
+      userData: isAuthenticated(request)
+        ? await strategies.userInfoStrategy(request)
+        : null,
+    },
   };
 }

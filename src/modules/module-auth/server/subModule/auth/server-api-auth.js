@@ -1,6 +1,4 @@
 /* eslint-disable camelcase */
-import { API_CONFIGS } from '../../../../../common/api/api-auth';
-
 import serverConfig from '../../../../../server/server-config';
 import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
 import logger from '../../../../../server/helpers/server-logger';
@@ -10,6 +8,8 @@ import {
   getRefreshToken,
   clearAuthCookie,
 } from '../../../../../server/utils/auth-utils';
+
+import { API_CONFIGS } from '../../../common/subModule/api-auth';
 
 export const API = API_CONFIGS;
 

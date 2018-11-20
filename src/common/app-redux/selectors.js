@@ -1,10 +1,11 @@
 import { createSelector } from 'redux-orm';
 
-import { includes } from '../utils/common';
-
 import orm from '../models/domains/utils/orm';
 
 import { STATE_CLIENT_CONFIG_PARAM } from '../constants/sync-consts';
+
+// todo @ANKU @LOW - для поддержки обратной совместимости
+export * from '../../modules/module-auth/common/subModule/redux-selectors';
 
 export function getCurrentPath(globalState) {
   // используется в redux-router 4
@@ -16,39 +17,7 @@ export function getCurrentPath(globalState) {
 // ======================================================
 // APP
 // ======================================================
-export function getUserInfo(globalState) {
-  return globalState.userInfo;
-}
 
-export function getUser(globalState) {
-  const userInfo = getUserInfo(globalState);
-  return userInfo && userInfo.userId
-    ? userInfo
-    : null;
-}
-export function getUserId(globalState) {
-  const userInfo = getUserInfo(globalState);
-  return userInfo && userInfo.userId
-    ? userInfo.userId
-    : null;
-}
-
-export function hasPermission(globalState, permission) {
-  const user = getUser(globalState);
-  return user && includes(user.permissions, permission);
-}
-
-export function hasRole(globalState, role) {
-  const user = getUser(globalState);
-  return user && includes(user.roles, role);
-}
-
-// ======================================================
-// USERS
-// ======================================================
-export function getUsersData(globalState) {
-  return globalState.users;
-}
 
 
 

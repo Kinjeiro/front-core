@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
-import { API_CONFIGS } from '../../../../../common/api/api-users';
-
 import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
 import logger from '../../../../../server/helpers/server-logger';
+
+import { API_CONFIGS } from '../../../common/subModule/api-users';
 
 export default function createApiPlugins() {
   return [

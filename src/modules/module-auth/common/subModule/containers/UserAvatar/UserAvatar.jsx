@@ -4,18 +4,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import { getUserAvatarUrl } from '../../app-redux/reducers/app/users';
+import { getUserAvatarUrl } from '../../redux-user-info';
 import {
   getUserId,
-  getUsersData,
-} from '../../app-redux/selectors';
+  getUserInfo,
+} from '../../redux-selectors';
 
 import './UserAvatar.css';
 
 @connect(
   (globalState) => ({
     currentUserId: getUserId(globalState),
-    currentAvatarKey: getUsersData(globalState).avatarKey,
+    currentAvatarKey: getUserInfo(globalState).avatarKey,
   }),
 )
 export default class UserAvatar extends PureComponent {

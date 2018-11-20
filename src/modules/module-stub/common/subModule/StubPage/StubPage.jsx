@@ -20,19 +20,16 @@ import { notifyError } from '../../../../../common/helpers/notifications';
 // ======================================================
 // REDUX
 // ======================================================
-import apiAuth from '../../../../../common/api/api-auth';
-
 import {
   getI18NInfo,
-  getUserInfo,
+  getUser,
   hasPermission,
   getTestDomains,
 } from '../../../../../common/app-redux/selectors';
 import * as reduxI18nInfo from '../../../../../common/app-redux/reducers/app/i18n-info';
-import * as reduxUserInfo from '../../../../../common/app-redux/reducers/app/user-info';
+import * as reduxUserInfo from '../../../../module-auth/common/subModule/redux-user-info';
 import * as reduxTest from '../../../../../common/app-redux/reducers/app/test';
 import * as reduxLastUniError from '../../../../../common/app-redux/reducers/app/last-uni-error';
-import * as reduxUsers from '../../../../../common/app-redux/reducers/app/users';
 
 import TestDomain from '../../../../../common/models/domains/TestDomain';
 
@@ -63,7 +60,7 @@ const {
 } = getComponents();
 
 
-const { getUserAvatarUrl } = reduxUsers;
+const { getUserAvatarUrl } = reduxUserInfo;
 
 // const PAGE_ID = 'StubPage';
 
@@ -78,27 +75,23 @@ const { getUserAvatarUrl } = reduxUsers;
 // todo @ANKU @CRIT @MAIN - вынести все это в examples
 @connect(
   (globalState) => {
-    const userInfo = getUserInfo(globalState);
+    const user = getUser(globalState);
 
     return {
       i18nInfo: getI18NInfo(globalState),
-      userInfo,
+      user,
       // @debug - так как мы используем mock, то реальный пользователь с загрузкой страницы не приходит, так как мы токен не используем, поэтому нужно проверить загрузился ли он через componentWillMount
       showTestPermission: hasPermission(globalState, TEST_PERMISSION),
       testDomains: getTestDomains(globalState),
     };
   },
   {
+    ...reduxLastUniError.actions,
     ...reduxI18nInfo.actions,
-    ...reduxUserInfo.getBindActions({
-      apiChangeUser: apiAuth.apiLogin,
-      apiUserLogout: apiAuth.apiLogout,
-    }),
+    ...reduxUserInfo.actions,
     ...TestDomain.getActions(),
     ...reduxTest.actions,
     actionGoto: push,
-    ...reduxLastUniError.actions,
-    ...reduxUsers.actions,
   },
 )
 @bemDecorator({ componentName: 'StubPage', wrapper: false })
@@ -117,7 +110,7 @@ export default class StubPage extends Component {
       language: PropTypes.string,
       whitelist: PropTypes.arrayOf(PropTypes.string),
     }),
-    userInfo: USER_INFO_PROPS,
+    user: USER_INFO_PROPS,
     showTestPermission: PropTypes.bool,
 
     actionI18NChangeLanguage: PropTypes.func,
@@ -160,9 +153,9 @@ export default class StubPage extends Component {
   @bind()
   handleChangeUser() {
     this.props.actionChangeUser(
-      this.props.userInfo.userId === clientConfig.common.features.auth.mochUsers.ivanovIUserId
-        ? clientConfig.common.features.auth.mochUsers.korolevaUUserId
-        : clientConfig.common.features.auth.mochUsers.ivanovIUserId,
+      this.props.user.userId === clientConfig.common.features.auth.mockUsers.ivanovIUserId
+        ? clientConfig.common.features.auth.mockUsers.korolevaUUserId
+        : clientConfig.common.features.auth.mockUsers.ivanovIUserId,
       '123456',
     );
   }
@@ -185,7 +178,7 @@ export default class StubPage extends Component {
   // ======================================================
   renderTestChangeAvatar() {
     const {
-      userInfo: {
+      user: {
         userId,
         // username,
         // displayName,
@@ -195,9 +188,9 @@ export default class StubPage extends Component {
     } = this.props;
 
     // by aliasId
-    const otherUserId = userId === clientConfig.common.features.auth.mochUsers.ivanovIUserId
-      ? clientConfig.common.features.auth.mochUsers.korolevaUUserId
-      : clientConfig.common.features.auth.mochUsers.ivanovIUserId;
+    const otherUserId = userId === clientConfig.common.features.auth.mockUsers.ivanovIUserId
+      ? clientConfig.common.features.auth.mockUsers.korolevaUUserId
+      : clientConfig.common.features.auth.mockUsers.ivanovIUserId;
 
     return (
       <Segment
@@ -232,7 +225,7 @@ export default class StubPage extends Component {
         language,
         whitelist,
       },
-      userInfo: {
+      user: {
         userId,
         username,
         displayName,
@@ -402,11 +395,11 @@ export default class StubPage extends Component {
                 label: 'Text "test"',
                 type: Form.FIELD_TYPES.STRING,
                 required: true,
-                validate: (value) => (value !== 'test' ? 'Кастомная ошибка' : null),
+                validate: (value) => (!value || value === 'test' || 'Кастомная ошибка'),
                 onChange: () => {},
               },
               {
-                name: 'string',
+                name: 'string2',
                 label: 'Required text',
                 type: Form.FIELD_TYPES.STRING,
                 required: true,

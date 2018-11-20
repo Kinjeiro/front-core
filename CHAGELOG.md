@@ -98,7 +98,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - если массив: выведется массив ошибок
 */
 ```
-5. Field::validate и Form::validate - поддерживают асинхронную валидацию и возвращают Promise
+5. ```Field::validate``` и ```Form::validate``` - поддерживают асинхронную валидацию и возвращают Promise
+6. UserInfo: ```common\app-redux\reducers\user-info``` и ```common\app-redux\reducers\users``` переехали в один файл ```modules\module-auth\common\subModule\redux-user-info``` 
+7. UserInfo: теперь инфомарция о пользователе переехала из redux ```globalState.userInfo``` -> ```globalState.userInfo.userData``` 
+8. Почистил @deprecated:
+```
+- Удалил common\containers\LoginPage 
+- Удалил common\containers\index.js
+- Удалил константы из common\routes.pathes.js
+```
+    
+
 
 ### API Dependencies:
     - auth-server@2.0.1

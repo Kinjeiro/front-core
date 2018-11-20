@@ -18,7 +18,7 @@ import {
 import {
   getUserInfo,
 } from '../../../../../../common/app-redux/selectors';
-import * as reduxUserInfo from '../../../../../../common/app-redux/reducers/app/user-info';
+import * as reduxUserInfo from '../../redux-user-info';
 
 // ======================================================
 // COMPONENTS and STYLES
