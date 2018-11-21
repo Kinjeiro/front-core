@@ -182,6 +182,7 @@
     "rimraf": "~2.6.2",
     "route-parser": "0.0.5",
     "sass-loader": "~6.0.7",
+    "shallowequal": "~1.1.0",
     "static-site-generator-webpack-plugin": "~3.0.0",
     "stream": "0.0.2",
     "style-loader": "~0.17.0",
@@ -200,8 +201,7 @@
   },
   "peerDependencies": {
     "react": ">=16.4.0",
-    "react-dom": ">=16.4.0",
-    "shallowEqual": ">=1"
+    "react-dom": ">=16.4.0"
   },
   "devDependencies": {
     "autoprefixer": "~6.3.1",
