@@ -6,33 +6,9 @@ import { API_CONFIGS } from '../../../common/subModule/api-users';
 
 export default function createApiPlugins() {
   return [
-    apiPluginFactory(
-      API_CONFIGS.editUser,
-      async (userData, request, reply) => {
-        logger.debug('editUser: ', userData);
-        await request.services.serviceUsers.editUser(userData);
-        return reply();
-      },
-    ),
-    apiPluginFactory(
-      API_CONFIGS.deleteUser,
-      async (requestData, request, reply) => {
-        logger.debug('deleteUser');
-        await request.services.serviceUsers.deleteUser();
-        return reply();
-      },
-    ),
-    apiPluginFactory(
-      API_CONFIGS.changePassword,
-      async (userData, request, reply) => {
-        logger.debug('changePassword: ', userData);
-        const {
-          newPassword,
-          oldPassword,
-        } = userData;
-        return reply(request.services.serviceUsers.changeUserPassword(newPassword, oldPassword));
-      },
-    ),
+    // ======================================================
+    // NO AUTH
+    // ======================================================
     apiPluginFactory(
       API_CONFIGS.checkUnique,
       async (userData, request, reply) => {
@@ -41,7 +17,29 @@ export default function createApiPlugins() {
           field,
           value,
         } = userData;
-        return reply(request.services.serviceUsers.checkUnique(field, value));
+        return reply({
+          result: await request.services.serviceUsers.checkUnique(field, value),
+        });
+      },
+      {
+        routeConfig: {
+          // не требуется авторизация для проверки уникальности
+          auth: false,
+        },
+      },
+    ),
+    apiPluginFactory(
+      API_CONFIGS.getPublicInfo,
+      async (userData, request, reply) => {
+        logger.debug('getPublicInfo: ', userData);
+        const { userIdOrAliasId } = request.params;
+        return reply(request.services.serviceUsers.getPublicInfo(userIdOrAliasId));
+      },
+      {
+        routeConfig: {
+          // не требуется авторизация для проверки уникальности
+          auth: false,
+        },
       },
     ),
     apiPluginFactory(
@@ -71,6 +69,44 @@ export default function createApiPlugins() {
           response.header(headerKey, headers[headerKey]);
         });
         return response;
+      },
+      {
+        routeConfig: {
+          // не требуется авторизация для аватарок других пользователей
+          auth: false,
+        },
+      },
+    ),
+
+
+    // ======================================================
+    // AUTH
+    // ======================================================
+    apiPluginFactory(
+      API_CONFIGS.editUser,
+      async (userData, request, reply) => {
+        logger.debug('editUser: ', userData);
+        const editedUser = await request.services.serviceUsers.editUser(userData);
+        return reply(editedUser);
+      },
+    ),
+    apiPluginFactory(
+      API_CONFIGS.deleteUser,
+      async (requestData, request, reply) => {
+        logger.debug('deleteUser');
+        await request.services.serviceUsers.deleteUser();
+        return reply();
+      },
+    ),
+    apiPluginFactory(
+      API_CONFIGS.changePassword,
+      async (userData, request, reply) => {
+        logger.debug('changePassword: ', userData);
+        const {
+          newPassword,
+          oldPassword,
+        } = userData;
+        return reply(request.services.serviceUsers.changeUserPassword(newPassword, oldPassword));
       },
     ),
   ];

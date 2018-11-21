@@ -25,7 +25,7 @@ export default class ServiceUsers extends CoreService {
       editUser: '/users',
       changeUserPassword: '/users/changePassword',
       deleteUser: '/users',
-      checkUnique: '/unique',
+      checkUnique: '/users/unique',
 
       editUserByAdmin: '/users/{userId}',
       deleteUserByAdmin: '/users/{userId}',
@@ -38,6 +38,56 @@ export default class ServiceUsers extends CoreService {
     };
   }
 
+  // ======================================================
+  // NO AUTH
+  // ======================================================
+  async checkUnique(field, value) {
+    logger.debug('ServiceUsers', 'checkUnique', field, value);
+    const responseData = await this.send(
+      this.urls.checkUnique,
+      {
+        field,
+        value,
+      },
+    );
+    return !responseData || typeof responseData.result === 'undefined' || responseData.result;
+  }
+
+  async getAvatar(userIdOrAliasId, key = undefined) {
+    logger.debug('ServiceUsers', 'getAvatar', userIdOrAliasId, key);
+    const response = await this.send(
+      this.urls.getAvatar,
+      {
+        userIdOrAliasId,
+        key,
+      },
+      {
+        returnResponse: true,
+        // todo @ANKU @LOW @BUG_OUT @Request - УЖАСНАЯ БАГА буффер не формируется https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+        // encoding: 'utf8',
+        encoding: null,
+      },
+    );
+
+    return {
+      headers: response.headers,
+      buffer: response.body,
+    };
+  }
+
+  async getPublicInfo(userIdOrAliasId) {
+    logger.log('ServiceUsers', 'getPublicInfo', userIdOrAliasId);
+    return this.send(
+      this.urls.getPublicInfo,
+      {
+        userIdOrAliasId,
+      },
+    );
+  }
+
+  // ======================================================
+  // AUTH
+  // ======================================================
   async editUser(userData) {
     logger.debug('ServiceUsers', 'editUser');
     return this.sendWithAuth(
@@ -45,16 +95,6 @@ export default class ServiceUsers extends CoreService {
       userData,
       {
         method: 'PUT',
-      },
-    );
-  }
-  async checkUnique(field, value) {
-    logger.debug('ServiceUsers', 'checkUnique');
-    return this.sendWithAuth(
-      this.urls.checkUnique,
-      {
-        field,
-        value,
       },
     );
   }
@@ -82,38 +122,6 @@ export default class ServiceUsers extends CoreService {
     );
   }
 
-
-  async getAvatar(userIdOrAliasId, key = undefined) {
-    logger.debug('ServiceUsers', 'getAvatar', userIdOrAliasId, key);
-    const response = await this.sendWithAuth(
-      this.urls.getAvatar,
-      {
-        userIdOrAliasId,
-        key,
-      },
-      {
-        returnResponse: true,
-        // todo @ANKU @LOW @BUG_OUT @Request - УЖАСНАЯ БАГА буффер не формируется https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
-        // encoding: 'utf8',
-        encoding: null,
-      },
-    );
-
-    return {
-      headers: response.headers,
-      buffer: response.body,
-    };
-  }
-
-  async getPublicInfo(userIdOrAliasId) {
-    logger.log('ServiceUsers', 'getPublicInfo', userIdOrAliasId);
-    return this.sendWithAuth(
-      this.urls.getPublicInfo,
-      {
-        userIdOrAliasId,
-      },
-    );
-  }
 
   /**
    *
