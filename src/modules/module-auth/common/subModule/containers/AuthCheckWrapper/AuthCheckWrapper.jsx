@@ -8,7 +8,6 @@ import {
   wrapToArray,
 } from '../../../../../../common/utils/common';
 import USER_PROP_TYPE from '../../../../../../common/models/model-user-info';
-import { getUserInfo } from '../../../../../../common/app-redux/selectors';
 import { actions } from '../../../../../../common/app-redux/reducers/app/last-uni-error';
 import { notifyError } from '../../../../../../common/helpers/notifications';
 
@@ -17,11 +16,13 @@ import { notifyError } from '../../../../../../common/helpers/notifications';
 // ======================================================
 import i18n from '../../i18n';
 
+import { getUser } from '../../redux-selectors';
+
 // import './AuthCheckWrapper.scss';
 
 @connect(
   (globalState) => ({
-    userInfo: getUserInfo(globalState),
+    user: getUser(globalState),
   }),
   {
     ...actions,
@@ -43,7 +44,7 @@ export default class AuthCheckWrapper extends Component {
     // ======================================================
     // @connect
     // ======================================================
-    userInfo: USER_PROP_TYPE,
+    user: USER_PROP_TYPE,
 
     actionThrowNotAuthError: PropTypes.func,
   };
@@ -71,20 +72,37 @@ export default class AuthCheckWrapper extends Component {
   // }
 
   // ======================================================
+  // UTILS
+  // ======================================================
+  isNotAuth() {
+    const {
+      user,
+      checkAuth,
+    } = this.props;
+
+    return checkAuth && !user;
+  }
+
+  isNotPermission() {
+    const {
+      user,
+      permissions,
+    } = this.props;
+    return permissions && permissions.length > 0 && (!user || !includes(user.permissions, permissions));
+  }
+  // ======================================================
   // HANDLERS
   // ======================================================
   @bind()
   handleClick(event) {
     const {
-      userInfo,
-      checkAuth,
       permissions,
       linkForwardTo,
       actionThrowNotAuthError,
     } = this.props;
 
-    const isNotAuth = checkAuth && !userInfo.userId;
-    const isNotPermission = permissions && permissions.length > 0 && !includes(userInfo.permissions, permissions);
+    const isNotAuth = this.isNotAuth();
+    const isNotPermission = this.isNotPermission();
 
     if (isNotAuth || isNotPermission) {
       event.preventDefault();
@@ -111,8 +129,6 @@ export default class AuthCheckWrapper extends Component {
   render() {
     const {
       children,
-
-      userInfo,
       checkAuth,
       permissions,
     } = this.props;
@@ -121,8 +137,8 @@ export default class AuthCheckWrapper extends Component {
       return children;
     }
 
-    const isNotAuth = checkAuth && !userInfo.username;
-    const isNotPermission = permissions && permissions.length > 0 && !includes(userInfo.permissions, permissions);
+    const isNotAuth = this.isNotAuth();
+    const isNotPermission = this.isNotPermission();
 
     return React.Children.map(children, (child) => {
       if (!React.isValidElement(child)) {
