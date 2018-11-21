@@ -16,7 +16,15 @@ import logger, { logObject } from '../helpers/server-logger';
 
 export function getHeaders(/* apiRequest */) {
   return {
+    /**
+    * @deprecated - use projectId
+    */
     applicationId: serverConfig.common.appId,
+    /*
+      @NOTE: все названия попадают под lowwerCase - поэтому лучше писать snake
+    */
+    // projectId: serverConfig.common.appId,
+    project_id: serverConfig.common.appId,
   };
 }
 
