@@ -14,6 +14,7 @@ import serverConfig from './server-config';
 // COMMON
 // ======================================================
 import CoreClientRunner from '../client/CoreClientRunner';
+import { createComponentBase } from '../common/components/ComponentsBase';
 import SubModuleFactory from '../modules/SubModuleFactory';
 
 import createServices from './services';
@@ -70,6 +71,9 @@ export default class CoreServerRunner extends AbstractServerRunner {
   getClientRunner() {
     if (!this.clientRunner) {
       this.clientRunner = this.createClientRunner();
+      if (serverConfig.common.isServerSideRendering) {
+        this.clientRunner.initAllComponents(createComponentBase());
+      }
     }
     return this.clientRunner;
   }
