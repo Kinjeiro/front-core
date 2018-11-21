@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 import { USER_INFO_DEFAULT_VALUES } from '../../../../common/models/model-user-info';
 
 import { createReducer } from '../../../../common/app-redux/utils';
@@ -110,9 +112,15 @@ export function getBindActions({
      */
     actionChangeUser: actionSignin,
     actionUserLogout() {
-      return {
-        types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
-        payload: apiLogout(),
+      return async (dispatch, getState) => {
+        await dispatch({
+          types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
+          payload: apiLogout()
+            .then(() => {
+              // до USER_LOGOUT_SUCCESS чтобы компоненты уже заанмаунтились и пропсы в них не поменялись когда пользователя уже и нет
+              dispatch(push('/'));
+            }),
+        });
       };
     },
     actionForgotPassword(email, resetPasswordPageUrl, emailOptions) {
@@ -134,7 +142,8 @@ export function getBindActions({
     actionEditUser(userData) {
       return {
         types: [TYPES.EDIT_USER_FETCH, TYPES.EDIT_USER_SUCCESS, TYPES.EDIT_USER_FAIL],
-        payload: apiEditUser(userData),
+        payload: apiEditUser(userData)
+          .then((user) => user || userData),
       };
     },
     actionChangeEmail(email) {
