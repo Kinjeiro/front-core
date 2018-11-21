@@ -1,4 +1,7 @@
-import { sendWithAuth } from '../../utils/send-server-request';
+import {
+  sendWithAuth,
+  sendEndpointMethodRequest,
+} from '../../utils/send-server-request';
 
 import {
   REQUEST_FIELD__USER,
@@ -45,6 +48,27 @@ export default class CoreService {
   }
   getEndpointServiceConfig() {
     return this.endpointServiceConfig;
+  }
+
+
+  send(
+    path,
+    data,
+    options,
+  ) {
+    const {
+      method = 'GET',
+      ...requestOptions
+    } = options || {};
+
+    return sendEndpointMethodRequest(
+      this.getEndpointServiceConfig(),
+      path,
+      method,
+      data,
+      this.getRequest(),
+      requestOptions,
+    );
   }
 
   sendWithAuth(
