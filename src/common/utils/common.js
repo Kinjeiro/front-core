@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign,no-continue,no-restricted-syntax */
 import flattenDeep from 'lodash/flattenDeep';
-import shallowEqualLib from 'shallowEqual';
+import shallowEqualLib from 'shallowequal';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoizeLodash from 'lodash/memoize';

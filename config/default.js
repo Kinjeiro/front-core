@@ -97,10 +97,12 @@ const {
 
 // console.warn('Server process.env', process.env);
 
+const corePackageJson = require(path.resolve(__dirname, '..', 'package.json'));
 // Так как мы теперь используем этот файл только во время webpack можем читать из json
 const packageJson = require(path.join(process.cwd(), 'package.json'));
 const APP_ID = packageJson.name;
 const APP_VERSION = packageJson.version;
+
 
 const FINAL_SERVICES_HOST = HOST || SERVICES_HOST || 'localhost';
 
@@ -134,6 +136,7 @@ module.exports = {
     projectName: PROJECT_NAME || APP_ID,
     appId: APP_ID,
     appVersion: APP_VERSION,
+    coreVersion: corePackageJson.version,
 
     env: NODE_ENV,
     isProduction,
