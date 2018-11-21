@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 import pick from 'lodash/pick';
 
-import { objectValues } from '../../../../../common/utils/common';
+import {
+  objectValues,
+  merge,
+} from '../../../../../common/utils/common';
 import {
   PUBLIC_USER_INFO_PROP_TYPE_MAP,
   PROTECTED_USER_INFO_PROP_TYPE_MAP,
@@ -21,16 +24,19 @@ export const PROTECTED_ATTRS = Object.keys(PROTECTED_USER_INFO_PROP_TYPE_MAP);
 export default class ServiceMockUsers extends ServiceUsers {
   async editUser(newData) {
     logger.debug('ServiceMockUsers', 'editUser');
-    const user = await this.getService('serviceAuth').authValidate(this.getUserToken());
-    Object.apply(user, pick(newData, PUBLIC_EDITABLE_ATTRS));
+    const serviceAuth = this.getService('serviceAuth');
+    const user = await serviceAuth.authValidate(this.getUserToken());
+    return merge(
+      serviceAuth.getUsers()[user.userId],
+      pick(newData, PUBLIC_EDITABLE_ATTRS),
+    );
   }
   async changeUserPassword(newPassword, oldPassword) {
     logger.debug('ServiceMockUsers', 'changeUserPassword');
-    const user = await this.getService('serviceAuth').authValidate(this.getUserToken());
+    const serviceAuth = this.getService('serviceAuth');
+    const user = await serviceAuth.authValidate(this.getUserToken());
     if (user.password === oldPassword) {
-      Object.apply(user, {
-        password: newPassword,
-      });
+      serviceAuth.getUsers()[user.userId].password = newPassword;
     } else {
       // todo @ANKU @LOW - @@loc
       throw new Error('Неверный старый пароль');
@@ -44,7 +50,9 @@ export default class ServiceMockUsers extends ServiceUsers {
       // todo @ANKU @LOW - @@loc
       throw new Error(`Значение "${value}" для поля "${field}" уже используется.`);
     }
-    return result;
+    return {
+      result,
+    };
   }
 
   async deleteUser() {

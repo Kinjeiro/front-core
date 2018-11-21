@@ -9,9 +9,10 @@ export const API_CONFIGS = {
   editUser: api(`${API_PREFIX}/`, 'PUT'),
   deleteUser: api(`${API_PREFIX}/`, 'DELETE'),
   changePassword: api(`${API_PREFIX}/changePassword`, 'PUT'),
-  checkUnique: api(`${API_PREFIX}/checkUnique`, 'GET'),
 
+  checkUnique: api(`${API_PREFIX}/checkUnique`, 'GET'),
   avatar: api(`${API_PREFIX}/avatar/{userIdOrAliasId}`, 'GET'),
+  getPublicInfo: api(`${API_PREFIX}/public/{userIdOrAliasId}`, 'GET'),
 };
 
 /**
@@ -68,6 +69,9 @@ export function apiCheckUnique(field, value) {
     field,
     value,
   });
+}
+export function apiGetPublicInfo(userIdOrAliasId) {
+  return sendApiRequest(API_CONFIGS.getPublicInfo, { userIdOrAliasId });
 }
 export function apiDeleteUser() {
   return sendApiRequest(API_CONFIGS.deleteUser);

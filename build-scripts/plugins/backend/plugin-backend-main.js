@@ -80,7 +80,8 @@ function pluginBackendMain(webpackConfig, {
     if (!ENV.WATCH_CLIENT_FILES) {
       webpackConfig.watchOptions = {
         ignored: [
-          /node_modules/,
+          // /node_modules/,
+          /node_modules[/\\](?!@reagentum)/,
           /[/\\]static[/\\]/,
           /[/\\]src[/\\]client[/\\]/,
           /[/\\]src[/\\]common[/\\]app-redux[/\\]/,
