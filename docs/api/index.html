@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.11 | Documentation</title>
+  <title>@reagentum/front-core 1.6.12 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.11</code></div>
+          <div class='mb1'><code>1.6.12</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -472,6 +472,16 @@
                   href='#classname'
                   class="">
                   className
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#default'
+                  class="">
+                  default
                   
                 </a>
                 
@@ -1238,6 +1248,16 @@
                   href='#apigetuseravatarurl'
                   class="">
                   apiGetUserAvatarUrl
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#authviewdecorator'
+                  class="">
+                  authViewDecorator
                   
                 </a>
                 
@@ -4522,6 +4542,53 @@ actionStatus</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='default'>
+      default
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>default</div>
+  
+  
+
+  <div>Deprecated: user src/common/all-permissions.js
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id=''>
       
     </h3>
@@ -5959,7 +6026,7 @@ touched</p>
   
   
 
-  <div>Deprecated: use model-user
+  <div>Deprecated: use /src/modules/module-auth/common/subModule/model-user.js
 </div>
   
   
@@ -10146,6 +10213,101 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='authviewdecorator'>
+      authViewDecorator
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Оборачивание компонентов для проверки авторизации, наличия ролей или permissions</p>
+<p>Последний параметр, если это object - рассматривается как options. Все перед ним это rolesOr</p>
+
+
+  <div class='pre p1 fill-light mt0'>authViewDecorator(args: ...any, null: any, options: any): function (any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>null</span> <code class='quiet'>(any)</code>
+	    (...rolesOr, options)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    rolesOr: [], - у пользователя должна быть хоть одна из ролей
+<ul>
+<li>rolesAnd: [] - должны быть все роли</li>
+<li>permissionsOr: [] - должно быть хоть одно разрещение (также учитываются глобальные конфиги clientConfig.common.permissions)</li>
+<li>permissionsAnd: [] - должны быть все разрещение</li>
+<li>redirectNotAuth: string || (getRoutePath, location) => string - если нет авторизации то по умолчанию бросается ошибка и показывается модалка авторизации, либо если задать эту переменную то переходит на другую страницу</li>
+<li>redirectNotAccess: PATH_ACCESS_DENIED || string || (getRoutePath, location) => string- если не хватает каких-либо</li>
+<li>afterAuthRedirect: null,</li>
+</ul>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>function (any)</code>:
+        Пример 1:
+
+      
+    
   
 
   
