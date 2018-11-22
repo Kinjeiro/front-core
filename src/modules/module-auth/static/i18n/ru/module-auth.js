@@ -81,7 +81,8 @@ module.exports = {
       actionGoToLogin: 'Перейти на страницу логина',
     },
     AuthCheckWrapper: {
-      notPermissions: 'У вас не хватает прав ({{permissions}})',
+      notRoles: 'У вас нет подходящих ролей ({{roles}})',
+      notPermissions: 'У вас не хватает права ({{permissions}})',
     },
   },
 };

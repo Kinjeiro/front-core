@@ -1,8 +1,8 @@
 /**
- * @deprecated - use model-user
+ * @deprecated - use /src/modules/module-auth/common/subModule/model-user.js
  */
 
-import USER_PROP_TYPE, * as USER from './model-user';
+import USER_PROP_TYPE, * as USER from '../../modules/module-auth/common/subModule/model-user';
 
 export const PUBLIC_USER_INFO_PROP_TYPE_MAP = USER.USER_PROP_TYPE_MAP;
 export const PUBLIC_USER_INFO_PROP_TYPE = USER.PUBLIC_USER_PROP_TYPE;

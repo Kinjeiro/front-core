@@ -1,5 +1,5 @@
-export const TEST_PERMISSION = 'TEST_PERMISSION';
-
-export default [
-  TEST_PERMISSION,
-];
+/**
+ * @deprecated - user src/common/all-permissions.js
+ */
+export default from '../all-permissions';
+export * from '../all-permissions';

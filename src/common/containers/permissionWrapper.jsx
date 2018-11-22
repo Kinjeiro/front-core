@@ -17,7 +17,10 @@ import USER_INFO_PROP_TYPE from '../models/user-info';
 import { createUniError } from '../models/uni-error';
 import { PATH_ACCESS_DENIED } from '../constants/routes.pathes';
 
-export default function permissionWrapper(permissions, accessDeniedRoutePath = PATH_ACCESS_DENIED) {
+export default function permissionWrapper(
+  permissions,
+  accessDeniedRoutePath = PATH_ACCESS_DENIED,
+) {
   if (!Array.isArray(permissions)) {
     // eslint-disable-next-line no-param-reassign
     permissions = [permissions];
@@ -26,7 +29,7 @@ export default function permissionWrapper(permissions, accessDeniedRoutePath = P
   return (WrappedComponent) => {
     @connect(
       (state) => ({
-        userInfo: reduxSelectors.getUserInfo(state),
+        user: reduxSelectors.getUser(state),
       }),
       {
         actionChangeGlobalUniError: globalUniErrorActions.actionChangeGlobalUniError,
@@ -36,14 +39,14 @@ export default function permissionWrapper(permissions, accessDeniedRoutePath = P
     class PermissionCmpWrapper extends Component {
       static propTypes = {
         // from connect
-        userInfo: USER_INFO_PROP_TYPE,
+        user: USER_INFO_PROP_TYPE,
         actionChangeGlobalUniError: PropTypes.func,
         actionGoTo: PropTypes.func,
       };
 
       componentWillMount() {
         const {
-          userInfo,
+          user,
           actionChangeGlobalUniError,
           actionGoTo,
         } = this.props;
@@ -56,7 +59,7 @@ export default function permissionWrapper(permissions, accessDeniedRoutePath = P
             || [];
           const allow =
             permissions.every((permission) =>
-              (userInfo && userInfo.permissions.includes(permission))
+              (user && user.permissions.includes(permission))
               || configPermissions.includes(permission));
 
           if (!allow) {

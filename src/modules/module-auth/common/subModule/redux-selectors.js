@@ -16,12 +16,12 @@ export function getUserId(globalState) {
   return (userData && userData.userId) || null;
 }
 
-export function hasPermission(globalState, permission) {
+export function hasPermission(globalState, ...permissions) {
   const user = getUser(globalState);
-  return user && includes(user.permissions, permission);
+  return user && permissions.some((permission) => includes(user.permissions, permission));
 }
 
-export function hasRole(globalState, role) {
+export function hasRole(globalState, ...roles) {
   const user = getUser(globalState);
-  return user && includes(user.roles, role);
+  return user && roles.some((role) => includes(user.roles, role));
 }

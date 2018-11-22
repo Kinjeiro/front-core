@@ -195,7 +195,12 @@ module.exports = {
         mockUsers: {
           ivanovIUserId: '11AaaAaa',
           korolevaUUserId: '22BbbBbb'
-        }
+        },
+
+        /**
+         * название роли в базе
+         */
+        adminRoleName: 'admin'
       },
 
       date: {

@@ -5,17 +5,17 @@ import bind from 'lodash-decorators/bind';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import clientConfig from '../../../../../common/client-config';
+import clientConfig from '../../../../../../common/client-config';
 
 // ======================================================
 // UTILS
 // ======================================================
-import bemDecorator from '../../../../../common/utils/decorators/bem-component';
-import loading from '../../../../../common/utils/decorators/react-class/loading';
-import titled from '../../../../../common/utils/decorators/react-class/titled';
-import { PATH_INDEX } from '../../../../../common/routes.pathes';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+import loading from '../../../../../../common/utils/decorators/react-class/loading';
+import titled from '../../../../../../common/utils/decorators/react-class/titled';
+import { PATH_INDEX } from '../../../../../../common/routes.pathes';
 
-import { notifyError } from '../../../../../common/helpers/notifications';
+import { notifyError } from '../../../../../../common/helpers/notifications';
 
 // ======================================================
 // REDUX
@@ -25,29 +25,29 @@ import {
   getUser,
   hasPermission,
   getTestDomains,
-} from '../../../../../common/app-redux/selectors';
-import * as reduxI18nInfo from '../../../../../common/app-redux/reducers/app/i18n-info';
-import * as reduxUserInfo from '../../../../module-auth/common/subModule/redux-user-info';
-import * as reduxTest from '../../../../../common/app-redux/reducers/app/test';
-import * as reduxLastUniError from '../../../../../common/app-redux/reducers/app/last-uni-error';
+} from '../../../../../../common/app-redux/selectors';
+import * as reduxI18nInfo from '../../../../../../common/app-redux/reducers/app/i18n-info';
+import * as reduxUserInfo from '../../../../../module-auth/common/subModule/redux-user-info';
+import * as reduxTest from '../../../../../../common/app-redux/reducers/app/test';
+import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
 
-import TestDomain from '../../../../../common/models/domains/TestDomain';
+import TestDomain from '../../../../../../common/models/domains/TestDomain';
 
 // ======================================================
 // COMPONENTS and STYLES
 // ======================================================
-import { TEST_PERMISSION } from '../../../../../common/constants/permissions';
-import { USER_INFO_PROPS } from '../../../../../common/models/index';
-import ListItem from '../../../../../common/components/ListItem/ListItem';
-import Link from '../../../../../common/components/Link/Link';
-import contextModules from '../../../../../common/contexts/ContextModules/decorator-context-modules';
-import ModuleLink from '../../../../../common/containers/ModuleLink/ModuleLink';
+import { TEST_PERMISSION } from '../../../../../../common/constants/permissions';
+import { USER_INFO_PROPS } from '../../../../../../common/models/index';
+import ListItem from '../../../../../../common/components/ListItem/ListItem';
+import Link from '../../../../../../common/components/Link/Link';
+import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
+import ModuleLink from '../../../../../../common/containers/ModuleLink/ModuleLink';
 
 // ======================================================
 // MODULE
 // ======================================================
-import i18n from '../i18n';
-import getComponents from '../get-components';
+import i18n from '../../i18n';
+import getComponents from '../../get-components';
 
 import './StubPage.css';
 import './StubPageSass.scss';

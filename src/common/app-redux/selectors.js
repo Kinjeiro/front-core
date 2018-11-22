@@ -5,7 +5,16 @@ import orm from '../models/domains/utils/orm';
 import { STATE_CLIENT_CONFIG_PARAM } from '../constants/sync-consts';
 
 // todo @ANKU @LOW - для поддержки обратной совместимости
-export * from '../../modules/module-auth/common/subModule/redux-selectors';
+// для наглядности
+// export * from '../../modules/module-auth/common/subModule/redux-selectors';
+import * as userSelectors from '../../modules/module-auth/common/subModule/redux-selectors';
+
+export const getUserInfo = userSelectors.getUserInfo;
+export const getUser = userSelectors.getUser;
+export const getUserId = userSelectors.getUserId;
+export const hasPermission = userSelectors.hasPermission;
+export const hasRole = userSelectors.hasRole;
+
 
 export function getCurrentPath(globalState) {
   // используется в redux-router 4

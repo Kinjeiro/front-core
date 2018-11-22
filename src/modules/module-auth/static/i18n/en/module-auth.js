@@ -81,6 +81,7 @@ module.exports = {
       actionGoToLogin: 'Go to login page',
     },
     AuthCheckWrapper: {
+      notRoles: 'You haven\'t roles ({{roles}})',
       notPermissions: 'You haven\'t permissions ({{permissions}})',
     },
   },
