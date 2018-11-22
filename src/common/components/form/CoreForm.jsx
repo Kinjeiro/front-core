@@ -117,6 +117,7 @@ export default class CoreForm extends Component {
 
   domForm = null;
   domControls = {};
+  unmount = false;
 
   // ======================================================
   // LIFECYCLE
@@ -147,6 +148,9 @@ export default class CoreForm extends Component {
   //     }, 2000);
   //   }
   // }
+  componentWillUnmount() {
+    this.unmount = true;
+  }
 
   // ======================================================
   // UTILS
@@ -278,12 +282,11 @@ export default class CoreForm extends Component {
       if (onSubmit) {
         await onSubmit(formData);
       }
-      try {
+      // может получится так, что после submit будет редирект и компонент заанмаунтится, поэтому setState будет падать с ошибкой - это нормально
+      if (!this.unmount) {
         this.setState({
           touched: false,
         });
-      } catch (error) {
-        // может получится так, что после submit будет редирект и компонент заанмаунтится, поэтому setState будет падать с ошибкой - это нормально
       }
     }
     return false;
