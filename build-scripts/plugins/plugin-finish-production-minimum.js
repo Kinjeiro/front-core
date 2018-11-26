@@ -2,8 +2,13 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-function pluginFinishProductionMinimum(webpackConfig, { isProduction }) {
-  if (isProduction) {
+function pluginFinishProductionMinimum(
+  webpackConfig,
+  {
+    appConfig
+  }
+) {
+  if (appConfig.common.build.minimize) {
     webpackConfig.plugins.push(
       new webpack.LoaderOptionsPlugin({
         minimize: true,
