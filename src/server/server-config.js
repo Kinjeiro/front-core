@@ -1,6 +1,21 @@
 // import merge from 'lodash/merge';
 // import at from 'lodash/at';
-import nodeConfig from 'config';
+
+// todo @ANKU @LOW @HACK - при чистой уставноке почему-то не находит и не устанавливает с github
+// import nodeConfig from 'config';
+let nodeConfig;
+try {
+  nodeConfig = require('config').default;
+} catch (error) {
+  console.error('server-config:', error);
+  try {
+    nodeConfig = require('../../node_modules/config').default;
+  } catch (error2) {
+    console.error('server-config 2:', error2);
+    nodeConfig = null;
+  }
+}
+
 
 // const config = {};
 
