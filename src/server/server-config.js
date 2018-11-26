@@ -5,30 +5,26 @@
 // import nodeConfig from 'config';
 
 function loadConfig() {
-  return require('config');
-}
-
-function loadConfig2() {
-  return require('../../node_modules/config');
-}
-
-let nodeConfig = null;
-try {
-  nodeConfig = loadConfig();
-} catch (error1) {
-  console.error('server-config 1:', error1);
-}
-try {
-  if (!nodeConfig) {
-    nodeConfig = loadConfig2();
+  try {
+    return require('config');
+  } catch (error1) {
+    console.error('server-config 1:', error1);
   }
-} catch (error2) {
-  console.error('server-config 2:', error2);
-  nodeConfig = null;
+  return null;
+}
+function loadConfig2() {
+  try {
+    return require('../../node_modules/config');
+  } catch (error2) {
+    console.error('server-config 2:', error2);
+    return null;
+  }
 }
 
-
-
+let nodeConfig = loadConfig();
+if (!nodeConfig) {
+  nodeConfig = loadConfig2();
+}
 
 // const config = {};
 
