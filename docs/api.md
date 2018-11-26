@@ -148,9 +148,9 @@
 -   [remoteJwt][144]
 -   [onPreResponse][145]
 -   [prepare-state][146]
--   [constructor][147]
--   [Config][148]
-    -   [util][149]
+-   [Config][147]
+    -   [util][148]
+-   [constructor][149]
 -   [setModuleDefaults][150]
 -   [setModuleDefaults][151]
 -   [get][152]
@@ -1808,39 +1808,6 @@ Returns **(void | any)**
 
 Returns **{}** 
 
-## constructor
-
-<p>Get the configuration object.</p>
-
-<p>
-The configuration object is a shared singleton object within the application,
-attained by calling require('config').
-</p>
-
-<p>
-Usually you'll specify a CONFIG variable at the top of your .js file
-for file/module scope. If you want the root of the object, you can do this:
-</p>
-<pre>
-var CONFIG = require('config');
-</pre>
-
-<p>
-Sometimes you only care about a specific sub-object within the CONFIG
-object.  In that case you could do this at the top of your file:
-</p>
-<pre>
-var CONFIG = require('config').customer;
-or
-var CUSTOMER_CONFIG = require('config').customer;
-</pre>
-
-<script type="text/javascript">
-  document.getElementById("showProtected").style.display = "block";
-</script>
-
-Returns **any** CONFIG {object} - The top level configuration object
-
 ## Config
 
 <p>Application Configurations</p>
@@ -1886,6 +1853,39 @@ The following code loads the customer section into the CONFIG variable:
 ### util
 
 Utilities are under the util namespace vs. at the top level
+
+## constructor
+
+<p>Get the configuration object.</p>
+
+<p>
+The configuration object is a shared singleton object within the application,
+attained by calling require('config').
+</p>
+
+<p>
+Usually you'll specify a CONFIG variable at the top of your .js file
+for file/module scope. If you want the root of the object, you can do this:
+</p>
+<pre>
+var CONFIG = require('config');
+</pre>
+
+<p>
+Sometimes you only care about a specific sub-object within the CONFIG
+object.  In that case you could do this at the top of your file:
+</p>
+<pre>
+var CONFIG = require('config').customer;
+or
+var CUSTOMER_CONFIG = require('config').customer;
+</pre>
+
+<script type="text/javascript">
+  document.getElementById("showProtected").style.display = "block";
+</script>
+
+Returns **any** CONFIG {object} - The top level configuration object
 
 ## setModuleDefaults
 
@@ -2991,11 +2991,11 @@ Returns **any** Promise
 
 [146]: #prepare-state
 
-[147]: #constructor
+[147]: #config
 
-[148]: #config
+[148]: #util
 
-[149]: #util
+[149]: #constructor
 
 [150]: #setmoduledefaults
 
