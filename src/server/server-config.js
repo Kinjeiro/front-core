@@ -3,18 +3,32 @@
 
 // todo @ANKU @LOW @HACK - при чистой уставноке почему-то не находит и не устанавливает с github
 // import nodeConfig from 'config';
-let nodeConfig;
-try {
-  nodeConfig = require('../../node_modules/config');
-} catch (error2) {
-  console.error('server-config 1:', error2);
-  try {
-    nodeConfig = require('config');
-  } catch (error) {
-    console.error('server-config 2:', error);
-    nodeConfig = null;
-  }
+
+function loadConfig() {
+  return require('config');
 }
+
+function loadConfig2() {
+  return require('../../node_modules/config');
+}
+
+let nodeConfig = null;
+try {
+  nodeConfig = loadConfig();
+} catch (error1) {
+  console.error('server-config 1:', error1);
+}
+try {
+  if (!nodeConfig) {
+    nodeConfig = loadConfig2();
+  }
+} catch (error2) {
+  console.error('server-config 2:', error2);
+  nodeConfig = null;
+}
+
+
+
 
 // const config = {};
 
