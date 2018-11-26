@@ -383,6 +383,7 @@ module.exports = {
         // see front-core\src\server\plugins\mocking.js::DEFAULT_OPTIONS
         enable: isTrue(APP_MOCKS) || isTrue(USE_MOCKS),
         useMocks: isTrue(USE_MOCKS),
+        useMocksInitData: isTrue(USE_MOCKS),
         apiPrefix: FRONT_UI_SERVER_API_PREFIX,
         cookieEnableMocking: 'app-mocking',
         urlParamForEnableMocking: 'mock',

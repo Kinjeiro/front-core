@@ -1,6 +1,9 @@
+import serverConfig from '../../../server/server-config';
+
 import {
   generateId as utilsGenerateId,
   objectValues,
+  merge,
 } from '../../../common/utils/common';
 import { applyPatchOperations } from '../../../common/utils/api-utils';
 
@@ -8,11 +11,22 @@ import { filterAndSortDb } from '../../../common/models/model-table';
 
 import CoreService from './CoreService';
 
-const DEFAULT_DATA = {};
+let init = false;
+const MOCK_DATA = {};
 
 export default class CoreServiceMock extends CoreService {
+  async initData() {
+    return {};
+  }
+
   async getData() {
-    return DEFAULT_DATA;
+    if (!this.init) {
+      if (serverConfig.server.features.mocking.useMocks && serverConfig.server.features.mocking.useMocksInitData) {
+        merge(MOCK_DATA, await this.initData());
+      }
+      init = true;
+    }
+    return MOCK_DATA;
   }
 
   async getValues() {
