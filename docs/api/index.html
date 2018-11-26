@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.15 | Documentation</title>
+  <title>@reagentum/front-core 1.6.16 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.15</code></div>
+          <div class='mb1'><code>1.6.16</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1499,16 +1499,6 @@
               
                 
                 <li><a
-                  href='#constructor'
-                  class="">
-                  constructor
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#config'
                   class=" toggle-sibling">
                   Config
@@ -1532,6 +1522,16 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#constructor'
+                  class="">
+                  constructor
+                  
+                </a>
                 
                 </li>
               
@@ -12288,84 +12288,6 @@ and avoid cache pollution)</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='constructor'>
-      constructor
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Get the configuration object.</p>
-<p>
-The configuration object is a shared singleton object within the application,
-attained by calling require('config').
-</p>
-<p>
-Usually you'll specify a CONFIG variable at the top of your .js file
-for file/module scope. If you want the root of the object, you can do this:
-</p>
-<pre>
-var CONFIG = require('config');
-</pre>
-<p>
-Sometimes you only care about a specific sub-object within the CONFIG
-object.  In that case you could do this at the top of your file:
-</p>
-<pre>
-var CONFIG = require('config').customer;
-or
-var CUSTOMER_CONFIG = require('config').customer;
-</pre>
-<script type="text/javascript">
-  document.getElementById("showProtected").style.display = "block";
-</script>
-
-
-  <div class='pre p1 fill-light mt0'>constructor(): any</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        CONFIG {object} - The top level configuration object
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='config'>
       Config
     </h3>
@@ -12483,6 +12405,84 @@ The following code loads the customer section into the CONFIG variable:
     </div>
   
 </div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='constructor'>
+      constructor
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get the configuration object.</p>
+<p>
+The configuration object is a shared singleton object within the application,
+attained by calling require('config').
+</p>
+<p>
+Usually you'll specify a CONFIG variable at the top of your .js file
+for file/module scope. If you want the root of the object, you can do this:
+</p>
+<pre>
+var CONFIG = require('config');
+</pre>
+<p>
+Sometimes you only care about a specific sub-object within the CONFIG
+object.  In that case you could do this at the top of your file:
+</p>
+<pre>
+var CONFIG = require('config').customer;
+or
+var CUSTOMER_CONFIG = require('config').customer;
+</pre>
+<script type="text/javascript">
+  document.getElementById("showProtected").style.display = "block";
+</script>
+
+
+  <div class='pre p1 fill-light mt0'>constructor(): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        CONFIG {object} - The top level configuration object
+
+      
+    
+  
+
+  
+
+  
+
+  
 
   
 
