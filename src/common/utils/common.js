@@ -1,11 +1,12 @@
 /* eslint-disable no-param-reassign,no-continue,no-restricted-syntax */
 import flattenDeep from 'lodash/flattenDeep';
-import shallowEqualLib from 'shallowequal';
 import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoizeLodash from 'lodash/memoize';
-import promiseMemoize from 'promise-memoize';
 import lodashDifference from 'lodash/difference';
+
+import shallowEqualLib from 'shallowequal';
+import promiseMemoize from 'promise-memoize';
 import uuid from 'uuid';
 // import uniqueId from 'lodash/uniqueId';
 
