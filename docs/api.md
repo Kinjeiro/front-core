@@ -148,30 +148,59 @@
 -   [remoteJwt][144]
 -   [onPreResponse][145]
 -   [prepare-state][146]
--   [createServices][147]
--   [createMockServices][148]
--   [pluginServicesContext][149]
--   [registerService][150]
--   [createProxyWrapperCallback][151]
--   [apiPluginFullFactory][152]
--   [apiPluginFactory][153]
--   [proxyRoute][154]
--   [proxyRoutePluginFactory][155]
--   [createEndpointServiceConfig][156]
--   [HOST][157]
--   [HOST][158]
--   [SERVICES_HOST][159]
--   [SERVICES_HOST][160]
--   [REQUEST_TIMEOUT][161]
--   [REQUEST_TIMEOUT][162]
--   [createEndpointFactoryFromEnv][163]
--   [dirnameNormalize][164]
--   [inModules][165]
--   [applicationId][166]
--   [sendSimpleRequest][167]
--   [sendEndpointMethodRequest][168]
--   [factoryEndpointServiceMethodRequest][169]
--   [proceedRequest][170]
+-   [Config][147]
+    -   [util][148]
+-   [constructor][149]
+-   [setModuleDefaults][150]
+-   [setModuleDefaults][151]
+-   [get][152]
+-   [has][153]
+-   [RawConfig][154]
+-   [watch][155]
+-   [makeHidden][156]
+-   [makeImmutable][157]
+-   [getConfigSources][158]
+-   [loadFileConfigs][159]
+-   [parseFile][160]
+-   [parseString][161]
+-   [attachProtoDeep][162]
+-   [cloneDeep][163]
+-   [setPath][164]
+-   [substituteDeep][165]
+-   [equalsDeep][166]
+-   [diffDeep][167]
+-   [extendDeep][168]
+-   [stripYamlComments][169]
+-   [stripComments][170]
+-   [isObject][171]
+-   [initParam][172]
+-   [getCmdLineArg][173]
+-   [getEnv][174]
+-   [getRegExpFlags][175]
+-   [createServices][176]
+-   [createMockServices][177]
+-   [pluginServicesContext][178]
+-   [registerService][179]
+-   [createProxyWrapperCallback][180]
+-   [apiPluginFullFactory][181]
+-   [apiPluginFactory][182]
+-   [proxyRoute][183]
+-   [proxyRoutePluginFactory][184]
+-   [createEndpointServiceConfig][185]
+-   [HOST][186]
+-   [HOST][187]
+-   [SERVICES_HOST][188]
+-   [SERVICES_HOST][189]
+-   [REQUEST_TIMEOUT][190]
+-   [REQUEST_TIMEOUT][191]
+-   [createEndpointFactoryFromEnv][192]
+-   [dirnameNormalize][193]
+-   [inModules][194]
+-   [applicationId][195]
+-   [sendSimpleRequest][196]
+-   [sendEndpointMethodRequest][197]
+-   [factoryEndpointServiceMethodRequest][198]
+-   [proceedRequest][199]
 
 ## Runners
 
@@ -296,12 +325,12 @@ Get log level string based on supplied params
 
 **Parameters**
 
--   `level` **([string][171] \| [function][172] \| [object][173])** console[level]
--   `action` **[object][173]** selected action
--   `payload` **[array][174]** selected payload
--   `type` **[string][171]** log entry type
+-   `level` **([string][200] \| [function][201] \| [object][202])** console[level]
+-   `action` **[object][202]** selected action
+-   `payload` **[array][203]** selected payload
+-   `type` **[string][200]** log entry type
 
-Returns **[string][171]** level
+Returns **[string][200]** level
 
 ## createLogger
 
@@ -309,20 +338,20 @@ Creates logger with following options
 
 **Parameters**
 
--   `options` **[object][173]** options for logger (optional, default `{}`)
-    -   `options.level` **([string][171] \| [function][172] \| [object][173])** console[level]
-    -   `options.duration` **[boolean][175]** print duration of each action?
-    -   `options.timestamp` **[boolean][175]** print timestamp with each action?
-    -   `options.colors` **[object][173]** custom colors
-    -   `options.logger` **[object][173]** implementation of the `console` API
-    -   `options.logErrors` **[boolean][175]** should errors in action execution be caught, logged, and re-thrown?
-    -   `options.collapsed` **[boolean][175]** is group collapsed?
-    -   `options.predicate` **[boolean][175]** condition which resolves logger behavior
-    -   `options.stateTransformer` **[function][172]** transform state before print
-    -   `options.actionTransformer` **[function][172]** transform action before print
-    -   `options.errorTransformer` **[function][172]** transform error before print
+-   `options` **[object][202]** options for logger (optional, default `{}`)
+    -   `options.level` **([string][200] \| [function][201] \| [object][202])** console[level]
+    -   `options.duration` **[boolean][204]** print duration of each action?
+    -   `options.timestamp` **[boolean][204]** print timestamp with each action?
+    -   `options.colors` **[object][202]** custom colors
+    -   `options.logger` **[object][202]** implementation of the `console` API
+    -   `options.logErrors` **[boolean][204]** should errors in action execution be caught, logged, and re-thrown?
+    -   `options.collapsed` **[boolean][204]** is group collapsed?
+    -   `options.predicate` **[boolean][204]** condition which resolves logger behavior
+    -   `options.stateTransformer` **[function][201]** transform state before print
+    -   `options.actionTransformer` **[function][201]** transform action before print
+    -   `options.errorTransformer` **[function][201]** transform error before print
 
-Returns **[function][172]** logger middleware
+Returns **[function][201]** logger middleware
 
 ## getBindActions
 
@@ -558,7 +587,7 @@ actionStatus
 
 Компонент для того, чтобы не писать bind функции c ключом
 В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][176]
+См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][205]
 
 ## theme
 
@@ -832,7 +861,7 @@ touched
 
 ## FROM_BOOM
 
-[https://github.com/hapijs/boom][177]
+[https://github.com/hapijs/boom][206]
 
 ## FROM_BOOM_RESPONSE
 
@@ -864,7 +893,7 @@ touched
 
 ## parseFromBoom
 
-[https://github.com/hapijs/boom][177]
+[https://github.com/hapijs/boom][206]
 
 -   isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
 -   isServer - convenience bool indicating status code >= 500.
@@ -936,7 +965,7 @@ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
 -   `operationType`  
 -   `itemIds`  
 
-Returns **{path: [string][171], value: any, op: [string][171]}** 
+Returns **{path: [string][200], value: any, op: [string][200]}** 
 
 ## apiCreateRecord
 
@@ -1016,7 +1045,7 @@ object of that fields
     other - result
 -   `mockFilter`  function(requestOptions, error, response) {}
 
-Returns **[Promise][178]** 
+Returns **[Promise][207]** 
 
 ## emitProcessing
 
@@ -1078,7 +1107,7 @@ Returns **any**
 -   `path`   (optional, default `[]`)
 -   `pathStr`   (optional, default `''`)
 
-Returns **{result: any, isRoot: [boolean][175], pathStr: [string][171]}** 
+Returns **{result: any, isRoot: [boolean][204], pathStr: [string][200]}** 
 
 ## arrayToTree
 
@@ -1096,7 +1125,7 @@ Returns **{result: any, isRoot: [boolean][175], pathStr: [string][171]}**
 
 ## aggregation
 
-[https://stackoverflow.com/a/45332959/344172][179]
+[https://stackoverflow.com/a/45332959/344172][208]
 
 **Parameters**
 
@@ -1169,7 +1198,7 @@ Returns **({method, path, payload} | any)**
 **Parameters**
 
 -   `tableId`  айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)Options:
--   `$1` **[Object][173]**  (optional, default `{}`)
+-   `$1` **[Object][202]**  (optional, default `{}`)
     -   `$1.loadOnMount`   (optional, default `true`)
     -   `$1.loadOnChange`   (optional, default `true`)
     -   `$1.clearOnUnmount`   (optional, default `true`)
@@ -1239,7 +1268,7 @@ Returns **any** возвращает true - если нужно прервать
     -   если function - функция вызывается дважды, один раз для newProps второй раз для oldProps - на вход который подаются пропсы, вернуть должна часть props по которой будет deep equals
     -   если string - путь в props для объектов которые будут сравниваться
     -   если string array - если больше 1 то singleRun по умолчанию true
--   `$1` **[Object][173]**  (optional, default `{}`)
+-   `$1` **[Object][202]**  (optional, default `{}`)
     -   `$1.deepEqual`   (optional, default `true`)
     -   `$1.singleRun`   (optional, default `true`)
     -   `$1.oldPropsNotNull`   (optional, default `true`)
@@ -1268,7 +1297,7 @@ accountId: PropTypes.number,
 
 -   `statusPropPath`  
 
-Returns **[function][172]** 
+Returns **[function][201]** 
 
 ## formatDate
 
@@ -1276,12 +1305,12 @@ Returns **[function][172]**
 
 **Parameters**
 
--   `date` **[String][171]** Строка даты в формате `YYYY-MM-DD`
--   `options` **[Object][173]?** Список опций
-    -   `options.fullMonth` **[Boolean][175]** Если `true`, то название месяца, иначе номер (optional, default `true`)
-    -   `options.cutCurrentYear` **[Boolean][175]** Если `true`, то дата без указания года (optional, default `true`)
+-   `date` **[String][200]** Строка даты в формате `YYYY-MM-DD`
+-   `options` **[Object][202]?** Список опций
+    -   `options.fullMonth` **[Boolean][204]** Если `true`, то название месяца, иначе номер (optional, default `true`)
+    -   `options.cutCurrentYear` **[Boolean][204]** Если `true`, то дата без указания года (optional, default `true`)
 
-Returns **[String][171]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+Returns **[String][200]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
 
 ## formatStringInner
 
@@ -1320,7 +1349,7 @@ Returns **any**
 
 ## generateId
 
-Returns **[string][171]** 
+Returns **[string][200]** 
 
 **Meta**
 
@@ -1392,11 +1421,11 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
 -   `context`  
 
-Returns **[Function][172]** 
+Returns **[Function][201]** 
 
 ## ImageTools
 
-from [https://gist.github.com/dcollien/312bce1270a5f511bf4a][180]
+from [https://gist.github.com/dcollien/312bce1270a5f511bf4a][209]
 
 ImageTools.resize(this.files[0], {
 width: 320, // maximum width
@@ -1447,7 +1476,7 @@ Returns **{}**
 -   `url`  
 -   `hash`  
 
-Returns **[string][171]** 
+Returns **[string][200]** 
 
 ## joinPath
 
@@ -1468,7 +1497,7 @@ Returns **any**
 
 -   `paths` **...any** 
 
-Returns **[string][171]** 
+Returns **[string][200]** 
 
 ## joinUri
 
@@ -1567,7 +1596,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][178]&lt;any>** 
+Returns **[Promise][207]&lt;any>** 
 
 ## ServiceAuthMock
 
@@ -1603,7 +1632,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][178]&lt;any>** 
+Returns **[Promise][207]&lt;any>** 
 
 ## getProtectedInfoByToken
 
@@ -1620,7 +1649,7 @@ Returns **any**
 
 -   `userIdOrAliasId`  
 
-Returns **[Promise][178]&lt;\[`"userId"`, `"displayName"`, `"aliasId"`, `"description"`, `"username"`, `"firstName"`, `"lastName"`, `"middleName"`, `"email"`, `"phone"`, `"address"`]>** 
+Returns **[Promise][207]&lt;\[`"userId"`, `"displayName"`, `"aliasId"`, `"description"`, `"username"`, `"firstName"`, `"lastName"`, `"middleName"`, `"email"`, `"phone"`, `"address"`]>** 
 
 ## SUB_MODULE_FACTORY
 
@@ -1713,7 +1742,7 @@ Returns **{options: any}**
 -   `pathnameWithoutContextPath`  
 -   `moduleToRoutePrefixMap`  
 
-Returns **[boolean][175]** 
+Returns **[boolean][204]** 
 
 ## DEFAULT_LOGGER_IDS
 
@@ -1778,6 +1807,650 @@ Returns **(void | any)**
 -   `pluginOptions`  
 
 Returns **{}** 
+
+## Config
+
+<p>Application Configurations</p>
+
+<p>
+The config module exports a singleton object representing all
+configurations for this application deployment.
+</p>
+
+<p>
+Application configurations are stored in files within the config directory
+of your application.  The default configuration file is loaded, followed
+by files specific to the deployment type (development, testing, staging,
+production, etc.).
+</p>
+
+<p>
+For example, with the following config/default.yaml file:
+</p>
+
+<pre>
+  ...
+  customer:
+    &nbsp;&nbsp;initialCredit: 500
+    &nbsp;&nbsp;db:
+      &nbsp;&nbsp;&nbsp;&nbsp;name: customer
+      &nbsp;&nbsp;&nbsp;&nbsp;port: 5984
+  ...
+</pre>
+
+<p>
+The following code loads the customer section into the CONFIG variable:
+<p>
+
+<pre>
+  var CONFIG = require('config').customer;
+  ...
+  newCustomer.creditLimit = CONFIG.initialCredit;
+  database.open(CONFIG.db.name, CONFIG.db.port);
+  ...
+</pre>
+
+### util
+
+Utilities are under the util namespace vs. at the top level
+
+## constructor
+
+<p>Get the configuration object.</p>
+
+<p>
+The configuration object is a shared singleton object within the application,
+attained by calling require('config').
+</p>
+
+<p>
+Usually you'll specify a CONFIG variable at the top of your .js file
+for file/module scope. If you want the root of the object, you can do this:
+</p>
+<pre>
+var CONFIG = require('config');
+</pre>
+
+<p>
+Sometimes you only care about a specific sub-object within the CONFIG
+object.  In that case you could do this at the top of your file:
+</p>
+<pre>
+var CONFIG = require('config').customer;
+or
+var CUSTOMER_CONFIG = require('config').customer;
+</pre>
+
+<script type="text/javascript">
+  document.getElementById("showProtected").style.display = "block";
+</script>
+
+Returns **any** CONFIG {object} - The top level configuration object
+
+## setModuleDefaults
+
+<p>
+Set default configurations for a node.js module.
+</p>
+
+<p>
+This allows module developers to attach their configurations onto the
+default configuration object so they can be configured by the consumers
+of the module.
+</p>
+
+<p>Using the function within your module:</p>
+<pre>
+  var CONFIG = require("config");
+  CONFIG.util.setModuleDefaults("MyModule", {
+  &nbsp;&nbsp;templateName: "t-50",
+  &nbsp;&nbsp;colorScheme: "green"
+  });
+<br>
+  // Template name may be overridden by application config files
+  console.log("Template: " + CONFIG.MyModule.templateName);
+</pre>
+
+<p>
+The above example results in a "MyModule" element of the configuration
+object, containing an object with the specified default values.
+</p>
+
+**Parameters**
+
+-   `moduleName`  {string} - Name of your module.
+-   `defaultProperties`  {object} - The default module configuration.
+
+Returns **any** moduleConfig {object} - The module level configuration object.
+
+## setModuleDefaults
+
+<p>
+Set default configurations for a node.js module.
+</p>
+
+<p>
+This allows module developers to attach their configurations onto the
+default configuration object so they can be configured by the consumers
+of the module.
+</p>
+
+<p>Using the function within your module:</p>
+<pre>
+  var CONFIG = require("config");
+  CONFIG.util.setModuleDefaults("MyModule", {
+  &nbsp;&nbsp;templateName: "t-50",
+  &nbsp;&nbsp;colorScheme: "green"
+  });
+<br>
+  // Template name may be overridden by application config files
+  console.log("Template: " + CONFIG.MyModule.templateName);
+</pre>
+
+<p>
+The above example results in a "MyModule" element of the configuration
+object, containing an object with the specified default values.
+</p>
+
+**Parameters**
+
+-   `moduleName`  {string} - Name of your module.
+-   `defaultProperties`  {object} - The default module configuration.
+
+Returns **any** moduleConfig {object} - The module level configuration object.
+
+## get
+
+<p>Get a configuration value</p>
+
+<p>
+This will return the specified property value, throwing an exception if the
+configuration isn't defined.  It is used to assure configurations are defined
+before being used, and to prevent typos.
+</p>
+
+**Parameters**
+
+-   `property`  {string} - The configuration property to get. Can include '.' sub-properties.
+
+Returns **any** value {\*} - The property value
+
+## has
+
+Test that a configuration parameter exists
+
+<pre>
+   var config = require('config');
+   if (config.has('customer.dbName')) {
+     console.log('Customer database name: ' + config.customer.dbName);
+   }
+</pre>
+
+**Parameters**
+
+-   `property`  {string} - The configuration property to test. Can include '.' sub-properties.
+
+Returns **any** isPresent {boolean} - True if the property is defined, false if not defined.
+
+## RawConfig
+
+This is meant to wrap configuration objects that should be left as is,
+meaning that the object or its protoype will not be modified in any way
+
+## watch
+
+<p>Monitor a javascript property for runtime changes.</p>
+
+<p>
+This method was built for an earlier version of node-config that allowed
+configuration value mutations.  Since version 1.0.0, node-config no longer
+allows configuration mutations, and is no longer used in node-config.
+</p>
+
+<p>
+It is deprecated, and will be removed in the next semver incompatible release 2.0.0.
+</p>
+
+**Parameters**
+
+-   `object`  {object} - The object to watch.
+-   `property`  {string} - The property name to watch.  Watch all object properties if null.
+-   `handler`  {function(object, propertyName, priorValue, newValue)} - Handler called when a property change is detected.
+      The handler is run along with other handlers registered for notification.
+      If your handler changes the value of the property, that change is applied after all handlers have finished processing the current change.
+      Then all handlers (including this one) will be called again with the newly changed value.
+-   `depth`  {integer} (optional) - If watching all object properties or if the specified property is an object, this specifies the depth of the object graph to watch for changes.  Default 6.
+
+Returns **any** object {object} - The original object is returned - for chaining.
+
+**Meta**
+
+-   **deprecated**: This is deprecated.
+
+
+## makeHidden
+
+<p>Make a configuration property hidden so it doesn't appear when enumerating
+elements of the object.</p>
+
+<p>
+The property still exists and can be read from and written to, but it won't
+show up in for ... in loops, Object.keys(), or JSON.stringify() type methods.
+</p>
+
+<p>
+If the property already exists, it will be made hidden.  Otherwise it will
+be created as a hidden property with the specified value.
+</p>
+
+<p><i>
+This method was built for hiding configuration values, but it can be applied
+to <u>any</u> javascript object.
+</i></p>
+
+<p>Example:</p>
+<pre>
+  var CONFIG = require('config');
+  ...
+
+  // Hide the Amazon S3 credentials
+  CONFIG.util.makeHidden(CONFIG.amazonS3, 'access_id');
+  CONFIG.util.makeHidden(CONFIG.amazonS3, 'secret_key');
+
+</pre>
+
+**Parameters**
+
+-   `object`  {object} - The object to make a hidden property into.
+-   `property`  {string} - The name of the property to make hidden.
+-   `value`  {\*} - (optional) Set the property value to this (otherwise leave alone)
+
+Returns **any** object {object} - The original object is returned - for chaining.
+
+## makeImmutable
+
+<p>Make a javascript object property immutable (assuring it cannot be changed
+from the current value).</p>
+<p>
+If the specified property is an object, all attributes of that object are
+made immutable, including properties of contained objects, recursively.
+If a property name isn't supplied, all properties of the object are made
+immutable.
+</p>
+<p>
+
+</p>
+<p>
+New properties can be added to the object and those properties will not be
+immutable unless this method is called on those new properties.
+</p>
+<p>
+This operation cannot be undone.
+</p>
+
+<p>Example:</p>
+<pre>
+  var config = require('config');
+  var myObject = {hello:'world'};
+  config.util.makeImmutable(myObject);
+</pre>
+
+**Parameters**
+
+-   `object`  {object} - The object to specify immutable properties for
+-   `property`  {string | [string]} - The name of the property (or array of names) to make immutable.
+           If not provided, all owned properties of the object are made immutable.
+-   `value`  {_ | \[_]} - Property value (or array of values) to set
+           the property to before making immutable. Only used when setting a single
+           property. Retained for backward compatibility.
+
+Returns **any** object {object} - The original object is returned - for chaining.
+
+## getConfigSources
+
+Return the sources for the configurations
+
+<p>
+All sources for configurations are stored in an array of objects containing
+the source name (usually the filename), the original source (as a string),
+and the parsed source as an object.
+</p>
+
+Returns **any** configSources {Array[Object]} - An array of objects containing
+   name, original, and parsed elements
+
+## loadFileConfigs
+
+Load the individual file configurations.
+
+<p>
+This method builds a map of filename to the configuration object defined
+by the file.  The search order is:
+</p>
+
+<pre>
+  default.EXT
+  (deployment).EXT
+  (hostname).EXT
+  (hostname)-(deployment).EXT
+  local.EXT
+  local-(deployment).EXT
+  runtime.json
+</pre>
+
+<p>
+EXT can be yml, yaml, coffee, iced, json, cson or js signifying the file type.
+yaml (and yml) is in YAML format, coffee is a coffee-script, iced is iced-coffee-script,
+json is in JSON format, cson is in CSON format, properties is in .properties format
+(http://en.wikipedia.org/wiki/.properties), and js is a javascript executable file that is
+require()'d with module.exports being the config object.
+</p>
+
+<p>
+hostname is the $HOST environment variable (or --HOST command line parameter)
+if set, otherwise the $HOSTNAME environment variable (or --HOSTNAME command
+line parameter) if set, otherwise the hostname found from
+require('os').hostname().
+</p>
+
+<p>
+Once a hostname is found, everything from the first period ('.') onwards
+is removed. For example, abc.example.com becomes abc
+</p>
+
+<p>
+(deployment) is the deployment type, found in the $NODE_ENV environment
+variable or --NODE_ENV command line parameter.  Defaults to 'development'.
+</p>
+
+<p>
+The runtime.json file contains configuration changes made at runtime either
+manually, or by the application setting a configuration value.
+</p>
+
+<p>
+If the $NODE_APP_INSTANCE environment variable (or --NODE_APP_INSTANCE
+command line parameter) is set, then files with this appendage will be loaded.
+See the Multiple Application Instances section of the main documentaion page
+for more information.
+</p>
+
+Returns **any** config {Object} The configuration object
+
+## parseFile
+
+Parse and return the specified configuration file.
+
+If the file exists in the application config directory, it will
+parse and return it as a JavaScript object.
+
+The file extension determines the parser to use.
+
+.js = File to run that has a module.exports containing the config object
+.coffee = File to run that has a module.exports with coffee-script containing the config object
+.iced = File to run that has a module.exports with iced-coffee-script containing the config object
+All other supported file types (yaml, toml, json, cson, hjson, json5, properties, xml)
+are parsed with util.parseString.
+
+If the file doesn't exist, a null will be returned.  If the file can't be
+parsed, an exception will be thrown.
+
+This method performs synchronous file operations, and should not be called
+after synchronous module loading.
+
+**Parameters**
+
+-   `fullFilename`  {string} The full file path and name
+
+Returns **configObject** The configuration object parsed from the file
+
+## parseString
+
+Parse and return the specied string with the specified format.
+
+The format determines the parser to use.
+
+json = File is parsed using JSON.parse()
+yaml (or yml) = Parsed with a YAML parser
+toml = Parsed with a TOML parser
+cson = Parsed with a CSON parser
+hjson = Parsed with a HJSON parser
+json5 = Parsed with a JSON5 parser
+properties = Parsed with the 'properties' node package
+xml = Parsed with a XML parser
+
+If the file doesn't exist, a null will be returned.  If the file can't be
+parsed, an exception will be thrown.
+
+This method performs synchronous file operations, and should not be called
+after synchronous module loading.
+
+**Parameters**
+
+-   `content`  {string} The full content
+-   `format`  {string} The format to be parsed
+
+Returns **configObject** The configuration object parsed from the string
+
+## attachProtoDeep
+
+Attach the Config class prototype to all config objects recursively.
+
+<p>
+This allows you to do anything with CONFIG sub-objects as you can do with
+the top-level CONFIG object.  It's so you can do this:
+</p>
+
+<pre>
+  var CUST_CONFIG = require('config').Customer;
+  CUST_CONFIG.get(...)
+</pre>
+
+**Parameters**
+
+-   `toObject`  
+-   `depth`  
+
+Returns **any** toObject
+
+## cloneDeep
+
+Return a deep copy of the specified object.
+
+This returns a new object with all elements copied from the specified
+object.  Deep copies are made of objects and arrays so you can do anything
+with the returned object without affecting the input object.
+
+**Parameters**
+
+-   `parent`  {object} The original object to copy from
+-   `depth`  {Integer} Maximum depth (default 20) (optional, default `20`)
+
+Returns **[object][202]** A new object with the elements copied from the copyFrom objectThis method is copied from [https://github.com/pvorb/node-clone/blob/17eea36140d61d97a9954c53417d0e04a00525d9/clone.js][210]Copyright © 2011-2014 Paul Vorbach and contributors.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions: The above copyright notice and this permission
+notice shall be included in all copies or substantial portions of the Software.
+
+## setPath
+
+Set objects given a path as a string list
+
+**Parameters**
+
+-   `object`  {object} - Object to set the property on
+-   `path`  {array[string]} - Array path to the property
+-   `value`  {\*} - value to set, ignoring null
+
+## substituteDeep
+
+Create a new object patterned after substitutionMap, where:
+1\. Terminal string values in substitutionMap are used as keys
+2\. To look up values in a key-value store, variables
+3\. And parent keys are created as necessary to retain the structure of substitutionMap.
+
+**Parameters**
+
+-   `substitionMap`  {object} - an object whose terminal (non-subobject) values are strings
+-   `variables`  {object[string:value]} - usually process.env, a flat object used to transform
+         terminal values in a copy of substititionMap.
+
+Returns **[object][202]** deep copy of substitutionMap with only those paths whose terminal values
+     corresponded to a key in `variables`
+
+## equalsDeep
+
+Return true if two objects have equal contents.
+
+**Parameters**
+
+-   `object1`  {object} The object to compare from
+-   `object2`  {object} The object to compare with
+-   `depth`  {integer} An optional depth to prevent recursion.  Default: 20.
+
+Returns **[boolean][204]** True if both objects have equivalent contents
+
+## diffDeep
+
+Returns an object containing all elements that differ between two objects.
+
+<p>
+This method was designed to be used to create the runtime.json file
+contents, but can be used to get the diffs between any two Javascript objects.
+</p>
+<p>
+It works best when object2 originated by deep copying object1, then
+changes were made to object2, and you want an object that would give you
+the changes made to object1 which resulted in object2.
+</p>
+
+**Parameters**
+
+-   `object1`  {object} The base object to compare to
+-   `object2`  {object} The object to compare with
+-   `depth`  {integer} An optional depth to prevent recursion.  Default: 20.
+
+Returns **[object][202]** A differential object, which if extended onto object1 would
+                 result in object2.
+
+## extendDeep
+
+Extend an object, and any object it contains.
+
+This does not replace deep objects, but dives into them
+replacing individual elements instead.
+
+**Parameters**
+
+-   `mergeInto`  {object} The object to merge into
+-   `depth`  {integer} An optional depth to prevent recursion.  Default: 20.
+
+Returns **[object][202]** The altered mergeInto object is returned
+
+## stripYamlComments
+
+Strip YAML comments from the string
+
+The 2.0 yaml parser doesn't allow comment-only or blank lines.  Strip them.
+
+**Parameters**
+
+-   `fileString`  {string} The string to strip comments from
+
+Returns **[string][200]** The string with comments stripped.
+
+## stripComments
+
+Strip all Javascript type comments from the string.
+
+The string is usually a file loaded from the O/S, containing
+newlines and javascript type comments.
+
+Thanks to James Padolsey, and all who contributed to this implementation.
+[http://james.padolsey.com/javascript/javascript-comment-removal-revisted/][211]
+
+**Parameters**
+
+-   `fileString`  {string} The string to strip comments from
+-   `stringRegex`  {RegExp} Optional regular expression to match strings that
+      make up the config file
+
+Returns **[string][200]** The string with comments stripped.
+
+## isObject
+
+Is the specified argument a regular javascript object?
+
+The argument is an object if it's a JS object, but not an array.
+
+**Parameters**
+
+-   `arg`  {\*} An argument of any type.
+
+Returns **[boolean][204]** TRUE if the arg is an object, FALSE if not
+
+## initParam
+
+<p>Initialize a parameter from the command line or process environment</p>
+
+<p>
+This method looks for the parameter from the command line in the format
+--PARAMETER=VALUE, then from the process environment, then from the
+default specified as an argument.
+</p>
+
+**Parameters**
+
+-   `paramName`  {String} Name of the parameter
+-   `defaultValue`  {Any} Default value of the parameter
+
+Returns **Any** The found value, or default value
+
+## getCmdLineArg
+
+<p>Get Command Line Arguments</p>
+
+<p>
+This method allows you to retrieve the value of the specified command line argument.
+</p>
+
+<p>
+The argument is case sensitive, and must be of the form '--ARG_NAME=value'
+</p>
+
+**Parameters**
+
+-   `searchFor`  {String} The argument name to search for
+
+Returns **any** false if the argument was not found, the argument value if found
+
+## getEnv
+
+<p>Get a Config Environment Variable Value</p>
+
+<p>
+This method returns the value of the specified config environment variable,
+including any defaults or overrides.
+</p>
+
+**Parameters**
+
+-   `varName`  {String} The environment variable name
+
+Returns **[String][200]** The value of the environment variable
+
+## getRegExpFlags
+
+Returns a string of flags for regular expression `re`.
+
+**Parameters**
+
+-   `re` **[RegExp][212]** Regular expression
+
+Returns **[string][200]** Flags
 
 ## createServices
 
@@ -1851,8 +2524,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][181] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][182]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][213] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][214]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `routeOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -1881,7 +2554,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 
 **Parameters**
 
--   `$0` **[Object][173]** 
+-   `$0` **[Object][202]** 
     -   `$0.protocol`  
     -   `$0.host`  
     -   `$0.port`  
@@ -1896,7 +2569,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   `endpoint`  
 -   `timeout`  
 
-Returns **{protocol: [string][171], host: [string][171], port: [number][183], endpoint: [string][171], fullUrl: [string][171], timeout: any}** 
+Returns **{protocol: [string][200], host: [string][200], port: [number][215], endpoint: [string][200], fullUrl: [string][200], timeout: any}** 
 
 ## HOST
 
@@ -1937,23 +2610,23 @@ Returns **function (any, any?)**
 
 ## dirnameNormalize
 
-[https://github.com/webpack/webpack/issues/1599][184]
+[https://github.com/webpack/webpack/issues/1599][216]
 С любыми настройками webpack на сервере**dirname на unix выдает src... а **filename /index.js в любом варианте
 
 **Parameters**
 
 -   `dirname`  
 
-Returns **[string][171]** 
+Returns **[string][200]** 
 
 ## inModules
 
 **Parameters**
 
--   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][185]
+-   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][217]
 -   `projectSrcPath`  
 
-Returns **[Array][174]** 
+Returns **[Array][203]** 
 
 ## applicationId
 
@@ -1966,12 +2639,12 @@ Returns **[Array][174]**
 
 **Parameters**
 
--   `requestOptions`  [https://github.com/request/request#requestoptions-callback][186]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
-    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][187]
+-   `requestOptions`  [https://github.com/request/request#requestoptions-callback][218]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
+    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][219]
     нужно установить в настройках:
     encoding: null,
 
-Returns **[Promise][178]** 
+Returns **[Promise][207]** 
 
 ## sendEndpointMethodRequest
 
@@ -1997,7 +2670,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][188]
+-   `requestOptions`  [https://www.npmjs.com/package/request][220]
 -   `logger`  
 
 Returns **any** 
@@ -2015,13 +2688,13 @@ Returns **any**
 -   `requestOptions`  
 -   `logger`  
 
-Returns **[Promise][178]&lt;any>** 
+Returns **[Promise][207]&lt;any>** 
 
 ## proceedRequest
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][189]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][221]
 -   `server`  
 
 Returns **any** Promise
@@ -2318,88 +2991,152 @@ Returns **any** Promise
 
 [146]: #prepare-state
 
-[147]: #createservices
+[147]: #config
 
-[148]: #createmockservices
+[148]: #util
 
-[149]: #pluginservicescontext
+[149]: #constructor
 
-[150]: #registerservice
+[150]: #setmoduledefaults
 
-[151]: #createproxywrappercallback
+[151]: #setmoduledefaults-1
 
-[152]: #apipluginfullfactory
+[152]: #get
 
-[153]: #apipluginfactory
+[153]: #has
 
-[154]: #proxyroute
+[154]: #rawconfig
 
-[155]: #proxyroutepluginfactory
+[155]: #watch
 
-[156]: #createendpointserviceconfig
+[156]: #makehidden
 
-[157]: #host
+[157]: #makeimmutable
 
-[158]: #host-1
+[158]: #getconfigsources
 
-[159]: #services_host
+[159]: #loadfileconfigs
 
-[160]: #services_host-1
+[160]: #parsefile
 
-[161]: #request_timeout
+[161]: #parsestring
 
-[162]: #request_timeout-1
+[162]: #attachprotodeep
 
-[163]: #createendpointfactoryfromenv
+[163]: #clonedeep
 
-[164]: #dirnamenormalize
+[164]: #setpath
 
-[165]: #inmodules
+[165]: #substitutedeep
 
-[166]: #applicationid
+[166]: #equalsdeep
 
-[167]: #sendsimplerequest
+[167]: #diffdeep
 
-[168]: #sendendpointmethodrequest
+[168]: #extenddeep
 
-[169]: #factoryendpointservicemethodrequest
+[169]: #stripyamlcomments
 
-[170]: #proceedrequest-1
+[170]: #stripcomments
 
-[171]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[171]: #isobject
 
-[172]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[172]: #initparam
 
-[173]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[173]: #getcmdlinearg
 
-[174]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[174]: #getenv
 
-[175]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[175]: #getregexpflags
 
-[176]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+[176]: #createservices
 
-[177]: https://github.com/hapijs/boom
+[177]: #createmockservices
 
-[178]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[178]: #pluginservicescontext
 
-[179]: https://stackoverflow.com/a/45332959/344172
+[179]: #registerservice
 
-[180]: https://gist.github.com/dcollien/312bce1270a5f511bf4a
+[180]: #createproxywrappercallback
 
-[181]: https://github.com/hapijs/h2o2
+[181]: #apipluginfullfactory
 
-[182]: http://localhost:
+[182]: #apipluginfactory
 
-[183]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[183]: #proxyroute
 
-[184]: https://github.com/webpack/webpack/issues/1599
+[184]: #proxyroutepluginfactory
 
-[185]: https://www.npmjs.com/package/glob#glob-primer
+[185]: #createendpointserviceconfig
 
-[186]: https://github.com/request/request#requestoptions-callback
+[186]: #host
 
-[187]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+[187]: #host-1
 
-[188]: https://www.npmjs.com/package/request
+[188]: #services_host
 
-[189]: https://hapijs.com/api#serverinjectoptions-callback
+[189]: #services_host-1
+
+[190]: #request_timeout
+
+[191]: #request_timeout-1
+
+[192]: #createendpointfactoryfromenv
+
+[193]: #dirnamenormalize
+
+[194]: #inmodules
+
+[195]: #applicationid
+
+[196]: #sendsimplerequest
+
+[197]: #sendendpointmethodrequest
+
+[198]: #factoryendpointservicemethodrequest
+
+[199]: #proceedrequest-1
+
+[200]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[201]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[202]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[203]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[204]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[205]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+
+[206]: https://github.com/hapijs/boom
+
+[207]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+[208]: https://stackoverflow.com/a/45332959/344172
+
+[209]: https://gist.github.com/dcollien/312bce1270a5f511bf4a
+
+[210]: https://github.com/pvorb/node-clone/blob/17eea36140d61d97a9954c53417d0e04a00525d9/clone.js
+
+[211]: http://james.padolsey.com/javascript/javascript-comment-removal-revisted/
+
+[212]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+
+[213]: https://github.com/hapijs/h2o2
+
+[214]: http://localhost:
+
+[215]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[216]: https://github.com/webpack/webpack/issues/1599
+
+[217]: https://www.npmjs.com/package/glob#glob-primer
+
+[218]: https://github.com/request/request#requestoptions-callback
+
+[219]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+
+[220]: https://www.npmjs.com/package/request
+
+[221]: https://hapijs.com/api#serverinjectoptions-callback
