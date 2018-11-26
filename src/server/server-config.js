@@ -5,17 +5,16 @@
 // import nodeConfig from 'config';
 let nodeConfig;
 try {
-  nodeConfig = require('config').default;
-} catch (error) {
-  console.error('server-config:', error);
+  nodeConfig = require('../../node_modules/config');
+} catch (error2) {
+  console.error('server-config 1:', error2);
   try {
-    nodeConfig = require('../../node_modules/config').default;
-  } catch (error2) {
-    console.error('server-config 2:', error2);
+    nodeConfig = require('config');
+  } catch (error) {
+    console.error('server-config 2:', error);
     nodeConfig = null;
   }
 }
-
 
 // const config = {};
 
