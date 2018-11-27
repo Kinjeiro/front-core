@@ -11,22 +11,28 @@ import { filterAndSortDb } from '../../../common/models/model-table';
 
 import CoreService from './CoreService';
 
-let init = false;
-const MOCK_DATA = {};
+export const MOCK_DB_INITS = {};
+export const MOCK_DBS = {};
 
 export default class CoreServiceMock extends CoreService {
   async initData() {
     return {};
   }
 
+  getMockDbName() {
+    return this.constructor.name;
+  }
+
   async getData() {
-    if (!this.init) {
+    const mockDBName = this.getMockDbName();
+    if (!MOCK_DB_INITS[mockDBName]) {
+      MOCK_DBS[mockDBName] = {};
       if (serverConfig.server.features.mocking.useMocks && serverConfig.server.features.mocking.useMocksInitData) {
-        merge(MOCK_DATA, await this.initData());
+        merge(MOCK_DBS[mockDBName], await this.initData());
       }
-      init = true;
+      MOCK_DB_INITS[mockDBName] = true;
     }
-    return MOCK_DATA;
+    return MOCK_DBS[mockDBName];
   }
 
   async getValues() {

@@ -2,29 +2,29 @@
 // import at from 'lodash/at';
 
 // todo @ANKU @LOW @HACK - при чистой уставноке почему-то не находит и не устанавливает с github
-// import nodeConfig from 'config';
+import nodeConfig from 'config';
+// function loadConfig() {
+//   try {
+//     return require('config');
+//   } catch (error1) {
+//     console.error('server-config 1:', error1);
+//   }
+//   return null;
+// }
+// function loadConfig2() {
+//   try {
+//     return require('../../node_modules/config');
+//   } catch (error2) {
+//     console.error('server-config 2:', error2);
+//     return null;
+//   }
+// }
+//
+// let nodeConfig = loadConfig();
+// if (!nodeConfig) {
+//   nodeConfig = loadConfig2();
+// }
 
-function loadConfig() {
-  try {
-    return require('config');
-  } catch (error1) {
-    console.error('server-config 1:', error1);
-  }
-  return null;
-}
-function loadConfig2() {
-  try {
-    return require('../../node_modules/config');
-  } catch (error2) {
-    console.error('server-config 2:', error2);
-    return null;
-  }
-}
-
-let nodeConfig = loadConfig();
-if (!nodeConfig) {
-  nodeConfig = loadConfig2();
-}
 
 // const config = {};
 

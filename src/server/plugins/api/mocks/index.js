@@ -1,4 +1,5 @@
 import mockHealthmonitor from './mock-healthmonitor';
+import mockMemoryDB from './mock-memory-db';
 // import mockApiAuth from './mock-api-auth';
 // import mockApiUsers from './mock-api-users';
 //
@@ -7,6 +8,7 @@ import mockHealthmonitor from './mock-healthmonitor';
 export default function getMockRoutes(services, strategies) {
   return [
     ...mockHealthmonitor,
+    ...mockMemoryDB,
     // ...(serverConfig.server.features.mocking.authMock
     //   ? [
     //     ...mockApiAuth,
