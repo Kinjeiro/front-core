@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.17 | Documentation</title>
+  <title>@reagentum/front-core 1.6.18 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.17</code></div>
+          <div class='mb1'><code>1.6.18</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1662,6 +1662,26 @@
                   href='#createendpointfactoryfromenv'
                   class="">
                   createEndpointFactoryFromEnv
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createtempfile'
+                  class="">
+                  createTempFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#downloadfile'
+                  class="">
+                  downloadFile
                   
                 </a>
                 
@@ -11315,12 +11335,35 @@ package.json</p>
   
 
   <ul>
-<li>getServerPlugins: (services, strategies, servicesContext) => [],</li>
-<li>getServerApi: (services, strategies, servicesContext) => [],</li>
-<li>getServerMocks: (services, strategies, servicesContext) => [],</li>
-<li>getServerServices: (endpointServices, servicesContext) => ({}),</li>
-<li>getServerMockServices: (endpointServices, servicesContext) => ({}),</li>
-<li>getServerStrategies: (servicesContext) => ({}),</li>
+<li>
+<p>async initServerSubModule: (serverRunner) => {},
+событие происходящее один раз на сервере. Если что-то изменили в модуле - нужно весь сервер перезапустить</p>
+</li>
+<li>
+<p>async afterStartServer: (serverRunner) => {},
+событие происходящее один раз на сервере. Если что-то изменили в модуле - нужно весь сервер перезапустить</p>
+</li>
+<li>
+<p>getServerPlugins: (services, strategies, servicesContext) => [],</p>
+</li>
+<li>
+<p>getServerApi: (services, strategies, servicesContext) => [],</p>
+</li>
+<li>
+<p>getServerMocks: (services, strategies, servicesContext) => [],</p>
+</li>
+<li>
+<p>getServerServices: (endpointServices, servicesContext) => ({}),</p>
+</li>
+<li>
+<p>getServerMockServices: (endpointServices, servicesContext) => ({}),</p>
+</li>
+<li>
+<p>getServerStrategies: (servicesContext) => ({}),</p>
+</li>
+<li>
+<p>getDBModels: () => [],</p>
+</li>
 </ul>
 
 
@@ -13219,6 +13262,192 @@ server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>function (any, any?)</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createtempfile'>
+      createTempFile
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>createTempFile(content: any, fileName: any, options: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>content</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fileName</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    <a href="https://raszi.github.io/node-tmp/">https://raszi.github.io/node-tmp/</a>
+ options
+mode: the file mode to create with, it fallbacks to 0600 on file creation and 0700 on directory creation
+prefix: the optional prefix, fallbacks to tmp- if not provided
+postfix: the optional postfix, fallbacks to .tmp on file creation
+template: mkstemp like filename template, no default
+dir: the optional temporary directory, fallbacks to system default (guesses from environment)
+tries: how many times should the function try to get a unique filename before giving up, default 3
+keep: signals that the temporary file or directory should not be deleted on exit, default is false, means delete
+Please keep in mind that it is recommended in this case to call the provided cleanupCallback function manually.
+unsafeCleanup: recursively removes the created temporary directory, even when it's not empty. default is false
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='downloadfile'>
+      downloadFile
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>downloadFile(reply: any, serverPath: any, fileName: any, type: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>reply</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>serverPath</span> <code class='quiet'>(any)</code>
+	    либо путь, либо data: , либо stream
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fileName</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
         
 
       
