@@ -48,15 +48,20 @@ export default class ServicesContext {
     const getServiceFn = isMock ? mockServices[serviceName] || services[serviceName] : services[serviceName];
 
     const endpoint = serverConfig.server.endpointServices[serviceName];
-    const service = executeVariable(getServiceFn, null, endpoint);
 
-    if (service.setRequest) {
-      service.setRequest(request);
+    let service = null;
+    try {
+      service = executeVariable(getServiceFn, null, endpoint);
+      if (service.setRequest) {
+        service.setRequest(request);
+      }
+      if (service.setServicesContext) {
+        service.setServicesContext(this);
+      }
+    } catch (error) {
+      logger.error(`Ошибка при получение сервиса "${serviceName}":\n`, error);
+      throw error;
     }
-    if (service.setServicesContext) {
-      service.setServicesContext(this);
-    }
-
     return service;
   }
 

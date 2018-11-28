@@ -470,6 +470,10 @@ export function apiPluginFactory(apiConfig, handler, otherOptions = {}) {
   });
 }
 
+
+// ======================================================
+// PROXY
+// ======================================================
 export const PROXY_WILDCARD_NAME = 'proxyWildcardPath';
 
 /**
