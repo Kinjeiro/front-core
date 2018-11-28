@@ -66,10 +66,10 @@ function getTmpDirectory() {
 async function createTempFile(content = null, fileName = null, options = undefined) {
   return new Promise((resolve, reject) => {
     tmp.file(
-      {
-        keep: true,
-        ...options
-      },
+      Object.apply(
+        { keep: true },
+        options
+      ),
       (error, filePath, fd, cleanupCallback) => {
         if (error) {
           reject(error);
@@ -133,10 +133,10 @@ async function writeToFilePromise(filePath, content, streamOptions = null, newFi
         // use {'flags': 'a'} to append and {'flags': 'w'} to erase and write a new file
         const writeStream = fs.createWriteStream(
           filePath,
-          {
-            flags: append ? 'a' : 'w',
-            ...streamOptions,
-          }
+          Object.apply(
+            { flags: append ? 'a' : 'w' },
+            streamOptions
+          ),
         )
         // https://nodejs.org/api/stream.html#stream_class_stream_writable
           .on('finish', () => resolve(filePath))
