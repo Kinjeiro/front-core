@@ -1,6 +1,8 @@
+/* eslint-disable no-param-reassign */
 import path from 'path';
 import fs from 'fs';
 import { URL } from 'url';
+import { Readable } from 'stream';
 import Response from 'hapi/lib/response';
 
 import {
@@ -73,7 +75,9 @@ function responseWrapperInner(result, reply) {
   // const isReplyResponse = reply._replied;
 
   // todo @ANKU @LOW - бага он не сравнивает две одинаковые функции! result.constructor и Response - можно через сравнения тела функции сделать - a.toString() === b.toString()
-  const isReplyResponse = typeof result === 'object' && result !== null && (result.constructor === Response || !!result.headers);
+  const isReplyResponse = typeof result === 'object'
+    && result !== null
+    && (result.constructor === Response || !!result.headers);
 
   // если typeof result === 'undefined' - значит ничего не возвращали, и значит reply заиспользуют позже внутри колбэков
   return typeof result === 'undefined' || isReplyResponse
@@ -141,9 +145,36 @@ export function getRequestCookieFromResponse(response) {
     .join('; ');
 }
 
+function getFileType(fileNameOrPath) {
+  if (typeof fileNameOrPath === 'string') {
+    const extension = path.extname(fileNameOrPath);
+    // eslint-disable-next-line no-param-reassign
+    return extension
+      ? getMimeType(extension)
+      : 'application/octet-stream';
+  }
+  return null;
+}
+
+/**
+ *
+ * @param reply
+ * @param serverPath - либо путь, либо data: , либо stream
+ * @param fileName
+ * @param type
+ * @return {*}
+ */
 export function downloadFile(reply, serverPath, fileName = null, type = null) {
   if (!serverPath) {
     return reply().code(404);
+  }
+
+  if (serverPath instanceof Readable) {
+    // type = type || getFileType(fileName);
+    return reply(serverPath)
+      // .type(type)
+      // .header('content-disposition', `attachment; filename=${encodeURI(fileName)};`)
+      ;
   }
 
   const result = base64ToBuffer(serverPath, fileName);
@@ -161,14 +192,7 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
 
   if (path.isAbsolute(serverPath)) {
     const extension = path.extname(serverPath);
-    // eslint-disable-next-line no-param-reassign
     fileName = fileName || path.basename(serverPath, extension);
-    if (!type) {
-      // eslint-disable-next-line no-param-reassign
-      type = extension
-        ? getMimeType(extension)
-        : 'application/octet-stream';
-    }
 
     // const fileData = ; // get file content;
     // const fileBuffer = new Buffer(fileData, 'base64');
@@ -176,7 +200,7 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
 
     return reply(fileBuffer)
       .encoding('binary')
-      .type(type)
+      .type(type || getFileType(serverPath))
       .header('content-length', fileBuffer.length)
       .header('content-disposition', `attachment; filename=${encodeURI(fileName)};`);
   }
