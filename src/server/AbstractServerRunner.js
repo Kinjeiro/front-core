@@ -66,12 +66,35 @@ export default class AbstractServerRunner {
     return this.serverSubModules;
   }
 
+  async initServerSubModules() {
+    await Promise.all(
+      this.getServerSubModules().map((subModule) =>
+        subModule.initServerSubModule
+        && subModule.initServerSubModule(this),
+      ),
+    );
+  }
+  async afterStartServerSubModules() {
+    await Promise.all(
+      this.getServerSubModules().map((subModule) =>
+        subModule.afterStartServer
+        && subModule.afterStartServer(this),
+      ),
+    );
+  }
+  getAllDBModels() {
+    return aggregateArrayFn(this.getServerSubModules(), 'getDBModels')();
+  }
+
 
   // ======================================================
   // INIT
   // ======================================================
-  init() {
+  async init() {
     this.server = new Hapi.Server(this.hapiServerOptions);
+
+    // init модуль
+    await this.initServerSubModules();
   }
 
 
@@ -242,11 +265,13 @@ export default class AbstractServerRunner {
     });
   }
 
-  afterStart() {
+  async afterStart() {
     const { server } = this;
 
     logger.log('Environment: ', serverConfig.common.env);
     logger.log(`Server is running: ${server.info.uri}...`);
+
+    await this.afterStartServerSubModules();
   }
 
   monitorRequests() {
@@ -326,7 +351,7 @@ export default class AbstractServerRunner {
     try {
       this.logConfig();
 
-      this.init();
+      await this.init();
 
       const servicesContext = this.createServicesContext();
       const services = this.createServices(serverConfig.server.endpointServices, servicesContext);
@@ -345,7 +370,7 @@ export default class AbstractServerRunner {
       await this.initServerAuthStrategy(services, strategies);
       await this.startServer();
 
-      this.afterStart();
+      await this.afterStart();
 
       return this;
     } catch (error) {

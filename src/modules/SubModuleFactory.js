@@ -106,21 +106,31 @@ export const SUB_MODULE_FACTORY = {
 
   DEFAULT_SERVER_SUB_MODULE_OPTIONS: {
     isTurnOff: false,
+    initServerSubModule: async (serverRunner) => {},
+    afterStartServer: async (serverRunner) => {},
+
     getServerPlugins: (services, strategies, servicesContext) => [],
     getServerApi: (services, strategies, servicesContext) => [],
     getServerMocks: (services, strategies, servicesContext) => [],
     getServerServices: (endpointServices, servicesContext) => ({}),
     getServerMockServices: (endpointServices, servicesContext) => ({}),
     getServerStrategies: (servicesContext) => ({}),
+    getDBModels: () => [],
   },
 
   /**
+   - async initServerSubModule: (serverRunner) => {},
+      событие происходящее один раз на сервере. Если что-то изменили в модуле - нужно весь сервер перезапустить
+   - async afterStartServer: (serverRunner) => {},
+      событие происходящее один раз на сервере. Если что-то изменили в модуле - нужно весь сервер перезапустить
+
    - getServerPlugins: (services, strategies, servicesContext) => [],
    - getServerApi: (services, strategies, servicesContext) => [],
    - getServerMocks: (services, strategies, servicesContext) => [],
    - getServerServices: (endpointServices, servicesContext) => ({}),
    - getServerMockServices: (endpointServices, servicesContext) => ({}),
    - getServerStrategies: (servicesContext) => ({}),
+   - getDBModels: () => [],
 
    * @param options
    * @return {{options: *}}
