@@ -439,6 +439,17 @@ module.exports = {
            },*/
           logstashLogger: false
         }
+      },
+
+      attachments: {
+        // todo @ANKU @CRIT @MAIN - переделать на magage rights для пользователей по CRUD действиям
+        /**
+         * accessPublic - все у кого есть ссылка
+         * accessAuth - только авторизованные пользователи
+         * accessOwnerOnly - только тот, кто создал (ну и админ ;))
+         * <permission> - пермишен специальный
+         */
+        defaultAccess: 'accessAuth'
       }
 
       // todo @ANKU @LOW - под вопросом нужно ли yar включать (лишний id в куках)
