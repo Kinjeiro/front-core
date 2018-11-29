@@ -15,6 +15,8 @@ export const ATTACHMENT_PROP_TYPE_MAP = {
   contextParams: PropTypes.object,
   // virtual от id
   downloadUrl: PropTypes.string,
+  // используется кем (id)
+  links: PropTypes.arrayOf(PropTypes.string),
 
   // services field
   // client

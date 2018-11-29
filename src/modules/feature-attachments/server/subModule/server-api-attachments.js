@@ -9,16 +9,12 @@ import logger from '../../../../server/helpers/server-logger';
 
 import {
   API_CONFIGS,
-  getDownloadUrl,
 } from '../../common/subModule/api-attachments';
 import ACCESS_TYPE from '../../common/subModule/model-attachment-access';
 
 async function wrapToDownloadUrl(attachment) {
   const attachmentFinal = await attachment;
-  return {
-    ...omit(attachmentFinal, 'contentId'),
-    downloadUrl: getDownloadUrl(attachmentFinal.id),
-  };
+  return omit(attachmentFinal, 'contentId');
 }
 
 // todo @ANKU @CRIT @MAIN - сделать модуль прав на объект и CRUD действия

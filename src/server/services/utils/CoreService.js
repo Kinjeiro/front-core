@@ -151,7 +151,7 @@ export default class CoreService {
   // ======================================================
   // Record
   // ======================================================
-  async serializeRecord(recordQuery, operationType) {
+  async serializeRecord(recordQuery, operationType, index = null) {
     return recordQuery;
   }
   async serializeRecords(recordsQuery, operationType) {
