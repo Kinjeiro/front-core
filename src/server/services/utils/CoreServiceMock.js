@@ -52,24 +52,41 @@ export default class CoreServiceMock extends CoreService {
   // CRUD
   // ======================================================
   async loadRecords(query, searchFields) {
-    return filterAndSortDb(await this.getData(), query, searchFields);
+    return this.serializeRecord(
+      filterAndSortDb(await this.getData(), query, searchFields),
+      this.OPERATION_TYPE.FIND,
+    );
   }
 
   async loadRecord(id) {
-    return (await this.getData())[id];
+    return this.serializeRecord(
+      (await this.getData())[id],
+      this.OPERATION_TYPE.GET,
+    );
   }
 
-  async addRecord(record, id = record.id || this.generateId()) {
+  async addRecord(data, id = null) {
+    const dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.ADD);
+    const idFinal = id || dataFinal.id || this.generateId();
     // eslint-disable-next-line no-param-reassign
-    record.id = id;
-    (await this.getData())[id] = record;
-    return record;
+    dataFinal.id = idFinal;
+    (await this.getData())[idFinal] = dataFinal;
+    return this.serializeRecord(
+      dataFinal,
+      this.OPERATION_TYPE.ADD,
+    );
   }
 
   async editRecord(id, data) {
     const records = await this.getData();
-    records[id] = applyPatchOperations(records[id], data);
-    return records[id];
+    records[id] = applyPatchOperations(
+      records[id],
+      await this.deserializeData(data, this.OPERATION_TYPE.EDIT),
+    );
+    return this.serializeRecord(
+      records[id],
+      this.OPERATION_TYPE.EDIT,
+    );
   }
 
   async deleteRecord(id) {

@@ -17,7 +17,17 @@ import {
 
 const INIT_SERVICES = {};
 
+export const OPERATION_TYPE = {
+  FIND: 'find',
+  GET: 'load',
+  ADD: 'add',
+  EDIT: 'edit',
+  DELETE: 'delete',
+};
+
 export default class CoreService {
+  OPERATION_TYPE = OPERATION_TYPE;
+
   servicesContext = null;
   request = null;
   endpointServiceConfig = null;
@@ -136,6 +146,19 @@ export default class CoreService {
     return [];
   }
   async initData(data) {
+  }
+
+  // ======================================================
+  // Record
+  // ======================================================
+  async serializeRecord(recordQuery, operationType) {
+    return recordQuery;
+  }
+  async serializeRecords(recordsQuery, operationType) {
+    return recordsQuery;
+  }
+  async deserializeData(data, operationType) {
+    return data;
   }
 
   // ======================================================
