@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { Readable } from 'stream';
 import merge from 'lodash/merge';
 
 import { arrayContainsArray } from '../../common/utils/common';
@@ -112,38 +113,58 @@ export function logPromise(promise, options, ...logArgs) {
     });
 }
 
-export function logObject(object, keys, level = 'log', hidePassword = undefined) {
-  defaultLogger[level](keys
-    ? keys.reduce((resultObj, key) => {
-      // eslint-disable-next-line no-param-reassign
-      resultObj[key] = object[key];
+// todo @ANKU @LOW - сделать в виде обхода дерева
+export function logObject(object, keys = null, level = 'log', hidePassword = undefined) {
+  let message;
+  if (object instanceof Readable) {
+    message = object.hapi || 'stream...';
+  } else if (object instanceof Buffer) {
+    message = object.toString();
+  } else {
+    const newObject = (keys && keys.length > 0 ? keys : Object.keys(object))
+      .reduce((resultObj, key) => {
+        // eslint-disable-next-line no-param-reassign
+        const value = object[key];
+        let newValue;
 
-      if (hidePassword) {
-        const value = resultObj[key];
-
-        if (hidePassword === true) {
-          hidePassword = 'password';
+        if (value instanceof Readable) {
+          newValue = value.hapi || 'stream...';
+        } else if (value instanceof Buffer) {
+          newValue = value.toString();
         }
 
-        if (key === hidePassword) {
-          resultObj[key] = '********';
-        } else if (value && typeof value === 'object' && value[hidePassword]) {
-          resultObj[key][hidePassword] = '********';
-        }
-      }
+        if (hidePassword) {
+          if (hidePassword === true) {
+            hidePassword = 'password';
+          }
 
-      return resultObj;
-      // const value = object[key];
-      // if (typeof value === 'object') {
-      //  resultObj.push(`${key}:`, value);
-      // } else {
-      //  resultObj.push(`${key}: ${value}`);
-      // }
-      // resultObj.push('\n');
-      // return resultObj;
-    }, {})
-    : object,
-  );
+          if (key === hidePassword) {
+            newValue = '********';
+          } else if (value && typeof value === 'object' && value[hidePassword]) {
+            newValue[hidePassword] = '********';
+          }
+        }
+
+        resultObj[key] = JSON.stringify(
+          typeof newValue === 'undefined' ? value : newValue,
+          null,
+          2,
+        );
+
+        return resultObj;
+        // const value = object[key];
+        // if (typeof value === 'object') {
+        //  resultObj.push(`${key}:`, value);
+        // } else {
+        //  resultObj.push(`${key}: ${value}`);
+        // }
+        // resultObj.push('\n');
+        // return resultObj;
+      }, {});
+    message = JSON.stringify(newObject, null, 2);
+  }
+
+  defaultLogger[level](message);
 }
 
 export default defaultLogger;
