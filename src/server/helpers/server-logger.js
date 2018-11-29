@@ -2,7 +2,9 @@
 import { Readable } from 'stream';
 import merge from 'lodash/merge';
 
-import { arrayContainsArray } from '../../common/utils/common';
+import {
+  arrayContainsArray,
+} from '../../common/utils/common';
 
 import winstonLoggerFactory from '../libs/winston-logger';
 import config from '../server-config';
@@ -131,6 +133,13 @@ export function logObject(object, keys = null, level = 'log', hidePassword = und
           newValue = value.hapi || 'stream...';
         } else if (value instanceof Buffer) {
           newValue = value.toString();
+        } else if (typeof value === 'object') {
+          newValue = {
+            // todo @ANKU @LOW - пока для одноуровневых сделаем обычно assign а потом нужен будет deepClone
+            ...value,
+          };
+        } else {
+          newValue = value;
         }
 
         if (hidePassword) {
