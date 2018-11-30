@@ -29,7 +29,7 @@ export default class ServiceAttachmentsMock extends CoreServiceMock {
    */
   async link(id, linkByObjectId, objectModel = null) {
     const attachment = await this.loadRecord(id);
-    return this.editRecord(id, {
+    await this.editRecord(id, {
       links: [
         ...attachment.links,
         linkByObjectId,
@@ -40,13 +40,13 @@ export default class ServiceAttachmentsMock extends CoreServiceMock {
   async unlink(id, linkByObjectId = null) {
     if (linkByObjectId) {
       const attachment = await this.loadRecord(id);
-      return this.editRecord(id, {
+      await this.editRecord(id, {
         links: attachment.links.filter((obj) => obj !== linkByObjectId),
       });
+    } else {
+      await this.editRecord(id, {
+        links: null,
+      });
     }
-
-    return this.editRecord(id, {
-      links: null,
-    });
   }
 }
