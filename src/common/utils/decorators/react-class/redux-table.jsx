@@ -175,14 +175,25 @@ export default function reduxTableDecorator(
           // actionClearFilters,
           actionLoadRecords,
           syncWithUrlParameters,
+          table: {
+            actionLoadRecordsStatus,
+          } = {},
         } = newProps;
 
+        const isFailed = actionLoadRecordsStatus
+          && actionLoadRecordsStatus.isFailed
+          && !this.props.table.actionLoadRecordsStatus.isFailed;
         const oldTableId = this.getTableId();
         const newTableId = this.getTableId(newProps);
         if (newTableId !== oldTableId) {
           this.componentWillUnmount(this.props);
           // this.componentWillMount(newProps);
-        } else if (loadOnChange && actionLoadRecords && syncWithUrlParameters) {
+        } else if (
+          !isFailed
+          && loadOnChange
+          && actionLoadRecords
+          && syncWithUrlParameters
+        ) {
           // если обновился урл (через updateUrl) - нужно обновиться загрузку
           actionLoadRecords(newTableId, initMeta, initFilters, false, false, syncWithUrlParameters);
         }
@@ -269,6 +280,7 @@ export default function reduxTableDecorator(
 
       @bind()
       handleWrapActionLoadRecords(...args) {
+        // eslint-disable-next-line max-len
         clientLogger.error('@deprecated: Use "onUpdateTableFilters" or "onUpdateTableMeta" instead of "actionLoadRecords"');
         return this.props.actionLoadRecords(...args);
       }
