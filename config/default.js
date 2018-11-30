@@ -88,6 +88,7 @@ const {
   CLIENT_SIDE_RENDERING,
   APP_MOCKS,
   USE_MOCKS,
+  DEBUG,
   /** Первый запуск мидловых сервисов бывает до 20 сек*/
   REQUEST_TIMEOUT = 120000,
   LOGS_PATH = path.join(process.cwd(), '/logs/all.log'),
@@ -142,6 +143,7 @@ module.exports = {
     isProduction,
     isLocalhost,
     isTest,
+    isDebug: !DEBUG,
 
     hotLoader: !!HOT_LOADER && isLocalhost,
     isServerSideRendering: !isTrue(CLIENT_SIDE_RENDERING),

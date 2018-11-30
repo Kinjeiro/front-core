@@ -31,6 +31,7 @@ function pluginEnvironments(webpackConfig, {
           WATCH_CLIENT_FILES: JSON.stringify(ENV.WATCH_CLIENT_FILES),
           APP_MOCKS: JSON.stringify(ENV.APP_MOCKS),
           USE_MOCKS: JSON.stringify(ENV.USE_MOCKS),
+          DEBUG: JSON.stringify(ENV.DEBUG),
           HOT_LOADER: JSON.stringify(ENV.HOT_LOADER),
           LOGS_PATH: JSON.stringify(ENV.LOGS_PATH),
 
