@@ -1,4 +1,5 @@
 // их парсинг происходит в \src\server\strategies\user-info\default.js
+import { checkAccess } from '../../modules/module-auth/common/subModule/helpers/access-object-utils';
 
 export default class CredentialsModel {
   // практически соответствует модели \src\common\models\user-info.js
@@ -22,8 +23,14 @@ export default class CredentialsModel {
   isAuth() {
     return !!this.userInfo;
   }
-  checkSimplePermission(permission) {
-    return this.userInfo && this.userInfo.permissions.includes(permission);
+  checkSimplePermission(accessObject) {
+    // todo @ANKU @CRIT @MAIN @HACK - будем переделывать систему прав и тогда разнесем permissions и roles
+    return checkAccess(this.userInfo, accessObject);
+    // return this.userInfo
+    //   && (
+    //     this.userInfo.permissions.includes(accessObject)
+    //     || this.userInfo.roles.includes(accessObject)
+    //   );
   }
   getUserName() {
     return this.isAuth()

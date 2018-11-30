@@ -1,3 +1,4 @@
+/* eslint-disable max-len,no-unused-vars */
 import merge from 'lodash/merge';
 import Wreck from 'wreck';
 
@@ -9,12 +10,14 @@ import { appUrl } from '../../common/helpers/app-urls';
 
 import {
   createUniError,
-  throwUniError,
+  // throwUniError,
   parseToUniError,
   isUniError,
 } from '../../common/models/uni-error';
 import logger from '../helpers/server-logger';
 import { getCredentialsFromRequest } from '../utils/credentials-utils';
+
+import { normalizeAccessObject } from '../../modules/module-auth/common/subModule/helpers/access-object-utils';
 
 import apiPluginLog from './api-plugin-log';
 import {
@@ -32,6 +35,9 @@ import {
 
 import serverConfig from '../server-config';
 
+// ======================================================
+// AUTH
+// ======================================================
 function authWrapper(handler, pluginOptions) {
   return (request, reply) => {
     // if (request.auth && request.auth.credentials && !request.auth.credentials.profileId) {
@@ -47,7 +53,10 @@ function authWrapper(handler, pluginOptions) {
   };
 }
 
-async function permissionWrapper(permissions, checkPermissionStrategy, other) {
+// ======================================================
+// PERMISSIONS
+// ======================================================
+async function accessWrapper(accessObject, checkPermissionStrategy, other) {
   const {
     apiConfig,
     reply,
@@ -55,7 +64,7 @@ async function permissionWrapper(permissions, checkPermissionStrategy, other) {
     apiRequest,
   } = other;
 
-  if (permissions && typeof checkPermissionStrategy !== 'function') {
+  if (accessObject && typeof checkPermissionStrategy !== 'function') {
     if (!isLogging) {
       // если не логировали, но нужно сначала залогировать что за реквест был
       apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
@@ -69,23 +78,19 @@ async function permissionWrapper(permissions, checkPermissionStrategy, other) {
   }
 
   try {
-    if (permissions) {
-      if (!Array.isArray(permissions)) {
-        // eslint-disable-next-line no-param-reassign
-        permissions = [permissions];
-      }
+    if (accessObject) {
       // проверяем доступы
-      return await Promise.all(permissions.map((permission) =>
-        // если пермишен не будет найден - вызовется throw Error и дальне не пойдет
-        checkPermissionStrategy(apiRequest, permission),
-      ));
+      return await checkPermissionStrategy(apiRequest, accessObject);
     }
   } catch (error) {
     return responseError(error, reply, 403);
   }
+  return null;
 }
 
-
+// ======================================================
+// PROXY
+// ======================================================
 const DEFAULT_PROXY_OPTIONS = {
   passThrough: true, // пробрасывание header от clientRequest
 };
@@ -118,7 +123,7 @@ function proxyWrapper(reply, proxy, callback) {
     // в старой версии используется через неудобный callback https://github.com/hapijs/h2o2/tree/v6.0.1#using-the-mapuri-and-onresponse-options
     // а в 7 версии через возврат параметров - мы позволим работать и так и так
     const originalMapUri = proxyOptions.mapUri;
-    proxyOptions.mapUri = (request, callback) => {
+    proxyOptions.mapUri = (request, callbackFn) => {
       let updatedData = null;
       try {
         updatedData = originalMapUri(request);
@@ -126,10 +131,10 @@ function proxyWrapper(reply, proxy, callback) {
         logger.info('normal error', error);
       }
 
-      if (updatedData && callback) {
+      if (updatedData && callbackFn) {
         // mapUri не поддерживает params (они работают только в uri) - мы это исправим
         Object.keys(request.params).forEach((paramKey) => {
-          updatedData.uri = updatedData.uri.replace(new RegExp(`\{${paramKey}\}`, 'g'), request.params[paramKey]);
+          updatedData.uri = updatedData.uri.replace(new RegExp(`{${paramKey}}`, 'g'), request.params[paramKey]);
         });
 
         // todo @ANKU @LOW @BUG_OUT @h2o2 - по умолчанию они не передают query!!! https://github.com/hapijs/h2o2/issues/23
@@ -143,11 +148,11 @@ function proxyWrapper(reply, proxy, callback) {
          // бага с авторизацией на middle server через hawk - поэтому отключил проброску headers c клиента
          если подавать headers: { host: 'localhost:8080' }
          */
-        return callback(null, updatedData.uri, updatedData.headers);
+        return callbackFn(null, updatedData.uri, updatedData.headers);
       }
 
       logger.debug('proxy to by callback in mapUri');
-      return originalMapUri(request, callback);
+      return originalMapUri(request, callbackFn);
     };
   }
 
@@ -298,6 +303,10 @@ function createProxyWrapperCallback(handler, apiRequest, pluginOptions) {
 // }
 
 
+
+// ======================================================
+// MAIN
+// ======================================================
 function getRouteConfig(method, routeConfig, isProxy) {
   let routeConfigFull = merge(
     {},
@@ -384,7 +393,11 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
  * @param apiConfig
  * @param handler - Можно не использовать reply, если возвращаем не response, то идет вызов reply автоматически с
  *   результатом в качестве аргумента
+ *
+ * @param accessObject
  * @param permissions
+ * @param roles
+ *
  * @param checkPermissionStrategy
  * @param routeConfig
  * @param isLogging
@@ -396,6 +409,8 @@ function apiPluginFullFactory(apiConfig, options) {
     handler,
     routeConfig = {},
 
+    accessObject,
+    roles,
     permissions,
     checkPermissionStrategy,
 
@@ -416,7 +431,8 @@ function apiPluginFullFactory(apiConfig, options) {
       apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
     }
 
-    await permissionWrapper(permissions, checkPermissionStrategy, {
+    // проверяем доступ - если не будет - выбросится ошибка
+    await accessWrapper(accessObject || normalizeAccessObject(roles, permissions), checkPermissionStrategy, {
       apiConfig,
       reply,
       isLogging,
@@ -424,7 +440,6 @@ function apiPluginFullFactory(apiConfig, options) {
     });
 
     try {
-      let result;
       // проксируем
       if (proxy) {
         return proxyWrapper(
@@ -433,10 +448,7 @@ function apiPluginFullFactory(apiConfig, options) {
           createProxyWrapperCallback(handler, apiRequest, pluginOptions),
         );
       }
-      result = await handler(getRequestData(apiRequest), apiRequest, reply, pluginOptions);
-
-
-      return result;
+      return await handler(getRequestData(apiRequest), apiRequest, reply, pluginOptions);
     } catch (error) {
       if (!isLogging) {
         // если не логировали, но нужно сначала залогировать что за реквест был

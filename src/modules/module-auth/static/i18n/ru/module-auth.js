@@ -1,4 +1,11 @@
 module.exports = {
+  errors: {
+    notRolesOr: 'У вас должна быть хоть бы одна роль из списка: {{roles}}',
+    notRolesAnd: 'У вас должны быть все роли из списка: {{roles}}',
+    notPermissionsOr: 'У вас должно быть хоть бы одно разрешение из списка: {{permissions}}',
+    notPermissionsAnd: 'У вас должны быть все разрешения из списка: {{permissions}}',
+  },
+
   pages: {
     SignupPage: {
       title: 'Регистрация',
@@ -79,10 +86,6 @@ module.exports = {
     AuthErrorContainer: {
       sessionExpire: 'Ваша сессия истекла. Пожалуйста перелогиньтесь.',
       actionGoToLogin: 'Перейти на страницу логина',
-    },
-    AuthCheckWrapper: {
-      notRoles: 'У вас нет подходящих ролей ({{roles}})',
-      notPermissions: 'У вас не хватает права ({{permissions}})',
     },
   },
 };

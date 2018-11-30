@@ -1,4 +1,11 @@
 module.exports = {
+  errors: {
+    notRolesOr: 'You should have at least one of this roles: {{roles}}',
+    notRolesAnd: 'You should have all this roles: {{roles}}',
+    notPermissionsOr: 'You should have at least one of this permissions: {{permissions}}',
+    notPermissionsAnd: 'You should have all this permissions: {{permissions}}',
+  },
+
   pages: {
     SignupPage: {
       title: 'Sign up',
@@ -79,10 +86,6 @@ module.exports = {
     AuthErrorContainer: {
       sessionExpire: 'Your session has expired. Please relogin.',
       actionGoToLogin: 'Go to login page',
-    },
-    AuthCheckWrapper: {
-      notRoles: 'You haven\'t roles ({{roles}})',
-      notPermissions: 'You haven\'t permissions ({{permissions}})',
     },
   },
 };

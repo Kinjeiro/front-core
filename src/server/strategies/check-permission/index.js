@@ -1,26 +1,27 @@
 import i18n from '../../../common/utils/i18n-utils';
 
-import serverConfig from '../../server-config';
 import logger from '../../helpers/server-logger';
 
 import checkPermissionDefault from './default';
 
 export default function factoryCheckPermissionStrategy(servicesContext) {
-  return async (apiRequest, permission, errorMsg) => {
-    let isActionPermitted = true;
-    const configPermissions = serverConfig.common.features.auth && serverConfig.common.features.auth.permissions;
-    const authPermissionsTurnOn = serverConfig.common.features.auth && configPermissions !== false;
+  return async (apiRequest, accessObject, errorMsg) => {
+    // const configPermissions = serverConfig.common.features.auth && serverConfig.common.features.auth.permissions;
+    // const authPermissionsTurnOn = serverConfig.common.features.auth && configPermissions !== false;
+    const accessErrors = await checkPermissionDefault(apiRequest, accessObject);
 
-    if (authPermissionsTurnOn) {
-      isActionPermitted = configPermissions.includes(permission)
-        || await checkPermissionDefault(apiRequest, permission);
+    let error;
+    if (accessErrors === false) {
+      error = errorMsg || i18n('core:Ошибка авторизации. Недостаточно прав');
+    } else if (Array.isArray(accessErrors)) {
+      error = errorMsg || accessErrors[0];
     }
 
-    if (!isActionPermitted) {
-      logger.error(errorMsg || i18n('core:Ошибка авторизации. Недостаточно прав'), permission);
-      throw new Error(errorMsg || i18n(`Ошибка авторизации. Недостаточно прав "${permission}"`));
+    if (error) {
+      logger.error('factoryCheckPermissionStrategy: ', error, accessObject);
+      throw new Error(error);
     }
 
-    return isActionPermitted;
+    return true;
   };
 }

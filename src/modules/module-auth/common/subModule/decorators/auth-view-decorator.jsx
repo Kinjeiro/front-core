@@ -9,8 +9,6 @@ import {
   executeVariable,
 } from '../../../../../common/utils/common';
 import { cutContextPath } from '../../../../../common/helpers/app-urls';
-import clientConfig from '../../../../../common/client-config';
-// import { createUniError } from '../../../../../common/models/uni-error';
 
 import { PATH_ACCESS_DENIED } from '../../../../../common/routes.pathes';
 import { getCurrentPath } from '../../../../../common/app-redux/selectors';
@@ -22,16 +20,12 @@ import { notifyError } from '../../../../../common/helpers/notifications';
 // ======================================================
 // MODULE
 // ======================================================
-import i18n from '../i18n';
 import { getUser } from '../redux-selectors';
 import USER_PROP_TYPE from '../model-user';
-import { ADMIN } from '../roles';
+import { checkAccess, DEFAULT_ACCESS_OBJECT } from '../helpers/access-object-utils';
 
 const DEFAULT_OPTIONS = {
-  rolesOr: [],
-  rolesAnd: [],
-  permissionsOr: [],
-  permissionsAnd: [],
+  ...DEFAULT_ACCESS_OBJECT,
   redirectNotAuth: null,
   redirectNotAccess: PATH_ACCESS_DENIED,
   afterAuthRedirect: null,
@@ -106,9 +100,6 @@ export default function authViewDecorator(...args) {
     afterAuthRedirect,
   } = options;
 
-  const configPermissions = (Array.isArray(clientConfig.common.permissions) && clientConfig.common.permissions)
-    || [];
-
   return (WrappedComponent) => {
     @contextModules()
     @connect(
@@ -158,54 +149,41 @@ export default function authViewDecorator(...args) {
           location,
         } = props;
 
-        let allow = true;
+        const accessErrors = checkAccess(user, {
+          rolesOr,
+          rolesAnd,
+          permissionsOr,
+          permissionsAnd,
+        });
 
-        const authTurnOn = clientConfig.common.features.auth
-          && clientConfig.common.features.auth.permissions;
-
-        if (authTurnOn) {
-          const isAuth = !!user;
-          if (!isAuth) {
-            allow = false;
-            if (redirectNotAuth) {
-              const redirectNotAuthFinal = executeVariable(redirectNotAuth, null,
-                getRoutePath,
-                location,
-              );
-              onGoTo(cutContextPath(redirectNotAuthFinal));
-            } else {
-              // запускаем ошибку авторизации
-              actionThrowNotAuthError(afterAuthRedirect || currentPath);
-            }
-          } else if (user.roles.includes(ADMIN)) {
-            allow = true;
+        if (accessErrors === true) {
+          return true;
+        } else if (accessErrors === false) {
+          // не авторизован
+          if (redirectNotAuth) {
+            const redirectNotAuthFinal = executeVariable(redirectNotAuth, null,
+              getRoutePath,
+              location,
+            );
+            onGoTo(cutContextPath(redirectNotAuthFinal));
           } else {
-            let error = null;
-            if (rolesOr.length && !rolesOr.some((role) => user.roles.includes(role))) {
-              error = i18n('containers.AuthCheckWrapper.notRoles', { roles: rolesOr.join(', ') });
-            }
-            if (!error && rolesAnd.length && !rolesAnd.some((role) => user.roles.includes(role))) {
-              error = i18n('containers.AuthCheckWrapper.notRoles', { roles: rolesAnd.join(', ') });
-            }
-            if (!error && permissionsOr.length && !permissionsOr.some((permission) => user.permissions.includes(permission) || configPermissions.includes(permission))) {
-              error = i18n('containers.AuthCheckWrapper.notPermissions', { permissions: permissionsOr.join(', ') });
-            }
-            if (!error && permissionsAnd.length && !permissionsAnd.some((permission) => user.permissions.includes(permission) || configPermissions.includes(permission))) {
-              error = i18n('containers.AuthCheckWrapper.notPermissions', { permissions: permissionsAnd.join(', ') });
-            }
-            if (error) {
-              allow = false;
-              // actionChangeGlobalUniError(createUniError(i18n('У вас нет прав на просмотр страницы')));
-              const redirectNotAccessFinal = executeVariable(redirectNotAccess, null,
-                getRoutePath,
-                location,
-              );
-              onGoTo(cutContextPath(redirectNotAccessFinal));
-              notifyError(error);
-            }
+            // запускаем ошибку авторизации
+            actionThrowNotAuthError(afterAuthRedirect || currentPath);
           }
+        } else if (Array.isArray(accessErrors)) {
+          // есть ошибки доступа
+          // actionChangeGlobalUniError(createUniError(i18n('У вас нет прав на просмотр страницы')));
+          const redirectNotAccessFinal = executeVariable(redirectNotAccess, null,
+            getRoutePath,
+            location,
+          );
+          onGoTo(cutContextPath(redirectNotAccessFinal));
+          // todo @ANKU @LOW - может все ошибки показать?
+          notifyError(accessErrors[0]);
+        } else {
+          throw new Error('Не поддерживающийся формат проверки прав');
         }
-        return allow;
+        return false;
       }
 
       // ======================================================
