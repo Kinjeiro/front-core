@@ -14,7 +14,7 @@ export const getUser = userSelectors.getUser;
 export const getUserId = userSelectors.getUserId;
 export const hasPermission = userSelectors.hasPermission;
 export const hasRole = userSelectors.hasRole;
-
+export const checkAccess = userSelectors.checkAccess;
 
 export function getCurrentPath(globalState) {
   // используется в redux-router 4

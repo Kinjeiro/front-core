@@ -1,5 +1,7 @@
 import { includes } from '../../../../common/utils/common';
 
+import { checkAccess as checkAccessMethod } from './helpers/access-object-utils';
+
 export function getUserInfo(globalState) {
   return globalState.userInfo;
 }
@@ -24,4 +26,9 @@ export function hasPermission(globalState, ...permissions) {
 export function hasRole(globalState, ...roles) {
   const user = getUser(globalState);
   return user && roles.some((role) => includes(user.roles, role));
+}
+export function checkAccess(globalState, accessObjectOrRoles, permissions = undefined) {
+  const user = getUser(globalState);
+  const isAccess = checkAccessMethod(user, accessObjectOrRoles, permissions);
+  return isAccess === true;
 }
