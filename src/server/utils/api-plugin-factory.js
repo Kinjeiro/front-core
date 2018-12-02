@@ -64,23 +64,28 @@ async function accessWrapper(accessObject, checkPermissionStrategy, other) {
     apiRequest,
   } = other;
 
-  if (accessObject && typeof checkPermissionStrategy !== 'function') {
-    if (!isLogging) {
-      // если не логировали, но нужно сначала залогировать что за реквест был
-      apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
-    }
-    logger.error(i18n('core:Для проверки прав, необходимо подать checkPermissionStrategy'), apiConfig, checkPermissionStrategy);
-    return responseError(
-      i18n('core:Для проверки прав, необходимо подать checkPermissionStrategy'),
-      reply,
-      500,
-    );
-  }
+  // if (accessObject && typeof checkPermissionStrategy !== 'function') {
+  //   if (!isLogging) {
+  //     // если не логировали, но нужно сначала залогировать что за реквест был
+  //     apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
+  //   }
+  //   logger.error(i18n('core:Для проверки прав, необходимо подать checkPermissionStrategy'), apiConfig, checkPermissionStrategy);
+  //   return responseError(
+  //     i18n('core:Для проверки прав, необходимо подать checkPermissionStrategy'),
+  //     reply,
+  //     500,
+  //   );
+  // }
+
+  // see src/server/strategies/plugin-strategies.js
+  const strategy = checkPermissionStrategy || apiRequest.strategies.checkPermissionStrategy;
+  // проверка авторизации уже была выше authWrapper в routeConfig:{ auth: true } - по умолчанию - поэтому тут ее отключаем
+  const notAuthCheck = true;
 
   try {
     if (accessObject) {
       // проверяем доступы
-      return await checkPermissionStrategy(apiRequest, accessObject);
+      return await strategy(apiRequest, accessObject, null, notAuthCheck);
     }
   } catch (error) {
     return responseError(error, reply, 403);
@@ -358,10 +363,12 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
       && serverConfig.common.features.auth
       && serverConfig.common.features.auth.globalAuth !== false;
 
+    // предпоследний враппер
     let finalHandler = authTurnOn
       ? authWrapper(handler, pluginOptions)
       : (request, reply) => handler(request, reply, pluginOptions);
 
+    // самый верхний враппер
     finalHandler = parseResponseHandler(finalHandler);
 
     let methods = method;
@@ -432,12 +439,16 @@ function apiPluginFullFactory(apiConfig, options) {
     }
 
     // проверяем доступ - если не будет - выбросится ошибка
-    await accessWrapper(accessObject || normalizeAccessObject(roles, permissions), checkPermissionStrategy, {
-      apiConfig,
-      reply,
-      isLogging,
-      apiRequest,
-    });
+    await accessWrapper(
+      accessObject || normalizeAccessObject(roles, permissions),
+      checkPermissionStrategy,
+      {
+        apiConfig,
+        reply,
+        isLogging,
+        apiRequest,
+      },
+    );
 
     try {
       // проксируем

@@ -20,6 +20,7 @@ import serverConfig from './server-config';
 
 import pluginServicesContext from './services/utils/plugin-services-context';
 import ServicesContext from './services/utils/ServicesContext';
+import pluginStrategies from './strategies/plugin-strategies';
 
 
 if (!serverConfig.common.isProduction) {
@@ -170,6 +171,13 @@ export default class AbstractServerRunner {
       {
         register: pluginServicesContext,
         options: {
+          servicesContext,
+        },
+      },
+      {
+        register: pluginStrategies,
+        options: {
+          strategies,
           servicesContext,
         },
       },

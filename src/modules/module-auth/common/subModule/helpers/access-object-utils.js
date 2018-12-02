@@ -41,14 +41,6 @@ export function normalizeAccessObject(roles, permissions = null) {
  */
 export function checkAccess(user, roles, permissions) {
   const isAuth = !!user;
-  const accessObject = normalizeAccessObject(roles, permissions);
-  const {
-    rolesOr,
-    rolesAnd,
-    permissionsOr,
-    permissionsAnd,
-  } = accessObject;
-
   const authTurnOn = clientConfig.common.features.auth
     && clientConfig.common.features.auth.permissions;
 
@@ -60,30 +52,38 @@ export function checkAccess(user, roles, permissions) {
     } else if (user.roles.includes(ADMIN)) {
       allow = true;
     } else {
+      const accessObject = normalizeAccessObject(roles, permissions);
+      const {
+        rolesOr,
+        rolesAnd,
+        permissionsOr,
+        permissionsAnd,
+      } = accessObject;
+
       const configPermissions = wrapToArray(clientConfig.common.permissions);
 
-      const error = [];
+      const errors = [];
       if (rolesOr.length > 0 && !rolesOr.some((role) => user.roles.includes(role))) {
-        error.push(i18n('errors.notRolesOr', { roles: rolesOr.join(', ') }));
+        errors.push(i18n('errors.notRolesOr', { roles: rolesOr.join(', ') }));
       }
       if (rolesAnd.length > 0 && !rolesAnd.some((role) => user.roles.includes(role))) {
-        error.push(i18n('errors.notRolesAnd', { roles: rolesAnd.join(', ') }));
+        errors.push(i18n('errors.notRolesAnd', { roles: rolesAnd.join(', ') }));
       }
       if (
         permissionsOr.length > 0
         && !permissionsOr.some((permission) =>
         user.permissions.includes(permission) || configPermissions.includes(permission))
       ) {
-        error.push(i18n('errors.notPermissionsOr', { permissions: permissionsOr.join(', ') }));
+        errors.push(i18n('errors.notPermissionsOr', { permissions: permissionsOr.join(', ') }));
       }
       if (permissionsAnd.length > 0
         && !permissionsAnd.some((permission) =>
         user.permissions.includes(permission) || configPermissions.includes(permission))
       ) {
-        error.push(i18n('errors.notPermissionsAnd', { permissions: permissionsAnd.join(', ') }));
+        errors.push(i18n('errors.notPermissionsAnd', { permissions: permissionsAnd.join(', ') }));
       }
-      if (error.length > 0) {
-        return error;
+      if (errors.length > 0) {
+        return errors;
       }
     }
   }
