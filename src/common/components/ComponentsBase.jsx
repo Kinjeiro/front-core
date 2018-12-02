@@ -63,7 +63,7 @@ function addCallback(CurrentClassWrapper, callback) {
 export function createComponentBase() {
   return {
     replace(name, ComponentClass) {
-      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+      if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
         logger.debug('[COMPONENTS BASE] replace', name);
       }
       if (!this[`_${name}`]) {
@@ -91,7 +91,7 @@ export function createComponentBase() {
     },
     wrap(name, ComponentClass, funcIsClass = false) {
       const PrevClassWrapper = this[`_${name}`];
-      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+      if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
         logger.debug('[COMPONENTS BASE] wrap', name, !!PrevClassWrapper);
       }
       this.replace(
@@ -102,7 +102,7 @@ export function createComponentBase() {
     },
     addClassName(name, classNameAdditional) {
       const CurrentClassWrapper = this[`_${name}`];
-      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+      if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
         logger.debug('[COMPONENTS BASE] addClassName', name, !!CurrentClassWrapper);
       }
       this.replace(
@@ -113,7 +113,7 @@ export function createComponentBase() {
     },
     addInitCallback(name, initCallback) {
       const CurrentClassWrapper = this[`_${name}`];
-      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+      if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
         logger.debug('[COMPONENTS BASE] addInitCallback', name, !!CurrentClassWrapper);
       }
       this.replace(
