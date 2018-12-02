@@ -252,6 +252,10 @@ module.exports = {
       notifications: {
         ui: true,
         systemQueue: true
+      },
+
+      componentsBase: {
+        logComponentBaseEvents: false
       }
     },
 

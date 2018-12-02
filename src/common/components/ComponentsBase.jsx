@@ -1,6 +1,7 @@
 /* eslint-disable global-require,max-len,react/prop-types */
 import React from 'react';
 
+import clientConfig from '../client-config';
 import {
   executeVariable,
   executeVariableMemoize,
@@ -62,7 +63,9 @@ function addCallback(CurrentClassWrapper, callback) {
 export function createComponentBase() {
   return {
     replace(name, ComponentClass) {
-      logger.debug('[COMPONENTS BASE] replace', name);
+      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+        logger.debug('[COMPONENTS BASE] replace', name);
+      }
       if (!this[`_${name}`]) {
         Object.defineProperty(this, name, {
           enumerable: true,
@@ -88,7 +91,9 @@ export function createComponentBase() {
     },
     wrap(name, ComponentClass, funcIsClass = false) {
       const PrevClassWrapper = this[`_${name}`];
-      logger.debug('[COMPONENTS BASE] wrap', name, !!PrevClassWrapper);
+      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+        logger.debug('[COMPONENTS BASE] wrap', name, !!PrevClassWrapper);
+      }
       this.replace(
         name,
         wrap(ComponentClass, PrevClassWrapper, funcIsClass),
@@ -97,7 +102,9 @@ export function createComponentBase() {
     },
     addClassName(name, classNameAdditional) {
       const CurrentClassWrapper = this[`_${name}`];
-      logger.debug('[COMPONENTS BASE] addClassName', name, !!CurrentClassWrapper);
+      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+        logger.debug('[COMPONENTS BASE] addClassName', name, !!CurrentClassWrapper);
+      }
       this.replace(
         name,
         addClassName(CurrentClassWrapper, classNameAdditional),
@@ -106,7 +113,9 @@ export function createComponentBase() {
     },
     addInitCallback(name, initCallback) {
       const CurrentClassWrapper = this[`_${name}`];
-      logger.debug('[COMPONENTS BASE] addInitCallback', name, !!CurrentClassWrapper);
+      if (clientConfig.common.feature.componentsBase.logComponentBaseEvents) {
+        logger.debug('[COMPONENTS BASE] addInitCallback', name, !!CurrentClassWrapper);
+      }
       this.replace(
         name,
         addCallback(CurrentClassWrapper, initCallback),
