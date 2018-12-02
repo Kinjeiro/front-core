@@ -46,7 +46,6 @@ export default class ServicesContext {
     } = this;
     const isMock = cookie(request, serverConfig.server.features.mocking.cookieEnableMocking) === 'true';
     const getServiceFn = isMock ? mockServices[serviceName] || services[serviceName] : services[serviceName];
-
     const endpoint = serverConfig.server.endpointServices[serviceName];
 
     let service = null;
@@ -62,6 +61,8 @@ export default class ServicesContext {
       logger.error(`Ошибка при получение сервиса "${serviceName}":\n`, error);
       throw error;
     }
+    logger.debug(`getService ${isMock ? '[MOCK]' : ''} "${serviceName}" - ${!!service}. Endpoint: ${endpoint ? JSON.stringify(endpoint) : 'none'}`);
+
     return service;
   }
 
