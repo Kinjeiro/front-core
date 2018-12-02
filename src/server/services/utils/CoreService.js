@@ -21,6 +21,7 @@ export const OPERATION_TYPE = {
   FIND: 'find',
   GET: 'load',
   ADD: 'add',
+  ADD_OR_EDIT: 'addOrEdit',
   EDIT: 'edit',
   DELETE: 'delete',
 };
@@ -151,36 +152,49 @@ export default class CoreService {
   // ======================================================
   // Record
   // ======================================================
-  async serializeRecord(recordQuery, operationType, index = null) {
+  async serializeRecord(recordQuery, operationType, options = undefined) {
     return recordQuery;
   }
-  async serializeRecords(recordsQuery, operationType) {
+  async serializeRecords(recordsQuery, operationType, options = undefined) {
     return recordsQuery;
   }
-  async deserializeData(data, operationType) {
+  async deserializeData(data, operationType, options = undefined) {
     return data;
   }
 
   // ======================================================
   // CRUD
   // ======================================================
-  async loadRecords(query, searchFields) {
+  async loadRecords(query, searchFields, options) {
     throw new Error('Not Implemented');
   }
 
-  async loadRecord(id) {
+  async loadRecord(id, options) {
     throw new Error('Not Implemented');
   }
 
-  async addRecord(record, id) {
+  async addRecord(record, id, options) {
+    throw new Error('Not Implemented');
+  }
+  async addOrEditRecord(id, data, options) {
     throw new Error('Not Implemented');
   }
 
-  async editRecord(id, data) {
+  async editRecord(id, data, options) {
     throw new Error('Not Implemented');
   }
 
-  async deleteRecord(id) {
+  async deleteRecord(id, options) {
+    throw new Error('Not Implemented');
+  }
+
+  async startTransactionSession() {
+    throw new Error('Not Implemented');
+  }
+  commitTransactionSession(transactionSession) {
+    throw new Error('Not Implemented');
+  }
+  abortTransactionSession(transactionSession) {
     throw new Error('Not Implemented');
   }
 }

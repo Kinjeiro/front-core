@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import serverConfig from '../../../server/server-config';
 
 import {
@@ -51,22 +52,24 @@ export default class CoreServiceMock extends CoreService {
   // ======================================================
   // CRUD
   // ======================================================
-  async loadRecords(query, searchFields) {
+  async loadRecords(query, searchFields, options = undefined) {
     return this.serializeRecord(
       filterAndSortDb(await this.getData(), query, searchFields),
       this.OPERATION_TYPE.FIND,
+      options,
     );
   }
 
-  async loadRecord(id) {
+  async loadRecord(id, options = undefined) {
     return this.serializeRecord(
       (await this.getData())[id],
       this.OPERATION_TYPE.GET,
+      options,
     );
   }
 
-  async addRecord(data, id = null) {
-    const dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.ADD);
+  async addRecord(data, id = null, options = undefined) {
+    const dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.ADD, options);
     const idFinal = id || dataFinal.id || this.generateId();
     // eslint-disable-next-line no-param-reassign
     dataFinal.id = idFinal;
@@ -74,22 +77,37 @@ export default class CoreServiceMock extends CoreService {
     return this.serializeRecord(
       dataFinal,
       this.OPERATION_TYPE.ADD,
+      options,
     );
   }
 
-  async editRecord(id, data) {
+  async addOrEditRecord(id, data, options = undefined) {
     const records = await this.getData();
-    records[id] = applyPatchOperations(
+    if (!records[id]) {
+      records[id] = { id: this.generateId() };
+    }
+    const dataFinal = merge(records[id], await this.deserializeData(data, this.OPERATION_TYPE.ADD_OR_EDIT, options));
+    return this.serializeRecord(
+      dataFinal,
+      this.OPERATION_TYPE.ADD_OR_EDIT,
+      options,
+    );
+  }
+
+  async editRecord(id, data, options = undefined) {
+    const records = await this.getData();
+    applyPatchOperations(
       records[id],
-      await this.deserializeData(data, this.OPERATION_TYPE.EDIT),
+      await this.deserializeData(data, this.OPERATION_TYPE.EDIT, options),
     );
     return this.serializeRecord(
       records[id],
       this.OPERATION_TYPE.EDIT,
+      options,
     );
   }
 
-  async deleteRecord(id) {
+  async deleteRecord(id, options = undefined) {
     delete (await this.getData())[id];
   }
 }
