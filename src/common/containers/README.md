@@ -13,8 +13,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
 
-import bemDecorator from '@reagentum/front-core/lib/common/utils/decorators/bem-component';
-import i18n from '@reagentum/front-core/lib/common/utils/i18n-utils';
+import bemDecorator from '@igs/front-core/lib/common/utils/decorators/bem-component';
+import i18n from '@igs/front-core/lib/common/utils/i18n-utils';
 
 // import './$ClassName2$.css';
 

@@ -5,8 +5,8 @@ const factoryPluginLibLink = require('./factory-plugin-lib-link');
   + можно переключать с lib на src, если проект на npm-link
 
  Before:
-  import run from '@reagentum/front-core/src/client/run-client';
+  import run from '@igs/front-core/src/client/run-client';
  After:
   import run from 'front-core/client/run-client';
 */
-module.exports = factoryPluginLibLink('front-core', { scoped: '@reagentum', filesDir: 'src' });
+module.exports = factoryPluginLibLink('front-core', { scoped: '@igs', filesDir: 'src' });

@@ -1,5 +1,5 @@
 {
-  "name": "@reagentum/front-core",
+  "name": "@igs/front-core",
   "version": "1.3.39-0",
   "description": "front-core",
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",

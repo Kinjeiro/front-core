@@ -27,7 +27,7 @@ function inCoreProject(...args) {
 function inCoreProjectSrcRelative(srcPath) {
   return useFromFrontCore
     ? `src/${srcPath}`
-    : `node_modules/@reagentum/front-core/lib/${srcPath}`;
+    : `node_modules/@igs/front-core/lib/${srcPath}`;
 }
 
 function inProject(...args) {

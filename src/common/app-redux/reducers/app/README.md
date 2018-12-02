@@ -9,8 +9,8 @@ entityNameSmall = camelCase(entityName)
 
 Шаблон
 ```
-import { createReducer } from '@reagentum/front-core/lib/common/app-redux/utils';
-import { createStatusReducer } from '@reagentum/front-core/lib/common/app-redux/helpers';
+import { createReducer } from '@igs/front-core/lib/common/app-redux/utils';
+import { createStatusReducer } from '@igs/front-core/lib/common/app-redux/helpers';
 
 // ======================================================
 // INITIAL STATE

@@ -5,9 +5,9 @@ const path = require('path');
  Прекрасная статья об подключении зависимой библиотеки
  https://medium.com/@bmihelac/tips-for-local-developing-of-react-modules-with-babel-and-webpack-51f9c2f0477
 
- factoryPluginLibLink('front-core', { scoped: '@reagentum', filesDir: 'lib' })
+ factoryPluginLibLink('front-core', { scoped: '@igs', filesDir: 'lib' })
  Before:
- import run from '@reagentum/front-core/lib/client/run-client';
+ import run from '@igs/front-core/lib/client/run-client';
  After:
  import run from 'front-core/client/run-client';
 

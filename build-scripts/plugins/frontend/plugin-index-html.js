@@ -45,7 +45,7 @@ function pluginIndexHtml(webpackConfig, context) {
 
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
-      // './node-modules/@reagentum/front-core/lib/static-client/index.template.ejs'
+      // './node-modules/@igs/front-core/lib/static-client/index.template.ejs'
       // template:  './src/static-client/index.template.ejs',
       template:  inCoreProjectSrcRelative('static-client/index.template.ejs'),
       // filename: './.build/assets/index.html', // relative to root of the application
