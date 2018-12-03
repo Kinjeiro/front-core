@@ -23,3 +23,7 @@
     }
   }
 }
+
+@block AuthModal {
+  z-index: 10010; // CoreModal 10000 дефолтный
+}

@@ -140,7 +140,10 @@ export default class AuthErrorContainer extends Component {
     } = this.state;
 
     return authError && (
-      <Modal onCancel={ () => this.setState({ authError: null }) }>
+      <Modal
+        className="AuthModal"
+        onCancel={ () => this.setState({ authError: null }) }
+      >
         {
           reLoginModalForm
             ? (

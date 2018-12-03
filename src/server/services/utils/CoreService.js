@@ -188,6 +188,33 @@ export default class CoreService {
     throw new Error('Not Implemented');
   }
 
+  // ======================================================
+  // BULK
+  // ======================================================
+  /**
+   * This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware for every document use create() instead.
+   * @param operations: {
+      [this.OPERATION_TYPE.ADD]: addArray,
+      [this.OPERATION_TYPE.EDIT]: editArray,
+      [this.OPERATION_TYPE.DELETE]: deleteArray,
+    }
+   * @return BulkWriteOpResultObject
+   - insertedCount	number -- Number of documents inserted.
+   - matchedCount	  number -- Number of documents matched for update.
+   - modifiedCount	number -- Number of documents modified.
+   - deletedCount	  number -- Number of documents deleted.
+   - upsertedCount	number -- Number of documents upserted.
+   - insertedIds	  object -- Inserted document generated Id's, hash key is the index of the originating operation
+   - upsertedIds	  object -- Upserted document generated Id's, hash key is the index of the originating operation
+   - result	        object -- The command result object.
+   */
+  async bulkOperations(operations, options = null) {
+    throw new Error('Not Implemented');
+  }
+
+  // ======================================================
+  // TRANSACTION
+  // ======================================================
   async startTransactionSession() {
     throw new Error('Not Implemented');
   }
