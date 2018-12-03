@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.20 | Documentation</title>
+  <title>@reagentum/front-core 1.6.21 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.20</code></div>
+          <div class='mb1'><code>1.6.21</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1315,6 +1315,16 @@
               
                 
                 <li><a
+                  href='#link'
+                  class="">
+                  link
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#apigetuseravatarurl'
                   class="">
                   apiGetUserAvatarUrl
@@ -1328,6 +1338,16 @@
                   href='#authviewdecorator'
                   class="">
                   authViewDecorator
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#checkaccess'
+                  class="">
+                  checkAccess
                   
                 </a>
                 
@@ -1589,6 +1609,16 @@
               
                 
                 <li><a
+                  href='#bulkoperations'
+                  class="">
+                  bulkOperations
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#pluginservicescontext'
                   class="">
                   pluginServicesContext
@@ -1602,6 +1632,16 @@
                   href='#registerservice'
                   class="">
                   registerService
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#pluginstrategies'
+                  class="">
+                  pluginStrategies
                   
                 </a>
                 
@@ -10732,6 +10772,91 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='link'>
+      link
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>если какой-то объект использует этот аттач то link проставляется этому объекту
+удобно чтобы удалять темповые не используемые фотография</p>
+
+
+  <div class='pre p1 fill-light mt0'>link(id: any, linkByObjectId: any, objectModel: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>linkByObjectId</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>objectModel</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='apigetuseravatarurl'>
       apiGetUserAvatarUrl
     </h3>
@@ -10879,6 +11004,91 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>function (any)</code>:
         Пример 1:
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='checkaccess'>
+      checkAccess
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>По умолчанию используется оператор OR (Или) то есть пользователю достаточно иметь хотя бы одну соотвествующую роль \ разрешение</p>
+
+
+  <div class='pre p1 fill-light mt0'>checkAccess(user: any, roles: any, permissions: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>user</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>roles</span> <code class='quiet'>(any)</code>
+	    либо массив ролей, либо объект accessObject (rolesOr: [], rolesAnd: [], permissionsOr: [], permissionsAnd: [])
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>permissions</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        boolean|Array - либо булеан, либо массив ошибок
 
       
     
@@ -12694,6 +12904,95 @@ and avoid cache pollution)</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='bulkoperations'>
+      bulkOperations
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware for every document use create() instead.</p>
+
+
+  <div class='pre p1 fill-light mt0'>bulkOperations(operations: any, options: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>operations</span> <code class='quiet'>(any)</code>
+	    : {
+<p>}</p>
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        BulkWriteOpResultObject
+<ul>
+<li>insertedCount	number -- Number of documents inserted.</li>
+<li>matchedCount	  number -- Number of documents matched for update.</li>
+<li>modifiedCount	number -- Number of documents modified.</li>
+<li>deletedCount	  number -- Number of documents deleted.</li>
+<li>upsertedCount	number -- Number of documents upserted.</li>
+<li>insertedIds	  object -- Inserted document generated Id's, hash key is the index of the originating operation</li>
+<li>upsertedIds	  object -- Upserted document generated Id's, hash key is the index of the originating operation</li>
+<li>result	        object -- The command result object.</li>
+</ul>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='pluginservicescontext'>
       pluginServicesContext
     </h3>
@@ -12846,6 +13145,82 @@ and avoid cache pollution)</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='pluginstrategies'>
+      pluginStrategies
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Обогощает request "servicesContext" и "services" еще перед авторизацией</p>
+
+
+  <div class='pre p1 fill-light mt0'>pluginStrategies(server: any, options: any, next: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>server</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>next</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='createproxywrappercallback'>
       createProxyWrapperCallback
     </h3>
@@ -12941,7 +13316,7 @@ and avoid cache pollution)</p>
   <p>Подключена проверка пермишенов, логгинг, проксирование (и авторизация)</p>
 
 
-  <div class='pre p1 fill-light mt0'>apiPluginFullFactory(apiConfig: any, options: any, handler: any, permissions: any, checkPermissionStrategy: any, routeConfig: any, isLogging: any): any</div>
+  <div class='pre p1 fill-light mt0'>apiPluginFullFactory(apiConfig: any, options: any, handler: any, accessObject: any, permissions: any, roles: any, checkPermissionStrategy: any, routeConfig: any, isLogging: any): any</div>
   
   
 
@@ -12984,7 +13359,23 @@ and avoid cache pollution)</p>
       
         <div class='space-bottom0'>
           <div>
+            <span class='code bold'>accessObject</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
             <span class='code bold'>permissions</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>roles</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
