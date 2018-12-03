@@ -78,12 +78,12 @@ async function accessWrapper(accessObject, checkPermissionStrategy, other) {
   // }
 
   // see src/server/strategies/plugin-strategies.js
-  const strategy = checkPermissionStrategy || apiRequest.strategies.checkPermissionStrategy;
+  const strategy = checkPermissionStrategy || (apiRequest.strategies && apiRequest.strategies.checkPermissionStrategy);
   // проверка авторизации уже была выше authWrapper в routeConfig:{ auth: true } - по умолчанию - поэтому тут ее отключаем
   const notAuthCheck = true;
 
   try {
-    if (accessObject) {
+    if (accessObject && strategy) {
       // проверяем доступы
       return await strategy(apiRequest, accessObject, null, notAuthCheck);
     }
@@ -433,24 +433,24 @@ function apiPluginFullFactory(apiConfig, options) {
 
   const handlerFinal = async function (apiRequest, reply, pluginOptions) {
     // logger.info(`======= PLUGIN: ${apiRequest.path} =========`);
-
-    if (isLogging) {
-      apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
-    }
-
-    // проверяем доступ - если не будет - выбросится ошибка
-    await accessWrapper(
-      accessObject || normalizeAccessObject(roles, permissions),
-      checkPermissionStrategy,
-      {
-        apiConfig,
-        reply,
-        isLogging,
-        apiRequest,
-      },
-    );
-
     try {
+      console.warn('ANKU , apiRequest.url', apiRequest.url);
+      if (isLogging) {
+        apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
+      }
+
+      // проверяем доступ - если не будет - выбросится ошибка
+      await accessWrapper(
+        accessObject || normalizeAccessObject(roles, permissions),
+        checkPermissionStrategy,
+        {
+          apiConfig,
+          reply,
+          isLogging,
+          apiRequest,
+        },
+      );
+
       // проксируем
       if (proxy) {
         return proxyWrapper(
