@@ -7,7 +7,7 @@
     margin-top: 0;
   }
 
-  // todo @ANKU @LOW - кнопку сделать как ссылку
+  /*// todo @ANKU @LOW - кнопку сделать как ссылку*/
   @element action {
     & ,
     &:hover,
@@ -17,7 +17,7 @@
       cursor: pointer;
       margin: 0;
       text-decoration: underline;
-      // todo @ANKU @LOW - цвет вынести в константы
+      /*// todo @ANKU @LOW - цвет вынести в константы*/
       color: blue;
       background: transparent;
     }
@@ -25,5 +25,6 @@
 }
 
 @block AuthModal {
-  z-index: 10010; // CoreModal 10000 дефолтный
+  /*// CoreModal 10000 дефолтный // todo @ANKU @LOW - вынести z-index в константы */
+  z-index: 10010;
 }
