@@ -33,7 +33,7 @@ export default class ServiceAttachmentContentsMock extends CoreServiceMock {
    */
   async uploadFile(filename, contentType, readStream) {
     const serverPath = await createTempFile(readStream, filename);
-    return this.addRecord(crateAttachmentContentMock(serverPath));
+    return this.createRecord(crateAttachmentContentMock(serverPath));
   }
 
   /**
@@ -42,7 +42,7 @@ export default class ServiceAttachmentContentsMock extends CoreServiceMock {
    * @return stream
    */
   async downloadFile(id) {
-    const content = await this.loadRecord(id);
+    const content = await this.readRecord(id);
     return fs.createReadStream(content.serverPath);
   }
 
@@ -52,8 +52,8 @@ export default class ServiceAttachmentContentsMock extends CoreServiceMock {
    * @return {Promise}
    */
   async deleteFile(id) {
-    const content = await this.loadRecord(id);
+    const content = await this.readRecord(id);
     await removeFile(content.serverPath);
-    return this.deleteRecord(id);
+    return this.removeRecord(id);
   }
 }

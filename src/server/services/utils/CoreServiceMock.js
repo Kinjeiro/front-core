@@ -56,7 +56,7 @@ export default class CoreServiceMock extends CoreService {
   // ======================================================
   // CRUD
   // ======================================================
-  async loadRecords(query, searchFields, options = undefined) {
+  async findRecords(query, searchFields, options = undefined) {
     return this.serializeRecord(
       filterAndSortDb(await this.getData(), query, searchFields),
       this.OPERATION_TYPE.FIND,
@@ -64,41 +64,41 @@ export default class CoreServiceMock extends CoreService {
     );
   }
 
-  async loadRecord(id, options = undefined) {
+  async readRecord(id, options = undefined) {
     return this.serializeRecord(
       (await this.getData())[id],
-      this.OPERATION_TYPE.GET,
+      this.OPERATION_TYPE.READ,
       options,
     );
   }
 
-  async addRecord(data, id = null, options = undefined) {
-    const dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.ADD, options);
+  async createRecord(data, id = null, options = undefined) {
+    const dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.CREATE, options);
     const idFinal = id || dataFinal.id || this.generateId();
     // eslint-disable-next-line no-param-reassign
     dataFinal.id = idFinal;
     (await this.getData())[idFinal] = dataFinal;
     return this.serializeRecord(
       dataFinal,
-      this.OPERATION_TYPE.ADD,
+      this.OPERATION_TYPE.CREATE,
       options,
     );
   }
 
-  async addOrEditRecord(id, data, options = undefined) {
+  async createOrUpdateRecord(id, data, options = undefined) {
     const records = await this.getData();
     if (!records[id]) {
       records[id] = { id: this.generateId() };
     }
-    const dataFinal = merge(records[id], await this.deserializeData(data, this.OPERATION_TYPE.ADD_OR_EDIT, options));
+    const dataFinal = merge(records[id], await this.deserializeData(data, this.OPERATION_TYPE.CREATE_OR_UPDATE, options));
     return this.serializeRecord(
       dataFinal,
-      this.OPERATION_TYPE.ADD_OR_EDIT,
+      this.OPERATION_TYPE.CREATE_OR_UPDATE,
       options,
     );
   }
 
-  async editRecord(id, data, options = undefined) {
+  async updateRecord(id, data, options = undefined) {
     const records = await this.getData();
     if (isPatchOperations(data)) {
       applyPatchOperations(
@@ -119,18 +119,18 @@ export default class CoreServiceMock extends CoreService {
     } else {
       merge(
         records[id],
-        await this.deserializeData(data, this.OPERATION_TYPE.EDIT, options),
+        await this.deserializeData(data, this.OPERATION_TYPE.UPDATE, options),
       );
     }
 
     return this.serializeRecord(
       records[id],
-      this.OPERATION_TYPE.EDIT,
+      this.OPERATION_TYPE.UPDATE,
       options,
     );
   }
 
-  async deleteRecord(id, options = undefined) {
+  async removeRecord(id, options = undefined) {
     delete (await this.getData())[id];
   }
 }

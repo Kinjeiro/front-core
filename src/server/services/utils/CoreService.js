@@ -19,11 +19,11 @@ const INIT_SERVICES = {};
 
 export const OPERATION_TYPE = {
   FIND: 'find',
-  GET: 'load',
-  ADD: 'add',
-  ADD_OR_EDIT: 'addOrEdit',
-  EDIT: 'edit',
-  DELETE: 'delete',
+  READ: 'read',
+  CREATE: 'create',
+  CREATE_OR_UPDATE: 'createOrUpdate',
+  EDIT: 'update',
+  REMOVE: 'remove',
 };
 
 export default class CoreService {
@@ -168,26 +168,24 @@ export default class CoreService {
   // ======================================================
   // CRUD
   // ======================================================
-  async loadRecords(query, searchFields, options) {
+  async findRecords(query, searchFields, options) {
     throw new Error('Not Implemented');
   }
 
-  async loadRecord(id, options) {
-    throw new Error('Not Implemented');
-  }
 
-  async addRecord(record, id, options) {
+  async createRecord(record, id, options) {
     throw new Error('Not Implemented');
   }
-  async addOrEditRecord(id, data, options) {
+  async readRecord(id, options) {
     throw new Error('Not Implemented');
   }
-
-  async editRecord(id, data, options) {
+  async updateRecord(id, data, options) {
     throw new Error('Not Implemented');
   }
-
-  async deleteRecord(id, options) {
+  async createOrUpdateRecord(id, data, options) {
+    throw new Error('Not Implemented');
+  }
+  async removeRecord(id, options) {
     throw new Error('Not Implemented');
   }
 
@@ -197,9 +195,9 @@ export default class CoreService {
   /**
    * This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware for every document use create() instead.
    * @param operations: {
-      [this.OPERATION_TYPE.ADD]: addArray,
-      [this.OPERATION_TYPE.EDIT]: editArray,
-      [this.OPERATION_TYPE.DELETE]: deleteArray,
+      [this.OPERATION_TYPE.CREATE]: createArray,
+      [this.OPERATION_TYPE.UPDATE]: updateArray,
+      [this.OPERATION_TYPE.REMOVE]: removeArray,
     }
    * @return BulkWriteOpResultObject
    - insertedCount	number -- Number of documents inserted.

@@ -178,7 +178,7 @@ export default function createApiPlugins() {
           length: size,
         } = await serviceAttachmentContents.uploadFile(fileName, contentType, fileStream);
 
-        return reply(wrapToDownloadUrl(serviceAttachments.addRecord({
+        return reply(wrapToDownloadUrl(serviceAttachments.createRecord({
           fileName,
           // preview:        { type: String }, - // todo @ANKU @LOW -
           description,
@@ -222,7 +222,7 @@ export default function createApiPlugins() {
           },
         } = request;
 
-        return reply(wrapToDownloadUrl(serviceAttachments.loadRecord(id)));
+        return reply(wrapToDownloadUrl(serviceAttachments.readRecord(id)));
       },
     ),
     apiPluginFactory(
@@ -239,7 +239,7 @@ export default function createApiPlugins() {
           },
         } = request;
 
-        const attachment = await serviceAttachments.loadRecord(id);
+        const attachment = await serviceAttachments.readRecord(id);
         logger.debug(`downloadAttachment "${attachment.fileName}" [${id}] by "${user && user.userId}"`);
 
         checkAttachmentAccess(attachment, user);
@@ -269,7 +269,7 @@ export default function createApiPlugins() {
           },
         } = request;
 
-        const attachment = await serviceAttachments.loadRecord(id);
+        const attachment = await serviceAttachments.readRecord(id);
         logger.debug(`deleteAttachment "${attachment.fileName}" [${id}] by "${user.userId}"`);
 
         checkAttachmentAccess(attachment, user);
@@ -280,7 +280,7 @@ export default function createApiPlugins() {
         // сначала удаляем контент из базы
         await serviceAttachmentContents.deleteFile(contentId);
         // потом удаляем инфу об аттачменте
-        await serviceAttachments.deleteRecord(id);
+        await serviceAttachments.removeRecord(id);
 
         return reply();
       },
