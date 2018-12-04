@@ -4,8 +4,12 @@ import serverConfig from '../../../server/server-config';
 import {
   objectValues,
   merge,
+  wrapToArray,
 } from '../../../common/utils/common';
-import { applyPatchOperations } from '../../../common/utils/api-utils';
+import {
+  isPatchOperations,
+  applyPatchOperations,
+} from '../../../common/utils/api-utils';
 import { filterAndSortDb } from '../../../common/models/model-table';
 
 import CoreService from './CoreService';
@@ -96,10 +100,29 @@ export default class CoreServiceMock extends CoreService {
 
   async editRecord(id, data, options = undefined) {
     const records = await this.getData();
-    applyPatchOperations(
-      records[id],
-      await this.deserializeData(data, this.OPERATION_TYPE.EDIT, options),
-    );
+    if (isPatchOperations(data)) {
+      applyPatchOperations(
+        records[id],
+        await Promise.all(
+          wrapToArray(data)
+            .map(async (patchOperation) => ({
+              ...patchOperation,
+              value: await this.deserializePatchValue(
+                patchOperation.value,
+                patchOperation.path,
+                patchOperation.op,
+                options,
+              ),
+            })),
+        ),
+      );
+    } else {
+      merge(
+        records[id],
+        await this.deserializeData(data, this.OPERATION_TYPE.EDIT, options),
+      );
+    }
+
     return this.serializeRecord(
       records[id],
       this.OPERATION_TYPE.EDIT,

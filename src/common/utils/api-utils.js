@@ -54,6 +54,11 @@ export function createJsonPatchOperation(path, value, operationType = PATCH_OPER
   return operation;
 }
 
+export function isPatchOperations(patchOperations) {
+  const patchOperation = wrapToArray(patchOperations)[0];
+  return patchOperation && typeof patchOperation.path !== 'undefined' && typeof patchOperation.op !== 'undefined';
+}
+
 export function parseToJsonPatch(patchOperations) {
   if (Array.isArray(patchOperations)) {
     return patchOperations;
@@ -464,14 +469,42 @@ export function convertToFormData(params = {}, filesMap = {}, options) {
   return formData;
 }
 
-export function createCrudApi(API_PREFIX, sendApiFn, isFormDataOnCreate = false) {
+/**
+ *
+ * @param API_PREFIX
+ * @param sendApiFn
+ * @param options
+ * @return {{
+ * API_PREFIX: *,
+ * API_CONFIGS: {
+ *  loadRecords: ({method, path, payload}|*),
+ *  createRecord: ({method, path, payload}|*),
+ *  readRecord: ({method, path, payload}|*),
+ *  updateRecord: ({method, path, payload}|*),
+ *  patchRecord: ({method, path, payload}|*),
+ *  deleteRecord: ({method, path, payload}|*)},
+ *
+ *  apiLoadRecords: (function(*=, *=): *),
+ *  apiCreateRecord: (function(*=, *=): *),
+ *  apiReadRecord: (function(*): *),
+ *  apiUpdateRecord: (function(*, *=): *),
+ *  apiPatchRecord: (function(*, *=): *),
+ *  apiDeleteRecord: (function(*): *)}}
+ */
+export function createCrudApi(API_PREFIX, sendApiFn, options = {}) {
+  const {
+    isFormDataOnCreate,
+  } = options || {};
+
   const API_CONFIGS = {
     loadRecords: apiConfig(`/${API_PREFIX}`, 'GET'),
 
     createRecord: apiConfig(`/${API_PREFIX}`, 'POST'),
     readRecord: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
-    updateRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
+    updateRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PUT'),
     deleteRecord: apiConfig(`/${API_PREFIX}/{id}`, 'DELETE'),
+
+    patchRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
   };
 
   function apiLoadRecords(meta = null, filters = null) {
@@ -498,8 +531,11 @@ export function createCrudApi(API_PREFIX, sendApiFn, isFormDataOnCreate = false)
   function apiReadRecord(id) {
     return sendApiFn(API_CONFIGS.readRecord, null, { pathParams: { id } });
   }
-  function apiUpdateRecord(id, patchOperations) {
-    return sendApiFn(API_CONFIGS.updateRecord, patchOperations, { pathParams: { id } });
+  function apiUpdateRecord(id, changedData) {
+    return sendApiFn(API_CONFIGS.updateRecord, changedData, { pathParams: { id } });
+  }
+  function apiPatchRecord(id, patchOperations) {
+    return sendApiFn(API_CONFIGS.patchRecord, patchOperations, { pathParams: { id } });
   }
   function apiDeleteRecord(id) {
     return sendApiFn(API_CONFIGS.deleteRecord, null, { pathParams: { id } });
@@ -513,6 +549,7 @@ export function createCrudApi(API_PREFIX, sendApiFn, isFormDataOnCreate = false)
     apiReadRecord,
     apiUpdateRecord,
     apiDeleteRecord,
+    apiPatchRecord,
   };
 }
 

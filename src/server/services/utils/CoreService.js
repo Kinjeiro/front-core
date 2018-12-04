@@ -161,6 +161,9 @@ export default class CoreService {
   async deserializeData(data, operationType, options = undefined) {
     return data;
   }
+  async deserializePatchValue(value, path, op, options = undefined) {
+    return value;
+  }
 
   // ======================================================
   // CRUD

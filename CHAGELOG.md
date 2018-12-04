@@ -107,8 +107,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Удалил common\containers\index.js
 - Удалил константы из common\routes.pathes.js
 ```
-    
-
+9. api-utils::createCrudApi - options
+```isFormDataOnCreate``` переехало в options
+было
+```
+export function createCrudApi(API_PREFIX, sendApiFn, isFormDataOnCreate = false) {
+```
+стало
+```
+export function createCrudApi(API_PREFIX, sendApiFn, options) {
+```
+10. api-utils::createCrudApi - теперь для update возвращает реально PUT операцию, куда можно подавать полный объект
+А вот patch операции (PATCH метод) добавлен отдельный метод.
+То есть, если вы уже заточились на серваке на PATCH операции, то переделайте
+```
+export const API_PREFIX_CHARITIES = 'charities';
+const crudCharities = createCrudApi(API_PREFIX_CHARITIES, sendApi);
+export const API_CONFIGS = {
+  ...
+  updateCharity: crudCharities.API_CONFIGS.updateRecord,
+};
+export const apiUpdateCharity = crudCharities.apiUpdateRecord;
+```
+на 
+```
+export const API_CONFIGS = {
+  updateCharity: crudCharities.API_CONFIGS.pstchRecord,
+};
+export const apiUpdateCharity = crudCharities.apiPatchRecord;
+```
 
 ### API Dependencies:
     - auth-server@2.0.1
