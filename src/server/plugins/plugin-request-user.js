@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import { wrapToArray } from '../../common/utils/common';
+
 import serverConfig from '../server-config';
 
 import { getCredentialsFromRequest } from '../utils/credentials-utils';
@@ -13,7 +15,7 @@ function pluginRequestUser(server, options, next) {
   server.ext('onPostAuth', (request, reply) => {
     const { userInfo } = getCredentialsFromRequest(request);
     request[REQUEST_FIELD__USER] = userInfo;
-    request[REQUEST_FIELD__IS_ADMIN] = userInfo && userInfo.roles.includes(serverConfig.common.features.auth.adminRoleName);
+    request[REQUEST_FIELD__IS_ADMIN] = userInfo && wrapToArray(userInfo.roles).includes(serverConfig.common.features.auth.adminRoleName);
     request[REQUEST_FIELD__USER_TOKEN] = getToken(request);
     return reply.continue();
   });

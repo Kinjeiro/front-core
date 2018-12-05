@@ -49,41 +49,46 @@ export function checkAccess(user, roles, permissions) {
   if (authTurnOn) {
     if (!isAuth) {
       allow = false;
-    } else if (user.roles.includes(ADMIN)) {
-      allow = true;
     } else {
-      const accessObject = normalizeAccessObject(roles, permissions);
-      const {
-        rolesOr,
-        rolesAnd,
-        permissionsOr,
-        permissionsAnd,
-      } = accessObject;
+      const userRoles = wrapToArray(user.roles);
+      const userPermissions = wrapToArray(user.permissions);
 
-      const configPermissions = wrapToArray(clientConfig.common.permissions);
+      if (userRoles.includes(ADMIN)) {
+        allow = true;
+      } else {
+        const accessObject = normalizeAccessObject(roles, permissions);
+        const {
+          rolesOr,
+          rolesAnd,
+          permissionsOr,
+          permissionsAnd,
+        } = accessObject;
 
-      const errors = [];
-      if (rolesOr.length > 0 && !rolesOr.some((role) => user.roles.includes(role))) {
-        errors.push(i18n('errors.notRolesOr', { roles: rolesOr.join(', ') }));
-      }
-      if (rolesAnd.length > 0 && !rolesAnd.some((role) => user.roles.includes(role))) {
-        errors.push(i18n('errors.notRolesAnd', { roles: rolesAnd.join(', ') }));
-      }
-      if (
-        permissionsOr.length > 0
-        && !permissionsOr.some((permission) =>
-        user.permissions.includes(permission) || configPermissions.includes(permission))
-      ) {
-        errors.push(i18n('errors.notPermissionsOr', { permissions: permissionsOr.join(', ') }));
-      }
-      if (permissionsAnd.length > 0
-        && !permissionsAnd.some((permission) =>
-        user.permissions.includes(permission) || configPermissions.includes(permission))
-      ) {
-        errors.push(i18n('errors.notPermissionsAnd', { permissions: permissionsAnd.join(', ') }));
-      }
-      if (errors.length > 0) {
-        return errors;
+        const configPermissions = wrapToArray(clientConfig.common.permissions);
+
+        const errors = [];
+        if (rolesOr.length > 0 && !rolesOr.some((role) => userRoles.includes(role))) {
+          errors.push(i18n('errors.notRolesOr', { roles: rolesOr.join(', ') }));
+        }
+        if (rolesAnd.length > 0 && !rolesAnd.some((role) => userRoles.includes(role))) {
+          errors.push(i18n('errors.notRolesAnd', { roles: rolesAnd.join(', ') }));
+        }
+        if (
+          permissionsOr.length > 0
+          && !permissionsOr.some((permission) =>
+          userPermissions.includes(permission) || configPermissions.includes(permission))
+        ) {
+          errors.push(i18n('errors.notPermissionsOr', { permissions: permissionsOr.join(', ') }));
+        }
+        if (permissionsAnd.length > 0
+          && !permissionsAnd.some((permission) =>
+            userPermissions.includes(permission) || configPermissions.includes(permission))
+        ) {
+          errors.push(i18n('errors.notPermissionsAnd', { permissions: permissionsAnd.join(', ') }));
+        }
+        if (errors.length > 0) {
+          return errors;
+        }
       }
     }
   }
