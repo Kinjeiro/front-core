@@ -15,7 +15,7 @@ import {
   arrayToTree as arrayToTreeLib,
 } from './tree-utils';
 
-export function generateId(uuidOptions = null, version = 'v1') {
+export function generateUuid(uuidOptions = null, version = 'v1') {
   // return uniqueId();
 
   // https://stackoverflow.com/a/2117523/344172
@@ -42,6 +42,21 @@ export function generateId(uuidOptions = null, version = 'v1') {
   // );
 
   return uuid[version](uuidOptions);
+}
+export function generateId(uuidOptions = null, version = 'v1') {
+  return generateUuid(uuidOptions, version);
+}
+export function generateNumberId(length = 7) {
+  // current timestamp 1543988290855 - 13
+  const numId = Math.floor(new Date().valueOf() * Math.random());
+  let numIdStr = `${numId}`;
+  while (numIdStr.length < length) {
+    numIdStr += '0';
+  }
+  return parseInt(numIdStr.substr(0, length), 10);
+}
+export function generateShortUuid(length = 5) {
+  return generateNumberId(length).toString(36);
 }
 
 export function getRandomInt(minValue = 0, maxValue = Number.MAX_VALUE) {
