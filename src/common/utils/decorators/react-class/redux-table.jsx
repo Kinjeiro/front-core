@@ -11,7 +11,7 @@ import merge from 'lodash/merge';
 import bind from 'lodash-decorators/bind';
 
 import {
-  generateId,
+  generateUuid,
   executeVariable,
 } from '../../common';
 import {
@@ -68,7 +68,7 @@ const {
  * - onUpdateTableMeta - (newMeta, replaceAll = false) начальный фильтры из options и урла
  */
 export default function reduxTableDecorator(
-  tableId = generateId(),
+  tableId = generateUuid(),
   {
     loadOnMount = true,
     loadOnChange = true,
@@ -135,7 +135,14 @@ export default function reduxTableDecorator(
         actionReplaceState: PropTypes.func,
       };
 
-      componentWillMount(props = this.props) {
+      /*
+        @NOTE: в React v16 componentWillUnmount стал асинхронным, то есть теперь он может сработать после того как замаунтится новый компонент
+        То есть своим уникальным id стереть значения для нового
+        Поэтому нужно вместо componentWillMount (который в 16 deprecated) использовать componentDidMount
+        https://github.com/facebook/react/issues/11106
+      */
+      // componentWillMount(props = this.props) {
+      componentDidMount(props = this.props) {
         const {
           initMeta,
           initFilters,

@@ -139,27 +139,27 @@ export default function createRoutes(
             </Route>
           )
         }
+
+        {
+          afterRoutes
+        }
+
+        <Route
+          path={ CORE_ROUTES_NAMES.ACCESS_DENIED }
+          component={ ErrorPage }
+        />
+        <Route
+          path={ CORE_ROUTES_NAMES.ERROR }
+          component={ ErrorPage }
+          showDetail={ true }
+        />
+
+        <Route
+          path="*"
+          exact={ true }
+          component={ Info404 }
+        />
       </Route>
-
-      {
-        afterRoutes
-      }
-
-      <Route
-        path={ CORE_ROUTES_NAMES.ACCESS_DENIED }
-        component={ ErrorPage }
-      />
-      <Route
-        path={ CORE_ROUTES_NAMES.ERROR }
-        component={ ErrorPage }
-        showDetail={ true }
-      />
-
-      <Route
-        path="*"
-        exact={ true }
-        component={ Info404 }
-      />
     </Route>
   );
 }

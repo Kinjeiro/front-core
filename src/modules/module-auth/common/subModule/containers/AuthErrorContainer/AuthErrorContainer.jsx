@@ -31,6 +31,9 @@ require('./AuthErrorContainer.css');
 // eslint-disable-next-line no-unused-vars
 const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
 
+/**
+ * По ключу userId обновляет все, то если если пользователь сменится - все обновится
+ */
 @connect(
   (globalState) => ({
     lastUniError: getLastUniError(globalState),

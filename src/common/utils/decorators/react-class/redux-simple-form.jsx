@@ -86,7 +86,8 @@ export default function reduxSimpleFormDecorator(
       // ======================================================
       // LIFECYCLE
       // ======================================================
-      componentWillMount() {
+      // componentWillMount() {
+      componentDidMount() {
         const {
           form,
           formId: formIdFinal,

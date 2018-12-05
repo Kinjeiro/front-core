@@ -17,7 +17,8 @@ const initialState = {
 const PREFIX = 'currentPage';
 export const TYPES = {
   CURRENT_PAGE_CHANGED:     `${PREFIX}/CHANGED`,
-  CLEAR_CURRENT_PAGE_INFO:     `${PREFIX}/CLEAR`,
+  CLEAR_CURRENT_PAGE_INFO:     `${PREFIX}/CLEAR_CURRENT`,
+  CLEAR_PAGE_INFO:     `${PREFIX}/CLEAR`,
 };
 
 
@@ -25,16 +26,22 @@ export const TYPES = {
 // ACTION CREATORS
 // ======================================================
 export const actions = {
-  actionCurrentPageChanged(newPageData) {
+  actionCurrentPageChanged(newPageData, replace = false) {
     return {
       type: TYPES.CURRENT_PAGE_CHANGED,
       payload: newPageData,
+      replace,
     };
   },
   actionClearCurrentPageInfo(pageId) {
     return {
       type: TYPES.CLEAR_CURRENT_PAGE_INFO,
       payload: pageId,
+    };
+  },
+  actionClearPageInfo() {
+    return {
+      type: TYPES.CLEAR_PAGE_INFO,
     };
   },
 };
@@ -45,8 +52,8 @@ export const actions = {
 // ======================================================
 const reducer = createReducer(initialState, {
   [TYPES.CURRENT_PAGE_CHANGED]:
-    (state, action, newPageData) => ({
-      ...state,
+    (state, { replace }, newPageData) => ({
+      ...(replace ? initialState : state),
       ...newPageData,
     }),
   [TYPES.CLEAR_CURRENT_PAGE_INFO]:
@@ -55,6 +62,8 @@ const reducer = createReducer(initialState, {
         ? initialState
         : state;
     },
+  [TYPES.CLEAR_PAGE_INFO]:
+    () => initialState,
 });
 
 export default reducer;
