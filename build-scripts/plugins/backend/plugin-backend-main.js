@@ -90,8 +90,10 @@ function pluginBackendMain(webpackConfig, {
           /[/\\]src[/\\]common[/\\]components[/\\]/,
           /[/\\]src[/\\]common[/\\]containers[/\\]/,
           /[/\\]src[/\\]modules[/\\]\S+[/\\]static[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]pages[/\\]/,
           /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]containers[/\\]/,
           /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]components[/\\]/,
+          /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]subModule[/\\]pages[/\\]/,
           /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]subModule[/\\]containers[/\\]/,
           /[/\\]src[/\\]modules[/\\]\S+[/\\]common[/\\]subModule[/\\]components[/\\]/
           // api, model, routes не игнорируем, потому что сервер может от этого плясать
