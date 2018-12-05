@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.23 | Documentation</title>
+  <title>@reagentum/front-core 1.6.24 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.23</code></div>
+          <div class='mb1'><code>1.6.24</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1338,6 +1338,16 @@
                   href='#apigetuseravatarurl'
                   class="">
                   apiGetUserAvatarUrl
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#connect'
+                  class="">
+                  connect
                   
                 </a>
                 
@@ -8617,7 +8627,10 @@ m.tellAge(); // Mike is 12 years old.
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>title</span> <code class='quiet'>(any)</code>
-	    
+	    не более 50 символов (Если title длинный, поисковая система сама выберет, какие 70 символов показать
+пользователю в соответствии с введенным запросом. И этот выбор непредсказуем)(50–57 символов для Google;  65–70
+символов для Яндекс)
+
           </div>
           
         </div>
@@ -8627,10 +8640,17 @@ m.tellAge(); // Mike is 12 years old.
             <span class='code bold'>metas</span> <code class='quiet'>(any)</code>
 	    html head meta tags for current page 
 [
-description, keywords, author, robots, googlebot, google and e.t.
+description, keywords, author, robots, googlebot, google and
+e.t.
 ]
 
 (для CEO, используется в Server Side Rendering, отдачавая поисковым ботам инфу о конкретной странице)
+- description - не более 150 символов, в 60% случаев Google формирует сниппет из мета-тега
+description.
+- keywords (optional, ignored by Google)
+<ul>
+<li>robots (optional, used by Google)</li>
+</ul>
 
           </div>
           
@@ -11001,6 +11021,53 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='connect'>
+      connect
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>По ключу userId обновляет все, то если если пользователь сменится - все обновится</p>
+
+
+  <div class='pre p1 fill-light mt0'>connect</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
