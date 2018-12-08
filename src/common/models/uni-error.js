@@ -172,7 +172,9 @@ export function createUniError(uniErrorData = {}) {
 
   uniError.isNotAuth = uniError.isNotAuth || uniError.uniCode === 401;
 
-  uniError.stack = uniError.stack || (uniError.stack !== false && getStackTrace());
+  uniError.stack = (uniError.originalObject && uniError.originalObject.stack)
+    || uniError.stack
+    || (uniError.stack !== false && getStackTrace());
 
   return uniError;
 }
