@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import h2o2 from 'h2o2'; // Proxy handler plugin for hapi.js
 import bind from 'lodash-decorators/bind';
 
@@ -40,6 +41,7 @@ import pluginStaticAssets from './plugins/static-assets';
 import pluginI18n from './plugins/i18n';
 import pluginMocking from './plugins/mocking';
 import pluginsRequestUser from './plugins/plugin-request-user';
+import pluginModuleMap from './plugins/plugin-module-map';
 
 // plugin api
 import pluginApiHealthmonitor from './plugins/api/healthmonitor';
@@ -202,6 +204,12 @@ export default class CoreServerRunner extends AbstractServerRunner {
     hapiServerPlugins.push(
       h2o2, // проксирование
       // loggerPlugin,
+      {
+        register: pluginModuleMap,
+        options: {
+          getModuleToRoutePrefixMap: this.getModuleToRoutePrefixMap.bind(this),
+        },
+      },
       pluginI18n,
       pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
       pluginsRequestUser,

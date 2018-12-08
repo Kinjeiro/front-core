@@ -434,7 +434,6 @@ function apiPluginFullFactory(apiConfig, options) {
   const handlerFinal = async function (apiRequest, reply, pluginOptions) {
     // logger.info(`======= PLUGIN: ${apiRequest.path} =========`);
     try {
-      console.warn('ANKU , apiRequest.url', apiRequest.url);
       if (isLogging) {
         apiPluginLog(apiRequest, apiConfig, '[plugin REQUEST]');
       }
