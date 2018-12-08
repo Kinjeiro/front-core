@@ -1,3 +1,7 @@
+import each from 'lodash/each';
+import forOwn from 'lodash/forOwn';
+import isObject from 'lodash/isObject';
+
 // todo @ANKU @LOW @BUG_OUT @react-scroll - у них в методе не учитывает fixed а ведь именно от него зависит получение скролла от элемента
 export function getScrollParent(element, includeHidden) {
   let style = getComputedStyle(element);
@@ -18,5 +22,40 @@ export function getScrollParent(element, includeHidden) {
   }
 
   return document;
+}
+
+function createHiddenInput(name, value) {
+  const input = document.createElement('input');
+  input.setAttribute('type', 'hidden');
+  input.setAttribute('name', name);
+  input.setAttribute('value', value);
+  return input;
+}
+
+function appendInput(form, name, value) {
+  if (Array.isArray(value)) {
+    each(value, (v, i) => {
+      appendInput(form, `${name}[${i}]`, v);
+    });
+  } else if (isObject(value)) {
+    forOwn(value, (v, p) => {
+      appendInput(form, `${name}[${p}]`, v);
+    });
+  } else {
+    form.appendChild(createHiddenInput(name, value));
+  }
+}
+
+// https://stackoverflow.com/a/37171171/344172
+export function postFormToUrl(url, data, encoding = 'UTF-8') {
+  const form = document.createElement('form');
+  document.body.appendChild(form);
+  form.setAttribute('method', 'post');
+  form.setAttribute('action', url);
+  form.setAttribute('accept-charset', encoding);
+
+  forOwn(data, (value, name) => appendInput(form, name, value));
+
+  form.submit();
 }
 

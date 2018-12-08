@@ -239,7 +239,6 @@ export function emitProcessing(handlerPromise, componentWithSetState, processing
     return promiseStatusSwitch(
       handlerPromise,
       (promise) => {
-        console.warn('ANKU , setProcessing');
         componentWithSetState.setState({ [processingStateVariable]: true });
         return promise
         // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
