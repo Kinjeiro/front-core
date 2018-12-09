@@ -35,28 +35,93 @@ import {
 
 import serverConfig from '../server-config';
 
+export const API_PLUGIN_OPTIONS = {
+  HANDLER: 'handler',
+  /**
+   * hapi настройки для роутера - см ROUTE_CONFIG_OPTIONS
+   */
+  ROUTE_CONFIG: 'routeConfig',
+
+  /**
+   * или
+   */
+  ROLES: 'roles',
+  /**
+   * или
+   */
+  PERMISSIONS: 'permissions',
+  /**
+   * Если не хватает ROLES и PERMISSIONS - можно воспользоваться объектом для тонкой настроки - src/modules/module-auth/common/subModule/helpers/access-object-utils.js
+   */
+  ACCESS_OBJECT: 'accessObject',
+  CHECK_PERMISSION_STRATEGY: 'checkPermissionStrategy',
+
+  IS_LOGGING: 'isLogging',
+
+  /**
+   * h2o2 options
+   */
+  PROXY: 'proxy',
+
+  /**
+   * поддержать гостевой режим (может пользователь быть, а может и не быть), но попытку авторизации нужно произвести
+   * false,
+   */
+  GUEST_MODE: 'guestMode',
+};
+
+export const ROUTE_CONFIG_OPTIONS = {
+  /**
+   * hapi настройка
+   * true
+   */
+  AUTH: 'auth',
+};
+
 // ======================================================
 // AUTH
 // ======================================================
-function authWrapper(handler, pluginOptions) {
-  return (request, reply) => {
-    // if (request.auth && request.auth.credentials && !request.auth.credentials.profileId) {
-    if (!getCredentialsFromRequest(request).isAuth() && !serverConfig.common.isTest) {
-      logger.info('[plugin ERROR AUTH]');
-      return responseError(createUniError({
-        message: i18n('No auth'),
-        responseStatusCode: 401,
-      }), reply, 401);
-    }
+function authWrapper(handler, apiPluginOptions, routeConfig, serverPluginOptions) {
+  const {
+    [ROUTE_CONFIG_OPTIONS.AUTH]: auth,
+  } = routeConfig;
+  const {
+    [API_PLUGIN_OPTIONS.GUEST_MODE]: guestMode,
+  } = apiPluginOptions;
 
-    return handler(request, reply, pluginOptions);
-  };
+  const authTurnOn = auth !== false
+    && serverConfig.common.features.auth
+    && serverConfig.common.features.auth.globalAuth !== false;
+
+  // предпоследний враппер
+  return authTurnOn
+    ? (request, reply) => {
+      // if (request.auth && request.auth.credentials && !request.auth.credentials.profileId) {
+      if (
+        !getCredentialsFromRequest(request).isAuth()
+        && !serverConfig.common.isTest
+      ) {
+        // в гостевом режиме пользователь может быть, а может и не быть
+        if (guestMode) {
+          logger.info('-- No auth, but GUEST_MODE');
+        } else {
+          logger.info('[plugin ERROR AUTH]');
+          return responseError(createUniError({
+            message: i18n('No auth'),
+            responseStatusCode: 401,
+          }), reply, 401);
+        }
+      }
+
+      return handler(request, reply, apiPluginOptions);
+    }
+    : handler;
 }
 
 // ======================================================
 // PERMISSIONS
 // ======================================================
-async function accessWrapper(accessObject, checkPermissionStrategy, other) {
+async function accessChecker(accessObject, checkPermissionStrategy, other) {
   const {
     apiConfig,
     reply,
@@ -342,7 +407,17 @@ function getRouteConfig(method, routeConfig, isProxy) {
 /*
 * подключена проверка авторизации
 */
-export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = false) {
+export function pluginRouteFactory(
+  path,
+  handler,
+  routeConfig = {},
+  apiPluginOptions = {},
+) {
+  const {
+    [API_PLUGIN_OPTIONS.PROXY]: proxy,
+  } = apiPluginOptions;
+  const isProxy = !!proxy;
+
   const {
     method = 'GET',
     pluginName,
@@ -351,23 +426,11 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
 
   const name = pluginName || (typeof path !== 'function' && `${path}_${method}`) || generateId();
 
-  const register = function (server, pluginOptions, next) {
-    const {
-      auth,
-    } = routeConfigOther;
-
-    // для динамических путей или путей из конфигов, которые инициализируются чуть позже
-    const pathFinal = joinUri('/', typeof path === 'function' ? path(routeConfig) : path);
-
-    const authTurnOn = auth !== false
-      && serverConfig.common.features.auth
-      && serverConfig.common.features.auth.globalAuth !== false;
+  const register = function (server, serverPluginOptions, next) {
+    let finalHandler = (request, reply) => handler(request, reply, serverPluginOptions);
 
     // предпоследний враппер
-    let finalHandler = authTurnOn
-      ? authWrapper(handler, pluginOptions)
-      : (request, reply) => handler(request, reply, pluginOptions);
-
+    finalHandler = authWrapper(finalHandler, apiPluginOptions, routeConfig, serverPluginOptions);
     // самый верхний враппер
     finalHandler = parseResponseHandler(finalHandler);
 
@@ -375,6 +438,9 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
     if (!Array.isArray(methods)) {
       methods = [methods];
     }
+
+    // для динамических путей или путей из конфигов, которые инициализируются чуть позже
+    const pathFinal = joinUri('/', typeof path === 'function' ? path(routeConfig) : path);
 
     methods.forEach((methodItem) => {
       logger.debug(`init server route: [${methodItem}]\t\t${appUrl(pathFinal)}`);
@@ -411,20 +477,20 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
  *
  * @returns function(apiRequestData, request, reply) {}
  */
-function apiPluginFullFactory(apiConfig, options) {
+function apiPluginFullFactory(apiConfig, apiPluginOptions) {
   const {
-    handler,
-    routeConfig = {},
+    [API_PLUGIN_OPTIONS.HANDLER]: handler,
+    [API_PLUGIN_OPTIONS.ROUTE_CONFIG]: routeConfig = {},
 
-    accessObject,
-    roles,
-    permissions,
-    checkPermissionStrategy,
+    [API_PLUGIN_OPTIONS.ACCESS_OBJECT]: accessObject,
+    [API_PLUGIN_OPTIONS.ROLES]: roles,
+    [API_PLUGIN_OPTIONS.PERMISSIONS]: permissions,
+    [API_PLUGIN_OPTIONS.CHECK_PERMISSION_STRATEGY]: checkPermissionStrategy,
 
-    isLogging = true,
+    [API_PLUGIN_OPTIONS.IS_LOGGING]: isLogging = true,
 
-    proxy, // h2o2 options
-  } = options;
+    [API_PLUGIN_OPTIONS.PROXY]: proxy, // h2o2 options
+  } = apiPluginOptions;
 
   const {
     method,
@@ -439,7 +505,7 @@ function apiPluginFullFactory(apiConfig, options) {
       }
 
       // проверяем доступ - если не будет - выбросится ошибка
-      await accessWrapper(
+      await accessChecker(
         accessObject || normalizeAccessObject(roles, permissions),
         checkPermissionStrategy,
         {
@@ -469,26 +535,31 @@ function apiPluginFullFactory(apiConfig, options) {
     }
   };
 
-  return pluginRouteFactory(path, handlerFinal, {
-    ...routeConfig,
-    method,
-  }, !!proxy);
+  return pluginRouteFactory(
+    path,
+    handlerFinal,
+    {
+      ...routeConfig,
+      method,
+    },
+    apiPluginOptions,
+  );
 }
 
 /**
  *
  * @param apiConfig
  * @param handler - (payload, apiRequest, reply, pluginOptions) => {}
- * @param otherOptions
+ * @param apiPluginOptions
    - permissions
    - checkPermissionStrategy
    - routeConfig
    - isLogging
  */
-export function apiPluginFactory(apiConfig, handler, otherOptions = {}) {
+export function apiPluginFactory(apiConfig, handler, apiPluginOptions = {}) {
   return apiPluginFullFactory(apiConfig, {
     handler,
-    ...otherOptions,
+    ...apiPluginOptions,
   });
 }
 
