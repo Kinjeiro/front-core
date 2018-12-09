@@ -136,6 +136,16 @@ export const API_CONFIGS = {
 };
 export const apiUpdateCharity = crudCharities.apiPatchRecord;
 ```
+11. Если кто-то пользователся src/server/utils/api-plugin-factory.js::pluginRouteFactory
+убрал в конце proxy и заменил на apiPluginOptions
+было
+```
+export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = false) {
+```
+стало
+```
+export function pluginRouteFactory(path, handler, routeConfig = {}, apiPluginOptions = {})
+```
 
 ### API Dependencies:
     - auth-server@2.0.1
