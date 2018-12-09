@@ -171,7 +171,14 @@ export default class CoreService {
   async findRecords(query, searchFields, options) {
     throw new Error('Not Implemented');
   }
-
+  async findFirstRecord(query, searchFields = undefined, options = undefined, shouldBeOne = false) {
+    const results = await this.findRecords(query, searchFields, options);
+    if (shouldBeOne && results.length > 1) {
+      // todo @ANKU @LOW - @@loc
+      throw new Error(`Должна быть только одна копия для ${this.getServiceName()}: ${JSON.stringify(query)}`);
+    }
+    return results[0];
+  }
 
   async createRecord(record, id, options) {
     throw new Error('Not Implemented');
