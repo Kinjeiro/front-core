@@ -111,6 +111,10 @@ const isProduction = NODE_ENV === 'production';
 const isLocalhost = NODE_ENV === 'localhost';
 const isTest = NODE_ENV === 'test';
 
+const CONTEXT_PATH_FINAL = CONTEXT_PATH || CONTEXT_ROOT
+  ? urlJoin('/', CONTEXT_PATH || CONTEXT_ROOT)
+  : '';
+
 module.exports = {
   // ======================================================
   // ПУТЬ до родительских конфигов
@@ -154,9 +158,8 @@ module.exports = {
 
     app: {
       isCore: isUseFromCore(),
-      contextRoot: CONTEXT_PATH || CONTEXT_ROOT
-        ? urlJoin('/', CONTEXT_PATH || CONTEXT_ROOT)
-        : ''
+      contextRoot: CONTEXT_PATH_FINAL,
+      contextPath: CONTEXT_PATH_FINAL
     },
 
     build: {
@@ -390,7 +393,7 @@ module.exports = {
       // ======================================================
       mocking: {
         // enable - нужно только чтобы включить мокирующие роуты, но не чтобы включить сам процесс мокирования (он включается через url ?mock=true или куки app-mocking:true)
-        // see front-core\src\server\plugins\mocking.js::DEFAULT_OPTIONS
+        // see front-core\src\server\plugins\plugin-mocking.js::DEFAULT_OPTIONS
         enable: isTrue(APP_MOCKS) || isTrue(USE_MOCKS),
         useMocks: isTrue(USE_MOCKS),
         useMocksInitData: isTrue(USE_MOCKS),

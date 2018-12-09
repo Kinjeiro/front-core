@@ -8,6 +8,11 @@ import {
 } from './request-context-utils';
 
 import serverConfig from '../server-config';
+import {
+  setCookie,
+  getCookie,
+  clearCookie,
+} from '../utils/hapi-utils';
 
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
 const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
@@ -53,13 +58,12 @@ export function setAuthCookies(
   //   .state(refreshTokenCookie, refreshToken, OPTIONS)
   //   .state(authTypeCookie, authType, OPTIONS);
 
-  response.state(tokenCookie, accessToken, {
-    ...OPTIONS,
+  setCookie(response, tokenCookie, accessToken, {
     expire: expiresInMilliseconds,
     ttl: expiresInMilliseconds,
   });
-  response.state(refreshTokenCookie, refreshToken, OPTIONS);
-  response.state(authTypeCookie, authType, OPTIONS);
+  setCookie(response, refreshTokenCookie, refreshToken, OPTIONS);
+  setCookie(response, authTypeCookie, authType, OPTIONS);
 
   // чтобы если отработал refresh_token проксирующие запросы уже слались через новый токен
   if (requestForProxyNewToken) {
@@ -70,41 +74,19 @@ export function setAuthCookies(
   return response;
 }
 
-function getState(req, name) {
-  const { state } = req;
-  // eslint-disable-next-line no-nested-ternary
-  let result = state
-    ? typeof state === 'function'
-      ? state(name)
-      : state[name]
-    : undefined;
-
-  if (Array.isArray(result)) {
-    /*
-      todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
-      refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
-      это бага, но никак настройки для isHttpOnly никак не получить
-      если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
-    */
-    // в таком случае всегда первым будет ближайший contextPath
-    result = result[0];
-  }
-  return result;
-}
-
 export function getToken(req) {
   // получем и удаляем из хранилища
   const updatedToken = getRequestContext(req, req.id, true);
   if (updatedToken) {
     logger.debug(`Use accessToken for proxy from request.id: ${req.id}\n${updatedToken}`);
   }
-  return updatedToken || getState(req, tokenCookie);
+  return updatedToken || getCookie(req, tokenCookie);
 }
 export function getRefreshToken(req) {
-  return getState(req, refreshTokenCookie);
+  return getCookie(req, refreshTokenCookie);
 }
 export function getAuthType(req) {
-  return getState(req, authTypeCookie);
+  return getCookie(req, authTypeCookie);
 }
 
 export function getHeadersByAuthType(token, authType = AUTH_TYPES.BEARER) {
@@ -124,9 +106,8 @@ export function getHeadersByAuthType(token, authType = AUTH_TYPES.BEARER) {
 
 
 export function clearAuthCookie(res) {
-  res.unstate(tokenCookie, OPTIONS);
-  res.unstate(refreshTokenCookie, OPTIONS);
-  res.unstate(authTypeCookie, OPTIONS);
-
+  clearCookie(res, tokenCookie);
+  clearCookie(res, refreshTokenCookie);
+  clearCookie(res, authTypeCookie);
   return res;
 }

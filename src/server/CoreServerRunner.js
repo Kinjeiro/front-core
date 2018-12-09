@@ -39,7 +39,7 @@ import pluginPageIndex from './plugins/pages/pages';
 import pluginProxyAssets from './plugins/proxy-assets';
 import pluginStaticAssets from './plugins/static-assets';
 import pluginI18n from './plugins/i18n';
-import pluginMocking from './plugins/mocking';
+import pluginMocking from './plugins/plugin-mocking';
 import pluginsRequestUser from './plugins/plugin-request-user';
 import pluginModuleMap from './plugins/plugin-module-map';
 

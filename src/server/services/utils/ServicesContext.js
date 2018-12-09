@@ -70,7 +70,10 @@ export default class ServicesContext {
     const that = this;
     return new Proxy({}, {
       get(target, prop) {
-        return that.getService(request, prop);
+        if (typeof prop === 'string') {
+          return that.getService(request, prop);
+        }
+        return null;
       },
     });
   }

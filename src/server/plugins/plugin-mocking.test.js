@@ -8,7 +8,7 @@ import {
 import mockingPlugin, {
   validateRoutePath,
   getRequestPath,
-} from './mocking';
+} from './plugin-mocking';
 
 describe('(Plugin) Mocking', () => {
   describe('Mocking utils', () => {

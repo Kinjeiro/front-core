@@ -2,12 +2,14 @@
 import serverConfig from '../../../../../server/server-config';
 import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
 import logger from '../../../../../server/helpers/server-logger';
+import { clearCookie } from '../../../../../server/utils/hapi-utils';
 import {
   setAuthCookies,
   getToken,
   getRefreshToken,
   clearAuthCookie,
 } from '../../../../../server/utils/auth-utils';
+import { COOKIE__GUEST_ID } from '../../../../../server/plugins/plugin-request-user';
 
 import { API_CONFIGS } from '../../../common/subModule/api-auth';
 
@@ -101,7 +103,11 @@ export default function createApiPlugins() {
       async (requestData, request, reply) => {
         logger.log('LOGOUT');
         await request.services.serviceAuth.authLogout(getToken(request));
-        return clearAuthCookie(reply());
+
+        // очищаем guest если он был
+        clearCookie(reply, COOKIE__GUEST_ID);
+        clearAuthCookie(reply);
+        return reply();
       },
     ),
   );
