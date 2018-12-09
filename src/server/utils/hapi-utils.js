@@ -11,6 +11,8 @@ import {
 } from '../../common/utils/uri-utils';
 import { parseToUniError } from '../../common/models/uni-error';
 
+import serverConfig from '../server-config';
+
 import {
   getMimeType,
   base64ToBuffer,
@@ -145,6 +147,74 @@ export function getRequestCookieFromResponse(response) {
     .join('; ');
 }
 
+/**
+ * @deprecated - bug with set cookie value - use getCookie and setCookie instead
+ * @param request
+ * @param name
+ * @param value
+ * @return {*}
+ */
+export function cookie(request, name, value = null) {
+  if (value !== null) {
+    request.state(name, value);
+    return value;
+  }
+  return typeof request.state === 'function'
+     ? request.state(name)
+     : request.state[name];
+}
+export function getCookie(request, name) {
+  const { state } = request;
+  // eslint-disable-next-line no-nested-ternary
+  let result = state
+  ? typeof state === 'function'
+    ? state(name)
+    : state[name]
+  : undefined;
+
+  if (Array.isArray(result)) {
+    /*
+      todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
+      refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
+      это бага, но никак настройки для isHttpOnly никак не получить
+      если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
+    */
+    // в таком случае всегда первым будет ближайший contextPath
+    result = result[0];
+  }
+  return result;
+}
+
+export const DEFAULT_COOKIE_OPTIONS = {
+  // todo @ANKU @CRIT @MAIN - в утилитах неочень хорошо использовать конфиги, но все же
+  path: serverConfig.common.app.contextRoot || '/',
+  isHttpOnly: true,
+  // todo @ANKU @CRIT @MAIN @DEBUG - secure: false
+  isSecure: false,
+};
+
+export function setCookie(reply, name, value = undefined, options = undefined) {
+  const optionFinal = options
+    ? {
+      ...DEFAULT_COOKIE_OPTIONS,
+      ...options,
+    }
+    : DEFAULT_COOKIE_OPTIONS;
+
+  if (typeof value === 'undefined') {
+    // обязательно нужно подавать options иначе не находится
+    reply.unstate(name, optionFinal);
+  } else {
+    reply.state(name, value, optionFinal);
+  }
+  return reply;
+}
+
+export function clearCookie(reply, name) {
+  return setCookie(reply, name);
+}
+
+
 function getFileType(fileNameOrPath) {
   if (typeof fileNameOrPath === 'string') {
     const extension = path.extname(fileNameOrPath);
@@ -208,12 +278,3 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
   throw new Error(`Не понятный формат "${serverPath}"`);
 }
 
-export function cookie(request, name, value = null) {
-  if (value !== null) {
-    request.state(name, value);
-    return value;
-  }
-  return typeof request.state === 'function'
-    ? request.state(name)
-    : request.state[name];
-}
