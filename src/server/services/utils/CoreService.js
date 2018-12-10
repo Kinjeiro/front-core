@@ -168,6 +168,19 @@ export default class CoreService {
   // ======================================================
   // CRUD
   // ======================================================
+  /**
+   *
+   * @param query
+   * @param searchFields
+   * @param options
+   * @return {Promise<{
+   *   records: result,
+       meta: {
+         ...meta,
+         total,
+       },
+   *  }>}
+   */
   async findRecords(query, searchFields, options) {
     throw new Error('Not Implemented');
   }
