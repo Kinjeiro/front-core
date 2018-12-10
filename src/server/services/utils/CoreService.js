@@ -2,6 +2,7 @@
 import {
   generateId as utilsGenerateId,
 } from '../../../common/utils/common';
+import { getMeta } from '../../../common/models/model-table';
 
 import {
   sendWithAuth,
@@ -168,22 +169,49 @@ export default class CoreService {
   // ======================================================
   // CRUD
   // ======================================================
+  async innerFindRecords(query, searchFields = undefined, options = undefined, withPagination = false) {
+    throw new Error('Not Implemented');
+  }
+
   /**
    *
    * @param query
    * @param searchFields
    * @param options
-   * @return {Promise<{
+   * @return {Promise<>}
+   */
+  async findRecords(query, searchFields = undefined, options = undefined) {
+    return this.innerFindRecords(query, searchFields, options);
+  }
+
+  /**
+   *
+   * @param query
+   * @param searchFields
+   * @param findOptions
+   * @return {Promise<
+   * {
    *   records: result,
        meta: {
          ...meta,
          total,
        },
-   *  }>}
+   *  }
+   * >}
    */
-  async findRecords(query, searchFields, options) {
-    throw new Error('Not Implemented');
+  async findRecordsWithPagination(query, searchFields = undefined, findOptions = undefined) {
+    return this.innerFindRecords(
+      {
+        ...query,
+        // парсинм с дефолтными данными мету
+        ...getMeta(query),
+      },
+      searchFields,
+      findOptions,
+      true, // withPagination
+    );
   }
+
   async findFirstRecord(query, searchFields = undefined, options = undefined, shouldBeOne = false) {
     const results = await this.findRecords(query, searchFields, options);
     if (shouldBeOne && results.length > 1) {

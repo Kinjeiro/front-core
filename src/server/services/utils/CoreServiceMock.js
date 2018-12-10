@@ -56,12 +56,16 @@ export default class CoreServiceMock extends CoreService {
   // ======================================================
   // CRUD
   // ======================================================
-  async findRecords(query, searchFields, options = undefined) {
-    return this.serializeRecord(
+  async innerFindRecords(query, searchFields, options = undefined, withPagination = false) {
+    const resultWithPagination = this.serializeRecord(
       filterAndSortDb(await this.getData(), query, searchFields),
       this.OPERATION_TYPE.FIND,
       options,
     );
+
+    return withPagination
+      ? resultWithPagination
+      : resultWithPagination.records;
   }
 
   async readRecord(id, options = undefined) {
