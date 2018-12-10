@@ -192,7 +192,7 @@ export const reducer = createReducer(
   {
     [TYPES.CHANGE_USER_SUCCESS]:
       'userData',
-    [TYPES.TYPES.SIGNUP_SUCCESS]:
+    [TYPES.SIGNUP_SUCCESS]:
       'userData',
     [TYPES.USER_LOGOUT_SUCCESS]:
       (state) => ({
