@@ -51,10 +51,11 @@ export function getFullUrl(routePath, queryParams = undefined) {
  * @param relativeLocation - LocationDescription - @see model-location.js
  * @param moduleName
  * @param modulesPrefixes - мапа: moduleName => prefix
+ * @param queryParams
  * @returns {*}
  */
-export function getModuleFullPath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
-  return appUrl(getModuleRoutePath(relativeLocation, moduleName, modulesPrefixes));
+export function getModuleFullPath(relativeLocation, moduleName = null, modulesPrefixes = {}, queryParams = undefined) {
+  return appUrl(getModuleRoutePath(relativeLocation, moduleName, modulesPrefixes, queryParams));
 }
 
 export default appUrl;

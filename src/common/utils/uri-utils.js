@@ -300,7 +300,7 @@ export function updateWindowLocationQueryParams(newQueryParams, ...args) {
  * @param modulesPrefixes - мапа: moduleName => prefix
  * @returns {*}
  */
-export function getModuleRoutePath(relativeLocation, moduleName = null, modulesPrefixes = {}) {
+export function getModuleRoutePath(relativeLocation, moduleName = null, modulesPrefixes = {}, queryParams = undefined) {
   const prefix = moduleName ? modulesPrefixes[moduleName] : null;
 
   if (relativeLocation && typeof relativeLocation === 'object') {
@@ -309,14 +309,14 @@ export function getModuleRoutePath(relativeLocation, moduleName = null, modulesP
       ...relativeLocation,
       pathname: relativeLocation.pathname
         ? prefix
-          ? joinPath(prefix, relativeLocation.pathname)
-          : joinPath(relativeLocation.pathname)
+          ? joinPath(prefix, relativeLocation.pathname, queryParams)
+          : joinPath(relativeLocation.pathname, queryParams)
         : undefined,
     };
   }
   return prefix
-    ? joinPath(prefix, relativeLocation)
+    ? joinPath(prefix, relativeLocation, queryParams)
     : relativeLocation
-      ? joinPath(relativeLocation)
-      : '/';
+      ? joinPath(relativeLocation, queryParams)
+      : joinPath(queryParams);
 }

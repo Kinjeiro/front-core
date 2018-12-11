@@ -9,6 +9,7 @@ import {
   parseUrlParameters,
   formatUrlParameters,
 } from '../../common/utils/uri-utils';
+import appUrl from '../../common/helpers/app-urls';
 import { parseToUniError } from '../../common/models/uni-error';
 
 import serverConfig from '../server-config';
@@ -278,3 +279,50 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
   throw new Error(`Не понятный формат "${serverPath}"`);
 }
 
+export function getRefererUrl(request, ...pathsOrParams) {
+  const {
+    // info: {
+    //   /*
+    //     received: 1544545806171,
+    //     responded: 0,
+    //     remoteAddress: '127.0.0.1',
+    //     remotePort: 10822,
+    //     referrer: 'http://localhost:8080/products/good/5c0faecd8a04462198033ff3',
+    //     host: 'localhost:8080',
+    //     hostname: 'localhost',
+    //     acceptEncoding: 'gzip',
+    //     cors: { isOriginMatch: true }
+    //   */
+    // },
+    server: {
+      info: {
+        /*
+          id - a unique connection identifier (using the format '{hostname}:{pid}:{now base36}').
+          created - the connection creation timestamp.
+          started - the connection start timestamp (0 when stopped).
+          port - the connection port based on the following rules:
+            the configured port value before the server has been started.
+            the actual port assigned when no port is configured or set to 0 after the server has been started.
+          host - the host name the connection was configured to. Defaults to the operating system hostname when available, otherwise 'localhost'.
+          address - the active IP address the connection was bound to after starting. Set to undefined until the server has been started or when using a non TCP port (e.g. UNIX domain socket).
+          protocol - the protocol used:
+            'http' - HTTP.
+            'https' - HTTPS.
+            'socket' - UNIX domain socket or Windows named pipe.
+          uri - a string representing the connection (e.g. 'http://example.com:8080' or 'socket:/unix/domain/socket/path'). Contains the uri setting if provided, otherwise constructed from the available settings. If no port is available or set to 0, the uri will not include a port component.
+
+          created: 1544546105671,
+          started: 1544546106326,
+          host: 'KinjeiroROCK',
+          port: 8080,
+          protocol: 'http',
+          id: 'KinjeiroROCK:7536:jpjyveiv',
+          uri: 'http://KinjeiroROCK:8080',
+          address: '0.0.0.0'
+        */
+        uri,
+      },
+    },
+  } = request;
+  return `${uri}${appUrl(...pathsOrParams)}`;
+}
