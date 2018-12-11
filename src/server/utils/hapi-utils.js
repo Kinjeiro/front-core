@@ -281,19 +281,20 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
 
 export function getRefererUrl(request, ...pathsOrParams) {
   const {
-    // info: {
-    //   /*
-    //     received: 1544545806171,
-    //     responded: 0,
-    //     remoteAddress: '127.0.0.1',
-    //     remotePort: 10822,
-    //     referrer: 'http://localhost:8080/products/good/5c0faecd8a04462198033ff3',
-    //     host: 'localhost:8080',
-    //     hostname: 'localhost',
-    //     acceptEncoding: 'gzip',
-    //     cors: { isOriginMatch: true }
-    //   */
-    // },
+    info: {
+      /*
+        received: 1544545806171,
+        responded: 0,
+        remoteAddress: '127.0.0.1',
+        remotePort: 10822,
+        referrer: 'http://localhost:8080/products/good/5c0faecd8a04462198033ff3',
+        host: 'localhost:8080',
+        hostname: 'localhost',
+        acceptEncoding: 'gzip',
+        cors: { isOriginMatch: true }
+      */
+      host,
+    },
     server: {
       info: {
         /*
@@ -320,9 +321,11 @@ export function getRefererUrl(request, ...pathsOrParams) {
           uri: 'http://KinjeiroROCK:8080',
           address: '0.0.0.0'
         */
-        uri,
+        // uri,
+        protocol,
       },
     },
   } = request;
-  return `${uri}${appUrl(...pathsOrParams)}`;
+  // return `${uri}${appUrl(...pathsOrParams)}`;
+  return `${protocol}://${host}${appUrl(...pathsOrParams)}`;
 }
