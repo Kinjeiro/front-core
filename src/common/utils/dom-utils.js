@@ -47,10 +47,20 @@ function appendInput(form, name, value) {
 }
 
 // https://stackoverflow.com/a/37171171/344172
-export function postFormToUrl(url, data, encoding = 'UTF-8') {
+/**
+ *
+ * @param url
+ * @param data
+ * @param newWindow - при банк эквейринге (оплате через банк) нужно открывать
+ * @param encoding
+ */
+export function postFormToUrl(url, data, encoding = 'UTF-8', newWindow = false) {
   const form = document.createElement('form');
   document.body.appendChild(form);
   form.setAttribute('method', 'post');
+  if (newWindow) {
+    form.setAttribute('target', '_blank');
+  }
   form.setAttribute('action', url);
   form.setAttribute('accept-charset', encoding);
 

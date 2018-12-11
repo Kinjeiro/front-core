@@ -214,11 +214,11 @@ export default class CoreService {
 
   async findFirstRecord(query, searchFields = undefined, options = undefined, shouldBeOne = false) {
     const results = await this.findRecords(query, searchFields, options);
-    if (shouldBeOne && results.length > 1) {
+    if (shouldBeOne && results && results.length > 1) {
       // todo @ANKU @LOW - @@loc
       throw new Error(`Должна быть только одна копия для ${this.getServiceName()}: ${JSON.stringify(query)}`);
     }
-    return results[0];
+    return results ? results[0] : null;
   }
 
   async createRecord(record, id, options) {

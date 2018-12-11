@@ -19,6 +19,8 @@ const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
 const authTypeCookie = serverConfig.server.features.auth.authTypeCookie;
 const contextPath = appUrl();
 
+export const TOKEN_QUERY_PARAM_NAME = serverConfig.server.features.auth.tokenParam;
+
 const OPTIONS = {
   path: contextPath,
   isHttpOnly: true,
@@ -62,7 +64,9 @@ export function setAuthCookies(
     expire: expiresInMilliseconds,
     ttl: expiresInMilliseconds,
   });
-  setCookie(response, refreshTokenCookie, refreshToken, OPTIONS);
+  if (typeof refreshToken !== 'undefined') {
+    setCookie(response, refreshTokenCookie, refreshToken, OPTIONS);
+  }
   setCookie(response, authTypeCookie, authType, OPTIONS);
 
   // чтобы если отработал refresh_token проксирующие запросы уже слались через новый токен
@@ -74,13 +78,13 @@ export function setAuthCookies(
   return response;
 }
 
-export function getToken(req) {
+export function getToken(request) {
   // получем и удаляем из хранилища
-  const updatedToken = getRequestContext(req, req.id, true);
+  const updatedToken = getRequestContext(request, request.id, true);
   if (updatedToken) {
-    logger.debug(`Use accessToken for proxy from request.id: ${req.id}\n${updatedToken}`);
+    logger.debug(`Use accessToken for proxy from request.id: ${request.id}\n${updatedToken}`);
   }
-  return updatedToken || getCookie(req, tokenCookie);
+  return updatedToken || request.query[TOKEN_QUERY_PARAM_NAME] || getCookie(request, tokenCookie);
 }
 export function getRefreshToken(req) {
   return getCookie(req, refreshTokenCookie);

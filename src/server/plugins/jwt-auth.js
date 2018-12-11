@@ -1,11 +1,11 @@
+import omit from 'lodash/omit';
+
 import {
   appUrl,
   cutContextPath,
 } from '../../common/helpers/app-urls';
 import { parseToUniError } from '../../common/models/uni-error';
 import i18n from '../../common/utils/i18n-utils';
-
-import serverConfig from '../server-config';
 
 import logger from '../helpers/server-logger';
 import {
@@ -14,6 +14,7 @@ import {
 } from '../utils/credentials-utils';
 
 import {
+  TOKEN_QUERY_PARAM_NAME,
   setAuthCookies,
   // getToken,
   clearAuthCookie,
@@ -33,11 +34,9 @@ export function remoteJwt(server, pluginOptions) {
     noAuthRequireMatcherFn,
   } = pluginOptions;
 
-  const tokenParam = serverConfig.server.features.auth.tokenParam;
-
   async function authenticate(request, reply) {
     const { url: { pathname, path } } = request;
-    const tokenParamValue = request.query[tokenParam];
+    const tokenParamValue = request.query[TOKEN_QUERY_PARAM_NAME];
 
     // Проставляем через url
     if (tokenParamValue) {
@@ -46,12 +45,13 @@ export function remoteJwt(server, pluginOptions) {
       // todo @ANKU @CRIT @MAIN @BUG_OUT @hapi - при обновлении на hapi@16.1.1 куки перестают сохраняться
 
       // todo @ANKU @LOW - но куки на мобильных не поддерживаются, можно через sessionStorage клиента сделать
-      // Redirect user to the same page and set token cookie
 
-      return setAuthCookies(
-        reply.redirect(appUrl(pathname)),
-        tokenParamValue,
-      );
+      // // Redirect user to the same page and set token cookie
+      // return setAuthCookies(
+      //   reply.redirect(appUrl(pathname, omit(request.query, [TOKEN_QUERY_PARAM_NAME]))),
+      //   tokenParamValue,
+      // );
+      setAuthCookies(reply, tokenParamValue);
     }
 
     if (noAuthRequireMatcherFn && noAuthRequireMatcherFn(cutContextPath(pathname))) {

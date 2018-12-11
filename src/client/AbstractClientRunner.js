@@ -200,12 +200,12 @@ export default class AbstractClientRunner {
       : null;
   }
 
-  createStore(history, initialState = this.getInitialState()) {
+  createStore(history, initialState = null) {
     // перед тем как будут запрошены reducer (через require, чтобы раньше не подцепились) нужно инициализировать orm модели
     this.registerModels();
 
     return createStore(history, {
-      initialState,
+      initialState: initialState || this.getInitialState(),
       rootReducer: getRootReducer(this.getReducers()),
     });
   }
