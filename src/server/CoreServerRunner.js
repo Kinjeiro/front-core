@@ -45,7 +45,8 @@ import pluginModuleMap from './plugins/plugin-module-map';
 
 // plugin api
 import pluginApiHealthmonitor from './plugins/api/healthmonitor';
-import pluginsApiTest from './plugins/api/plugin-api-test';
+import pluginApiTest from './plugins/api/plugin-api-test';
+import pluginApiConfig from './plugins/api/plugin-api-config';
 
 import AbstractServerRunner from './AbstractServerRunner';
 
@@ -230,7 +231,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
       // API
       // ======================================================
       pluginApiHealthmonitor,
-      pluginsApiTest,
+      pluginApiTest,
+      pluginApiConfig,
     );
 
     if (PROXY_ASSETS) {
