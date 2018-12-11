@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.29 | Documentation</title>
+  <title>@reagentum/front-core 1.6.30 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.29</code></div>
+          <div class='mb1'><code>1.6.30</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1078,6 +1078,16 @@
                   href='#onstatuspropupdate'
                   class="">
                   onStatusPropUpdate
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#postformtourl'
+                  class="">
+                  postFormToUrl
                   
                 </a>
                 
@@ -5073,7 +5083,7 @@ moduleToRoutePrefixMap: {}
   <p>Полный путь до ресурса с учетом префикса различных модулей и contextPath</p>
 
 
-  <div class='pre p1 fill-light mt0'>getModuleFullPath(relativeLocation: any, moduleName: any, modulesPrefixes: any): any</div>
+  <div class='pre p1 fill-light mt0'>getModuleFullPath(relativeLocation: any, moduleName: any, modulesPrefixes: any, queryParams: any): any</div>
   
   
 
@@ -5110,6 +5120,14 @@ moduleToRoutePrefixMap: {}
             <span class='code bold'>modulesPrefixes</span> <code class='quiet'>(any)</code>
 	    мапа: moduleName => prefix
 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>queryParams</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
@@ -9183,6 +9201,90 @@ accountId: PropTypes.number,
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='postformtourl'>
+      postFormToUrl
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>postFormToUrl(url: any, data: any, encoding: any, newWindow: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>url</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>encoding</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>newWindow</span> <code class='quiet'>(any)</code>
+	    при банк эквейринге (оплате через банк) нужно открывать
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='formatdate'>
       formatDate
     </h3>
@@ -10426,7 +10528,7 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
   <p>Путь до ресурса с учетом префикса различных модулей для роутинг (без учета contextPath)</p>
 
 
-  <div class='pre p1 fill-light mt0'>getModuleRoutePath(relativeLocation: any, moduleName: any, modulesPrefixes: any): any</div>
+  <div class='pre p1 fill-light mt0'>getModuleRoutePath(relativeLocation: any, moduleName: any, modulesPrefixes: any, queryParams: any): any</div>
   
   
 
@@ -10463,6 +10565,15 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
             <span class='code bold'>modulesPrefixes</span> <code class='quiet'>(any)</code>
 	    мапа: moduleName => prefix
 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>queryParams</span> <code class='quiet'>(any
+            = <code>undefined</code>)</code>
+	    
           </div>
           
         </div>
