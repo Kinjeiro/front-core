@@ -104,7 +104,7 @@ export default class CoreSelect extends PureComponent {
     return resultOptions;
   }
 
-  updateSelect(value, label = null) {
+  updateSelect(value, label = null, optionNode = undefined, contextSelect = undefined) {
     const {
       onSelect,
     } = this.props;
@@ -112,7 +112,7 @@ export default class CoreSelect extends PureComponent {
     if (onSelect) {
       // todo @ANKU @LOW @BUG_OUT - элемент при выборе показывает в input option.value а не children option
       // onSelect(value);
-      onSelect(value);
+      onSelect(value, optionNode, contextSelect);
     }
     this.setState({
       selectedLabel: label,
@@ -142,17 +142,18 @@ export default class CoreSelect extends PureComponent {
   }
 
   @bind()
-  handleSelect(label, optionNode) {
+  handleSelect(label, optionNode, contextSelect = undefined) {
     if (typeof optionNode === 'object') {
       if (optionNode.value) {
         // semantic format
-        return this.updateSelect(optionNode.value);
+        return this.updateSelect(optionNode.value, undefined, optionNode, contextSelect);
       }
       // antd select format
       // todo @ANKU @LOW @BUG_OUT @antd - элемент при выборе показывает в input option.value а не children option
-      return this.updateSelect(optionNode.props.optionValue, label);
+      return this.updateSelect(optionNode.props.optionValue, label, optionNode, contextSelect);
     } else if (label.target) {
-      return this.updateSelect(label.target.value);
+      // event
+      return this.updateSelect(label.target.value, undefined, optionNode, contextSelect);
     }
     throw new Error('Unknown handleSelect format');
   }

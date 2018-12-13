@@ -367,7 +367,7 @@ export default class CoreField extends Component {
   }
 
   @bind()
-  handleChange(value, index) {
+  handleChange(value, index, node = undefined, contextData = undefined) {
     const {
       name,
       type,
@@ -390,7 +390,10 @@ export default class CoreField extends Component {
           ? parseOutValue(value, this.props, index)
           : CoreField.parseOutValue(type, value),
         multiple ? index : undefined,
-        context,
+        contextData && typeof contextData === 'object'
+          ? { ...contextData, ...context }
+          : context,
+        node,
       );
 
       return emitProcessing(
@@ -452,12 +455,18 @@ export default class CoreField extends Component {
       controlProps: {
         onBlur,
       } = {},
-      // value,
+      value: oldValue,
     } = this.props;
     const {
       touched,
     } = this.state;
-    const newValue = controlProps.value;
+    const newValue = controlProps
+      ? controlProps.value
+      : event.relatedTarget
+        ? event.relatedTarget.value
+        // todo @ANKU @LOW - что делать если не вернули?
+        // : undefined;
+        : oldValue;
 
     // для первой валидации
     if (!touched) {
@@ -736,7 +745,7 @@ export default class CoreField extends Component {
         return {
           selectedValue: controlValue,
           options,
-          onSelect: (id) => this.handleChange(id, index),
+          onSelect: (id, node, contextSelect) => this.handleChange(id, index, contextSelect),
           ...controlPropsFinal,
         };
       }
@@ -752,7 +761,7 @@ export default class CoreField extends Component {
           onErrors: this.handleErrors,
           onWarnings: this.handleWarnings,
           ...controlPropsFinal,
-          onChange: (value) => this.handleChange(value, index),
+          onChange: (value, node, contextData) => this.handleChange(value, index, node, contextData),
         };
     }
   }
@@ -823,6 +832,9 @@ export default class CoreField extends Component {
 
       case TYPES.BINARY: {
         return CB.Attachment;
+      }
+      case TYPES.CUSTOM: {
+        return null;
       }
       default:
         console.error('Field неизвестный тип поля', type);

@@ -159,6 +159,9 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   render: PropTypes.func,
 
+  /**
+   * (value, index, contextData, node) => {}
+   */
   onChange: PropTypes.func,
   /**
    * (value, fieldProps, index) => parsedValue
