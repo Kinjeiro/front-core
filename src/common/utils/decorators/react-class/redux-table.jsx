@@ -221,10 +221,13 @@ export default function reduxTableDecorator(
         return executeVariable(tableId, null, props);
       }
 
-      updateUrl(meta, filters = undefined) {
+      updateUrl(meta, newFilters = undefined) {
         const {
           location,
           actionReplaceState,
+          table: {
+            filters,
+          },
         } = this.props;
 
         actionReplaceState({
@@ -233,7 +236,7 @@ export default function reduxTableDecorator(
             location.search,
             {
               ...meta,
-              filters,
+              filters: typeof newFilters === 'undefined' ? filters : newFilters,
             },
             true, // assign = replace
           ),
