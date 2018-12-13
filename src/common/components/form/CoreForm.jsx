@@ -177,10 +177,14 @@ export default class CoreForm extends Component {
       //   return await Field.validate(field.value, field, domElement).length === 0;
       // });
       fieldsErrors = (await Promise.all(fields.map(async (field, index) => {
-        const domElement = this.domControls[field.name];
-        let value = newValues[field.name];
+        const {
+          name,
+        } = field;
+
+        const domElement = this.domControls[name];
+        let value = newValues[name];
         if (typeof value === 'undefined') {
-          value = field.value;
+          value = this.getFieldValue(name, field);
         }
         const errors = await Field.validate(
           value,
@@ -190,7 +194,7 @@ export default class CoreForm extends Component {
         );
         return errors && errors.length > 0
           ? {
-            field: field.name,
+            field: name,
             fieldLabel: this.getFieldLabel(field),
             errors,
           }
@@ -310,6 +314,21 @@ export default class CoreForm extends Component {
     return labelFinal;
   }
 
+  getFieldValue(fieldName, fieldProp = null) {
+    const {
+      formData,
+    } = this.props;
+
+    let value;
+    if (fieldProp) {
+      value = fieldProp.value;
+    }
+    if (typeof value === 'undefined') {
+      value = formData[fieldName];
+    }
+    return value;
+  }
+
   gerFieldProps(field, index) {
     const {
       className,
@@ -343,7 +362,7 @@ export default class CoreForm extends Component {
     const formDependentData = wrapToArray(formDependentFields)
       .reduce((result, otherFieldName) => {
         // eslint-disable-next-line no-param-reassign
-        result[otherFieldName] = formData[otherFieldName];
+        result[otherFieldName] = this.getFieldValue(otherFieldName);
         return result;
       }, {});
 
@@ -357,7 +376,7 @@ export default class CoreForm extends Component {
       //   }
       //   : field.controlProps,
       controlRef: this.controlRef,
-      value: typeof value === 'undefined' ? formData[name] : value,
+      value: this.getFieldValue(name, field),
       key: name,
       className: `${this.bem('field')} ${className || ''}`,
       label,
