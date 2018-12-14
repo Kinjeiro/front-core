@@ -81,9 +81,9 @@ export default class AuthErrorContainer extends Component {
     const {
       lastUniError,
     } = newProps;
-    if (lastUniError !== this.props.lastUniError && lastUniError && lastUniError.isNotAuth) {
+    if (lastUniError !== this.props.lastUniError) {
       this.setState({
-        authError: lastUniError,
+        authError: lastUniError && lastUniError.isNotAuth ? lastUniError : null,
       });
     }
   }

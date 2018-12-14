@@ -4,6 +4,7 @@ import { USER_INFO_DEFAULT_VALUES } from '../../../../common/models/model-user-i
 
 import { createReducer } from '../../../../common/app-redux/utils';
 import { createStatusReducer } from '../../../../common/app-redux/helpers/index';
+import { actions as errorActions } from '../../../../common/app-redux/reducers/app/last-uni-error';
 
 import * as apiAuth from './api-auth';
 import * as apiUsers from './api-users';
@@ -100,6 +101,12 @@ export function getBindActions({
   };
 
   return {
+    actionCloseAuthModal() {
+      return (dispatch) => {
+        return dispatch(errorActions.actionClearLastError());
+      };
+    },
+    
     actionSignup(userData) {
       return {
         types: [TYPES.SIGNUP_FETCH, TYPES.SIGNUP_SUCCESS, TYPES.SIGNUP_FAIL],
