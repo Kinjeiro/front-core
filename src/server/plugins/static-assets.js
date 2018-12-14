@@ -40,6 +40,18 @@ export const register = function (server, options, next) {
       auth: null,
     },
   });
+  server.route({
+    method: 'GET',
+    path: '/robots.txt',
+    handler: {
+      proxy: {
+        uri: `{protocol}://{host}:{port}${appUrl(ASSETS, 'robots.txt')}`,
+      },
+    },
+    config: {
+      auth: null,
+    },
+  });
 
   next();
 };

@@ -32,7 +32,9 @@ export const register = function (server, options, next) {
     method: 'GET',
     path: '/favicon.ico',
     handler: (request, reply) => reply.proxy({
-      uri: `http://${options.host}:${options.port}${appUrl(ASSETS, 'favicon.ico')}`,
+      // uri: `http://${options.host}:${options.port}${appUrl(ASSETS, 'favicon.ico')}`,
+      host: options.host,
+      port: options.port,
     }),
   });
 
