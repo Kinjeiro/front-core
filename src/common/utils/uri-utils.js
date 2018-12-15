@@ -315,7 +315,9 @@ export function getModuleRoutePath(relativeLocation, moduleName = null, modulesP
     };
   }
   return prefix
-    ? joinPath(prefix, relativeLocation, queryParams)
+    ? relativeLocation
+      ? joinPath(prefix, relativeLocation, queryParams)
+      : joinPath(prefix, queryParams)
     : relativeLocation
       ? joinPath(relativeLocation, queryParams)
       : joinPath(queryParams);
