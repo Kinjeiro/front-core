@@ -57,7 +57,23 @@ function pluginCodeBabelOptions(webpackConfig, context) {
 
   if (MINIMIZED) {
     // минификация кода для компиляции через babel (для репозитория lib)
-    presets.push('babel-preset-minify');
+    // presets.push('babel-preset-minify');
+    presets.push(['babel-preset-minify', {
+
+      /*
+        // todo @ANKU @LOW @BUG_OUT @babel-minify
+        Cannot read property 'contexts' of null (Workaround here) #933
+        https://github.com/babel/minify/issues/933
+
+        src\common\utils\common.js -> minimizedPackage\front-core\lib\common\utils\common.js
+        TypeError: src/common/utils/common.test.js: Cannot read property 'contexts' of null
+            at NodePath._getQueueContexts (H:\__CODER__\_W_Reagentum_\_FRONT_CORE_\front-core\node_modules\babel-traverse\lib\path\context.js:278
+        :21)
+            at NodePath._containerInsert (H:\__CODER__\_W_Reagentum_\_FRONT_CORE_\front-core\node_modules\babel-traverse\lib\path\modification.js
+        :94:23)
+      */
+      builtIns: false
+    }]);
   }
 
   const plugins = [
