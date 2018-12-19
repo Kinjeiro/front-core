@@ -192,7 +192,8 @@ export function formatUrlParameters(params, url = '', hash = ''/* , useBracket =
  * @returns {*}
  */
 export function joinPath(...paths) {
-  if (!paths || paths.length === 0) {
+  // const paths
+  if (!paths || paths.length === 0 || (paths.length === 1 && !paths[0])) {
     return '/';
   }
   const lastUrlParameters = paths.length > 1 && paths[paths.length - 1];
