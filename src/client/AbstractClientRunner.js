@@ -219,7 +219,7 @@ export default class AbstractClientRunner {
   }
 
   removeLoader() {
-    if (clientConfig.preloader) {
+    if (clientConfig.client.preloader) {
       // 1 секунда, чтобы реакт успел отрисоваться
       setTimeout(() => document.querySelector('.preloader').remove(), 1000);
     }
