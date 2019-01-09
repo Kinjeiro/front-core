@@ -22,6 +22,7 @@ import {
 import { appUrl } from '../../../common/helpers/app-urls';
 
 import serverConfig from '../../server-config';
+import clientConfig from '../../../common/client-config';
 import logger from '../../helpers/server-logger';
 import { readFile } from '../../utils/file-utils';
 
@@ -128,6 +129,7 @@ export default function createRenderHandler(reply, store, server = null, options
           // contextRoot: appUrl(),
           unescapedHeadHtml: formatHtml(headHtml),
           unescapedBodyHtml: formatHtml(bodyHtml),
+          preloader: clientConfig.client.preloader,
           // assetsManifest,
         });
       } catch (error) {

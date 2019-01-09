@@ -27,8 +27,11 @@
 
     <%- unescapedHeadHtml %>
 </head>
-<body class="body">
+<body class="body" style="margin: 0">
     <%- unescapedBodyHtml %>
+    <% if (preloader) { %>
+        <%- preloader %>
+    <% } %>
     <div id="react-app" class="ReactApp"><%- content %></div>
     <script> window.<%= GLOBAL_CLIENT_STORE_INITIAL_STATE %> = <%- storeState %>; </script>
     <script> window.<%= GLOBAL_I18N_CLIENT_BUNDLES %> = <%- i18nClientBundle %>; </script>
