@@ -27,6 +27,7 @@ import { readFile } from '../../utils/file-utils';
 // COMPONENTS
 // ======================================================
 import I18NProvider from '../../../common/containers/I18NProvider/I18NProvider';
+import { executeVariable } from '../../../common/utils/common';
 
 const template = require('./html.ejs');
 
@@ -51,9 +52,11 @@ export default function createRenderHandler(
   reply,
   store,
   server = null,
-  options = {},
+  options,
 ) {
-  const { clientRunner } = options;
+  const {
+    preLoader,
+  } = options || {};
   return (error, redirectLocation, renderProps) => {
     if (error) {
       console.error(error);
@@ -114,7 +117,7 @@ export default function createRenderHandler(
         };
         // const i18nServer = i18n.cloneInstance();
         // i18nServer.changeLanguage(locale);
-        const preloader = clientRunner.getPreLoader();
+        const preloaderFinal = executeVariable(preLoader, null, state, i18nClientBundle);
 
         // ======================================================
         // RENDER TEMPLATE
@@ -130,7 +133,7 @@ export default function createRenderHandler(
           // contextRoot: appUrl(),
           unescapedHeadHtml: formatHtml(headHtml),
           unescapedBodyHtml: formatHtml(bodyHtml),
-          preloader,
+          preloader: preloaderFinal,
           // assetsManifest,
         });
       } catch (error) {

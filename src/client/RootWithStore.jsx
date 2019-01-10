@@ -25,8 +25,7 @@ export default class RootWithStore extends Component {
 
   componentDidMount() {
     const { actionClosePreLoader } = this.props;
-    const { preLoader: { autoClose = false } = {} } = clientConfig.common.features;
-    if (autoClose) {
+    if (clientConfig.common.features.preLoader.autoClose) {
       actionClosePreLoader();
     } else {
       this.bodyElement.style.overflow = 'visible';
@@ -35,11 +34,14 @@ export default class RootWithStore extends Component {
 
   componentWillReceiveProps(newProps) {
     const { isPreloaderVisible } = newProps;
-    const { preLoader: { autoClose, domId } = {} } = clientConfig.common.features;
+    const autoClose = clientConfig.common.features.preLoader.autoClose;
+    const domId = clientConfig.common.features.preLoader.domId;
     const preLoaderAutoCloseDelay = typeof autoClose === 'number' ? autoClose : 0;
     if (!isPreloaderVisible) {
       setTimeout(() => {
-        document.querySelector(`#${domId}`).remove();
+        if (domId) {
+          document.querySelector(`#${domId}`).remove();
+        }
         this.bodyElement.style.overflow = 'visible';
       }, preLoaderAutoCloseDelay);
     }

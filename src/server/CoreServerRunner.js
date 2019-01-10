@@ -36,6 +36,7 @@ import moduleAuth from '../modules/module-auth/common/subModule';
 // ======================================================
 import pluginAuthJwt, { AUTH_SCHEME_NAME } from './plugins/jwt-auth';
 import pluginPageIndex from './plugins/pages/pages';
+import getPreLoader from './plugins/pages/default-pre-loader';
 import pluginProxyAssets from './plugins/proxy-assets';
 import pluginStaticAssets from './plugins/static-assets';
 import pluginI18n from './plugins/i18n';
@@ -171,6 +172,14 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return joinPath(this.getModuleRoutePrefix(moduleAuth.MODULE_NAME), moduleAuth.paths.PATH_AUTH_SIGNIN);
   }
 
+  /**
+   *
+   * @return  string || (reduxStore, i18n) => string
+   */
+  getPreLoader() {
+    return getPreLoader;
+  }
+
   // ======================================================
   // METHODS
   // ======================================================
@@ -190,6 +199,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
         loginPath: this.getLoginPath,
         noAuthRequireMatcherFn: this.noAuthRequireMatcher,
         noNeedCredentialsPageMatcherFn: this.noNeedCredentialsPageMatcher,
+        preLoader: this.getPreLoader(),
       },
     };
   }

@@ -259,6 +259,11 @@ module.exports = {
 
       componentsBase: {
         logComponentBaseEvents: false
+      },
+
+      preLoader: {
+        autoClose: 10,
+        domId: 'PreLoader'
       }
     },
 

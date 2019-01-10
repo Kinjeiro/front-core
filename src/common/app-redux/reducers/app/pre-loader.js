@@ -13,7 +13,7 @@ const initialState = {
 // ======================================================
 const PREFIX = 'preLoader';
 export const TYPES = {
-  TOOGLE_PRELOADER:     `${PREFIX}/TOOGLE_PRELOADER`,
+  TOGGLE_PRELOADER:     `${PREFIX}/TOGGLE_PRELOADER`,
 };
 
 // ======================================================
@@ -22,23 +22,24 @@ export const TYPES = {
 export const actions = {
   actionClosePreLoader() {
     return {
-      type: TYPES.TOOGLE_PRELOADER,
+      type: TYPES.TOGGLE_PRELOADER,
     };
-  } };
+  },
+};
 
 
     // ======================================================
 // REDUCER
 // ======================================================
 const reducer = createReducer(initialState, {
-  [TYPES.TOOGLE_PRELOADER]:
-      (state) => {
-        const { isPreloaderVisible } = state;
-        return {
-          ...state,
-          isPreloaderVisible: !isPreloaderVisible,
-        };
-      },
+  [TYPES.TOGGLE_PRELOADER]:
+    (state) => {
+      const { isPreloaderVisible } = state;
+      return {
+        ...state,
+        isPreloaderVisible: !isPreloaderVisible,
+      };
+    },
 });
 
 export default reducer;
