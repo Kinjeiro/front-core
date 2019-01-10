@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { URL } from 'url';
 import { Readable } from 'stream';
+import Cookie from 'cookie';
 import Response from 'hapi/lib/response';
 
 import {
@@ -148,41 +149,34 @@ export function getRequestCookieFromResponse(response) {
     .join('; ');
 }
 
-/**
- * @deprecated - bug with set cookie value - use getCookie and setCookie instead
- * @param request
- * @param name
- * @param value
- * @return {*}
- */
-export function cookie(request, name, value = null) {
-  if (value !== null) {
-    request.state(name, value);
-    return value;
-  }
-  return typeof request.state === 'function'
-     ? request.state(name)
-     : request.state[name];
-}
 export function getCookie(request, name) {
   const { state } = request;
-  // eslint-disable-next-line no-nested-ternary
-  let result = state
-  ? typeof state === 'function'
-    ? state(name)
-    : state[name]
-  : undefined;
+  let result;
 
-  if (Array.isArray(result)) {
-    /*
-      todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
-      refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
-      это бага, но никак настройки для isHttpOnly никак не получить
-      если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
-    */
-    // в таком случае всегда первым будет ближайший contextPath
-    result = result[0];
+  if (state) {
+    // eslint-disable-next-line no-nested-ternary
+    result = state
+      ? typeof state === 'function'
+        ? state(name)
+        : state[name]
+      : undefined;
+
+    if (Array.isArray(result)) {
+      /*
+        todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
+        refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
+        это бага, но никак настройки для isHttpOnly никак не получить
+        если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
+      */
+      // в таком случае всегда первым будет ближайший contextPath
+      result = result[0];
+    }
+  } else {
+    // @guide - к сожалению на стадии onRequest не сформированы еще куки (не работает yar) а редирект может быть только на ней =(
+    const cookies = Cookie.parse(request.headers.cookie || '');
+    result = cookies[name];
   }
+
   return result;
 }
 
@@ -211,9 +205,21 @@ export function setCookie(reply, name, value = undefined, options = undefined) {
   return reply;
 }
 
-export function clearCookie(reply, name) {
-  return setCookie(reply, name);
+export function clearCookie(reply, name, options = undefined) {
+  return setCookie(reply, name, undefined, options);
 }
+
+/**
+ * @deprecated - bug with set cookie value - use getCookie and setCookie instead
+ * @param request
+ * @param name
+ * @param value
+ * @return {*}
+ */
+export function cookie(request, name, value = null) {
+  return getCookie(request, name);
+}
+
 
 
 function getFileType(fileNameOrPath) {
