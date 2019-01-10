@@ -1,5 +1,4 @@
 import RouteParser from 'route-parser';
-import Cookie from 'cookie';
 
 import {
   joinUri,
@@ -12,6 +11,11 @@ import {
 
 import serverConfig from '../server-config';
 import logger from '../helpers/server-logger';
+import {
+  getCookie,
+  setCookie,
+  clearCookie,
+} from '../utils/hapi-utils';
 
 export const DEFAULT_OPTIONS = {
   // serverConfig.server.features.mocking.enable
@@ -143,14 +147,15 @@ function onRequest(options, request, reply) {
   let cookieEnable;
 
   // @guide - к сожалению на стадии onRequest не сформированы еще куки (не работает yar) а редирект может быть только на ней =(
-  const cookies = Cookie.parse(request.headers.cookie || '');
+  const currentCookieEnable = getCookie(request, cookieEnableMocking);
+
   if (request.query[urlParamForEnableMocking]) {
     cookieEnable = request.query[urlParamForEnableMocking];
     // todo @ANKU @BUG_OUT @hapi - приходится делать семафор в контексте request, но в hapi с этим проблема: редирект можно сделать (onRequest) только ДО того как можно проставить куки (onPreAuth)
     // eslint-disable-next-line no-param-reassign
     request.app.urlParamForEnableMocking = cookieEnable;
-  } else if (cookies[cookieEnableMocking]) {
-    cookieEnable = cookies[cookieEnableMocking];
+  } else if (currentCookieEnable) {
+    cookieEnable = currentCookieEnable;
   }
 
   // enable - нужно только чтобы включить мокирующие роуты, но не чтобы включить сам процесс мокирования (он включается через url mock=true)
@@ -186,18 +191,25 @@ function onPreResponse(mockOptions, request, reply) {
     useMocks,
     cookieEnableMocking,
   } = mockOptions;
+  const {
+    app: {
+      urlParamForEnableMocking,
+    },
+  } = request;
 
-  const contextRoot = joinUri('/', serverConfig.common.app.contextRoot);
-
-  if (request.app.urlParamForEnableMocking) {
-    reply.state(cookieEnableMocking, request.app.urlParamForEnableMocking, { path: contextRoot });
-  } else if (enable && useMocks && request.state && typeof request.state[cookieEnableMocking] === 'undefined') {
-    // enable - нужно только чтобы включить мокирующие роуты, но не чтобы включить сам процесс мокирования (он включается через url mock=true)
-    // если запустили с помощью environment в конфигах APP_MOCK или через options плагина
-    reply.state(cookieEnableMocking, 'true', { path: contextRoot });
+  // enable - нужно только чтобы включить мокирующие роуты, но не чтобы включить сам процесс мокирования (он включается через url mock=true)
+  // если запустили с помощью environment в конфигах APP_MOCK или через options плагина
+  if (enable && useMocks) {
+    setCookie(
+      reply,
+      cookieEnableMocking,
+      typeof urlParamForEnableMocking !== 'undefined'
+        ? urlParamForEnableMocking
+        : 'true',
+    );
+  } else {
+    clearCookie(reply, cookieEnableMocking);
   }
-
-  // }
 
   return reply.continue();
 }
