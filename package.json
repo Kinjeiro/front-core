@@ -65,7 +65,7 @@
     "update-babelrc": "node ./build-scripts/update-babelrc.js",
     "sync-work-branch": "sh ./build-scripts/sync-work-branch.sh",
     "clear-cashe-and-install": "rm -rf ./node_modules && rm -f package-lock.json && npm cache clean --force && npm install --production",
-    "minimized:copy": "cpr . minimizedPackage/front-core --delete-first --filter \"^(.idea|.build|build-scripts|lib|minimizedPackage|logs|node_modules|old|src).*\"",
+    "minimized:copy": "cpr . minimizedPackage/front-core --delete-first --filter \"^(.idea|.build|.git|build-scripts|lib|minimizedPackage|logs|node_modules|old|src).*\"",
     "minimized:libs": "cross-env MINIMIZED=true npm run update-babelrc && babel src --out-dir minimizedPackage/front-core/lib --copy-files --include-dotfiles",
     "minimized:scripts": "minify build-scripts --mangle.keepClassName --outDir minimizedPackage/front-core/build-scripts",
     "minimized": "npm run minimized:copy && npm run minimized:scripts && npm run minimized:libs"
