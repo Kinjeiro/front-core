@@ -125,6 +125,11 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return getStateFromPage();
   }
 
+  getPreLoader() {
+    // override метод, перезаписывается на клиенте в clientRunner.js
+    return false;
+  }
+
   //
   // hotReloadListeners() {
   //   super.hotReloadListeners();

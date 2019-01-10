@@ -218,13 +218,6 @@ export default class AbstractClientRunner {
     }
   }
 
-  removeLoader() {
-    if (clientConfig.client.preloader) {
-      // 1 секунда, чтобы реакт успел отрисоваться
-      setTimeout(() => document.querySelector('.preloader').remove(), 1000);
-    }
-  }
-
   init() {
     // ======================================================
     // COMPONENTS
@@ -345,8 +338,6 @@ export default class AbstractClientRunner {
       reactRootComponent,
       reactAppDiv,
       );
-
-    this.removeLoader();
   }
 
 

@@ -10,6 +10,7 @@ import i18nInfo from './app/i18n-info';
 import tables from './app/redux-tables';
 import modules from './app/redux-modules';
 import test from './app/test';
+import preLoader from './app/pre-loader';
 
 import uiDomains from './ui-domains';
 
@@ -33,6 +34,7 @@ export const coreReduces = {
   tables,
   modules,
   test,
+  preLoader,
 
   // ======================================================
   // UI DOMAINS

@@ -11,9 +11,7 @@ import i18nInstance from 'i18next';
 // ======================================================
 // UTILS
 // ======================================================
-import {
-  isValidPath,
-} from '../../../common/utils/uri-utils';
+import { isValidPath } from '../../../common/utils/uri-utils';
 import { ASSETS } from '../../../common/constants/routes.pathes';
 import {
   GLOBAL_CLIENT_STORE_INITIAL_STATE,
@@ -22,7 +20,6 @@ import {
 import { appUrl } from '../../../common/helpers/app-urls';
 
 import serverConfig from '../../server-config';
-import clientConfig from '../../../common/client-config';
 import logger from '../../helpers/server-logger';
 import { readFile } from '../../utils/file-utils';
 
@@ -38,9 +35,7 @@ const template = require('./html.ejs');
 
 function formatHtml(code) {
   if (Array.isArray(code)) {
-    return code
-      .map((codeItem) => formatHtml(codeItem))
-      .join('\n');
+    return code.map(codeItem => formatHtml(codeItem)).join('\n');
   }
   if (React.isValidElement(code)) {
     return renderToString(code);
@@ -52,23 +47,26 @@ function formatHtml(code) {
   return code;
 }
 
-export default function createRenderHandler(reply, store, server = null, options = {}) {
+export default function createRenderHandler(
+  reply,
+  store,
+  server = null,
+  options = {},
+) {
+  const { clientRunner } = options;
   return (error, redirectLocation, renderProps) => {
     if (error) {
       console.error(error);
       return reply(Boom.badImplementation());
     }
 
-    const {
-      staticAssets,
-      headHtml,
-      bodyHtml,
-    } = options;
+    const { staticAssets, headHtml, bodyHtml } = options;
 
     if (redirectLocation) {
-      return reply().redirect(appUrl(redirectLocation.pathname, redirectLocation.search));
+      return reply().redirect(
+        appUrl(redirectLocation.pathname, redirectLocation.search),
+      );
     }
-
 
     if (renderProps) {
       // значит произошел match роутинга
@@ -100,7 +98,10 @@ export default function createRenderHandler(reply, store, server = null, options
 
         const resourcesByNamespace = i18nInstance.options.ns.reduce(
           (result, namespace) => {
-            result[namespace] = i18nInstance.getResourceBundle(locale, namespace);
+            result[namespace] = i18nInstance.getResourceBundle(
+              locale,
+              namespace,
+            );
             return result;
           },
           {},
@@ -113,7 +114,7 @@ export default function createRenderHandler(reply, store, server = null, options
         };
         // const i18nServer = i18n.cloneInstance();
         // i18nServer.changeLanguage(locale);
-
+        const preloader = clientRunner.getPreLoader();
 
         // ======================================================
         // RENDER TEMPLATE
@@ -129,7 +130,7 @@ export default function createRenderHandler(reply, store, server = null, options
           // contextRoot: appUrl(),
           unescapedHeadHtml: formatHtml(headHtml),
           unescapedBodyHtml: formatHtml(bodyHtml),
-          preloader: clientConfig.client.preloader,
+          preloader,
           // assetsManifest,
         });
       } catch (error) {
