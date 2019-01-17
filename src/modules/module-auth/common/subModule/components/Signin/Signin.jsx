@@ -11,21 +11,14 @@ import clientConfig from '../../../../../../common/client-config';
 // ======================================================
 // REDUX
 // ======================================================
-import {
-  getUserInfo,
-} from '../../../../../../common/app-redux/selectors';
+import { getUserInfo } from '../../../../../../common/app-redux/selectors';
 import * as reduxUserInfo from '../../redux-user-info';
 
 // ======================================================
 // COMPONENTS and STYLES
 // ======================================================
-import {
-  ACTION_STATUS_PROPS,
-} from '../../../../../../common/models/index';
-import {
-  SUB_TYPES,
-} from '../../../../../../common/models/model-field';
-
+import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
+import { SUB_TYPES } from '../../../../../../common/models/model-field';
 
 // ======================================================
 // MODULE
@@ -37,30 +30,24 @@ import * as paths from '../../routes-paths-auth';
 
 import getComponents from '../../get-components';
 
-const {
-  Link,
-  Form,
-  Button,
-} = getComponents();
+const { Link, Form, Button } = getComponents();
 
 export const PAGE_ID = 'Signin';
 
 @connect(
-  (globalState) => ({
+  globalState => ({
     actionChangeUserStatus: getUserInfo(globalState).actionChangeUserStatus,
   }),
   {
     actionChangeUser: reduxUserInfo.actions.actionChangeUser,
+    actionGoogleSignin: reduxUserInfo.actions.actionGoogleSignin,
   },
 )
-@reduxSimpleForm(
-  PAGE_ID,
-  {
-    username: '',
-    loginEmail: '',
-    password: '',
-  },
-)
+@reduxSimpleForm(PAGE_ID, {
+  username: '',
+  loginEmail: '',
+  password: '',
+})
 @bemDecorator({ componentName: 'Signin', wrapper: false })
 export default class Signin extends Component {
   static PAGE_ID = PAGE_ID;
@@ -101,18 +88,14 @@ export default class Signin extends Component {
   // ======================================================
   getFields() {
     const {
-      form: {
-        username,
-        loginEmail,
-        password,
-      },
+      form: { username, loginEmail, password },
       emailAsLogin,
     } = this.props;
 
     return [
       emailAsLogin
         ? {
-          /*
+            /*
            id необходим для корректной работы автозаполнению
            Chrome will only save the autocomplete information on submit.
            https://stackoverflow.com/questions/15462991/trigger-autocomplete-without-submitting-a-form
@@ -149,11 +132,7 @@ export default class Signin extends Component {
   @bind()
   async handleLogin() {
     const {
-      form: {
-        username,
-        loginEmail,
-        password,
-      },
+      form: { username, loginEmail, password },
       emailAsLogin,
       actionChangeUser,
       onSubmit,
@@ -180,6 +159,7 @@ export default class Signin extends Component {
       onEnterTypeChange,
       onModalCancel,
       formProps,
+      actionGoogleSignin,
     } = this.props;
 
     // чтобы кнопка была сразу доступна при вводе данных а не когда фокус переместатя
@@ -190,29 +170,33 @@ export default class Signin extends Component {
         id={ PAGE_ID }
         className={ this.fullClassName }
         i18nFieldPrefix={ `${NAMESPACE}:pages.SigninPage.fields` }
-
         fields={ this.getFields() }
         onChangeField={ onUpdateForm }
-
         inModal={ inModal }
         useForm={ true }
-
         actions={
-          clientConfig.common.features.auth.allowSignup && (
-            <Button
-              key="signupButton"
-              className={ this.bem('signupButton') }
-              onClick={ () => onEnterTypeChange(true) }
-            >
-              {i18n('pages.SigninPage.signup')}
-            </Button>
-          )
+          <React.Fragment>
+            {clientConfig.common.features.auth.allowSignup && (
+              <Button
+                key="signupButton"
+                className={ this.bem('signupButton') }
+                onClick={ () => onEnterTypeChange(true) }
+              >
+                {i18n('pages.SigninPage.signup')}
+              </Button>
+            )}
+            <a  href="http://localhost:1337/api/auth/google" >
+              <Button>
+                ГУГОЛ
+              </Button>
+            </a>
+
+          </React.Fragment>
         }
         onSubmit={ this.handleLogin }
         textActionSubmit={ i18n('pages.SigninPage.loginButton') }
         onCancel={ onModalCancel }
         textActionCancel={ i18n('pages.SigninPage.loginCancelButton') }
-
         postActions={
           clientConfig.common.features.auth.allowResetPasswordByEmail && (
             <div className={ this.bem('forgotPassword') }>
@@ -222,7 +206,6 @@ export default class Signin extends Component {
             </div>
           )
         }
-
         actionStatus={ actionChangeUserStatus }
         { ...formProps }
       />

@@ -28,6 +28,7 @@ export default class ServiceAuth extends CoreService {
     this.urls = {
       authSignup: '/auth/signup',
       authSignin: '/auth/signin',
+      authGoogleSignin: '/auth/google',
       authRefresh: '/auth/signin',
       authValidate: '/auth/user',
       authSignout: '/auth/signout',
@@ -39,8 +40,10 @@ export default class ServiceAuth extends CoreService {
 
   getClientInfo() {
     return {
-      client_id: serverConfig.server.features.auth.applicationClientInfo.client_id,
-      client_secret: serverConfig.server.features.auth.applicationClientInfo.client_secret,
+      client_id:
+        serverConfig.server.features.auth.applicationClientInfo.client_id,
+      client_secret:
+        serverConfig.server.features.auth.applicationClientInfo.client_secret,
     };
   }
 
@@ -64,46 +67,63 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   authLogin(username, password) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authSignin, 'post',
-      {
-        // @NOTE: необходимо учитывать snake запись (_) это стандарт
-        grant_type: 'password',
-        username,
-        password,
-        ...this.getClientInfo(),
-      },
-    )
-      // .then((results) => {
-      //   // стандарт работает на секундах, а сервер на милисекундах
-      //   // https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
-      //   // eslint-disable-next-line no-param-reassign
-      //   results.expires_in *= 1000;
-      //   return results;
-      // })
-      .catch((error) => {
-        // eslint-disable-next-line no-param-reassign
-        const uniError = parseToUniError(error);
-        if (uniError.originalObject && uniError.originalObject.error_description) {
-          let clientErrorMessage;
+    return (
+      sendEndpointMethodRequest(
+        this.endpointServiceConfig,
+        this.urls.authSignin,
+        'post',
+        {
+          // @NOTE: необходимо учитывать snake запись (_) это стандарт
+          grant_type: 'password',
+          username,
+          password,
+          ...this.getClientInfo(),
+        },
+      )
+        // .then((results) => {
+        //   // стандарт работает на секундах, а сервер на милисекундах
+        //   // https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
+        //   // eslint-disable-next-line no-param-reassign
+        //   results.expires_in *= 1000;
+        //   return results;
+        // })
+        .catch(error => {
+          // eslint-disable-next-line no-param-reassign
+          const uniError = parseToUniError(error);
+          if (
+            uniError.originalObject &&
+            uniError.originalObject.error_description
+          ) {
+            let clientErrorMessage;
 
-          // switch (uniError.originalObject.error_description) {
-          switch (uniError.originalObject.error) {
-            case 'Invalid resource owner credentials':
-              clientErrorMessage = i18n('core:errors.wrongUserCredentials');
-              break;
-            case 'Missing required parameter: password':
-              clientErrorMessage = i18n('core:errors.missingPassword');
-              break;
-            default:
-              // clientErrorMessage = uniError.originalObject.error_description;
-              clientErrorMessage = uniError.originalObject.error;
+            // switch (uniError.originalObject.error_description) {
+            switch (uniError.originalObject.error) {
+              case 'Invalid resource owner credentials':
+                clientErrorMessage = i18n('core:errors.wrongUserCredentials');
+                break;
+              case 'Missing required parameter: password':
+                clientErrorMessage = i18n('core:errors.missingPassword');
+                break;
+              default:
+                // clientErrorMessage = uniError.originalObject.error_description;
+                clientErrorMessage = uniError.originalObject.error;
+            }
+            uniError.clientErrorMessage = clientErrorMessage;
           }
-          uniError.clientErrorMessage = clientErrorMessage;
-        }
 
-        throw new ThrowableUniError(uniError);
-      });
+          throw new ThrowableUniError(uniError);
+        })
+    );
+  }
+
+  authGoogleSignin() {
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authGoogleSignin,
+      'get',
+      null,
+      null,
+    );
   }
 
   /*
@@ -113,21 +133,18 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   authRefresh(refreshToken) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authRefresh, 'post',
-      {
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken,
-        ...this.getClientInfo(),
-      },
-    )
-      // .then((results) => {
-      //   // стандарт работает на секундах, а сервер на милисекундах
-      //   // eslint-disable-next-line no-param-reassign
-      //   results.expires_in *= 1000;
-      //   return results;
-      // })
-      ;
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authRefresh,
+      'post',
+      {},
+    );
+    // .then((results) => {
+    //   // стандарт работает на секундах, а сервер на милисекундах
+    //   // eslint-disable-next-line no-param-reassign
+    //   results.expires_in *= 1000;
+    //   return results;
+    // })
   }
 
   /*
@@ -139,8 +156,10 @@ export default class ServiceAuth extends CoreService {
    */
   authValidate(token, authType = AUTH_TYPES.BEARER) {
     // todo @ANKU @LOW - заиспользовать разные типы
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authValidate, 'get',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authValidate,
+      'get',
       null,
       null,
       {
@@ -150,8 +169,10 @@ export default class ServiceAuth extends CoreService {
   }
 
   authLogout(token, authType = AUTH_TYPES.BEARER) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authSignout, 'get',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authSignout,
+      'get',
       null,
       null,
       {
@@ -159,7 +180,6 @@ export default class ServiceAuth extends CoreService {
       },
     );
   }
-
 
   /**
    * Протокол для @reagentum/auth-server@1.0.4
@@ -170,8 +190,10 @@ export default class ServiceAuth extends CoreService {
    * @return {*}
    */
   async authForgot(email, resetPasswordPageUrl, emailOptions) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authForgot, 'post',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authForgot,
+      'post',
       {
         email,
         emailOptions,
@@ -192,8 +214,10 @@ export default class ServiceAuth extends CoreService {
    * @return {Promise.<*>}
    */
   async authResetPassword(resetPasswordToken, newPassword, emailOptions) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authReset, 'post',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authReset,
+      'post',
       {
         resetPasswordToken,
         newPassword,

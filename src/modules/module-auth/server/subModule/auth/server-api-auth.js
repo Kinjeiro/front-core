@@ -41,10 +41,7 @@ export default function createApiPlugins() {
       apiPluginFactory(
         API.signup,
         async (requestData, request, reply) => {
-          const {
-            username,
-            password,
-          } = requestData;
+          const { username, password } = requestData;
           logger.log('SIGNUP: ', username);
           await request.services.serviceAuth.authSignup(requestData);
 
@@ -63,12 +60,30 @@ export default function createApiPlugins() {
 
   plugins.push(
     apiPluginFactory(
+      API.googleSignin,
+      async (requestData, request, reply) => {
+        logger.log('GOOGLE_SIGNIN');
+        const response = await request.services.serviceAuth.authGoogleSignin();
+
+        reply(response);
+
+        // logger.log('-- done. Now login');
+        // return login(username, password, request.services.serviceAuth, reply);
+      },
+      {
+        routeConfig: {
+          // для этого обработчика авторизация не нужна
+          auth: false,
+        },
+      },
+    ),
+  );
+
+  plugins.push(
+    apiPluginFactory(
       API.login,
       async (requestData, request, reply) => {
-        const {
-          username,
-          password,
-        } = requestData;
+        const { username, password } = requestData;
         logger.log('LOGIN: ', username);
         return login(username, password, request.services.serviceAuth, reply);
       },
@@ -79,37 +94,33 @@ export default function createApiPlugins() {
         },
       },
     ),
-    apiPluginFactory(
-      API.refreshLogin,
-      async (requestData, request, reply) => {
-        logger.log('refreshLogin');
-        const {
-          access_token,
-          refresh_token,
-          expires_in,
-        } = await request.services.serviceAuth.authRefresh(getRefreshToken(request));
+    apiPluginFactory(API.refreshLogin, async (requestData, request, reply) => {
+      logger.log('refreshLogin');
+      const {
+        access_token,
+        refresh_token,
+        expires_in,
+      } = await request.services.serviceAuth.authRefresh(
+        getRefreshToken(request),
+      );
 
-        return setAuthCookies(
-          reply(),
-          access_token,
-          refresh_token,
-          // expires_in,
-          expires_in * 1000,
-        );
-      },
-    ),
-    apiPluginFactory(
-      API.logout,
-      async (requestData, request, reply) => {
-        logger.log('LOGOUT');
-        await request.services.serviceAuth.authLogout(getToken(request));
+      return setAuthCookies(
+        reply(),
+        access_token,
+        refresh_token,
+        // expires_in,
+        expires_in * 1000,
+      );
+    }),
+    apiPluginFactory(API.logout, async (requestData, request, reply) => {
+      logger.log('LOGOUT');
+      await request.services.serviceAuth.authLogout(getToken(request));
 
-        // очищаем guest если он был
-        clearCookie(reply, COOKIE__GUEST_ID);
-        clearAuthCookie(reply);
-        return reply();
-      },
-    ),
+      // очищаем guest если он был
+      clearCookie(reply, COOKIE__GUEST_ID);
+      clearAuthCookie(reply);
+      return reply();
+    }),
   );
 
   if (serverConfig.common.features.auth.allowResetPasswordByEmail) {
@@ -117,13 +128,13 @@ export default function createApiPlugins() {
       apiPluginFactory(
         API.forgot,
         async (requestData, request, reply) => {
-          const {
+          const { email, resetPasswordPageUrl, emailOptions } = requestData;
+          logger.log('[FORGOT PASSWORD]', email);
+          await request.services.serviceAuth.authForgot(
             email,
             resetPasswordPageUrl,
             emailOptions,
-          } = requestData;
-          logger.log('[FORGOT PASSWORD]', email);
-          await request.services.serviceAuth.authForgot(email, resetPasswordPageUrl, emailOptions);
+          );
           return reply();
         },
         {
@@ -137,18 +148,23 @@ export default function createApiPlugins() {
       apiPluginFactory(
         API.resetPassword,
         async (requestData, request, reply) => {
-          const {
-            resetPasswordToken,
-            newPassword,
-            emailOptions,
-          } = requestData;
+          const { resetPasswordToken, newPassword, emailOptions } = requestData;
           logger.log('[RESET PASSWORD]');
           const {
             username,
-          } = await request.services.serviceAuth.authResetPassword(resetPasswordToken, newPassword, emailOptions);
+          } = await request.services.serviceAuth.authResetPassword(
+            resetPasswordToken,
+            newPassword,
+            emailOptions,
+          );
 
           logger.log(`-- done for user "${username}". Now login`);
-          return login(username, newPassword, request.services.serviceAuth, reply);
+          return login(
+            username,
+            newPassword,
+            request.services.serviceAuth,
+            reply,
+          );
         },
         {
           routeConfig: {

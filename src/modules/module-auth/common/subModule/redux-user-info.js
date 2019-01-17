@@ -43,6 +43,10 @@ export const TYPES = {
   CHANGE_USER_FAIL:     `${PREFIX}/CHANGE_USER_FAIL`,
   CHANGE_USER_SUCCESS:  `${PREFIX}/CHANGE_USER_SUCCESS`,
 
+  SIGNIN_GOOGLE_FETCH:   `${PREFIX}SIGNIN_GOOGLE_FETCH`,
+  SIGNIN_GOOGLE_SUCCESS:   `${PREFIX}/SIGNIN_GOOGLE_SUCCESS`,
+  SIGNIN_GOOGLE_FAIL:   `${PREFIX}/SIGNIN_GOOGLE_FAIL`,
+
   USER_LOGOUT_FETCH:     `${PREFIX}/USER_LOGOUT_FETCH`,
   USER_LOGOUT_SUCCESS:   `${PREFIX}/USER_LOGOUT_SUCCESS`,
   USER_LOGOUT_FAIL:      `${PREFIX}/USER_LOGOUT_FAIL`,
@@ -84,6 +88,7 @@ export const TYPES = {
 export function getBindActions({
   apiSignup,
   apiLogin,
+  apiGoogleSignin,
   apiLogout,
   apiForgotPassword,
   apiResetPassword,
@@ -106,7 +111,7 @@ export function getBindActions({
         return dispatch(errorActions.actionClearLastError());
       };
     },
-    
+
     actionSignup(userData) {
       return {
         types: [TYPES.SIGNUP_FETCH, TYPES.SIGNUP_SUCCESS, TYPES.SIGNUP_FAIL],
@@ -118,6 +123,12 @@ export function getBindActions({
      * @deprecated use actionSignin
      */
     actionChangeUser: actionSignin,
+    actionGoogleSignin() {
+      return {
+        types: [TYPES.SIGNIN_GOOGLE_FETCH, TYPES.SIGNIN_GOOGLE_SUCCESS, TYPES.SIGNIN_GOOGLE_FAIL],
+        payload: apiGoogleSignin(),
+      };
+    },
     actionUserLogout() {
       return async (dispatch, getState) => {
         await dispatch({
@@ -199,6 +210,8 @@ export const reducer = createReducer(
   {
     [TYPES.CHANGE_USER_SUCCESS]:
       'userData',
+    [TYPES.SIGNIN_GOOGLE_SUCCESS]:
+      'userData',
     [TYPES.SIGNUP_SUCCESS]:
       'userData',
     [TYPES.USER_LOGOUT_SUCCESS]:
@@ -240,6 +253,9 @@ export const reducer = createReducer(
     ),
     actionChangeUserStatus: createStatusReducer(
       TYPES.CHANGE_USER_FETCH, TYPES.CHANGE_USER_SUCCESS, TYPES.CHANGE_USER_FAIL,
+    ),
+    actionGoogleSigninStatus: createStatusReducer(
+      TYPES.SIGNIN_GOOGLE_FETCH, TYPES.SIGNIN_GOOGLE_SUCCESS, TYPES.SIGNIN_GOOGLE_FAIL,
     ),
     actionUserLogoutStatus: createStatusReducer(
       TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL,
