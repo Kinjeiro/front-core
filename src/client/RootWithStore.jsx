@@ -40,7 +40,11 @@ export default class RootWithStore extends Component {
     if (!isPreloaderVisible) {
       setTimeout(() => {
         if (domId) {
-          document.querySelector(`#${domId}`).remove();
+          const node = document.querySelector(`#${domId}`);
+          // при hot reload node может уже и не быть
+          if (node) {
+            node.remove();
+          }
         }
         this.bodyElement.style.overflow = 'visible';
       }, preLoaderAutoCloseDelay);
