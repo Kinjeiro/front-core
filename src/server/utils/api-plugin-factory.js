@@ -136,7 +136,13 @@ function proxyWrapper(reply, proxy, callback) {
         if (queryStr && updatedData.uri.indexOf(queryStr) < 0) {
           updatedData.uri += queryStr;
         }
-        logger.debug('proxy to:', updatedData.uri);
+
+        if (!updatedData.headers) {
+          updatedData.headers = {};
+        }
+        // некоторые crud api требуют явного content-type
+        updatedData.headers['content-type'] = updatedData.headers['content-type'] || (request.headers && request.headers['content-type']) || 'application/json';
+        logger.debug('proxy to:', updatedData.uri, updatedData.headers);
 
         /*
          // бага с авторизацией на middle server через hawk - поэтому отключил проброску headers c клиента
