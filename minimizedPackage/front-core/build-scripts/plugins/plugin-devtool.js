@@ -1,0 +1,1 @@
+function pluginDevtool(a,{isProduction:b,appConfig:c,assetsDir:d}){const e=c.server.main.devtools;a.devtool=!1,e&&(a.devtool=!0===e?"inline-source-map":e)}module.exports=pluginDevtool;

@@ -1,0 +1,1 @@
+const fs=require("fs"),path=require("path");function factoryPluginLibLink(a,{filesDir:b="src",scoped:c=""}={}){return(d,{inProject:e})=>{const f=d.module.rules.find(a=>"babel-loader"===a.loader);f.options.plugins.push(["babel-plugin-module-resolver",{root:["./src"],alias:{[a]:path.posix.join("",c,a,b)}}])}}module.exports=factoryPluginLibLink;

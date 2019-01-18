@@ -1,0 +1,1 @@
+const CopyWebpackPlugin=require("copy-webpack-plugin");function pluginFileStatic(a,{staticPaths:b,assetsDir:c}){b&&b.length&&a.plugins.push(new CopyWebpackPlugin(b.map(b=>({from:b,to:`${a.output.path}/${c}`,force:!0}))))}module.exports=pluginFileStatic;

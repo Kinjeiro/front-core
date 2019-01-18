@@ -1,0 +1,1 @@
+Promise.prototype.finally||(Promise.prototype.finally=function(a){var b=this.constructor;return this.then(function(c){return b.resolve(a()).then(function(){return c})},function(c){return b.resolve(a()).then(function(){throw c})})});

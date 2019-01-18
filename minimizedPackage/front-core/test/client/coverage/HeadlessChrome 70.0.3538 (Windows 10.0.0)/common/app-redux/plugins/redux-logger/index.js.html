@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\app-redux\plugins\redux-logger\index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">common/app-redux/plugins/redux-logger/</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>15/60</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">11.76% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">8.33% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.79% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>6/38</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 branch</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import printBuffer from './core';
+import { timer } from './helpers';
+import defaults from './defaults';
+/* eslint max-len: ["error", 110, { "ignoreComments": true }] */
+/**
+ * Creates logger with following options
+ *
+ * @namespace
+ * @param {object} options - options for logger
+ * @param {string | function | object} options.level - console[level]
+ * @param {boolean} options.duration - print duration of each action?
+ * @param {boolean} options.timestamp - print timestamp with each action?
+ * @param {object} options.colors - custom colors
+ * @param {object} options.logger - implementation of the `console` API
+ * @param {boolean} options.logErrors - should errors in action execution be caught, logged, and re-thrown?
+ * @param {boolean} options.collapsed - is group collapsed?
+ * @param {boolean} options.predicate - condition which resolves logger behavior
+ * @param {function} options.stateTransformer - transform state before print
+ * @param {function} options.actionTransformer - transform action before print
+ * @param {function} options.errorTransformer - transform error before print
+ *
+ * @returns {function} logger middleware
+ */
+<span class="fstat-no" title="function not covered" >function createLogger(options = {}) <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >{</span></span></span>
+<span class="cstat-no" title="statement not covered" >  c</span>onst loggerOptions = Object.assign({}, defaults, options);
+&nbsp;
+  const {
+    logger,
+    stateTransformer,
+    errorTransformer,
+    predicate,
+    logErrors,
+    diffPredicate,
+  } = loggerOptions;
+&nbsp;
+  // Return if 'console' object is not defined
+<span class="cstat-no" title="statement not covered" >  if (typeof logger === 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >n</span></span>ext =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span></span>ction =&gt; next(action);
+  }
+&nbsp;
+  // Detect if 'createLogger' was passed directly to 'applyMiddleware'.
+<span class="cstat-no" title="statement not covered" >  if (options.getState &amp;&amp; options.dispatch) {</span>
+    // eslint-disable-next-line no-console
+<span class="cstat-no" title="statement not covered" >    c</span>onsole.error(`[redux-logger] redux-logger not installed. Make sure to pass logger instance as middleware:
+// Logger with default options
+import { logger } from 'redux-logger'
+const store = createStore(
+  reducer,
+  applyMiddleware(logger)
+)
+// Or you can create your own logger with custom options http://bit.ly/redux-logger-options
+import { createLogger } from 'redux-logger'
+const logger = createLogger({
+  // ...options
+});
+const store = createStore(
+  reducer,
+  applyMiddleware(logger)
+)
+`);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    r</span>eturn <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >n</span></span>ext =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span></span>ction =&gt; next(action);
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  c</span>onst logBuffer = [];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span></span>{ getState }) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >n</span></span>ext =&gt; <span class="fstat-no" title="function not covered" >(action) =&gt; {</span>
+    // Exit early if predicate function returns 'false'
+<span class="cstat-no" title="statement not covered" >    if (typeof predicate === 'function' &amp;&amp; !predicate(getState, action)) {</span>
+<span class="cstat-no" title="statement not covered" >      r</span>eturn next(action);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    c</span>onst logEntry = {};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    l</span>ogBuffer.push(logEntry);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    l</span>ogEntry.started = timer.now();
+<span class="cstat-no" title="statement not covered" >    l</span>ogEntry.startedTime = new Date();
+<span class="cstat-no" title="statement not covered" >    l</span>ogEntry.prevState = stateTransformer(getState());
+<span class="cstat-no" title="statement not covered" >    l</span>ogEntry.action = action;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    l</span>et returnedValue;
+<span class="cstat-no" title="statement not covered" >    if (logErrors) {</span>
+<span class="cstat-no" title="statement not covered" >      try {</span>
+<span class="cstat-no" title="statement not covered" >        r</span>eturnedValue = next(action);
+      } catch (e) {
+<span class="cstat-no" title="statement not covered" >        l</span>ogEntry.error = errorTransformer(e);
+      }
+    } else {
+<span class="cstat-no" title="statement not covered" >      r</span>eturnedValue = next(action);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    l</span>ogEntry.took = timer.now() - logEntry.started;
+<span class="cstat-no" title="statement not covered" >    l</span>ogEntry.nextState = stateTransformer(getState());
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    c</span>onst diff = loggerOptions.diff &amp;&amp; typeof diffPredicate === 'function'
+      ? diffPredicate(getState, action)
+      : loggerOptions.diff;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    p</span>rintBuffer(logBuffer, Object.assign({}, loggerOptions, { diff }));
+<span class="cstat-no" title="statement not covered" >    l</span>ogBuffer.length = 0;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (logEntry.error) <span class="cstat-no" title="statement not covered" >t</span></span>hrow logEntry.error;
+<span class="cstat-no" title="statement not covered" >    r</span>eturn returnedValue;
+  };
+}
+&nbsp;
+// eslint-disable-next-line consistent-return
+const defaultLogger = <span class="fstat-no" title="function not covered" >({ dispatch, getState } = {}) =&gt; <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >  if (typeof dispatch === 'function' || typeof getState === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn createLogger()({ dispatch, getState });
+  }
+  // eslint-disable-next-line no-console
+<span class="cstat-no" title="statement not covered" >  c</span>onsole.error(`
+[redux-logger v3] BREAKING CHANGE
+[redux-logger v3] Since 3.0.0 redux-logger exports by default logger with default settings.
+[redux-logger v3] Change
+[redux-logger v3] import createLogger from 'redux-logger'
+[redux-logger v3] to
+[redux-logger v3] import { createLogger } from 'redux-logger'
+`);
+};
+&nbsp;
+export { defaults, createLogger, defaultLogger as logger };
+&nbsp;
+export default defaultLogger;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Dec 14 2018 19:57:38 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

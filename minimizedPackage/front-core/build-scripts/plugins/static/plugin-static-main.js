@@ -1,0 +1,1 @@
+const webpack=require("webpack"),StaticSiteGeneratorPlugin=require("static-site-generator-webpack-plugin"),state=require("../../../src/static/state.json");function pluginStaticMain(a){a.entry={index:["./src/static/index-static.jsx"]},a.output.libraryTarget="umd",a.plugins.push(new StaticSiteGeneratorPlugin("index",["/"],{state}))}module.exports=pluginStaticMain;

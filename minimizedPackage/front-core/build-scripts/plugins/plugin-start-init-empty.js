@@ -1,0 +1,1 @@
+function pluginStartInitEmpty(a={}){return Object.assign(a,{entry:{},output:{},plugins:[],resolve:{modules:[],extensions:[],alias:[]},module:{rules:[]},externals:{},bail:!0})}module.exports=pluginStartInitEmpty;

@@ -1,0 +1,17 @@
+.idea/
+.build/
+.build-docker/
+node_modules/
+logs/
+config/local-*.js
+
+npm-debug.log
+docker/tmp-package.json
+test/client/coverage/
+test/client/test-results.xml
+.babelrc
+npm-debug.log.*
+minimizedPackage/
+
+src/
+docs/api/assets/fonts/

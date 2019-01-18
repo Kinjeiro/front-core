@@ -1,0 +1,61 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": "airbnb",
+  "env": {
+    "mocha": true,
+    "browser": true,
+    "node": false
+  },
+  "globals": {
+    "benchmark": true,
+    "chai": true,
+    "expect": true,
+    "geminiReact": true,
+    "React": true,
+    "suite": true,
+    "require": true,
+    "module": true // webpack hot loader
+  },
+  "rules": {
+    "max-len": ["error", 120, 4, {"ignoreComments": true}],
+    "arrow-parens": 0, //для удобной записи, где нужно реально показать что это параментр, чтобы не запутаться, и для случаев где не нужно оборачиваться в скобочки
+    "no-nested-ternary": 0, //в основном записи "? :" очень простые, в несколько строк для понятия, поэтому сложностей не вызывают
+    "no-multi-spaces": 0, //для красоты необходимо
+    "no-multiple-empty-lines": 0, //нужно для наглядного визуального разделения кусков кода
+    //    "no-trailing-spaces": ["error", { "skipBlankLines": true }], //линии нужня для отделения логических кусков кода
+    "class-methods-use-this": 0, //иногда в рендерах не используется this, но в будущем может переделываться, поэтому нужно оставлять их не статиками
+    "arrow-body-style": 0, //методы render должны единообразно выглядеть, если даже в них один return
+    "key-spacing": ["error", { "mode": "minimum" }], //чтобы можно было выравнивать значение для визуального удобства
+    "prefer-arrow-callback": [ "error", { "allowNamedFunctions": true } ], // чтобы унифицировать и не потерять контекст (к примеру mocha describe it сделаем эту настройку)
+    "import/no-named-as-default": 0, // неудобно, порой нужно называть функцию отдельно в экпорт и ту же в экспорт дефолт
+    "import/no-named-as-default-member": 0, // неудобно, порой нужно называть функцию отдельно в экпорт и ту же в экспорт дефолт
+    "global-require": 0, // require используется не в node а для webpack
+
+    "jsx-a11y/label-has-for": 0, // label for требует id, но в компонентах id очень редко бывают
+
+    "react/prefer-stateless-function": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-indent-props": [2, 2],
+    "react/jsx-boolean-value": ["error", "always"],
+    "react/jsx-curly-spacing": [2, "always", {"spacing": {
+      "objectLiterals": "never"
+    }}], //чтобы в jsx были пробелы для наглядного расположения параметров
+    "react/forbid-prop-types": 0, // часто нужно обозначить мапу, а PropTypes.object запрещен
+    "react/sort-comp": 0, // мы утилиты распологаем над жизненным циклом, а он ругается
+    "import/no-extraneous-dependencies": 0, // многие библиотеки есть в front-core но! // todo @ANKU @LOW @BUT_OUT - packageDir не работает на multiple, пока эта таска не заапрувится https://github.com/benmosher/eslint-plugin-import/pull/1104
+    "import/prefer-default-export": 0 //у нас другой стиль, не всегда есть default для единообразия
+
+    //    //чтобы поддержать функциональность абсолютного импорта из-под src "import Test from 'components/Test'"
+    //    "import/no-unresolved": 0,
+    //    "import/extensions": 0,
+    //    "import/no-extraneous-dependencies": 0,
+    //
+    //    "no-tabs": 0,
+  }
+}

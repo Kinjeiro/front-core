@@ -1,0 +1,1 @@
+function pluginFileImages(a,{ASSETS_BASE_QUERY:b}){a.module.rules.push({test:/\.(ico|gif|png|jpg|jpe?g|webp|svg)$/i,use:[{loader:"url-loader",options:b},{loader:"image-webpack-loader",options:{bypassOnDebug:!0}}]})}module.exports=pluginFileImages;

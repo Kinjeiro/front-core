@@ -1,0 +1,1803 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\utils\api-utils.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">common/utils/</a> api-utils.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">54.84% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>85/155</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">29.63% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>32/108</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">28.13% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>9/32</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">48.51% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>49/101</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 statement, 1 function</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable no-param-reassign */
+import FileSaver from 'file-saver';
+import { applyPatch } from 'fast-json-patch';
+&nbsp;
+import {
+  wrapToArray,
+} from './common';
+import apiConfig from './create-api-config';
+&nbsp;
+// https://tools.ietf.org/html/rfc6902
+export const PATCH_OPERATIONS = {
+  REPLACE: 'replace',
+  ADD: 'add',
+  REMOVE: 'remove',
+};
+// export const ADD_AS_LAST = '-';
+export const ADD_AS_LAST = '-';
+&nbsp;
+export const RE_DOT = /\./g;
+/**
+ * по умолчанию не добавляет в конец, нужно обязательно указывать позицию
+   createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
+   @guide - "/-" обозначает в конец
+   createJsonPatchOperation('/field2/-', 'newValue4', PATCH_OPERATIONS.ADD),
+ * @param path
+ * @param value
+ * @param operationType
+ * @param itemIds
+ * @returns {{path: string, value: *, op: string}}
+ */
+export function createJsonPatchOperation(path, value, operationType = PATCH_OPERATIONS.REPLACE, itemIds = undefined) {
+  // по стандарту вложенные объекты разделяются не точками (как в lodash.get) а слешом
+  let pathFinal = A</span>rray.isArray(path) ? <span class="branch-0 cbranch-no" title="branch not covered" >path.join('/') : path.replace(RE_DOT, '/');
+  pathFinal = pathFinal.indexOf('/') === 0 ? pathFinal : `/${pathFinal}`;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (operationType === PATCH_OPERATIONS.ADD &amp;&amp; !(/\/(-|\d+)$/g.test(pathFinal))) {
+    // если в конце не указана позиция или не указан "-" - то есть в конец, то добавим
+<span class="cstat-no" title="statement not covered" >    p</span>athFinal += `/${ADD_AS_LAST}`;
+  }
+&nbsp;
+  const operation = {
+    path: pathFinal,
+    value,
+    op: operationType,
+  };
+&nbsp;
+  if (itemIds) {
+    operation.itemIds = Array.isArray(itemIds)
+      ? itemIds
+      : typeof itemIds !== 'undefined'
+        ? [itemIds]
+        : <span class="branch-1 cbranch-no" title="branch not covered" >undefined;</span>
+  }
+&nbsp;
+  return operation;
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function isPatchOperations(patchOperations) {</span>
+<span class="cstat-no" title="statement not covered" >  c</span>onst patchOperation = wrapToArray(patchOperations)[0];
+<span class="cstat-no" title="statement not covered" >  r</span>eturn patchOperation &amp;&amp; typeof patchOperation.path !== 'undefined' &amp;&amp; typeof patchOperation.op !== 'undefined';
+}
+&nbsp;
+export function parseToJsonPatch(patchOperations) {
+  if (Array.isArray(patchOperations)) {
+    return patchOperations;
+  }
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (<span class="branch-0 cbranch-no" title="branch not covered" >t</span>ypeof patchOperations === 'object') {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (patchOperations.op) {
+<span class="cstat-no" title="statement not covered" >      r</span>eturn [patchOperations];
+    }
+&nbsp;
+    return Object.keys(patchOperations).map((field) =&gt;
+      createJsonPatchOperation(field, patchOperations[field]));
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  t</span>hrow new Error('Not supported json patch format', patchOperations, 'See https://tools.ietf.org/html/rfc6902');
+}
+&nbsp;
+export function applyPatchOperations(object, patchOperations) {
+  return applyPatch(object, parseToJsonPatch(patchOperations)).newDocument;
+}
+&nbsp;
+// нужен чтобы при повторных проходах, не учитывать уже заменненые значения
+const SPECIAL_DELIMITER = '{';
+const SPECIAL_DELIMITER_REGEXP = new RegExp(SPECIAL_DELIMITER, 'g');
+&nbsp;
+export function replacePathIndexToItemId(operation, saveItemIds = false) <span class="branch-1 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >{</span></span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (operation.itemIds) {
+    const {
+      path,
+      value,
+      op,
+      itemIds,
+    } = operation;
+&nbsp;
+    const resultPath = itemIds.reduce((result, itemId) =&gt;
+      result.replace(/\/(\d+)(\/|$)/, `/${SPECIAL_DELIMITER}${itemId}${SPECIAL_DELIMITER}$2`,
+    ), path)
+      .replace(SPECIAL_DELIMITER_REGEXP, '');
+&nbsp;
+    // const regExp = /\/(\d+)(\/|$)/g;
+    // let resultPath = '';
+    // let lastPosition = 0;
+    // let arrayIndex = 0;
+    // let res;
+    // // eslint-disable-next-line no-cond-assign
+    // while ((res = regExp.exec(path)) !== null) {
+    //   const indexPart = res[1];
+    //   const rightPart = res[2];
+    //   const isLast = regExp.lastIndex === path.length;
+    //   const leftPart = path.substr(
+    //     lastPosition,
+    //     regExp.lastIndex - `${indexPart}`.length - lastPosition - (isLast ? 0 : 1),
+    //   );
+    //   // eslint-disable-next-line no-plusplus
+    //   const itemId = itemIds[arrayIndex++];
+    //   // resultPath = `${resultPath}${leftPart}${itemId}${dotOrEnd}`;
+    //   resultPath = `${resultPath}${leftPart}${itemId}`;
+    //
+    //   if (isLast) {
+    //     resultPath = `${resultPath}${rightPart}`;
+    //   }
+    //
+    //   // смешаем на один назад, так как слеш является как концом первого, так иначалом второго
+    //   regExp.lastIndex = regExp.lastIndex - 1;
+    //   lastPosition = regExp.lastIndex;
+    // }
+&nbsp;
+    // убираем itemByIds
+    const resultOperation = {
+      op,
+      path: resultPath,
+      value,
+    };
+&nbsp;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (saveItemIds) {
+<span class="cstat-no" title="statement not covered" >      r</span>esultPath.itemIds = itemIds;
+    }
+&nbsp;
+    return resultOperation;
+  }
+<span class="cstat-no" title="statement not covered" >  r</span>eturn operation;
+}
+&nbsp;
+&nbsp;
+// todo @ANKU @LOW - может вынести это куда или либу скачать?
+// todo @ANKU @LOW - либо сделать через sugnature - первые 4 байта контента
+// https://medium.com/the-everyday-developer/detect-file-mime-type-using-magic-numbers-and-javascript-16bc513d4e1e
+// https://github.com/leahciMic/file-signature/blob/master/file-signature.js
+const EXT_TYPES = {
+  '3gp': 'video/3gpp',
+  a: 'application/octet-stream',
+  ai: 'application/postscript',
+  aif: 'audio/x-aiff',
+  aiff: 'audio/x-aiff',
+  asc: 'application/pgp-signature',
+  asf: 'video/x-ms-asf',
+  asm: 'text/x-asm',
+  asx: 'video/x-ms-asf',
+  atom: 'application/atom+xml',
+  au: 'audio/basic',
+  avi: 'video/x-msvideo',
+  bat: 'application/x-msdownload',
+  bin: 'application/octet-stream',
+  bmp: 'image/bmp',
+  bz2: 'application/x-bzip2',
+  c: 'text/x-c',
+  cab: 'application/vnd.ms-cab-compressed',
+  cc: 'text/x-c',
+  chm: 'application/vnd.ms-htmlhelp',
+  class: 'application/octet-stream',
+  com: 'application/x-msdownload',
+  conf: 'text/plain',
+  cpp: 'text/x-c',
+  crt: 'application/x-x509-ca-cert',
+  css: 'text/css',
+  csv: 'text/csv',
+  cxx: 'text/x-c',
+  deb: 'application/x-debian-package',
+  der: 'application/x-x509-ca-cert',
+  diff: 'text/x-diff',
+  djv: 'image/vnd.djvu',
+  djvu: 'image/vnd.djvu',
+  dll: 'application/x-msdownload',
+  dmg: 'application/octet-stream',
+&nbsp;
+  // MS OFFICE
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  dotx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+  docm: 'application/vnd.ms-word.document.macroEnabled.12',
+  dotm: 'application/vnd.ms-word.template.macroEnabled.12',
+  xls: ' application/vnd.ms-excel',
+  xlt: ' application/vnd.ms-excel',
+  xla: ' application/vnd.ms-excel',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xltx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+  xlsm: 'application/vnd.ms-excel.sheet.macroEnabled.12',
+  xltm: 'application/vnd.ms-excel.template.macroEnabled.12',
+  xlam: 'application/vnd.ms-excel.addin.macroEnabled.12',
+  xlsb: 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+  ppt: ' application/vnd.ms-powerpoint',
+  pot: ' application/vnd.ms-powerpoint',
+  pps: ' application/vnd.ms-powerpoint',
+  ppa: ' application/vnd.ms-powerpoint',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  potx: 'application/vnd.openxmlformats-officedocument.presentationml.template',
+  ppsx: 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+  ppam: 'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+  pptm: 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+  potm: 'application/vnd.ms-powerpoint.template.macroEnabled.12',
+  ppsm: 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+  mdb: 'application/vnd.ms-access',
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+  dot: 'application/msword',
+  dtd: 'application/xml-dtd',
+  dvi: 'application/x-dvi',
+  ear: 'application/java-archive',
+  eml: 'message/rfc822',
+  eps: 'application/postscript',
+  exe: 'application/x-msdownload',
+  f: 'text/x-fortran',
+  f77: 'text/x-fortran',
+  f90: 'text/x-fortran',
+  flv: 'video/x-flv',
+  for: 'text/x-fortran',
+  gem: 'application/octet-stream',
+  gemspec: 'text/x-script.ruby',
+  gif: 'image/gif',
+  gz: 'application/x-gzip',
+  h: 'text/x-c',
+  hh: 'text/x-c',
+  htm: 'text/html',
+  html: 'text/html',
+  ico: 'image/vnd.microsoft.icon',
+  ics: 'text/calendar',
+  ifb: 'text/calendar',
+  iso: 'application/octet-stream',
+  jar: 'application/java-archive',
+  java: 'text/x-java-source',
+  jnlp: 'application/x-java-jnlp-file',
+  jpeg: 'image/jpeg',
+  jpg: 'image/jpeg',
+  js: 'application/javascript',
+  json: 'application/json',
+  log: 'text/plain',
+  m3u: 'audio/x-mpegurl',
+  m4v: 'video/mp4',
+  man: 'text/troff',
+  mathml: 'application/mathml+xml',
+  mbox: 'application/mbox',
+  mdoc: 'text/troff',
+  me: 'text/troff',
+  mid: 'audio/midi',
+  midi: 'audio/midi',
+  mime: 'message/rfc822',
+  mml: 'application/mathml+xml',
+  mng: 'video/x-mng',
+  mov: 'video/quicktime',
+  mp3: 'audio/mpeg',
+  mp4: 'video/mp4',
+  mp4v: 'video/mp4',
+  mpeg: 'video/mpeg',
+  mpg: 'video/mpeg',
+  ms: 'text/troff',
+  msi: 'application/x-msdownload',
+  odp: 'application/vnd.oasis.opendocument.presentation',
+  ods: 'application/vnd.oasis.opendocument.spreadsheet',
+  odt: 'application/vnd.oasis.opendocument.text',
+  ogg: 'application/ogg',
+  p: 'text/x-pascal',
+  pas: 'text/x-pascal',
+  pbm: 'image/x-portable-bitmap',
+  pdf: 'application/pdf',
+  pem: 'application/x-x509-ca-cert',
+  pgm: 'image/x-portable-graymap',
+  pgp: 'application/pgp-encrypted',
+  pkg: 'application/octet-stream',
+  pl: 'text/x-script.perl',
+  pm: 'text/x-script.perl-module',
+  png: 'image/png',
+  pnm: 'image/x-portable-anymap',
+  ppm: 'image/x-portable-pixmap',
+  ps: 'application/postscript',
+  psd: 'image/vnd.adobe.photoshop',
+  py: 'text/x-script.python',
+  qt: 'video/quicktime',
+  ra: 'audio/x-pn-realaudio',
+  rake: 'text/x-script.ruby',
+  ram: 'audio/x-pn-realaudio',
+  rar: 'application/x-rar-compressed',
+  rb: 'text/x-script.ruby',
+  rdf: 'application/rdf+xml',
+  roff: 'text/troff',
+  rpm: 'application/x-redhat-package-manager',
+  rss: 'application/rss+xml',
+  rtf: 'application/rtf',
+  ru: 'text/x-script.ruby',
+  s: 'text/x-asm',
+  sgm: 'text/sgml',
+  sgml: 'text/sgml',
+  sh: 'application/x-sh',
+  sig: 'application/pgp-signature',
+  snd: 'audio/basic',
+  so: 'application/octet-stream',
+  svg: 'image/svg+xml',
+  svgz: 'image/svg+xml',
+  swf: 'application/x-shockwave-flash',
+  t: 'text/troff',
+  tar: 'application/x-tar',
+  tbz: 'application/x-bzip-compressed-tar',
+  tcl: 'application/x-tcl',
+  tex: 'application/x-tex',
+  texi: 'application/x-texinfo',
+  texinfo: 'application/x-texinfo',
+  text: 'text/plain',
+  tif: 'image/tiff',
+  tiff: 'image/tiff',
+  torrent: 'application/x-bittorrent',
+  tr: 'text/troff',
+  txt: 'text/plain',
+  vcf: 'text/x-vcard',
+  vcs: 'text/x-vcalendar',
+  vrml: 'model/vrml',
+  war: 'application/java-archive',
+  wav: 'audio/x-wav',
+  wma: 'audio/x-ms-wma',
+  wmv: 'video/x-ms-wmv',
+  wmx: 'video/x-ms-wmx',
+  wrl: 'model/vrml',
+  wsdl: 'application/wsdl+xml',
+  xbm: 'image/x-xbitmap',
+  xhtml: 'application/xhtml+xml',
+  xml: 'application/xml',
+  xpm: 'image/x-xpixmap',
+  xsl: 'application/xml',
+  xslt: 'application/xslt+xml',
+  yaml: 'text/yaml',
+  yml: 'text/yaml',
+  zip: 'application/zip',
+};
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function getExt(path) {</span>
+<span class="cstat-no" title="statement not covered" >  c</span>onst i = path.lastIndexOf('.');
+<span class="cstat-no" title="statement not covered" >  r</span>eturn (i &lt; 0) ? '' : path.substr(i + 1);
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function getContentType(ext) {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn EXT_TYPES[ext.toLowerCase()] || 'application/octet-stream';
+}
+&nbsp;
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function downloadFile(blob, fileName, type = null) <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >  t</span>ype = type || fileName ? getContentType(getExt(fileName)) : 'application/octet-stream';
+  // eslint-disable-next-line no-undef
+<span class="cstat-no" title="statement not covered" >  if (!(blob instanceof Blob)) {</span>
+    // eslint-disable-next-line no-undef
+<span class="cstat-no" title="statement not covered" >    b</span>lob = new Blob([blob], { type });
+  }
+&nbsp;
+&nbsp;
+  // const byteArray = new Uint8Array(content);
+  // // now that we have the byte array, construct the blob from it
+  // const blob1 = new Blob([byteArray], { type: 'application/octet-stream' });
+  // const blob2 = new Blob([content], { type: 'application/octet-stream' });
+  // FileSaver.saveAs(blob2, fileName);
+&nbsp;
+  // const file = new Blob(
+  //   [content],
+  //   {
+  //     type: type || fileName ? getContentType(getExt(fileName)) : 'application/octet-stream',
+  //     // type: 'application/octet-stream',
+  //   },
+  // );
+&nbsp;
+  // 1
+<span class="cstat-no" title="statement not covered" >  F</span>ileSaver.saveAs(blob, fileName);
+&nbsp;
+&nbsp;
+  // 2
+  // const objectUrl = URL.createObjectURL(file);
+  // window.open(objectUrl);
+&nbsp;
+  // 3
+  // const blob = new Blob([content], {type: "octet/stream"});
+  // const blob = new Blob([content], {type: 'image/jpeg'});
+  // if (window.navigator.msSaveOrOpenBlob) {
+  //   window.navigator.msSaveOrOpenBlob(blob, fileName);
+  // } else {
+  //   const a = document.createElement('a');
+  //   document.body.appendChild(a);
+  //   const url = window.URL.createObjectURL(blob);
+  //   a.href = url;
+  //   a.download = fileName;
+  //   a.click();
+  //   setTimeout(() =&gt; {
+  //     window.URL.revokeObjectURL(url);
+  //     document.body.removeChild(a);
+  //   }, 0);
+  // }
+&nbsp;
+  // let anchor = document.createElement("a");
+  // let file = 'https://www.example.com/some-file.pdf';
+  // let headers = new Headers();
+  // headers.append('Authorization', 'Bearer MY-TOKEN');
+  // fetch(file, { headers })
+  //   .then(response =&gt; response.blob())
+  //   .then(blobby =&gt; {
+  //     let objectUrl = window.URL.createObjectURL(blobby);
+  //
+  //     anchor.href = objectUrl;
+  //     anchor.download = 'some-file.pdf';
+  //     anchor.click();
+  //
+  //     window.URL.revokeObjectURL(objectUrl);
+  //   });
+&nbsp;
+&nbsp;
+  // // const blobby = response.blob();
+  // let objectUrl = window.URL.createObjectURL(blob);
+  //
+  // let anchor = document.createElement("a");
+  // anchor.href = objectUrl;
+  // anchor.download = fileName;
+  // anchor.click();
+  // window.URL.revokeObjectURL(objectUrl);
+<span class="cstat-no" title="statement not covered" >  r</span>eturn Promise.resolve(blob);
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function downloadText(text, fileName = null) <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn downloadFile(text, fileName || `${text.substr(0, Math.min(10, text.length))}.txt`, 'text/plain;charset=utf-8');
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function downloadFileFromResponse(response, fileName) {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn downloadFile(response.data || response.text, fileName, response.type);
+}
+&nbsp;
+export const DEFAULT_FILES_PARAM_NAME = 'file';
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function convertToFormData(params = {}, filesMap = {}, options) <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >{</span></span></span></span></span>
+  const {
+    fieldFile = DEFAULT_FILES_PARAM_NAME,
+  } = options;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  l</span>et filesMapFinal = filesMap;
+  // файл - это мапа, нужно проверить если это собственно файл - его нужно в массив обернгуть
+<span class="cstat-no" title="statement not covered" >  if (typeof filesMapFinal !== 'object' || filesMapFinal instanceof File) {</span>
+<span class="cstat-no" title="statement not covered" >    c</span>onst files = wrapToArray(filesMapFinal);
+<span class="cstat-no" title="statement not covered" >    f</span>ilesMapFinal = {};
+<span class="cstat-no" title="statement not covered" >    f</span>ilesMapFinal[fieldFile] = files;
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  c</span>onst formData = new FormData();
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  O</span>bject.keys(params).forEach(<span class="fstat-no" title="function not covered" >(paramKey) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    f</span>ormData.append(paramKey, params[paramKey]);
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  O</span>bject.keys(filesMapFinal).forEach(<span class="fstat-no" title="function not covered" >(fileField) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    c</span>onst files = wrapToArray(filesMapFinal[fileField]);
+<span class="cstat-no" title="statement not covered" >    f</span>iles.forEach(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>file) =&gt;
+      // formData.append(`${fileField}[]`, file, file.name));
+      formData.append(`${fileField}`, file, file.name));
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn formData;
+}
+&nbsp;
+/**
+ *
+ * @param API_PREFIX
+ * @param sendApiFn
+ * @param options
+ * @return {{
+ * API_PREFIX: *,
+ * API_CONFIGS: {
+ *  loadRecords: ({method, path, payload}|*),
+ *  createRecord: ({method, path, payload}|*),
+ *  readRecord: ({method, path, payload}|*),
+ *  updateRecord: ({method, path, payload}|*),
+ *  patchRecord: ({method, path, payload}|*),
+ *  deleteRecord: ({method, path, payload}|*)},
+ *
+ *  apiLoadRecords: (function(*=, *=): *),
+ *  apiCreateRecord: (function(*=, *=): *),
+ *  apiReadRecord: (function(*): *),
+ *  apiUpdateRecord: (function(*, *=): *),
+ *  apiPatchRecord: (function(*, *=): *),
+ *  apiDeleteRecord: (function(*): *)}}
+ */
+export <span class="fstat-no" title="function not covered" >function createCrudApi(API_PREFIX, sendApiFn, options = {}) <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >{</span></span></span>
+  const {
+    isFormDataOnCreate,
+  } = options || {};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  c</span>onst API_CONFIGS = {
+    loadRecords: apiConfig(`/${API_PREFIX}`, 'GET'),
+&nbsp;
+    createRecord: apiConfig(`/${API_PREFIX}`, 'POST'),
+    readRecord: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
+    updateRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PUT'),
+    deleteRecord: apiConfig(`/${API_PREFIX}/{id}`, 'DELETE'),
+&nbsp;
+    patchRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function apiLoadRecords(meta = null, filters = null) <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >{</span></span></span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn sendApiFn(API_CONFIGS.loadRecords, {
+      // мета передаем от рута, а вот все остальные фильтры от объекта filters
+      ...meta,
+      filters,
+    });
+  }
+&nbsp;
+  /**
+   *
+   * @param data
+   * @param filesMap - может быть File, массивом File, либо мапой &lt;имя поля&gt;: File|[...File]
+   * @return {*}
+   */
+<span class="fstat-no" title="function not covered" >  function apiCreateRecord(data, filesMap = null) <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >    if (isFormDataOnCreate || filesMap !== null) {</span>
+      // если передается даже пустая мапа - это говорит, что использовать механизм formData
+<span class="cstat-no" title="statement not covered" >      d</span>ata = convertToFormData(data, filesMap);
+    }
+<span class="cstat-no" title="statement not covered" >    r</span>eturn sendApiFn(API_CONFIGS.createRecord, data);
+  }
+<span class="fstat-no" title="function not covered" >  function apiReadRecord(id) {</span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn sendApiFn(API_CONFIGS.readRecord, null, { pathParams: { id } });
+  }
+<span class="fstat-no" title="function not covered" >  function apiUpdateRecord(id, changedData) {</span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn sendApiFn(API_CONFIGS.updateRecord, changedData, { pathParams: { id } });
+  }
+<span class="fstat-no" title="function not covered" >  function apiPatchRecord(id, patchOperations) {</span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn sendApiFn(API_CONFIGS.patchRecord, patchOperations, { pathParams: { id } });
+  }
+<span class="fstat-no" title="function not covered" >  function apiDeleteRecord(id) {</span>
+<span class="cstat-no" title="statement not covered" >    r</span>eturn sendApiFn(API_CONFIGS.deleteRecord, null, { pathParams: { id } });
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn {
+    API_PREFIX,
+    API_CONFIGS,
+    apiLoadRecords,
+    apiCreateRecord,
+    apiReadRecord,
+    apiUpdateRecord,
+    apiDeleteRecord,
+    apiPatchRecord,
+  };
+}
+&nbsp;
+export <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" >a</span></span></span></span></span></span></span>sync function readAsDataURL(file) {
+  return new Promise(<span class="fstat-no" title="function not covered" >(resolve, reject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    c</span>onst reader = new FileReader();
+<span class="cstat-no" title="statement not covered" >    r</span>eader.readAsDataURL(file);
+<span class="cstat-no" title="statement not covered" >    r</span>eader.onload = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>) =&gt; resolve(reader.result);
+<span class="cstat-no" title="statement not covered" >    r</span>eader.onerror = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e</span></span>rror =&gt; reject(error);
+  });
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function dataURLtoBlob(dataurl) {</span>
+<span class="cstat-no" title="statement not covered" >  c</span>onst arr = dataurl.split(',');
+<span class="cstat-no" title="statement not covered" >  c</span>onst mime = arr[0].match(/:(.*?);/)[1];
+<span class="cstat-no" title="statement not covered" >  c</span>onst bstr = atob(arr[1]);
+<span class="cstat-no" title="statement not covered" >  l</span>et n = bstr.length;
+<span class="cstat-no" title="statement not covered" >  c</span>onst u8arr = new Uint8Array(n);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  while (n--) {</span>
+<span class="cstat-no" title="statement not covered" >    u</span>8arr[n] = bstr.charCodeAt(n);
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn new Blob([u8arr], { type: mime });
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Dec 15 2018 10:13:19 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

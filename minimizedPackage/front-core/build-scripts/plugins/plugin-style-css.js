@@ -1,0 +1,1 @@
+const ExtractTextPlugin=require("extract-text-webpack-plugin");function pluginStyleBase(a,{isLocalhost:b,assetsDir:c}){b||a.plugins.push(new ExtractTextPlugin({filename:`${c}/[name].css`,allChunks:!0}))}module.exports=pluginStyleBase;

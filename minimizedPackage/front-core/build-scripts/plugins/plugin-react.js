@@ -1,0 +1,1 @@
+const webpack=require("webpack");function pluginReact(a){a.plugins.push(new webpack.ProvidePlugin({React:"react"}))}module.exports=pluginReact;

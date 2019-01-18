@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<testsuite name="HeadlessChrome 71.0.3578 (Windows 10.0.0)" package="" timestamp="2018-12-15T07:13:18" id="0" hostname="KinjeiroROCK" tests="82" errors="0" failures="0" time="0.67">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/71.0.3578.98 Safari/537.36"/>
+  </properties>
+  <testcase name="(Redux Module) i18n-info (Reducer) Should be a function." time="0.002" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Reducer) Should initialize with a state of whitelist as empty array []" time="0.001" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Reducer) Should return the previous state if an action was not matched." time="0.001" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator) actionI18nInfoInit Should be exported as a function." time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator) actionI18nInfoInit Should return an action with type &quot;I18N_INFO_INIT&quot;." time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator) actionI18nInfoInit Should default &quot;language&quot; of &quot;payload&quot; property be undefined." time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator) actionI18nInfoInit Should assign parameters to the &quot;payload&quot; property." time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator) actionI18nInfoInit Should initialize state with &quot;whitelist&quot; parameter" time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator) actionI18nInfoInit Should initialize state with &quot;language&quot; parameter" time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator)(async) actionI18NChangeLanguage Should be exported as a function." time="0" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator)(async) actionI18NChangeLanguage Should return payload as promise that return language." time="0.203" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator)(async) actionI18NChangeLanguage Should change language in state" time="0.204" classname="(Redux Module) i18n-info"/>
+  <testcase name="(Redux Module) i18n-info (Action Creator)(async) actionI18NChangeLanguage Should change actionI18NChangeLanguageStatus when action proceed" time="0.203" classname="(Redux Module) i18n-info"/>
+  <testcase name="&lt;Info404/> should render without problems" time="0.005" classname="&lt;Info404/>"/>
+  <testcase name="&lt;Info404/> should render 'message' property" time="0.023" classname="&lt;Info404/>"/>
+  <testcase name="app-urls [function] appUrl should parse simple" time="0.002" classname="app-urls"/>
+  <testcase name="app-urls [function] appUrl should parse with last url parameters" time="0" classname="app-urls"/>
+  <testcase name="app-urls [function] cutContextPath should cut while contextPath without slash" time="0" classname="app-urls"/>
+  <testcase name="app-urls [function] cutContextPath should cut while contextPath with slash" time="0" classname="app-urls"/>
+  <testcase name="app-urls [function] cutContextPath should cut while contextPath is slash" time="0" classname="app-urls"/>
+  <testcase name="app-urls [function] cutContextPath should cut while contextPath is empty" time="0" classname="app-urls"/>
+  <testcase name="api utils [function] parseToJsonPatch should parse to json patch format from changed data object" time="0.001" classname="api utils"/>
+  <testcase name="api utils [function] applyPatchOperations should apply patch operations correct" time="0.001" classname="api utils"/>
+  <testcase name="api utils [function] replacePathIndexToItemId should replace by ids" time="0.001" classname="api utils"/>
+  <testcase name="api utils [function] replacePathIndexToItemId should replace by ids with incorrect path" time="0" classname="api utils"/>
+  <testcase name="api utils [function] replacePathIndexToItemId should replace path by one id" time="0" classname="api utils"/>
+  <testcase name="api utils [function] replacePathIndexToItemId should replace path indexes to number ids" time="0" classname="api utils"/>
+  <testcase name="common utils [function] includes should find includes in two arrays" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should not find includes with [] second array" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should not find includes with null second array" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should not find includes with null second array wiht option &quot;emptyIsInclude&quot;" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should not find includes with null first array" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should not find includes with difference arrays" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should find all values" time="0" classname="common utils"/>
+  <testcase name="common utils [function] includes should not find all requested values" time="0" classname="common utils"/>
+  <testcase name="common utils [function] valueFromRange should find start position" time="0" classname="common utils"/>
+  <testcase name="common utils [function] valueFromRange should find middle position" time="0" classname="common utils"/>
+  <testcase name="common utils [function] valueFromRange should find last position" time="0" classname="common utils"/>
+  <testcase name="common utils [function] valueFromRange should return out range value" time="0" classname="common utils"/>
+  <testcase name="common utils [function] valueFromRange should return value from input values" time="0" classname="common utils"/>
+  <testcase name="common utils [function] difference should return diff from minus" time="0" classname="common utils"/>
+  <testcase name="common utils [function] difference should part array if minus one" time="0" classname="common utils"/>
+  <testcase name="common utils [function] difference should full array if search empty" time="0" classname="common utils"/>
+  <testcase name="common utils [function] difference should equal array if minus has other values" time="0.001" classname="common utils"/>
+  <testcase name="common utils [function] difference should empty array if minus has one correct value from other" time="0" classname="common utils"/>
+  <testcase name="date-utils [function] parseDate should parse by default string date without time" time="0.005" classname="date-utils"/>
+  <testcase name="date-utils [function] parseDate should parse by default string date with time" time="0.001" classname="date-utils"/>
+  <testcase name="date-utils [function] parseDate should parse by default iso string date" time="0" classname="date-utils"/>
+  <testcase name="date-utils [function] compareDate should correct equals dates with time" time="0.002" classname="date-utils"/>
+  <testcase name="date-utils [function] compareDate should correct compares dates when first is before" time="0" classname="date-utils"/>
+  <testcase name="date-utils [function] compareDate should correct compares dates when first is after" time="0.001" classname="date-utils"/>
+  <testcase name="date-utils [function] compareDate should n't equals dates with different time" time="0" classname="date-utils"/>
+  <testcase name="date-utils [function] compareDate should equals dates with different input format" time="0.001" classname="date-utils"/>
+  <testcase name="date-utils [function] compareDate should calculate time from now" time="0" classname="date-utils"/>
+  <testcase name="format-utils [function] formatString should format from map" time="0.001" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should format from map with empty param" time="0.001" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should format from array args" time="0" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should format with number keys from array args" time="0" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should format with replaceFn" time="0" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should format with replaceFn with value" time="0" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should hide nonWordSeparator if value is empty" time="0" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should work with complex mask" time="0.003" classname="format-utils"/>
+  <testcase name="format-utils [function] formatString should work with complex mask and custom func" time="0" classname="format-utils"/>
+  <testcase name="pluralize-utils [function] pluralize should pluralize by numerals to день" time="0" classname="pluralize-utils"/>
+  <testcase name="pluralize-utils [function] pluralize should pluralize by numerals to дня" time="0.001" classname="pluralize-utils"/>
+  <testcase name="pluralize-utils [function] pluralize should pluralize by numerals to дней" time="0" classname="pluralize-utils"/>
+  <testcase name="tree-utils utils [function] findInTree should search in tree" time="0.001" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] findInTree should search id in tree by string" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] findInTree should n't search in tree" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] findInTree should search by change &quot;fieldSearch&quot; options" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] findInTree should search by &quot;equalConstraint&quot; options = EQUAL_CONSTRAINTS.CONTAINS" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] findInTree should search by &quot;equalConstraint&quot; options = EQUAL_CONSTRAINTS.START_WITH" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] findInTree should search by filter function" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] arrayToTree should parse to correct tree" time="0" classname="tree-utils utils"/>
+  <testcase name="tree-utils utils [function] treeToArray should find only leafs" time="0.001" classname="tree-utils utils"/>
+  <testcase name="uri-utils [function] formatUrlParameters should format simple" time="0" classname="uri-utils"/>
+  <testcase name="uri-utils [function] formatUrlParameters should format inner object params" time="0" classname="uri-utils"/>
+  <testcase name="uri-utils [function] parseUrlParameters should parse array variables correct" time="0.003" classname="uri-utils"/>
+  <testcase name="uri-utils [function] parseUrlParameters should parse array variables correct" time="0" classname="uri-utils"/>
+  <testcase name="uri-utils [function] parseUrlParameters should parse object in query params" time="0.001" classname="uri-utils"/>
+  <testcase name="Stub test should be ok" time="0" classname="Stub test"/>
+  <testcase name="Module Stub test should be ok" time="0" classname="Module Stub test"/>
+  <system-out>
+    <![CDATA[HeadlessChrome 71.0.3578 (Windows 10.0.0) ERROR: 'i18n: language hasn't been set yet. Doesn't use i18n out of container/I18NProvider wrapper', 'key: core:pages.Info404.pageNotFoundError'
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) LOG: 'delayPromise', 200
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) LOG: 'delayPromise', 200
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) LOG: 'delayPromise', 200
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) ERROR: 'i18n: language hasn't been set yet. Doesn't use i18n out of container/I18NProvider wrapper', 'key: core:pages.Info404.returnTo'
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) ERROR: 'i18n: language hasn't been set yet. Doesn't use i18n out of container/I18NProvider wrapper', 'key: core:pages.Info404.indexPage'
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) ERROR: 'i18n: language hasn't been set yet. Doesn't use i18n out of container/I18NProvider wrapper', 'key: core:pages.Info404.returnTo'
+,HeadlessChrome 71.0.3578 (Windows 10.0.0) ERROR: 'i18n: language hasn't been set yet. Doesn't use i18n out of container/I18NProvider wrapper', 'key: core:pages.Info404.indexPage'
+
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

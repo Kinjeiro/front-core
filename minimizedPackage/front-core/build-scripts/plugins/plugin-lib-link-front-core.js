@@ -1,0 +1,1 @@
+const factoryPluginLibLink=require("./factory-plugin-lib-link");module.exports=factoryPluginLibLink("front-core",{scoped:"@reagentum",filesDir:"src"});

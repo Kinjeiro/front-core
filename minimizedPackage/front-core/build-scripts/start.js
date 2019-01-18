@@ -1,0 +1,1 @@
+const{inCoreRoot}=require("./utils/path-utils"),spawn=require("child_process").spawn;spawn("node",[inCoreRoot("build-scripts/start-backend")],{stdio:"inherit"}),setTimeout(()=>{spawn("node",[inCoreRoot("build-scripts/start-frontend")],{stdio:"inherit"})},6e3);

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\app-redux\plugins\redux-logger\core.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">common/app-redux/plugins/redux-logger/</a> core.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.56% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>14/90</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.78% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/59</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">8.11% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>6/74</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 branch</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { formatTime } from './helpers';
+import diffLogger from './diff';
+&nbsp;
+/**
+ * Get log level string based on supplied params
+ *
+ * @param {string | function | object} level - console[level]
+ * @param {object} action - selected action
+ * @param {array} payload - selected payload
+ * @param {string} type - log entry type
+ *
+ * @returns {string} level
+ */
+<span class="fstat-no" title="function not covered" >function getLogLevel(level, action, payload, type) {</span>
+<span class="cstat-no" title="statement not covered" >  s</span>witch (typeof level) {
+    case 'object':
+<span class="cstat-no" title="statement not covered" >      r</span>eturn typeof level[type] === 'function' ? level[type](...payload) : level[type];
+    case 'function':
+<span class="cstat-no" title="statement not covered" >      r</span>eturn level(action);
+    default:
+<span class="cstat-no" title="statement not covered" >      r</span>eturn level;
+  }
+}
+&nbsp;
+<span class="fstat-no" title="function not covered" >function defaultTitleFormatter(options) <span class="cstat-no" title="statement not covered" >{</span></span>
+  const { timestamp, duration } = options;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn <span class="fstat-no" title="function not covered" >(action, time, took) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    c</span>onst parts = ['action'];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    p</span>arts.push(`%c${String(action.type)}`);
+<span class="cstat-no" title="statement not covered" >    if (timestamp) <span class="cstat-no" title="statement not covered" >p</span></span>arts.push(`%c@ ${time}`);
+<span class="cstat-no" title="statement not covered" >    if (duration) <span class="cstat-no" title="statement not covered" >p</span></span>arts.push(`%c(in ${took.toFixed(2)} ms)`);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    r</span>eturn parts.join(' ');
+  };
+}
+&nbsp;
+<span class="fstat-no" title="function not covered" >function printBuffer(buffer, options) <span class="cstat-no" title="statement not covered" >{</span></span>
+  const {
+    logger,
+    actionTransformer,
+    titleFormatter = defaultTitleFormatter(options),
+    collapsed,
+    colors,
+    level,
+    diff,
+  } = options;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  c</span>onst isUsingDefaultFormatter = typeof options.titleFormatter === 'undefined';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  b</span>uffer.forEach(<span class="fstat-no" title="function not covered" >(logEntry, key) =&gt; <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >{</span></span></span>
+    const { started, startedTime, action, prevState, error } = logEntry;
+    let { took, nextState } = logEntry;
+<span class="cstat-no" title="statement not covered" >    c</span>onst nextEntry = buffer[key + 1];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (nextEntry) {</span>
+<span class="cstat-no" title="statement not covered" >      n</span>extState = nextEntry.prevState;
+<span class="cstat-no" title="statement not covered" >      t</span>ook = nextEntry.started - started;
+    }
+&nbsp;
+    // Message
+<span class="cstat-no" title="statement not covered" >    c</span>onst formattedAction = actionTransformer(action);
+<span class="cstat-no" title="statement not covered" >    c</span>onst isCollapsed = typeof collapsed === 'function'
+      ? collapsed(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>) =&gt; nextState, action, logEntry)
+      : collapsed;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    c</span>onst formattedTime = formatTime(startedTime);
+<span class="cstat-no" title="statement not covered" >    c</span>onst titleCSS = colors.title ? `color: ${colors.title(formattedAction)};` : '';
+<span class="cstat-no" title="statement not covered" >    c</span>onst headerCSS = ['color: gray; font-weight: lighter;'];
+<span class="cstat-no" title="statement not covered" >    h</span>eaderCSS.push(titleCSS);
+<span class="cstat-no" title="statement not covered" >    if (options.timestamp) <span class="cstat-no" title="statement not covered" >h</span></span>eaderCSS.push('color: gray; font-weight: lighter;');
+<span class="cstat-no" title="statement not covered" >    if (options.duration) <span class="cstat-no" title="statement not covered" >h</span></span>eaderCSS.push('color: gray; font-weight: lighter;');
+<span class="cstat-no" title="statement not covered" >    c</span>onst title = titleFormatter(formattedAction, formattedTime, took);
+&nbsp;
+    // Render
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      if (isCollapsed) {</span>
+<span class="cstat-no" title="statement not covered" >        if (colors.title &amp;&amp; isUsingDefaultFormatter) {</span>
+<span class="cstat-no" title="statement not covered" >          l</span>ogger.groupCollapsed(`%c ${title}`, ...headerCSS);
+        } else <span class="cstat-no" title="statement not covered" >l</span>ogger.groupCollapsed(title);
+      } else <span class="cstat-no" title="statement not covered" >if (colors.title &amp;&amp; isUsingDefaultFormatter) {</span>
+<span class="cstat-no" title="statement not covered" >        l</span>ogger.group(`%c ${title}`, ...headerCSS);
+      } else {
+<span class="cstat-no" title="statement not covered" >        l</span>ogger.group(title);
+      }
+    } catch (e) {
+<span class="cstat-no" title="statement not covered" >      l</span>ogger.log(title);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    c</span>onst prevStateLevel = getLogLevel(level, formattedAction, [prevState], 'prevState');
+<span class="cstat-no" title="statement not covered" >    c</span>onst actionLevel = getLogLevel(level, formattedAction, [formattedAction], 'action');
+<span class="cstat-no" title="statement not covered" >    c</span>onst errorLevel = getLogLevel(level, formattedAction, [error, prevState], 'error');
+<span class="cstat-no" title="statement not covered" >    c</span>onst nextStateLevel = getLogLevel(level, formattedAction, [nextState], 'nextState');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (prevStateLevel) {</span>
+<span class="cstat-no" title="statement not covered" >      if (colors.prevState) {</span>
+<span class="cstat-no" title="statement not covered" >        c</span>onst styles = `color: ${colors.prevState(prevState)}; font-weight: bold`;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        l</span>ogger[prevStateLevel]('%c prev state', styles, prevState);
+      } else <span class="cstat-no" title="statement not covered" >l</span>ogger[prevStateLevel]('prev state', prevState);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (actionLevel) {</span>
+<span class="cstat-no" title="statement not covered" >      if (colors.action) {</span>
+<span class="cstat-no" title="statement not covered" >        c</span>onst styles = `color: ${colors.action(formattedAction)}; font-weight: bold`;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        l</span>ogger[actionLevel]('%c action    ', styles, formattedAction);
+      } else <span class="cstat-no" title="statement not covered" >l</span>ogger[actionLevel]('action    ', formattedAction);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (error &amp;&amp; errorLevel) {</span>
+<span class="cstat-no" title="statement not covered" >      if (colors.error) {</span>
+<span class="cstat-no" title="statement not covered" >        c</span>onst styles = `color: ${colors.error(error, prevState)}; font-weight: bold;`;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        l</span>ogger[errorLevel]('%c error     ', styles, error);
+      } else <span class="cstat-no" title="statement not covered" >l</span>ogger[errorLevel]('error     ', error);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (nextStateLevel) {</span>
+<span class="cstat-no" title="statement not covered" >      if (colors.nextState) {</span>
+<span class="cstat-no" title="statement not covered" >        c</span>onst styles = `color: ${colors.nextState(nextState)}; font-weight: bold`;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        l</span>ogger[nextStateLevel]('%c next state', styles, nextState);
+      } else <span class="cstat-no" title="statement not covered" >l</span>ogger[nextStateLevel]('next state', nextState);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (logger.withTrace) {</span>
+<span class="cstat-no" title="statement not covered" >      l</span>ogger.groupCollapsed('TRACE');
+<span class="cstat-no" title="statement not covered" >      l</span>ogger.trace();
+<span class="cstat-no" title="statement not covered" >      l</span>ogger.groupEnd();
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (diff) {</span>
+<span class="cstat-no" title="statement not covered" >      d</span>iffLogger(prevState, nextState, logger, isCollapsed);
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      l</span>ogger.groupEnd();
+    } catch (e) {
+<span class="cstat-no" title="statement not covered" >      l</span>ogger.log('—— log end ——');
+    }
+  });
+}
+&nbsp;
+export default printBuffer;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Dec 15 2018 10:13:19 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\app-redux\middlewares\promise-middleware.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">common/app-redux/middlewares/</a> promise-middleware.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">69.09% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>38/55</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">44.83% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>13/29</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">75% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">52.78% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>19/36</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 branch</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import logger from '../../helpers/client-logger';
+import Notifications from '../../helpers/notifications';
+import { parseToUniError } from '../../models/uni-error';
+&nbsp;
+export const ACTION_PROMISE_UNI_ERROR_FIELD = 'promiseError';
+&nbsp;
+// это улучшеная версия redux-thunk
+// также аналог можно посмотреть тут - https://github.com/reactjs/redux/blob/5b94a18f560eff60ce37ae01d1b16387bcfb8e3a/examples/real-world/middleware/api.js
+function isPromise(promise) {
+  // noinspection Eslint
+  return p</span>romise &amp;&amp; (Promise.resolve(promise) == promise || <span class="branch-2 cbranch-no" title="branch not covered" >promise.then);
+}
+&nbsp;
+const promiseMiddleware = ({ dispatch, getState }) =&gt; next =&gt; action =&gt; {
+  // действие по умолчанию
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof action === 'function') {
+<span class="cstat-no" title="statement not covered" >    r</span>eturn action(dispatch, getState);
+  }
+&nbsp;
+  const {
+    payload,
+    type,
+    types,
+    // бывает что сервер если что-то не найдено отвечает ошибкой с http кодом и ее не нужно показывать как глобальную
+    errorIsAnswer,
+    ...other
+  } = action;
+&nbsp;
+&nbsp;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!isPromise(payload)) {
+<span class="cstat-no" title="statement not covered" >    r</span>eturn next(action);
+  }
+&nbsp;
+  const promise = payload;
+&nbsp;
+  // @guide - можно подать название экшена в поле type, либо 3 названия для отслеживания разных статусов promise запроса
+  const [REQUEST, SUCCESS, FAILURE] = Array.isArray(type)
+    ? <span class="branch-0 cbranch-no" title="branch not covered" >type</span>
+    : types || <span class="branch-1 cbranch-no" title="branch not covered" >[null, type, null];</span>
+&nbsp;
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (REQUEST) {
+    // если есть разбиение на стадии - сначала сообщаем, что мы начали загрузку
+    next({
+      payload,
+      ...other,
+      type: REQUEST,
+    });
+  }
+&nbsp;
+  const actionPromise = typeof promise === 'function'
+    ? <span class="branch-0 cbranch-no" title="branch not covered" >promise(dispatch, getState)</span>
+    : promise;
+&nbsp;
+  actionPromise
+    .then((promisePayload) =&gt; {
+      const uniError = parseToUniError(promisePayload, undefined, { withoutException: true });
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (uniError) {
+<span class="cstat-no" title="statement not covered" >        r</span>eturn Promise.reject(uniError);
+      }
+      return next(
+        {
+          payload: promisePayload,
+          ...other,
+          type: SUCCESS,
+        },
+      );
+    })
+    .catch(<span class="fstat-no" title="function not covered" >(errors) =&gt; <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >      if (!Array.isArray(errors)) {</span>
+        // eslint-disable-next-line no-param-reassign
+<span class="cstat-no" title="statement not covered" >        e</span>rrors = [errors];
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      l</span>et isNoAuthError = false;
+<span class="cstat-no" title="statement not covered" >      l</span>et resultUniError = null;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      e</span>rrors.forEach(<span class="fstat-no" title="function not covered" >(error) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        c</span>onst uniError = parseToUniError(error);
+<span class="cstat-no" title="statement not covered" >        l</span>ogger.error('MIDDLEWARE ERROR:', uniError.message, uniError, uniError.stack);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!resultUniError) {</span>
+          // первый error отдаем
+<span class="cstat-no" title="statement not covered" >          r</span>esultUniError = uniError;
+<span class="cstat-no" title="statement not covered" >          i</span>sNoAuthError = uniError.isNotAuth;
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!errorIsAnswer &amp;&amp; !isNoAuthError) {</span>
+<span class="cstat-no" title="statement not covered" >          N</span>otifications.notify(uniError.clientErrorMessages);
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      r</span>eturn next(
+        {
+          payload,
+          ...other,
+          error: resultUniError,
+          [ACTION_PROMISE_UNI_ERROR_FIELD]: resultUniError,
+          type: FAILURE,
+        },
+      );
+&nbsp;
+      // todo @ANKU @LOW - есть код, где используется then от action и если ошибка они не должны срабатывать
+      // return Promise.reject();
+      // return resultUniError;
+    });
+&nbsp;
+  return actionPromise;
+};
+&nbsp;
+export default promiseMiddleware;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Dec 15 2018 10:13:19 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

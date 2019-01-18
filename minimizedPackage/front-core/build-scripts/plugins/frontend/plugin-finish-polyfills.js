@@ -1,0 +1,1 @@
+function pluginPolyfills(a,{inCoreRoot:b}){const c=b("build-scripts/plugins/frontend/vendor-fixes/polyfills/polyfills.js");a.entry.index=[c,...(a.entry.index||[])]}module.exports=pluginPolyfills;

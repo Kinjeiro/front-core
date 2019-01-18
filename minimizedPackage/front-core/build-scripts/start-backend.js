@@ -1,0 +1,1 @@
+const{tryLoadProjectFile}=require("./utils/require-utils"),runner=require("./webpack.runner.backend"),context=tryLoadProjectFile("build-scripts/webpack-context"),WEBPACK_CONFIG_UTILS=tryLoadProjectFile("build-scripts/webpack-config");runner({context,appConfig:context.appConfig,buildDir:context.buildDir,webpackConfig:WEBPACK_CONFIG_UTILS.getBackendWebpackConfig(context)});

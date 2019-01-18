@@ -1,0 +1,1 @@
+const webpack=require("webpack"),CopyWebpackPlugin=require("copy-webpack-plugin");function pluginOptimizeProdVendors(a,{isProduction:b}){a.plugins.push(new webpack.optimize.CommonsChunkPlugin({name:"vendor",minChunks(a){return a.context&&-1!==a.context.indexOf("node_modules")}}))}module.exports=pluginOptimizeProdVendors;

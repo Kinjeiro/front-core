@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\utils\i18n-utils.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">common/utils/</a> i18n-utils.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">63.49% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>40/63</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>24/40</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">51.22% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>21/41</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 branch</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// import i18n from 'i18n';
+import i18next from 'i18next';
+&nbsp;
+import clientConfig from '../client-config';
+&nbsp;
+// default
+let i18nInstance = i18next;
+&nbsp;
+/**
+ * Метод инициализации настроек
+ * Используется отдельно на клиенте и отдельно на сервере
+ *
+ * @param newI18nInstance
+ */
+export <span class="fstat-no" title="function not covered" >function init(newI18nInstance) {</span>
+<span class="cstat-no" title="statement not covered" >  i</span>18nInstance = newI18nInstance;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn i18nInstance;
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function getI18Instance() {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn i18nInstance;
+}
+&nbsp;
+&nbsp;
+export function translateWithNamespace(namespace, key, mapParams = <span class="branch-1 cbranch-no" title="branch not covered" >{}, defaultValue = undefined) <span class="branch-0 cbranch-no" title="branch not covered" >{</span></span>
+  // return i18nInstance.t(key, {
+  //  defaultValue: defaultValue || key,
+  //  ...mapParams
+  // });
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (!i18nInstance.language) {
+    console.error(
+      'i18n: language hasn\'t been set yet. Doesn\'t use i18n out of container/I18NProvider wrapper',
+      `key: ${key}`,
+    );
+  }
+&nbsp;
+  <span class="missing-if-branch" title="if path not taken" >I</span>i</span>f (namespace &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >key.indexOf(':') &lt; 0) {
+    // eslint-disable-next-line no-param-reassign
+<span class="cstat-no" title="statement not covered" >    k</span>ey = `${namespace}:${key}`;
+  }
+&nbsp;
+&nbsp;
+  // неудобная особенность - если ключа нет но есть defaultValue i18next все равно кидается console.log ошибкой
+  // const value = i18nInstance.t(key, {
+  //   defaultValue: typeof defaultValue !== 'undefined'
+  //     ? defaultValue
+  //     : (clientConfig.common &amp;&amp; !clientConfig.common.isProduction
+  //         ? `@@ ${key}`
+  //         : undefined
+  //                 ),
+  //   ...mapParams,
+  // });
+&nbsp;
+  let value;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (i18nInstance.exists(key)) {
+<span class="cstat-no" title="statement not covered" >    v</span>alue = i18nInstance.t(key, mapParams);
+  } else {
+    value = typeof defaultValue !== 'undefined'
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >defaultValue</span>
+      : clientConfig.common &amp;&amp; !clientConfig.common.isProduction
+          ? `@@ ${key}`
+          : <span class="branch-1 cbranch-no" title="branch not covered" >undefined;</span>
+  }
+&nbsp;
+  return value;
+}
+&nbsp;
+/**
+ * Translate - see \static\i18n\ru\core.js
+ *
+ * @param key
+ * @param mapParams ( defaultValue props include )
+ * @param namespace
+ * @param defaultValue
+ *
+ * @example:
+    {
+        "key": "The current date is {{date, MM/DD/YYYY}}", // mommentjs для форматирования
+        "key2": "{{text, uppercase}} just uppercased"
+    }
+&nbsp;
+ @example: как передать html в пропсу:
+    key:
+      submitSuccessMessage: 'На вашу почту {{email}} отослано сообщение с ссылкой для смены пароля',
+&nbsp;
+    textSuccess={
+      &lt;div
+        dangerouslySetInnerHTML={{
+          __html: i18n(
+            'core:pages.ForgotPage.submitSuccessMessage',
+            {
+              email: `&lt;b className="${this.bem('email-text')}"&gt;${email}&lt;/b&gt;`,
+              // interpolation: {escapeValue: false},
+            },
+          ),
+        }}
+      /&gt;
+    }
+&nbsp;
+ *
+ * @returns {*}
+ */
+export function translateDefault(key, mapParams = {}, namespace = '', defaultValue = undefined) <span class="branch-1 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-1 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-1 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >{</span></span></span></span></span></span>
+  return translateWithNamespace(namespace, key, mapParams, defaultValue);
+}
+&nbsp;
+export const translateCore = translateWithNamespace.bind(null, 'core');
+&nbsp;
+&nbsp;
+/**
+ * чтобы каждый раз не писать префиксы для конкретного компонента
+ *
+ * Пример:
+ * import {i18nContextProvider}
+   const i18n = i18nContextProvider('components.MyComponent');
+   console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyComponent
+&nbsp;
+ * @param context
+ * @returns {Function}
+ */
+export <span class="fstat-no" title="function not covered" >function i18nContextProvider(context) {</span>
+<span class="cstat-no" title="statement not covered" >  if (context[context.length - 1] !== '.') {</span>
+<span class="cstat-no" title="statement not covered" >    c</span>ontext += '.';
+  }
+<span class="cstat-no" title="statement not covered" >  r</span>eturn <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span></span></span>key, ...<span class="cstat-no" title="statement not covered" >other) =&gt; translate(`${context}${key}`, ...other);
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function getWhitelistLanguages() {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn i18nInstance.options.whitelist;
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function getCurrentLanguage() {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn i18nInstance.language;
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function changeLanguagePromise(language) {</span>
+<span class="cstat-no" title="statement not covered" >  l</span>et loadedHandler;
+<span class="cstat-no" title="statement not covered" >  l</span>et errorLoadedHandler;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  r</span>eturn new Promise(<span class="fstat-no" title="function not covered" >(resolve, reject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    l</span>oadedHandler = resolve;
+<span class="cstat-no" title="statement not covered" >    e</span>rrorLoadedHandler = reject;
+&nbsp;
+    // i18nInstance.on('loaded', loadedHandler);
+<span class="cstat-no" title="statement not covered" >    i</span>18nInstance.on('languageChanged', loadedHandler);
+<span class="cstat-no" title="statement not covered" >    i</span>18nInstance.on('failedLoading', errorLoadedHandler);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    i</span>18nInstance.changeLanguage(language);
+  })
+    .finally(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      i</span>18nInstance.off('languageChanged', loadedHandler);
+<span class="cstat-no" title="statement not covered" >      i</span>18nInstance.off('failedLoading', errorLoadedHandler);
+    });
+}
+&nbsp;
+export default translateDefault;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Dec 15 2018 10:13:19 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+const CopyWebpackPlugin=require("copy-webpack-plugin");function pluginI18nFiles(a,{staticPaths:b,assetsDir:c}){b&&b.length&&a.plugins.push(new CopyWebpackPlugin(b.map(b=>({from:`${b}/i18n`,to:`${a.output.path}/${c}/i18n`,force:!0}))))}module.exports=pluginI18nFiles;

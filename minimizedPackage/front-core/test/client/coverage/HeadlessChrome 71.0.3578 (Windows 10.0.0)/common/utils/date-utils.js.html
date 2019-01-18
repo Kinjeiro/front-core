@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\utils\date-utils.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">common/utils/</a> date-utils.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">88.17% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>82/93</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">74.16% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>66/89</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">69.23% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>9/13</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.51% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>59/69</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// todo @ANKU @LOW - @UP - вынести в core и брать настойки форматов из конфигов
+&nbsp;
+// @guide - максимально инкапсулировать moment внутри этих утился, чтобы можно было менять
+import moment from 'moment';
+&nbsp;
+import clientConfig from '../client-config';
+import i18n from './i18n-utils';
+&nbsp;
+export const FORMATS = {
+  ISO: 'iso',
+  TIMESTAMP: 'timestamp',
+};
+&nbsp;
+// todo @ANKU @LOW - брать из clientConfig
+export c</span>onst SYSTEM_DATE_FORMAT =     clientConfig.common.features.date.systemDateFormat || <span class="branch-1 cbranch-no" title="branch not covered" >FORMATS.TIMESTAMP;
+export c</span>onst SYSTEM_DATETIME_FORMAT = clientConfig.common.features.date.systemDateTimeFormat || <span class="branch-1 cbranch-no" title="branch not covered" >FORMATS.TIMESTAMP;
+export c</span>onst DATE_FORMAT =            clientConfig.common.features.date.dateFormat || <span class="branch-1 cbranch-no" title="branch not covered" >'DD.MM.YYYY';
+export c</span>onst DATETIME_FORMAT =        clientConfig.common.features.date.dateTimeFormat || <span class="branch-1 cbranch-no" title="branch not covered" >'DD.MM.YYYY HH:mm';
+export c</span>onst SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || <span class="branch-1 cbranch-no" title="branch not covered" >FORMATS.TIMESTAMP;
+export c</span>onst SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeFormat || <span class="branch-1 cbranch-no" title="branch not covered" >FORMATS.TIMESTAMP;
+&nbsp;
+export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT, FORMATS.ISO]) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+  let momentDate;
+&nbsp;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof date === 'undefined' || date === null) {
+<span class="cstat-no" title="statement not covered" >    r</span>eturn date;
+  }
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (date === '') {
+<span class="cstat-no" title="statement not covered" >    r</span>eturn null;
+  }
+&nbsp;
+  if (typeof date === 'string') {
+    const valueTrimmed = date.replace(/~+$/, '');
+&nbsp;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!Array.isArray(inputFormats)) {
+<span class="cstat-no" title="statement not covered" >      i</span>nputFormats = [inputFormats];
+    }
+&nbsp;
+    inputFormats.some((inputFormat) =&gt; {
+      let valueMoment;
+      if (inputFormat === FORMATS.ISO || inputFormat === FORMATS.TIMESTAMP) {
+        valueMoment = moment(valueTrimmed);
+      } else if (valueTrimmed.length === inputFormat.length) {
+        // Проверяем, чтобы пользователь ввел полную строку даты без пробелов.
+        valueMoment = moment(valueTrimmed, inputFormats, true);
+      }
+&nbsp;
+      if (valueMoment &amp;&amp; valueMoment.isValid()) {
+        momentDate = valueMoment;
+        return true;
+      }
+      return false;
+    });
+  } else if (typeof date === 'number') {
+    // FORMATS.TIMESTAMP
+    momentDate = moment(date);
+  } else if (moment.isMoment(date)) {
+    momentDate = date;
+  } else <span class="missing-if-branch" title="else path not taken" >E</span>if (moment(date).isValid()) {
+    momentDate = moment(date);
+  }
+&nbsp;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!momentDate) {
+<span class="cstat-no" title="statement not covered" >    t</span>hrow new Error(`${i18n('Не поддерживаемый формат для даты')} "${date}"`);
+  }
+&nbsp;
+  return momentDate;
+}
+&nbsp;
+export function parseDate(date, outputFormat = undefined, inputFormat) {
+  const momentDate = normalizeDate(date, inputFormat);
+&nbsp;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!momentDate) {
+<span class="cstat-no" title="statement not covered" >    r</span>eturn momentDate;
+  }
+&nbsp;
+  switch (outputFormat) {
+    case FORMATS.TIMESTAMP:
+    case 'x':
+      return momentDate.valueOf();
+<span class="branch-2 cbranch-no" title="branch not covered" >    case FORMATS.ISO:</span>
+<span class="cstat-no" title="statement not covered" >      r</span>eturn momentDate.toISOString();
+    // если не задан формат - возвращаем moment дату
+<span class="branch-3 cbranch-no" title="branch not covered" >    c</span>ase null:
+    case undefined:
+      return momentDate;
+    default:
+      return momentDate.format(outputFormat);
+  }
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function formatDateToTimestamp(date, inputFormat) {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn parseDate(date, FORMATS.TIMESTAMP, inputFormat);
+}
+export <span class="fstat-no" title="function not covered" >function formatDateToIso(date, inputFormat) {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn parseDate(date, FORMATS.ISO, inputFormat);
+}
+&nbsp;
+export function formatDate(date, format = <span class="branch-1 cbranch-no" title="branch not covered" >DATE_FORMAT) {</span>
+  return parseDate(date, format);
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function formatDateTime(date, format = DATETIME_FORMAT) <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn parseDate(date, format);
+}
+&nbsp;
+export function parseToSystem(momentData) {
+  return parseDate(momentData, SYSTEM_DATE_FORMAT);
+}
+&nbsp;
+export <span class="fstat-no" title="function not covered" >function parseToServerFormat(momentData) {</span>
+<span class="cstat-no" title="statement not covered" >  r</span>eturn parseDate(momentData, SERVER_DATE_FORMAT);
+}
+&nbsp;
+export function getCurrentTime() {
+  return parseToSystem(Date.now());
+}
+&nbsp;
+export function fromNow (date, format = 'days') <span class="branch-1 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >{</span></span>
+  return moment().diff(moment(date), format);
+}
+&nbsp;
+export function compareDate(dateA, dateB, withoutTime = true) {
+  const momentDateA = normalizeDate(dateA);
+  const filterParam = withoutTime ? 'day' : undefined;
+&nbsp;
+  return ((momentDateA &amp;&amp; !dateB) || (momentDateA &amp;&amp; momentDateA.isAfter(dateB, filterParam)))
+    ? 1
+    : ((</span>!momentDateA &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!dateB) || momentDateA.isSame(dateB, filterParam))
+      ? 0
+      : -1;
+}
+&nbsp;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Dec 15 2018 10:13:19 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

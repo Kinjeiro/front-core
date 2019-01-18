@@ -1,0 +1,1 @@
+const webpack=require("webpack");function pluginOptimizeScopeHosting(a){a.plugins.push(new webpack.optimize.ModuleConcatenationPlugin)}module.exports=pluginOptimizeScopeHosting;

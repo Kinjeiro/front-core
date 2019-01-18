@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for common\app-redux\reducers\app\i18n-info.test.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">common/app-redux/reducers/app/</a> i18n-info.test.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>70/70</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>23/23</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>66/66</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 branch</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
+  createTestStore,
+  testStatusReducer,
+} from '../../../../test/client/redux-test-utils';
+import { delayPromiseThen } from '../../../utils/common';
+&nbsp;
+import {
+  initialState,
+  TYPES,
+  actions,
+  getBindActions,
+  default as reducer,
+} from './i18n-info';
+&nbsp;
+describe('(Redux Module) i18n-info', () =&gt; {
+  describe('(Reducer)', () =&gt; {
+    it('Should be a function.', () =&gt; {
+      expect(reducer)
+        .to.be.a('function');
+    });
+&nbsp;
+    it('Should initialize with a state of whitelist as empty array []', () =&gt; {
+      expect(reducer(undefined, {}).whitelist)
+        .to.deep.equal([]);
+    });
+&nbsp;
+    it('Should return the previous state if an action was not matched.', () =&gt; {
+      let state = reducer(undefined, {});
+      expect(state.whitelist).to.deep.equal([]);
+      state = reducer(state, { type: '@@@@@@@' });
+      expect(state.whitelist).to.deep.equal([]);
+      state = reducer(state, actions.actionI18nInfoInit(['en'], 'en'));
+      expect(state.whitelist).to.deep.equal(['en']);
+      state = reducer(state, { type: '@@@@@@@' });
+      expect(state.whitelist).to.deep.equal(['en']);
+    });
+  });
+&nbsp;
+  describe('(Action Creator) actionI18nInfoInit', () =&gt; {
+    let actionI18nInfoInit;
+&nbsp;
+    before(() =&gt; {
+      actionI18nInfoInit = getBindActions().actionI18nInfoInit;
+    });
+&nbsp;
+    it('Should be exported as a function.', () =&gt; {
+      expect(actionI18nInfoInit)
+        .to.be.a('function');
+    });
+&nbsp;
+    it('Should return an action with type "I18N_INFO_INIT".', () =&gt; {
+      expect(actionI18nInfoInit())
+        .to.have.property('type', TYPES.I18N_INFO_INIT);
+    });
+&nbsp;
+    it('Should default "language" of "payload" property be undefined.', () =&gt; {
+      expect(actionI18nInfoInit(['en']))
+        .to.have.property('payload')
+        .to.deep.equals({
+          whitelist: ['en'],
+          language: undefined,
+        });
+    });
+&nbsp;
+    it('Should assign parameters to the "payload" property.', () =&gt; {
+      expect(actionI18nInfoInit(['en'], 'en'))
+        .to.have.property('payload')
+        .to.deep.equal({
+          whitelist: ['en'],
+          language: 'en',
+        });
+    });
+&nbsp;
+    it('Should initialize state with "whitelist" parameter', () =&gt; {
+      let state = reducer();
+      expect(state.whitelist).to.deep.equal(initialState.whitelist);
+      state = reducer(state, actionI18nInfoInit(['en']));
+      expect(state.whitelist).to.deep.equal(['en']);
+    });
+&nbsp;
+    it('Should initialize state with "language" parameter', () =&gt; {
+      let state = reducer();
+      expect(state.language).to.deep.equal(initialState.language);
+      state = reducer(state, actionI18nInfoInit(['en'], 'en'));
+      expect(state.language).to.deep.equal('en');
+    });
+  });
+&nbsp;
+  describe('(Action Creator)(async) actionI18NChangeLanguage', () =&gt; {
+    let actionI18NChangeLanguage;
+    let spyApiI18NChangeLanguage;
+&nbsp;
+    let store;
+    let dispatchAction;
+    let getReducerSliceState;
+&nbsp;
+    beforeEach(() =&gt; {
+      store = createTestStore('i18nInfo', reducer);
+      dispatchAction = store.dispatch.bind(store);
+      getReducerSliceState = () =&gt; store.getState().i18nInfo;
+&nbsp;
+      spyApiI18NChangeLanguage = sinon.spy(delayPromiseThen(200));
+      actionI18NChangeLanguage = getBindActions({
+        apiI18NChangeLanguage: spyApiI18NChangeLanguage,
+      }).actionI18NChangeLanguage;
+    });
+&nbsp;
+    it('Should be exported as a function.', () =&gt; {
+      expect(actionI18NChangeLanguage)
+        .to.be.a('function');
+    });
+&nbsp;
+    it('Should return payload as promise that return language.', () =&gt; {
+      const promise = actionI18NChangeLanguage('en').payload;
+      expect(!!promise.then).to.be.true;
+      // return promise.should.eventually.be.fulfilled;
+      return promise.then((newLanguage) =&gt;
+        expect(newLanguage)
+          .to.deep.equal('en'));
+    });
+&nbsp;
+    it('Should change language in state', () =&gt; {
+      expect(getReducerSliceState().language).to.deep.equals(null);
+      return dispatchAction(actionI18NChangeLanguage('en'))
+        .then(() =&gt; {
+          expect(spyApiI18NChangeLanguage.calledOnce).to.be.true;
+          expect(getReducerSliceState().language)
+            .to.deep.equals('en');
+        });
+    });
+&nbsp;
+    it('Should change actionI18NChangeLanguageStatus when action proceed', () =&gt; {
+      return testStatusReducer(
+        'actionI18NChangeLanguageStatus',
+        actionI18NChangeLanguage.bind(null, 'en'),
+        dispatchAction,
+        getReducerSliceState,
+      );
+    });
+  });
+});
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Dec 15 2018 10:13:19 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
