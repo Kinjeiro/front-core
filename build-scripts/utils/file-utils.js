@@ -13,6 +13,7 @@ const mime = require('mime');
 
 // const pathModule = path.posix || path;
 
+
 function ensureDirectoryExistence(filePath) {
   const dirName = path.dirname(filePath);
   if (fs.existsSync(dirName)) {
@@ -47,6 +48,68 @@ function getTmpDirectory() {
   return os.tmpdir();
 }
 
+
+async function writeToFilePromise(filePath, content, streamOptions = null, newFileName = null, fileDescriptor = null) {
+  return new Promise((resolve, reject) => {
+    try {
+      ensureDirectoryExistence(filePath);
+
+      const {
+        append = true
+      } = streamOptions || {};
+
+      if (newFileName) {
+        if (fileDescriptor) {
+          fs.close(fileDescriptor);
+        }
+        const newPath = path.join(path.dirname(filePath), newFileName);
+        fs.renameSync(filePath, newPath);
+        console.log(`\nRename file\n-- from: ${filePath}\n--   to: ${newPath}`);
+        // eslint-disable-next-line no-param-reassign
+        filePath = newPath;
+      } else {
+        console.log(`\nWrite content to file: ${filePath}`);
+      }
+
+      if (content !== null) {
+        // let downloaded  = 0;
+
+        // use {'flags': 'a'} to append and {'flags': 'w'} to erase and write a new file
+        const writeStream = fs.createWriteStream(
+          filePath,
+          Object.apply(
+            { flags: append ? 'a' : 'w' },
+            streamOptions
+          ),
+        )
+          // https://nodejs.org/api/stream.html#stream_class_stream_writable
+          .on('finish', () => {
+            resolve(filePath);
+          })
+          .on('error', (error) => {
+            reject(error);
+          })
+        ;
+
+        if (content instanceof Readable) {
+          // content.on('data', (chunk) => {
+          //   downloaded += chunk.length;
+          // });
+          content.pipe(writeStream);
+        } else {
+          writeStream.write(content);
+          //  wStream.end is better because it asks node to close immediatelly after the write.
+          writeStream.end();
+        }
+      } else {
+        resolve(filePath);
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 /**
  *
  * @param content
@@ -76,7 +139,6 @@ async function createTempFile(content = null, fileName = null, options = undefin
         } else {
           writeToFilePromise(filePath, content, null, fileName, fd)
             .then(resolve, reject);
-
           // // If we don't need the file anymore we could manually call the cleanupCallback
           // // But that is not necessary if we didn't pass the keep option because the library
           // // will clean after itself.
@@ -109,63 +171,15 @@ function writeToFile(filePath, content) {
     'utf8'
   );
 }
-async function writeToFilePromise(filePath, content, streamOptions = null, newFileName = null, fileDescriptor = null) {
-  return new Promise((resolve, reject) => {
-    try {
-      ensureDirectoryExistence(filePath);
-
-      const {
-        append = true
-      } = streamOptions || {};
-
-      if (newFileName) {
-        if (fileDescriptor) {
-          fs.close(fileDescriptor);
-        }
-        const newPath = path.join(path.dirname(filePath), newFileName);
-        fs.renameSync(filePath, newPath);
-        console.log(`Rename file\n-- from: ${filePath}\n--   to: ${newPath}`);
-        // eslint-disable-next-line no-param-reassign
-        filePath = newPath;
-      }
-
-      if (content !== null) {
-        // use {'flags': 'a'} to append and {'flags': 'w'} to erase and write a new file
-        const writeStream = fs.createWriteStream(
-          filePath,
-          Object.apply(
-            { flags: append ? 'a' : 'w' },
-            streamOptions
-          ),
-        )
-        // https://nodejs.org/api/stream.html#stream_class_stream_writable
-          .on('finish', () => resolve(filePath))
-          .on('error', reject);
-
-        if (content instanceof Readable) {
-          content.pipe(writeStream);
-        } else {
-          writeStream.write(content);
-        }
-
-        //  wStream.end is better because it asks node to close immediatelly after the write.
-        writeStream.end();
-      } else {
-        resolve(filePath);
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
 
 
 function getAbsolutePath(relativePath) {
   return path.resolve(relativePath);
 }
 
-function getCurrentDir() {
-  return path.dirname(require.main.filename);
+function getCurrentDir(...paths) {
+  // return path.join(path.dirname(require.main.filename), ...paths);
+  return path.join(__dirname, ...paths);
 }
 
 // todo @ANKU @LOW - убрать дублирование здесь и в path-utils
