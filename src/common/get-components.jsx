@@ -17,10 +17,10 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // FORM FIELDS
   // ======================================================
-  COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, isProcessing, ...props }) =>
-    <input ref={ controlRef } { ...props } />);
-  COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, isProcessing, ...props }) =>
-    <input ref={ controlRef } { ...props } type="number" />);
+  COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, isProcessing, value, ...props }) =>
+    <input ref={ controlRef } { ...props } value={ value || '' } />);
+  COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, isProcessing, value, ...props }) =>
+    <input ref={ controlRef } { ...props } value={ value || '' } type="number" />);
   COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, isProcessing, ...props }) =>
     <textarea ref={ controlRef } { ...props } />);
   COMPONENTS_BASE.replace('BaseSelect', () => ({ options, value }) =>
@@ -67,7 +67,7 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // CONTAINERS
   // ======================================================
-  COMPONENTS_BASE.replace('BaseButton', () => ({ primary, ...props }) => (<button type="button" { ...props } />));
+  COMPONENTS_BASE.replace('BaseButton', () => ({ primary, loading, ...props }) => (<button type="button" { ...props } />));
   COMPONENTS_BASE.replace('Button', () => require('./containers/CoreButton/CoreButton').default);
   COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
   COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
