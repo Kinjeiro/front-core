@@ -197,6 +197,34 @@ function getExtension(mimeType) {
   return mime.getExtension(mimeType);
 }
 
+
+function getFileInfo(filePath) {
+  const isExist = fs.existsSync(filePath);
+  let isDir = false;
+  let size = null;
+  if (isExist) {
+    const stats = fs.statSync(filePath);
+    size = stats.size;
+    isDir = stats.isDirectory();
+  }
+
+  const extWithDot = path.extname(filePath);
+  const ext = extWithDot ? extWithDot.substr(1) : null;
+  const fileName = path.basename(filePath);
+  const type = getMimeType(filePath);
+
+  return {
+    filePath,
+    isExist,
+    isDir,
+    fileName,
+    ext,
+    size,
+    type,
+    isImage: type.indexOf('image/') === 0
+  };
+}
+
 module.exports = {
   ensureDirectoryExistence,
   getTmpDirectory,
@@ -217,5 +245,6 @@ module.exports = {
   inProject,
 
   getMimeType,
-  getExtension
+  getExtension,
+  getFileInfo
 };
