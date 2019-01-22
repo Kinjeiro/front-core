@@ -26,7 +26,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('BaseSelect', () => ({ options, value }) =>
     <select value={ value } />);
   COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
-    <input ref={ controlRef } value={ value } type="datetime" />);
+    <input ref={ controlRef } value={ value || '' } type="datetime" />);
   COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, isProcessing, ...props }) =>
     <input ref={ controlRef } { ...props } type="checkbox" />);
   COMPONENTS_BASE.replace('Attachment', () => ({ controlRef, touched, isProcessing, ...props }) =>
@@ -39,6 +39,8 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // UI
   // ======================================================
+  COMPONENTS_BASE.replace('Image', () => require('./components/Image/Image').default);
+  COMPONENTS_BASE.replace('Icon', () => require('./components/Icon/Icon').default);
   COMPONENTS_BASE.replace('ActionStatus', () => require('./components/ActionStatus/ActionStatus').default);
   COMPONENTS_BASE.replace('Modal', () => require('./components/CoreModal/CoreModal').default);
   COMPONENTS_BASE.replace('ErrorBoundary', () => require('./components/ErrorBoundary/ErrorBoundary').default);
