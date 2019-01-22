@@ -125,6 +125,16 @@ export default class CoreField extends Component {
         return value;
     }
   }
+  static isEmptyValue(type = TYPES.TEXT, value = null) {
+    switch (type) {
+      // case TYPES.DATETIME:
+      case TYPES.BINARY: {
+        return !value || !value.id;
+      }
+      default:
+        return isEmpty(value);
+    }
+  }
 
   /**
    *
@@ -177,6 +187,7 @@ export default class CoreField extends Component {
 
   static async validate(value, fieldProps = {}, domRef = null, getFormData = null) {
     const {
+      // type,
       name,
       required: propsRequired,
       constraints: {
@@ -698,11 +709,11 @@ export default class CoreField extends Component {
           checked: controlValue,
           onChange: (event, props) =>
             this.handleChange(
-              props && typeof props.checked !== 'undefined'
+              (props && typeof props.checked !== 'undefined')
                 ? props.checked
-                  : typeof props.checked !== 'undefined'
+                : typeof event.target.checked !== 'undefined'
                   ? event.target.checked
-                : event.target.value || event,
+                  : event.target.value || event,
               index,
             ),
           ...controlPropsFinal,
