@@ -13,6 +13,16 @@ import { COOKIE__GUEST_ID } from '../../../../../server/plugins/plugin-request-u
 
 import { API_CONFIGS } from '../../../common/subModule/api-auth';
 
+const PROVIDERS = {
+  GOOGLE: 'google',
+  VKONTAKTE: 'vkontakte',
+  FACEBOOK: 'facebook',
+};
+
+function getSocialAuthUrl(provider) {
+  return `${serverConfig.server.endpointServices.serviceAuth.fullUrl}/auth/${provider}?provider=${provider}&client_id=${serverConfig.server.features.auth.applicationClientInfo.client_id}`;
+}
+
 export const API = API_CONFIGS;
 
 async function login(username, password, serviceAuth, reply) {
@@ -63,12 +73,39 @@ export default function createApiPlugins() {
       API.googleSignin,
       async (requestData, request, reply) => {
         logger.log('GOOGLE_SIGNIN');
-        const response = await request.services.serviceAuth.authGoogleSignin();
+        reply.redirect(getSocialAuthUrl(PROVIDERS.GOOGLE));
+      },
+      {
+        routeConfig: {
+          // для этого обработчика авторизация не нужна
+          auth: false,
+        },
+      },
+    ),
+  );
 
-        reply(response);
+  plugins.push(
+    apiPluginFactory(
+      API.facebookSignin,
+      async (requestData, request, reply) => {
+        logger.log('FACEBOOK_SIGNIN');
+        reply.redirect(getSocialAuthUrl(PROVIDERS.FACEBOOK));
+      },
+      {
+        routeConfig: {
+          // для этого обработчика авторизация не нужна
+          auth: false,
+        },
+      },
+    ),
+  );
 
-        // logger.log('-- done. Now login');
-        // return login(username, password, request.services.serviceAuth, reply);
+  plugins.push(
+    apiPluginFactory(
+      API.vkontakteSignin,
+      async (requestData, request, reply) => {
+        logger.log('VKONTAKTE_SIGNIN');
+        reply.redirect(getSocialAuthUrl(PROVIDERS.VKONTAKTE));
       },
       {
         routeConfig: {

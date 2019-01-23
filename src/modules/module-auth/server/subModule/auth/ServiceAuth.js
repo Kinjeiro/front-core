@@ -137,7 +137,11 @@ export default class ServiceAuth extends CoreService {
       this.endpointServiceConfig,
       this.urls.authRefresh,
       'post',
-      {},
+      {
+        ...this.getClientInfo(),
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+      },
     );
     // .then((results) => {
     //   // стандарт работает на секундах, а сервер на милисекундах

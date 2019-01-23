@@ -26,11 +26,17 @@ import { SUB_TYPES } from '../../../../../../common/models/model-field';
 import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 
-// import './Signin.css';
-
+import './Signin.scss';
 import getComponents from '../../get-components';
 
-const { Link, Form, Button } = getComponents();
+const {
+  Link,
+  Form,
+  Button,
+  FbAuthIcon,
+  GoogleAuthIcon,
+  VKAuthIcon,
+} = getComponents();
 
 export const PAGE_ID = 'Signin';
 
@@ -40,7 +46,6 @@ export const PAGE_ID = 'Signin';
   }),
   {
     actionChangeUser: reduxUserInfo.actions.actionChangeUser,
-    actionGoogleSignin: reduxUserInfo.actions.actionGoogleSignin,
   },
 )
 @reduxSimpleForm(PAGE_ID, {
@@ -159,9 +164,7 @@ export default class Signin extends Component {
       onEnterTypeChange,
       onModalCancel,
       formProps,
-      actionGoogleSignin,
     } = this.props;
-
     // чтобы кнопка была сразу доступна при вводе данных а не когда фокус переместатя
     // уберем onChangeField={ onUpdateForm } и проставим явно onChange (вместо onChangeBlur)
 
@@ -185,12 +188,26 @@ export default class Signin extends Component {
                 {i18n('pages.SigninPage.signup')}
               </Button>
             )}
-            <a  href="http://localhost:1337/api/auth/google" >
-              <Button>
-                ГУГОЛ
-              </Button>
-            </a>
-
+            <div className="SocialAuthButtons">
+              <a href={ '/api/auth/google' }>
+                <Button className="GoogleAuthButton">
+                  <GoogleAuthIcon className="SocialAuthIcon" />
+                  Войти через Google
+                </Button>
+              </a>
+              <a href={ '/api/auth/vkontakte' }>
+                <Button className="VkontakteAuthButton">
+                  <VKAuthIcon className="SocialAuthIcon" />
+                  Войти через VK
+                </Button>
+              </a>
+              <a href={ '/api/auth/facebook' }>
+                <Button className="FacebookAuthButton">
+                  <FbAuthIcon className="SocialAuthIcon" />
+                  Продолжить с Facebook
+                </Button>
+              </a>
+            </div>
           </React.Fragment>
         }
         onSubmit={ this.handleLogin }
