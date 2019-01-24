@@ -37,6 +37,10 @@ module.exports = {
   },
 
   components: {
+    Attachment: {
+      dropThere: 'Перетащите сюда файлы',
+      addButton: 'Добавить файл',
+    },
     Loading: {
       loading: 'Загрузка...',
     },

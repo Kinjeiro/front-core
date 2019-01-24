@@ -1,4 +1,5 @@
 import omit from 'lodash/omit';
+import fs from 'fs';
 
 import { DEFAULT_FILES_PARAM_NAME } from '../../../../common/utils/api-utils';
 
@@ -11,6 +12,7 @@ import {
   API_CONFIGS,
 } from '../../common/subModule/api-attachments';
 import ACCESS_TYPE from '../../common/subModule/model-attachment-access';
+import { createAttachment, createServerAttachment } from '../../common/subModule/model-attachment';
 
 async function wrapToDownloadUrl(attachment) {
   const attachmentFinal = await attachment;
@@ -147,6 +149,8 @@ export default function createApiPlugins() {
           ...contextParams
         } = requestData;
 
+        console.warn('ANKU , requestData', requestData);
+
         /*
          this is stream !!!
 
@@ -169,26 +173,34 @@ export default function createApiPlugins() {
             },
           },
         } = fileStream;
-
-        logger.debug(`uploadAttachment "${fileName}" by "${userId}"`);
+        logger.debug(`uploadAttachment "${fileName}"[${contentType}] by "${userId}"`);
 
         // upload data
         const {
           id: contentId,
           length: size,
         } = await serviceAttachmentContents.uploadFile(fileName, contentType, fileStream);
+        logger.debug(`-- size = "${size}"`);
 
-        return reply(wrapToDownloadUrl(serviceAttachments.createRecord({
+        const attachmentData = createAttachment(
+          null,
           fileName,
-          // preview:        { type: String }, - // todo @ANKU @LOW -
-          description,
-          // uploadedOn:     { type: Date }, - auto default
-          uploadedBy: userId,
           size,
-          type: contentType,
+          contentType,
+          userId,
+          null,
+          null, // todo @ANKU @LOW - preview
+          description,
+          Date.now(),
           contextParams,
+        );
+
+        const serverAttachmentData = createServerAttachment(
+          attachmentData,
           contentId,
-        })));
+        );
+
+        return reply(wrapToDownloadUrl(serviceAttachments.createRecord(serverAttachmentData)));
       },
       {
         routeConfig: {
@@ -242,7 +254,11 @@ export default function createApiPlugins() {
         const attachment = await serviceAttachments.readRecord(id);
         logger.debug(`downloadAttachment "${attachment.fileName}" [${id}] by "${user && user.userId}"`);
 
-        checkAttachmentAccess(attachment, user);
+
+        if (!checkAttachmentAccess(attachment, user)) {
+          logger.error('-- not permitted');
+          return reply().code(404);
+        }
         const {
           contentId,
         } = attachment;

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import ID from '../../../../common/models/model-id';
 import DATE from '../../../../common/models/model-date';
+import { generateUuid } from '../../../../common/utils/common';
 
 export const ATTACHMENT_PROP_TYPE_MAP = {
   id: ID,
@@ -37,10 +38,9 @@ export function createAttachment(
   type,
   uploadedBy,
   downloadUrl,
-  contentId = null,
   preview = null,
   description = null,
-  uploadedOn = new Date(),
+  uploadedOn = null,
   contextParams = {},
 ) {
   return {
@@ -53,8 +53,35 @@ export function createAttachment(
     size,
     type,
     downloadUrl,
-    contentId,
     contextParams,
+  };
+}
+
+export function createTempAttachment(
+  attachment,
+  uuid = generateUuid(),
+  isNew = true,
+  loaded = 0,
+  total = 0,
+  isLoaded = false,
+) {
+  return {
+    ...attachment,
+    uuid,
+    isNew,
+    loaded,
+    total,
+    isLoaded,
+  };
+}
+
+export function createServerAttachment(
+  attachment,
+  contentId = undefined,
+) {
+  return {
+    ...attachment,
+    contentId,
   };
 }
 
@@ -63,8 +90,8 @@ export function normalizeAttachment(attachment) {
     || (Array.isArray(attachment) && typeof attachment[0] === 'string')) {
     return Array.isArray(attachment)
       ? attachment.map((attachItem) =>
-        createAttachment(attachItem, attachItem, null, null, null, attachItem, null, attachItem))
-      : createAttachment(attachment, attachment, null, null, null, attachment, null, attachment);
+        createAttachment(attachItem, attachItem, null, null, null, attachItem, attachItem))
+      : createAttachment(attachment, attachment, null, null, null, attachment, attachment);
   }
   return attachment;
 }

@@ -57,6 +57,8 @@ const {
   Form,
   Attachment,
   UserAvatar,
+
+  TestForm,
 } = getComponents();
 
 
@@ -384,69 +386,7 @@ export default class StubPage extends Component {
           </h4>
         </div>
 
-        <Segment
-          label="Form"
-          className="FormSegment"
-        >
-          <Form
-            fields={ [
-              {
-                name: 'string',
-                label: 'Text "test"',
-                type: Form.FIELD_TYPES.STRING,
-                required: true,
-                validate: (value) => (!value || value === 'test' || 'Кастомная ошибка'),
-                onChange: () => {},
-              },
-              {
-                name: 'string2',
-                label: 'Required text',
-                type: Form.FIELD_TYPES.STRING,
-                required: true,
-              },
-              {
-                name: 'numeric',
-                label: 'numeric',
-                type: Form.FIELD_TYPES.NUMERIC,
-                constraints: {
-                  maxValue: 10,
-                },
-                onChange: () => {},
-              },
-              {
-                name: 'text',
-                lagel: 'text',
-                type: Form.FIELD_TYPES.TEXT,
-                onChange: () => {},
-              },
-              {
-                label: 'LIST',
-                name: 'list',
-                type: Form.FIELD_TYPES.LIST,
-                options: [
-                  {
-                    label: 'label 1',
-                    value: 'value 1',
-                  },
-                  {
-                    label: 'bbbb',
-                    value: 'bbbb',
-                  },
-                ],
-              },
-              {
-                name: 'datetime',
-                label: 'datetime',
-                type: Form.FIELD_TYPES.DATETIME,
-              },
-              {
-                name: 'boolean',
-                label: 'boolean',
-                type: Form.FIELD_TYPES.BOOLEAN,
-              },
-            ] }
-          />
-        </Segment>
+        <TestForm />
 
         { this.renderTestChangeAvatar() }
 
