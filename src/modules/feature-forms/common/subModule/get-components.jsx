@@ -5,10 +5,10 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // FORM UI
   // ======================================================
-  COMPONENTS_BASE.replace('Form', () => require('./components/CoreForm').default);
-  COMPONENTS_BASE.replace('FormLayout', () => require('./components/FormLayout').default);
-  COMPONENTS_BASE.replace('Field', () => require('./components/CoreField').default);
-  COMPONENTS_BASE.replace('FieldLayout', () => require('./components/FieldLayout').default);
+  COMPONENTS_BASE.replace('Form', () => require('./components/Form/CoreForm').default);
+  COMPONENTS_BASE.replace('FormLayout', () => require('./components/Form/FormLayout').default);
+  COMPONENTS_BASE.replace('Field', () => require('./components/Field/CoreField').default);
+  COMPONENTS_BASE.replace('FieldLayout', () => require('./components/Field/FieldLayout').default);
 
   // ======================================================
   // FORM FIELDS
@@ -32,9 +32,9 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('AttachmentItemView', () => require('./components/fields/Attachment/AttachmentItem/AttachmentItemView').default);
   COMPONENTS_BASE.replace('AttachmentItemLayout', () => require('./components/fields/Attachment/AttachmentItem/AttachmentItemLayout').default);
 
-  COMPONENTS_BASE.replace('Input', () => require('./components/fields/CoreInput').default);
-  COMPONENTS_BASE.replace('TextArea', () => require('./components/fields/CoreTextArea').default);
-  COMPONENTS_BASE.replace('Select', () => require('./components/fields/CoreSelect').default);
+  COMPONENTS_BASE.replace('Input', () => require('./components/fields/Input/CoreInput').default);
+  COMPONENTS_BASE.replace('TextArea', () => require('./components/fields/TextArea/CoreTextArea').default);
+  COMPONENTS_BASE.replace('Select', () => require('./components/fields/Select/CoreSelect').default);
 
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;
