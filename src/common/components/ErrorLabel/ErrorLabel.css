@@ -1,0 +1,9 @@
+@import "../../app-style/vars.css";
+
+.ErrorLabel {
+  color: var(--color-error-text);
+
+  &--warning {
+    color: var(--color-warning-text);
+  }
+}

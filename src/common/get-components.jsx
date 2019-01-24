@@ -23,6 +23,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('ThemeProvider', () => require('./components/ThemeProvider/ThemeProvider').default);
   COMPONENTS_BASE.replace('UniError', () => require('./components/UniError/UniError').default);
   COMPONENTS_BASE.replace('UnescapedHtml', () => require('./components/UnescapedHtml/UnescapedHtml').default);
+  COMPONENTS_BASE.replace('ErrorLabel', () => require('./components/ErrorLabel/ErrorLabel').default);
 
   // ======================================================
   // FUTURE UI
