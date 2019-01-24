@@ -22,7 +22,7 @@ export function createApiConfig(
   if (typeof path === 'object') {
     return path.method && path.path
       ? path
-      : { method: 'GET', path };
+      : { method: 'GET', path: path.path };
   }
 
   return {
