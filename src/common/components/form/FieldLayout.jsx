@@ -14,12 +14,14 @@ require('./FieldLayout.css');
 
 export default class FieldLayout extends PureComponent {
   static propTypes = {
-    className: PropTypes.string,
     label: PropTypes.node,
     children: PropTypes.node,
     errors: PropTypes.arrayOf(PropTypes.string),
     warnings: PropTypes.arrayOf(PropTypes.string),
+
+    className: PropTypes.string,
     touched: PropTypes.bool,
+    required: PropTypes.bool,
     isProcessing: PropTypes.bool,
     textDescription: PropTypes.node,
   };

@@ -1066,6 +1066,7 @@ export default class CoreField extends Component {
       ${className || ''}\
       ${multiple ? 'CoreField--multiple' : ''}\
       ${propsRequired || required ? 'CoreField--required' : ''}\
+      ${touched ? 'CoreField--touched' : ''}\
       ${isProcessing ? 'CoreField--isProcessing' : ''}\
       ${touched && errors && errors.length > 0 ? 'CoreField--error' : ''}\
     `;
