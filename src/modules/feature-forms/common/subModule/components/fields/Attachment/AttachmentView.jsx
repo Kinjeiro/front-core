@@ -4,22 +4,22 @@ import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
 import bind from 'lodash-decorators/bind';
 
-import CONSTRAINTS_PROP_TYPE from '../../../../models/model-constraints';
+import CONSTRAINTS_PROP_TYPE from '../../../../../../../common/models/model-constraints';
 
 import {
   ATTACHMENT_PROP_TYPE,
-} from '../../../../../modules/feature-attachments/common/subModule/model-attachment';
+} from '../../../../../../feature-attachments/common/subModule/model-attachment';
 
 // ======================================================
 // MODULE
 // ======================================================
-import { translateCore } from '../../../../utils/i18n-utils';
+import { translateCore } from '../../../../../../../common/utils/i18n-utils';
 import {
   executeVariable,
   wrapToArray,
-} from '../../../../utils/common';
+} from '../../../../../../../common/utils/common';
 
-import getComponents from '../../../../get-components';
+import getComponents from '../../../../../../../common/get-components';
 
 const {
   AttachmentItemView,

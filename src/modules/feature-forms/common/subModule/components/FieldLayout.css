@@ -1,4 +1,4 @@
-@import "../../app-style/vars.css";
+@import "../../../../../common/app-style/vars.css";
 
 .FieldLayout {
   display: flex;

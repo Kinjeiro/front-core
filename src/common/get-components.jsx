@@ -5,39 +5,6 @@ let CB = null;
 
 export function initComponents(COMPONENTS_BASE) {
   require('./app-style/init.css');
-  // ======================================================
-  // FORM UI
-  // ======================================================
-  COMPONENTS_BASE.replace('Form', () => require('./components/form/CoreForm').default);
-  COMPONENTS_BASE.replace('FormLayout', () => require('./components/form/FormLayout').default);
-  COMPONENTS_BASE.replace('Field', () => require('./components/form/CoreField').default);
-  COMPONENTS_BASE.replace('FieldLayout', () => require('./components/form/FieldLayout').default);
-
-  // ======================================================
-  // FORM FIELDS
-  // ======================================================
-  COMPONENTS_BASE.replace('BaseInput', () => ({ controlRef, touched, isProcessing, value, ...props }) =>
-    <input ref={ controlRef } { ...props } value={ value || '' } />);
-  COMPONENTS_BASE.replace('BaseNumberInput', () => ({ controlRef, touched, isProcessing, value, ...props }) =>
-    <input ref={ controlRef } { ...props } value={ value || '' } type="number" />);
-  COMPONENTS_BASE.replace('BaseTextArea', () => ({ controlRef, touched, isProcessing, ...props }) =>
-    <textarea ref={ controlRef } { ...props } />);
-  COMPONENTS_BASE.replace('BaseSelect', () => ({ options, value }) =>
-    <select value={ value } />);
-  COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
-    <input ref={ controlRef } value={ value || '' } type="datetime" />);
-  COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, isProcessing, ...props }) =>
-    <input ref={ controlRef } { ...props } type="checkbox" />);
-
-  COMPONENTS_BASE.replace('Attachment', () => require('./components/form/fields/Attachment/Attachment').default);
-  COMPONENTS_BASE.replace('AttachmentView', () => require('./components/form/fields/Attachment/AttachmentView').default);
-  COMPONENTS_BASE.replace('AttachmentLayout', () => require('./components/form/fields/Attachment/AttachmentLayout').default);
-  COMPONENTS_BASE.replace('AttachmentItemView', () => require('./components/form/fields/Attachment/AttachmentItem/AttachmentItemView').default);
-  COMPONENTS_BASE.replace('AttachmentItemLayout', () => require('./components/form/fields/Attachment/AttachmentItem/AttachmentItemLayout').default);
-
-  COMPONENTS_BASE.replace('Input', () => require('./components/form/fields/CoreInput').default);
-  COMPONENTS_BASE.replace('TextArea', () => require('./components/form/fields/CoreTextArea').default);
-  COMPONENTS_BASE.replace('Select', () => require('./components/form/fields/CoreSelect').default);
 
   // ======================================================
   // UI

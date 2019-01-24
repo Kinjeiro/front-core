@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // import i18n from '../../utils/i18n';
 
-import getComponents from '../../get-components';
+import getComponents from '../../../../../common/get-components';
 
 const {
   UnescapedHtml,

@@ -3,25 +3,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import clientConfig from '../../client-config';
-import bemDecorator from '../../utils/decorators/bem-component';
-import i18n from '../../utils/i18n-utils';
+import clientConfig from '../../../../../common/client-config';
+import bemDecorator from '../../../../../common/utils/decorators/bem-component';
+import i18n from '../../../../../common/utils/i18n-utils';
 import {
   executeVariable,
   wrapToArray,
   generateId,
   emitProcessing,
-} from '../../utils/common';
-import { ACTION_STATUS_PROPS } from '../../models';
+} from '../../../../../common/utils/common';
+import { ACTION_STATUS_PROPS } from '../../../../../common/models';
 
-import getComponents from '../../get-components';
+import getComponents from '../../../../../common/get-components';
 
 // import './CoreForm.scss';
 
 import {
   FIELD_PROP_TYPE,
   TYPES,
-} from '../../models/model-field';
+} from '../../../../../common/models/model-field';
 
 const {
   // todo @ANKU @LOW - можно сделать отложенную чтобы не загружать если задали кастомный Layout

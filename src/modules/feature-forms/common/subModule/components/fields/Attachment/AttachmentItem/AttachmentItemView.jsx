@@ -3,15 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import ATTACHMENT_PROP_TYPE from '../../../../../../modules/feature-attachments/common/subModule/model-attachment';
+import ATTACHMENT_PROP_TYPE from '../../../../../../../feature-attachments/common/subModule/model-attachment';
 
 // ======================================================
 // MODULE
 // ======================================================
-import { translateCore } from '../../../../../utils/i18n-utils';
-import { valueFromRange } from '../../../../../utils/common';
+import { translateCore } from '../../../../../../../../common/utils/i18n-utils';
+import { valueFromRange } from '../../../../../../../../common/utils/common';
 
-import getComponents from '../../../../../get-components';
+import getComponents from '../../../../../../../../common/get-components';
 
 const {
   Input,

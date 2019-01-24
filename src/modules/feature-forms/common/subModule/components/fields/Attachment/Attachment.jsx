@@ -8,22 +8,22 @@ import {
   // generateId,
   wrapToArray,
   difference,
-} from '../../../../utils/common';
-import CONSTRAINTS_PROP_TYPE from '../../../../models/model-constraints';
-import getApiClient from '../../../../helpers/get-api-client';
+} from '../../../../../../../common/utils/common';
+import CONSTRAINTS_PROP_TYPE from '../../../../../../../common/models/model-constraints';
+import getApiClient from '../../../../../../../common/helpers/get-api-client';
 
 import {
   createAttachment,
   normalizeAttachment,
   ATTACHMENT_PROP_TYPE, createTempAttachment,
-} from '../../../../../modules/feature-attachments/common/subModule/model-attachment';
+} from '../../../../../../feature-attachments/common/subModule/model-attachment';
 
 // ======================================================
 // MODULE
 // ======================================================
-import { translateCore } from '../../../../utils/i18n-utils';
+import { translateCore } from '../../../../../../../common/utils/i18n-utils';
 
-import getComponents from '../../../../get-components';
+import getComponents from '../../../../../../../common/get-components';
 
 const {
   AttachmentView,
