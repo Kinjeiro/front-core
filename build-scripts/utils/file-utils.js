@@ -221,7 +221,7 @@ function getFileInfo(filePath) {
     ext,
     size,
     type,
-    isImage: type.indexOf('image/') === 0
+    isImage: type ? type.indexOf('image/') === 0 : false
   };
 }
 

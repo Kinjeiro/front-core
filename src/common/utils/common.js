@@ -403,7 +403,9 @@ export function wrapToArray(value = null) {
     ? value
     : value === null || value === ''
       ? []
-      : [value];
+      : value instanceof FileList
+        ? [...value]
+        : [value];
 }
 
 export function includes(first, second, emptyIsInclude = false, allIncludes = false) {

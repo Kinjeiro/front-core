@@ -1,7 +1,10 @@
 // export * from '../../../config/utils/create-config';
 
 import clientConfig from '../client-config';
-import { joinUri } from './uri-utils';
+import {
+  joinPath,
+  isFullUrl,
+} from './uri-utils';
 
 /**
  * Создание настроек для клиенской части и их роутинг через плагину на серверной
@@ -17,12 +20,20 @@ export function createApiConfig(
   payload,
 ) {
   if (typeof path === 'object') {
-    return path;
+    return path.method && path.path
+      ? path
+      : { method: 'GET', path };
   }
+
   return {
     method,
     // /api/test-client-api/find
-    path: joinUri('/', clientConfig.common.serverApiPrefix, '/', path),
+    path: isFullUrl(path)
+      ? path
+      : path.search(new RegExp(`^/?${joinPath(clientConfig.common.serverApiPrefix, '/')}`)) === 0
+        // уже апи префикс есть
+        ? joinPath('/', path)
+        : joinPath('/', clientConfig.common.serverApiPrefix, '/', path),
     payload,
   };
 }
