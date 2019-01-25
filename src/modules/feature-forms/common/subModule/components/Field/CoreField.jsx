@@ -20,7 +20,7 @@ import {
   DATETIME_FORMAT,
 } from '../../../../../../common/utils/date-utils';
 
-import i18n from '../../../../../../common/utils/i18n-utils';
+import i18n from '../../i18n';
 
 import {
   FIELD_PROP_TYPE_MAP,

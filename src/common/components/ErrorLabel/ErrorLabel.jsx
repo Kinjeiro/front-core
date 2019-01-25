@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+require('./ErrorLabel.css');
+
 export default class ErrorLabel extends PureComponent {
   static propTypes = {
     isWarning: PropTypes.bool,

@@ -5,7 +5,6 @@ import bind from 'lodash-decorators/bind';
 
 import clientConfig from '../../../../../../common/client-config';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
-import i18n from '../../../../../../common/utils/i18n-utils';
 import {
   executeVariable,
   wrapToArray,
@@ -22,6 +21,9 @@ import {
   FIELD_PROP_TYPE,
   TYPES,
 } from '../../../../../../common/models/model-field';
+
+
+import i18n from '../../i18n';
 
 const {
   // todo @ANKU @LOW - можно сделать отложенную чтобы не загружать если задали кастомный Layout
@@ -282,7 +284,7 @@ export default class CoreForm extends Component {
       event.stopPropagation();
     }
 
-    if (await emitProcessing(this.isValid(), this)) {
+    if (await emitProcessing(this.isValid(), this, 'isProcessing')) {
       if (onSubmit) {
         await onSubmit(formData);
       }
@@ -347,6 +349,9 @@ export default class CoreForm extends Component {
       // firstFocus,
       formData,
     } = this.props;
+    const {
+      isProcessing,
+    } = this.state;
 
     const label = this.getFieldLabel(field);
     const placeholder = textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`,
@@ -369,6 +374,8 @@ export default class CoreForm extends Component {
     return {
       id: `${id}_${name}`,
       ...field,
+      // пока форма находится в процессе сабмита никакие изменения вносить нельзя
+      readOnly: isProcessing || field.readOnly,
       // controlProps: firstFocus && index === 0
       //   ? {
       //     autoFocus: true,
