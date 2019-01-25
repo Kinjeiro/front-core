@@ -9,6 +9,7 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // UI
   // ======================================================
+  COMPONENTS_BASE.replace('Button', () => require('./components/Button/Button').default);
   COMPONENTS_BASE.replace('Image', () => require('./components/Image/Image').default);
   COMPONENTS_BASE.replace('Icon', () => require('./components/Icon/Icon').default);
   COMPONENTS_BASE.replace('ActionStatus', () => require('./components/ActionStatus/ActionStatus').default);
@@ -38,8 +39,7 @@ export function initComponents(COMPONENTS_BASE) {
   // ======================================================
   // CONTAINERS
   // ======================================================
-  COMPONENTS_BASE.replace('BaseButton', () => ({ primary, loading, ...props }) => (<button type="button" { ...props } />));
-  COMPONENTS_BASE.replace('Button', () => require('./containers/CoreButton/CoreButton').default);
+  COMPONENTS_BASE.replace('PermissionButton', () => require('./containers/PermissionButton/PermissionButton').default);
   COMPONENTS_BASE.replace('Link', () => require('./containers/Link/Link').default);
   COMPONENTS_BASE.replace('ModuleLink', () => require('./containers/ModuleLink/ModuleLink').default);
 

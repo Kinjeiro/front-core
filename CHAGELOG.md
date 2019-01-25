@@ -146,6 +146,8 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, isProxy = fa
 ```
 export function pluginRouteFactory(path, handler, routeConfig = {}, apiPluginOptions = {})
 ```
+12. Если нужна проверка прав и авторизации нужно использовать вместо 
+```Button``` (которая теперь компонент) -> ```PermissionButton``` (которая контейнер, знает о редуксовых врапперах)
 
 ### API Dependencies:
     - auth-server@2.0.1

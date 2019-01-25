@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import getComponents from '../../get-components';
 
 const {
-  BaseButton,
+  Button,
 
   AuthCheckWrapper, // module-auth
 } = getComponents();
@@ -12,17 +12,16 @@ const {
 /*
 * Обертка над react-router чтобы потом при перехода на 4 версию ничего не отвалилвалось
 */
-export default class CoreButton extends Component {
+export default class PermissionButton extends Component {
   static propTypes = {
-    children: PropTypes.node,
-    className: PropTypes.string,
+    ...Button.propTypes,
+
     checkAuth: PropTypes.bool,
     permissions: AuthCheckWrapper.propTypes.permissions,
   };
 
   render() {
     const {
-      children,
       checkAuth,
       permissions,
       className,
@@ -34,12 +33,10 @@ export default class CoreButton extends Component {
         checkAuth={ checkAuth }
         permissions={ permissions }
       >
-        <BaseButton
+        <Button
           { ...otherProps }
-          className={ `CoreButton ${className || ''}` }
-        >
-          { children }
-        </BaseButton>
+          className={ `PermissionButton ${className || ''}` }
+        />
       </AuthCheckWrapper>
     );
   }

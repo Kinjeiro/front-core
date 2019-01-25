@@ -53,6 +53,7 @@ import './StubPage.css';
 import './StubPageSass.scss';
 
 const {
+  Button,
   Segment,
   Form,
   Attachment,
@@ -251,9 +252,9 @@ export default class StubPage extends Component {
       <div className={ this.fullClassName }>
         { i18n('core:pages.StubPage.pageTitle') }
 
-        <button onClick={ () => actionGoto(PATH_INDEX) }>
+        <Button onClick={ () => actionGoto(PATH_INDEX) }>
           { i18n('core:go to index') }
-        </button>
+        </Button>
 
         <div className={ this.bem('languageElement', { lang: language }) }>
           <p>
@@ -296,16 +297,16 @@ export default class StubPage extends Component {
             )
           }
 
-          <button onClick={ this.handleChangeUser }>
+          <Button onClick={ this.handleChangeUser }>
             { i18n('core:pages.StubPage.changeUserButton') }
-          </button>
+          </Button>
         </div>
 
         <div>
           <h3>{ i18n('core:pages.StubPage.domainTitle') }</h3>
-          <button onClick={ this.handleClickCreateTestDomain }>
+          <Button onClick={ this.handleClickCreateTestDomain }>
             {i18n('core:pages.StubPage.createTestDomainButton')}
-          </button>
+          </Button>
           <ul>
             { testDomains.map((testDomain) => (
               <ListItem
@@ -327,11 +328,11 @@ export default class StubPage extends Component {
         </div>
 
         <div>
-          <button
+          <Button
             onClick={ () => actionLoadTestGet() }
           >
             Load test get with auth check
-          </button>
+          </Button>
         </div>
 
         <div>
@@ -341,11 +342,11 @@ export default class StubPage extends Component {
         </div>
 
         <div>
-          <button
+          <Button
             onClick={ () => onGoTo('relative', 'testModule') }
           >
             Test module routing - onGoTo
-          </button>
+          </Button>
           <ModuleLink
             modulePath={ 'relative' }
             moduleName={ 'testModule' }
@@ -356,17 +357,17 @@ export default class StubPage extends Component {
 
         <div>
           <div>
-            <button
+            <Button
               onClick={ () => actionUserLogout() }
             >
               Logout
-            </button>
+            </Button>
           </div>
-          <button
+          <Button
             onClick={ () => actionThrowNotAuthError('/opa1/opa2') }
           >
             Not auth
-          </button>
+          </Button>
 
           <h4>
             <Link
