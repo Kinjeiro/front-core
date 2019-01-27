@@ -49,7 +49,7 @@ export default class InstanceAttachment extends Component {
     // ======================================================
     // connect
     // ======================================================
-    attachmentsMap: PropTypes.array,
+    attachmentsMap: PropTypes.objectOf(ATTACHMENT_PROP_TYPE),
     actionGetAttachmentInfo: PropTypes.func,
     actionDownloadAttachment: PropTypes.func,
     actionUploadAttach: PropTypes.func,
@@ -57,8 +57,12 @@ export default class InstanceAttachment extends Component {
     actionDeleteAttach: PropTypes.func,
   };
 
-  static defaultProps = {
-  };
+  // ======================================================
+  // STATIC
+  // ======================================================
+  static isEmptyValue(type, value = null, props = {}) {
+    return !value || !value.downloadUrl;
+  }
 
   // ======================================================
   // UTILS

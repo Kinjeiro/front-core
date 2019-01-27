@@ -49,6 +49,12 @@ export default class TestForm extends PureComponent {
     onUpdateForm: PropTypes.func,
   };
 
+  static defaultProps = {
+    onSubmit: (data) => {
+      debugger;
+    },
+  };
+
   // ======================================================
   // RENDERS
   // ======================================================
