@@ -15,7 +15,7 @@ export default class Button extends PureComponent {
   static propTypes = {
     as: PropTypes.any,
     className: PropTypes.string,
-    children: PropTypes.string,
+    children: PropTypes.node,
 
     primary: PropTypes.bool,
     loading: PropTypes.bool,
@@ -51,7 +51,9 @@ export default class Button extends PureComponent {
         ...props,
         className: `Button ${className || ''} ${primary ? 'Button--primary' : ''} ${notNaturalButton ? 'Button--notNaturalButton' : ''}`,
       },
-      loading ? (<Loading />) : children,
+      loading
+        ? (<Loading />)
+        : children,
     );
   }
 }

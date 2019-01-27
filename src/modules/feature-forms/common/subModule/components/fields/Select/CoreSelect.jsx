@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import omit from 'lodash/omit';
 
+// ======================================================
+// MODULE
+// ======================================================
 import i18n from '../../../i18n';
-
-import getComponents from '../../../../../../../common/get-components';
+import getComponents from '../../../get-components';
 
 const {
   BaseSelect,

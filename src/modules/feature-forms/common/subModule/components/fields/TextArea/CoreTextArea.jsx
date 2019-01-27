@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import getComponents from '../../../../../../../common/get-components';
+import getComponents from '../../../get-components';
 
 // import './InputWithState.css';
 

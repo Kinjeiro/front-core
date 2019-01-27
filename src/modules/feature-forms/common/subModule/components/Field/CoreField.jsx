@@ -94,7 +94,13 @@ export default class CoreField extends Component {
   // ======================================================
   // STATIC
   // ======================================================
-  static defaultCompareFn(newValue = null, oldValue = null/* , field = null */) {
+  static defaultCompareFn(newValue = null, oldValue = null/* , field = null */, props = {}) {
+    const { controlClass } = props;
+
+    if (controlClass && controlClass.defaultCompareFn) {
+      return controlClass.defaultCompareFn(newValue, oldValue, props);
+    }
+
     // undefined === null === ''
     // eslint-disable-next-line no-param-reassign
     newValue = newValue === '' ? null : newValue;
@@ -102,7 +108,14 @@ export default class CoreField extends Component {
     oldValue = oldValue === '' ? null : oldValue;
     return deepEquals(newValue, oldValue) ? 0 : 1;
   }
-  static parseInValue(type, value) {
+
+  static parseInValue(type, value, props = {}) {
+    const { controlClass } = props;
+
+    if (controlClass && controlClass.parseInValue) {
+      return controlClass.parseInValue(type, value, props);
+    }
+
     switch (type) {
       // case TYPES.DATETIME:
       case TYPES.DATE: {
@@ -113,7 +126,13 @@ export default class CoreField extends Component {
         return value;
     }
   }
-  static parseOutValue(type = TYPES.TEXT, value = null) {
+  static parseOutValue(type = TYPES.TEXT, value = null, props = {}) {
+    const { controlClass } = props;
+
+    if (controlClass && controlClass.parseOutValue) {
+      return controlClass.parseOutValue(type, value, props);
+    }
+
     switch (type) {
       // case TYPES.DATETIME:
       case TYPES.DATE: {
@@ -125,15 +144,24 @@ export default class CoreField extends Component {
         return value;
     }
   }
-  static isEmptyValue(type = TYPES.TEXT, value = null) {
-    switch (type) {
-      // case TYPES.DATETIME:
-      case TYPES.BINARY: {
-        return !value || !value.id;
-      }
-      default:
-        return isEmpty(value);
+  static isEmptyValue(type = TYPES.TEXT, value = null, props = {}) {
+    const { controlClass } = props;
+
+    if (controlClass && controlClass.isEmptyValue) {
+      return controlClass.isEmptyValue(type, value, props);
     }
+
+    // switch (type) {
+    //   // case TYPES.DATETIME:
+    //   case TYPES.BINARY: {
+    //     // todo @ANKU @CRIT @MAIN - InstanceAttachment требуте downloadUrl а обычный нет - только из пропс
+    //     return !value || !value.id;
+    //   }
+    //   default:
+    //     return isEmpty(value);
+    // }
+
+    return isEmpty(value);
   }
 
   /**
@@ -145,6 +173,12 @@ export default class CoreField extends Component {
    * @returns {*}
    */
   static parseValueToString(type, value, customMask = null, props = {}) {
+    const { controlClass } = props;
+
+    if (controlClass && controlClass.isEmptyValue) {
+      return controlClass.isEmptyValue(type, value, customMask, props);
+    }
+
     const typeFinal = type || CoreField.TYPES.TEXT;
 
     switch (typeFinal) {
@@ -187,7 +221,7 @@ export default class CoreField extends Component {
 
   static async validate(value, fieldProps = {}, domRef = null, getFormData = null) {
     const {
-      // type,
+      type,
       name,
       required: propsRequired,
       constraints: {
@@ -198,9 +232,20 @@ export default class CoreField extends Component {
       validate,
       multiple,
       formDependentData,
+
+      controlClass,
     } = fieldProps;
 
+    // let errors = [];
     let errors = [];
+
+    if (controlClass && controlClass.validate) {
+      const staticValidateError = await controlClass.validate(value, fieldProps, domRef, getFormData);
+      if (Array.isArray(staticValidateError)) {
+        errors.push(...staticValidateError);
+      }
+    }
+
     if (domRef && domRef.checkValidity) {
       /*
        https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Form_validation#The_HTML5_constraint_validation_API
@@ -239,8 +284,8 @@ export default class CoreField extends Component {
     } else {
       // code checking
       // eslint-disable-next-line no-lonely-if
-      if ((propsRequired || required) && isEmpty(value)) {
-        errors.push(i18n('core:components.CoreField.errors.requiredError', {
+      if ((propsRequired || required) && CoreField.isEmptyValue(type, value, fieldProps)) {
+        errors.push(i18n('components.CoreField.errors.requiredError', {
           fieldName: name,
         }));
       }
@@ -249,13 +294,13 @@ export default class CoreField extends Component {
     if (multiple) {
       const values = wrapToArray(value);
       if (typeof multipleMinSize !== 'undefined' && values.length < multipleMinSize) {
-        errors.push(i18n('core:components.CoreField.errors.multipleMinSize', {
+        errors.push(i18n('components.CoreField.errors.multipleMinSize', {
           fieldName: name,
           multipleMinSize,
         }));
       }
       if (typeof multipleMaxSize !== 'undefined' && values.length > multipleMaxSize) {
-        errors.push(i18n('core:components.CoreField.errors.multipleMaxSize', {
+        errors.push(i18n('components.CoreField.errors.multipleMaxSize', {
           fieldName: name,
           multipleMaxSize,
         }));
@@ -399,7 +444,7 @@ export default class CoreField extends Component {
         name,
         parseOutValue
           ? parseOutValue(value, this.props, index)
-          : CoreField.parseOutValue(type, value),
+          : CoreField.parseOutValue(type, value, this.props),
         multiple ? index : undefined,
         contextData && typeof contextData === 'object'
           ? { ...contextData, ...context }
@@ -461,6 +506,14 @@ export default class CoreField extends Component {
   }
 
   @bind()
+  async handleTouch() {
+    await emitProcessing(this.validateComponent(this.props), this);
+    this.setState({
+      touched: true,
+    });
+  }
+
+  @bind()
   async handleBlur(event, controlProps) {
     const {
       controlProps: {
@@ -483,6 +536,7 @@ export default class CoreField extends Component {
     if (!touched) {
       emitProcessing(this.validateComponent(this.props, newValue), this);
 
+      // this.handleTouch();
       this.setState({
         touched: true,
       });
@@ -622,6 +676,7 @@ export default class CoreField extends Component {
       required: required || propsRequired,
       isProcessing,
       onBlur: this.handleBlur,
+      onTouch: this.handleTouch,
       ...this.handlersWrapToPromiseChanging(controlProps, ['onMouseDown']),
     };
     controlPropsFinal = this.updatePropsBySubType(controlPropsFinal);
@@ -646,7 +701,7 @@ export default class CoreField extends Component {
     //   return valueName;
     // }
 
-    const controlValue = CoreField.parseInValue(type, inValue);
+    const controlValue = CoreField.parseInValue(type, inValue, this.props);
 
     // if (controlValue === null && emptyValue) {
     //   return emptyValue;
@@ -865,7 +920,7 @@ export default class CoreField extends Component {
       return valueName;
     }
 
-    const controlValue = CoreField.parseInValue(type, inValue);
+    const controlValue = CoreField.parseInValue(type, inValue, this.props);
 
     if (controlValue === null && emptyValue) {
       return emptyValue;
@@ -1079,7 +1134,7 @@ export default class CoreField extends Component {
 
         label={ this.renderLabel() }
         textDescription={ textDescription }
-        errors={ touched ? errors : undefined }
+        errors={ touched && !isProcessing ? errors : undefined }
         warnings={ warnings }
 
         required={ required || propsRequired }

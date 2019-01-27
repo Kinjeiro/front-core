@@ -13,16 +13,15 @@ import {
 } from '../../../../../../common/utils/common';
 import { ACTION_STATUS_PROPS } from '../../../../../../common/models';
 
-import getComponents from '../../../../../../common/get-components';
-
-// import './CoreForm.scss';
-
 import {
   FIELD_PROP_TYPE,
   TYPES,
 } from '../../../../../../common/models/model-field';
 
-
+// ======================================================
+// MODULE
+// ======================================================
+import getComponents from '../../get-components';
 import i18n from '../../i18n';
 
 const {
@@ -114,6 +113,7 @@ export default class CoreForm extends Component {
     hasError: false,
     isProcessing: false,
     touched: false,
+    hasSendOnce: false,
     dependentFieldsHashes: {},
   };
 
@@ -271,11 +271,31 @@ export default class CoreForm extends Component {
   }
 
   @bind()
-  async handleSubmit(event) {
+  async asyncSubmit() {
     const {
       onSubmit,
       useForm,
       formData,
+    } = this.props;
+
+    if (await this.isValid()) {
+      if (onSubmit) {
+        await onSubmit(formData);
+      }
+      // может получится так, что после submit будет редирект и компонент заанмаунтится, поэтому setState будет падать с ошибкой - это нормально
+      if (!this.unmount) {
+        this.setState({
+          touched: false,
+          hasSendOnce: true,
+        });
+      }
+    }
+  }
+
+  @bind()
+  async handleSubmit(event) {
+    const {
+      useForm,
     } = this.props;
 
     // если <form>
@@ -284,17 +304,7 @@ export default class CoreForm extends Component {
       event.stopPropagation();
     }
 
-    if (await emitProcessing(this.isValid(), this, 'isProcessing')) {
-      if (onSubmit) {
-        await onSubmit(formData);
-      }
-      // может получится так, что после submit будет редирект и компонент заанмаунтится, поэтому setState будет падать с ошибкой - это нормально
-      if (!this.unmount) {
-        this.setState({
-          touched: false,
-        });
-      }
-    }
+    await emitProcessing(this.asyncSubmit, this, 'isProcessing');
     return false;
   }
 
@@ -448,6 +458,7 @@ export default class CoreForm extends Component {
       hasError,
       isProcessing,
       touched,
+      hasSendOnce,
     } = this.state;
 
     const actionsFinal = [];
@@ -459,7 +470,7 @@ export default class CoreForm extends Component {
           type="submit"
           className={ this.bem('submitButton') }
           primary={ true }
-          disabled={ isProcessing || isFetching || hasError || !touched }
+          disabled={ isProcessing || isFetching || hasError || (!touched && !hasSendOnce) }
           loading={ isProcessing || isFetching }
           onClick={ useForm ? undefined : this.handleSubmit }
         >
