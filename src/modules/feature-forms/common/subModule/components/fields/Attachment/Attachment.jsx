@@ -1,15 +1,12 @@
 /* eslint-disable react/sort-comp,no-use-before-define,max-len */
 import React from 'react';
 import PropTypes from 'prop-types';
-import omit from 'lodash/omit';
+// import omit from 'lodash/omit';
 import bind from 'lodash-decorators/bind';
 
 import {
-  // generateId,
   wrapToArray,
-  difference,
 } from '../../../../../../../common/utils/common';
-import CONSTRAINTS_PROP_TYPE from '../../../../../../../common/models/model-constraints';
 import getApiClient from '../../../../../../../common/helpers/get-api-client';
 
 import {
@@ -21,15 +18,13 @@ import {
 // ======================================================
 // MODULE
 // ======================================================
-import { translateCore } from '../../../../../../../common/utils/i18n-utils';
-
-import getComponents from '../../../../../../../common/get-components';
+import i18n from '../../../i18n';
+import getComponents from '../../../get-components';
+import VIEW_PROP_TYPES from './attachment-view-props';
 
 const {
   AttachmentView,
 } = getComponents();
-
-require('./Attachment.css');
 
 export const DEFAULT_MULTIPLE_MAX_SIZE = 10;
 export const DEFAULT_MAX_BYTES = 10485760; // 10Mb
@@ -55,34 +50,7 @@ function filterFiles(array, predicatFn) {
 
 export default class Attachment extends React.Component {
   static propTypes = {
-    label: PropTypes.node,
-    name: PropTypes.string,
-    /**
-     * Если функция - (onOpenDialog, props, state) => Node
-     */
-    children: PropTypes.oneOfType([
-      PropTypes.node,
-      PropTypes.func,
-    ]),
-    usePreview: PropTypes.bool,
-    previews: PropTypes.object,
-    actions: PropTypes.node,
-    dropzoneText: PropTypes.node,
-    className: PropTypes.string,
-    readOnly: PropTypes.bool,
-    editable: PropTypes.bool,
-    multiple: PropTypes.bool,
-    required: PropTypes.bool,
-    constraints: CONSTRAINTS_PROP_TYPE,
-    /**
-     https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types
-     accept="image/png" or accept=".png" — Accepts PNG files.
-     accept="image/png, image/jpeg" or accept=".png, .jpg, .jpeg" — Accept PNG or JPEG files.
-     accept="image/*" — Accept any file with an image/* MIME type. (Many mobile devices also let the user take a picture with the camera when this is used.)
-     accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-     */
-    accept: PropTypes.string,
-    acceptOnlyImages: PropTypes.bool,
+    ...VIEW_PROP_TYPES,
 
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -90,47 +58,32 @@ export default class Attachment extends React.Component {
       ATTACHMENT_PROP_TYPE,
       PropTypes.arrayOf(ATTACHMENT_PROP_TYPE),
     ]),
-
     parseValue: PropTypes.func,
 
-    withDescriptions: PropTypes.bool,
-    descriptionInputProps: PropTypes.object,
-
-    showAddButton: PropTypes.bool,
-    addButtonText: PropTypes.node,
-
-    meta: PropTypes.shape({
-      touched: PropTypes.bool,
-      error: PropTypes.string,
-    }),
-
-    /**
-     * (uuidToFileMap, newAttachments, resultAttachments) => {} - всегда, даже если multiple=false, так как uuid важен для InstanceAttachments
-     */
-    onAdd: PropTypes.func,
-    onRemove: PropTypes.func,
-    onDescriptionBlur: PropTypes.func,
-    onAttachmentClick: PropTypes.func,
-
-    onChange: PropTypes.func,
-    onBlur: PropTypes.func,
-
-    onErrors: PropTypes.func,
-    onWarnings: PropTypes.func,
+    acceptOnlyImages: PropTypes.bool,
+    actions: PropTypes.node,
   };
 
   static defaultProps = {
     readOnly: false,
     editable: true,
     multiple: true,
-    dropzoneText: translateCore('components.Attachment.dropThere'),
+    dropzoneText: i18n('components.Attachment.dropThere'),
     usePreview: true,
     previews: {},
 
     showAddButton: true,
-    addButtonText: translateCore('components.Attachment.addButton'),
+    addButtonText: i18n('components.Attachment.addButton'),
+
+    openUploadDialogFn: () => {
+      throw new Error('todo openDialogFn');
+    },
   };
 
+
+  // ======================================================
+  // STATIC
+  // ======================================================
   static normalizeValue(value) {
     return Array.isArray(value)
       ? value.map((valueItem) => normalizeAttachment(valueItem))
@@ -148,7 +101,11 @@ export default class Attachment extends React.Component {
     return fileName || id;
   }
 
+  // ======================================================
+  // STATE
+  // ======================================================
   state = {
+    touched: false,
     previews: {},
   };
 
@@ -161,6 +118,20 @@ export default class Attachment extends React.Component {
     } = this.props;
 
     return wrapToArray(Attachment.normalizeValue(value));
+  }
+
+  getConstraints() {
+    const {
+      constraints,
+      required,
+    } = this.props;
+
+    return {
+      multipleMaxSize: DEFAULT_MULTIPLE_MAX_SIZE,
+      maxBytes: DEFAULT_MAX_BYTES,
+      required,
+      ...constraints,
+    };
   }
 
   // addPreview(fileName, previewData) {
@@ -233,7 +204,15 @@ export default class Attachment extends React.Component {
   }
 
 
+  hasMaxValues() {
+    const {
+      multiple,
+      value,
+    } = this.props;
+    const { multipleMaxSize } = this.getConstraints();
 
+    return multiple && wrapToArray(value).length >= multipleMaxSize;
+  }
 
   // ======================================================
   // HANDLERS
@@ -243,11 +222,6 @@ export default class Attachment extends React.Component {
     const {
       usePreview,
       onAdd,
-      constraints: {
-        multipleMaxSize = DEFAULT_MULTIPLE_MAX_SIZE,
-        maxBytes = DEFAULT_MAX_BYTES,
-        minBytes,
-      } = {},
       onWarnings,
       multiple,
     } = this.props;
@@ -256,57 +230,62 @@ export default class Attachment extends React.Component {
       previews,
     } = this.state;
 
+    const {
+      multipleMaxSize,
+      maxBytes,
+      minBytes,
+    } = this.getConstraints();
+
     const isReplaceData = !multiple;
 
     // event.target.files может быть FileList там не все методы массива
     let addedFilesFinal = wrapToArray(addedFiles || (event && event.target.files));
 
+    const warnings = [];
+    const newFilesMap = {};
+    let newAttachments = [];
+    let resultAttachments = this.getValues();
+
     debugger;
 
-
-    const warnings = [];
-    const currentAttachments = this.getValues();
-    const newAmount = currentAttachments.length + addedFilesFinal.length;
-    if (typeof multipleMaxSize !== 'undefined' && newAmount > multipleMaxSize) {
-      const {
-        filtered,
-        aborted,
-        abortedStr,
-      } = filterFiles(addedFilesFinal, (element, index) => index <= multipleMaxSize);
-      addedFilesFinal = filtered;
-      // todo @ANKU @LOW - @i18n @@loc @@plur
-      warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как превышен лимит кол-ва файлов ${multipleMaxSize}.`);
-    }
-    if (typeof maxBytes !== 'undefined') {
-      const {
-        filtered,
-        aborted,
-        abortedStr,
-      } = filterFiles(addedFilesFinal, ({ size }) => size <= maxBytes);
-      if (abortedStr) {
-        // todo @ANKU @LOW - @i18n @@loc @@plur
-        warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как превыше лимит размера файлов ${parseInt(maxBytes / 1000, 10)} кБ.`);
+    if (addedFilesFinal && addedFilesFinal.length > 0) {
+      const currentAttachments = this.getValues();
+      const newAmount = currentAttachments.length + addedFilesFinal.length;
+      if (typeof multipleMaxSize !== 'undefined' && newAmount > multipleMaxSize) {
+        const {
+          filtered,
+          aborted,
+          abortedStr,
+        } = filterFiles(addedFilesFinal, (element, index) => index <= multipleMaxSize);
         addedFilesFinal = filtered;
-      }
-    }
-    if (typeof minBytes !== 'undefined') {
-      const {
-        filtered,
-        aborted,
-        abortedStr,
-      } = filterFiles(addedFilesFinal, ({ size }) => size >= minBytes);
-      if (abortedStr) {
         // todo @ANKU @LOW - @i18n @@loc @@plur
-        warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как размер файлов меньше минимального ${parseInt(minBytes / 1000, 10)} кБ.`);
-        addedFilesFinal = filtered;
+        warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как превышен лимит кол-ва файлов ${multipleMaxSize}.`);
       }
-    }
-    if (window && warnings.length) {
-      // чтобы сработало после onChange, ибо по нему очищается
-      window.setTimeout(() => onWarnings(warnings, true), 10);
-    }
+      if (typeof maxBytes !== 'undefined') {
+        const {
+          filtered,
+          aborted,
+          abortedStr,
+        } = filterFiles(addedFilesFinal, ({ size }) => size <= maxBytes);
+        if (abortedStr) {
+          // todo @ANKU @LOW - @i18n @@loc @@plur
+          warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как превыше лимит размера файлов ${parseInt(maxBytes / 1000, 10)} кБ.`);
+          addedFilesFinal = filtered;
+        }
+      }
+      if (typeof minBytes !== 'undefined') {
+        const {
+          filtered,
+          aborted,
+          abortedStr,
+        } = filterFiles(addedFilesFinal, ({ size }) => size >= minBytes);
+        if (abortedStr) {
+          // todo @ANKU @LOW - @i18n @@loc @@plur
+          warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как размер файлов меньше минимального ${parseInt(minBytes / 1000, 10)} кБ.`);
+          addedFilesFinal = filtered;
+        }
+      }
 
-    if (addedFilesFinal.length > 0) {
       if (usePreview) {
         const newPreviews = isReplaceData ? {} : { ...previews };
         addedFilesFinal.forEach((file) => {
@@ -326,23 +305,28 @@ export default class Attachment extends React.Component {
       }
 
       // todo @ANKU @LOW - мапа не очень подходит ибо важна последовательность выбора в FileChooser
-      const newFilesMap = {};
-      const newAttachments = addedFilesFinal.map((file) => {
+      newAttachments = addedFilesFinal.map((file) => {
         const newAttach = this.parseValueFromFile(file);
 
         newFilesMap[newAttach.uuid] = file;
         return newAttach;
       });
 
-      const resultAttachments = [
-        ...(isReplaceData ? {} : this.getValues()),
+      resultAttachments = [
+        ...(isReplaceData ? {} : resultAttachments),
         ...newAttachments,
       ];
 
       if (onAdd) {
         onAdd(multiple ? newFilesMap : addedFilesFinal[0], newAttachments, resultAttachments);
       }
-      this.update(resultAttachments, newAttachments, newFilesMap);
+    }
+    debugger;
+    this.update(resultAttachments, newAttachments, newFilesMap);
+
+    if (window && warnings.length) {
+      // чтобы сработало после onChange, ибо по нему очищается
+      window.setTimeout(() => onWarnings(warnings, true), 10);
     }
   }
 
@@ -462,15 +446,26 @@ export default class Attachment extends React.Component {
       accept,
       acceptOnlyImages,
       withDescriptions,
+      previews,
     } = this.props;
+
+    const {
+      previews: statePreview,
+    } = this.state;
+
+    const classNameFinal = `Attachment ${className} ${readOnly ? 'Attachment--readOnly' : ''} ${withDescriptions ? 'Attachment--withDescription' : ''}`;
 
     return (
       <AttachmentView
-        { ...omit(this.props, OMIT_PROPS) }
-        accept={ acceptOnlyImages ? 'image/*' : accept }
+        { ...this.props }
 
-        className={ `Attachment ${className} ${readOnly ? 'Attachment--readOnly' : ''} ${withDescriptions ? 'Attachment--withDescription' : ''}` }
+        constraints={ this.getConstraints() }
+        className={ classNameFinal }
         value={ this.getValues() }
+        preview={{ ...previews, ...statePreview }}
+
+        hasMaxValues={ this.hasMaxValues() }
+        accept={ acceptOnlyImages ? 'image/*' : accept }
 
         onChange={ this.handleChange }
         onAdd={ this.handleAdd }
@@ -482,5 +477,4 @@ export default class Attachment extends React.Component {
   }
 }
 
-const OMIT_PROPS = difference(Object.keys(Attachment.propTypes), Object.keys(AttachmentView.propTypes));
-
+// const OMIT_PROPS = difference(Object.keys(Attachment.propTypes), Object.keys(AttachmentView.propTypes));

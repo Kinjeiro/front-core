@@ -1,3 +1,4 @@
+/*
 .FieldLayout__control {
   .Attachment {
     input[type='file'] {
@@ -6,5 +7,10 @@
     }
   }
 }
+*/
 
-
+.UploadControl {
+  &__input {
+    display: none;
+  }
+}

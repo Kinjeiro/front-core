@@ -3,15 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
+import { translateCore } from '../../../../../../../../common/utils/i18n-utils';
+import { valueFromRange } from '../../../../../../../../common/utils/common';
+
 import ATTACHMENT_PROP_TYPE from '../../../../../../../feature-attachments/common/subModule/model-attachment';
 
 // ======================================================
 // MODULE
 // ======================================================
-import { translateCore } from '../../../../../../../../common/utils/i18n-utils';
-import { valueFromRange } from '../../../../../../../../common/utils/common';
-
-import getComponents from '../../../../../../../../common/get-components';
+import getComponents from '../../../../get-components';
 
 const {
   Input,
@@ -177,7 +177,7 @@ export default class AttachmentItemView extends React.Component {
       editable,
     } = this.props;
 
-    return !readOnly && editable === true && (
+    return !readOnly && editable && (
       <span
         className="AttachmentItem__remove"
         onClick={ this.handleAttachmentRemove }

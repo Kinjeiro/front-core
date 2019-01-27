@@ -29,6 +29,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('Attachment', () => require('./components/fields/Attachment/Attachment').default);
   COMPONENTS_BASE.replace('AttachmentView', () => require('./components/fields/Attachment/AttachmentView').default);
   COMPONENTS_BASE.replace('AttachmentLayout', () => require('./components/fields/Attachment/AttachmentLayout').default);
+  COMPONENTS_BASE.replace('AttachmentUploadControl', () => require('./components/fields/Attachment/AttachmentUploadControl').default);
   COMPONENTS_BASE.replace('AttachmentItemView', () => require('./components/fields/Attachment/AttachmentItem/AttachmentItemView').default);
   COMPONENTS_BASE.replace('AttachmentItemLayout', () => require('./components/fields/Attachment/AttachmentItem/AttachmentItemLayout').default);
 

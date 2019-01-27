@@ -148,6 +148,7 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, apiPluginOpt
 ```
 12. Если нужна проверка прав и авторизации нужно использовать вместо 
 ```Button``` (которая теперь компонент) -> ```PermissionButton``` (которая контейнер, знает о редуксовых врапперах)
+13. Attachments - теперь все пропсы не пропрасываются в контрол, если нужно что-то пробросить в сам контрол нужно класть в ```customControlProps```
 
 ### API Dependencies:
     - auth-server@2.0.1
