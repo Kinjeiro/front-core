@@ -68,53 +68,61 @@ export default function createApiPlugins() {
     );
   }
 
-  plugins.push(
-    apiPluginFactory(
-      API.googleSignin,
-      async (requestData, request, reply) => {
-        logger.log('GOOGLE_SIGNIN');
-        reply.redirect(getSocialAuthUrl(PROVIDERS.GOOGLE));
-      },
-      {
-        routeConfig: {
-          // для этого обработчика авторизация не нужна
-          auth: false,
+  if (serverConfig.common.features.auth.socialProvides.google) {
+    plugins.push(
+      apiPluginFactory(
+        API.googleSignin,
+        async (requestData, request, reply) => {
+          logger.log('GOOGLE_SIGNIN');
+          reply.redirect(getSocialAuthUrl(PROVIDERS.GOOGLE));
         },
-      },
-    ),
-  );
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+  if (serverConfig.common.features.auth.socialProvides.vkontakte) {
+    plugins.push(
+      apiPluginFactory(
+        API.vkontakteSignin,
+        async (requestData, request, reply) => {
+          logger.log('VKONTAKTE_SIGNIN');
+          reply.redirect(getSocialAuthUrl(PROVIDERS.VKONTAKTE));
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+  if (serverConfig.common.features.auth.socialProvides.facebook) {
+    plugins.push(
+      apiPluginFactory(
+        API.facebookSignin,
+        async (requestData, request, reply) => {
+          logger.log('FACEBOOK_SIGNIN');
+          reply.redirect(getSocialAuthUrl(PROVIDERS.FACEBOOK));
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
 
-  plugins.push(
-    apiPluginFactory(
-      API.facebookSignin,
-      async (requestData, request, reply) => {
-        logger.log('FACEBOOK_SIGNIN');
-        reply.redirect(getSocialAuthUrl(PROVIDERS.FACEBOOK));
-      },
-      {
-        routeConfig: {
-          // для этого обработчика авторизация не нужна
-          auth: false,
-        },
-      },
-    ),
-  );
 
-  plugins.push(
-    apiPluginFactory(
-      API.vkontakteSignin,
-      async (requestData, request, reply) => {
-        logger.log('VKONTAKTE_SIGNIN');
-        reply.redirect(getSocialAuthUrl(PROVIDERS.VKONTAKTE));
-      },
-      {
-        routeConfig: {
-          // для этого обработчика авторизация не нужна
-          auth: false,
-        },
-      },
-    ),
-  );
+
+
 
   plugins.push(
     apiPluginFactory(

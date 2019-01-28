@@ -17,6 +17,14 @@ module.exports = {
     features: {
       // todo @ANKU @CRIT @MAIN - отключили временно авторизацию
       // auth: false,
+
+      auth: {
+        socialProvides: {
+          google: true,
+          vkontakte: true,
+          facebook: true
+        }
+      }
     }
   },
   server: {

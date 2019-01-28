@@ -59,6 +59,10 @@ module.exports = {
       loginCancelButton: 'Cancel',
       signup: 'Sign up',
       forgotPassword: 'Forgot password?',
+
+      googleSigninButton: 'Войти через Google',
+      vkontakteSigninButton: 'Войти через VK',
+      facebookSigninButton: 'Продолжить с Facebook',
     },
     ForgotPage: {
       title: 'Forgot password',

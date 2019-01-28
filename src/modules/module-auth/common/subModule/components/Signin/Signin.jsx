@@ -9,12 +9,6 @@ import bemDecorator from '../../../../../../common/utils/decorators/bem-componen
 import clientConfig from '../../../../../../common/client-config';
 
 // ======================================================
-// REDUX
-// ======================================================
-import { getUserInfo } from '../../../../../../common/app-redux/selectors';
-import * as reduxUserInfo from '../../redux-user-info';
-
-// ======================================================
 // COMPONENTS and STYLES
 // ======================================================
 import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
@@ -23,6 +17,10 @@ import { SUB_TYPES } from '../../../../../../common/models/model-field';
 // ======================================================
 // MODULE
 // ======================================================
+import { API_CONFIGS } from '../../api-auth';
+import { getUserInfo } from '../../redux-selectors';
+import * as reduxUserInfo from '../../redux-user-info';
+
 import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 
@@ -154,6 +152,61 @@ export default class Signin extends Component {
   }
 
   // ======================================================
+  // RENDERS
+  // ======================================================
+  renderSocials() {
+    const socials = [];
+
+    // todo @ANKU @CRIT @MAIN - сделать потом через попап \ либо отдельную страницу
+    if (clientConfig.common.features.auth.socialProvides.google) {
+      socials.push((
+        <a
+          key="google"
+          href={ API_CONFIGS.googleSignin.path }
+        >
+          <Button className="GoogleAuthButton">
+            <GoogleAuthIcon className="SocialAuthIcon" />
+            { i18n('pages.SigninPage.googleSigninButton') }
+          </Button>
+        </a>
+      ));
+    }
+    if (clientConfig.common.features.auth.socialProvides.vkontakte) {
+      socials.push((
+        <a
+          key="vkontakte"
+          href={ API_CONFIGS.vkontakteSignin.path }
+        >
+          <Button className="VkontakteAuthButton">
+            <VKAuthIcon className="SocialAuthIcon" />
+            { i18n('pages.SigninPage.vkontakteSigninButton') }
+          </Button>
+        </a>
+      ));
+    }
+    if (clientConfig.common.features.auth.socialProvides.facebook) {
+      socials.push((
+        <a
+          key="facebook"
+          href={ API_CONFIGS.facebookSignin.path }
+        >
+          <Button className="FacebookAuthButton">
+            <FbAuthIcon className="SocialAuthIcon" />
+            { i18n('pages.SigninPage.facebookSigninButton') }
+          </Button>
+        </a>
+      ));
+    }
+
+    return socials.length > 0 && (
+      <div className="SocialAuthButtons">
+        { socials }
+      </div>
+    );
+  }
+
+
+  // ======================================================
   // MAIN RENDER
   // ======================================================
   render() {
@@ -188,26 +241,7 @@ export default class Signin extends Component {
                 {i18n('pages.SigninPage.signup')}
               </Button>
             )}
-            <div className="SocialAuthButtons">
-              <a href={ '/api/auth/google' }>
-                <Button className="GoogleAuthButton">
-                  <GoogleAuthIcon className="SocialAuthIcon" />
-                  Войти через Google
-                </Button>
-              </a>
-              <a href={ '/api/auth/vkontakte' }>
-                <Button className="VkontakteAuthButton">
-                  <VKAuthIcon className="SocialAuthIcon" />
-                  Войти через VK
-                </Button>
-              </a>
-              <a href={ '/api/auth/facebook' }>
-                <Button className="FacebookAuthButton">
-                  <FbAuthIcon className="SocialAuthIcon" />
-                  Продолжить с Facebook
-                </Button>
-              </a>
-            </div>
+            { this.renderSocials() }
           </React.Fragment>
         }
         onSubmit={ this.handleLogin }

@@ -197,6 +197,12 @@ module.exports = {
          */
         aliasIdAsUsername: false,
 
+        socialProvides: {
+          google: false,
+          vkontakte: false,
+          facebook: false
+        },
+
         /**
          * Для тестовых пользователей генерятся уникальные userId на auth-server и чтобы можно было использовать их с моками и без, хорошо бы их тут определить
          * Чтобы на основе их защивать другие тестовые моковые данные, в которых нужно указывать userId
