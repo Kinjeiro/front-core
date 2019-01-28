@@ -21,6 +21,10 @@ export function isValidPath(path) {
   return path && /^([a-zA-Z]:)?(\\[^<>:"/\\|?*]+)+\\?$/.test(path);
 }
 
+export function isAbsoluteUrl(url) {
+  return url.indexOf(':') > 0;
+}
+
 // export function parseUrlParameters(url) {
 //   const urlParams = {};
 //
@@ -196,18 +200,20 @@ export function joinPath(...paths) {
   if (!paths || paths.length === 0 || (paths.length === 1 && !paths[0])) {
     return '/';
   }
+  const urlPrefix = isAbsoluteUrl(paths[0]) ? '' : '/';
+
   const lastUrlParameters = paths.length > 1 && paths[paths.length - 1];
   if (typeof lastUrlParameters === 'object') {
     // url parameters
     return formatUrlParameters(
       lastUrlParameters,
-      joinPathInner('/', ...convertToString(...paths.slice(0, paths.length - 1))),
+      joinPathInner(urlPrefix, ...convertToString(...paths.slice(0, paths.length - 1))),
     );
   } else if (typeof lastUrlParameters === 'undefined' || lastUrlParameters === null) {
-    return joinPathInner('/', ...convertToString(...paths.slice(0, paths.length - 1)));
+    return joinPathInner(urlPrefix, ...convertToString(...paths.slice(0, paths.length - 1)));
   }
 
-  return joinPathInner('/', ...convertToString(...paths));
+  return joinPathInner(urlPrefix, ...convertToString(...paths));
 }
 
 /**
