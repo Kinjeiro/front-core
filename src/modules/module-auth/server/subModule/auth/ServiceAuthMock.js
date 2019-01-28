@@ -28,6 +28,11 @@ export default class ServiceAuthMock extends ServiceAuth {
     return TOKENS;
   }
 
+  getSocialAuthUrl(provider, projectCallbackUrl = undefined) {
+    // todo @ANKU @LOW - в будущем можно примитивный механизм добавить получения инфы
+    throw new Error('Социальные провайдеры не доступны в mock режиме');
+  }
+
   getUserInner(userId) {
     // return serverConfig.common.features.auth.emailAsLogin
     //   ? objectValues(USERS).find(({ email }) => email === username)

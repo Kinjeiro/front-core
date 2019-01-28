@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import i18n from '../../../../../common/utils/i18n-utils';
 import {
   parseToUniError,
@@ -8,11 +9,15 @@ import {
   AUTH_TYPES,
   getHeadersByAuthType,
 } from '../../../../../server/utils/auth-utils';
-import { sendEndpointMethodRequest } from '../../../../../server/utils/send-server-request';
+import {
+  sendEndpointMethodRequest,
+  getEndpointServiceUrl,
+} from '../../../../../server/utils/send-server-request';
 
 import serverConfig from '../../../../../server/server-config';
 
 import CoreService from '../../../../../server/services/utils/CoreService';
+import { joinPath } from '../../../../../common/utils/uri-utils';
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
@@ -28,7 +33,9 @@ export default class ServiceAuth extends CoreService {
     this.urls = {
       authSignup: '/auth/signup',
       authSignin: '/auth/signin',
-      authGoogleSignin: '/auth/google',
+
+      authSocialProviderSignin: '/auth/{provider}',
+
       authRefresh: '/auth/signin',
       authValidate: '/auth/user',
       authSignout: '/auth/signout',
@@ -45,6 +52,22 @@ export default class ServiceAuth extends CoreService {
       client_secret:
         serverConfig.server.features.auth.applicationClientInfo.client_secret,
     };
+  }
+
+  getSocialAuthUrl(provider, projectCallbackUrl = undefined) {
+    const {
+      client_id,
+      // client_secret,
+    } = this.getClientInfo();
+
+    return joinPath(
+      getEndpointServiceUrl(this.endpointServiceConfig, this.urls.authSocialProviderSignin, { provider }),
+      {
+        provider,
+        client_id,
+        projectCallbackUrl,
+      },
+    );
   }
 
   async authSignup(userData, emailOptions = null) {
@@ -113,16 +136,6 @@ export default class ServiceAuth extends CoreService {
 
           throw new ThrowableUniError(uniError);
         })
-    );
-  }
-
-  authGoogleSignin() {
-    return sendEndpointMethodRequest(
-      this.endpointServiceConfig,
-      this.urls.authGoogleSignin,
-      'get',
-      null,
-      null,
     );
   }
 

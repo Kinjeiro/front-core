@@ -32,6 +32,16 @@ export default class CoreService {
 
   servicesContext = null;
   request = null;
+  /**
+   * Создается в config/utils/create-config.js:
+   *
+   * protocol: string
+   * host: string
+   * port: number
+   * endpoint: string
+   * fullUrl: string
+   * timeout: number
+   */
   endpointServiceConfig = null;
   options = null;
 

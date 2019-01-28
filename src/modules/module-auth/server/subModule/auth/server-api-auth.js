@@ -13,15 +13,10 @@ import { COOKIE__GUEST_ID } from '../../../../../server/plugins/plugin-request-u
 
 import { API_CONFIGS } from '../../../common/subModule/api-auth';
 
-const PROVIDERS = {
-  GOOGLE: 'google',
-  VKONTAKTE: 'vkontakte',
-  FACEBOOK: 'facebook',
-};
-
-function getSocialAuthUrl(provider) {
-  return `${serverConfig.server.endpointServices.serviceAuth.fullUrl}/auth/${provider}?provider=${provider}&client_id=${serverConfig.server.features.auth.applicationClientInfo.client_id}`;
-}
+// ======================================================
+// MODULE
+// ======================================================
+import PROVIDERS from './social-providers';
 
 export const API = API_CONFIGS;
 
@@ -69,12 +64,14 @@ export default function createApiPlugins() {
   }
 
   if (serverConfig.common.features.auth.socialProvides.google) {
+    // todo @ANKU @LOW - может сделать один метод апи просто пас параметр провайдера сделать
     plugins.push(
       apiPluginFactory(
         API.googleSignin,
         async (requestData, request, reply) => {
           logger.log('GOOGLE_SIGNIN');
-          reply.redirect(getSocialAuthUrl(PROVIDERS.GOOGLE));
+          // todo @ANKU @CRIT @MAIN - убрать редирект, заменить на возвращение обычного html и его вставку в reply
+          reply.redirect(request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.GOOGLE));
         },
         {
           routeConfig: {
@@ -91,7 +88,7 @@ export default function createApiPlugins() {
         API.vkontakteSignin,
         async (requestData, request, reply) => {
           logger.log('VKONTAKTE_SIGNIN');
-          reply.redirect(getSocialAuthUrl(PROVIDERS.VKONTAKTE));
+          reply.redirect(request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.VKONTAKTE));
         },
         {
           routeConfig: {
@@ -108,7 +105,7 @@ export default function createApiPlugins() {
         API.facebookSignin,
         async (requestData, request, reply) => {
           logger.log('FACEBOOK_SIGNIN');
-          reply.redirect(getSocialAuthUrl(PROVIDERS.FACEBOOK));
+          reply.redirect(request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.FACEBOOK));
         },
         {
           routeConfig: {
@@ -119,8 +116,6 @@ export default function createApiPlugins() {
       ),
     );
   }
-
-
 
 
 
