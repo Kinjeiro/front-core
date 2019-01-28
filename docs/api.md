@@ -88,12 +88,12 @@
     -   [ajaxGet][84]
     -   [ajaxPost][85]
     -   [proceedRequest][86]
--   [emitProcessing][87]
--   [valueFromRange][88]
+-   [valueFromRange][87]
+-   [findInTree][88]
 -   [findInTree][89]
--   [findInTree][90]
--   [arrayToTree][91]
--   [aggregation][92]
+-   [arrayToTree][90]
+-   [aggregation][91]
+-   [emitProcessing][92]
 -   [createApiConfig][93]
 -   [createApiConfig][94]
 -   [reduxSimpleFormDecorator][95]
@@ -132,21 +132,21 @@
 -   [deleteFile][128]
 -   [link][129]
 -   [parseValueToString][130]
--   [formData][131]
--   [validate][132]
--   [Layout][133]
--   [children][134]
--   [children][135]
--   [accept][136]
--   [accept][137]
--   [onAdd][138]
--   [onDescriptionChange][139]
--   [onDescriptionBlur][140]
--   [onClick][141]
--   [onRemove][142]
--   [update][143]
--   [CoreSelect][144]
--   [update][145]
+-   [touched][131]
+-   [children][132]
+-   [accept][133]
+-   [onAdd][134]
+-   [openUploadDialogFn][135]
+-   [onDescriptionChange][136]
+-   [onDescriptionBlur][137]
+-   [onClick][138]
+-   [onRemove][139]
+-   [update][140]
+-   [CoreSelect][141]
+-   [update][142]
+-   [formData][143]
+-   [validate][144]
+-   [Layout][145]
 -   [apiGetUserAvatarUrl][146]
 -   [authViewDecorator][147]
 -   [checkAccess][148]
@@ -175,42 +175,43 @@
 -   [onPreResponse][171]
 -   [createServices][172]
 -   [createMockServices][173]
--   [findRecords][174]
--   [findRecordsWithPagination][175]
--   [bulkOperations][176]
--   [pluginServicesContext][177]
--   [registerService][178]
--   [pluginStrategies][179]
--   [ROUTE_CONFIG][180]
--   [ROLES][181]
--   [PERMISSIONS][182]
--   [ACCESS_OBJECT][183]
--   [PROXY][184]
--   [GUEST_MODE][185]
--   [AUTH][186]
--   [createProxyWrapperCallback][187]
--   [apiPluginFullFactory][188]
--   [apiPluginFactory][189]
--   [proxyRoute][190]
--   [proxyRoutePluginFactory][191]
--   [createEndpointServiceConfig][192]
--   [HOST][193]
+-   [endpointServiceConfig][174]
+-   [findRecords][175]
+-   [findRecordsWithPagination][176]
+-   [bulkOperations][177]
+-   [pluginServicesContext][178]
+-   [registerService][179]
+-   [pluginStrategies][180]
+-   [ROUTE_CONFIG][181]
+-   [ROLES][182]
+-   [PERMISSIONS][183]
+-   [ACCESS_OBJECT][184]
+-   [PROXY][185]
+-   [GUEST_MODE][186]
+-   [AUTH][187]
+-   [createProxyWrapperCallback][188]
+-   [apiPluginFullFactory][189]
+-   [apiPluginFactory][190]
+-   [proxyRoute][191]
+-   [proxyRoutePluginFactory][192]
+-   [createEndpointServiceConfig][193]
 -   [HOST][194]
--   [SERVICES_HOST][195]
+-   [HOST][195]
 -   [SERVICES_HOST][196]
--   [REQUEST_TIMEOUT][197]
+-   [SERVICES_HOST][197]
 -   [REQUEST_TIMEOUT][198]
--   [createEndpointFactoryFromEnv][199]
--   [createTempFile][200]
--   [cookie][201]
--   [downloadFile][202]
--   [dirnameNormalize][203]
--   [inModules][204]
--   [applicationId][205]
--   [sendSimpleRequest][206]
--   [sendEndpointMethodRequest][207]
--   [factoryEndpointServiceMethodRequest][208]
--   [proceedRequest][209]
+-   [REQUEST_TIMEOUT][199]
+-   [createEndpointFactoryFromEnv][200]
+-   [createTempFile][201]
+-   [cookie][202]
+-   [downloadFile][203]
+-   [dirnameNormalize][204]
+-   [inModules][205]
+-   [applicationId][206]
+-   [sendSimpleRequest][207]
+-   [sendEndpointMethodRequest][208]
+-   [factoryEndpointServiceMethodRequest][209]
+-   [proceedRequest][210]
 
 ## Runners
 
@@ -339,12 +340,12 @@ Get log level string based on supplied params
 
 **Parameters**
 
--   `level` **([string][210] \| [function][211] \| [object][212])** console[level]
--   `action` **[object][212]** selected action
--   `payload` **[array][213]** selected payload
--   `type` **[string][210]** log entry type
+-   `level` **([string][211] \| [function][212] \| [object][213])** console[level]
+-   `action` **[object][213]** selected action
+-   `payload` **[array][214]** selected payload
+-   `type` **[string][211]** log entry type
 
-Returns **[string][210]** level
+Returns **[string][211]** level
 
 ## createLogger
 
@@ -352,20 +353,20 @@ Creates logger with following options
 
 **Parameters**
 
--   `options` **[object][212]** options for logger (optional, default `{}`)
-    -   `options.level` **([string][210] \| [function][211] \| [object][212])** console[level]
-    -   `options.duration` **[boolean][214]** print duration of each action?
-    -   `options.timestamp` **[boolean][214]** print timestamp with each action?
-    -   `options.colors` **[object][212]** custom colors
-    -   `options.logger` **[object][212]** implementation of the `console` API
-    -   `options.logErrors` **[boolean][214]** should errors in action execution be caught, logged, and re-thrown?
-    -   `options.collapsed` **[boolean][214]** is group collapsed?
-    -   `options.predicate` **[boolean][214]** condition which resolves logger behavior
-    -   `options.stateTransformer` **[function][211]** transform state before print
-    -   `options.actionTransformer` **[function][211]** transform action before print
-    -   `options.errorTransformer` **[function][211]** transform error before print
+-   `options` **[object][213]** options for logger (optional, default `{}`)
+    -   `options.level` **([string][211] \| [function][212] \| [object][213])** console[level]
+    -   `options.duration` **[boolean][215]** print duration of each action?
+    -   `options.timestamp` **[boolean][215]** print timestamp with each action?
+    -   `options.colors` **[object][213]** custom colors
+    -   `options.logger` **[object][213]** implementation of the `console` API
+    -   `options.logErrors` **[boolean][215]** should errors in action execution be caught, logged, and re-thrown?
+    -   `options.collapsed` **[boolean][215]** is group collapsed?
+    -   `options.predicate` **[boolean][215]** condition which resolves logger behavior
+    -   `options.stateTransformer` **[function][212]** transform state before print
+    -   `options.actionTransformer` **[function][212]** transform action before print
+    -   `options.errorTransformer` **[function][212]** transform error before print
 
-Returns **[function][211]** logger middleware
+Returns **[function][212]** logger middleware
 
 ## getBindActions
 
@@ -538,7 +539,7 @@ Returns **{}**
 
 Компонент для того, чтобы не писать bind функции c ключом
 В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][215]
+См. [https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items][216]
 
 ## theme
 
@@ -817,7 +818,7 @@ touched
 
 ## FROM_BOOM
 
-[https://github.com/hapijs/boom][216]
+[https://github.com/hapijs/boom][217]
 
 ## FROM_BOOM_RESPONSE
 
@@ -849,7 +850,7 @@ touched
 
 ## parseFromBoom
 
-[https://github.com/hapijs/boom][216]
+[https://github.com/hapijs/boom][217]
 
 -   isBoom - if true, indicates this is a Boom object instance. Note that this boolean should only be used if the error is an instance of Error. If it is not certain, use Boom.isBoom() instead.
 -   isServer - convenience bool indicating status code >= 500.
@@ -921,7 +922,7 @@ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
 -   `operationType`  
 -   `itemIds`  
 
-Returns **{path: [string][210], value: any, op: [string][210]}** 
+Returns **{path: [string][211], value: any, op: [string][211]}** 
 
 ## createCrudApi
 
@@ -1011,19 +1012,7 @@ object of that fields
     other - result
 -   `mockFilter`  function(requestOptions, error, response) {}
 
-Returns **[Promise][217]** 
-
-## emitProcessing
-
-Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)
-
-**Parameters**
-
--   `handlerPromise`  
--   `componentWithSetState`  
--   `processingStateVariable`  
-
-Returns **any** 
+Returns **[Promise][218]** 
 
 ## valueFromRange
 
@@ -1073,7 +1062,7 @@ Returns **any**
 -   `path`   (optional, default `[]`)
 -   `pathStr`   (optional, default `''`)
 
-Returns **{result: any, isRoot: [boolean][214], pathStr: [string][210]}** 
+Returns **{result: any, isRoot: [boolean][215], pathStr: [string][211]}** 
 
 ## arrayToTree
 
@@ -1091,7 +1080,7 @@ Returns **{result: any, isRoot: [boolean][214], pathStr: [string][210]}**
 
 ## aggregation
 
-[https://stackoverflow.com/a/45332959/344172][218]
+[https://stackoverflow.com/a/45332959/344172][219]
 
 **Parameters**
 
@@ -1117,6 +1106,18 @@ tellAge(){console.log(this.name+' is '+this.age+' years old.');}
 class Boy extends aggregation(Person,Male,Child){}
 var m = new Boy('Mike');
 m.tellAge(); // Mike is 12 years old.
+
+## emitProcessing
+
+Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)
+
+**Parameters**
+
+-   `handlerPromise`  
+-   `componentWithSetState`  
+-   `processingStateVariable`  
+
+Returns **any** 
 
 ## createApiConfig
 
@@ -1164,7 +1165,7 @@ Returns **({method, path, payload} | any)**
 **Parameters**
 
 -   `tableId`  айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)Options:
--   `$1` **[Object][212]**  (optional, default `{}`)
+-   `$1` **[Object][213]**  (optional, default `{}`)
     -   `$1.loadOnMount`   (optional, default `true`)
     -   `$1.loadOnChange`   (optional, default `true`)
     -   `$1.clearOnUnmount`   (optional, default `true`)
@@ -1240,7 +1241,7 @@ Returns **any** возвращает true - если нужно прервать
     -   если function - функция вызывается дважды, один раз для newProps второй раз для oldProps - на вход который подаются пропсы, вернуть должна часть props по которой будет deep equals
     -   если string - путь в props для объектов которые будут сравниваться
     -   если string array - если больше 1 то singleRun по умолчанию true
--   `$1` **[Object][212]**  (optional, default `{}`)
+-   `$1` **[Object][213]**  (optional, default `{}`)
     -   `$1.deepEqual`   (optional, default `true`)
     -   `$1.singleRun`   (optional, default `true`)
     -   `$1.oldPropsNotNull`   (optional, default `true`)
@@ -1269,7 +1270,7 @@ accountId: PropTypes.number,
 
 -   `statusPropPath`  
 
-Returns **[function][211]** 
+Returns **[function][212]** 
 
 ## postFormToUrl
 
@@ -1286,12 +1287,12 @@ Returns **[function][211]**
 
 **Parameters**
 
--   `date` **[String][210]** Строка даты в формате `YYYY-MM-DD`
--   `options` **[Object][212]?** Список опций
-    -   `options.fullMonth` **[Boolean][214]** Если `true`, то название месяца, иначе номер (optional, default `true`)
-    -   `options.cutCurrentYear` **[Boolean][214]** Если `true`, то дата без указания года (optional, default `true`)
+-   `date` **[String][211]** Строка даты в формате `YYYY-MM-DD`
+-   `options` **[Object][213]?** Список опций
+    -   `options.fullMonth` **[Boolean][215]** Если `true`, то название месяца, иначе номер (optional, default `true`)
+    -   `options.cutCurrentYear` **[Boolean][215]** Если `true`, то дата без указания года (optional, default `true`)
 
-Returns **[String][210]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
+Returns **[String][211]** Cтрока даты в формате `DD month YYYY или DD.MM.YYYY`
 
 ## formatStringInner
 
@@ -1330,7 +1331,7 @@ Returns **any**
 
 ## generateId
 
-Returns **[string][210]** 
+Returns **[string][211]** 
 
 **Meta**
 
@@ -1402,11 +1403,11 @@ console.log(i18n('core:keyForMyComponent')); //components.MyComponent.keyForMyCo
 
 -   `context`  
 
-Returns **[Function][211]** 
+Returns **[Function][212]** 
 
 ## ImageTools
 
-from [https://gist.github.com/dcollien/312bce1270a5f511bf4a][219]
+from [https://gist.github.com/dcollien/312bce1270a5f511bf4a][220]
 
 ImageTools.resize(this.files[0], {
 width: 320, // maximum width
@@ -1457,7 +1458,7 @@ Returns **{}**
 -   `url`  
 -   `hash`  
 
-Returns **[string][210]** 
+Returns **[string][211]** 
 
 ## joinPath
 
@@ -1478,7 +1479,7 @@ Returns **any**
 
 -   `paths` **...any** 
 
-Returns **[string][210]** 
+Returns **[string][211]** 
 
 ## joinUri
 
@@ -1535,7 +1536,7 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
 -   `contentType`  
 -   `readStream`  
 
-Returns **[Promise][217]** attachmentContentId
+Returns **[Promise][218]** attachmentContentId
 
 ## downloadFile
 
@@ -1551,7 +1552,7 @@ Returns **any** stream
 
 -   `id`  
 
-Returns **[Promise][217]** 
+Returns **[Promise][218]** 
 
 ## uploadFile
 
@@ -1561,7 +1562,7 @@ Returns **[Promise][217]**
 -   `contentType`  
 -   `readStream`  
 
-Returns **[Promise][217]** attachmentContentId
+Returns **[Promise][218]** attachmentContentId
 
 ## downloadFile
 
@@ -1577,7 +1578,7 @@ Returns **any** stream
 
 -   `attachmentContentId`  
 
-Returns **[Promise][217]** 
+Returns **[Promise][218]** 
 
 ## link
 
@@ -1590,7 +1591,7 @@ Returns **[Promise][217]**
 -   `linkByObjectId`  
 -   `objectModel`  
 
-Returns **[Promise][217]** 
+Returns **[Promise][218]** 
 
 ## parseValueToString
 
@@ -1603,52 +1604,20 @@ Returns **[Promise][217]**
 
 Returns **any** 
 
-## formData
+## touched
 
-Для передачи в onSubmit
+**Meta**
 
-## validate
+-   **deprecated**: в CoreField--touched есть
 
-(fieldErrors, formData, props) => result
-Где fieldErrors: [...string|{field, fieldLabel, errors}]
-
-Где result: string|boolean|[...string|{field, fieldLabel, errors}]
-
--   если false: ошибка с текстом textDefaultFormErrorText
--   если true | null | undefined: не будет ошибок (не смотря на fieldErrors)
--   если массив: выведется массив ошибок
-
-## Layout
-
-default - FormLayout
-props:
-id
-inModal
-
-fields
-actions
-postActions
-actionStatus
 
 ## children
 
-Если функция - (onOpenDialog, props, state) => Node
-
-## children
-
-Если функция - (onOpenDialog, props, state) => Node
+Если функция - (openUploadDialogFn, props) => Node
 
 ## accept
 
-[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types][220]
-accept="image/png" or accept=".png" — Accepts PNG files.
-accept="image/png, image/jpeg" or accept=".png, .jpg, .jpeg" — Accept PNG or JPEG files.
-accept="image/_" — Accept any file with an image/_ MIME type. (Many mobile devices also let the user take a picture with the camera when this is used.)
-accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-
-## accept
-
-[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types][220]
+[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types][221]
 accept="image/png" or accept=".png" — Accepts PNG files.
 accept="image/png, image/jpeg" or accept=".png, .jpg, .jpeg" — Accept PNG or JPEG files.
 accept="image/_" — Accept any file with an image/_ MIME type. (Many mobile devices also let the user take a picture with the camera when this is used.)
@@ -1657,6 +1626,10 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 ## onAdd
 
 (uuidToFileMap, newAttachments, resultAttachments) => {} - всегда, даже если multiple=false, так как uuid важен для InstanceAttachments
+
+## openUploadDialogFn
+
+бывает необходимо сделать кастомный вид кнопки загрузки, поэтому ставят showAddButton: false и children: (openUploadDialogFn, props) => {} куда и передается эта функция, чтобы мануально открыть окно выбора файла
 
 ## onDescriptionChange
 
@@ -1698,6 +1671,33 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 -   `withChange`  
 -   `event`  
 -   `comp`  
+
+## formData
+
+Для передачи в onSubmit
+
+## validate
+
+(fieldErrors, formData, props) => result
+Где fieldErrors: [...string|{field, fieldLabel, errors}]
+
+Где result: string|boolean|[...string|{field, fieldLabel, errors}]
+
+-   если false: ошибка с текстом textDefaultFormErrorText
+-   если true | null | undefined: не будет ошибок (не смотря на fieldErrors)
+-   если массив: выведется массив ошибок
+
+## Layout
+
+default - FormLayout
+props:
+id
+inModal
+
+fields
+actions
+postActions
+actionStatus
 
 ## apiGetUserAvatarUrl
 
@@ -1783,7 +1783,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][217]&lt;any>** 
+Returns **[Promise][218]&lt;any>** 
 
 ## ServiceAuthMock
 
@@ -1819,7 +1819,7 @@ Returns **any**
 -   `newPassword`  
 -   `emailOptions`  
 
-Returns **[Promise][217]&lt;any>** 
+Returns **[Promise][218]&lt;any>** 
 
 ## getProtectedInfoByToken
 
@@ -1836,7 +1836,7 @@ Returns **any**
 
 -   `userIdOrAliasId`  
 
-Returns **[Promise][217]&lt;\[`"userId"`, `"displayName"`, `"aliasId"`, `"description"`, `"username"`, `"firstName"`, `"lastName"`, `"middleName"`, `"email"`, `"phone"`, `"address"`]>** 
+Returns **[Promise][218]&lt;\[`"userId"`, `"displayName"`, `"aliasId"`, `"description"`, `"username"`, `"firstName"`, `"lastName"`, `"middleName"`, `"email"`, `"phone"`, `"address"`]>** 
 
 ## SUB_MODULE_FACTORY
 
@@ -1935,7 +1935,7 @@ Returns **{options: any}**
 -   `pathnameWithoutContextPath`  
 -   `moduleToRoutePrefixMap`  
 
-Returns **[boolean][214]** 
+Returns **[boolean][215]** 
 
 ## DEFAULT_LOGGER_IDS
 
@@ -2012,6 +2012,17 @@ Returns **(void | any)**
 ## createMockServices
 
 Метод для создания сервисов
+
+## endpointServiceConfig
+
+Создается в config/utils/create-config.js:
+
+protocol: string
+host: string
+port: number
+endpoint: string
+fullUrl: string
+timeout: number
 
 ## findRecords
 
@@ -2149,8 +2160,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][221] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][222]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][222] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][223]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `routeOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -2179,7 +2190,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 
 **Parameters**
 
--   `$0` **[Object][212]** 
+-   `$0` **[Object][213]** 
     -   `$0.protocol`  
     -   `$0.host`  
     -   `$0.port`  
@@ -2194,7 +2205,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   `endpoint`  
 -   `timeout`  
 
-Returns **{protocol: [string][210], host: [string][210], port: [number][223], endpoint: [string][210], fullUrl: [string][210], timeout: any}** 
+Returns **{protocol: [string][211], host: [string][211], port: [number][224], endpoint: [string][211], fullUrl: [string][211], timeout: any}** 
 
 ## HOST
 
@@ -2239,7 +2250,7 @@ Returns **function (any, any?)**
 
 -   `content`  
 -   `fileName`  
--   `options`  [https://raszi.github.io/node-tmp/][224] options
+-   `options`  [https://raszi.github.io/node-tmp/][225] options
     mode: the file mode to create with, it fallbacks to 0600 on file creation and 0700 on directory creation
     prefix: the optional prefix, fallbacks to tmp- if not provided
     postfix: the optional postfix, fallbacks to .tmp on file creation
@@ -2280,23 +2291,23 @@ Returns **any**
 
 ## dirnameNormalize
 
-[https://github.com/webpack/webpack/issues/1599][225]
+[https://github.com/webpack/webpack/issues/1599][226]
 С любыми настройками webpack на сервере**dirname на unix выдает src... а **filename /index.js в любом варианте
 
 **Parameters**
 
 -   `dirname`  
 
-Returns **[string][210]** 
+Returns **[string][211]** 
 
 ## inModules
 
 **Parameters**
 
--   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][226]
+-   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][227]
 -   `projectSrcPath`  
 
-Returns **[Array][213]** 
+Returns **[Array][214]** 
 
 ## applicationId
 
@@ -2309,12 +2320,12 @@ Returns **[Array][213]**
 
 **Parameters**
 
--   `requestOptions`  [https://github.com/request/request#requestoptions-callback][227]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
-    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][228]
+-   `requestOptions`  [https://github.com/request/request#requestoptions-callback][228]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
+    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][229]
     нужно установить в настройках:
     encoding: null,
 
-Returns **[Promise][217]** 
+Returns **[Promise][218]** 
 
 ## sendEndpointMethodRequest
 
@@ -2340,7 +2351,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][229]
+-   `requestOptions`  [https://www.npmjs.com/package/request][230]
 -   `logger`  
 
 Returns **any** 
@@ -2358,13 +2369,13 @@ Returns **any**
 -   `requestOptions`  
 -   `logger`  
 
-Returns **[Promise][217]&lt;any>** 
+Returns **[Promise][218]&lt;any>** 
 
 ## proceedRequest
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][230]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][231]
 -   `server`  
 
 Returns **any** Promise
@@ -2541,17 +2552,17 @@ Returns **any** Promise
 
 [86]: #proceedrequest
 
-[87]: #emitprocessing
+[87]: #valuefromrange
 
-[88]: #valuefromrange
+[88]: #findintree
 
-[89]: #findintree
+[89]: #findintree-1
 
-[90]: #findintree-1
+[90]: #arraytotree
 
-[91]: #arraytotree
+[91]: #aggregation
 
-[92]: #aggregation
+[92]: #emitprocessing
 
 [93]: #createapiconfig
 
@@ -2629,35 +2640,35 @@ Returns **any** Promise
 
 [130]: #parsevaluetostring
 
-[131]: #formdata
+[131]: #touched
 
-[132]: #validate-1
+[132]: #children
 
-[133]: #layout-1
+[133]: #accept
 
-[134]: #children
+[134]: #onadd
 
-[135]: #children-1
+[135]: #openuploaddialogfn
 
-[136]: #accept
+[136]: #ondescriptionchange
 
-[137]: #accept-1
+[137]: #ondescriptionblur
 
-[138]: #onadd
+[138]: #onclick
 
-[139]: #ondescriptionchange
+[139]: #onremove
 
-[140]: #ondescriptionblur
+[140]: #update
 
-[141]: #onclick
+[141]: #coreselect
 
-[142]: #onremove
+[142]: #update-1
 
-[143]: #update
+[143]: #formdata
 
-[144]: #coreselect
+[144]: #validate-1
 
-[145]: #update-1
+[145]: #layout-1
 
 [146]: #apigetuseravatarurl
 
@@ -2715,116 +2726,118 @@ Returns **any** Promise
 
 [173]: #createmockservices
 
-[174]: #findrecords
+[174]: #endpointserviceconfig
 
-[175]: #findrecordswithpagination
+[175]: #findrecords
 
-[176]: #bulkoperations
+[176]: #findrecordswithpagination
 
-[177]: #pluginservicescontext
+[177]: #bulkoperations
 
-[178]: #registerservice
+[178]: #pluginservicescontext
 
-[179]: #pluginstrategies
+[179]: #registerservice
 
-[180]: #route_config
+[180]: #pluginstrategies
 
-[181]: #roles
+[181]: #route_config
 
-[182]: #permissions
+[182]: #roles
 
-[183]: #access_object
+[183]: #permissions
 
-[184]: #proxy
+[184]: #access_object
 
-[185]: #guest_mode
+[185]: #proxy
 
-[186]: #auth
+[186]: #guest_mode
 
-[187]: #createproxywrappercallback
+[187]: #auth
 
-[188]: #apipluginfullfactory
+[188]: #createproxywrappercallback
 
-[189]: #apipluginfactory
+[189]: #apipluginfullfactory
 
-[190]: #proxyroute
+[190]: #apipluginfactory
 
-[191]: #proxyroutepluginfactory
+[191]: #proxyroute
 
-[192]: #createendpointserviceconfig
+[192]: #proxyroutepluginfactory
 
-[193]: #host
+[193]: #createendpointserviceconfig
 
-[194]: #host-1
+[194]: #host
 
-[195]: #services_host
+[195]: #host-1
 
-[196]: #services_host-1
+[196]: #services_host
 
-[197]: #request_timeout
+[197]: #services_host-1
 
-[198]: #request_timeout-1
+[198]: #request_timeout
 
-[199]: #createendpointfactoryfromenv
+[199]: #request_timeout-1
 
-[200]: #createtempfile
+[200]: #createendpointfactoryfromenv
 
-[201]: #cookie
+[201]: #createtempfile
 
-[202]: #downloadfile-2
+[202]: #cookie
 
-[203]: #dirnamenormalize
+[203]: #downloadfile-2
 
-[204]: #inmodules
+[204]: #dirnamenormalize
 
-[205]: #applicationid
+[205]: #inmodules
 
-[206]: #sendsimplerequest
+[206]: #applicationid
 
-[207]: #sendendpointmethodrequest
+[207]: #sendsimplerequest
 
-[208]: #factoryendpointservicemethodrequest
+[208]: #sendendpointmethodrequest
 
-[209]: #proceedrequest-1
+[209]: #factoryendpointservicemethodrequest
 
-[210]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[210]: #proceedrequest-1
 
-[211]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[211]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[212]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[212]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[213]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[213]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[214]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[214]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[215]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
+[215]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[216]: https://github.com/hapijs/boom
+[216]: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items
 
-[217]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[217]: https://github.com/hapijs/boom
 
-[218]: https://stackoverflow.com/a/45332959/344172
+[218]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[219]: https://gist.github.com/dcollien/312bce1270a5f511bf4a
+[219]: https://stackoverflow.com/a/45332959/344172
 
-[220]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types
+[220]: https://gist.github.com/dcollien/312bce1270a5f511bf4a
 
-[221]: https://github.com/hapijs/h2o2
+[221]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types
 
-[222]: http://localhost:
+[222]: https://github.com/hapijs/h2o2
 
-[223]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[223]: http://localhost:
 
-[224]: https://raszi.github.io/node-tmp/
+[224]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[225]: https://github.com/webpack/webpack/issues/1599
+[225]: https://raszi.github.io/node-tmp/
 
-[226]: https://www.npmjs.com/package/glob#glob-primer
+[226]: https://github.com/webpack/webpack/issues/1599
 
-[227]: https://github.com/request/request#requestoptions-callback
+[227]: https://www.npmjs.com/package/glob#glob-primer
 
-[228]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+[228]: https://github.com/request/request#requestoptions-callback
 
-[229]: https://www.npmjs.com/package/request
+[229]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
 
-[230]: https://hapijs.com/api#serverinjectoptions-callback
+[230]: https://www.npmjs.com/package/request
+
+[231]: https://hapijs.com/api#serverinjectoptions-callback

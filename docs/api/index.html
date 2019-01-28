@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.43 | Documentation</title>
+  <title>@reagentum/front-core 1.6.44 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.43</code></div>
+          <div class='mb1'><code>1.6.44</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -903,16 +903,6 @@
               
                 
                 <li><a
-                  href='#emitprocessing'
-                  class="">
-                  emitProcessing
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#valuefromrange'
                   class="">
                   valueFromRange
@@ -956,6 +946,16 @@
                   href='#aggregation'
                   class="">
                   aggregation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#emitprocessing'
+                  class="">
+                  emitProcessing
                   
                 </a>
                 
@@ -1343,29 +1343,9 @@
               
                 
                 <li><a
-                  href='#formdata'
+                  href='#touched'
                   class="">
-                  formData
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#validate'
-                  class="">
-                  validate
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#layout'
-                  class="">
-                  Layout
+                  touched
                   
                 </a>
                 
@@ -1376,26 +1356,6 @@
                   href='#children'
                   class="">
                   children
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#children'
-                  class="">
-                  children
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#accept'
-                  class="">
-                  accept
                   
                 </a>
                 
@@ -1416,6 +1376,16 @@
                   href='#onadd'
                   class="">
                   onAdd
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#openuploaddialogfn'
+                  class="">
+                  openUploadDialogFn
                   
                 </a>
                 
@@ -1486,6 +1456,36 @@
                   href='#update'
                   class="">
                   update
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#formdata'
+                  class="">
+                  formData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#validate'
+                  class="">
+                  validate
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#layout'
+                  class="">
+                  Layout
                   
                 </a>
                 
@@ -1770,6 +1770,16 @@
                   href='#createmockservices'
                   class="">
                   createMockServices
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#endpointserviceconfig'
+                  class="">
+                  endpointServiceConfig
                   
                 </a>
                 
@@ -7386,90 +7396,6 @@ other - result
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='emitprocessing'>
-      emitProcessing
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)</p>
-
-
-  <div class='pre p1 fill-light mt0'>emitProcessing(handlerPromise: any, componentWithSetState: any, processingStateVariable: any): any</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>handlerPromise</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>componentWithSetState</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>processingStateVariable</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='valuefromrange'>
       valueFromRange
     </h3>
@@ -7937,6 +7863,90 @@ tellAge(){console.log(this.name+' is '+this.age+' years old.');}
 class Boy extends aggregation(Person,Male,Child){}
 var m = new Boy('Mike');
 m.tellAge(); // Mike is 12 years old.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='emitprocessing'>
+      emitProcessing
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)</p>
+
+
+  <div class='pre p1 fill-light mt0'>emitProcessing(handlerPromise: any, componentWithSetState: any, processingStateVariable: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>handlerPromise</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>componentWithSetState</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>processingStateVariable</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
 
       
     
@@ -11191,130 +11201,22 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='formdata'>
-      formData
+    <h3 class='fl m0' id='touched'>
+      touched
     </h3>
     
     
   </div>
   
 
-  <p>Для передачи в onSubmit</p>
-
-
-  <div class='pre p1 fill-light mt0'>formData</div>
-  
   
 
-  
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>touched</div>
   
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='validate'>
-      validate
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>(fieldErrors, formData, props) => result
-Где fieldErrors: [...string|{field, fieldLabel, errors}]</p>
-<p>Где result: string|boolean|[...string|{field, fieldLabel, errors}]</p>
-<ul>
-<li>если false: ошибка с текстом textDefaultFormErrorText</li>
-<li>если true | null | undefined: не будет ошибок (не смотря на fieldErrors)</li>
-<li>если массив: выведется массив ошибок</li>
-</ul>
-
-
-  <div class='pre p1 fill-light mt0'>validate</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='layout'>
-      Layout
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>default - FormLayout
-props:
-id
-inModal</p>
-<p>fields
-actions
-postActions
-actionStatus</p>
-
-
-  <div class='pre p1 fill-light mt0'>Layout</div>
-  
-  
-
-  
+  <div>Deprecated: в CoreField--touched есть
+</div>
   
   
   
@@ -11354,108 +11256,10 @@ actionStatus</p>
   </div>
   
 
-  <p>Если функция - (onOpenDialog, props, state) => Node</p>
+  <p>Если функция - (openUploadDialogFn, props) => Node</p>
 
 
   <div class='pre p1 fill-light mt0'>children</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='children'>
-      children
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Если функция - (onOpenDialog, props, state) => Node</p>
-
-
-  <div class='pre p1 fill-light mt0'>children</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='accept'>
-      accept
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types</a>
-accept="image/png" or accept=".png" — Accepts PNG files.
-accept="image/png, image/jpeg" or accept=".png, .jpg, .jpeg" — Accept PNG or JPEG files.
-accept="image/<em>" — Accept any file with an image/</em> MIME type. (Many mobile devices also let the user take a picture with the camera when this is used.)
-accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"</p>
-
-
-  <div class='pre p1 fill-light mt0'>accept</div>
   
   
 
@@ -11554,6 +11358,53 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
 
   <div class='pre p1 fill-light mt0'>onAdd</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='openuploaddialogfn'>
+      openUploadDialogFn
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>бывает необходимо сделать кастомный вид кнопки загрузки, поэтому ставят showAddButton: false и children: (openUploadDialogFn, props) => {} куда и передается эта функция, чтобы мануально открыть окно выбора файла</p>
+
+
+  <div class='pre p1 fill-light mt0'>openUploadDialogFn</div>
   
   
 
@@ -11980,6 +11831,161 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='formdata'>
+      formData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Для передачи в onSubmit</p>
+
+
+  <div class='pre p1 fill-light mt0'>formData</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='validate'>
+      validate
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(fieldErrors, formData, props) => result
+Где fieldErrors: [...string|{field, fieldLabel, errors}]</p>
+<p>Где result: string|boolean|[...string|{field, fieldLabel, errors}]</p>
+<ul>
+<li>если false: ошибка с текстом textDefaultFormErrorText</li>
+<li>если true | null | undefined: не будет ошибок (не смотря на fieldErrors)</li>
+<li>если массив: выведется массив ошибок</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>validate</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='layout'>
+      Layout
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>default - FormLayout
+props:
+id
+inModal</p>
+<p>fields
+actions
+postActions
+actionStatus</p>
+
+
+  <div class='pre p1 fill-light mt0'>Layout</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
@@ -14017,6 +14023,59 @@ and avoid cache pollution)</p>
 
 
   <div class='pre p1 fill-light mt0'>createMockServices()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='endpointserviceconfig'>
+      endpointServiceConfig
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Создается в config/utils/create-config.js:</p>
+<p>protocol: string
+host: string
+port: number
+endpoint: string
+fullUrl: string
+timeout: number</p>
+
+
+  <div class='pre p1 fill-light mt0'>endpointServiceConfig</div>
   
   
 
