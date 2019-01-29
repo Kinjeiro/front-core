@@ -22,7 +22,6 @@ import { PATH_INDEX } from '../../constants/routes.pathes';
 import { UNI_ERROR_PROP_TYPE } from '../../models/uni-error';
 import getComponents from '../../get-components';
 
-debugger;
 const {
   UniError,
 } = getComponents();

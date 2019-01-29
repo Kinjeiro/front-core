@@ -202,12 +202,6 @@ export function joinPath(...paths) {
     return '/';
   }
 
-  if (paths[0].indexOf(':\\') > 0) {
-    console.warn('ANKU , paths[0]', paths[0]);
-    console.trace();
-    debugger;
-  }
-
   const firstPart = (isAbsoluteUrl(paths[0]) ? paths[0] : joinPathInner('/', paths[0]))
     // убираем в конце слеш
     .replace(/\/$/gi, '');
@@ -222,7 +216,6 @@ export function joinPath(...paths) {
     lastPart = joinPathInner('/', middlePart, lastUrlParameters || '');
   }
 
-  console.warn('ANKU , paths', paths, ' ===> ', `${firstPart}${lastPart}`);
   return `${firstPart}${lastPart}`;
 }
 
