@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import bemDecorator from '../../utils/decorators/bem-component';
-import NoticeEmitter from '../../helpers/notifications';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+import NoticeEmitter from '../../../../../../common/helpers/notifications';
 
-import getComponents from '../../get-components';
+import getComponents from '../../../../../../common/get-components';
 
 import './Notifications.css';
 

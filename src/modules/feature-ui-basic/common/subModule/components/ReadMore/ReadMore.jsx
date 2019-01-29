@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Truncate from 'react-truncate';
 import bind from 'lodash-decorators/bind';
 
-import i18n from '../../utils/i18n-utils';
+import i18n from '../../i18n';
 
 export default class ReadMore extends Component {
   static propTypes = {

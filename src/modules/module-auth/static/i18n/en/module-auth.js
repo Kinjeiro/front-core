@@ -4,6 +4,8 @@ module.exports = {
     notRolesAnd: 'You should have all this roles: {{roles}}',
     notPermissionsOr: 'You should have at least one of this permissions: {{permissions}}',
     notPermissionsAnd: 'You should have all this permissions: {{permissions}}',
+    wrongUserCredentials: 'Invalid user credentials.',
+    missingPassword: 'Missing required parameter: password.',
   },
 
   pages: {

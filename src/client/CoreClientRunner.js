@@ -19,6 +19,7 @@ export default class CoreClientRunner extends AbstractClientRunner {
   loadCommonSubModulesContexts() {
     return [
       require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi),
+      require.context('../modules', true, /^\.\/(.*)\/common\/index\.js/gi),
     ];
   }
 

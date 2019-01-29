@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import bemDecorator from '../../utils/decorators/bem-component';
-import i18n from '../../utils/i18n-utils';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+
+import i18n from '../../i18n';
 
 // import './Loading.css';
 
@@ -21,7 +22,7 @@ export default class Loading extends Component {
 
   static defaultProps = {
     isLoading: true,
-    loadingText: i18n('core:components.Loading.loading'),
+    loadingText: i18n('components.Loading.loading'),
   };
 
   // ======================================================

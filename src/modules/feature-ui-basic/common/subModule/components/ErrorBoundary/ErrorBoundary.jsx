@@ -3,10 +3,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import logger from '../../helpers/client-logger';
-import clientConfig from '../../client-config';
-import i18n from '../../utils/i18n-utils';
+import logger from '../../../../../../common/helpers/client-logger';
+import clientConfig from '../../../../../../common/client-config';
 
+import i18n from '../../i18n';
 import getComponents from '../../get-components';
 
 const {
@@ -47,11 +47,11 @@ export default class ErrorBoundary extends PureComponent {
     if (this.state.hasError) {
       return (
         <Segment
-          label={ i18n('core:components.ErrorBoundary.header') }
+          label={ i18n('components.ErrorBoundary.header') }
         >
           { !clientConfig.common.isProduction && (
             <Button onClick={ this.handleUpdate }>
-              { i18n('core:components.ErrorBoundary.refreshButton') }
+              { i18n('components.ErrorBoundary.refreshButton') }
             </Button>
           ) }
         </Segment>

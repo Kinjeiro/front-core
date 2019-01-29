@@ -1,13 +1,13 @@
 /* eslint-disable global-require,max-len,react/prop-types */
 import React from 'react';
 
-import clientConfig from '../client-config';
+import clientConfig from './client-config';
 import {
   executeVariable,
   executeVariableMemoize,
   generateId,
-} from '../utils/common';
-import logger from '../helpers/client-logger';
+} from './utils/common';
+import logger from './helpers/client-logger';
 
 function wrap(ComponentClass, PrevClassWrapper, funcIsClass = false) {
   const prevClassId = generateId();

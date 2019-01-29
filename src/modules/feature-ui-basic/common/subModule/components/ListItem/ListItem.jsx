@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import bemDecorator from '../../utils/decorators/bem-component';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 
 import './ListItem.css';
 

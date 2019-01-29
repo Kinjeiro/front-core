@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 // ======================================================
 // UTILS
 // ======================================================
-import bemDecorator from '../../utils/decorators/bem-component';
-import i18n from '../../utils/i18n-utils';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 
 import {
   UNI_ERROR_PROP_TYPE,
   createUniError,
-} from '../../models/uni-error';
+} from '../../../../../../common/models/uni-error';
+
+import i18n from '../../i18n';
 
 @bemDecorator('UniError')
 export default class UniError extends Component {
@@ -37,13 +38,13 @@ export default class UniError extends Component {
         {
           uniError
             ? uniError.uniMessage
-            : i18n('core:components.UniError.errorOccurred')
+            : i18n('components.UniError.errorOccurred')
         }
 
         {
           uniError && showDetails && (
             <div>
-              <p>{ i18n('core:components.UniError.showDetails') }:</p>
+              <p>{ i18n('components.UniError.showDetails') }:</p>
 
               <pre>
                 <code>

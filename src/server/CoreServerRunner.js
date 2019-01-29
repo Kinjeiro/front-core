@@ -15,7 +15,7 @@ import serverConfig from './server-config';
 // COMMON
 // ======================================================
 import CoreClientRunner from '../client/CoreClientRunner';
-import { createComponentBase } from '../common/components/ComponentsBase';
+import { createComponentBase } from '../common/ComponentsBase';
 import SubModuleFactory from '../modules/SubModuleFactory';
 
 import createServices from './services';

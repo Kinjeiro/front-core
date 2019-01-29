@@ -181,6 +181,7 @@ export default class CoreInput extends PureComponent {
       indexItem,
       title,
       errors,
+      onTouch,
       ...inputProps
     } = this.props;
 

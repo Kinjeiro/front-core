@@ -28,7 +28,7 @@ import {
 import moduleAuth from '../../../modules/module-auth/common/subModule';
 
 
-import CB from '../../../common/components/ComponentsBase';
+import CB from '../../../common/ComponentsBase';
 
 // ======================================================
 // SERVER

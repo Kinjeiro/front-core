@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
-import bemDecorator from '../../utils/decorators/bem-component';
-import NoticeEmitter from '../../helpers/notifications';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+import NoticeEmitter from '../../../../../../common/helpers/notifications';
 
 const STATUSES = NoticeEmitter.STATUSES;
 
+// todo @ANKU @LOW - в отдельную фичу оформить
 @bemDecorator({ componentName: 'Notice', wrapper: false })
 export default class Notice extends Component {
   static propTypes = {

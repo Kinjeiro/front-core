@@ -34,7 +34,7 @@ import
   }
 from '../common/app-redux/create-store';
 
-import { createComponentBase } from '../common/components/ComponentsBase';
+import { createComponentBase } from '../common/ComponentsBase';
 
 import './AbstractClientRunner.css';
 
@@ -165,7 +165,7 @@ export default class AbstractClientRunner {
       clientRunner: this,
       BaseApiClient,
       apiUtils,
-      CB: require('../common/components/ComponentsBase').default,
+      CB: require('../common/ComponentsBase').default,
       routes: this.routes,
     };
   }

@@ -38,10 +38,7 @@ import TestDomain from '../../../../../../common/models/domains/TestDomain';
 // ======================================================
 import { TEST_PERMISSION } from '../../../../../../common/constants/permissions';
 import { USER_INFO_PROPS } from '../../../../../../common/models/index';
-import ListItem from '../../../../../../common/components/ListItem/ListItem';
-import Link from '../../../../../../common/components/Link/Link';
 import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
-import ModuleLink from '../../../../../../common/containers/ModuleLink/ModuleLink';
 
 // ======================================================
 // MODULE
@@ -49,18 +46,21 @@ import ModuleLink from '../../../../../../common/containers/ModuleLink/ModuleLin
 import i18n from '../../i18n';
 import getComponents from '../../get-components';
 
-import './StubPage.css';
-import './StubPageSass.scss';
-
 const {
   Button,
   Segment,
   Form,
   Attachment,
   UserAvatar,
+  Link,
+  ListItem,
+  ModuleLink,
 
   TestForm,
 } = getComponents();
+
+require('./StubPage.css');
+require('./StubPageSass.scss');
 
 
 const { getUserAvatarUrl } = reduxUserInfo;

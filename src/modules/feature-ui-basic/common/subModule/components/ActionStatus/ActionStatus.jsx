@@ -2,10 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 // import bind from 'lodash-decorators/bind';
 
-import i18n from '../../utils/i18n-utils';
-import bemDecorator from '../../utils/decorators/bem-component';
-import PROP_ACTION_STATUS from '../../models/model-action-status';
+import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
+import PROP_ACTION_STATUS from '../../../../../../common/models/model-action-status';
 
+
+import i18n from '../../i18n';
 // import './ActionStatus.scss';
 
 @bemDecorator({ componentName: 'ActionStatus', wrapper: false })
@@ -42,9 +43,9 @@ export default class ActionStatus extends PureComponent {
         {
           error
             ? error.isNotFound
-              ? i18n('core:errors.authServerNotResponse')
+              ? i18n('errors.authServerNotResponse')
               : error.uniMessage
-            : i18n('core:error:clientErrorMessageDefault')
+            : i18n('error:clientErrorMessageDefault')
         }
       </div>
     );

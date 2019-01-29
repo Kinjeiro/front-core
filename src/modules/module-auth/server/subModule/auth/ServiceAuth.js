@@ -122,10 +122,10 @@ export default class ServiceAuth extends CoreService {
             // switch (uniError.originalObject.error_description) {
             switch (uniError.originalObject.error) {
               case 'Invalid resource owner credentials':
-                clientErrorMessage = i18n('core:errors.wrongUserCredentials');
+                clientErrorMessage = i18n('errors.wrongUserCredentials');
                 break;
               case 'Missing required parameter: password':
-                clientErrorMessage = i18n('core:errors.missingPassword');
+                clientErrorMessage = i18n('errors.missingPassword');
                 break;
               default:
                 // clientErrorMessage = uniError.originalObject.error_description;
