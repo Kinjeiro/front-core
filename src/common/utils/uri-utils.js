@@ -23,6 +23,7 @@ export function isValidPath(path) {
 
 export function isAbsoluteUrl(url) {
   return url.indexOf(':') > 0;
+  // return pathLib.isAbsolute(url);
 }
 
 // export function parseUrlParameters(url) {
@@ -200,20 +201,29 @@ export function joinPath(...paths) {
   if (!paths || paths.length === 0 || (paths.length === 1 && !paths[0])) {
     return '/';
   }
-  const urlPrefix = isAbsoluteUrl(paths[0]) ? '' : '/';
 
-  const lastUrlParameters = paths.length > 1 && paths[paths.length - 1];
-  if (typeof lastUrlParameters === 'object') {
-    // url parameters
-    return formatUrlParameters(
-      lastUrlParameters,
-      joinPathInner(urlPrefix, ...convertToString(...paths.slice(0, paths.length - 1))),
-    );
-  } else if (typeof lastUrlParameters === 'undefined' || lastUrlParameters === null) {
-    return joinPathInner(urlPrefix, ...convertToString(...paths.slice(0, paths.length - 1)));
+  if (paths[0].indexOf(':\\') > 0) {
+    console.warn('ANKU , paths[0]', paths[0]);
+    console.trace();
+    debugger;
   }
 
-  return joinPathInner(urlPrefix, ...convertToString(...paths));
+  const firstPart = (isAbsoluteUrl(paths[0]) ? paths[0] : joinPathInner('/', paths[0]))
+    // убираем в конце слеш
+    .replace(/\/$/gi, '');
+  const middlePart = paths.length > 2 ? joinPathInner('/', ...convertToString(...paths.slice(1, paths.length - 1))) : '';
+  const lastUrlParameters = paths.length > 1 ? paths[paths.length - 1] : '';
+
+  let lastPart = '';
+  if (typeof lastUrlParameters === 'object') {
+    // url parameters
+    lastPart = formatUrlParameters(lastUrlParameters, middlePart);
+  } else {
+    lastPart = joinPathInner('/', middlePart, lastUrlParameters || '');
+  }
+
+  console.warn('ANKU , paths', paths, ' ===> ', `${firstPart}${lastPart}`);
+  return `${firstPart}${lastPart}`;
 }
 
 /**
@@ -253,7 +263,7 @@ export function getLocationUrlParam(paramName, defaultValue, returnArray = false
 }
 
 export function isFullUrl(uri) {
-  return uri.indexOf('://') > 0;
+  return isAbsoluteUrl(uri);
 }
 
 

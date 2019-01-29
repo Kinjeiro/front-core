@@ -1,4 +1,5 @@
 import {
+  joinPath,
   parseUrlParameters,
   formatUrlParameters,
 } from './uri-utils';
@@ -23,6 +24,37 @@ describe('uri-utils', () => {
       };
 
       expect(formatUrlParameters(params)).to.be.equal('itemsPerPage=10&filters%5Buser%5D=ivanovI&testArray=10&testArray=20');
+    });
+  });
+
+  describe('[function] joinPath', () => {
+    it('should return valid relative url', () => {
+      expect(joinPath('/api/', '/api2/', 'api3/', { test: 'test' }))
+        .to.be.equal('/api/api2/api3/?test=test');
+    });
+    it('should return valid relative url with null last param', () => {
+      expect(joinPath('api/', '/api2/', '', null))
+        .to.be.equal('/api/api2/');
+    });
+    it('should return valid relative url with menu slashes', () => {
+      expect(joinPath('/', '/api/attachments'))
+        .to.be.equal('/api/attachments');
+    });
+    it('should return valid relative url with menu slashes 2', () => {
+      expect(joinPath('api', '/'))
+        .to.be.equal('/api/');
+    });
+    it('should return valid relative url with menu slashes 3', () => {
+      expect(joinPath('/', 'api', '/', '/attachments'))
+        .to.be.equal('/api/attachments');
+    });
+    it('should return valid relative url null args', () => {
+      expect(joinPath(null))
+        .to.be.equal('/');
+    });
+    it('should return valid absolute url', () => {
+      expect(joinPath('http://test.com/', 'api', '/api2', { test: 'test' }))
+        .to.be.equal('http://test.com/api/api2?test=test');
     });
   });
 

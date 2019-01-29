@@ -13,6 +13,9 @@ const mime = require('mime');
 
 // const pathModule = path.posix || path;
 
+function joinFilePath(...args) {
+  return path.join(...args);
+}
 
 function ensureDirectoryExistence(filePath) {
   const dirName = path.dirname(filePath);
@@ -226,6 +229,8 @@ function getFileInfo(filePath) {
 }
 
 module.exports = {
+  joinFilePath,
+
   ensureDirectoryExistence,
   getTmpDirectory,
 
