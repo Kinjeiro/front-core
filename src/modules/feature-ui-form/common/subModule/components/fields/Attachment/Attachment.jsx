@@ -143,7 +143,7 @@ export default class Attachment extends React.Component {
   //   });
   // }
 
-  parseValueFromFile(file) {
+  parseValueFromFile(fileDescriptor) {
     const {
       parseValue,
     } = this.props;
@@ -164,7 +164,7 @@ export default class Attachment extends React.Component {
       size,
       type,
       preview,
-    } = file;
+    } = fileDescriptor;
 
     return {
       ...createTempAttachment(
@@ -177,8 +177,9 @@ export default class Attachment extends React.Component {
           null,
           preview,
         ),
+        fileDescriptor,
       ),
-      ...(parseValue ? parseValue(file) : {}),
+      ...(parseValue ? parseValue(fileDescriptor) : {}),
     };
   }
 
@@ -245,8 +246,6 @@ export default class Attachment extends React.Component {
     const newFilesMap = {};
     let newAttachments = [];
     let resultAttachments = this.getValues();
-
-    debugger;
 
     if (addedFilesFinal && addedFilesFinal.length > 0) {
       const currentAttachments = this.getValues();
@@ -321,7 +320,6 @@ export default class Attachment extends React.Component {
         onAdd(multiple ? newFilesMap : addedFilesFinal[0], newAttachments, resultAttachments);
       }
     }
-    debugger;
     this.update(resultAttachments, newAttachments, newFilesMap);
 
     if (window && warnings.length) {

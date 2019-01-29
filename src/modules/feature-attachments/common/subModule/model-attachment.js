@@ -19,16 +19,34 @@ export const ATTACHMENT_PROP_TYPE_MAP = {
   // используется кем (id)
   links: PropTypes.arrayOf(PropTypes.string),
 
-  // services field
-  // client
+  // ======================================================
+  // on CLIENT
+  // ======================================================
   uuid: ID,
+  /**
+     FILE: {
+       lastModified: 1463127849264,
+       lastModifiedDate: Fri May 13 2016 11:24:09 GMT+0300 (RTZ 2 (зима)) {},
+       name: "test name.jpg",
+       preview: "blob:http://localhost:8080/3b5f332a-45a7-49a8-9a1e-5b9225bd831e",
+       size: 57613,
+       type: "image/jpeg",
+       webkitRelativePath: "",
+     }
+   */
+  fileDescriptor: PropTypes.any,
   isNew: PropTypes.bool,
   loaded: PropTypes.number,
   total: PropTypes.number,
   isLoaded: PropTypes.bool,
 
-  // server
-  contentId: PropTypes.string, // id контента, по которому можно получить содержимое файла
+  // ======================================================
+  // on SERVER
+  // ======================================================
+  /**
+   * id контента, по которому можно получить содержимое файла
+   */
+  contentId: PropTypes.string,
 };
 
 export function createAttachment(
@@ -59,6 +77,7 @@ export function createAttachment(
 
 export function createTempAttachment(
   attachment,
+  fileDescriptor,
   uuid = generateUuid(),
   isNew = true,
   loaded = 0,
@@ -68,6 +87,7 @@ export function createTempAttachment(
   return {
     ...attachment,
     uuid,
+    fileDescriptor,
     isNew,
     loaded,
     total,
