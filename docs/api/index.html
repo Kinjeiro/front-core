@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.44 | Documentation</title>
+  <title>@reagentum/front-core 1.6.45 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.44</code></div>
+          <div class='mb1'><code>1.6.45</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -367,16 +367,6 @@
               
                 
                 <li><a
-                  href='#link'
-                  class="">
-                  Link
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#mediaquery'
                   class="">
                   MediaQuery
@@ -390,16 +380,6 @@
                   href='#readmore'
                   class="">
                   ReadMore
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#bemdecorator'
-                  class="">
-                  bemDecorator
                   
                 </a>
                 
@@ -1263,6 +1243,26 @@
               
                 
                 <li><a
+                  href='#filedescriptor'
+                  class="">
+                  fileDescriptor
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#contentid'
+                  class="">
+                  contentId
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#uploadfile'
                   class="">
                   uploadFile
@@ -1326,6 +1326,16 @@
                   href='#link'
                   class="">
                   link
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#bemdecorator'
+                  class="">
+                  bemDecorator
                   
                 </a>
                 
@@ -4250,53 +4260,6 @@ actionEditRecordStatusMap: {}
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='link'>
-      Link
-    </h3>
-    
-    
-  </div>
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>Link</div>
-  
-  
-
-  <div>Deprecated: use /src/containers/Link/Link
-</div>
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='mediaquery'>
       MediaQuery
     </h3>
@@ -4360,55 +4323,6 @@ actionEditRecordStatusMap: {}
 
   <div>Deprecated: чтобы не подгружались все лишние компоненты, нужно не импортить index.js а писать полный путь
 </div>
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='bemdecorator'>
-      bemDecorator
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Компонент для того, чтобы не писать bind функции c ключом
-В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
-См. <a href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items">https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items</a></p>
-
-
-  <div class='pre p1 fill-light mt0'>bemDecorator</div>
-  
-  
-
-  
   
   
   
@@ -10590,6 +10504,108 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='filedescriptor'>
+      fileDescriptor
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>FILE: {
+lastModified: 1463127849264,
+lastModifiedDate: Fri May 13 2016 11:24:09 GMT+0300 (RTZ 2 (зима)) {},
+name: "test name.jpg",
+preview: "blob:<a href="http://localhost:8080/3b5f332a-45a7-49a8-9a1e-5b9225bd831e%22">http://localhost:8080/3b5f332a-45a7-49a8-9a1e-5b9225bd831e"</a>,
+size: 57613,
+type: "image/jpeg",
+webkitRelativePath: "",
+}</p>
+
+
+  <div class='pre p1 fill-light mt0'>fileDescriptor</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='contentid'>
+      contentId
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>id контента, по которому можно получить содержимое файла</p>
+
+
+  <div class='pre p1 fill-light mt0'>contentId</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='uploadfile'>
       uploadFile
     </h3>
@@ -11088,6 +11104,55 @@ accessOwnerOnly - только тот, кто создал (ну и админ ;
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='bemdecorator'>
+      bemDecorator
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Компонент для того, чтобы не писать bind функции c ключом
+В основном используется, чтобы улучшить производительность - не биндить фунции внутри render каждый раз при перерисовки (а она оооочень частая)
+См. <a href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items">https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md#lists-of-items</a></p>
+
+
+  <div class='pre p1 fill-light mt0'>bemDecorator</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
   
 
   
