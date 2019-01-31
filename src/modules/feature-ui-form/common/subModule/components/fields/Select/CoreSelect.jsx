@@ -206,6 +206,7 @@ export default class CoreSelect extends PureComponent {
       maxVisible,
       options,
       selectedValue,
+      onTouch,
       ...otherProps
     } = this.props;
     const {

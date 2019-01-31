@@ -1,59 +1,98 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import bind from 'lodash-decorators/bind';
 
-// import i18n from '../../utils/i18n';
+import { emitProcessing, wrapToArray } from '../../../../../../common/utils/common';
 
+// ======================================================
+// MODULE
+// ======================================================
 import getComponents from '../../get-components';
 
+import PROPS from './button-props';
+
 const {
-  Loading,
+  ButtonView,
 } = getComponents();
 
 require('./Button.css');
 
 export default class Button extends PureComponent {
-  static propTypes = {
-    as: PropTypes.any,
-    className: PropTypes.string,
-    children: PropTypes.node,
-
-    primary: PropTypes.bool,
-    loading: PropTypes.bool,
-    disabled: PropTypes.bool,
-
-    onClick: PropTypes.func,
-  };
+  static propTypes = PROPS;
 
   static defaultProps = {
-    as: 'button',
+    asyncIsLoading: true,
   };
 
+  state = {
+    isProcessing: undefined,
+  };
+
+  // ======================================================
+  // HANDLERS
+  // ======================================================
+  @bind()
+  handleClick(...args) {
+    const {
+      onClick,
+      onClickArgs,
+      asyncIsLoading,
+    } = this.props;
+
+    if (onClick) {
+      if (asyncIsLoading) {
+        return emitProcessing(
+          onClick(
+            ...wrapToArray(onClickArgs),
+            ...args,
+          ),
+          this,
+          'isProcessing',
+        );
+      }
+      return onClick(...args);
+    }
+    return true;
+  }
+
+  // ======================================================
+  // MAIN RENDER
+  // ======================================================
   render() {
     const {
-      as,
       className,
-      children,
+      simple,
       primary,
       loading,
       disabled,
-      onClick,
-      ...props
+      asyncIsLoading,
+
+      ...otherProps
     } = this.props;
+    const {
+      isProcessing,
+    } = this.state;
 
-    const notNaturalButton = as !== 'button';
+    const isLoading = typeof loading !== 'undefined'
+      ? typeof loading === 'object' && loading !== null && typeof loading.isFetching !== 'undefined'
+        ? loading.isFetching
+        : loading
+      : asyncIsLoading
+        ? isProcessing
+        : undefined;
 
-    return React.createElement(
-      as,
-      {
-        type: 'button',
-        disabled: loading || disabled,
-        onClick: notNaturalButton && (loading || disabled) ? undefined : onClick,
-        ...props,
-        className: `Button ${className || ''} ${primary ? 'Button--primary' : ''} ${notNaturalButton ? 'Button--notNaturalButton' : ''}`,
-      },
-      loading
-        ? (<Loading />)
-        : children,
+    const classNameFinal = `Button ${className || ''} ${simple ? 'Button--simple' : ''} ${primary ? 'Button--primary' : ''} ${isLoading ? 'Button--loading' : ''}`;
+
+    return (
+      <ButtonView
+        { ...{
+          ...otherProps,
+          loading: isLoading,
+          disabled: isLoading || disabled,
+          className: classNameFinal,
+          onClick: this.handleClick,
+        } }
+      />
     );
   }
 }

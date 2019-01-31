@@ -13,7 +13,7 @@ import {
   createAttachment,
   normalizeAttachment,
   ATTACHMENT_PROP_TYPE, createTempAttachment,
-} from '../../../../../../feature-attachments/common/subModule/model-attachment';
+} from '../../../../../../feature-instantly-attachments/common/subModule/model-attachment';
 
 // ======================================================
 // MODULE

@@ -154,7 +154,7 @@ export default class CoreField extends Component {
     // switch (type) {
     //   // case TYPES.DATETIME:
     //   case TYPES.BINARY: {
-    //     // todo @ANKU @CRIT @MAIN - InstanceAttachment требуте downloadUrl а обычный нет - только из пропс
+    //     // todo @ANKU @CRIT @MAIN - InstantlyAttachment требуте downloadUrl а обычный нет - только из пропс
     //     return !value || !value.id;
     //   }
     //   default:

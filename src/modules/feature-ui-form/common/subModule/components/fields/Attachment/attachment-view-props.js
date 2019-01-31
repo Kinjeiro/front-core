@@ -4,7 +4,7 @@ import CONSTRAINTS_PROP_TYPE from '../../../../../../../common/models/model-cons
 
 import {
   ATTACHMENT_PROP_TYPE,
-} from '../../../../../../feature-attachments/common/subModule/model-attachment';
+} from '../../../../../../feature-instantly-attachments/common/subModule/model-attachment';
 
 export default {
   // ======================================================

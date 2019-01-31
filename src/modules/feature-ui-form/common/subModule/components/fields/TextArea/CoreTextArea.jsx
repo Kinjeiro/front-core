@@ -23,7 +23,8 @@ export default class CoreTextArea extends PureComponent {
   };
 
   static defaultProps = {
-    withState: false,
+    // withState: false,
+    withState: true,
   };
 
   state = {

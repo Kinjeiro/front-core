@@ -6,7 +6,7 @@ import bind from 'lodash-decorators/bind';
 import { translateCore } from '../../../../../../../../common/utils/i18n-utils';
 import { valueFromRange } from '../../../../../../../../common/utils/common';
 
-import ATTACHMENT_PROP_TYPE from '../../../../../../../feature-attachments/common/subModule/model-attachment';
+import ATTACHMENT_PROP_TYPE from '../../../../../../../feature-instantly-attachments/common/subModule/model-attachment';
 
 // ======================================================
 // MODULE

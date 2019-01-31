@@ -5,6 +5,7 @@ export function initComponents(COMPONENTS_BASE) {
   // UI
   // ======================================================
   COMPONENTS_BASE.replace('Button', () => require('./components/Button/Button').default);
+  COMPONENTS_BASE.replace('ButtonView', () => require('./components/Button/ButtonView').default);
   COMPONENTS_BASE.replace('Image', () => require('./components/Image/Image').default);
   COMPONENTS_BASE.replace('Icon', () => require('./components/Icon/Icon').default);
   COMPONENTS_BASE.replace('ActionStatus', () => require('./components/ActionStatus/ActionStatus').default);

@@ -4,20 +4,14 @@ import PropTypes from 'prop-types';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 import NoticeEmitter from '../../../../../../common/helpers/notifications';
 
-import getComponents from '../../../../../../common/get-components';
-
-import './Notifications.css';
+import getComponents from '../../get-components';
 
 const { Notice } =  getComponents();
 
+require('./Notifications.css');
+
 @bemDecorator({ componentName: 'Notifications', wrapper: false })
 export default class Notifications extends Component {
-  static propTypes = {
-  };
-
-  static defaultProps = {
-  };
-
   state = {
     notices: [],
   };
