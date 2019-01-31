@@ -17,7 +17,7 @@ function wrap(ComponentClass, PrevClassWrapper, funcIsClass = false) {
     }
     // нужно сначала его загрузить, чтобы сначала css их пременился, а потом css остальных
     const PrevClass = executeVariableMemoize(prevClassId, PrevClassWrapper);
-    const ComponentClassFinal = funcIsClass ? ComponentClass : executeVariable(ComponentClass);
+    const ComponentClassFinal = funcIsClass ? ComponentClass : executeVariable(ComponentClass, null, PrevClass);
 
     // render
     return ({ children, ...otherProps }) => {
@@ -34,7 +34,7 @@ function addClassName(CurrentClassWrapper, classNameAdditional) {
   const currentClassId = generateId();
   return () => {
     const CurrentClass = executeVariableMemoize(currentClassId, CurrentClassWrapper);
-    const classNameFinal = executeVariable(classNameAdditional);
+    const classNameFinal = executeVariable(classNameAdditional, null, CurrentClass);
 
     // render
     return ({ className, children, ...otherProps }) =>
@@ -62,22 +62,39 @@ function addCallback(CurrentClassWrapper, callback) {
 
 export function createComponentBase() {
   return {
-    replace(name, ComponentClass) {
+    replace(name, ComponentClass, withPrevious = false) {
+      const ccFieldInner = `_${name}`;
+      const ccFieldInnerPrev = `${ccFieldInner}_prev`;
+      const ccField = name;
+      const ccFieldWithPrevious = `${ccFieldInner}_withPrevious`;
+
+      // если хотя бы один компонент из одинакового найминга - то будет true
+      this[ccFieldWithPrevious] = this[ccFieldWithPrevious] || withPrevious;
+
       if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
         logger.debug('[COMPONENTS BASE] replace', name);
       }
-      if (!this[`_${name}`]) {
-        Object.defineProperty(this, name, {
+      if (!this[ccFieldInner]) {
+        Object.defineProperty(this, ccField, {
           enumerable: true,
           configurable: true,
           // writable: true,
           set(CClass) {
-            this[`_${name}`] = CClass;
+            this[ccFieldInnerPrev] = this[ccFieldInner];
+            this[ccFieldInner] = CClass;
           },
           get() {
-            const CClass = this[`_${name}`];
+            const CClass = this[ccFieldInner];
+            const withPreviousFinal = this[ccFieldWithPrevious];
+            const PrevCClass = this[ccFieldInnerPrev];
             // отложенная загрузка компонентов () => require('./Component);
-            const ComponentClassFinal = executeVariable(CClass);
+            const ComponentClassFinal = executeVariable(
+              CClass,
+              null,
+              // todo @ANKU @LOW - не поддерживается 1) ClassA 2) (ClassA) => ClassB 3) (ClassB) => ClassC
+              //  тут ограничение, что если предыдущий объект тоже функция зависящая от предыдущего то будет ошибка
+              withPreviousFinal ? executeVariable(PrevCClass) : undefined,
+            );
             if (!ComponentClassFinal) {
               // можно на те которые не добавлены, но запращиваются - использовать new Proxy :: get(target, key) - https://stackoverflow.com/a/36111309/344172
               logger.error(`Empty component class "${name}"`);
@@ -86,7 +103,7 @@ export function createComponentBase() {
           },
         });
       }
-      this[name] = ComponentClass;
+      this[ccField] = ComponentClass;
       return this;
     },
     wrap(name, ComponentClass, funcIsClass = false) {
