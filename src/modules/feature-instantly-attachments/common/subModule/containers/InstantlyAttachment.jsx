@@ -36,7 +36,7 @@ const {
     ...actions,
   },
 )
-export default class InstanceAttachment extends Component {
+export default class InstantlyAttachment extends Component {
   static propTypes = {
     /*
      id

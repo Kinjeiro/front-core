@@ -2,7 +2,7 @@ import { appUrl } from '../../../../common/helpers/app-urls';
 import apiConfig from '../../../../common/utils/create-api-config';
 import getApiClient from '../../../../common/helpers/get-api-client';
 
-export const API_PREFIX = 'attachments';
+export const API_PREFIX = 'instantly-attachment';
 export const API_CONFIGS = {
   uploadAttachment: apiConfig(`/${API_PREFIX}`, 'POST'),
   getAttachmentInfo: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
