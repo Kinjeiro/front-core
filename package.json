@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.6.46",
+  "version": "1.6.47",
   "description": "front-core",
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
   "main": "./build-scripts/start.js",
@@ -79,7 +79,6 @@
     "@reagentum/module-auth": "file:./lib/modules/module-auth",
     "@reagentum/module-stub": "file:./lib/modules/module-stub",
     "@reagentum/feature-instantly-attachments": "file:./lib/modules/feature-instantly-attachments",
-
     "accept-language-parser": "~1.4.0",
     "array-from": "~2.1.1",
     "array.prototype.fill": "~1.0.1",
@@ -217,7 +216,6 @@
     "@reagentum/module-auth": "file:./src/modules/module-auth",
     "@reagentum/module-stub": "file:./src/modules/module-stub",
     "@reagentum/feature-instantly-attachments": "file:./src/modules/feature-instantly-attachments",
-
     "autoprefixer": "~6.3.1",
     "awesome-typescript-loader": "~1.0.0",
     "babel-cli": "~6.26.0",
