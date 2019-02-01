@@ -74,6 +74,12 @@
     "redux-logger": "git+https://github.com/thiamsantos/redux-logger.git#ddiff"
   },
   "dependencies": {
+    "@reagentum/feature-ui-basic": "file:./lib/modules/feature-ui-basic",
+    "@reagentum/feature-ui-form": "file:./lib/modules/feature-ui-form",
+    "@reagentum/module-auth": "file:./lib/modules/module-auth",
+    "@reagentum/module-stub": "file:./lib/modules/module-stub",
+    "@reagentum/feature-instantly-attachments": "file:./lib/modules/feature-instantly-attachments",
+
     "accept-language-parser": "~1.4.0",
     "array-from": "~2.1.1",
     "array.prototype.fill": "~1.0.1",
@@ -206,6 +212,12 @@
     "react-dom": ">=16.4.0"
   },
   "devDependencies": {
+    "@reagentum/feature-ui-basic": "file:./src/modules/feature-ui-basic",
+    "@reagentum/feature-ui-form": "file:./src/modules/feature-ui-form",
+    "@reagentum/module-auth": "file:./src/modules/module-auth",
+    "@reagentum/module-stub": "file:./src/modules/module-stub",
+    "@reagentum/feature-instantly-attachments": "file:./src/modules/feature-instantly-attachments",
+
     "autoprefixer": "~6.3.1",
     "awesome-typescript-loader": "~1.0.0",
     "babel-cli": "~6.26.0",
