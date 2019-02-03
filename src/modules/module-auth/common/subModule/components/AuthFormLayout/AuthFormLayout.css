@@ -19,6 +19,7 @@
   .FormLayout__actions,
   .ActionStatus__error {
     text-align: right;
+    flex-direction: column;
   }
 
   button {

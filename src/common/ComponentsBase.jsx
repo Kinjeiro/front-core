@@ -62,7 +62,7 @@ function addCallback(CurrentClassWrapper, callback) {
 
 export function createComponentBase() {
   return {
-    replace(name, ComponentClass, withPrevious = false) {
+    replace(name, ComponentClass, withPrevious = false, notLog = false) {
       const ccFieldInner = `_${name}`;
       const ccFieldInnerPrev = `${ccFieldInner}_prev`;
       const ccField = name;
@@ -71,8 +71,8 @@ export function createComponentBase() {
       // если хотя бы один компонент из одинакового найминга - то будет true
       this[ccFieldWithPrevious] = this[ccFieldWithPrevious] || withPrevious;
 
-      if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
-        logger.debug('[COMPONENTS BASE] replace', name);
+      if (!notLog && clientConfig.common.features.componentsBase.logComponentBaseEvents) {
+        logger.debug('[COMPONENTS BASE] replace', name, ComponentClass, withPrevious);
       }
       if (!this[ccFieldInner]) {
         Object.defineProperty(this, ccField, {
@@ -109,33 +109,39 @@ export function createComponentBase() {
     wrap(name, ComponentClass, funcIsClass = false) {
       const PrevClassWrapper = this[`_${name}`];
       if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
-        logger.debug('[COMPONENTS BASE] wrap', name, !!PrevClassWrapper);
+        logger.debug('[COMPONENTS BASE] wrap', name, !!PrevClassWrapper, ComponentClass, PrevClassWrapper);
       }
       this.replace(
         name,
         wrap(ComponentClass, PrevClassWrapper, funcIsClass),
+        false,
+        false,
       );
       return this;
     },
     addClassName(name, classNameAdditional) {
       const CurrentClassWrapper = this[`_${name}`];
       if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
-        logger.debug('[COMPONENTS BASE] addClassName', name, !!CurrentClassWrapper);
+        logger.debug('[COMPONENTS BASE] addClassName', name, !!CurrentClassWrapper, classNameAdditional);
       }
       this.replace(
         name,
         addClassName(CurrentClassWrapper, classNameAdditional),
+        false,
+        false,
       );
       return this;
     },
     addInitCallback(name, initCallback) {
       const CurrentClassWrapper = this[`_${name}`];
       if (clientConfig.common.features.componentsBase.logComponentBaseEvents) {
-        logger.debug('[COMPONENTS BASE] addInitCallback', name, !!CurrentClassWrapper);
+        logger.debug('[COMPONENTS BASE] addInitCallback', name, !!CurrentClassWrapper, initCallback);
       }
       this.replace(
         name,
         addCallback(CurrentClassWrapper, initCallback),
+        false,
+        false,
       );
       return this;
     },

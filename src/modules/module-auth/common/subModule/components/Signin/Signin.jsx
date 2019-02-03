@@ -158,15 +158,16 @@ export default class Signin extends Component {
     const socials = [];
 
     // todo @ANKU @CRIT @MAIN - сделать потом через попап \ либо отдельную страницу
-    if (clientConfig.common.features.auth.socialProvides.google) {
+    if (clientConfig.common.features.auth.socialProvides.facebook) {
       socials.push((
         <a
-          key="google"
-          href={ API_CONFIGS.googleSignin.path }
+          key="facebook"
+          href={ API_CONFIGS.facebookSignin.path }
+          className="SocialAuth"
         >
-          <Button className="GoogleAuthButton">
-            <GoogleAuthIcon className="SocialAuthIcon" />
-            { i18n('pages.SigninPage.googleSigninButton') }
+          <Button className="FacebookAuthButton">
+            <FbAuthIcon className="SocialAuthIcon" />
+            { i18n('pages.SigninPage.facebookSigninButton') }
           </Button>
         </a>
       ));
@@ -176,6 +177,7 @@ export default class Signin extends Component {
         <a
           key="vkontakte"
           href={ API_CONFIGS.vkontakteSignin.path }
+          className="SocialAuth"
         >
           <Button className="VkontakteAuthButton">
             <VKAuthIcon className="SocialAuthIcon" />
@@ -184,15 +186,16 @@ export default class Signin extends Component {
         </a>
       ));
     }
-    if (clientConfig.common.features.auth.socialProvides.facebook) {
+    if (clientConfig.common.features.auth.socialProvides.google) {
       socials.push((
         <a
-          key="facebook"
-          href={ API_CONFIGS.facebookSignin.path }
+          key="google"
+          href={ API_CONFIGS.googleSignin.path }
+          className="SocialAuth"
         >
-          <Button className="FacebookAuthButton">
-            <FbAuthIcon className="SocialAuthIcon" />
-            { i18n('pages.SigninPage.facebookSigninButton') }
+          <Button className="GoogleAuthButton">
+            <GoogleAuthIcon className="SocialAuthIcon" />
+            { i18n('pages.SigninPage.googleSigninButton') }
           </Button>
         </a>
       ));
@@ -230,20 +233,18 @@ export default class Signin extends Component {
         onChangeField={ onUpdateForm }
         inModal={ inModal }
         useForm={ true }
-        actions={
-          <React.Fragment>
-            {clientConfig.common.features.auth.allowSignup && (
-              <Button
-                key="signupButton"
-                className={ this.bem('signupButton') }
-                onClick={ () => onEnterTypeChange(true) }
-              >
-                {i18n('pages.SigninPage.signup')}
-              </Button>
-            )}
-            { this.renderSocials() }
-          </React.Fragment>
-        }
+        actions={ [
+          clientConfig.common.features.auth.allowSignup && (
+            <Button
+              key="signupButton"
+              className={ this.bem('signupButton') }
+              onClick={ () => onEnterTypeChange(true) }
+            >
+              {i18n('pages.SigninPage.signup')}
+            </Button>
+          ),
+          this.renderSocials(),
+        ] }
         onSubmit={ this.handleLogin }
         textActionSubmit={ i18n('pages.SigninPage.loginButton') }
         onCancel={ onModalCancel }

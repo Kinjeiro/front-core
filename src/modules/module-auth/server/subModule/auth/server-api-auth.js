@@ -134,33 +134,39 @@ export default function createApiPlugins() {
         },
       },
     ),
-    apiPluginFactory(API.refreshLogin, async (requestData, request, reply) => {
-      logger.log('refreshLogin');
-      const {
-        access_token,
-        refresh_token,
-        expires_in,
-      } = await request.services.serviceAuth.authRefresh(
-        getRefreshToken(request),
-      );
+    apiPluginFactory(
+      API.refreshLogin,
+      async (requestData, request, reply) => {
+        logger.log('refreshLogin');
+        const {
+          access_token,
+          refresh_token,
+          expires_in,
+        } = await request.services.serviceAuth.authRefresh(
+          getRefreshToken(request),
+        );
 
-      return setAuthCookies(
-        reply(),
-        access_token,
-        refresh_token,
-        // expires_in,
-        expires_in * 1000,
-      );
-    }),
-    apiPluginFactory(API.logout, async (requestData, request, reply) => {
-      logger.log('LOGOUT');
-      await request.services.serviceAuth.authLogout(getToken(request));
+        return setAuthCookies(
+          reply(),
+          access_token,
+          refresh_token,
+          // expires_in,
+          expires_in * 1000,
+        );
+      },
+    ),
+    apiPluginFactory(
+      API.logout,
+      async (requestData, request, reply) => {
+        logger.log('LOGOUT');
+        await request.services.serviceAuth.authLogout(getToken(request));
 
-      // очищаем guest если он был
-      clearCookie(reply, COOKIE__GUEST_ID);
-      clearAuthCookie(reply);
-      return reply();
-    }),
+        // очищаем guest если он был
+        clearCookie(reply, COOKIE__GUEST_ID);
+        clearAuthCookie(reply);
+        return reply();
+      },
+    ),
   );
 
   if (serverConfig.common.features.auth.allowResetPasswordByEmail) {
