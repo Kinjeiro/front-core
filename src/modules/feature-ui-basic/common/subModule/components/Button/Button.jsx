@@ -25,6 +25,7 @@ export default class Button extends PureComponent {
   };
 
   state = {
+    type: 'button',
     isProcessing: undefined,
   };
 
@@ -86,7 +87,7 @@ export default class Button extends PureComponent {
     return (
       <ButtonView
         { ...{
-          ...otherProps,
+          ...this.props,
           loading: isLoading,
           disabled: isLoading || disabled,
           className: classNameFinal,

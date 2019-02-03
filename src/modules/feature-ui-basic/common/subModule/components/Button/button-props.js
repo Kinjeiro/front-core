@@ -6,6 +6,10 @@ export default {
   className: PropTypes.string,
   children: PropTypes.node,
 
+  /**
+   * default "button" (not "submit")
+   */
+  type: PropTypes.string,
   simple: PropTypes.bool,
   primary: PropTypes.bool,
   loading: PropTypes.oneOfType([
