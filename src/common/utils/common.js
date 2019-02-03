@@ -297,7 +297,7 @@ export function wrapToArray(value = null) {
     ? value
     : value === null || value === ''
       ? []
-      : value instanceof FileList
+      : typeof FileList !== 'undefined' && value instanceof FileList
         ? [...value]
         : [value];
 }
