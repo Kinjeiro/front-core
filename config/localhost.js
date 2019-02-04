@@ -9,7 +9,8 @@ const {
   SERVICES_PORT = 80,
   SERVICES_PROTOCOL,
   /** Первый запуск мидловых сервисов бывает до 20 сек*/
-  REQUEST_TIMEOUT = 120000
+  REQUEST_TIMEOUT = 120000,
+  PROXY_PORT = 9090
 } = process.env;
 
 module.exports = {
@@ -32,7 +33,7 @@ module.exports = {
       devtools: true,
       proxyAssets: {
         host: 'localhost',
-        port: 9090
+        port: PROXY_PORT
       }
     },
 
