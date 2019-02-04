@@ -165,10 +165,10 @@ export default class Signin extends Component {
           href={ API_CONFIGS.facebookSignin.path }
           className="SocialAuth"
         >
-          <Button className="FacebookAuthButton">
+          <div className="FacebookAuthButton">
             <FbAuthIcon className="SocialAuthIcon" />
             { i18n('pages.SigninPage.facebookSigninButton') }
-          </Button>
+          </div>
         </a>
       ));
     }
@@ -179,10 +179,10 @@ export default class Signin extends Component {
           href={ API_CONFIGS.vkontakteSignin.path }
           className="SocialAuth"
         >
-          <Button className="VkontakteAuthButton">
+          <div className="VkontakteAuthButton">
             <VKAuthIcon className="SocialAuthIcon" />
             { i18n('pages.SigninPage.vkontakteSigninButton') }
-          </Button>
+          </div>
         </a>
       ));
     }
@@ -193,16 +193,19 @@ export default class Signin extends Component {
           href={ API_CONFIGS.googleSignin.path }
           className="SocialAuth"
         >
-          <Button className="GoogleAuthButton">
+          <div className="GoogleAuthButton">
             <GoogleAuthIcon className="SocialAuthIcon" />
             { i18n('pages.SigninPage.googleSigninButton') }
-          </Button>
+          </div>
         </a>
       ));
     }
 
     return socials.length > 0 && (
-      <div className="SocialAuthButtons">
+      <div
+        key="social"
+        className="SocialAuthButtons"
+      >
         { socials }
       </div>
     );

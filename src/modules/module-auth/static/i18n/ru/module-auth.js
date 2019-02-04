@@ -93,5 +93,9 @@ module.exports = {
       sessionExpire: 'Ваша сессия истекла. Пожалуйста перелогиньтесь.',
       actionGoToLogin: 'Перейти на страницу логина',
     },
+    AuthCheckWrapper: {
+      notRoles: 'У вас нет подходящих ролей ({{roles}})',
+      notPermissions: 'У вас не хватает права ({{permissions}})',
+    },
   },
 };
