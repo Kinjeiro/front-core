@@ -21,11 +21,11 @@ export default class Button extends PureComponent {
   static propTypes = PROPS;
 
   static defaultProps = {
+    type: 'button',
     asyncIsLoading: true,
   };
 
   state = {
-    type: 'button',
     isProcessing: undefined,
   };
 
