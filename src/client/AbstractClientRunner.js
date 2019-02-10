@@ -337,7 +337,7 @@ export default class AbstractClientRunner {
     ReactDOM.render(
       reactRootComponent,
       reactAppDiv,
-      );
+    );
   }
 
 
