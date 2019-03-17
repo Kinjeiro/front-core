@@ -131,8 +131,8 @@ export function compare(objA, objB, invert) {
   return objA > objB
     ? invertValue
     : objA < objB
-       ? invertValue * -1
-       : 0;
+      ? invertValue * -1
+      : 0;
 }
 
 export function comparatorByField(getField, invert) {
@@ -140,8 +140,7 @@ export function comparatorByField(getField, invert) {
     ? (obj) => obj[getField]
     : getField;
 
-  return (objA, objB) =>
-    compare(getFieldFinal(objA), getFieldFinal(objB), invert);
+  return (objA, objB) => compare(getFieldFinal(objA), getFieldFinal(objB), invert);
 }
 
 export function arrayContainsArray(superset, subset) {
@@ -545,8 +544,8 @@ export async function promiseState(promise) {
     .then(
       (value) => (
         value === fakeValue
-        ? PROMISE_STATUS.PENDING
-        : PROMISE_STATUS.FULFILLED
+          ? PROMISE_STATUS.PENDING
+          : PROMISE_STATUS.FULFILLED
       ),
       () => PROMISE_STATUS.REJECTED,
     );
@@ -563,15 +562,31 @@ export async function promiseStatusSwitch(
   }
   const status = await promiseState(promise);
   const func = status === PROMISE_STATUS.PENDING
-               ? pendingFunc
-               : status === PROMISE_STATUS.FULFILLED
-                 ? resolvedFunc
-                 : rejectedFunc;
+    ? pendingFunc
+    : status === PROMISE_STATUS.FULFILLED
+      ? resolvedFunc
+      : rejectedFunc;
   return func ? func(promise) : promise;
 }
 
+export async function promiseWaterFall(promises) {
+  const result = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const promise of wrapToArray(promises)) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      result.push(await executeVariable(promise));
+    } catch (e) {
+      throw e;
+    }
+  }
+  // iterable.reduce((result, fn) => result.then(fn), Promise.resolve());
+  return result;
+}
+
 /**
- * Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)
+ * Метод который, который на время исполнения промиса, проставляет через setState значение переменной
+ * processingStateVariable (по умолчанию, isProcessing)
  *
  * @param handlerPromise
  * @param componentWithSetState
