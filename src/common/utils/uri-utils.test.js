@@ -56,6 +56,10 @@ describe('uri-utils', () => {
       expect(joinPath('http://test.com/', 'api', '/api2', { test: 'test' }))
         .to.be.equal('http://test.com/api/api2?test=test');
     });
+    it('should return valid absolute url with parameters and without middle part', () => {
+      expect(joinPath('http://test.com', { test: 'test' }))
+        .to.be.equal('http://test.com?test=test');
+    });
   });
 
   describe('[function] parseUrlParameters', () => {

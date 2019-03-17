@@ -169,11 +169,11 @@ function pushEncodedKeyValuePair(pairs, key, val) {
  * // todo @ANKU @LOW - не работают с "bracket" (когда multiple test[]=value1&test[]=value2)
  *
  * @param params
- * @param url
+ * @param url - если '' пустая строка - то это сигнал вернуть c символом начала query параметров (знаком вопроса): ?test=testValue
  * @param hash
  * @returns {string}
  */
-export function formatUrlParameters(params, url = '', hash = ''/* , useBracket = false */) {
+export function formatUrlParameters(params, url = null, hash = ''/* , useBracket = false */) {
   // const paramStr =
   //   queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined })
   //   // todo @ANKU @LOW - @BUT_OUT queryString - они не кодируют # hash
@@ -186,7 +186,7 @@ export function formatUrlParameters(params, url = '', hash = ''/* , useBracket =
   }
   const paramStr = pairs.join('&');
 
-  return `${url}${(url && paramStr && '?') || ''}${paramStr}${hash}`;
+  return `${url || ''}${url !== null && paramStr ? '?' : ''}${paramStr}${hash}`;
 }
 
 /**
@@ -211,7 +211,7 @@ export function joinPath(...paths) {
   let lastPart = '';
   if (typeof lastUrlParameters === 'object') {
     // url parameters
-    lastPart = formatUrlParameters(lastUrlParameters, middlePart);
+    lastPart = formatUrlParameters(lastUrlParameters, middlePart || '');
   } else {
     lastPart = joinPathInner('/', middlePart, lastUrlParameters || '');
   }
