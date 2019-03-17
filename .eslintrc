@@ -57,5 +57,22 @@
     //    "import/no-extraneous-dependencies": 0,
     //
     //    "no-tabs": 0,
+
+//    "object-curly-newline": [
+//      "error",
+//      {
+//        "ObjectExpression": { "minProperties": 2 },
+//        "ObjectPattern": "always"
+//      }
+//    ],
+//    "object-property-newline": "error",
+//    "indent": [
+//      "error",
+//      2,
+//      {
+//        "ObjectExpression": 1
+//      }
+//    ]
+//    "react/jsx-one-expression-per-line": [<enabled>, { "allow": "none"|"literal"|"single-child" }]
   }
 }
