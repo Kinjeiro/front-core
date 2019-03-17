@@ -4,6 +4,7 @@ import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoizeLodash from 'lodash/memoize';
 import lodashDifference from 'lodash/difference';
+import emptyObject from 'lodash/isEmpty';
 
 import shallowEqualLib from 'shallowequal';
 import promiseMemoize from 'promise-memoize';
@@ -325,15 +326,12 @@ export function difference(source, minusValues) {
   );
 }
 
-export function isEmpty(value, objectChecker = null) {
-  if (objectChecker && typeof value === 'object') {
-    return objectChecker(value);
-  }
-  return value === null
-    || typeof value === 'undefined'
-    || value === ''
-    || (Array.isArray(value) && value.length === 0)
-    || (typeof value === 'object' && Object.keys(value).length === 0);
+export function isEmpty(value, objectChecker = emptyObject) {
+  return value instanceof Object
+    ? objectChecker(value)
+    : typeof value === 'string'
+      ? value.trim().length === 0
+      : typeof value === 'undefined' || value === null;
 }
 
 
