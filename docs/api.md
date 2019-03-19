@@ -173,20 +173,20 @@
 -   [ServiceAuthMock][169]
     -   [authForgot][170]
     -   [authResetPassword][171]
--   [getProtectedInfoByToken][172]
--   [getProtectedInfo][173]
--   [SUB_MODULE_FACTORY][174]
-    -   [COMMON_SUB_MODULE_REGEXP][175]
-    -   [loadSubModules][176]
-    -   [createCommonSubModule][177]
-    -   [createServerSubModule][178]
--   [bind][179]
--   [DEFAULT_LOGGER_IDS][180]
--   [contextData][181]
--   [register][182]
--   [method][183]
+-   [remoteJwt][172]
+-   [getProtectedInfoByToken][173]
+-   [getProtectedInfo][174]
+-   [SUB_MODULE_FACTORY][175]
+    -   [COMMON_SUB_MODULE_REGEXP][176]
+    -   [loadSubModules][177]
+    -   [createCommonSubModule][178]
+    -   [createServerSubModule][179]
+-   [bind][180]
+-   [DEFAULT_LOGGER_IDS][181]
+-   [contextData][182]
+-   [register][183]
 -   [method][184]
--   [remoteJwt][185]
+-   [method][185]
 -   [prepare-state][186]
 -   [onPreResponse][187]
 -   [createServices][188]
@@ -1932,6 +1932,17 @@ Returns **any**
 
 Returns **[Promise][233]&lt;any>** 
 
+## remoteJwt
+
+token - это токен сотрудника банка
+
+**Parameters**
+
+-   `server`  
+-   `pluginOptions`  
+
+Returns **{authenticate: authenticate}** 
+
 ## getProtectedInfoByToken
 
 **Parameters**
@@ -2075,17 +2086,6 @@ Returns fresh i18next instance for each request, to prevent cache pollution
 This method is a facade for i18next's bundled 't' method. We wrap it so that we can
 pass an extra language parameter for Hapi server.method caching (so you can generate keys based on languages
 and avoid cache pollution)
-
-## remoteJwt
-
-token - это токен сотрудника банка
-
-**Parameters**
-
--   `server`  
--   `pluginOptions`  
-
-Returns **{authenticate: authenticate}** 
 
 ## prepare-state
 
@@ -2834,33 +2834,33 @@ Returns **any** Promise
 
 [171]: #authresetpassword-1
 
-[172]: #getprotectedinfobytoken
+[172]: #remotejwt
 
-[173]: #getprotectedinfo
+[173]: #getprotectedinfobytoken
 
-[174]: #sub_module_factory
+[174]: #getprotectedinfo
 
-[175]: #common_sub_module_regexp
+[175]: #sub_module_factory
 
-[176]: #loadsubmodules
+[176]: #common_sub_module_regexp
 
-[177]: #createcommonsubmodule
+[177]: #loadsubmodules
 
-[178]: #createserversubmodule
+[178]: #createcommonsubmodule
 
-[179]: #bind
+[179]: #createserversubmodule
 
-[180]: #default_logger_ids
+[180]: #bind
 
-[181]: #contextdata
+[181]: #default_logger_ids
 
-[182]: #register
+[182]: #contextdata
 
-[183]: #method
+[183]: #register
 
-[184]: #method-1
+[184]: #method
 
-[185]: #remotejwt
+[185]: #method-1
 
 [186]: #prepare-state
 

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.7.0 | Documentation</title>
+  <title>@reagentum/front-core 1.7.1 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.7.0</code></div>
+          <div class='mb1'><code>1.7.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1761,6 +1761,16 @@
               
                 
                 <li><a
+                  href='#remotejwt'
+                  class="">
+                  remoteJwt
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#getprotectedinfobytoken'
                   class="">
                   getProtectedInfoByToken
@@ -1880,16 +1890,6 @@
                   href='#method'
                   class="">
                   method
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#remotejwt'
-                  class="">
-                  remoteJwt
                   
                 </a>
                 
@@ -13793,6 +13793,82 @@ webkitRelativePath: "",
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='remotejwt'>
+      remoteJwt
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>token - это токен сотрудника банка</p>
+
+
+  <div class='pre p1 fill-light mt0'>remoteJwt(server: any, pluginOptions: any): {authenticate: authenticate}</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>server</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pluginOptions</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{authenticate: authenticate}</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getprotectedinfobytoken'>
       getProtectedInfoByToken
     </h3>
@@ -14647,82 +14723,6 @@ and avoid cache pollution)</p>
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='remotejwt'>
-      remoteJwt
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>token - это токен сотрудника банка</p>
-
-
-  <div class='pre p1 fill-light mt0'>remoteJwt(server: any, pluginOptions: any): {authenticate: authenticate}</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>server</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>pluginOptions</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>{authenticate: authenticate}</code>:
-        
-
-      
-    
   
 
   
