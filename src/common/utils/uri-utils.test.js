@@ -2,6 +2,7 @@ import {
   joinPath,
   parseUrlParameters,
   formatUrlParameters,
+  updateUrl,
 } from './uri-utils';
 
 describe('uri-utils', () => {
@@ -94,6 +95,70 @@ describe('uri-utils', () => {
         },
         type: 'products',
       });
+    });
+  });
+
+
+  describe('[function] updateUrl', () => {
+    it('should update exist params', () => {
+      const url = 'http://test.domain.com/test?param1=1&param2=2';
+      expect(updateUrl(url, { param2: '22', param3: '3' }))
+        .to.be.equal('http://test.domain.com/test?param1=1&param2=22&param3=3');
+    });
+    it('should update without search', () => {
+      const url = 'http://test.domain.com/test';
+      expect(updateUrl(url, { param2: '22', param3: '3' }))
+        .to.be.equal('http://test.domain.com/test?param2=22&param3=3');
+    });
+
+    it('should replace array params', () => {
+      const url = 'test?var1=11&var1=12&var1=13&var2=2';
+      expect(updateUrl(url, { var1: ['13', '14'] }))
+        .to.be.equal('test?var1=13&var1=14&var2=2');
+    });
+    it('should merge array params', () => {
+      const url = 'test?var1=11&var1=12&var1=13&var2=2';
+      expect(updateUrl(url, { var1: ['13', '14'] }, true))
+        .to.be.equal('test?var1=11&var1=12&var1=13&var1=14&var2=2');
+    });
+
+
+    it('should replace object params', () => {
+      const url = 'http://localhost:8080/api/products?meta%5Bsearch%5D&meta%5BstartPage%5D=0&meta%5BitemsPerPage%5D=10&filters%5Btype%5D=goods';
+      expect(
+        updateUrl(
+          url,
+          {
+            // filters: {
+            //   type: 'goods',
+            // },
+            meta: {
+              // search: null,
+              startPage: '10',
+              // itemsPerPage: '10',
+            },
+          },
+        ),
+      ).to.be.equal('http://localhost:8080/api/products?filters%5Btype%5D=goods&meta%5BstartPage%5D=10');
+    });
+    it('should merge object params', () => {
+      const url = 'http://localhost:8080/api/products?meta%5Bsearch%5D&meta%5BstartPage%5D=0&meta%5BitemsPerPage%5D=10&filters%5Btype%5D=goods';
+      expect(
+        updateUrl(
+          url,
+          {
+            // filters: {
+            //   type: 'goods',
+            // },
+            meta: {
+              // search: null,
+              startPage: '10',
+              // itemsPerPage: '10',
+            },
+          },
+          true,
+        ),
+      ).to.be.equal('http://localhost:8080/api/products?filters%5Btype%5D=goods&meta%5BitemsPerPage%5D=10&meta%5Bsearch%5D&meta%5BstartPage%5D=10');
     });
   });
 });

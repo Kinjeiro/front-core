@@ -1,8 +1,10 @@
 /* eslint-disable no-undef,no-param-reassign */
 import pathLib from 'path';
 import forOwn from 'lodash/forOwn';
-import merge from 'lodash/merge';
+// import merge from 'lodash/merge';
+import mergeWith from 'lodash/mergeWith';
 import set from 'lodash/set';
+import uniq from 'lodash/uniq';
 import queryString from 'query-string';
 
 import { convertToString } from './common';
@@ -77,7 +79,8 @@ function proceedDefaultValues(defaultValues) {
  *
  * @param url - либо объект location, либо мапа параметров, либо стринга
  * @param defaultValues
- * @param customNormalizersMap - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
+ * @param customNormalizersMap - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла
+ *   значений
  * @returns {{}}
  */
 export function parseUrlParameters(url, defaultValues = {}, customNormalizersMap = {}) {
@@ -169,7 +172,8 @@ function pushEncodedKeyValuePair(pairs, key, val) {
  * // todo @ANKU @LOW - не работают с "bracket" (когда multiple test[]=value1&test[]=value2)
  *
  * @param params
- * @param url - если '' пустая строка - то это сигнал вернуть c символом начала query параметров (знаком вопроса): ?test=testValue
+ * @param url - если '' пустая строка - то это сигнал вернуть c символом начала query параметров (знаком вопроса):
+ *   ?test=testValue
  * @param hash
  * @returns {string}
  */
@@ -289,16 +293,38 @@ export function getHash() {
   return window.location.hash.replace(/^#/, '');
 }
 
-export function updateLocationSearch(url, newQueryParams, assign = false) {
+
+function mergerArrayMergeByValue(srcValue, newValue) {
+  if (Array.isArray(srcValue) || Array.isArray(newValue)) {
+    return uniq([...srcValue, ...newValue]);
+  }
+  return undefined;
+}
+
+export function updateLocationSearch(url, newQueryParams, fullReplace = false) {
   const params = parseUrlParameters(url);
-  if (assign) {
-    // полностью заменит сложные объекты (к примеру, filters для таблицы
+  if (fullReplace) {
+    // полностью заменит сложные объекты (к примеру, filters для таблицы)
     Object.assign(params, newQueryParams);
   } else {
-    merge(params, newQueryParams);
+    mergeWith(params, newQueryParams, mergerArrayMergeByValue);
   }
   return `?${formatUrlParameters(params)}`;
 }
+
+/**
+ *
+ * @param url
+ * @param newQueryParams
+ * @param merge - по умолчанию реплейс массивов и объектов
+ * @return {string}
+ */
+export function updateUrl(url, newQueryParams, merge = false) {
+  const searchFinal = updateLocationSearch(url, newQueryParams, !merge);
+  const index = url.indexOf('?');
+  return `${url.substr(0, index >= 0 ? index : undefined)}${searchFinal}`;
+}
+
 export function updateWindowLocationQueryParams(newQueryParams, ...args) {
   if (typeof window !== 'undefined' && window.history.pushState) {
     window.history.pushState('', '', updateLocationSearch(window.location.href, newQueryParams, ...args));
