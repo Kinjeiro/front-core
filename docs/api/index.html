@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.6.51 | Documentation</title>
+  <title>@reagentum/front-core 1.6.52 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.6.51</code></div>
+          <div class='mb1'><code>1.6.52</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1206,6 +1206,16 @@
                   href='#joinuri'
                   class="">
                   joinUri
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#updateurl'
+                  class="">
+                  updateUrl
                   
                 </a>
                 
@@ -8043,7 +8053,8 @@ m.tellAge(); // Mike is 12 years old.
   </div>
   
 
-  <p>Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)</p>
+  <p>Метод который, который на время исполнения промиса, проставляет через setState значение переменной
+processingStateVariable (по умолчанию, isProcessing)</p>
 
 
   <div class='pre p1 fill-light mt0'>emitProcessing(handlerPromise: any, componentWithSetState: any, processingStateVariable: any): any</div>
@@ -10114,7 +10125,8 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
             <span class='code bold'>customNormalizersMap</span> <code class='quiet'>(any)</code>
 	    мапа 
 <filterName>
-: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
+: (urlValue)=>normalizedValue  - для правильного парсинга из урла
+значений
 
           </div>
           
@@ -10191,7 +10203,9 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>url</span> <code class='quiet'>(any)</code>
-	    
+	    если '' пустая строка - то это сигнал вернуть c символом начала query параметров (знаком вопроса):
+?test=testValue
+
           </div>
           
         </div>
@@ -10419,6 +10433,90 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='updateurl'>
+      updateUrl
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>updateUrl(url: any, newQueryParams: any, merge: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>url</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>newQueryParams</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>merge</span> <code class='quiet'>(any)</code>
+	    по умолчанию реплейс массивов и объектов
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
         
 
       
@@ -16356,6 +16454,14 @@ server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy
               
                 <tr>
   <td class='break-word'><span class='code bold'>$0.envPriority</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.requestOptions</span> <code class='quiet'>any</code>
   </td>
   <td class='break-word'><span></span></td>
 </tr>
