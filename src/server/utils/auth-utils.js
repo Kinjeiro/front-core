@@ -1,5 +1,4 @@
-import { appUrl } from '../../common/helpers/app-urls';
-
+/* eslint-disable prefer-destructuring */
 import logger from '../helpers/server-logger';
 
 import {
@@ -12,21 +11,12 @@ import {
   setCookie,
   getCookie,
   clearCookie,
-} from '../utils/hapi-utils';
+} from './hapi-utils';
 
 const tokenCookie = serverConfig.server.features.auth.tokenCookie;
 const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
 const authTypeCookie = serverConfig.server.features.auth.authTypeCookie;
-const contextPath = appUrl();
-
-export const TOKEN_QUERY_PARAM_NAME = serverConfig.server.features.auth.tokenParam;
-
-const OPTIONS = {
-  path: contextPath,
-  isHttpOnly: true,
-  // todo @ANKU @CRIT @MAIN @DEBUG - secure: false
-  isSecure: false,
-};
+// const contextPath = appUrl();
 
 // https://habrahabr.ru/company/dataart/blog/262817/
 export const AUTH_TYPES = {
@@ -37,7 +27,8 @@ export function setAuthCookies(
   response,
   accessToken,
   refreshToken,
-  expiresInMilliseconds = undefined,
+  expiresInMilliseconds,
+  refreshTokenExpiresInMilliseconds,
   authType = AUTH_TYPES.BEARER,
   requestForProxyNewToken = null,
 ) {
@@ -51,23 +42,17 @@ export function setAuthCookies(
   //   path: finalContextRoot
   // });
 
-
-  // return response
-  //   .state(tokenCookie, accessToken, {
-  //     ...OPTIONS,
-  //     expire: expiresIn,
-  //   })
-  //   .state(refreshTokenCookie, refreshToken, OPTIONS)
-  //   .state(authTypeCookie, authType, OPTIONS);
-
   setCookie(response, tokenCookie, accessToken, {
     expire: expiresInMilliseconds,
     ttl: expiresInMilliseconds,
   });
   if (typeof refreshToken !== 'undefined') {
-    setCookie(response, refreshTokenCookie, refreshToken, OPTIONS);
+    setCookie(response, refreshTokenCookie, refreshToken, {
+      expire: refreshTokenExpiresInMilliseconds,
+      ttl: refreshTokenExpiresInMilliseconds,
+    });
   }
-  setCookie(response, authTypeCookie, authType, OPTIONS);
+  setCookie(response, authTypeCookie, authType);
 
   // чтобы если отработал refresh_token проксирующие запросы уже слались через новый токен
   if (requestForProxyNewToken) {
@@ -84,10 +69,13 @@ export function getToken(request) {
   if (updatedToken) {
     logger.debug(`Use accessToken for proxy from request.id: ${request.id}\n${updatedToken}`);
   }
-  return updatedToken || request.query[TOKEN_QUERY_PARAM_NAME] || getCookie(request, tokenCookie);
+  return updatedToken
+    || request.query[serverConfig.server.features.auth.callbackAccessTokenParam]
+    || getCookie(request, tokenCookie);
 }
 export function getRefreshToken(req) {
-  return getCookie(req, refreshTokenCookie);
+  return req.query[serverConfig.server.features.auth.callbackRefreshTokenLifeParam]
+    || getCookie(req, refreshTokenCookie);
 }
 export function getAuthType(req) {
   return getCookie(req, authTypeCookie);

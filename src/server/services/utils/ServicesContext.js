@@ -61,7 +61,12 @@ export default class ServicesContext {
       logger.error(`Ошибка при получение сервиса "${serviceName}":\n`, error);
       throw error;
     }
-    logger.debug(`getService ${isMock ? '[MOCK]' : ''} "${serviceName}" - ${!!service}. Endpoint: ${endpoint ? JSON.stringify(endpoint) : 'none'}`);
+    const isMockMsg = isMock
+      ? mockServices[serviceName]
+        ? '[MOCK]'
+        : '[no MOCK]'
+      : '';
+    logger.debug(`getService ${isMockMsg} "${serviceName}" - ${!!service}. Endpoint: ${endpoint ? JSON.stringify(endpoint) : 'none'}`);
 
     return service;
   }

@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Меню
-* [[last version][1.6.0 - ] (2018.11.14)](#1_6)
+* [[last version][1.7.0 - ] (2019.03.19)](#1_7)
+* [[1.6.0 - 1.6.52] (2018.11.14)](#1_6)
 * [[1.5.0 - 1.5.14] (2018.09.17)](#1_5)
 * [[1.4.0 - 1.4.32] (2018.07.28)](#1_4)
 * [[1.3.0 - 1.3.38] (2018.05.16)](#1_3)
@@ -15,8 +16,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * [[1.0.0] - 2017.12.26](#1_0)
 * [[0.2.16] - 2017.11.17](#0_2)
 
+## [last version][1.7.0 - ] (2019.03.19)
+### !!! Breaking changes:
+1. В конфиге изменен адрес для авторизационного сервера для синхронизации с ```@reagentum/auth-server@2.1.0``` (порт теперь 1338, протокол: https и игнорирование неподписанных сертификатов)
+было
+```
+serviceAuth: createEndpointServiceConfig({
+    port: 1337,
+    endpoint: 'api'
+}),
+serviceUsers: createEndpointServiceConfig({
+    port: 1337,
+    endpoint: 'api'
+}),
+```
+стало
+```
+  serviceAuth: createEndpointServiceConfig({
+    protocol: 'https',
+    port: 1338,
+    endpoint: 'api',
+    requestOptions: {
+      // игнорировать, что сертификат не подписан
+      rejectUnauthorized: false
+    }
+  }),
+  serviceUsers: createEndpointServiceConfig({
+    protocol: 'https',
+    port: 1338,
+    endpoint: 'api',
+    requestOptions: {
+      // игнорировать, что сертификат не подписан
+      rejectUnauthorized: false
+    }
+  }),
+```
+2. Токен в куках изменен с ```token``` на ```accessToken```
+3. Все куки теперь по умолчанию ```sameSite='Lex'``` (не пересылаются на другие сайты) 
 
-## [last version][1.6.0 - ] (2018.11.14)
+
+## [last version][1.6.0 - 1.6.52] (2018.11.14)
 ### !!! Breaking changes:
 1. Адаптация под обновленное апи auth-server@2.0.0
 - у любого пользователя главным идентификатором теперь является не username, а userId

@@ -71,14 +71,15 @@ export default class ServiceAuth extends CoreService {
   }
 
   async authSignup(userData, emailOptions = null) {
-    return sendEndpointMethodRequest(
-      this.endpointServiceConfig,
+    return this.send(
       this.urls.authSignup,
-      'post',
       {
         userData,
         ...this.getClientInfo(),
         emailOptions,
+      },
+      {
+        method: 'post',
       },
     );
   }
@@ -90,53 +91,52 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   authLogin(username, password) {
-    return (
-      sendEndpointMethodRequest(
-        this.endpointServiceConfig,
-        this.urls.authSignin,
-        'post',
-        {
-          // @NOTE: необходимо учитывать snake запись (_) это стандарт
-          grant_type: 'password',
-          username,
-          password,
-          ...this.getClientInfo(),
-        },
-      )
-        // .then((results) => {
-        //   // стандарт работает на секундах, а сервер на милисекундах
-        //   // https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
-        //   // eslint-disable-next-line no-param-reassign
-        //   results.expires_in *= 1000;
-        //   return results;
-        // })
-        .catch(error => {
-          // eslint-disable-next-line no-param-reassign
-          const uniError = parseToUniError(error);
-          if (
-            uniError.originalObject &&
-            uniError.originalObject.error_description
-          ) {
-            let clientErrorMessage;
+    return this.send(
+      this.urls.authSignin,
+      {
+        // @NOTE: необходимо учитывать snake запись (_) это стандарт
+        grant_type: 'password',
+        username,
+        password,
+        ...this.getClientInfo(),
+      },
+      {
+        method: 'post',
+      },
+    )
+      // .then((results) => {
+      //   // стандарт работает на секундах, а сервер на милисекундах
+      //   // https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
+      //   // eslint-disable-next-line no-param-reassign
+      //   results.expires_in *= 1000;
+      //   return results;
+      // })
+      .catch(error => {
+        // eslint-disable-next-line no-param-reassign
+        const uniError = parseToUniError(error);
+        if (
+          uniError.originalObject
+          && uniError.originalObject.error_description
+        ) {
+          let clientErrorMessage;
 
-            // switch (uniError.originalObject.error_description) {
-            switch (uniError.originalObject.error) {
-              case 'Invalid resource owner credentials':
-                clientErrorMessage = i18n('errors.wrongUserCredentials');
-                break;
-              case 'Missing required parameter: password':
-                clientErrorMessage = i18n('errors.missingPassword');
-                break;
-              default:
-                // clientErrorMessage = uniError.originalObject.error_description;
-                clientErrorMessage = uniError.originalObject.error;
-            }
-            uniError.clientErrorMessage = clientErrorMessage;
+          // switch (uniError.originalObject.error_description) {
+          switch (uniError.originalObject.error) {
+            case 'Invalid resource owner credentials':
+              clientErrorMessage = i18n('errors.wrongUserCredentials');
+              break;
+            case 'Missing required parameter: password':
+              clientErrorMessage = i18n('errors.missingPassword');
+              break;
+            default:
+              // clientErrorMessage = uniError.originalObject.error_description;
+              clientErrorMessage = uniError.originalObject.error;
           }
+          uniError.clientErrorMessage = clientErrorMessage;
+        }
 
-          throw new ThrowableUniError(uniError);
-        })
-    );
+        throw new ThrowableUniError(uniError);
+      });
   }
 
   /*
@@ -146,14 +146,15 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   authRefresh(refreshToken) {
-    return sendEndpointMethodRequest(
-      this.endpointServiceConfig,
+    return this.send(
       this.urls.authRefresh,
-      'post',
       {
         ...this.getClientInfo(),
         grant_type: 'refresh_token',
         refresh_token: refreshToken,
+      },
+      {
+        method: 'post',
       },
     );
     // .then((results) => {
@@ -207,8 +208,7 @@ export default class ServiceAuth extends CoreService {
    * @return {*}
    */
   async authForgot(email, resetPasswordPageUrl, emailOptions) {
-    return sendEndpointMethodRequest(
-      this.endpointServiceConfig,
+    return this.send(
       this.urls.authForgot,
       'post',
       {
@@ -218,6 +218,9 @@ export default class ServiceAuth extends CoreService {
         resetPasswordPageUrl,
 
         ...this.getClientInfo(),
+      },
+      {
+        method: 'post',
       },
     );
   }
@@ -231,10 +234,8 @@ export default class ServiceAuth extends CoreService {
    * @return {Promise.<*>}
    */
   async authResetPassword(resetPasswordToken, newPassword, emailOptions) {
-    return sendEndpointMethodRequest(
-      this.endpointServiceConfig,
+    return this.send(
       this.urls.authReset,
-      'post',
       {
         resetPasswordToken,
         newPassword,
@@ -242,6 +243,9 @@ export default class ServiceAuth extends CoreService {
         emailOptions,
 
         ...this.getClientInfo(),
+      },
+      {
+        method: 'post',
       },
     );
   }

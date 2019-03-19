@@ -34,7 +34,8 @@ import moduleAuth from '../modules/module-auth/common/subModule';
 // ======================================================
 // UTILS CONFIGS
 // ======================================================
-import pluginAuthJwt, { AUTH_SCHEME_NAME } from './plugins/jwt-auth';
+import { AUTH_SCHEME_NAME } from '../modules/module-auth/server/subModule/plugins/jwt-auth';
+
 import pluginPageIndex from './plugins/pages/pages';
 import getPreLoader from './plugins/pages/default-pre-loader';
 import pluginProxyAssets from './plugins/proxy-assets';
@@ -222,7 +223,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
         },
       },
       pluginI18n,
-      pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
+      // получаем из module-auth::getServerPlugins
+      // pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
       pluginsRequestUser,
 
       // ======================================================

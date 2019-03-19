@@ -34,6 +34,7 @@ export default async function authStrategyOAuth2(request, response, servicesCont
         newAuthInfo.access_token,
         newAuthInfo.refresh_token,
         newAuthInfo.expires_in ? newAuthInfo.expires_in * 1000 : undefined,
+        undefined,
         newAuthInfo.token_type,
         request,
       );

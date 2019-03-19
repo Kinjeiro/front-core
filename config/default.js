@@ -369,7 +369,7 @@ module.exports = {
              uploads - the directory used for writing file uploads. Defaults to os.tmpDir().
           */
           payload: {
-            maxBytes: 7000000 /* 7mb*/
+            maxBytes: 7000000 /* 7mb */
             // uploads: path.resolve(__dirname, '../temp')
           }
         }
@@ -379,8 +379,12 @@ module.exports = {
       // auth - настройки авторизации
       // ======================================================
       auth: {
-        tokenParam: 'token',
-        tokenCookie: 'token',
+        callbackAccessTokenParam: 'accessToken',
+        callbackAccessTokenLifeParam: 'accessTokenLife',
+        callbackRefreshTokenParam: 'refreshToken',
+        callbackRefreshTokenLifeParam: 'refreshTokenLife',
+
+        tokenCookie: 'accessToken',
         refreshTokenCookie: 'refreshToken',
         authTypeCookie: 'authType',
 
@@ -498,12 +502,22 @@ module.exports = {
       // AUTH Services - front-core-auth server
       // ======================================================
       serviceAuth: createEndpointServiceConfig({
-        port: 1337,
-        endpoint: 'api'
+        protocol: 'https',
+        port: 1338,
+        endpoint: 'api',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
       }),
       serviceUsers: createEndpointServiceConfig({
-        port: 1337,
-        endpoint: 'api'
+        protocol: 'https',
+        port: 1338,
+        endpoint: 'api',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
       }),
 
       /**

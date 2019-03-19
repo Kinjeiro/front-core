@@ -3,22 +3,22 @@ import omit from 'lodash/omit';
 import {
   appUrl,
   cutContextPath,
-} from '../../common/helpers/app-urls';
-import { parseToUniError } from '../../common/models/uni-error';
-import i18n from '../../common/utils/i18n-utils';
+} from '../../../../../common/helpers/app-urls';
+import { parseToUniError } from '../../../../../common/models/uni-error';
+import i18n from '../../../../../common/utils/i18n-utils';
 
-import logger from '../helpers/server-logger';
+import logger from '../../../../../server/helpers/server-logger';
+import serverConfig from '../../../../../server/server-config';
 import {
   continueWithCredentials,
   continueWithoutCredentials,
-} from '../utils/credentials-utils';
+} from '../../../../../server/utils/credentials-utils';
 
 import {
-  TOKEN_QUERY_PARAM_NAME,
   setAuthCookies,
   // getToken,
   clearAuthCookie,
-} from '../utils/auth-utils';
+} from '../../../../../server/utils/auth-utils';
 
 /**
  * token - это токен сотрудника банка
@@ -36,22 +36,47 @@ export function remoteJwt(server, pluginOptions) {
 
   async function authenticate(request, reply) {
     const { url: { pathname, path } } = request;
-    const tokenParamValue = request.query[TOKEN_QUERY_PARAM_NAME];
+
+    /*
+      Если использовать авторизационный сервер, который находится на другом домене, то куки нельзя проставлять, поэтому идет их проброс через url
+    */
+    const accessTokenParamValue = request.query[serverConfig.server.features.auth.callbackAccessTokenParam];
 
     // Проставляем через url
-    if (tokenParamValue) {
-      logger.log(i18n('core:Проставляем token из params в cookie'), tokenParamValue);
+    if (accessTokenParamValue) {
+      const accessTokenLife = request.query[serverConfig.server.features.auth.callbackAccessTokenLifeParam];
+      const refreshToken = request.query[serverConfig.server.features.auth.callbackRefreshTokenParam];
+      const refreshTokenLife = request.query[serverConfig.server.features.auth.callbackRefreshTokenLifeParam];
 
-      // todo @ANKU @CRIT @MAIN @BUG_OUT @hapi - при обновлении на hapi@16.1.1 куки перестают сохраняться
+      logger.log(i18n('core:Проставляем token из params в cookie'));
 
       // todo @ANKU @LOW - но куки на мобильных не поддерживаются, можно через sessionStorage клиента сделать
 
       // // Redirect user to the same page and set token cookie
-      // return setAuthCookies(
-      //   reply.redirect(appUrl(pathname, omit(request.query, [TOKEN_QUERY_PARAM_NAME]))),
-      //   tokenParamValue,
-      // );
-      setAuthCookies(reply, tokenParamValue);
+      setAuthCookies(
+        reply,
+        accessTokenParamValue,
+        refreshToken,
+        accessTokenLife ? parseInt(accessTokenLife, 10) * 1000 : undefined,
+        refreshTokenLife ? parseInt(refreshTokenLife, 10) * 1000 : undefined,
+      );
+
+      // todo @ANKU @CRIT @MAIN @BUG_OUT @hapi - при обновлении на hapi@16.1.1 куки перестают сохраняться
+      // как workaround: reply('<script>location.href=\'/account\'</script>')
+      return reply.redirect(
+        appUrl(
+          pathname,
+          omit(
+            request.query,
+            [
+              serverConfig.server.features.auth.callbackAccessTokenParam,
+              serverConfig.server.features.auth.callbackRefreshTokenParam,
+              serverConfig.server.features.auth.callbackAccessTokenLifeParam,
+              serverConfig.server.features.auth.callbackRefreshTokenLifeParam,
+            ],
+          ),
+        ),
+      );
     }
 
     if (noAuthRequireMatcherFn && noAuthRequireMatcherFn(cutContextPath(pathname))) {
