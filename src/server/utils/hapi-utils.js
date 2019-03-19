@@ -184,8 +184,21 @@ export const DEFAULT_COOKIE_OPTIONS = {
   // todo @ANKU @CRIT @MAIN - в утилитах неочень хорошо использовать конфиги, но все же
   path: serverConfig.common.app.contextRoot || '/',
   isHttpOnly: true,
-  // todo @ANKU @CRIT @MAIN @DEBUG - secure: false
+  /*
+    // todo @ANKU @CRIT @MAIN @DEBUG -
+    secure: false
+  */
   isSecure: false,
+  /*
+    https://github.com/hapijs/hapi-auth-cookie/issues/159#issuecomment-334907134
+
+    sameSite: 'Strict' - не отправляет куки на любые другие домены (то есть при перехода из вк \ facebook и обратно мы бы терали авторизацию)
+    sameSite: 'Lax',
+    Режим Lax решает проблемы с разлогированием описанную выше, но при этом сохраняет хороший уровень защиты. В сущности он добавляет исключение, когда куки передаются при навигации высокого уровня, которая использует “безопасные” HTTP методы. Согласно RFC безопасными методами считаются GET, HEAD, OPTIONS и TRACE.
+
+    К сожалению IE11 не поддерживает - https://caniuse.com/#search=samesite - приходится использовать механизм доп токена cookieCSRF между клиентом и этой нодой
+  */
+  isSameSite: 'Lax',
 };
 
 export function setCookie(reply, name, value = undefined, options = undefined) {
