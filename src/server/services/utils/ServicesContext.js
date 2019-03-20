@@ -59,7 +59,9 @@ export default class ServicesContext {
       }
     } catch (error) {
       logger.error(`Ошибка при получение сервиса "${serviceName}":\n`, error);
-      throw error;
+      // когда мы печатаем request (где лежит этот контекст) то могут приходить разные стринги
+      // throw error;
+      return null;
     }
     const isMockMsg = isMock
       ? mockServices[serviceName]
