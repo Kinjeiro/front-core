@@ -52,7 +52,14 @@ serviceUsers: createEndpointServiceConfig({
   }),
 ```
 2. Токен в куках изменен с ```token``` на ```accessToken```
-3. Все куки теперь по умолчанию ```sameSite='Lex'``` (не пересылаются на другие сайты) 
+3. Все куки теперь по умолчанию ```sameSite='Lex'``` (не пересылаются на другие сайты)
+
+socialProvides: {
+          google: false,
+          vkontakte: false,
+          facebook: false
+        },
+ 
 
 
 ## [last version][1.6.0 - 1.6.52] (2018.11.14)
@@ -203,8 +210,7 @@ export function pluginRouteFactory(path, handler, routeConfig = {}, apiPluginOpt
 Поэтому показывается только userId и displayName, либо если специально задано aliasId
 - теперь пользовательские данные доступны либо по userId, либо по aliasId
 - при логине ищется сразу по нескольким местам userId / aliasId / username / email
-
-
+2. Социальная авторизация через VK \ Facebook \ Google ```config.common.features.auth.socialProvides.google```
 
 ### Commits:
     
