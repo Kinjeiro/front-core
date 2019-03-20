@@ -298,8 +298,23 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
   throw new Error(`Не понятный формат "${serverPath}"`);
 }
 
-export function getRefererUrl(request, ...pathsOrParams) {
+export function getServerFullUrl(request, ...pathsOrParams) {
   const {
+    // url:
+    //   Url {
+    //   protocol: null,
+    //     slashes: null,
+    //     auth: null,
+    //     host: null,
+    //     port: null,
+    //     hostname: null,
+    //     hash: null,
+    //     search: null,
+    //     query: {},
+    //   pathname: '/api/auth/google',
+    //     path: '/api/auth/google',
+    //     href: '/api/auth/google' },
+
     info: {
       /*
         received: 1544545806171,
@@ -347,4 +362,17 @@ export function getRefererUrl(request, ...pathsOrParams) {
   } = request;
   // return `${uri}${appUrl(...pathsOrParams)}`;
   return `${protocol}://${host}${appUrl(...pathsOrParams)}`;
+}
+
+export function replaceLocalhostByCurrentHost(request, originalUrl) {
+  const {
+    server: {
+      info: {
+        host: hostname,
+      },
+    },
+  } = request;
+
+  console.warn('ANKU , hostname', hostname, request.url, request.info, request.server.info);
+  return originalUrl.replace(/0\.0\.0\.0|127\.0\.0\.1|localhost/gi, hostname);
 }

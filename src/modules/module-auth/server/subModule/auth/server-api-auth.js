@@ -2,7 +2,7 @@
 import serverConfig from '../../../../../server/server-config';
 import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
 import logger from '../../../../../server/helpers/server-logger';
-import { clearCookie } from '../../../../../server/utils/hapi-utils';
+import { clearCookie, replaceLocalhostByCurrentHost } from '../../../../../server/utils/hapi-utils';
 import {
   setAuthCookies,
   getToken,
@@ -71,7 +71,10 @@ export default function createApiPlugins() {
         async (requestData, request, reply) => {
           logger.log('GOOGLE_SIGNIN');
           // todo @ANKU @CRIT @MAIN - убрать редирект, заменить на возвращение обычного html и его вставку в reply
-          reply.redirect(request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.GOOGLE));
+          reply.redirect(
+            // так как нам нужно редиректится при социальной авторизации, локалхост нужно заменить на хост сервера, чтобы браузерный переход отработал правильно
+            replaceLocalhostByCurrentHost(request, request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.GOOGLE)),
+          );
         },
         {
           routeConfig: {
@@ -88,7 +91,10 @@ export default function createApiPlugins() {
         API.vkontakteSignin,
         async (requestData, request, reply) => {
           logger.log('VKONTAKTE_SIGNIN');
-          reply.redirect(request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.VKONTAKTE));
+          reply.redirect(
+            // так как нам нужно редиректится при социальной авторизации, локалхост нужно заменить на хост сервера, чтобы браузерный переход отработал правильно
+            replaceLocalhostByCurrentHost(request, request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.VKONTAKTE)),
+          );
         },
         {
           routeConfig: {
@@ -105,7 +111,10 @@ export default function createApiPlugins() {
         API.facebookSignin,
         async (requestData, request, reply) => {
           logger.log('FACEBOOK_SIGNIN');
-          reply.redirect(request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.FACEBOOK));
+          reply.redirect(
+            // так как нам нужно редиректится при социальной авторизации, локалхост нужно заменить на хост сервера, чтобы браузерный переход отработал правильно
+            replaceLocalhostByCurrentHost(request, request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.FACEBOOK)),
+          );
         },
         {
           routeConfig: {
