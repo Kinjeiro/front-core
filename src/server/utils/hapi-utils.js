@@ -298,6 +298,10 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
   throw new Error(`Не понятный формат "${serverPath}"`);
 }
 
+export function getCurrentHostName(request) {
+  return request.info.hostname;
+}
+
 export function getServerFullUrl(request, ...pathsOrParams) {
   const {
     // url:
@@ -327,6 +331,17 @@ export function getServerFullUrl(request, ...pathsOrParams) {
         acceptEncoding: 'gzip',
         cors: { isOriginMatch: true }
       */
+      /*
+        received: 1553167541160,
+        responded: 0,
+        remoteAddress: '37.110.80.68',
+        remotePort: 9432,
+        referrer: 'http://dev.reagentum.ru:3001/',
+        host: 'dev.reagentum.ru:3001',
+        hostname: 'dev.reagentum.ru',
+        acceptEncoding: 'gzip',
+        cors: { isOriginMatch: false }
+      */
       host,
     },
     server: {
@@ -354,6 +369,15 @@ export function getServerFullUrl(request, ...pathsOrParams) {
           id: 'KinjeiroROCK:7536:jpjyveiv',
           uri: 'http://KinjeiroROCK:8080',
           address: '0.0.0.0'
+
+          created: 1553103215038,
+          started: 1553103217013,
+          host: 'vm130052.local',
+          port: 3001,
+          protocol: 'http',
+          id: 'vm130052.local:13354:jthhjyda',
+          uri: 'http://vm130052.local:3001',
+          address: '0.0.0.0'
         */
         // uri,
         protocol,
@@ -365,14 +389,5 @@ export function getServerFullUrl(request, ...pathsOrParams) {
 }
 
 export function replaceLocalhostByCurrentHost(request, originalUrl) {
-  const {
-    server: {
-      info: {
-        host: hostname,
-      },
-    },
-  } = request;
-
-  console.warn('ANKU , hostname', hostname, request.url, request.info, request.server.info);
-  return originalUrl.replace(/0\.0\.0\.0|127\.0\.0\.1|localhost/gi, hostname);
+  return originalUrl.replace(/0\.0\.0\.0|127\.0\.0\.1|localhost/gi, getCurrentHostName(request));
 }
