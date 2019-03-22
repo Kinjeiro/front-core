@@ -140,10 +140,11 @@ export default class TestForm extends PureComponent {
         label: 'attachmentMultipleWithConditions',
         type: TYPES.BINARY,
         multiple: true,
-        required: false,
+        required: true,
         constraints: {
           maxBytes: 200000,
-          multipleMaxSize: 2,
+          multipleMaxSize: 3,
+          multipleMinSize: 2,
         },
         controlProps: {
           // accept: '.png, .jpg, .jpeg',

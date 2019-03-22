@@ -12,7 +12,8 @@ import getApiClient from '../../../../../../../common/helpers/get-api-client';
 import {
   createAttachment,
   normalizeAttachment,
-  ATTACHMENT_PROP_TYPE, createTempAttachment,
+  ATTACHMENT_PROP_TYPE,
+  createTempAttachment,
 } from '../../../../../../feature-instantly-attachments/common/subModule/model-attachment';
 
 // ======================================================
@@ -29,11 +30,11 @@ const {
 export const DEFAULT_MULTIPLE_MAX_SIZE = 10;
 export const DEFAULT_MAX_BYTES = 10485760; // 10Mb
 
-function filterFiles(array, predicatFn) {
+function filterFiles(array, predicateFn) {
   const filtered = [];
   const aborted = [];
   wrapToArray(array).forEach((element, index) => {
-    const isFiltered = predicatFn(element, index);
+    const isFiltered = predicateFn(element, index);
     if (isFiltered) {
       filtered.push(element);
     } else {
@@ -255,7 +256,7 @@ export default class Attachment extends React.Component {
           filtered,
           aborted,
           abortedStr,
-        } = filterFiles(addedFilesFinal, (element, index) => index <= multipleMaxSize);
+        } = filterFiles(addedFilesFinal, (element, index) => (index + 1) <= multipleMaxSize);
         addedFilesFinal = filtered;
         // todo @ANKU @LOW - @i18n @@loc @@plur
         warnings.push(`${aborted.length} файлов (${abortedStr}) не были добавлены, так как превышен лимит кол-ва файлов ${multipleMaxSize}.`);

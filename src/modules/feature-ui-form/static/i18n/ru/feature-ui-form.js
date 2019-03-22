@@ -9,7 +9,7 @@ module.exports = {
     CoreField: {
       errors: {
         requiredError: 'Поле "{{fieldName}}" обязательно к заполнению.',
-        multipleMinSize: 'Поле "{{fieldName}}" должно содержать не более {{multipleMinSize}} значений.',
+        multipleMinSize: 'Поле "{{fieldName}}" должно содержать не менее {{multipleMinSize}} значений.',
         multipleMaxSize: 'Поле "{{fieldName}}" не должно содержать более {{multipleMaxSize}} значений.',
       },
     },
