@@ -145,23 +145,30 @@ export default class CoreField extends Component {
     }
   }
   static isEmptyValue(type = TYPES.TEXT, value = null, props = {}) {
-    const { controlClass } = props;
+    const {
+      controlClass,
+    } = props;
 
-    if (controlClass && controlClass.isEmptyValue) {
-      return controlClass.isEmptyValue(type, value, props);
-    }
+    const valueArray = wrapToArray(value);
+    const isEmptyCustom = controlClass && controlClass.isEmptyValue;
 
-    // switch (type) {
-    //   // case TYPES.DATETIME:
-    //   case TYPES.BINARY: {
-    //     // todo @ANKU @CRIT @MAIN - InstantlyAttachment требуте downloadUrl а обычный нет - только из пропс
-    //     return !value || !value.id;
-    //   }
-    //   default:
-    //     return isEmpty(value);
-    // }
+    return valueArray.every((valueItem) => {
+      if (isEmptyCustom) {
+        return isEmptyCustom(type, valueItem, props);
+      }
 
-    return isEmpty(value);
+      // switch (type) {
+      //   // case TYPES.DATETIME:
+      //   case TYPES.BINARY: {
+      //     // todo @ANKU @CRIT @MAIN - InstantlyAttachment требуте downloadUrl а обычный нет - только из пропс
+      //     return !value || !value.id;
+      //   }
+      //   default:
+      //     return isEmpty(value);
+      // }
+
+      return isEmpty(valueItem);
+    });
   }
 
   /**
@@ -285,6 +292,7 @@ export default class CoreField extends Component {
       // code checking
       // eslint-disable-next-line no-lonely-if
       if ((propsRequired || required) && CoreField.isEmptyValue(type, value, fieldProps)) {
+        debugger;
         errors.push(i18n('components.CoreField.errors.requiredError', {
           fieldName: name,
         }));

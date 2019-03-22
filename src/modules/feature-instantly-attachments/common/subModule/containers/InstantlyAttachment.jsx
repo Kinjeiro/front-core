@@ -117,7 +117,10 @@ export default class InstantlyAttachment extends Component {
     Object.keys(attachmentsMap).forEach((key) => {
       const attach = attachmentsMap[key];
       const old = this.props.attachmentsMap[key];
+
       if (attach && attach.isNew === false && (!old || old.isNew)) {
+        // когда загрузился аттач на сервер
+
         let valueIndex = null;
         const newValues = wrapToArray(value).map((valueItem, index) => {
           if (valueItem.uuid === attach.uuid) {
@@ -125,14 +128,19 @@ export default class InstantlyAttachment extends Component {
             return {
               ...valueItem,
               ...attach,
+              // обновляем превью
               preview: attach.preview || valueItem.preview,
             };
           }
           return valueItem;
         });
 
+        // записываем его значение внутрь какой-нибудь формы
         onChange(multiple ? newValues : newValues[0], valueIndex);
+
+        // а сам аттачмент удаляем из общего хранилища аттачей - он загрузился и хранится теперь в форме
         actionClearAttachment(attach.uuid);
+
         // если есть варнинги нужно их пробросить, так как старые затруться после onChange
         if (warnings && warnings.length) {
           // таймаут чтобы сбросились старые в onChange
