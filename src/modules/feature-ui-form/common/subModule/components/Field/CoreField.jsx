@@ -292,7 +292,6 @@ export default class CoreField extends Component {
       // code checking
       // eslint-disable-next-line no-lonely-if
       if ((propsRequired || required) && CoreField.isEmptyValue(type, value, fieldProps)) {
-        debugger;
         errors.push(i18n('components.CoreField.errors.requiredError', {
           fieldName: name,
         }));

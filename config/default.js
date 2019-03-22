@@ -466,10 +466,10 @@ module.exports = {
       },
 
       attachments: {
-        // todo @ANKU @CRIT @MAIN - переделать на magage rights для пользователей по CRUD действиям
+        // todo @ANKU @CRIT @MAIN - переделать на manage rights для пользователей по CRUD действиям
         /**
          * accessPublic - все у кого есть ссылка
-         * accessAuth - только авторизованные пользователи
+         * accessAuth - (default) - только авторизованные пользователи
          * accessOwnerOnly - только тот, кто создал (ну и админ ;))
          * <permission> - пермишен специальный
          */

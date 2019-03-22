@@ -1,10 +1,9 @@
 import omit from 'lodash/omit';
-import fs from 'fs';
 
 import { DEFAULT_FILES_PARAM_NAME } from '../../../../common/utils/api-utils';
 
 import serverConfig from '../../../../server/server-config';
-import apiPluginFactory from '../../../../server/utils/api-plugin-factory';
+import apiPluginFactory, { API_PLUGIN_OPTIONS } from '../../../../server/utils/api-plugin-factory';
 import { downloadFile } from '../../../../server/utils/hapi-utils';
 import logger from '../../../../server/helpers/server-logger';
 
@@ -149,8 +148,6 @@ export default function createApiPlugins() {
           ...contextParams
         } = requestData;
 
-        console.warn('ANKU , requestData', requestData);
-
         /*
          this is stream !!!
 
@@ -257,7 +254,8 @@ export default function createApiPlugins() {
 
         if (!checkAttachmentAccess(attachment, user)) {
           logger.error('-- not permitted');
-          return reply().code(404);
+          // return reply().code(404);
+          return reply().code(403); // Forbidden
         }
         const {
           contentId,
@@ -266,9 +264,10 @@ export default function createApiPlugins() {
         return downloadFile(reply, await serviceAttachmentContents.downloadFile(contentId));
       },
       {
-        routeConfig: {
-          auth: false,
-        },
+        // routeConfig: {
+        //   auth: false,
+        // },
+        [API_PLUGIN_OPTIONS.AUTH_IF_EXISTS]: true,
       },
     ),
     apiPluginFactory(
