@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.7.4 | Documentation</title>
+  <title>@reagentum/front-core 1.7.5 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.7.4</code></div>
+          <div class='mb1'><code>1.7.5</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -2060,6 +2060,16 @@
                   href='#guest_mode'
                   class="">
                   GUEST_MODE
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#auth_if_exists'
+                  class="">
+                  AUTH_IF_EXISTS
                   
                 </a>
                 
@@ -15830,6 +15840,54 @@ false,</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='auth_if_exists'>
+      AUTH_IF_EXISTS
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>true - и если токен пользователя есть - запросит авторизацию, если нет - пропустит как если бы было routeConfig: { auth: false }</p>
+<p>Это настройка понадобилась, так как если задать routeConfig: { auth: false } - то не запустится система авторизации в jwt-auth и user не проставится в request вообще</p>
+
+
+  <div class='pre p1 fill-light mt0'>AUTH_IF_EXISTS</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='auth'>
       AUTH
     </h3>
@@ -15840,6 +15898,7 @@ false,</p>
 
   <p>hapi настройка
 true</p>
+<p>если false - то не будет запускать системы авторизации, то есть jwt-auth не сработает и user в request не проставится</p>
 
 
   <div class='pre p1 fill-light mt0'>AUTH</div>
