@@ -1,5 +1,7 @@
 // import {} from '../../../common/app-style/vars';
 
+import serverConfig from '../../server-config';
+
 // from https://codepen.io/cassidoo/pen/KRdLvL
 function getStyles() {
   return `
@@ -159,7 +161,7 @@ function getStyles() {
 
 function getHtml() {
   return `
-    <div id="PreLoader" class="PreLoader">
+    <div id="${serverConfig.common.features.preLoader.domId}" class="PreLoader">
       <div class="PreLoader--inner">
         <div class="PreLoader--dash PreLoader--one"></div>
         <div class="PreLoader--dash PreLoader--two"></div>

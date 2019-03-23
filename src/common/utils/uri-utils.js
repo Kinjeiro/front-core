@@ -11,8 +11,12 @@ import { convertToString } from './common';
 
 const pathModule = pathLib.posix || pathLib;
 
-// на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
-const joinPathInner = pathModule.join;
+function joinPathInner(...args) {
+  // на клиенте нет pahtLib.posix а на винде на сервере без posix будет неправильный урлы
+  // index.js:122 Uncaught TypeError: Arguments to path.join must be strings
+  return pathModule.join(...convertToString(...args));
+}
+
 export const normalize = pathModule.normalize;
 export const resolve = pathModule.resolve;
 
@@ -209,7 +213,7 @@ export function joinPath(...paths) {
   const firstPart = (isAbsoluteUrl(paths[0]) ? paths[0] : joinPathInner('/', paths[0]))
     // убираем в конце слеш
     .replace(/\/$/gi, '');
-  const middlePart = paths.length > 2 ? joinPathInner('/', ...convertToString(...paths.slice(1, paths.length - 1))) : '';
+  const middlePart = paths.length > 2 ? joinPathInner('/', ...paths.slice(1, paths.length - 1)) : '';
   const lastUrlParameters = paths.length > 1 ? paths[paths.length - 1] : '';
 
   let lastPart = '';
