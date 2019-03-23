@@ -18,6 +18,8 @@ const refreshTokenCookie = serverConfig.server.features.auth.refreshTokenCookie;
 const authTypeCookie = serverConfig.server.features.auth.authTypeCookie;
 // const contextPath = appUrl();
 
+export const TOKEN_QUERY_PARAM_NAME = serverConfig.server.features.auth.callbackAccessTokenParam;
+
 // https://habrahabr.ru/company/dataart/blog/262817/
 export const AUTH_TYPES = {
   BEARER: 'Bearer',
