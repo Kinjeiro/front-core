@@ -272,6 +272,8 @@ export function isClass(v) {
   return typeof v === 'function' && (
     // babel
     toString.indexOf('_classCallCheck') >= 0
+    // ??? иногда _classCallCheck не используется почему-то при компиляции на продакшен и падает "Cannot call a class as a function"
+    || toString.indexOf('__proto__||Object.getPrototypeOf') >= 0
     // es6
     || /^\s*class\s+/.test(toString)
   );
