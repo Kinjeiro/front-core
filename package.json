@@ -48,7 +48,7 @@
     "release-patch": "npm version patch -m \"chore(*) patch version: %s\"",
     "release-minor": "npm version minor -m \"chore(*) minor version: %s\"",
     "release-major": "npm version major -m \"chore(*) major version: %s\"",
-    "release-prepatch": "npm version preptch -m \"chore(*) preptch version: %s\"",
+    "release-prepatch": "npm version prepatch -m \"chore(*) preptch version: %s\"",
     "release-prerelease": "npm version prerelease -m \"chore(*) prerelease version: %s\"",
     "preversion": "npm run test",
     "version": "npm run build-docs-html && npm run build-docs-md && npm run compile && npm run generate-dts && git add -A",
