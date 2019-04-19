@@ -17,14 +17,16 @@ import { getCurrentPage } from '../../app-redux/selectors';
 // ======================================================
 // COMPONENTS and STYLES
 // ======================================================
-import './CoreApp.css';
-
-import {
-  ThemeProvider,
-  Notifications,
-} from '../../components';
+import getComponents from '../../get-components';
 
 import ContextModulesProvider from '../../contexts/ContextModules/ContextModulesProvider';
+
+const {
+  ThemeProvider,
+  Notifications,
+} = getComponents();
+
+require('./CoreApp.css');
 
 @connect(
   (state) => ({

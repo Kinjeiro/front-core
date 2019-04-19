@@ -1,0 +1,36 @@
+@import "../../../../../../common/app-style/vars.css";
+
+@block CoreModal {
+  position: fixed;
+  z-index: 10000;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: var(--color-modal-background);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @element content {
+    position: relative;
+    background: var(--color-modal-body-background);
+  //padding: 1em;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 100%;
+  }
+
+  @element closer {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+
+    &:before {
+      content: '[x]';
+      cursor: pointer;
+    }
+  }
+}
+

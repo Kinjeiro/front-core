@@ -1,0 +1,71 @@
+@import "../../../../../../common/app-style/vars.css";
+
+.FieldLayout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  &--touched {
+    :invalid {
+      background: var(--color-error-background);
+      border: 1px solid var(--color-error-border);
+    }
+  }
+
+  &__label {
+    flex: 1 0 150px;
+    max-width: 220px;
+
+    /*
+    //padding: 8px;
+    //font-weight: 300;
+    //letter-spacing: .09em;
+    //text-transform: uppercase;*/
+  }
+
+  &__content {
+    flex: 1 0 250px;
+  }
+
+  &__control {
+    input:not([type='checkbox']),
+    textarea {
+      width: 100%;
+      padding: 0.5em;
+    }
+
+  }
+
+  &__description {
+    font-size: 0.7em;
+    line-height: 1.3em;
+  }
+
+  &__errorLabel {
+    color: var(--color-error-text);
+  }
+  &__warningLabel {
+    color: var(--color-warning-text);
+  }
+  &__processingWrapper {
+    position: relative;
+  }
+  &__processing {
+    position: absolute;
+
+    .ui.loader {
+      transform: translateX(0%) translateY(-50%);
+      left: unset;
+      right: 0;
+      top: 50%;
+      height: 1em;
+      width: 1em;
+
+      &:before,
+      &:after {
+        width: inherit;
+        height: inherit;
+      }
+    }
+  }
+}

@@ -4,10 +4,10 @@ import Backend from 'i18next-sync-fs-backend';
 import moment from 'moment';
 
 import { ASSETS } from '../../common/constants/routes.pathes';
-import { joinUri } from '../../common/utils/uri-utils';
 import { init as initI18nUtils } from '../../common/utils/i18n-utils';
 
 import config from '../server-config';
+import { joinFilePath } from '../utils/file-utils';
 
 export const DEFAULT_I18NEXT_OPTIONS = {
   // whitelist: ['ru', 'en'],
@@ -18,7 +18,7 @@ export const DEFAULT_I18NEXT_OPTIONS = {
     // loadPath: 'assets/i18n/{{lng}}/{{ns}}.json',
     // todo @ANKU @CRIT @MAIN - build const
     // loadPath: joinUri(process.cwd(), '.build', ASSETS, 'i18n/{{lng}}/{{ns}}.json'),
-    loadPath: joinUri(process.cwd(), '.build', ASSETS, 'i18n/{{lng}}/{{ns}}.js'),
+    loadPath: joinFilePath(process.cwd(), '.build', ASSETS, 'i18n/{{lng}}/{{ns}}.js'),
     // addPath: 'assets/i18n/{{lng}}/{{ns}}.missing.json',
     jsonIndent: 2,
   },
@@ -33,7 +33,7 @@ const finalI18nextOptions = merge(
   {
     backend: {
       loadPath: config.common.features.i18n.assetsLoadPath
-        ? joinUri(process.cwd(), '.build', ASSETS, config.common.features.i18n.assetsLoadPath)
+        ? joinFilePath(process.cwd(), '.build', ASSETS, config.common.features.i18n.assetsLoadPath)
         : DEFAULT_I18NEXT_OPTIONS.backend.loadPath,
     },
   },

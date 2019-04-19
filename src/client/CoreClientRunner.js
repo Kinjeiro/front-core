@@ -3,8 +3,6 @@ import AbstractClientRunner from './AbstractClientRunner';
 
 import { getClientStoreInitialState as getStateFromPage } from './get-global-data';
 
-import { initComponents } from '../common/get-components';
-
 import SubModuleFactory from '../modules/SubModuleFactory';
 
 /**
@@ -21,6 +19,7 @@ export default class CoreClientRunner extends AbstractClientRunner {
   loadCommonSubModulesContexts() {
     return [
       require.context('../modules', true, /^\.\/(.*)\/common\/subModule\/index\.js/gi),
+      require.context('../modules', true, /^\.\/(.*)\/common\/index\.js/gi),
     ];
   }
 
@@ -52,7 +51,7 @@ export default class CoreClientRunner extends AbstractClientRunner {
 
   initComponents(COMPONENTS_BASE) {
     super.initComponents(COMPONENTS_BASE);
-    return initComponents(COMPONENTS_BASE);
+    return require('../common/get-components').initComponents(COMPONENTS_BASE);
   }
 
   /**
@@ -125,23 +124,20 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return getStateFromPage();
   }
 
-  //
   // hotReloadListeners() {
   //   super.hotReloadListeners();
   //
-  //   /**
-  //    * // todo @ANKU @LOW - только в связке они работают, поэтому приходится добавлять пустой метод, ибо без него проскакивает контекст
-  //    */
-  //   // https://github.com/webpack/webpack/issues/834#issuecomment-76590576
-  //   // ./src/modules recursive ^\.\/(.*)\/common\/index\.js/g
-  //   this.getCommonSubModulesContexts().forEach((context) => {
-  //     module.hot.accept(context.id, this.reloadUi);
-  //   });
-  //   module.hot.accept('../common/create-routes', () => {});
-  //
-  //   module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);
-  //   module.hot.accept('../common/models/domains', this.reloadAll);
-  //   module.hot.accept('../common/api', this.reloadAll);
+  //   // /**
+  //   //  * // todo @ANKU @LOW - только в связке они работают, поэтому приходится добавлять пустой метод, ибо без него проскакивает контекст
+  //   //  */
+  //   // // https://github.com/webpack/webpack/issues/834#issuecomment-76590576
+  //   // // ./src/modules recursive ^\.\/(.*)\/common\/index\.js/g
+  //   // this.getCommonSubModulesContexts().forEach((context) => {
+  //   //   module.hot.accept(context.id, this.reloadUi);
+  //   // });
+  //   // module.hot.accept('../common/create-routes', () => {});
+  //   // module.hot.accept('../common/app-redux/reducers/root', this.reloadStore);
+  //   // module.hot.accept('../common/api', this.reloadAll);
+  //   module.hot.accept('../common/get-components.jsx', this.reloadUi);
   // }
-  //
 }

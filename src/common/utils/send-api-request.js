@@ -6,6 +6,7 @@ import getApiClient from '../helpers/get-api-client';
  */
 export const apiClient = getApiClient();
 
-export default function sendApi({ method = 'get', path }, paramsOrData, options = {}) {
+export default function sendApi(apiConfig, paramsOrData, options = {}) {
+  const { method = 'get', path } = apiConfig;
   return getApiClient()[method.toLowerCase()](path, paramsOrData, options);
 }

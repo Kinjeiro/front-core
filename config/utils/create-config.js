@@ -96,6 +96,8 @@ function createApiConfig(
 //   return createConfig(restServiceFullUrl, null, method, payload);
 // }
 
+const LOCAL_HOST = '127.0.0.1';
+
 /**
  * Это настройка для набора сервисов, который после подключения спец библиотек (Thrift или оберток над Rest)
  * позволяют дергать свое апи через методы с переменными
@@ -117,7 +119,8 @@ function createEndpointServiceConfig({
   useDefault = true,
   timeout,
   fullUrl,
-  envPriority
+  envPriority,
+  requestOptions
 }) {
   // eslint-disable-next-line no-param-reassign
   envPriority = envPriority || typeof envPriority === 'undefined';
@@ -142,14 +145,15 @@ function createEndpointServiceConfig({
   const config = {
     protocol: protocol || (useDefault && 'http') || undefined,
     host: envPriority
-      ? HOST || SERVICES_HOST || host || (useDefault && 'localhost') || undefined
-      : host || HOST || SERVICES_HOST || (useDefault && 'localhost') || undefined,
+      ? HOST || SERVICES_HOST || host || (useDefault && LOCAL_HOST) || undefined
+      : host || HOST || SERVICES_HOST || (useDefault && LOCAL_HOST) || undefined,
     port: envPriority
       ? SERVICES_PORT || port || (useDefault && 80) || undefined
       : port || SERVICES_PORT || (useDefault && 80) || undefined,
     endpoint: endpoint || '',
-    timeout: timeout || REQUEST_TIMEOUT || (useDefault && 120000) || undefined
+    timeout: timeout || REQUEST_TIMEOUT || (useDefault && 120000) || undefined,
     // fullUrl,
+    requestOptions
   };
 
   let fullUrlFinal = '';
@@ -157,7 +161,7 @@ function createEndpointServiceConfig({
     fullUrlFinal += `${config.protocol || 'http'}://`;
   }
   if (config.host || config.port) {
-    fullUrlFinal += config.host || 'localhost';
+    fullUrlFinal += config.host || LOCAL_HOST;
   }
   if (config.port && config.port !== 80) {
     fullUrlFinal += `:${config.port}`;
@@ -185,7 +189,7 @@ function createEndpointFactoryFromEnv(env) {
     REQUEST_TIMEOUT = 120000
   } = env || process.env;
 
-  const FINAL_SERVICES_HOST = HOST || SERVICES_HOST || 'localhost';
+  const FINAL_SERVICES_HOST = HOST || SERVICES_HOST || LOCAL_HOST;
 
   return (endpoint, otherConfigs = {}) => {
     return createEndpointServiceConfig(Object.assign({
@@ -198,6 +202,7 @@ function createEndpointFactoryFromEnv(env) {
 }
 
 module.exports = {
+  LOCAL_HOST,
   FRONT_UI_SERVER_API_PREFIX,
   createApiConfig,
   // createApiConfigWithService,

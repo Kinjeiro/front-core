@@ -1,0 +1,36 @@
+@import "../../../../../../common/app-style/vars.css";
+
+.Button {
+  &--notNaturalButton {
+  //text-rendering: auto;
+  //letter-spacing: normal;
+  //word-spacing: normal;
+  //text-transform: none;
+  //text-indent: 0px;
+  //text-shadow: none;
+  //display: inline-block;
+  //font: 400 13.3333px Arial;
+  //align-items: flex-start;
+  //text-align: center;
+  //cursor: default;
+  //color: buttontext;
+  //background-color: buttonface;
+  //box-sizing: border-box;
+  //font-family: inherit;
+  //font-size: 100%;
+  //-webkit-appearance: button;
+
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonface;
+    border-image: initial;
+
+    padding: 1px 6px;
+    line-height: 1.15;
+    margin: 0;
+
+    :focus {
+      outline: -webkit-focus-ring-color auto 5px;
+    }
+  }
+}

@@ -15,7 +15,7 @@ import serverConfig from './server-config';
 // COMMON
 // ======================================================
 import CoreClientRunner from '../client/CoreClientRunner';
-import { createComponentBase } from '../common/components/ComponentsBase';
+import { createComponentBase } from '../common/ComponentsBase';
 import SubModuleFactory from '../modules/SubModuleFactory';
 
 import createServices from './services';
@@ -34,8 +34,10 @@ import moduleAuth from '../modules/module-auth/common/subModule';
 // ======================================================
 // UTILS CONFIGS
 // ======================================================
-import pluginAuthJwt, { AUTH_SCHEME_NAME } from './plugins/jwt-auth';
+import { AUTH_SCHEME_NAME } from '../modules/module-auth/server/subModule/plugins/jwt-auth';
+
 import pluginPageIndex from './plugins/pages/pages';
+import getPreLoader from './plugins/pages/default-pre-loader';
 import pluginProxyAssets from './plugins/proxy-assets';
 import pluginStaticAssets from './plugins/static-assets';
 import pluginI18n from './plugins/i18n';
@@ -171,6 +173,14 @@ export default class CoreServerRunner extends AbstractServerRunner {
     return joinPath(this.getModuleRoutePrefix(moduleAuth.MODULE_NAME), moduleAuth.paths.PATH_AUTH_SIGNIN);
   }
 
+  /**
+   *
+   * @return  string || (reduxStore, i18n) => string
+   */
+  getPreLoader() {
+    return getPreLoader;
+  }
+
   // ======================================================
   // METHODS
   // ======================================================
@@ -190,6 +200,7 @@ export default class CoreServerRunner extends AbstractServerRunner {
         loginPath: this.getLoginPath,
         noAuthRequireMatcherFn: this.noAuthRequireMatcher,
         noNeedCredentialsPageMatcherFn: this.noNeedCredentialsPageMatcher,
+        preLoader: this.getPreLoader(),
       },
     };
   }
@@ -212,7 +223,8 @@ export default class CoreServerRunner extends AbstractServerRunner {
         },
       },
       pluginI18n,
-      pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
+      // получаем из module-auth::getServerPlugins
+      // pluginAuthJwt, // options передаются при регистрации стратегии в методе initServerAuthStrategy
       pluginsRequestUser,
 
       // ======================================================

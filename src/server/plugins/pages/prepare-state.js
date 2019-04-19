@@ -1,3 +1,7 @@
+import {
+  UNI_ERROR_FROM,
+  parseToUniError,
+} from '../../../common/models/uni-error';
 import { isAuthenticated } from '../../utils/credentials-utils';
 
 /**
@@ -14,13 +18,24 @@ export default async function prepareState(request, server, defaultState = {}, p
     strategies,
   } = pluginOptions;
 
+  let userData = null;
+  // eslint-disable-next-line no-shadow,prefer-destructuring
+  let globalUniError = defaultState.globalUniError;
+
+  try {
+    userData = isAuthenticated(request)
+      ? await strategies.userInfoStrategy(request)
+      : null;
+  } catch (error) {
+    globalUniError = parseToUniError(error, { errorFrom: UNI_ERROR_FROM.FROM_SERVER });
+  }
+
   return {
     ...defaultState,
+    globalUniError,
     userInfo: {
       ...defaultState.userInfo,
-      userData: isAuthenticated(request)
-        ? await strategies.userInfoStrategy(request)
-        : null,
+      userData,
     },
   };
 }

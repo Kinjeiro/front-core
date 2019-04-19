@@ -7,6 +7,11 @@ import useScroll from 'react-router-scroll/lib/useScroll';
 // @guide - важно чтобы это было на первом месте, так как внутри идет инициализация i18n
 import { getI18Instance } from '../common/utils/i18n-utils';
 import I18NProvider from '../common/containers/I18NProvider/I18NProvider';
+import getComponents from '../common/get-components';
+
+import RootWithStore from './RootWithStore';
+
+const { ErrorBoundary } = getComponents();
 
 // ======================================================
 // CLIENT ROOT
@@ -23,11 +28,7 @@ export default class Root extends Component {
   };
 
   render() {
-    const {
-      store,
-      history,
-      routes,
-    } = this.props;
+    const { store, history, routes } = this.props;
 
     // /*
     //   * todo @ANKU @LOW @BUG_OUT @react-hot-reload v3 - бага в том, что каждый раз перерисовывается
@@ -51,17 +52,20 @@ export default class Root extends Component {
     // }
 
     return (
-      <Provider store={ store } key="provider">
-        <I18NProvider i18nInstance={ getI18Instance() } >
-          <Router
-            key={ Math.random() }
-            history={ history }
-            routes={ routes }
-            render={ applyRouterMiddleware(useScroll()) }
-          />
-        </I18NProvider>
-      </Provider>
+      <ErrorBoundary>
+        <Provider store={ store } key="provider">
+          <I18NProvider i18nInstance={ getI18Instance() }>
+            <RootWithStore>
+              <Router
+                key={ Math.random() }
+                history={ history }
+                routes={ routes }
+                render={ applyRouterMiddleware(useScroll()) }
+              />
+            </RootWithStore>
+          </I18NProvider>
+        </Provider>
+      </ErrorBoundary>
     );
   }
 }
-

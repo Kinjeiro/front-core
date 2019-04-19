@@ -37,34 +37,5 @@ module.exports = {
   },
 
   components: {
-    Loading: {
-      loading: 'Загрузка...',
-    },
-    UniError: {
-      errorOccurred: 'Произошла ошибка',
-      showDetails: 'Показать детали',
-    },
-    ReadMore: {
-      more: 'Еще',
-    },
-    CoreForm: {
-      textActionSubmit: 'Отправить',
-      textActionCancel: 'Отмена',
-      textDefaultFormErrorText: 'Некорректные данные',
-    },
-    CoreField: {
-      errors: {
-        requiredError: 'Поле "{{fieldName}}" обязательно к заполнению.',
-        multipleMinSize: 'Поле "{{fieldName}}" должно содержать не более {{multipleMinSize}} значений.',
-        multipleMaxSize: 'Поле "{{fieldName}}" не должно содержать более {{multipleMaxSize}} значений.',
-      },
-    },
-    CoreSelect: {
-      placeholder: 'Выберите значение...',
-    },
-    ErrorBoundary: {
-      header: 'Произошла ошибка',
-      refreshButton: 'Обновить',
-    },
   },
 };

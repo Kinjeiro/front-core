@@ -4,6 +4,8 @@ module.exports = {
     notRolesAnd: 'У вас должны быть все роли из списка: {{roles}}',
     notPermissionsOr: 'У вас должно быть хоть бы одно разрешение из списка: {{permissions}}',
     notPermissionsAnd: 'У вас должны быть все разрешения из списка: {{permissions}}',
+    wrongUserCredentials: 'Некорректно введенные данные.',
+    missingPassword: 'Введите пароль.',
   },
 
   pages: {
@@ -59,6 +61,10 @@ module.exports = {
       loginCancelButton: 'Отмена',
       signup: 'Регистрация',
       forgotPassword: 'Забыли пароль?',
+
+      googleSigninButton: 'Войти через Google',
+      vkontakteSigninButton: 'Войти через VK',
+      facebookSigninButton: 'Продолжить с Facebook',
     },
     ForgotPage: {
       title: 'Восстановление пароля',
@@ -86,6 +92,10 @@ module.exports = {
     AuthErrorContainer: {
       sessionExpire: 'Ваша сессия истекла. Пожалуйста перелогиньтесь.',
       actionGoToLogin: 'Перейти на страницу логина',
+    },
+    AuthCheckWrapper: {
+      notRoles: 'У вас нет подходящих ролей ({{roles}})',
+      notPermissions: 'У вас не хватает права ({{permissions}})',
     },
   },
 };

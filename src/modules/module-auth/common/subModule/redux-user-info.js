@@ -106,7 +106,7 @@ export function getBindActions({
         return dispatch(errorActions.actionClearLastError());
       };
     },
-    
+
     actionSignup(userData) {
       return {
         types: [TYPES.SIGNUP_FETCH, TYPES.SIGNUP_SUCCESS, TYPES.SIGNUP_FAIL],

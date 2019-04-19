@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import i18n from '../../../../../common/utils/i18n-utils';
 import {
   parseToUniError,
@@ -8,11 +9,15 @@ import {
   AUTH_TYPES,
   getHeadersByAuthType,
 } from '../../../../../server/utils/auth-utils';
-import { sendEndpointMethodRequest } from '../../../../../server/utils/send-server-request';
+import {
+  sendEndpointMethodRequest,
+  getEndpointServiceUrl,
+} from '../../../../../server/utils/send-server-request';
 
 import serverConfig from '../../../../../server/server-config';
 
 import CoreService from '../../../../../server/services/utils/CoreService';
+import { joinPath } from '../../../../../common/utils/uri-utils';
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
@@ -28,6 +33,9 @@ export default class ServiceAuth extends CoreService {
     this.urls = {
       authSignup: '/auth/signup',
       authSignin: '/auth/signin',
+
+      authSocialProviderSignin: '/auth/{provider}',
+
       authRefresh: '/auth/signin',
       authValidate: '/auth/user',
       authSignout: '/auth/signout',
@@ -39,20 +47,39 @@ export default class ServiceAuth extends CoreService {
 
   getClientInfo() {
     return {
-      client_id: serverConfig.server.features.auth.applicationClientInfo.client_id,
-      client_secret: serverConfig.server.features.auth.applicationClientInfo.client_secret,
+      client_id:
+        serverConfig.server.features.auth.applicationClientInfo.client_id,
+      client_secret:
+        serverConfig.server.features.auth.applicationClientInfo.client_secret,
     };
   }
 
+  getSocialAuthUrl(provider, projectCallbackUrl = undefined) {
+    const {
+      client_id,
+      // client_secret,
+    } = this.getClientInfo();
+
+    return joinPath(
+      getEndpointServiceUrl(this.endpointServiceConfig, this.urls.authSocialProviderSignin, { provider }),
+      {
+        provider,
+        client_id,
+        projectCallbackUrl,
+      },
+    );
+  }
+
   async authSignup(userData, emailOptions = null) {
-    return sendEndpointMethodRequest(
-      this.endpointServiceConfig,
+    return this.send(
       this.urls.authSignup,
-      'post',
       {
         userData,
         ...this.getClientInfo(),
         emailOptions,
+      },
+      {
+        method: 'post',
       },
     );
   }
@@ -64,14 +91,17 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   authLogin(username, password) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authSignin, 'post',
+    return this.send(
+      this.urls.authSignin,
       {
         // @NOTE: необходимо учитывать snake запись (_) это стандарт
         grant_type: 'password',
         username,
         password,
         ...this.getClientInfo(),
+      },
+      {
+        method: 'post',
       },
     )
       // .then((results) => {
@@ -81,19 +111,22 @@ export default class ServiceAuth extends CoreService {
       //   results.expires_in *= 1000;
       //   return results;
       // })
-      .catch((error) => {
+      .catch(error => {
         // eslint-disable-next-line no-param-reassign
         const uniError = parseToUniError(error);
-        if (uniError.originalObject && uniError.originalObject.error_description) {
+        if (
+          uniError.originalObject
+          && uniError.originalObject.error_description
+        ) {
           let clientErrorMessage;
 
           // switch (uniError.originalObject.error_description) {
           switch (uniError.originalObject.error) {
             case 'Invalid resource owner credentials':
-              clientErrorMessage = i18n('core:errors.wrongUserCredentials');
+              clientErrorMessage = i18n('errors.wrongUserCredentials');
               break;
             case 'Missing required parameter: password':
-              clientErrorMessage = i18n('core:errors.missingPassword');
+              clientErrorMessage = i18n('errors.missingPassword');
               break;
             default:
               // clientErrorMessage = uniError.originalObject.error_description;
@@ -113,21 +146,23 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   authRefresh(refreshToken) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authRefresh, 'post',
+    return this.send(
+      this.urls.authRefresh,
       {
+        ...this.getClientInfo(),
         grant_type: 'refresh_token',
         refresh_token: refreshToken,
-        ...this.getClientInfo(),
       },
-    )
-      // .then((results) => {
-      //   // стандарт работает на секундах, а сервер на милисекундах
-      //   // eslint-disable-next-line no-param-reassign
-      //   results.expires_in *= 1000;
-      //   return results;
-      // })
-      ;
+      {
+        method: 'post',
+      },
+    );
+    // .then((results) => {
+    //   // стандарт работает на секундах, а сервер на милисекундах
+    //   // eslint-disable-next-line no-param-reassign
+    //   results.expires_in *= 1000;
+    //   return results;
+    // })
   }
 
   /*
@@ -139,8 +174,10 @@ export default class ServiceAuth extends CoreService {
    */
   authValidate(token, authType = AUTH_TYPES.BEARER) {
     // todo @ANKU @LOW - заиспользовать разные типы
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authValidate, 'get',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authValidate,
+      'get',
       null,
       null,
       {
@@ -150,8 +187,10 @@ export default class ServiceAuth extends CoreService {
   }
 
   authLogout(token, authType = AUTH_TYPES.BEARER) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authSignout, 'get',
+    return sendEndpointMethodRequest(
+      this.endpointServiceConfig,
+      this.urls.authSignout,
+      'get',
       null,
       null,
       {
@@ -159,7 +198,6 @@ export default class ServiceAuth extends CoreService {
       },
     );
   }
-
 
   /**
    * Протокол для @reagentum/auth-server@1.0.4
@@ -170,8 +208,9 @@ export default class ServiceAuth extends CoreService {
    * @return {*}
    */
   async authForgot(email, resetPasswordPageUrl, emailOptions) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authForgot, 'post',
+    return this.send(
+      this.urls.authForgot,
+      'post',
       {
         email,
         emailOptions,
@@ -179,6 +218,9 @@ export default class ServiceAuth extends CoreService {
         resetPasswordPageUrl,
 
         ...this.getClientInfo(),
+      },
+      {
+        method: 'post',
       },
     );
   }
@@ -192,8 +234,8 @@ export default class ServiceAuth extends CoreService {
    * @return {Promise.<*>}
    */
   async authResetPassword(resetPasswordToken, newPassword, emailOptions) {
-    return sendEndpointMethodRequest(this.endpointServiceConfig,
-      this.urls.authReset, 'post',
+    return this.send(
+      this.urls.authReset,
       {
         resetPasswordToken,
         newPassword,
@@ -201,6 +243,9 @@ export default class ServiceAuth extends CoreService {
         emailOptions,
 
         ...this.getClientInfo(),
+      },
+      {
+        method: 'post',
       },
     );
   }

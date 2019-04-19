@@ -6,6 +6,12 @@ export const API_PREFIX = 'auth';
 export const API_CONFIGS = {
   signup: api(`${API_PREFIX}/signup`, 'POST'),
   login: api(`${API_PREFIX}/login`, 'POST'),
+
+  // todo @ANKU @CRIT @MAIN - сделать отдельный один метод с название провайдера
+  googleSignin: api(`${API_PREFIX}/google`, 'GET'),
+  facebookSignin: api(`${API_PREFIX}/facebook`, 'GET'),
+  vkontakteSignin: api(`${API_PREFIX}/vkontakte`, 'GET'),
+
   refreshLogin: api(`${API_PREFIX}/refreshLogin`),
   logout: api(`${API_PREFIX}/logout`),
   forgot: api(`${API_PREFIX}/forgot`, 'POST'),
@@ -20,6 +26,10 @@ export function apiLogin(username, password) {
     username,
     password,
   });
+}
+
+export function apiGoogleSignin() {
+  return sendApiRequest(API_CONFIGS.googleSignin, null);
 }
 export function apiRefreshLogin() {
   return sendApiRequest(API_CONFIGS.refreshLogin);

@@ -1,12 +1,5 @@
 @import "../../styles-auth.css";
 
-:root {
-  //--color-background-auth: #3AAFAB;
-  --color-background-auth: var(--color-primary);
-  --color-text-auth: var(--color-main-background);
-  --color-primary-auth: #333;
-}
-
 .AuthPageLayout {
   display: flex;
   justify-content: space-around;

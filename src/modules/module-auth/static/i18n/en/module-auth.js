@@ -4,6 +4,8 @@ module.exports = {
     notRolesAnd: 'You should have all this roles: {{roles}}',
     notPermissionsOr: 'You should have at least one of this permissions: {{permissions}}',
     notPermissionsAnd: 'You should have all this permissions: {{permissions}}',
+    wrongUserCredentials: 'Invalid user credentials.',
+    missingPassword: 'Missing required parameter: password.',
   },
 
   pages: {
@@ -59,6 +61,10 @@ module.exports = {
       loginCancelButton: 'Cancel',
       signup: 'Sign up',
       forgotPassword: 'Forgot password?',
+
+      googleSigninButton: 'Войти через Google',
+      vkontakteSigninButton: 'Войти через VK',
+      facebookSigninButton: 'Продолжить с Facebook',
     },
     ForgotPage: {
       title: 'Forgot password',
@@ -86,6 +92,10 @@ module.exports = {
     AuthErrorContainer: {
       sessionExpire: 'Your session has expired. Please relogin.',
       actionGoToLogin: 'Go to login page',
+    },
+    AuthCheckWrapper: {
+      notRoles: 'You haven\'t roles ({{roles}})',
+      notPermissions: 'You haven\'t permissions ({{permissions}})',
     },
   },
 };

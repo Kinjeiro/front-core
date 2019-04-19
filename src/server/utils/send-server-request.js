@@ -200,8 +200,18 @@ export async function sendEndpointMethodRequest(
   requestOptions = {},
 ) {
   const {
+    timeout,
+    requestOptions: endpointRequestOptions = {},
+  } = endpointServiceConfig;
+
+  const requestOptionsFinal = {
+    ...endpointRequestOptions,
+    ...requestOptions,
+  };
+
+  const {
     returnResponse,
-  } = requestOptions;
+  } = requestOptionsFinal;
 
   const url = getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath, data);
 
@@ -215,10 +225,14 @@ export async function sendEndpointMethodRequest(
       body: isGet ? undefined : data,
       json: true,
 
-      timeout: endpointServiceConfig.timeout,
-      ...requestOptions,
+      timeout,
+      ...requestOptionsFinal,
 
-      headers: Object.assign({}, getHeaders(apiRequest), requestOptions.headers),
+      headers: {
+        ...getHeaders(apiRequest),
+        ...endpointRequestOptions.headers,
+        ...requestOptions.headers,
+      },
     },
   )
     .then((response) => (returnResponse ? response : response.body));

@@ -38,10 +38,7 @@ import TestDomain from '../../../../../../common/models/domains/TestDomain';
 // ======================================================
 import { TEST_PERMISSION } from '../../../../../../common/constants/permissions';
 import { USER_INFO_PROPS } from '../../../../../../common/models/index';
-import ListItem from '../../../../../../common/components/ListItem/ListItem';
-import Link from '../../../../../../common/components/Link/Link';
 import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
-import ModuleLink from '../../../../../../common/containers/ModuleLink/ModuleLink';
 
 // ======================================================
 // MODULE
@@ -49,15 +46,21 @@ import ModuleLink from '../../../../../../common/containers/ModuleLink/ModuleLin
 import i18n from '../../i18n';
 import getComponents from '../../get-components';
 
-import './StubPage.css';
-import './StubPageSass.scss';
-
 const {
+  Button,
   Segment,
   Form,
   Attachment,
   UserAvatar,
+  Link,
+  ListItem,
+  ModuleLink,
+
+  TestForm,
 } = getComponents();
+
+require('./StubPage.css');
+require('./StubPageSass.scss');
 
 
 const { getUserAvatarUrl } = reduxUserInfo;
@@ -249,9 +252,9 @@ export default class StubPage extends Component {
       <div className={ this.fullClassName }>
         { i18n('core:pages.StubPage.pageTitle') }
 
-        <button onClick={ () => actionGoto(PATH_INDEX) }>
+        <Button onClick={ () => actionGoto(PATH_INDEX) }>
           { i18n('core:go to index') }
-        </button>
+        </Button>
 
         <div className={ this.bem('languageElement', { lang: language }) }>
           <p>
@@ -294,16 +297,16 @@ export default class StubPage extends Component {
             )
           }
 
-          <button onClick={ this.handleChangeUser }>
+          <Button onClick={ this.handleChangeUser }>
             { i18n('core:pages.StubPage.changeUserButton') }
-          </button>
+          </Button>
         </div>
 
         <div>
           <h3>{ i18n('core:pages.StubPage.domainTitle') }</h3>
-          <button onClick={ this.handleClickCreateTestDomain }>
+          <Button onClick={ this.handleClickCreateTestDomain }>
             {i18n('core:pages.StubPage.createTestDomainButton')}
-          </button>
+          </Button>
           <ul>
             { testDomains.map((testDomain) => (
               <ListItem
@@ -325,11 +328,11 @@ export default class StubPage extends Component {
         </div>
 
         <div>
-          <button
+          <Button
             onClick={ () => actionLoadTestGet() }
           >
             Load test get with auth check
-          </button>
+          </Button>
         </div>
 
         <div>
@@ -339,11 +342,11 @@ export default class StubPage extends Component {
         </div>
 
         <div>
-          <button
+          <Button
             onClick={ () => onGoTo('relative', 'testModule') }
           >
             Test module routing - onGoTo
-          </button>
+          </Button>
           <ModuleLink
             modulePath={ 'relative' }
             moduleName={ 'testModule' }
@@ -354,17 +357,17 @@ export default class StubPage extends Component {
 
         <div>
           <div>
-            <button
+            <Button
               onClick={ () => actionUserLogout() }
             >
               Logout
-            </button>
+            </Button>
           </div>
-          <button
+          <Button
             onClick={ () => actionThrowNotAuthError('/opa1/opa2') }
           >
             Not auth
-          </button>
+          </Button>
 
           <h4>
             <Link
@@ -384,69 +387,7 @@ export default class StubPage extends Component {
           </h4>
         </div>
 
-        <Segment
-          label="Form"
-          className="FormSegment"
-        >
-          <Form
-            fields={ [
-              {
-                name: 'string',
-                label: 'Text "test"',
-                type: Form.FIELD_TYPES.STRING,
-                required: true,
-                validate: (value) => (!value || value === 'test' || 'Кастомная ошибка'),
-                onChange: () => {},
-              },
-              {
-                name: 'string2',
-                label: 'Required text',
-                type: Form.FIELD_TYPES.STRING,
-                required: true,
-              },
-              {
-                name: 'numeric',
-                label: 'numeric',
-                type: Form.FIELD_TYPES.NUMERIC,
-                constraints: {
-                  maxValue: 10,
-                },
-                onChange: () => {},
-              },
-              {
-                name: 'text',
-                lagel: 'text',
-                type: Form.FIELD_TYPES.TEXT,
-                onChange: () => {},
-              },
-              {
-                label: 'LIST',
-                name: 'list',
-                type: Form.FIELD_TYPES.LIST,
-                options: [
-                  {
-                    label: 'label 1',
-                    value: 'value 1',
-                  },
-                  {
-                    label: 'bbbb',
-                    value: 'bbbb',
-                  },
-                ],
-              },
-              {
-                name: 'datetime',
-                label: 'datetime',
-                type: Form.FIELD_TYPES.DATETIME,
-              },
-              {
-                name: 'boolean',
-                label: 'boolean',
-                type: Form.FIELD_TYPES.BOOLEAN,
-              },
-            ] }
-          />
-        </Segment>
+        <TestForm />
 
         { this.renderTestChangeAvatar() }
 

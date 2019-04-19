@@ -2,7 +2,11 @@
 import lodashGet from 'lodash/get';
 import React from 'react';
 
-import { Loading as LoadingComponent } from '../../../components';
+import getComponents from '../../../get-components';
+
+const {
+  Loading: LoadingComponent,
+} = getComponents();
 
 function checkIsStatus(result) {
   return typeof result === 'object'

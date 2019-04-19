@@ -68,12 +68,21 @@ export const API_PLUGIN_OPTIONS = {
    * false,
    */
   GUEST_MODE: 'guestMode',
+
+  /**
+   * true - и если токен пользователя есть - запросит авторизацию, если нет - пропустит как если бы было routeConfig: { auth: false }
+   *
+   * Это настройка понадобилась, так как если задать routeConfig: { auth: false } - то не запустится система авторизации в jwt-auth и user не проставится в request вообще
+   */
+  AUTH_IF_EXISTS: 'authIfExist',
 };
 
 export const ROUTE_CONFIG_OPTIONS = {
   /**
    * hapi настройка
    * true
+   *
+   * если false - то не будет запускать системы авторизации, то есть jwt-auth не сработает и user в request не проставится
    */
   AUTH: 'auth',
 };
@@ -87,9 +96,11 @@ function authWrapper(handler, apiPluginOptions, routeConfig, serverPluginOptions
   } = routeConfig;
   const {
     [API_PLUGIN_OPTIONS.GUEST_MODE]: guestMode,
+    [API_PLUGIN_OPTIONS.AUTH_IF_EXISTS]: authIfExist,
   } = apiPluginOptions;
 
   const authTurnOn = auth !== false
+    && !authIfExist
     && serverConfig.common.features.auth
     && serverConfig.common.features.auth.globalAuth !== false;
 
@@ -127,6 +138,9 @@ async function accessChecker(accessObject, checkPermissionStrategy, other) {
     reply,
     isLogging,
     apiRequest,
+    // routeConfig: {
+    //   [ROUTE_CONFIG_OPTIONS.AUTH]: auth,
+    // },
   } = other;
 
   // if (accessObject && typeof checkPermissionStrategy !== 'function') {
@@ -144,7 +158,7 @@ async function accessChecker(accessObject, checkPermissionStrategy, other) {
 
   // see src/server/strategies/plugin-strategies.js
   const strategy = checkPermissionStrategy || (apiRequest.strategies && apiRequest.strategies.checkPermissionStrategy);
-  // проверка авторизации уже была выше authWrapper в routeConfig:{ auth: true } - по умолчанию - поэтому тут ее отключаем
+  // если нужна проверка авторизации уже была выше в authWrapper в routeConfig:{ auth: true } - по умолчанию - поэтому тут ее отключаем
   const notAuthCheck = true;
 
   try {
@@ -212,7 +226,13 @@ function proxyWrapper(reply, proxy, callback) {
         if (queryStr && updatedData.uri.indexOf(queryStr) < 0) {
           updatedData.uri += queryStr;
         }
-        logger.debug('proxy to:', updatedData.uri);
+
+        if (!updatedData.headers) {
+          updatedData.headers = {};
+        }
+        // некоторые crud api требуют явного content-type
+        updatedData.headers['content-type'] = updatedData.headers['content-type'] || (request.headers && request.headers['content-type']) || 'application/json';
+        logger.debug('proxy to:', updatedData.uri, updatedData.headers);
 
         /*
          // бага с авторизацией на middle server через hawk - поэтому отключил проброску headers c клиента
@@ -509,6 +529,7 @@ function apiPluginFullFactory(apiConfig, apiPluginOptions) {
         accessObject || normalizeAccessObject(roles, permissions),
         checkPermissionStrategy,
         {
+          routeConfig,
           apiConfig,
           reply,
           isLogging,

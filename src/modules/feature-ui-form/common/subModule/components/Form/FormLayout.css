@@ -1,0 +1,30 @@
+@import "../../../../../../common/app-style/vars.css";
+
+.FormLayout {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__fields {
+    & > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+  &__actions {
+    & > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+  &__formErrors {
+    color: var(--color-error-text);
+  }
+
+  & > *:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  * {
+    /*// чтобы инпуты с их padding не выезжали за 100% width*/
+    box-sizing: border-box;
+  }
+}

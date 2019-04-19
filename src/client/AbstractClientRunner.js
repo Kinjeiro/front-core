@@ -26,15 +26,12 @@ import getApiClient, {
 
 
 import { registerModels as registerOrmModels } from '../common/models/domains/utils/orm';
-import
-  createStore,
-  {
-    reloadReducers,
-    getRootReducer,
-  }
-from '../common/app-redux/create-store';
+import createStore, {
+  reloadReducers,
+  getRootReducer,
+} from '../common/app-redux/create-store';
 
-import { createComponentBase } from '../common/components/ComponentsBase';
+import { createComponentBase } from '../common/ComponentsBase';
 
 import './AbstractClientRunner.css';
 
@@ -99,24 +96,27 @@ export default class AbstractClientRunner {
   getReducers() {
     return aggregateObjectFn(this.getCommonSubModules(), 'getRootReducers')();
   }
+
   // todo @ANKU @LOW - переименовать в reduxOrmModels
   getEntityModels() {
     return {};
   }
+
   getApi() {
     return aggregateObjectFn(this.getCommonSubModules(), 'getApi')();
   }
+
   hotReloadListeners() {
     module.hot.accept('./Root', this.reloadUi);
-    this.getCommonSubModules().forEach((subModule) =>
-      subModule.hotReloadFunc(this.reloadUi, this.reloadStore, this.reloadAll, this.reloadModels));
+    this.getCommonSubModules().forEach(
+      (subModule) => subModule.hotReloadFunc(this.reloadUi, this.reloadStore, this.reloadAll, this.reloadModels),
+    );
   }
   initComponents(COMPONENTS_BASE) {
     return COMPONENTS_BASE;
   }
   initSubModulesComponents(COMPONENTS_BASE) {
-    this.getCommonSubModules().forEach((subModule) =>
-      subModule.initComponents(COMPONENTS_BASE));
+    this.getCommonSubModules().forEach((subModule) => subModule.initComponents(COMPONENTS_BASE));
     return COMPONENTS_BASE;
   }
 
@@ -152,6 +152,7 @@ export default class AbstractClientRunner {
   getApiClientClass() {
     return BaseApiClient;
   }
+
   getApiClient(defaultEndpoint) {
     return createApiClientByEndpoint(defaultEndpoint);
   }
@@ -165,7 +166,7 @@ export default class AbstractClientRunner {
       clientRunner: this,
       BaseApiClient,
       apiUtils,
-      CB: require('../common/components/ComponentsBase').default,
+      CB: require('../common/ComponentsBase').default,
       routes: this.routes,
     };
   }
@@ -188,6 +189,7 @@ export default class AbstractClientRunner {
     const basename = joinUri('/', clientConfig.common.app.contextRoot);
     return basename === '/' ? undefined : basename;
   }
+
   createHistory() {
     // только для клиента
     const CAN_USE_DOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
@@ -350,14 +352,17 @@ export default class AbstractClientRunner {
     this.reloadStore();
     this.reloadUi();
   }
+
   @bind()
   reloadModels() {
     this.registerModels(true);
   }
+
   @bind()
   reloadStore() {
     reloadReducers(this.store, getRootReducer(this.getReducers()));
   }
+
   @bind()
   reloadUi() {
     this.commonSubModules = null;

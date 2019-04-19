@@ -1,0 +1,32 @@
+@import "../../../../../../common/app-style/vars.css";
+
+.Button {
+  color: buttontext;
+  background-color: buttonface;
+
+  &--primary {
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+
+  &--simple {
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &.Button--primary {
+      // ivnertiruem
+      color: var(--color-primary);
+    }
+
+    &:hover {
+      border: none;
+      background: none;
+    }
+    &:focus {
+      border: none;
+      background: none;
+      outline-color: transparent;
+    }
+  }
+}

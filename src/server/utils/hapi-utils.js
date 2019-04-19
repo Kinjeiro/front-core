@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { URL } from 'url';
 import { Readable } from 'stream';
+import Cookie from 'cookie';
 import Response from 'hapi/lib/response';
 
 import {
@@ -148,41 +149,34 @@ export function getRequestCookieFromResponse(response) {
     .join('; ');
 }
 
-/**
- * @deprecated - bug with set cookie value - use getCookie and setCookie instead
- * @param request
- * @param name
- * @param value
- * @return {*}
- */
-export function cookie(request, name, value = null) {
-  if (value !== null) {
-    request.state(name, value);
-    return value;
-  }
-  return typeof request.state === 'function'
-     ? request.state(name)
-     : request.state[name];
-}
 export function getCookie(request, name) {
   const { state } = request;
-  // eslint-disable-next-line no-nested-ternary
-  let result = state
-  ? typeof state === 'function'
-    ? state(name)
-    : state[name]
-  : undefined;
+  let result;
 
-  if (Array.isArray(result)) {
-    /*
-      todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
-      refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
-      это бага, но никак настройки для isHttpOnly никак не получить
-      если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
-    */
-    // в таком случае всегда первым будет ближайший contextPath
-    result = result[0];
+  if (state) {
+    // eslint-disable-next-line no-nested-ternary
+    result = state
+      ? typeof state === 'function'
+        ? state(name)
+        : state[name]
+      : undefined;
+
+    if (Array.isArray(result)) {
+      /*
+        todo @ANKU @LOW @BUG_OUT @hapi - hapi при получении кукисов не проверяет path поэтому если у вас на одном сервере несколько приложений и у них разные contextPath то будет вот такая запись
+        refreshToken: [ 'fakeKorolevaUToken', 'fakeIvanovIToken' ],
+        это бага, но никак настройки для isHttpOnly никак не получить
+        если только не сохранять куки на сервере вот как здесь - https://github.com/hapijs/hapi-auth-cookie/blob/master/lib/index.js
+      */
+      // в таком случае всегда первым будет ближайший contextPath
+      result = result[0];
+    }
+  } else {
+    // @guide - к сожалению на стадии onRequest не сформированы еще куки (не работает yar) а редирект может быть только на ней =(
+    const cookies = Cookie.parse(request.headers.cookie || '');
+    result = cookies[name];
   }
+
   return result;
 }
 
@@ -190,8 +184,21 @@ export const DEFAULT_COOKIE_OPTIONS = {
   // todo @ANKU @CRIT @MAIN - в утилитах неочень хорошо использовать конфиги, но все же
   path: serverConfig.common.app.contextRoot || '/',
   isHttpOnly: true,
-  // todo @ANKU @CRIT @MAIN @DEBUG - secure: false
+  /*
+    // todo @ANKU @CRIT @MAIN @DEBUG -
+    secure: false
+  */
   isSecure: false,
+  /*
+    https://github.com/hapijs/hapi-auth-cookie/issues/159#issuecomment-334907134
+
+    sameSite: 'Strict' - не отправляет куки на любые другие домены (то есть при перехода из вк \ facebook и обратно мы бы терали авторизацию)
+    sameSite: 'Lax',
+    Режим Lax решает проблемы с разлогированием описанную выше, но при этом сохраняет хороший уровень защиты. В сущности он добавляет исключение, когда куки передаются при навигации высокого уровня, которая использует “безопасные” HTTP методы. Согласно RFC безопасными методами считаются GET, HEAD, OPTIONS и TRACE.
+
+    К сожалению IE11 не поддерживает - https://caniuse.com/#search=samesite - приходится использовать механизм доп токена cookieCSRF между клиентом и этой нодой
+  */
+  isSameSite: 'Lax',
 };
 
 export function setCookie(reply, name, value = undefined, options = undefined) {
@@ -211,9 +218,21 @@ export function setCookie(reply, name, value = undefined, options = undefined) {
   return reply;
 }
 
-export function clearCookie(reply, name) {
-  return setCookie(reply, name);
+export function clearCookie(reply, name, options = undefined) {
+  return setCookie(reply, name, undefined, options);
 }
+
+/**
+ * @deprecated - bug with set cookie value - use getCookie and setCookie instead
+ * @param request
+ * @param name
+ * @param value
+ * @return {*}
+ */
+export function cookie(request, name, value = null) {
+  return getCookie(request, name);
+}
+
 
 
 function getFileType(fileNameOrPath) {
@@ -279,8 +298,27 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
   throw new Error(`Не понятный формат "${serverPath}"`);
 }
 
-export function getRefererUrl(request, ...pathsOrParams) {
+export function getCurrentHostName(request) {
+  return request.info.hostname;
+}
+
+export function getServerFullUrl(request, ...pathsOrParams) {
   const {
+    // url:
+    //   Url {
+    //   protocol: null,
+    //     slashes: null,
+    //     auth: null,
+    //     host: null,
+    //     port: null,
+    //     hostname: null,
+    //     hash: null,
+    //     search: null,
+    //     query: {},
+    //   pathname: '/api/auth/google',
+    //     path: '/api/auth/google',
+    //     href: '/api/auth/google' },
+
     info: {
       /*
         received: 1544545806171,
@@ -292,6 +330,17 @@ export function getRefererUrl(request, ...pathsOrParams) {
         hostname: 'localhost',
         acceptEncoding: 'gzip',
         cors: { isOriginMatch: true }
+      */
+      /*
+        received: 1553167541160,
+        responded: 0,
+        remoteAddress: '37.110.80.68',
+        remotePort: 9432,
+        referrer: 'http://dev.reagentum.ru:3001/',
+        host: 'dev.reagentum.ru:3001',
+        hostname: 'dev.reagentum.ru',
+        acceptEncoding: 'gzip',
+        cors: { isOriginMatch: false }
       */
       host,
     },
@@ -320,6 +369,15 @@ export function getRefererUrl(request, ...pathsOrParams) {
           id: 'KinjeiroROCK:7536:jpjyveiv',
           uri: 'http://KinjeiroROCK:8080',
           address: '0.0.0.0'
+
+          created: 1553103215038,
+          started: 1553103217013,
+          host: 'vm130052.local',
+          port: 3001,
+          protocol: 'http',
+          id: 'vm130052.local:13354:jthhjyda',
+          uri: 'http://vm130052.local:3001',
+          address: '0.0.0.0'
         */
         // uri,
         protocol,
@@ -328,4 +386,8 @@ export function getRefererUrl(request, ...pathsOrParams) {
   } = request;
   // return `${uri}${appUrl(...pathsOrParams)}`;
   return `${protocol}://${host}${appUrl(...pathsOrParams)}`;
+}
+
+export function replaceLocalhostByCurrentHost(request, originalUrl) {
+  return originalUrl.replace(/0\.0\.0\.0|127\.0\.0\.1|localhost/gi, getCurrentHostName(request));
 }

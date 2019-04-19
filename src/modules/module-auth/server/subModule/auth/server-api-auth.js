@@ -2,7 +2,7 @@
 import serverConfig from '../../../../../server/server-config';
 import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
 import logger from '../../../../../server/helpers/server-logger';
-import { clearCookie } from '../../../../../server/utils/hapi-utils';
+import { clearCookie, replaceLocalhostByCurrentHost } from '../../../../../server/utils/hapi-utils';
 import {
   setAuthCookies,
   getToken,
@@ -12,6 +12,11 @@ import {
 import { COOKIE__GUEST_ID } from '../../../../../server/plugins/plugin-request-user';
 
 import { API_CONFIGS } from '../../../common/subModule/api-auth';
+
+// ======================================================
+// MODULE
+// ======================================================
+import PROVIDERS from './social-providers';
 
 export const API = API_CONFIGS;
 
@@ -41,10 +46,7 @@ export default function createApiPlugins() {
       apiPluginFactory(
         API.signup,
         async (requestData, request, reply) => {
-          const {
-            username,
-            password,
-          } = requestData;
+          const { username, password } = requestData;
           logger.log('SIGNUP: ', username);
           await request.services.serviceAuth.authSignup(requestData);
 
@@ -61,14 +63,76 @@ export default function createApiPlugins() {
     );
   }
 
+  if (serverConfig.common.features.auth.socialProvides.google) {
+    // todo @ANKU @LOW - может сделать один метод апи просто пас параметр провайдера сделать
+    plugins.push(
+      apiPluginFactory(
+        API.googleSignin,
+        async (requestData, request, reply) => {
+          logger.log('GOOGLE_SIGNIN');
+          // todo @ANKU @CRIT @MAIN - убрать редирект, заменить на возвращение обычного html и его вставку в reply
+          reply.redirect(
+            // так как нам нужно редиректится при социальной авторизации, локалхост нужно заменить на хост сервера, чтобы браузерный переход отработал правильно
+            replaceLocalhostByCurrentHost(request, request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.GOOGLE)),
+          );
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+  if (serverConfig.common.features.auth.socialProvides.vkontakte) {
+    plugins.push(
+      apiPluginFactory(
+        API.vkontakteSignin,
+        async (requestData, request, reply) => {
+          logger.log('VKONTAKTE_SIGNIN');
+          reply.redirect(
+            // так как нам нужно редиректится при социальной авторизации, локалхост нужно заменить на хост сервера, чтобы браузерный переход отработал правильно
+            replaceLocalhostByCurrentHost(request, request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.VKONTAKTE)),
+          );
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+  if (serverConfig.common.features.auth.socialProvides.facebook) {
+    plugins.push(
+      apiPluginFactory(
+        API.facebookSignin,
+        async (requestData, request, reply) => {
+          logger.log('FACEBOOK_SIGNIN');
+          reply.redirect(
+            // так как нам нужно редиректится при социальной авторизации, локалхост нужно заменить на хост сервера, чтобы браузерный переход отработал правильно
+            replaceLocalhostByCurrentHost(request, request.services.serviceAuth.getSocialAuthUrl(PROVIDERS.FACEBOOK)),
+          );
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+
+
+
   plugins.push(
     apiPluginFactory(
       API.login,
       async (requestData, request, reply) => {
-        const {
-          username,
-          password,
-        } = requestData;
+        const { username, password } = requestData;
         logger.log('LOGIN: ', username);
         return login(username, password, request.services.serviceAuth, reply);
       },
@@ -87,7 +151,9 @@ export default function createApiPlugins() {
           access_token,
           refresh_token,
           expires_in,
-        } = await request.services.serviceAuth.authRefresh(getRefreshToken(request));
+        } = await request.services.serviceAuth.authRefresh(
+          getRefreshToken(request),
+        );
 
         return setAuthCookies(
           reply(),
@@ -117,13 +183,13 @@ export default function createApiPlugins() {
       apiPluginFactory(
         API.forgot,
         async (requestData, request, reply) => {
-          const {
+          const { email, resetPasswordPageUrl, emailOptions } = requestData;
+          logger.log('[FORGOT PASSWORD]', email);
+          await request.services.serviceAuth.authForgot(
             email,
             resetPasswordPageUrl,
             emailOptions,
-          } = requestData;
-          logger.log('[FORGOT PASSWORD]', email);
-          await request.services.serviceAuth.authForgot(email, resetPasswordPageUrl, emailOptions);
+          );
           return reply();
         },
         {
@@ -137,18 +203,23 @@ export default function createApiPlugins() {
       apiPluginFactory(
         API.resetPassword,
         async (requestData, request, reply) => {
-          const {
-            resetPasswordToken,
-            newPassword,
-            emailOptions,
-          } = requestData;
+          const { resetPasswordToken, newPassword, emailOptions } = requestData;
           logger.log('[RESET PASSWORD]');
           const {
             username,
-          } = await request.services.serviceAuth.authResetPassword(resetPasswordToken, newPassword, emailOptions);
+          } = await request.services.serviceAuth.authResetPassword(
+            resetPasswordToken,
+            newPassword,
+            emailOptions,
+          );
 
           logger.log(`-- done for user "${username}". Now login`);
-          return login(username, newPassword, request.services.serviceAuth, reply);
+          return login(
+            username,
+            newPassword,
+            request.services.serviceAuth,
+            reply,
+          );
         },
         {
           routeConfig: {

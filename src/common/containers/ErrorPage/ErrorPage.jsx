@@ -19,8 +19,12 @@ import { actions as globalUniErrorActions } from '../../app-redux/reducers/app/g
 // COMPONENTS and STYLES
 // ======================================================
 import { PATH_INDEX } from '../../constants/routes.pathes';
+import { UNI_ERROR_PROP_TYPE } from '../../models/uni-error';
+import getComponents from '../../get-components';
 
-import { UniError } from '../../components';
+const {
+  UniError,
+} = getComponents();
 
 @connect(
   (state) => ({
@@ -33,7 +37,7 @@ import { UniError } from '../../components';
 @bemDecorator('ErrorPage')
 export default class ErrorPage extends Component {
   static propTypes = {
-    globalUniError: UniError.propTypes.uniError,
+    globalUniError: UNI_ERROR_PROP_TYPE,
     actionClearGlobalUniError: PropTypes.func,
 
     returnUrl: PropTypes.string,

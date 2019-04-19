@@ -83,7 +83,7 @@ const {
 
   PORT,
   SERVER_PORT = 8080,
-  PROXY_PORT = 9091,
+  // PROXY_PORT = 9090,
   HOT_LOADER,
   CLIENT_SIDE_RENDERING,
   APP_MOCKS,
@@ -197,6 +197,12 @@ module.exports = {
          */
         aliasIdAsUsername: false,
 
+        socialProvides: {
+          google: false,
+          vkontakte: false,
+          facebook: false
+        },
+
         /**
          * Для тестовых пользователей генерятся уникальные userId на auth-server и чтобы можно было использовать их с моками и без, хорошо бы их тут определить
          * Чтобы на основе их защивать другие тестовые моковые данные, в которых нужно указывать userId
@@ -259,6 +265,11 @@ module.exports = {
 
       componentsBase: {
         logComponentBaseEvents: false
+      },
+
+      preLoader: {
+        autoClose: 10,
+        domId: 'PreLoader'
       }
     },
 
@@ -358,7 +369,7 @@ module.exports = {
              uploads - the directory used for writing file uploads. Defaults to os.tmpDir().
           */
           payload: {
-            maxBytes: 7000000 /* 7mb*/
+            maxBytes: 7000000 /* 7mb */
             // uploads: path.resolve(__dirname, '../temp')
           }
         }
@@ -368,8 +379,12 @@ module.exports = {
       // auth - настройки авторизации
       // ======================================================
       auth: {
-        tokenParam: 'token',
-        tokenCookie: 'token',
+        callbackAccessTokenParam: 'accessToken',
+        callbackAccessTokenLifeParam: 'accessTokenLife',
+        callbackRefreshTokenParam: 'refreshToken',
+        callbackRefreshTokenLifeParam: 'refreshTokenLife',
+
+        tokenCookie: 'accessToken',
         refreshTokenCookie: 'refreshToken',
         authTypeCookie: 'authType',
 
@@ -451,10 +466,10 @@ module.exports = {
       },
 
       attachments: {
-        // todo @ANKU @CRIT @MAIN - переделать на magage rights для пользователей по CRUD действиям
+        // todo @ANKU @CRIT @MAIN - переделать на manage rights для пользователей по CRUD действиям
         /**
          * accessPublic - все у кого есть ссылка
-         * accessAuth - только авторизованные пользователи
+         * accessAuth - (default) - только авторизованные пользователи
          * accessOwnerOnly - только тот, кто создал (ну и админ ;))
          * <permission> - пермишен специальный
          */
@@ -487,12 +502,22 @@ module.exports = {
       // AUTH Services - front-core-auth server
       // ======================================================
       serviceAuth: createEndpointServiceConfig({
-        port: 1337,
-        endpoint: 'api'
+        protocol: 'https',
+        port: 1338,
+        endpoint: 'api',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
       }),
       serviceUsers: createEndpointServiceConfig({
-        port: 1337,
-        endpoint: 'api'
+        protocol: 'https',
+        port: 1338,
+        endpoint: 'api',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
       }),
 
       /**

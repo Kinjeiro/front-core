@@ -1,0 +1,16 @@
+/*
+.FieldLayout__control {
+  .Attachment {
+    input[type='file'] {
+      color: transparent;
+      padding: 0;
+    }
+  }
+}
+*/
+
+.UploadControl {
+  &__input {
+    display: none;
+  }
+}

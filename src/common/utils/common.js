@@ -4,6 +4,7 @@ import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoizeLodash from 'lodash/memoize';
 import lodashDifference from 'lodash/difference';
+import emptyObject from 'lodash/isEmpty';
 
 import shallowEqualLib from 'shallowequal';
 import promiseMemoize from 'promise-memoize';
@@ -130,8 +131,8 @@ export function compare(objA, objB, invert) {
   return objA > objB
     ? invertValue
     : objA < objB
-       ? invertValue * -1
-       : 0;
+      ? invertValue * -1
+      : 0;
 }
 
 export function comparatorByField(getField, invert) {
@@ -139,118 +140,11 @@ export function comparatorByField(getField, invert) {
     ? (obj) => obj[getField]
     : getField;
 
-  return (objA, objB) =>
-    compare(getFieldFinal(objA), getFieldFinal(objB), invert);
+  return (objA, objB) => compare(getFieldFinal(objA), getFieldFinal(objB), invert);
 }
 
 export function arrayContainsArray(superset, subset) {
   return subset.every((value) => superset.indexOf(value) >= 0);
-}
-
-// ======================================================
-// PROMISE
-// ======================================================
-export function isPromise(promise) {
-  return promise && !!promise.then;
-}
-
-export function delayPromiseSilence(silence = false, delay = 0, ...args) {
-  return delay > 0
-    ? new Promise((resolve) => {
-      // todo @ANKU @LOW - подумать над логгером в utils
-      if (!silence) {
-        console.log('delayPromise', delay);
-      }
-      setTimeout(resolve.bind(this, ...args), delay);
-    })
-    : Promise.resolve(...args);
-}
-export function delayPromise(delay = 0, ...args) {
-  return delayPromiseSilence(false, delay, ...args);
-}
-
-export function delayPromiseThen(delay = 0, maxValue = undefined) {
-  if (typeof maxValue !== 'undefined') {
-    delay = getRandomValue(delay, maxValue);
-  }
-  return (...args) => delayPromise(delay, ...args);
-}
-
-export function promiseMap(nameToPromiseMap) {
-  const keys = Object.keys(nameToPromiseMap);
-  return Promise.all(keys.map((key) => nameToPromiseMap[key]))
-    .then((results) =>
-      keys.reduce((resultMap, key, index) => {
-        resultMap[key] = results[index];
-        return resultMap;
-      }, {}));
-}
-
-export const PROMISE_STATUS = {
-  PENDING: 'pending',
-  FULFILLED: 'fulfilled',
-  REJECTED: 'rejected',
-};
-export async function promiseState(promise) {
-  const fakeValue = {};
-  return Promise.race([promise, fakeValue])
-    .then(
-      (value) => (
-        value === fakeValue
-        ? PROMISE_STATUS.PENDING
-        : PROMISE_STATUS.FULFILLED
-      ),
-      () => PROMISE_STATUS.REJECTED,
-    );
-}
-export async function promiseStatusSwitch(
-  promise,
-  pendingFunc = null,
-  resolvedFunc = null,
-  rejectedFunc = null,
-  timeout = null,
-) {
-  if (timeout) {
-    await delayPromiseSilence(true, timeout);
-  }
-  const status = await promiseState(promise);
-  const func = status === PROMISE_STATUS.PENDING
-    ? pendingFunc
-    : status === PROMISE_STATUS.FULFILLED
-      ? resolvedFunc
-      : rejectedFunc;
-  return func ? func(promise) : promise;
-}
-
-/**
- * Метод который, который на время исполнения промиса, проставляет через setState значение переменной processingStateVariable (по умолчанию, isProcessing)
- *
- * @param handlerPromise
- * @param componentWithSetState
- * @param processingStateVariable
- * @return {*}
- */
-export function emitProcessing(handlerPromise, componentWithSetState, processingStateVariable = 'isProcessing') {
-  if (isPromise(handlerPromise) && componentWithSetState && componentWithSetState.setState) {
-    /*
-     бывает так, что промис - лишь обертка над Promise.resolve а setState заставляете перирисоваться ради этой милисекунды
-     поэтому сделаем setTimeout и проверим значение на следующем тике
-     */
-    return promiseStatusSwitch(
-      handlerPromise,
-      (promise) => {
-        componentWithSetState.setState({ [processingStateVariable]: true });
-        return promise
-        // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-          .then(() => componentWithSetState.setState({ [processingStateVariable]: false }))
-          .catch(() => componentWithSetState.setState({ [processingStateVariable]: false }));
-      },
-      null,
-      null,
-      10,
-    );
-  }
-  return handlerPromise;
 }
 
 // ======================================================
@@ -378,6 +272,8 @@ export function isClass(v) {
   return typeof v === 'function' && (
     // babel
     toString.indexOf('_classCallCheck') >= 0
+    // ??? иногда _classCallCheck не используется почему-то при компиляции на продакшен и падает "Cannot call a class as a function"
+    || toString.indexOf('__proto__||Object.getPrototypeOf') >= 0
     // es6
     || /^\s*class\s+/.test(toString)
   );
@@ -403,7 +299,9 @@ export function wrapToArray(value = null) {
     ? value
     : value === null || value === ''
       ? []
-      : [value];
+      : typeof FileList !== 'undefined' && value instanceof FileList
+        ? [...value]
+        : [value];
 }
 
 export function includes(first, second, emptyIsInclude = false, allIncludes = false) {
@@ -429,15 +327,12 @@ export function difference(source, minusValues) {
   );
 }
 
-export function isEmpty(value, objectChecker = null) {
-  if (objectChecker && typeof value === 'object') {
-    return objectChecker(value);
-  }
-  return value === null
-    || typeof value === 'undefined'
-    || value === ''
-    || (Array.isArray(value) && value.length === 0)
-    || (typeof value === 'object' && Object.keys(value).length === 0);
+export function isEmpty(value, objectChecker = emptyObject) {
+  return value instanceof Object
+    ? objectChecker(value)
+    : typeof value === 'string'
+      ? value.trim().length === 0
+      : typeof value === 'undefined' || value === null;
 }
 
 
@@ -598,4 +493,128 @@ export function aggregateObjectFn(array, field) {
     Object.assign(result, object);
     return result;
   }, {});
+}
+
+
+// ======================================================
+// PROMISE
+// ======================================================
+export function isPromise(promise) {
+  return promise && !!promise.then;
+}
+
+export function delayPromiseSilence(silence = false, delay = 0, ...args) {
+  return delay > 0
+    ? new Promise((resolve) => {
+      // todo @ANKU @LOW - подумать над логгером в utils
+      if (!silence) {
+        console.log('delayPromise', delay);
+      }
+      setTimeout(resolve.bind(this, ...args), delay);
+    })
+    : Promise.resolve(...args);
+}
+export function delayPromise(delay = 0, ...args) {
+  return delayPromiseSilence(false, delay, ...args);
+}
+
+export function delayPromiseThen(delay = 0, maxValue = undefined) {
+  if (typeof maxValue !== 'undefined') {
+    delay = getRandomValue(delay, maxValue);
+  }
+  return (...args) => delayPromise(delay, ...args);
+}
+
+export function promiseMap(nameToPromiseMap) {
+  const keys = Object.keys(nameToPromiseMap);
+  return Promise.all(keys.map((key) => nameToPromiseMap[key]))
+    .then((results) =>
+      keys.reduce((resultMap, key, index) => {
+        resultMap[key] = results[index];
+        return resultMap;
+      }, {}));
+}
+
+export const PROMISE_STATUS = {
+  PENDING: 'pending',
+  FULFILLED: 'fulfilled',
+  REJECTED: 'rejected',
+};
+export async function promiseState(promise) {
+  const fakeValue = {};
+  return Promise.race([promise, fakeValue])
+    .then(
+      (value) => (
+        value === fakeValue
+          ? PROMISE_STATUS.PENDING
+          : PROMISE_STATUS.FULFILLED
+      ),
+      () => PROMISE_STATUS.REJECTED,
+    );
+}
+export async function promiseStatusSwitch(
+  promise,
+  pendingFunc = null,
+  resolvedFunc = null,
+  rejectedFunc = null,
+  timeout = null,
+) {
+  if (timeout) {
+    await delayPromiseSilence(true, timeout);
+  }
+  const status = await promiseState(promise);
+  const func = status === PROMISE_STATUS.PENDING
+    ? pendingFunc
+    : status === PROMISE_STATUS.FULFILLED
+      ? resolvedFunc
+      : rejectedFunc;
+  return func ? func(promise) : promise;
+}
+
+export async function promiseWaterFall(promises) {
+  const result = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const promise of wrapToArray(promises)) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      result.push(await executeVariable(promise));
+    } catch (e) {
+      throw e;
+    }
+  }
+  // iterable.reduce((result, fn) => result.then(fn), Promise.resolve());
+  return result;
+}
+
+/**
+ * Метод который, который на время исполнения промиса, проставляет через setState значение переменной
+ * processingStateVariable (по умолчанию, isProcessing)
+ *
+ * @param handlerPromise
+ * @param componentWithSetState
+ * @param processingStateVariable
+ * @return {*}
+ */
+export function emitProcessing(handlerPromise, componentWithSetState, processingStateVariable = 'isProcessing') {
+  const handlerPromiseFinal = executeVariable(handlerPromise);
+  if (isPromise(handlerPromiseFinal) && componentWithSetState && componentWithSetState.setState) {
+    /*
+     бывает так, что промис - лишь обертка над Promise.resolve а setState заставляете перирисоваться ради этой милисекунды
+     поэтому сделаем setTimeout и проверим значение на следующем тике
+     */
+    return promiseStatusSwitch(
+      handlerPromiseFinal,
+      (promise) => {
+        componentWithSetState.setState({ [processingStateVariable]: true });
+        return promise
+        // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+          .then(() => componentWithSetState.setState({ [processingStateVariable]: false }))
+          .catch(() => componentWithSetState.setState({ [processingStateVariable]: false }));
+      },
+      null,
+      null,
+      10,
+    );
+  }
+  return handlerPromise;
 }
