@@ -136,10 +136,34 @@ export function getCurrentLanguage() {
 export function changeLanguagePromise(language) {
   let loadedHandler;
   let errorLoadedHandler;
+  const coreLanguages = ['ru', 'en'];
+
+  // core имеют только en, ru локализации, при смене языка на отличных от коровских,
+  // редюсер бросит ошибку, из за чего не произойдет смена языка для модулей проекта, которые имеют перевод.
+  const coreNamespaces = [
+    'core',
+    'feature-ui-basic',
+    'feature-ui-form',
+    'module-auth',
+    'module-stub',
+    'frontCore-components',
+    'feature-ui-app-semantic',
+    'feature-ui-basic-semantic',
+    'feature-ui-form-generator-semantic',
+    'feature-ui-form-semantic',
+  ]
 
   return new Promise((resolve, reject) => {
     loadedHandler = resolve;
-    errorLoadedHandler = reject;
+    errorLoadedHandler = (lng, ns, msg) => {
+      // Позволяет сменить язык если в модулях коры нет локализации для отличного от коровского whitelist.
+      // Отрабатывает только кейс когда коровские модули не имеют отличную от ru, en локализаций, в остальных случаях
+      // бросит ошибку
+      if(!coreLanguages.includes(lng) && coreNamespaces.includes(ns)) {
+        return console.warn(`Не удалось загрузить локализацию ${lng} для модуля Front-Core: ${ns}`);
+      }
+        reject(msg);
+    };
 
     // i18nInstance.on('loaded', loadedHandler);
     i18nInstance.on('languageChanged', loadedHandler);
