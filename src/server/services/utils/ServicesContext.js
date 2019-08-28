@@ -4,6 +4,8 @@ import serverConfig from '../../server-config';
 import logger from '../../helpers/server-logger';
 import { cookie } from '../../utils/hapi-utils';
 
+const DEFAULT_MIDDLEWARE_ENDPOINT = serverConfig.server.endpointServices.middlewareApiService;
+
 export default class ServicesContext {
   services = {};
   mockServices = {};
@@ -46,10 +48,11 @@ export default class ServicesContext {
     } = this;
     const isMock = cookie(request, serverConfig.server.features.mocking.cookieEnableMocking) === 'true';
     const getServiceFn = isMock ? mockServices[serviceName] || services[serviceName] : services[serviceName];
-    const endpoint = serverConfig.server.endpointServices[serviceName];
+    const endpoint = serverConfig.server.endpointServices[serviceName] || DEFAULT_MIDDLEWARE_ENDPOINT;
 
     let service = null;
     try {
+      // Здесь создается экземпляр = new MyModuleService(configEndpoints[serviceName])
       service = executeVariable(getServiceFn, null, endpoint);
       if (service.setRequest) {
         service.setRequest(request);

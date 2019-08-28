@@ -35,6 +35,8 @@ export default class CoreService {
   /**
    * Создается в config/utils/create-config.js:
    *
+   * Если в serverConfig.server.endpointServices[serviceName] нету используется по умолчанию serverConfig.server.endpointServices.middlewareApiService
+   *
    * protocol: string
    * host: string
    * port: number
@@ -42,10 +44,10 @@ export default class CoreService {
    * fullUrl: string
    * timeout: number
    */
-  endpointServiceConfig = null;
+  endpointServiceConfig = undefined;
   options = null;
 
-  constructor(endpointServiceConfig = null, options = {}) {
+  constructor(endpointServiceConfig = undefined, options = {}) {
     this.setEndpointServiceConfig(endpointServiceConfig);
     this.options = options;
   }
