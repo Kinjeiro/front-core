@@ -8,16 +8,21 @@ import i18n from './i18n-utils';
 
 export const FORMATS = {
   ISO: 'iso',
-  TIMESTAMP: 'timestamp',
+  /**
+   * @deprecated use MILLISECONDS or UNIX_TIMESTAMP_SECONDS
+   */
+  TIMESTAMP: 'timestamp', // in milliseconds
+  MILLISECONDS: 'milliseconds', // in milliseconds (like as date.getTime())
+  UNIX_TIMESTAMP_SECONDS: 'unixTimestamp', // in seconds
 };
 
 // todo @ANKU @LOW - брать из clientConfig
-export const SYSTEM_DATE_FORMAT =     clientConfig.common.features.date.systemDateFormat || FORMATS.TIMESTAMP;
-export const SYSTEM_DATETIME_FORMAT = clientConfig.common.features.date.systemDateTimeFormat || FORMATS.TIMESTAMP;
+export const SYSTEM_DATE_FORMAT =     clientConfig.common.features.date.systemDateFormat || FORMATS.MILLISECONDS;
+export const SYSTEM_DATETIME_FORMAT = clientConfig.common.features.date.systemDateTimeFormat || FORMATS.MILLISECONDS;
 export const DATE_FORMAT =            clientConfig.common.features.date.dateFormat || 'DD.MM.YYYY';
 export const DATETIME_FORMAT =        clientConfig.common.features.date.dateTimeFormat || 'DD.MM.YYYY HH:mm';
-export const SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || FORMATS.TIMESTAMP;
-export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeFormat || FORMATS.TIMESTAMP;
+export const SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || FORMATS.MILLISECONDS;
+export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeFormat || FORMATS.MILLISECONDS;
 
 export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT, FORMATS.ISO]) {
   let momentDate;
@@ -33,13 +38,14 @@ export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT
     const valueTrimmed = date.replace(/~+$/, '');
 
     if (!Array.isArray(inputFormats)) {
+      // eslint-disable-next-line no-param-reassign
       inputFormats = [inputFormats];
     }
 
     inputFormats.some((inputFormat) => {
       let valueMoment;
-      if (inputFormat === FORMATS.ISO || inputFormat === FORMATS.TIMESTAMP) {
-        valueMoment = moment(valueTrimmed);
+      if (inputFormat === FORMATS.ISO || inputFormat === FORMATS.MILLISECONDS || inputFormat === FORMATS.UNIX_TIMESTAMP_SECONDS) {
+        valueMoment = moment(inputFormat === FORMATS.UNIX_TIMESTAMP_SECONDS ? valueTrimmed * 1000 : valueTrimmed);
       } else if (valueTrimmed.length === inputFormat.length) {
         // Проверяем, чтобы пользователь ввел полную строку даты без пробелов.
         valueMoment = moment(valueTrimmed, inputFormats, true);
@@ -52,8 +58,17 @@ export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT
       return false;
     });
   } else if (typeof date === 'number') {
-    // FORMATS.TIMESTAMP
-    momentDate = moment(date);
+    if (inputFormats === FORMATS.MILLISECONDS) {
+      momentDate = moment(date);
+    } else if (inputFormats === FORMATS.UNIX_TIMESTAMP_SECONDS) {
+      momentDate = moment(date * 1000);
+    } else {
+      let milliseconds = date;
+      if (`${milliseconds}`.length <= 10) {
+        milliseconds *= 1000;
+      }
+      momentDate = moment(milliseconds);
+    }
   } else if (moment.isMoment(date)) {
     momentDate = date;
   } else if (moment(date).isValid()) {
@@ -75,7 +90,7 @@ export function parseDate(date, outputFormat = undefined, inputFormat) {
   }
 
   switch (outputFormat) {
-    case FORMATS.TIMESTAMP:
+    case FORMATS.MILLISECONDS:
     case 'x':
       return momentDate.valueOf();
     case FORMATS.ISO:
@@ -90,7 +105,7 @@ export function parseDate(date, outputFormat = undefined, inputFormat) {
 }
 
 export function formatDateToTimestamp(date, inputFormat) {
-  return parseDate(date, FORMATS.TIMESTAMP, inputFormat);
+  return parseDate(date, FORMATS.MILLISECONDS, inputFormat);
 }
 export function formatDateToIso(date, inputFormat) {
   return parseDate(date, FORMATS.ISO, inputFormat);
@@ -116,7 +131,7 @@ export function getCurrentTime() {
   return parseToSystem(Date.now());
 }
 
-export function fromNow (date, format = 'days') {
+export function fromNow(date, format = 'days') {
   return moment().diff(moment(date), format);
 }
 
