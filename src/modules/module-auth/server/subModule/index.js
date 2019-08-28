@@ -21,9 +21,16 @@ export default SubModuleFactory.createServerSubModule({
     ...apiAuth(),
     ...apiUsers(),
   ],
-  getServerServices: {
-    serviceAuth: ServiceAuth,
-    serviceUsers: ServiceUsers,
+  getServerServices: () => {
+    const serviceMocks = {};
+    if (serverConfig.server.features.mocking.authMock) {
+      serviceMocks.serviceAuth = ServiceAuthMock;
+      serviceMocks.serviceUsers = ServiceUsersMock;
+    } else {
+      serviceMocks.serviceAuth = ServiceAuth;
+      serviceMocks.serviceUsers = ServiceUsers;
+    }
+    return serviceMocks;
   },
   getServerMockServices: () => {
     const serviceMocks = {};
