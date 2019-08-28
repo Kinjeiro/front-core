@@ -16,6 +16,10 @@ import {
   arrayToTree as arrayToTreeLib,
 } from './tree-utils';
 
+export function parseInt(val) {
+  return Number.parseInt(val, 10);
+}
+
 export function generateUuid(uuidOptions = null, version = 'v1') {
   // return uniqueId();
 
