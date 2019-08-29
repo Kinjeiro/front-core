@@ -166,7 +166,9 @@ function createEndpointServiceConfig({
   if (config.port && config.port !== 80) {
     fullUrlFinal += `:${config.port}`;
   }
-  fullUrlFinal += join('/', config.endpoint || '');
+  if (config.endpoint) {
+    fullUrlFinal += join('/', config.endpoint);
+  }
 
   config.fullUrl = fullUrlFinal;
   return config;
