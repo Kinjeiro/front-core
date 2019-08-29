@@ -1872,6 +1872,7 @@ Returns **any** boolean|Array - либо булеан, либо массив о�
 **Extends CoreService**
 
 Клиенсткая реализация протокола OAuth 2.0 Bearer
+PROTOCOL - [https://tools.ietf.org/html/rfc6749#][241]
 
 **Parameters**
 
@@ -2290,8 +2291,8 @@ Returns **any** function(apiRequestData, request, reply) {}
 **Parameters**
 
 -   `path`  you can user wildcard (\*) or h2o2 format: \\path{otherPart}
--   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][241] (add support { apiPrefix: 'serviceApiPath' })
-             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][242]' + upstream.info.port + '/item/{a}/{b}' } } });
+-   `proxy`  string \\ mapUri function \\ h2o2 options (proxyOptions) - [https://github.com/hapijs/h2o2][242] (add support { apiPrefix: 'serviceApiPath' })
+             server.route({ method: 'GET', path: '/handlerTemplate/{a}/{b}', handler: { proxy: { uri: '[http://localhost:][243]' + upstream.info.port + '/item/{a}/{b}' } } });
 -   `routeOptions`  если только функция, значит это handler-   handler - (payload, requestData, apiRequest, reply, proxyResponse, pluginOptions) => {}
     -   permissions
     -   checkPermissionStrategy
@@ -2336,7 +2337,7 @@ Returns **any** function(apiRequestData, request, reply) {}
 -   `endpoint`  
 -   `timeout`  
 
-Returns **{protocol: [string][229], host: [string][229], port: [number][243], endpoint: [string][229], fullUrl: [string][229], timeout: any}** 
+Returns **{protocol: [string][229], host: [string][229], port: [number][244], endpoint: [string][229], fullUrl: [string][229], timeout: any}** 
 
 ## HOST
 
@@ -2381,7 +2382,7 @@ Returns **function (any, any?)**
 
 -   `content`  
 -   `fileName`  
--   `options`  [https://raszi.github.io/node-tmp/][244] options
+-   `options`  [https://raszi.github.io/node-tmp/][245] options
     mode: the file mode to create with, it fallbacks to 0600 on file creation and 0700 on directory creation
     prefix: the optional prefix, fallbacks to tmp- if not provided
     postfix: the optional postfix, fallbacks to .tmp on file creation
@@ -2422,7 +2423,7 @@ Returns **any**
 
 ## dirnameNormalize
 
-[https://github.com/webpack/webpack/issues/1599][245]
+[https://github.com/webpack/webpack/issues/1599][246]
 С любыми настройками webpack на сервере**dirname на unix выдает src... а **filename /index.js в любом варианте
 
 **Parameters**
@@ -2435,7 +2436,7 @@ Returns **[string][229]**
 
 **Parameters**
 
--   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][246]
+-   `globRegexp`  [https://www.npmjs.com/package/glob#glob-primer][247]
 -   `projectSrcPath`  
 
 Returns **[Array][232]** 
@@ -2451,8 +2452,8 @@ Returns **[Array][232]**
 
 **Parameters**
 
--   `requestOptions`  [https://github.com/request/request#requestoptions-callback][247]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
-    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][248]
+-   `requestOptions`  [https://github.com/request/request#requestoptions-callback][248]!!! Есть ужасная бага при загрузке файлов - буффер по умолчанию переводится в строку
+    [https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request][249]
     нужно установить в настройках:
     encoding: null,
 
@@ -2482,7 +2483,7 @@ findTariffByInn: factoryEndpointServiceMethodRequest(endpointServiceConfig, 'tar
 -   `method`  
 -   `data`  
 -   `apiRequest`  
--   `requestOptions`  [https://www.npmjs.com/package/request][249]
+-   `requestOptions`  [https://www.npmjs.com/package/request][250]
 -   `logger`  
 
 Returns **any** 
@@ -2506,7 +2507,7 @@ Returns **[Promise][235]&lt;any>**
 
 **Parameters**
 
--   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][250]
+-   `requestOptions`  see [https://hapijs.com/api#serverinjectoptions-callback][251]
 -   `server`  
 
 Returns **any** Promise
@@ -2991,22 +2992,24 @@ Returns **any** Promise
 
 [240]: http://localhost:8080/3b5f332a-45a7-49a8-9a1e-5b9225bd831e"
 
-[241]: https://github.com/hapijs/h2o2
+[241]: https://tools.ietf.org/html/rfc6749#
 
-[242]: http://localhost:
+[242]: https://github.com/hapijs/h2o2
 
-[243]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[243]: http://localhost:
 
-[244]: https://raszi.github.io/node-tmp/
+[244]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[245]: https://github.com/webpack/webpack/issues/1599
+[245]: https://raszi.github.io/node-tmp/
 
-[246]: https://www.npmjs.com/package/glob#glob-primer
+[246]: https://github.com/webpack/webpack/issues/1599
 
-[247]: https://github.com/request/request#requestoptions-callback
+[247]: https://www.npmjs.com/package/glob#glob-primer
 
-[248]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
+[248]: https://github.com/request/request#requestoptions-callback
 
-[249]: https://www.npmjs.com/package/request
+[249]: https://stackoverflow.com/questions/14855015/getting-binary-content-in-node-js-using-request
 
-[250]: https://hapijs.com/api#serverinjectoptions-callback
+[250]: https://www.npmjs.com/package/request
+
+[251]: https://hapijs.com/api#serverinjectoptions-callback
