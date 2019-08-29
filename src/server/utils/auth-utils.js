@@ -22,6 +22,7 @@ export const TOKEN_QUERY_PARAM_NAME = serverConfig.server.features.auth.callback
 
 // https://habrahabr.ru/company/dataart/blog/262817/
 export const AUTH_TYPES = {
+  BASIC: 'Basic',
   BEARER: 'Bearer',
 };
 
@@ -90,6 +91,9 @@ export function getHeadersByAuthType(token, authType = AUTH_TYPES.BEARER) {
     switch (authType.toLowerCase()) {
       case AUTH_TYPES.BEARER.toLowerCase():
         headers.authorization = `Bearer ${token}`;
+        break;
+      case AUTH_TYPES.BASIC.toLowerCase():
+        headers.authorization = `Basic ${token}`;
         break;
       default:
     }

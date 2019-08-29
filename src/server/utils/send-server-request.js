@@ -10,6 +10,11 @@ import { getHeadersByAuthType } from './auth-utils';
 import logger, { logObject } from '../helpers/server-logger';
 
 
+export const CONTENT_TYPES = {
+  FORM_URLENCODED: 'application/x-www-form-urlencoded',
+  JSON: 'application/json',
+};
+
 // ======================================================
 // UTILS
 // ======================================================
@@ -211,31 +216,50 @@ export async function sendEndpointMethodRequest(
 
   const {
     returnResponse,
+    form,
   } = requestOptionsFinal;
 
   const url = getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath, data);
 
   const isGet = method.toUpperCase() === 'GET';
 
+  const headersFinal = {
+    contentType: form ? CONTENT_TYPES.FORM_URLENCODED : undefined,
+    accept: CONTENT_TYPES.JSON,
+    ...getHeaders(apiRequest),
+    ...endpointRequestOptions.headers,
+    ...requestOptions.headers,
+  };
+
+  const isFormUrlencoded = form || headersFinal.contentType === CONTENT_TYPES.FORM_URLENCODED;
+
   return sendSimpleRequest(
     {
       method,
       url,
       qs: isGet ? data : undefined,
-      body: isGet ? undefined : data,
-      json: true,
+      body: isGet || isFormUrlencoded ? undefined : data,
+      json: !isFormUrlencoded,
+
+      // https://github.com/request/request#forms
+      // application/x-www-form-urlencoded
+      // или
+      // multipart/form-data
+      form: form || (isFormUrlencoded ? data : undefined),
 
       timeout,
       ...requestOptionsFinal,
 
-      headers: {
-        ...getHeaders(apiRequest),
-        ...endpointRequestOptions.headers,
-        ...requestOptions.headers,
-      },
+      headers: headersFinal,
     },
   )
-    .then((response) => (returnResponse ? response : response.body));
+    .then((response) => (
+      returnResponse
+        ? response
+        : headersFinal.accept === CONTENT_TYPES.JSON && response.body && typeof response.body === 'string'
+          ? JSON.parse(response.body)
+          : response.body
+    ));
 }
 
 export async function sendWithAuth(

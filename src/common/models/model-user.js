@@ -153,4 +153,12 @@ export const PUBLIC_EDITABLE_ATTRS = [
   'contextData',
 ];
 
+
+export function createUserFromData(userData) {
+  return {
+    ...USER_DEFAULT_VALUES,
+    ...userData,
+  };
+}
+
 export default USER_PROP_TYPE;
