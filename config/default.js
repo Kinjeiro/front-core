@@ -400,6 +400,22 @@ module.exports = {
         protectorUser: {
           username: 'protector',
           password: PROTECTOR_PASSWORD
+        },
+
+
+        // урлы для авторизации по протоколу oauth2Urls
+        oauth2Urls: {
+          authSignin: '/auth/signin',
+          authRefresh: '/auth/signin',
+          authValidate: '/auth/user',
+          authSignout: '/auth/signout',
+
+          authForgot: '/auth/forgot',
+          authReset: '/auth/reset',
+
+          authSocialProviderSignin: '/auth/{provider}',
+
+          authSignup: '/auth/signup'
         }
       },
 

@@ -22,15 +22,15 @@ export default SubModuleFactory.createServerSubModule({
     ...apiUsers(),
   ],
   getServerServices: () => {
-    const serviceMocks = {};
+    const services = {};
     if (serverConfig.server.features.mocking.authMock) {
-      serviceMocks.serviceAuth = ServiceAuthMock;
-      serviceMocks.serviceUsers = ServiceUsersMock;
+      services.serviceAuth = ServiceAuthMock;
+      services.serviceUsers = ServiceUsersMock;
     } else {
-      serviceMocks.serviceAuth = ServiceAuth;
-      serviceMocks.serviceUsers = ServiceUsers;
+      services.serviceAuth = ServiceAuth;
+      services.serviceUsers = ServiceUsers;
     }
-    return serviceMocks;
+    return services;
   },
   getServerMockServices: () => {
     const serviceMocks = {};
