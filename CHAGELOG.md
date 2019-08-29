@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Меню
-* [[last version][1.7.0 - ] (2019.03.19)](#1_7)
+* [[last version][1.8.0 - ] (2019.08.29)](#1_8)
+* [[1.7.0 - 1.7.10] (2019.03.19)](#1_7)
 * [[1.6.0 - 1.6.52] (2018.11.14)](#1_6)
 * [[1.5.0 - 1.5.14] (2018.09.17)](#1_5)
 * [[1.4.0 - 1.4.32] (2018.07.28)](#1_4)
@@ -16,7 +17,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * [[1.0.0] - 2017.12.26](#1_0)
 * [[0.2.16] - 2017.11.17](#0_2)
 
-## [last version][1.7.0 - ] (2019.03.19)
+## [last version][1.8.0 - ] (2019.03.19)
+### !!! Breaking changes:
+1. Коррекция реализации протокол oauth2.0 (на примере openconnect: urlencoded, basic для client_secret, post для валидации)
+добавились настройки ```server.features.auth.oauth2Urls``` - мапа в которой нужно указать пути до апи
+
+Старый коровский авторизационный сервер ```auth-server@2.2.1``` больше не поддерживается. Нужна обновленная версия
+
+### API Dependencies:
+    - auth-server@3.0.0
+
+### Dependencies:
+    
+### Dev Dependencies:
+
+### Features:
+
+### Commits:
+    - 
+
+## [1.7.0 - 1.7.10] (2019.03.19)
 ### !!! Breaking changes:
 1. В конфиге изменен адрес для авторизационного сервера для синхронизации с ```@reagentum/auth-server@2.1.0``` (порт теперь 1338, протокол: https и игнорирование неподписанных сертификатов)
 было
@@ -54,13 +74,64 @@ serviceUsers: createEndpointServiceConfig({
 2. Токен в куках изменен с ```token``` на ```accessToken```
 3. Все куки теперь по умолчанию ```sameSite='Lex'``` (не пересылаются на другие сайты)
 
+### Features:
+- Появилась возможность указывать социальный провайдеры при логине
 socialProvides: {
-          google: false,
-          vkontakte: false,
-          facebook: false
-        },
+  google: false,
+  vkontakte: false,
+  facebook: false
+},
  
-
+### Commits:
+     - feat(server, send-request): - поддержка application/x-www-form-urlencoded на сервере 
+        \\ createUserFromData для модели Andrey Kuzmin 29.08.2019 20:56
+     - bug(apiConfig): - если нет endpoint path нельзя проставлять вконце слэш Andrey Kuzmin 29.08.2019 19:25
+     - chore(*) patch version: 1.7.10 Andrey Kuzmin 28.08.2019 12:32
+     - bug(utils, i18n): - нужно потом будет переделать Andrey Kuzmin 28.08.2019 12:29
+     - chore(*) patch version: 1.7.8 Andrey Kuzmin 28.08.2019 12:18
+     - chore(minimized): - убрал из сборки минимайза .git папку Andrey Kuzmin 28.08.2019 12:06
+     - feat(utils, date): - многопутаницы, поэтому вместо FORMATS.TIMESTAMP исполуем четко MILLISECONDS и UNIX_TIMESTAMP_SECONDS Andrey Kuzmin 28.08.2019 12:05
+     - feat(utils): - parseInt по умолчанию с 10система исчисления Andrey Kuzmin 28.08.2019 12:03
+     - feat(server, services): - Если в serverConfig.server.endpointServices[serviceName] нету эндпоинта, используется по умолчанию serverConfig.server.endpointServices.middlewareApiService Andrey Kuzmin 28.08.2019 12:02
+     - bug(module-auth, mocking): - есть возможность включить моикрованную авторизацию, и при этом выключить моки enable: true, \  useMocks: false, \ authMock: true Andrey Kuzmin 28.08.2019 12:00
+     - chore(*) patch version: 1.7.8 Andrey Kuzmin 28.08.2019 12:18
+     - chore(minimized): - убрал из сборки минимайза .git папку Andrey Kuzmin 28.08.2019 12:06
+     - feat(utils, date): - многопутаницы, поэтому вместо FORMATS.TIMESTAMP исполуем четко MILLISECONDS и UNIX_TIMESTAMP_SECONDS Andrey Kuzmin 28.08.2019 12:05
+     - feat(utils): - parseInt по умолчанию с 10система исчисления Andrey Kuzmin 28.08.2019 12:03
+     - feat(server, services): - Если в serverConfig.server.endpointServices[serviceName] нету эндпоинта, используется по умолчанию serverConfig.server.endpointServices.middlewareApiService Andrey Kuzmin 28.08.2019 12:02
+     - bug(module-auth, mocking): - есть возможность включить моикрованную авторизацию, и при этом выключить моки enable: true, \  useMocks: false, \ authMock: true Andrey Kuzmin 28.08.2019 12:00
+     - chore(*) patch version: 1.7.9 Alexander 19.04.2019 13:31
+     - chore(*) patch version: 1.7.8 Alexander 19.04.2019 13:26
+     - Merge branch 'master' of gitlab.com:reagentum/reafront/front-core Alexander 19.04.2019 13:14
+     - fix: (i18n-utils): не ломать флоу переключения языка, если в модулях core нет перевода для языков отличных от русского и английского Alexander 19.04.2019 13:13
+     - chore(*) patch version: 1.7.7 Andrey Kuzmin 09.04.2019 18:18
+     - feat(module-auth, css): - Дефолтный цвет фона для авторизации теперь не завидит от primary (теперь синий, а то раньше дико смотрелось) 2 Andrey Kuzmin 09.04.2019 18:16
+     - chore(*) patch version: 1.7.6 Andrey Kuzmin 09.04.2019 16:56
+     - feat(module-auth, css): - Дефолтный цвет фона для авторизации теперь не завидит от primary (теперь синий, а то раньше дико смотрелось) Andrey Kuzmin 09.04.2019 16:53
+     - bug(server, services): - Cannot call a class as a function на продакшене Andrey Kuzmin 09.04.2019 16:02
+     - chore(*) preptch version: 1.4.33-0 Andrey Kuzmin 09.04.2019 16:05
+     - bug(server, services): - Cannot call a class as a function на продакшене Andrey Kuzmin 09.04.2019 16:02
+     - chore(*) patch version: 1.7.5 Andrey Kuzmin 23.03.2019 16:08
+     - bug(uri-utils): - все параметры для joinPath автоматически переводятся в стринги (раньше при попадании числа падало) Andrey Kuzmin 23.03.2019 16:02
+     - bug(server, auth-utils): - вернул назад переменную TOKEN_QUERY_PARAM_NAME Andrey Kuzmin 23.03.2019 16:01
+     - bug(feature-instantly-attachments): - права на аттачи для авторизованных пользователей не показывались, так как процесс авторизации не происходит если делать routeConfig: { auth:false } - добавил доп API_PLUGIN_OPTIONS.AUTH_IF_EXISTS Andrey Kuzmin 22.03.2019 15:16
+     - chore(*) patch version: 1.7.4 Andrey Kuzmin 22.03.2019 11:33
+     - bug(feature-ui-form): - неправильно считалось isEmpty для малтипл Andrey Kuzmin 22.03.2019 11:30
+     - bug(feature-ui-form): - не учитывался пограничное условие валидации максимальных файлов 
+        \\ неправильный перевод Andrey Kuzmin 22.03.2019 11:29
+     - bug(server, page): - если падала ошибка при попытке логина (сервер не доступен) то страница вообще не отрисовывалась - теперь ошибка пишется в redux state Andrey Kuzmin 22.03.2019 11:28
+     - chore(*) patch version: 1.7.3 Andrey Kuzmin 21.03.2019 14:37
+     - bug(module-auth): - (2) при редиректе на социалки, если в конфигах было задано localhost так и остается (а нужен действительный hostname) Andrey Kuzmin 21.03.2019 14:33
+     - chore(*) patch version: 1.7.2 Andrey Kuzmin 20.03.2019 19:04
+     - bug(module-auth): - при редиректе на социалки, если в конфигах было задано localhost так и остается (а нужен действительный hostname) Andrey Kuzmin 20.03.2019 18:45
+     - bug(server, service): - убрал ошибку для несуществующих сервисов - ибо при принте response бывают что попадаются другие названия и падало Andrey Kuzmin 20.03.2019 18:45
+     - chore(depen): "git-branch-is": "~2.1.0", - для проверки если это мастер (для наследуемых проектов) Andrey Kuzmin 20.03.2019 18:43
+     - chore(*) patch version: 1.7.1 Andrey Kuzmin 19.03.2019 18:10
+     - feat(module-auth, ssl): - адаптировал апи под работу с @reagentum/auth-server@2.0.30: работа через https (с флагом игнорировать не подписанные) 
+        \\ перенес jwt-auth в модуль 
+        \\ проброс токенов через кросс домены (через query params): callbackAccessTokenParam и т.д. 
+        \\ обновил порт по умолчанию для auth-server 1338 и протокол https 
+        \\ tokenCookie теперь вместо token называется accessToken Andrey Kuzmin 19.03.2019 18:07
 
 ## [last version][1.6.0 - 1.6.52] (2018.11.14)
 ### !!! Breaking changes:
