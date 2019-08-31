@@ -64,6 +64,60 @@ export function generateShortUuid(length = 5) {
   return generateNumberId(length).toString(36);
 }
 
+
+
+// функция "перемешивания" элеменов в массиве
+function random(a, b) {
+  return Math.random() - 0.5;
+}
+// создание массива из количества элентов каждого типа символа (верхний регистр, нижний регистр, цифры, спецсимволы)
+function splitPassLength(sourcePassLength, salt) {
+  const arr = [];
+
+  for (let i = 0; i < salt.length - 1; i++) {
+    const amountSymbols = Math.floor(
+      Math.random() * (sourcePassLength / 2 - 1) + 1,
+    );
+
+    // TODO: давайте писать чистые функции, числа заменить на константы, имена переменных > 2 символов
+    sourcePassLength -= amountSymbols;
+    arr.push(amountSymbols);
+  }
+
+  arr.push(sourcePassLength);
+
+  return arr;
+}
+export const MIN_PASSWORD_LENGTH = 8;
+export function generatePassword(initialPasswordLength = MIN_PASSWORD_LENGTH) {
+  const salt = [
+    'QWERTYUIOPASDFGHJKLMNBVCXZ'.split(''),
+    'qwertyuiopasdfghjklmnbvcxz'.split(''),
+    '0123456789'.split(''),
+    '!@#$%^*&'.split(''),
+  ].sort(random);
+
+  const passlength = initialPasswordLength < MIN_PASSWORD_LENGTH
+    ? MIN_PASSWORD_LENGTH
+    : initialPasswordLength;
+
+  const partedPassLength = splitPassLength(passlength, salt);
+  const password = [];
+
+  salt.forEach((item, index) => {
+    for (let i = 0; i < partedPassLength[index]; i++) {
+      password.push(item[Math.floor(Math.random() * item.length)]);
+    }
+  });
+
+  return password.sort(random).join('');
+}
+
+// (?=n) - необходима любая строка, после которой следует n (пример: (?=.*[A-Z]) - в стринге должна быть хотя одна заглавная буква)
+// Допустимые символы: латинские буквы, цифры, спецсимволы. Не менее 8 символов, минимум 1 строчная, 1 заглавная, 1 спецсимвол или 1 цифра.
+export const PASSWORD_REGEXP = /^((?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*#?&~^\\d])[A-Za-z\\d@$!%*#?&^~]{8,})?$/;
+
+
 export function getRandomInt(minValue = 0, maxValue = Number.MAX_VALUE) {
   return Math.floor(Math.random() * ((maxValue - minValue) + 1)) + minValue;
 }
@@ -205,11 +259,10 @@ export function isDecimal(value) {
 export function emptyFunction() {}
 
 export function filterObjects(collections, queryFields) {
-  return collections.filter((payer) =>
-    Object.keys(queryFields).every((field) => {
-      const value = queryFields[field];
-      const payerValue = payer[field];
-      return value === null
+  return collections.filter((payer) => Object.keys(queryFields).every((field) => {
+    const value = queryFields[field];
+    const payerValue = payer[field];
+    return value === null
         || typeof value === 'undefined'
         || value === ''
         || payerValue === value
@@ -218,7 +271,7 @@ export function filterObjects(collections, queryFields) {
           && value.toLowerCase
           && payerValue.toLowerCase().indexOf(value.toLowerCase()) === 0
         );
-    }));
+  }));
 }
 
 export function arrayToObject(array, keyMap) {
@@ -532,11 +585,10 @@ export function delayPromiseThen(delay = 0, maxValue = undefined) {
 export function promiseMap(nameToPromiseMap) {
   const keys = Object.keys(nameToPromiseMap);
   return Promise.all(keys.map((key) => nameToPromiseMap[key]))
-    .then((results) =>
-      keys.reduce((resultMap, key, index) => {
-        resultMap[key] = results[index];
-        return resultMap;
-      }, {}));
+    .then((results) => keys.reduce((resultMap, key, index) => {
+      resultMap[key] = results[index];
+      return resultMap;
+    }, {}));
 }
 
 export const PROMISE_STATUS = {
