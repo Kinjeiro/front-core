@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.1 | Documentation</title>
+  <title>@reagentum/front-core 1.8.2 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.1</code></div>
+          <div class='mb1'><code>1.8.2</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1353,6 +1353,16 @@
               
                 
                 <li><a
+                  href='#link'
+                  class="">
+                  link
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#type'
                   class="">
                   type
@@ -1714,6 +1724,12 @@
                   
                     <ul class='list-reset py1-ul pl1'>
                       <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#serviceauthauthclientcredentials'
+                        class='regular pre-open'>
+                        #authClientCredentials
+                      </a></li>
                       
                       <li><a
                         href='#serviceauthauthforgot'
@@ -11419,6 +11435,91 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='link'>
+      link
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>если какой-то объект использует этот аттач то link проставляется этому объекту
+удобно чтобы удалять темповые не используемые фотография</p>
+
+
+  <div class='pre p1 fill-light mt0'>link(id: any, linkByObjectId: any, objectModel: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>linkByObjectId</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>objectModel</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='type'>
       type
     </h3>
@@ -13432,6 +13533,66 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
+  
+    <div class='border-bottom' id='serviceauthauthclientcredentials'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>authClientCredentials(clientCredentials)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>clientCredentials { client_id, client_secret }</p>
+
+
+  <div class='pre p1 fill-light mt0'>authClientCredentials(clientCredentials: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>clientCredentials</span> <code class='quiet'>(any
+            = <code>undefined</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
   
     <div class='border-bottom' id='serviceauthauthforgot'>
       <div class="clearfix small pointer toggle-sibling">
