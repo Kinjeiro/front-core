@@ -30,7 +30,7 @@ export function appUrl(pathname, ...otherPaths) {
 }
 
 export function testAppUrlStartWith(pathname, ...testUrls) {
-  return testUrls.some((testUri) => pathname.indexOf(joinPath('/', testUri)) === 0);
+  return testUrls.some((testUri) => joinPath(pathname, '/').indexOf(joinPath('/', testUri, '/')) === 0);
 }
 
 export function cutContextPath(requestPath) {
