@@ -196,10 +196,10 @@ export function createUniError(uniErrorData = {}) {
 // }
 export function ThrowableUniError(uniError) {
   this.name = 'ThrowableUniError';
-  this.uniError = createUniError(uniError);
-  this.message = this.uniError.clientErrorMessage;
+  Object.apply(this, createUniError(uniError));
+  this.message = this.clientErrorMessage;
   // this.stack = (new Error()).stack;
-  this.stack = uniError.stack || (new Error()).stack;
+  this.stack = this.stack || (new Error()).stack;
 }
 ThrowableUniError.prototype = new Error();
 

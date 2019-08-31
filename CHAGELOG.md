@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Старый коровский авторизационный сервер ```auth-server@2.2.1``` больше не поддерживается. Нужна обновленная версия
 
+2. ThrowableUniError теперь у себя в теле содержит uni-error а не отдельно переменной uniError
+
 ### API Dependencies:
     - auth-server@3.0.0
 
