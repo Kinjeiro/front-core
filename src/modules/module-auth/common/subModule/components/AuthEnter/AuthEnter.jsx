@@ -94,7 +94,7 @@ export default class AuthEnter extends Component {
       // убираем любые ошибки
       actionClearLastError();
 
-      const goTo = isSignup === null
+      await (isSignup === null
         // выходим из авторизации - если urlReturn нету - то будет переадрисовка на index
         ? onGoTo(urlReturn) // в urlReturn уже может учитываться contextPath но внутри метода есть такая проверка
         : onGoTo(joinPath(
@@ -105,9 +105,8 @@ export default class AuthEnter extends Component {
             // не забываем urlReturn если он есть
             [PARAM__RETURN_URL]: urlReturn,
           },
-        ), MODULE_NAME);
-
-      await goTo;
+        ), MODULE_NAME)
+      );
     }
   }
 

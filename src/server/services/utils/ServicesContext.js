@@ -25,7 +25,7 @@ export default class ServicesContext {
     logger.log(
       `[ServicesContext] Register service "${serviceName}"`,
       isMock ? '[MOCK]' : '',
-      getServiceFn.setServicesContext ? 'has setServicesContext' : '',
+      getServiceFn && getServiceFn.setServicesContext ? 'has setServicesContext' : '',
     );
   }
 
