@@ -48,13 +48,55 @@ export default class ServiceAuth extends CoreService {
   // ======================================================
   deserializeUserFromOpenidData(userData) {
     /*
-      "sub": "cd3642b7-1a4b-4766-9922-75f9faa56c14",
-      "email_verified": false,
-      "name": "Ivan Ivanov",
-      "preferred_username": "opa",
-      "given_name": "Ivan",
-      "family_name": "Ivanov"
+      1 вариант opid от Keycloak
+        "active": true,
+        "jti": "c5592bbd-840a-4be4-9a8f-456b7c953526",
+        "exp": 1567015812,
+        "nbf": 0,
+        "iat": 1567015512,
+        "iss": "http://185.22.63.233:8080/auth/realms/exporter",
+        "aud": "account",
+        "sub": "cd3642b7-1a4b-4766-9922-75f9faa56c14",
+        "typ": "Bearer",
+        "azp": "exporter-ui-node",
+        "auth_time": 0,
+        "session_state": "5082e0fa-6dbd-4f49-b49d-afb393086d13",
+        "acr": "1",
+        "realm_access": {
+            "roles": [
+                "offline_access",
+                "uma_authorization"
+            ]
+        },
+        "resource_access": {
+            "account": {
+                "roles": [
+                    "manage-account",
+                    "manage-account-links",
+                    "view-profile"
+                ]
+            }
+        },
+        "scope": "profile email",
+        "client_id": "exporter-ui-node",
+        "name": "Ivan Ivanov",
+        "given_name": "Ivan",
+        "family_name": "Ivanov",
+        "preferred_username": "opa",
+        "email_verified": false,
+        "username": "opa",
+
+      2 вариант - oauth2.0 от спринговского Вани
+        "aud": ["exporter_portal_api"],
+        "user_name": "iskuzminov",
+        "scope": ["read", "write", "trust"],
+        "active": true,
+        "exp": 1567316912,
+        "authorities": ["ROLE_DEVELOPERS", "ROLE_ADMINS"],
+        "jti": "6fd0e6d2-e990-4cc7-88c7-4473809b3504",
+        "client_id": "back_office_ui_app",
     */
+
     const {
       sub,
       name,
@@ -62,6 +104,17 @@ export default class ServiceAuth extends CoreService {
       preferred_username,
       given_name,
       family_name,
+      realm_access: {
+        roles: realmRoles = [],
+      } = {},
+      resource_access: {
+        account: {
+          roles: accountRoles = [],
+        } = {},
+      } = {},
+
+      user_name,
+      authorities = [],
     } = userData;
 
 
@@ -90,15 +143,24 @@ export default class ServiceAuth extends CoreService {
        permissions: [],
      };
     */
+
+    const usernameFinal = username || user_name || preferred_username;
+
     return createUserFromData({
-      userId: sub || username || preferred_username,
-      username: username || preferred_username,
+      userId: sub || usernameFinal,
+      username: usernameFinal,
       // userType: undefined,
 
       firstName: given_name,
       // middleName: 'Ivanovich',
       lastName: family_name,
       displayName: name,
+
+      roles: [
+        ...authorities,
+        ...realmRoles,
+        ...accountRoles,
+      ],
 
       // email: 'ivanovi@local.com',
       // profileImageURI: undefined,
@@ -118,16 +180,16 @@ export default class ServiceAuth extends CoreService {
     };
   }
 
-  getClientCredentialsHeaders() {
+  getClientCredentialsHeaders(clientCredentials = undefined) {
     const {
       client_id,
       client_secret,
-    } = this.getClientInfo();
+    } = clientCredentials || this.getClientInfo();
 
     // согласно протоколу они передаются через Authorization: `Basic
     // https://developers.getbase.com/docs/rest/articles/oauth2/requests
-    const clientCredentials = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
-    return getHeadersByAuthType(clientCredentials, AUTH_TYPES.BASIC);
+    const clientCredentialsEncoded = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
+    return getHeadersByAuthType(clientCredentialsEncoded, AUTH_TYPES.BASIC);
   }
 
   getSocialAuthUrl(provider, projectCallbackUrl = undefined) {
@@ -172,32 +234,6 @@ export default class ServiceAuth extends CoreService {
 
     throw new ThrowableUniError(uniError);
   }
-
-  // ======================================================
-  // SING_UP \ REGISTRATION
-  // ======================================================
-  async authSignup(userData, emailOptions = null) {
-    try {
-      return await this.send(
-        this.urls.authSignup,
-        {
-          userData,
-          ...this.getClientInfo(),
-          emailOptions,
-        },
-        {
-          method: 'post',
-          headers: {
-            ...this.getClientCredentialsHeaders(),
-            // contentType: CONTENT_TYPES.FORM_URLENCODED,
-          },
-        },
-      );
-    } catch (error) {
-      return this.catchAuthError(error);
-    }
-  }
-
 
   // ======================================================
   // SIGN IN \ LOGIN
@@ -294,6 +330,56 @@ export default class ServiceAuth extends CoreService {
    */
   async authValidate(token) {
     try {
+      // VALIDATE
+      // https://connect2id.com/products/server/docs/api/token-introspection#introspection-response
+      /*
+        {
+          "active"     : false,
+        }
+
+        либо
+        {
+          "active": true,
+
+          "jti": "c5592bbd-840a-4be4-9a8f-456b7c953526",
+          "exp": 1567015812,
+          "nbf": 0,
+          "iat": 1567015512,
+          "iss": "http://185.22.63.233:8080/auth/realms/exporter",
+          "aud": "account",
+          "sub": "cd3642b7-1a4b-4766-9922-75f9faa56c14",
+          "typ": "Bearer",
+          "azp": "exporter-ui-node",
+          "auth_time": 0,
+          "session_state": "5082e0fa-6dbd-4f49-b49d-afb393086d13",
+          "acr": "1",
+          "realm_access": {
+              "roles": [
+                  "offline_access",
+                  "uma_authorization"
+              ]
+          },
+          "resource_access": {
+              "account": {
+                  "roles": [
+                      "manage-account",
+                      "manage-account-links",
+                      "view-profile"
+                  ]
+              }
+          },
+          "scope": "profile email",
+          "client_id": "exporter-ui-node",
+
+          "name": "Ivan Ivanov",
+          "given_name": "Ivan",
+          "family_name": "Ivanov",
+          "preferred_username": "opa",
+          "email_verified": false,
+          "username": "opa",
+      }
+      */
+
       return await this.deserializeUserFromOpenidData(
         await this.send(
           this.urls.authValidate,
@@ -333,6 +419,39 @@ export default class ServiceAuth extends CoreService {
     }
   }
 
+
+  // ======================================================
+  // CLIENT_CREDENTIALS
+  // ======================================================
+  /**
+   * clientCredentials { client_id, client_secret }
+   * @return {
+        "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZXhwb3J0ZXJfcG9ydGFsX2FwaSJdLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiLCJ0cnVzdCJdLCJleHAiOjE1NjczMDkwMDYsImF1dGhvcml0aWVzIjpbIlVJX0NMSUVOVCJdLCJqdGkiOiJiM2U5NzkwNy05NGNmLTQ4MjktODU1NS0wYjUxMGM4ZmFiNTUiLCJjbGllbnRfaWQiOiJjbGllbnRfdWlfYXBwIn0.dDHQ_TH_8JpdsJb_pPwQT2jJkOatKwTghaydLUx39yy1N4uRgRT_qoaiESA_c2LmOkpyXNESQcjmDmSuOrpM3dSHgSl6dtQJp022Vg5tCu-uLTAIjvUST8UUWURlT5HvFtuBTzQXitiXa66LFPo4Ye1kn0nxFQv8Ob5Eu9vA5ctBvFjqftA5zIb0QqmGl6d7TKOhXyA6SwXqdrmTJBW5j4_qDls_rQaiN4kwFxs1Ak-OFphwmLsmkz4JMG1rraMR3R2JxnuvVpEhuaz0tcBkzpgO07dwqwc39lafqTDtYGe559VpQBG1WBY-Hy2wrt7Jqsr1EvpvAByNBaZF7Fyuog",
+        "token_type": "bearer",
+        "expires_in": 43199,
+        "scope": "read write trust",
+        "jti": "b3e97907-94cf-4829-8555-0b510c8fab55"
+    }
+   */
+  async authClientCredentials(clientCredentials = undefined) {
+    try {
+      return await this.send(
+        this.urls.authSignin,
+        {
+          grant_type: 'client_credentials',
+        },
+        {
+          method: 'post',
+          headers: {
+            ...this.getClientCredentialsHeaders(clientCredentials),
+            contentType: CONTENT_TYPES.FORM_URLENCODED,
+          },
+        },
+      );
+    } catch (error) {
+      return this.catchAuthError(error);
+    }
+  }
 
   // ======================================================
   // ADDITIONAL
@@ -395,6 +514,32 @@ export default class ServiceAuth extends CoreService {
             // todo @ANKU @CRIT @MAIN -
             ...this.getClientCredentialsHeaders(),
             contentType: CONTENT_TYPES.FORM_URLENCODED,
+          },
+        },
+      );
+    } catch (error) {
+      return this.catchAuthError(error);
+    }
+  }
+
+
+  // ======================================================
+  // SING_UP \ REGISTRATION
+  // ======================================================
+  async authSignup(userData, emailOptions = null) {
+    try {
+      return await this.send(
+        this.urls.authSignup,
+        {
+          userData,
+          ...this.getClientInfo(),
+          emailOptions,
+        },
+        {
+          method: 'post',
+          headers: {
+            ...this.getClientCredentialsHeaders(),
+            // contentType: CONTENT_TYPES.FORM_URLENCODED,
           },
         },
       );

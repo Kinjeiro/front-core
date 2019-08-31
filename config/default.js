@@ -405,17 +405,17 @@ module.exports = {
 
         // урлы для авторизации по протоколу oauth2Urls
         oauth2Urls: {
-          authSignin: '/auth/signin',
-          authRefresh: '/auth/signin',
-          authValidate: '/auth/user',
-          authSignout: '/auth/signout',
+          authSignin: '/token',
+          authRefresh: '/token',
+          authValidate: '/token/introspect',
+          authSignout: '/logout',
 
-          authForgot: '/auth/forgot',
-          authReset: '/auth/reset',
+          authForgot: '/forgot',
+          authReset: '/reset',
 
-          authSocialProviderSignin: '/auth/{provider}',
+          authSocialProviderSignin: '/social/{provider}',
 
-          authSignup: '/auth/signup'
+          authSignup: '/signup'
         }
       },
 
@@ -520,7 +520,7 @@ module.exports = {
       serviceAuth: createEndpointServiceConfig({
         protocol: 'https',
         port: 1338,
-        endpoint: 'api',
+        endpoint: 'auth',
         requestOptions: {
           // игнорировать, что сертификат не подписан
           rejectUnauthorized: false
