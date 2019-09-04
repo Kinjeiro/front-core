@@ -5,6 +5,7 @@ import { USER_INFO_DEFAULT_VALUES } from '../../../../common/models/model-user-i
 import { createReducer } from '../../../../common/app-redux/utils';
 import { createStatusReducer } from '../../../../common/app-redux/helpers/index';
 import { actions as errorActions } from '../../../../common/app-redux/reducers/app/last-uni-error';
+import { PATH_MAIN_INDEX } from '../../../../common/routes.pathes';
 
 import * as apiAuth from './api-auth';
 import * as apiUsers from './api-users';
@@ -118,16 +119,17 @@ export function getBindActions({
      * @deprecated use actionSignin
      */
     actionChangeUser: actionSignin,
-    actionUserLogout() {
+    actionUserLogout(returnUrl = PATH_MAIN_INDEX) {
       return async (dispatch, getState) => {
         await dispatch({
           types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
-          payload: apiLogout()
-            .then(() => {
-              // до USER_LOGOUT_SUCCESS чтобы компоненты уже заанмаунтились и пропсы в них не поменялись когда пользователя уже и нет
-              dispatch(push('/'));
-            }),
+          payload: apiLogout(),
         });
+
+        // до USER_LOGOUT_SUCCESS чтобы компоненты уже заанмаунтились и пропсы в них не поменялись когда пользователя уже и нет
+        if (returnUrl) {
+          dispatch(push(returnUrl));
+        }
       };
     },
     actionForgotPassword(email, resetPasswordPageUrl, emailOptions) {
