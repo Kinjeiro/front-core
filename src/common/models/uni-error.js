@@ -196,7 +196,7 @@ export function createUniError(uniErrorData = {}) {
 // }
 export function ThrowableUniError(uniError) {
   this.name = 'ThrowableUniError';
-  Object.apply(this, createUniError(uniError));
+  Object.assign(this, createUniError(uniError));
   this.message = this.clientErrorMessage;
   // this.stack = (new Error()).stack;
   this.stack = this.stack || (new Error()).stack;
@@ -207,12 +207,10 @@ ThrowableUniError.prototype = new Error();
 // ======================================================
 // PARSERS
 // ======================================================
-export function parseFromThrowableUniError(errorOrResponse, uniErrorData = {}) {
+export function parseFromThrowableUniError(errorOrResponse, uniErrorData = undefined) {
   if (errorOrResponse instanceof ThrowableUniError) {
-    return {
-      ...errorOrResponse.uniError,
-      ...uniErrorData,
-    };
+    Object.assign(errorOrResponse, uniErrorData);
+    return errorOrResponse;
   }
   return null;
 }
@@ -320,7 +318,17 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
   ) {
     // это response
     const response = errorOrResponse.response || errorOrResponse;
-    const responseBody = response.body || response.payload;
+    let responseBody = response.body || response.payload;
+
+    if (typeof responseBody === 'string') {
+      try {
+        responseBody = JSON.parse(responseBody);
+      } catch (parseError) {
+        logger.warn('Try parse responseBody error', responseBody);
+      }
+    }
+
+    const responseStatusCode = response.statusCode || response.status || responseBody.code;
 
     if (typeof responseBody === 'object') {
       // json from middle
@@ -334,7 +342,16 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
        */
 
       // eslint-disable-next-line no-use-before-define
-      let innerUniError = parseToUniError(responseBody, uniErrorData, { withoutException: true });
+      let innerUniError = parseToUniError(
+        responseBody,
+        {
+          ...uniErrorData,
+          responseStatusCode,
+        },
+        {
+          withoutException: true,
+        },
+      );
       if (innerUniError) {
         return innerUniError;
       }
@@ -349,7 +366,7 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
 
       return createUniError({
         ...(innerUniError || {}),
-        responseStatusCode: response.statusCode || response.status || responseBody.code,
+        responseStatusCode,
         originalObject: responseBody,
         errorFrom: UNI_ERROR_FROM.FROM_RESPONSE_BODY,
         ...uniErrorData,
@@ -359,7 +376,7 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
     return createUniError({
       // eslint-disable-next-line max-len
       message: `${response.statusMessage || response.statusText}: ${(response.request && response.request.href) || (response.req && response.req.url)}`,
-      responseStatusCode: response.statusCode,
+      responseStatusCode,
       originalObject: responseBody,
       errorFrom: UNI_ERROR_FROM.FROM_RESPONSE,
       ...uniErrorData,
@@ -395,7 +412,6 @@ export function parseFromError(error, uniErrorData = {}) {
      - statusCode - the HTTP status code, derived from error.output.statusCode.
      - error - the HTTP status message (e.g. 'Bad Request', 'Internal Server Error') derived from statusCode.
      - message - the error message derived from error.message.
-
  // - message - the error message.
  // - typeof - the constructor used to create the error (e.g. Boom.badRequest).
    - inherited Error properties (message, stack)

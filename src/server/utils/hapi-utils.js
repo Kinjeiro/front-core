@@ -98,10 +98,11 @@ export function responseWrapper(result, reply) {
   return responseWrapperInner(result, reply);
 }
 
-export function responseError(error, reply, code = 500) {
+export function responseError(error, reply, code = undefined) {
   // todo @ANKU @LOW - иногда при ошибка бывает - UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 2): Error: reply interface called twice
-  return responseWrapperInner(parseToUniError(error), reply)
-    .code(code);
+  const uniError = parseToUniError(error);
+  return responseWrapperInner(uniError, reply)
+    .code(code || uniError.uniCode || 500);
 }
 
 export function parseResponseHandler(handler, proceedRequestData) {
