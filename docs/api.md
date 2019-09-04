@@ -882,10 +882,8 @@ touched
 -   statusCode - the HTTP status code, derived from error.output.statusCode.
 -   error - the HTTP status message (e.g. 'Bad Request', 'Internal Server Error') derived from statusCode.
 -   message - the error message derived from error.message.
-
-// - message - the error message.
-// - typeof - the constructor used to create the error (e.g. Boom.badRequest).
-
+    // - message - the error message.
+    // - typeof - the constructor used to create the error (e.g. Boom.badRequest).
 -   inherited Error properties (message, stack)
 
 **Parameters**

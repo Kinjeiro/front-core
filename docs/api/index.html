@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.2 | Documentation</title>
+  <title>@reagentum/front-core 1.8.3 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.2</code></div>
+          <div class='mb1'><code>1.8.3</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -6553,11 +6553,9 @@ touched</p>
 <li>payload - the formatted object used as the response payload (stringified). Can be directly manipulated but any changes will be lost if reformat() is called. Any content allowed and by default includes the following content:</li>
 <li>statusCode - the HTTP status code, derived from error.output.statusCode.</li>
 <li>error - the HTTP status message (e.g. 'Bad Request', 'Internal Server Error') derived from statusCode.</li>
-<li>message - the error message derived from error.message.</li>
-</ul>
-<p>// - message - the error message.
-// - typeof - the constructor used to create the error (e.g. Boom.badRequest).</p>
-<ul>
+<li>message - the error message derived from error.message.
+// - message - the error message.
+// - typeof - the constructor used to create the error (e.g. Boom.badRequest).</li>
 <li>inherited Error properties (message, stack)</li>
 </ul>
 
