@@ -19,39 +19,57 @@ export const API_CONFIGS = {
 };
 
 export function apiSignup(userData) {
-  return sendApiRequest(API_CONFIGS.signup, userData);
+  return sendApiRequest(API_CONFIGS.signup, userData, { isAuth: true });
 }
 export function apiLogin(username, password) {
-  return sendApiRequest(API_CONFIGS.login, {
-    username,
-    password,
-  });
+  return sendApiRequest(
+    API_CONFIGS.login,
+    {
+      username,
+      password,
+    },
+    {
+      isAuth: true,
+    },
+  );
 }
 
 export function apiGoogleSignin() {
-  return sendApiRequest(API_CONFIGS.googleSignin, null);
+  return sendApiRequest(API_CONFIGS.googleSignin, undefined, { isAuth: true });
 }
 export function apiRefreshLogin() {
-  return sendApiRequest(API_CONFIGS.refreshLogin);
+  return sendApiRequest(API_CONFIGS.refreshLogin, undefined, { isAuth: true });
 }
 
 export function apiLogout() {
-  return sendApiRequest(API_CONFIGS.logout);
+  return sendApiRequest(API_CONFIGS.logout, undefined, { isAuth: true });
 }
 
 export function apiForgotPassword(email, resetPasswordPageUrl, emailOptions) {
-  return sendApiRequest(API_CONFIGS.forgot, {
-    email,
-    resetPasswordPageUrl,
-    emailOptions,
-  });
+  return sendApiRequest(
+    API_CONFIGS.forgot,
+    {
+      email,
+      resetPasswordPageUrl,
+      emailOptions,
+    },
+    {
+      isAuth: true,
+    },
+  );
 }
 export function apiResetPassword(resetPasswordToken, newPassword, successEmailOptions) {
-  return sendApiRequest(API_CONFIGS.resetPassword, {
-    resetPasswordToken,
-    newPassword,
-    successEmailOptions,
-  });
+  return sendApiRequest(
+    API_CONFIGS.resetPassword,
+    {
+      resetPasswordToken,
+      newPassword,
+      successEmailOptions,
+    },
+    {
+      isAuth: true,
+    },
+  );
 }
 
 export default {

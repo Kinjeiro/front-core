@@ -270,6 +270,9 @@ export default class BaseApiClientClass {
     const {
       optionsParser, // используется в parseOptions
 
+      // обозначает что запрос является частью авторизации и на него не нужно повторений
+      isAuth = false,
+
       url,
       method = 'get',
 
@@ -416,6 +419,7 @@ export default class BaseApiClientClass {
 
   requestCallback(resolve, reject, requestOptions, err, response) {
     const {
+      isAuth,
       mockFilter = this.mockFilter,
     } = requestOptions;
 
@@ -428,15 +432,23 @@ export default class BaseApiClientClass {
         .then(resolve)
         .catch(reject);
     } else if (error) {
-      if (error.isNotAuth && this.apiClientOptions.retryWhenNotAuthErrorTimeout) {
+      const urlPath = cutContextPath(requestOptions.url);
+
+      if (
+        error.isNotAuth
+        && this.apiClientOptions.retryWhenNotAuthErrorTimeout
+        // и при этом не урл логина \ регистрации
+        && !isAuth
+      ) {
         requestOptions.retryWhenNotAuthErrorAttempts = requestOptions.retryWhenNotAuthErrorAttempts || 0;
+
         if (requestOptions.retryWhenNotAuthErrorAttempts < this.apiClientOptions.retryWhenNotAuthErrorAttempts) {
           requestOptions.retryWhenNotAuthErrorAttempts += 1;
           setTimeout(() => {
             // возможно уже отработал refresh_token и пришли на клиент обновленные токены
             this.proceedRequest({
               ...requestOptions,
-              url: cutContextPath(requestOptions.url),
+              url: urlPath,
             })
               .then((result) => resolve(result))
               .catch((result) => reject(result));
