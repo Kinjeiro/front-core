@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
+import set from 'lodash/set';
 
 import clientConfig from '../../../../../../common/client-config';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
@@ -255,10 +256,16 @@ export default class CoreForm extends Component {
       });
     }
 
-    // todo @ANKU @LOW - нужно onChange тоже включить в процессинг, но почему-то падают странности
-    const result = await onChange
-      ? onChange(fieldName, newValue)
-      : onChangeField && onChangeField({ [fieldName]: newValue });
+    let result;
+    if (onChange) {
+      // todo @ANKU @LOW - нужно onChange тоже включить в процессинг, но почему-то падают странности
+      result = await onChange(fieldName, newValue);
+    } else if (onChangeField) {
+      const resultFormData = {};
+      // fieldName может быть составным: address.city
+      set(resultFormData, fieldName, newValue);
+      result = await onChangeField(resultFormData);
+    }
 
     emitProcessing(
       this.isValid({
