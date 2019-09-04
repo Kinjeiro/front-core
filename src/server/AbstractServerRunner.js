@@ -48,7 +48,8 @@ process.on('unhandledRejection', error => {
 
   cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npm run start
 */
-const rootCas = require('ssl-root-cas/latest').create();
+// const rootCas = require('ssl-root-cas/latest').create();
+const rootCas = require('ssl-root-cas').create();
 // will work with all https requests will all libraries (i.e. request.js)
 require('https').globalAgent.options.ca = rootCas;
 
