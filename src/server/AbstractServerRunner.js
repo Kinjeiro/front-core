@@ -33,6 +33,27 @@ process.on('unhandledRejection', error => {
   console.error('unhandledRejection', error);
 });
 
+/*
+  FIX ERROR: unable to verify the first certificate
+
+  https://www.npmjs.com/package/ssl-root-cas#unable-to-verify-the-first-certificate
+  https://stackoverflow.com/questions/31673587/error-unable-to-verify-the-first-certificate-in-nodejs
+
+  unable to verify the first certificate
+
+  When you get this error it means that the webserver you are connecting to is misconfigured and did not include the intermediate certificates in the certificate it sent to you.
+  You can work around this by adding the missing certificate:
+
+  ЛИБО небезопасную:
+
+  cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npm run start
+*/
+const rootCas = require('ssl-root-cas/latest').create();
+// will work with all https requests will all libraries (i.e. request.js)
+require('https').globalAgent.options.ca = rootCas;
+
+
+
 /**
 * Абстрактный класс для серверного ранера, икапсулирующий логику запуска node js сервера hapi
 */
@@ -69,20 +90,18 @@ export default class AbstractServerRunner {
 
   async initServerSubModules() {
     await Promise.all(
-      this.getServerSubModules().map((subModule) =>
-        subModule.initServerSubModule
-        && subModule.initServerSubModule(this),
-      ),
+      this.getServerSubModules().map((subModule) => subModule.initServerSubModule
+        && subModule.initServerSubModule(this)),
     );
   }
+
   async afterStartServerSubModules() {
     await Promise.all(
-      this.getServerSubModules().map((subModule) =>
-        subModule.afterStartServer
-        && subModule.afterStartServer(this),
-      ),
+      this.getServerSubModules().map((subModule) => subModule.afterStartServer
+        && subModule.afterStartServer(this)),
     );
   }
+
   getAllDBModels() {
     return aggregateArrayFn(this.getServerSubModules(), 'getDBModels')();
   }
@@ -185,7 +204,7 @@ export default class AbstractServerRunner {
       {
         register: pluginYar,
         options: serverConfig.server.features.session.yarOptions
-      }*/
+      } */
 
       ...aggregateArrayFn(this.getServerSubModules(), 'getServerPlugins')(services, strategies, servicesContext),
       // todo @ANKU @LOW - вынести в отдельный метод вне getPlugins?
@@ -227,25 +246,24 @@ export default class AbstractServerRunner {
     const contextPath = serverConfig.common.app.contextRoot;
 
     return new Promise(
-      (resolve, reject) =>
-        server.register(
-          hapiServerPlugins,
-          {
-            routes: {
-              prefix: contextPath
-                ? joinPath('/', contextPath)
-                : undefined,
-            },
+      (resolve, reject) => server.register(
+        hapiServerPlugins,
+        {
+          routes: {
+            prefix: contextPath
+              ? joinPath('/', contextPath)
+              : undefined,
           },
-          (error) => {
-            return error
-              ? reject(error)
-              : resolve({
-                services,
-                strategies,
-              });
-          },
-        ),
+        },
+        (error) => {
+          return error
+            ? reject(error)
+            : resolve({
+              services,
+              strategies,
+            });
+        },
+      ),
     )
       .catch((error) => {
         logger.error(error);
