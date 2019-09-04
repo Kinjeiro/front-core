@@ -144,7 +144,7 @@ export default class Signin extends Component {
 
     const loginFinal = emailAsLogin ? loginEmail : username;
     await actionChangeUser(loginFinal, password);
-    await onEnterTypeChange(null);
+    await onEnterTypeChange(null, false);
 
     if (onSubmit) {
       await onSubmit(loginFinal);
@@ -241,7 +241,7 @@ export default class Signin extends Component {
             <Button
               key="signupButton"
               className={ this.bem('signupButton') }
-              onClick={ () => onEnterTypeChange(true) }
+              onClick={ () => onEnterTypeChange(true, false) }
             >
               {i18n('pages.SigninPage.signup')}
             </Button>

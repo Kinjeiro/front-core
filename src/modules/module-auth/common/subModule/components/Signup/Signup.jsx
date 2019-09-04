@@ -124,7 +124,7 @@ export default class Signup extends Component {
       aliasId: !emailAsLogin && aliasIdAsUsername ? username : undefined,
     });
 
-    await onEnterTypeChange(null);
+    await onEnterTypeChange(null, true);
 
     if (onSubmit) {
       await onSubmit();
@@ -213,7 +213,7 @@ export default class Signup extends Component {
             <Button
               key="signinButton"
               className={ this.bem('signinButton') }
-              onClick={ () => onEnterTypeChange(false) }
+              onClick={ () => onEnterTypeChange(false, true) }
             >
               {i18n('pages.SignupPage.signinButton')}
             </Button>

@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
+import { PATH_MAIN_INDEX } from '../../../../../../common/routes.pathes';
 
 import { joinPath } from '../../../../../../common/utils/uri-utils';
 
 import titled from '../../../../../../common/utils/decorators/react-class/titled';
 import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
 import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
+
+import commonConfig from '../../../../../../common/client-config';
 
 // ======================================================
 // MODULE
@@ -73,8 +76,17 @@ export default class AuthEnter extends Component {
   // HANDLERS
   // ======================================================
   // todo @ANKU @LOW - переделать из true, false и null на более понятную систему, к примеру статусов
+
+  /**
+   *
+   * @param isChangeFromSigninToSignup
+   *   true - переключаемся между Логин -> Ренистрация
+   *   false - переключаемся между Ренистрация -> Логин
+   *   null - закрываем окно (закончили или регистрацию или логин)
+   * @return {Promise<void>}
+   */
   @bind()
-  async handleEnterTypeChange(isSignup = null) {
+  async handleEnterTypeChange(isChangeFromSigninToSignup = null, isSignupPage = false) {
     const {
       inModal,
       actionClearLastError,
@@ -82,31 +94,53 @@ export default class AuthEnter extends Component {
       onGoTo,
     } = this.props;
 
+    let urlReturnFinal = urlReturn;
+
+    const isFinish = isChangeFromSigninToSignup === null;
 
     if (inModal) {
-      if (isSignup === null) {
+      if (isChangeFromSigninToSignup === null) {
         // убираем любые ошибки тем самым закроется модалка
         actionClearLastError();
       } else {
-        this.setState({ isSignup });
+        this.setState({ isSignup: isChangeFromSigninToSignup });
       }
     } else {
       // убираем любые ошибки
       actionClearLastError();
+      if (isFinish) {
+        if (typeof urlReturnFinal === 'undefined') {
+          urlReturnFinal = isSignupPage
+            ? commonConfig.common.features.auth.paths.afterSignup
+            : commonConfig.common.features.auth.paths.afterSignin;
+        }
 
-      await (isSignup === null
         // выходим из авторизации - если urlReturn нету - то будет переадрисовка на index
-        ? onGoTo(urlReturn) // в urlReturn уже может учитываться contextPath но внутри метода есть такая проверка
-        : onGoTo(joinPath(
-          isSignup
-            ? PATH_AUTH_SIGNUP
-            : PATH_AUTH_SIGNIN,
-          {
-            // не забываем urlReturn если он есть
-            [PARAM__RETURN_URL]: urlReturn,
-          },
-        ), MODULE_NAME)
-      );
+        if (urlReturnFinal !== false) {
+          // можно и отменить
+          await onGoTo(urlReturnFinal || PATH_MAIN_INDEX);
+        }
+      } else {
+        if (typeof urlReturnFinal === 'undefined') {
+          urlReturnFinal = isSignupPage
+            ? commonConfig.common.features.auth.paths.afterSignin
+            : commonConfig.common.features.auth.paths.afterSignup;
+        }
+
+        // переключаемся на страницу другого типа, и не забываем urlReturn нужный
+        await onGoTo(
+          joinPath(
+            isChangeFromSigninToSignup
+              ? PATH_AUTH_SIGNUP
+              : PATH_AUTH_SIGNIN,
+            {
+              // не забываем urlReturn если он есть
+              [PARAM__RETURN_URL]: urlReturnFinal,
+            },
+          ),
+          MODULE_NAME,
+        )
+      }
     }
   }
 

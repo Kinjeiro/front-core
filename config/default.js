@@ -182,6 +182,12 @@ module.exports = {
         retryWhenNotAuthErrorTimeout: 300,
         retryWhenNotAuthErrorAttempts: 2,
 
+        paths: {
+          afterSignin: '/',
+          afterSignup: '/',
+          afterLogout: '/'
+        },
+
         /**
          * чаше всего необходимо для открытых систем, а для enterprise обычно не надо
          */
