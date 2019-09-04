@@ -14,7 +14,12 @@ export const CORE_ROUTES_NAMES = {
 
 // не нужно дергать и добавлять contextPath так как он уже при history basename добавляется автоматом
 // export const PATH_INDEX = appUrl('/');
-export const PATH_INDEX = '/';
+export const PATH_MAIN_INDEX = '/';
+/**
+ * @deprecated - use PATH_MAIN_INDEX
+ * @type {string}
+ */
+export const PATH_INDEX = PATH_MAIN_INDEX;
 export const PATH_ACCESS_DENIED = joinUri(PATH_INDEX, CORE_ROUTES_NAMES.ACCESS_DENIED);
 export const PATH_ERROR_PAGE = joinUri(PATH_INDEX, CORE_ROUTES_NAMES.ERROR);
 

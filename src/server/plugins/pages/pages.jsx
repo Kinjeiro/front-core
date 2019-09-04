@@ -2,6 +2,7 @@ import merge from 'lodash/merge';
 
 import { createMemoryHistory, match } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { PATH_MAIN_INDEX } from '../../../common/routes.pathes';
 
 // ======================================================
 // COMMON
@@ -139,7 +140,7 @@ export function register(server, pluginOptions, next) {
               const loginPathFinal = appUrl(executeVariable(loginPath));
               const notReturnUrl = [
                 appUrl(''),
-                appUrl('/'),
+                appUrl(PATH_MAIN_INDEX),
                 loginPathFinal,
               ];
 
