@@ -15,7 +15,7 @@ import {
   isUniError,
 } from '../../common/models/uni-error';
 import logger from '../helpers/server-logger';
-import { getCredentialsFromRequest } from '../utils/credentials-utils';
+import { getCredentialsFromRequest } from './credentials-utils';
 
 import { normalizeAccessObject } from '../../modules/module-auth/common/subModule/helpers/access-object-utils';
 

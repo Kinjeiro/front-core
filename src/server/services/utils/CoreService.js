@@ -84,11 +84,7 @@ export default class CoreService {
   }
 
 
-  send(
-    path,
-    data,
-    options,
-  ) {
+  send(path, data, options) {
     const {
       method = 'GET',
       ...requestOptions
@@ -104,11 +100,7 @@ export default class CoreService {
     );
   }
 
-  sendWithAuth(
-    path,
-    data,
-    options,
-  ) {
+  sendWithAuth(path, data, options) {
     const {
       token = this.getUserToken(),
       method = 'GET',
@@ -124,6 +116,16 @@ export default class CoreService {
       this.getRequest(),
       requestOptions,
     );
+  }
+
+  sendWithClientCredentials(path, data, options) {
+    // todo @ANKU @LOW - подумать над этим обратным ходом - вообще сервис корный не должен знать об авторизации, но с другой стороны это такая распространненая функция что хочется ее дать всем без гемора
+    const serviceAuth = this.getService('serviceAuth');
+    if (!serviceAuth) {
+      throw new Error('Not supported sendWithClientCredentials with serviceAuth');
+    }
+
+    return serviceAuth.sendWithClientCredentials(path, data, options);
   }
 
   // ======================================================

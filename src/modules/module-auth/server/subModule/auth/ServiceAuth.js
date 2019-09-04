@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import i18n from '../../../../../common/utils/i18n-utils';
 import {
   parseToUniError,
   ThrowableUniError,
@@ -20,6 +19,16 @@ import serverConfig from '../../../../../server/server-config';
 import CoreService from '../../../../../server/services/utils/CoreService';
 import { joinPath } from '../../../../../common/utils/uri-utils';
 
+// ======================================================
+// MODULE
+// ======================================================
+import i18n from '../../../common/subModule/i18n';
+
+export const GRANT_TYPES = {
+  PASSWORD: 'password',
+  CLIENT_CREDENTIALS: 'client_credentials',
+  REFRESH_TOKEN: 'refresh_token',
+};
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
@@ -208,28 +217,37 @@ export default class ServiceAuth extends CoreService {
     );
   }
 
-  catchAuthError(error) {
+  catchAuthError(errorObject) {
     // eslint-disable-next-line no-param-reassign
-    const uniError = parseToUniError(error);
+    const uniError = parseToUniError(errorObject);
     if (
       uniError.originalObject
       && uniError.originalObject.error_description
     ) {
-      let clientErrorMessage;
+      const {
+        error,
+        error_description,
+      } = uniError.originalObject;
 
-      // switch (uniError.originalObject.error_description) {
-      switch (uniError.originalObject.error) {
-        case 'Invalid resource owner credentials':
-          clientErrorMessage = i18n('errors.wrongUserCredentials');
-          break;
-        case 'Missing required parameter: password':
-          clientErrorMessage = i18n('errors.missingPassword');
-          break;
-        default:
-          // clientErrorMessage = uniError.originalObject.error_description;
-          clientErrorMessage = uniError.originalObject.error;
-      }
-      uniError.clientErrorMessage = clientErrorMessage;
+      // // switch (uniError.originalObject.error_description) {
+      // switch (uniError.originalObject.error) {
+      //   case 'invalid_grant':
+      //     // {"error":"invalid_grant","error_description":"Invalid user credentials"}
+      //     clientErrorMessage = i18n(uniError.originalObject.error_description || 'errors.wrongUserCredentials');
+      //     break;
+      //   case 'Invalid resource owner credentials':
+      //     clientErrorMessage = i18n('errors.wrongUserCredentials');
+      //     break;
+      //   case 'Missing required parameter: password':
+      //     clientErrorMessage = i18n('errors.missingPassword');
+      //     break;
+      //   default:
+      //     // clientErrorMessage = uniError.originalObject.error_description;
+      //     clientErrorMessage = uniError.originalObject.error;
+      // }
+      uniError.message = uniError.message || error_description || error;
+      uniError.clientErrorMessage = i18n(`errors.${error_description}`, undefined, undefined, null)
+        || i18n(`errors.${error}`, undefined, undefined, null);
     }
 
     throw new ThrowableUniError(uniError);
@@ -251,7 +269,7 @@ export default class ServiceAuth extends CoreService {
         this.urls.authSignin,
         {
           // @NOTE: необходимо учитывать snake запись (_) это стандарт
-          grant_type: 'password',
+          grant_type: GRANT_TYPES.PASSWORD,
           username,
           password,
           // ...this.getClientInfo(),
@@ -291,7 +309,7 @@ export default class ServiceAuth extends CoreService {
       return await this.send(
         this.urls.authRefresh,
         {
-          grant_type: 'refresh_token',
+          grant_type: GRANT_TYPES.REFRESH_TOKEN,
           refresh_token: refreshToken,
           // ...this.getClientInfo(),
         },
@@ -438,7 +456,7 @@ export default class ServiceAuth extends CoreService {
       return await this.send(
         this.urls.authSignin,
         {
-          grant_type: 'client_credentials',
+          grant_type: GRANT_TYPES.CLIENT_CREDENTIALS,
         },
         {
           method: 'post',
@@ -451,6 +469,25 @@ export default class ServiceAuth extends CoreService {
     } catch (error) {
       return this.catchAuthError(error);
     }
+  }
+
+  async sendWithClientCredentials(url, data, options = {}) {
+    const {
+      access_token,
+      token_type,
+    } = await this.authClientCredentials();
+
+    return this.send(
+      url,
+      data,
+      {
+        ...options,
+        headers: {
+          ...options.headers,
+          ...getHeadersByAuthType(access_token, token_type),
+        },
+      },
+    );
   }
 
   // ======================================================
@@ -513,7 +550,6 @@ export default class ServiceAuth extends CoreService {
           headers: {
             // todo @ANKU @CRIT @MAIN -
             ...this.getClientCredentialsHeaders(),
-            contentType: CONTENT_TYPES.FORM_URLENCODED,
           },
         },
       );
@@ -526,21 +562,13 @@ export default class ServiceAuth extends CoreService {
   // ======================================================
   // SING_UP \ REGISTRATION
   // ======================================================
-  async authSignup(userData, emailOptions = null) {
+  async authSignup(userData) {
     try {
-      return await this.send(
+      return await this.sendWithClientCredentials(
         this.urls.authSignup,
-        {
-          userData,
-          ...this.getClientInfo(),
-          emailOptions,
-        },
+        userData,
         {
           method: 'post',
-          headers: {
-            ...this.getClientCredentialsHeaders(),
-            // contentType: CONTENT_TYPES.FORM_URLENCODED,
-          },
         },
       );
     } catch (error) {
