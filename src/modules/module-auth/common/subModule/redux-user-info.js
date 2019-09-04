@@ -124,13 +124,14 @@ export function getBindActions({
       return async (dispatch, getState) => {
         await dispatch({
           types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
-          payload: apiLogout(),
+          payload: apiLogout()
+            // нужно до USER_LOGOUT_SUCCESS дернуть чтобы компоненты уже ЗААНМАУНТИЛИСЬ и пропсы в них не поменялись когда пользователя уже и нет
+            .then(() => {
+              if (returnUrl) {
+                dispatch(push(returnUrl || commonConfig.common.features.auth.paths.afterLogout || PATH_MAIN_INDEX));
+              }
+            }),
         });
-
-        // до USER_LOGOUT_SUCCESS чтобы компоненты уже заанмаунтились и пропсы в них не поменялись когда пользователя уже и нет
-        if (returnUrl) {
-          dispatch(push(returnUrl || commonConfig.common.features.auth.paths.afterLogout || PATH_MAIN_INDEX));
-        }
       };
     },
     actionForgotPassword(email, resetPasswordPageUrl, emailOptions) {

@@ -121,12 +121,6 @@ export default class AuthEnter extends Component {
           await onGoTo(urlReturnFinal || PATH_MAIN_INDEX);
         }
       } else {
-        if (typeof urlReturnFinal === 'undefined') {
-          urlReturnFinal = isSignupPage
-            ? commonConfig.common.features.auth.paths.afterSignin
-            : commonConfig.common.features.auth.paths.afterSignup;
-        }
-
         // переключаемся на страницу другого типа, и не забываем urlReturn нужный
         await onGoTo(
           joinPath(
