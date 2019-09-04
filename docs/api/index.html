@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.3 | Documentation</title>
+  <title>@reagentum/front-core 1.8.4 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.3</code></div>
+          <div class='mb1'><code>1.8.4</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -820,6 +820,16 @@
                   href='#user-info'
                   class="">
                   user-info
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#path_index'
+                  class="">
+                  PATH_INDEX
                   
                 </a>
                 
@@ -1683,6 +1693,26 @@
               
                 
                 <li><a
+                  href='#bind'
+                  class="">
+                  bind
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#bind'
+                  class="">
+                  bind
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#authviewdecorator'
                   class="">
                   authViewDecorator
@@ -1858,16 +1888,6 @@
                   
                   
                 </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#bind'
-                  class="">
-                  bind
-                  
-                </a>
                 
                 </li>
               
@@ -6818,6 +6838,58 @@ touched</p>
   
 
   <div>Deprecated: use model-user-info
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='path_index'>
+      PATH_INDEX
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>PATH_INDEX</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+    </p>
+  
+  
+
+  <div>Deprecated: use PATH_MAIN_INDEX
 </div>
   
   
@@ -13222,6 +13294,155 @@ webkitRelativePath: "",
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='bind'>
+      bind
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>bind</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>isChangeFromSigninToSignup</span> <code class='quiet'>(any)</code>
+	    true - переключаемся между Логин -> Ренистрация
+false - переключаемся между Ренистрация -> Логин
+null - закрываем окно (закончили или регистрацию или логин)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;void></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='bind'>
+      bind
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Определеяет какие куски приложения требуют авторизации
+В enterprise обычно все что не noAuthRequireMatcher
+Но других проектах помимо noAuthRequireMatcher (где указыавются просто файлы, статика, авторизация и подобное)
+еще позволительный страницы без юзера (к примеру лендинг)</p>
+
+
+  <div class='pre p1 fill-light mt0'>bind</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pathnameWithoutContextPath</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>moduleToRoutePrefixMap</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='authviewdecorator'>
       authViewDecorator
     </h3>
@@ -14610,85 +14831,6 @@ package.json</p>
     </div>
   
 </div>
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='bind'>
-      bind
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Определеяет какие куски приложения требуют авторизации
-В enterprise обычно все что не noAuthRequireMatcher
-Но других проектах помимо noAuthRequireMatcher (где указыавются просто файлы, статика, авторизация и подобное)
-еще позволительный страницы без юзера (к примеру лендинг)</p>
-
-
-  <div class='pre p1 fill-light mt0'>bind</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>pathnameWithoutContextPath</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>moduleToRoutePrefixMap</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
 
   
 
