@@ -26,3 +26,18 @@ export function base64ToBuffer(base65Url, fileName = null) {
   }
   return null;
 }
+
+export function streamToString(stream, notParseToUtf = false) {
+  const chunks = [];
+  return new Promise((resolve, reject) => {
+    stream.on('data', chunk => chunks.push(chunk));
+    stream.on('error', reject);
+    stream.on('end', () => {
+      let result = Buffer.concat(chunks);
+      if (!notParseToUtf) {
+        result = result.toString('utf8');
+      }
+      resolve(result);
+    });
+  });
+}

@@ -12,6 +12,7 @@ import logger, { logObject } from '../helpers/server-logger';
 
 export const CONTENT_TYPES = {
   FORM_URLENCODED: 'application/x-www-form-urlencoded',
+  FORM_DATA: 'multipart/form-data',
   JSON: 'application/json',
 };
 
@@ -217,18 +218,28 @@ export async function sendEndpointMethodRequest(
   const {
     returnResponse,
     form,
+    formData,
   } = requestOptionsFinal;
 
   const url = getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath, data);
 
   const isGet = method.toUpperCase() === 'GET';
 
-  const headersFinal = {
-    contentType: form ? CONTENT_TYPES.FORM_URLENCODED : undefined,
-    accept: CONTENT_TYPES.JSON,
+  const headersPreFinal = {
     ...getHeaders(apiRequest),
     ...endpointRequestOptions.headers,
     ...requestOptions.headers,
+  };
+
+  const isFormData = formData || (headersPreFinal.contentType && headersPreFinal.contentType.indexOf(CONTENT_TYPES.FORM_DATA) >= 0);
+
+  const headersFinal = {
+    contentType: form
+      ? CONTENT_TYPES.FORM_URLENCODED
+      // если это form-data сама проставится внутри request и добавит boundary
+      : undefined,
+    accept: CONTENT_TYPES.JSON,
+    ...headersPreFinal,
   };
 
   const isFormUrlencoded = form || headersFinal.contentType === CONTENT_TYPES.FORM_URLENCODED;
@@ -237,15 +248,28 @@ export async function sendEndpointMethodRequest(
     {
       method,
       url,
-      qs: isGet ? data : undefined,
-      body: isGet || isFormUrlencoded ? undefined : data,
-      json: !isFormUrlencoded,
+      json: !isFormUrlencoded && !isFormData,
 
+      qs: isGet ? data : undefined,
+      body: isGet || isFormUrlencoded || isFormData ? undefined : data,
       // https://github.com/request/request#forms
       // application/x-www-form-urlencoded
       // или
       // multipart/form-data
-      form: form || (isFormUrlencoded ? data : undefined),
+      form: isFormUrlencoded ? form || data : undefined,
+      /*
+        в библиотеке request уже подцепляется библиотека form-data, которая преобразуем объект в FormData и отсылает проставляя собственный contentType: form-data c boundary
+        К примеру:
+          file: {
+            value: await streamToString(readStream, true),
+            options: {
+              filename,
+              contentType,
+            },
+          },
+          file2: anyBuffer,
+      */
+      formData: isFormData ? formData || data : undefined,
 
       timeout,
       ...requestOptionsFinal,
@@ -278,11 +302,11 @@ export async function sendWithAuth(
     data,
     apiRequest,
     {
+      ...requestOptions,
       headers: {
         ...getHeadersByAuthType(token, requestOptions.authType),
         ...requestOptions.headers,
       },
-      ...requestOptions,
     },
   );
 }
