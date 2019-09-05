@@ -42,6 +42,9 @@ export default class CoreSelect extends PureComponent {
     fieldValue: PropTypes.string,
     maxVisible: PropTypes.number,
 
+    /**
+     * (value, optionNode, contextSelect, optionItem) => {}
+     */
     onSelect: PropTypes.func,
   };
 
@@ -106,7 +109,7 @@ export default class CoreSelect extends PureComponent {
     return resultOptions;
   }
 
-  updateSelect(value, label = null, optionNode = undefined, contextSelect = undefined) {
+  updateSelect(value, label = null, optionNode = undefined, contextSelect = undefined, optionItem = undefined) {
     const {
       onSelect,
     } = this.props;
@@ -114,7 +117,7 @@ export default class CoreSelect extends PureComponent {
     if (onSelect) {
       // todo @ANKU @LOW @BUG_OUT - элемент при выборе показывает в input option.value а не children option
       // onSelect(value);
-      onSelect(value, optionNode, contextSelect);
+      onSelect(value, optionNode, contextSelect, optionItem);
     }
     this.setState({
       selectedLabel: label,
@@ -147,8 +150,10 @@ export default class CoreSelect extends PureComponent {
   handleSelect(label, optionNode, contextSelect = undefined) {
     if (typeof optionNode === 'object') {
       if (optionNode.value) {
+        // бывает что нужно проставлять не id а полные толстенькие изначальные рекорды
+        const { optionItem } = optionNode.options.find(({ value }) => optionNode.value === value) || {};
         // semantic format
-        return this.updateSelect(optionNode.value, undefined, optionNode, contextSelect);
+        return this.updateSelect(optionNode.value, undefined, optionNode, contextSelect, optionItem);
       }
       // antd select format
       // todo @ANKU @LOW @BUG_OUT @antd - элемент при выборе показывает в input option.value а не children option
@@ -179,6 +184,8 @@ export default class CoreSelect extends PureComponent {
 
       return {
         ...option,
+        // нужно отделить, чтобы потом можно было в качестве значения проставлять
+        optionItem: option,
         value,
         label,
       };
