@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 /**
  * Убираем ошибку множественного react
@@ -20,6 +21,33 @@ function pluginReact(webpackConfig) {
       React: 'react'
     })
   );
+
+  const PROCESS_DIR = process.cwd();
+  const CURRENT_FILE_PATH = __dirname;
+  const isUseFromFrontCore = CURRENT_FILE_PATH.indexOf(path.join(PROCESS_DIR, 'build-scripts')) >= 0;
+
+  if (
+    isUseFromFrontCore
+    && process.env.NODE_ENV !== 'test'
+    && process.env.NODE_ENV !== 'localhost'
+  ) {
+    webpackConfig.externals = {
+      ...webpackConfig.externals,
+      // Don't bundle react or react-dom
+      react: {
+        commonjs: 'react',
+        commonjs2: 'react',
+        amd: 'React',
+        root: 'React'
+      },
+      'react-dom': {
+        commonjs: 'react-dom',
+        commonjs2: 'react-dom',
+        amd: 'ReactDOM',
+        root: 'ReactDOM'
+      }
+    };
+  }
 }
 
 module.exports = pluginReact;
