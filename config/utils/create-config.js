@@ -122,8 +122,8 @@ function createEndpointServiceConfig({
   envPriority,
   requestOptions
 }) {
-  // eslint-disable-next-line no-param-reassign
-  envPriority = envPriority || typeof envPriority === 'undefined';
+  // по умолчанию от сервис хоста не будет зависеть переменные, нужно их явно включить
+  // envPriority = envPriority || typeof envPriority === 'undefined';
 
   if (fullUrl) {
     return {

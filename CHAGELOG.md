@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 2. ThrowableUniError теперь у себя в теле содержит uni-error а не отдельно переменной uniError
 
+3. теперь при создании endpoint config createEndpointServiceConfig - envPriority по умолчанию false, то есть host в конфиги более приоритетен чем HOST \ SERVICE_HOST в окружении
+
 ### API Dependencies:
     - auth-server@3.0.0
 
