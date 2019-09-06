@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign,no-shadow,import/no-dynamic-require,no-unused-vars */
 const path = require('path');
+const crypto = require('crypto');
 
 const {
   urlJoin,
@@ -496,7 +497,7 @@ module.exports = {
          * <permission> - пермишен специальный
          */
         defaultAccess: 'accessAuth'
-      }
+      },
 
       // todo @ANKU @LOW - под вопросом нужно ли yar включать (лишний id в куках)
       // ,
@@ -510,6 +511,10 @@ module.exports = {
       //    }
       //  }
       // }
+
+      serverUtils: {
+        hashSalt: crypto.randomBytes(32).toString('hex')
+      }
     },
 
     // ======================================================
