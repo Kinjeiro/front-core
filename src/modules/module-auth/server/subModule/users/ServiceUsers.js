@@ -1,3 +1,4 @@
+/* eslint-disable lines-between-class-members */
 import logger from '../../../../../server/helpers/server-logger';
 import serverConfig from '../../../../../server/server-config';
 
@@ -10,30 +11,7 @@ export default class ServiceUsers extends CoreService {
     super(endpointServiceConfig, options);
 
     this.urls = {
-    //   - [GET] /api/users/avatar/:username - получение аватарки в data:image
-    // - [GET] /api/users/public/:username - получение публичных данных пользователя
-    // - [GET] /api/users/protected/:username - получение частисных данных пользователя (телефон, почта и так далее). **Нужна роль 'protector'**
-    //
-    // - [PUT] /api/users/ - изменение данных пользователя
-    // - [DELETE] /api/users/ - удаление пользователя
-    //
-    // - [PUT] /api/users/:username - изменение данных пользователя админом
-    // - [DELETE] /api/users/:username - удаление пользователя админом
-    //
-    // - [DELETE] /api/users/all - удаление всех пользователей админом
-
-      editUser: '/users',
-      changeUserPassword: '/users/changePassword',
-      deleteUser: '/users',
-      checkUnique: '/users/unique',
-
-      editUserByAdmin: '/users/{userId}',
-      deleteUserByAdmin: '/users/{userId}',
-      deleteAllByAdmin: '/users/all',
-
-      getAvatar: '/users/avatar/{userIdOrAliasId}',
-      getPublicInfo: '/users/public/{userIdOrAliasId}',
-      getProtectedInfo: '/users/protected/{userIdOrAliasId}',
+      ...serverConfig.server.features.serviceUsers.urls,
       ...urls,
     };
   }
@@ -124,20 +102,17 @@ export default class ServiceUsers extends CoreService {
 
 
   /**
-   *
+   * @deprecated - use getProtectedInfo
    * @param token - нужен пользователь с ролью 'protector'
    * @param userIdOrAliasId
    * @return {*}
    */
   async getProtectedInfoByToken(userIdOrAliasId, token = undefined) {
     logger.log('ServiceUsers', 'getProtectedInfoByToken', userIdOrAliasId);
-    return this.sendWithAuth(
+    return this.sendWithClientCredentials(
       this.urls.getProtectedInfo,
       {
         userIdOrAliasId,
-      },
-      {
-        token,
       },
     );
   }
@@ -160,29 +135,21 @@ export default class ServiceUsers extends CoreService {
    */
   async getProtectedInfo(userIdOrAliasId) {
     logger.log('ServiceUsers', 'getProtectedInfo', userIdOrAliasId);
-    const serviceAuth = this.getService('serviceAuth');
-    const {
-      username: protector,
-      password,
-    } = serverConfig.server.features.auth.protectorUser;
-
-    if (!serviceAuth) {
-      throw new Error('Нет необходимого сервиса serviceAuth.');
-    }
-    if (!password) {
-      // eslint-disable-next-line max-len
-      throw new Error(`Не указан пароль для пользователя "${protector}" с ролью "protector" (serverConfig.server.features.auth.protectorUser.password).`);
-    }
-
-    const { access_token } = await serviceAuth.authLogin(protector, password);
-
-    return this.getProtectedInfoByToken(userIdOrAliasId, access_token);
+    return this.sendWithClientCredentials(
+      this.urls.getProtectedInfo,
+      {
+        userIdOrAliasId,
+      },
+    );
   }
 
 
-  async editUserByAdmin(userId, userData, token = undefined) {
+  // ======================================================
+  // BY ADMIN
+  // ======================================================
+  async editUserByAdmin(userId, userData) {
     logger.log('ServiceUsers', 'editUserByAdmin', userId);
-    return this.sendWithAuth(
+    return this.sendWithClientCredentials(
       this.urls.editUserByAdmin,
       {
         userId,
@@ -190,31 +157,28 @@ export default class ServiceUsers extends CoreService {
       },
       {
         method: 'PUT',
-        token,
       },
     );
   }
-  async deleteUserByAdmin(userId, token = undefined) {
+  async deleteUserByAdmin(userId) {
     logger.log('ServiceUsers', 'deleteUserByAdmin', userId);
-    return this.sendWithAuth(
+    return this.sendWithClientCredentials(
       this.urls.deleteUserByAdmin,
       {
         userId,
       },
       {
         method: 'DELETE',
-        token,
       },
     );
   }
-  async deleteAllByAdmin(token = undefined) {
+  async deleteAllByAdmin() {
     logger.log('ServiceUsers', 'deleteAllByAdmin');
-    return this.sendWithAuth(
+    return this.sendWithClientCredentials(
       this.urls.deleteAllByAdmin,
       undefined,
       {
         method: 'DELETE',
-        token,
       },
     );
   }

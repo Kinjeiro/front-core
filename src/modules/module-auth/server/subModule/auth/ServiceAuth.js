@@ -493,6 +493,19 @@ export default class ServiceAuth extends CoreService {
   // ======================================================
   // ADDITIONAL
   // ======================================================
+  async authRevokeTokens(userId) {
+    return this.sendWithClientCredentials(
+      this.urls.authRevokeTokens,
+      {
+        userId,
+        clientId: this.getClientInfo().client_id,
+      },
+      {
+        method: 'DELETE',
+      },
+    );
+  }
+
   /**
    * Протокол для @reagentum/auth-server@1.0.4
    *

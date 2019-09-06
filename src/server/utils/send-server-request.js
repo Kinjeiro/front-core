@@ -162,12 +162,29 @@ export function sendSimpleRequest(requestOptions) {
 // ======================================================
 // ENDPOINT Middleware SERVICE Methods
 // ======================================================
-export function getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath = '', data) {
+/**
+ *
+ * @param endpointServiceConfig
+ * @param serviceMethodPath
+ * @param data - если потребуется возьмутся для pathParams
+ * @param additionalPathParams - сначала из них возьмутся
+ * @return {*}
+ */
+export function getEndpointServiceUrl(
+  endpointServiceConfig,
+  serviceMethodPath = '',
+  data = undefined,
+  additionalPathParams = undefined,
+) {
   const {
     fullUrl: serviceFullUrl,
   } = endpointServiceConfig;
 
-  return Hoek.reachTemplate(data, `${serviceFullUrl}${joinUri('/', serviceMethodPath)}`);
+  let url = `${serviceFullUrl}${joinUri('/', serviceMethodPath)}`;
+  if (additionalPathParams) {
+    url = Hoek.reachTemplate(additionalPathParams, url);
+  }
+  return Hoek.reachTemplate(data, url);
 }
 
 /**
@@ -216,12 +233,16 @@ export async function sendEndpointMethodRequest(
   };
 
   const {
+    pathParams,
+  } = requestOptions;
+
+  const {
     returnResponse,
     form,
     formData,
   } = requestOptionsFinal;
 
-  const url = getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath, data);
+  const url = getEndpointServiceUrl(endpointServiceConfig, serviceMethodPath, data, pathParams);
 
   const isGet = method.toUpperCase() === 'GET';
 

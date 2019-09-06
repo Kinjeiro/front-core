@@ -90,11 +90,12 @@ const {
   APP_MOCKS,
   USE_MOCKS,
   DEBUG,
-  /** Первый запуск мидловых сервисов бывает до 20 сек*/
+  /** Первый запуск мидловых сервисов бывает до 20 сек */
   REQUEST_TIMEOUT = 120000,
   LOGS_PATH = path.join(process.cwd(), '/logs/all.log'),
 
-  PROTECTOR_PASSWORD
+  PROTECTOR_PASSWORD,
+  REALM
 } = process.env;
 
 // console.warn('Server process.env', process.env);
@@ -386,6 +387,8 @@ module.exports = {
       // auth - настройки авторизации
       // ======================================================
       auth: {
+        realm: REALM || APP_ID,
+
         callbackAccessTokenParam: 'accessToken',
         callbackAccessTokenLifeParam: 'accessTokenLife',
         callbackRefreshTokenParam: 'refreshToken',
@@ -411,18 +414,40 @@ module.exports = {
 
 
         // урлы для авторизации по протоколу oauth2Urls
+        // http://185.22.63.233:8080/auth/realms/exporter/.well-known/openid-configuration
         oauth2Urls: {
-          authSignin: '/token',
-          authRefresh: '/token',
-          authValidate: '/token/introspect',
-          authSignout: '/logout',
+          authSignin:   '/realms/{realm}/protocol/openid-connect/token',            // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/token",
+          authRefresh:  '/realms/{realm}/protocol/openid-connect/token',            // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/token",
+          authValidate: '/realms/{realm}/protocol/openid-connect/token/introspect', // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/token/introspect",
+          authUserInfo: '/realms/{realm}/protocol/openid-connect/userinfo',         // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/userinfo",
+          authSignout:  '/realms/{realm}/protocol/openid-connect/logout',           // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/logout",
 
           authForgot: '/forgot',
-          authReset: '/reset',
-
+          authReset:  '/reset',
           authSocialProviderSignin: '/social/{provider}',
 
+          // by admin
+          authRevokeTokens: '/revoke',  // удаление токенов доступа, при краже или смене пароля
           authSignup: '/signup'
+        }
+      },
+      serviceUsers: {
+        urls: {
+          // public
+          checkUnique:        '/users/unique',                    // [GET] - field и value для проверки уникальности в рамках пользователей
+          getAvatar:          '/users/avatar/{userIdOrAliasId}',  // [GET] - получение аватарки в data:image
+          getPublicInfo:      '/users/public/{userIdOrAliasId}',  // [GET] - получение публичных данных пользователя
+
+          // authorized
+          editUser:           '/users',                           // [PUT] - изменение данных пользователя
+          changeUserPassword: '/users/changePassword',            // [PUT] - изменение пароля
+          deleteUser:         '/users',                           // [DELETE] - удаление пользователя
+
+          // by admin
+          getProtectedInfo:   '/admin/users/{userIdOrAliasId}',   // [GET] - получение частисных данных пользователя (телефон, почта и так далее). **Нужна роль 'protector'**
+          editUserByAdmin:    '/admin/users/{userId}',            // [PUT] - изменение данных пользователя админом
+          deleteUserByAdmin:  '/admin/users/{userId}',            // [DELETE] - удаление пользователя админом
+          deleteAllByAdmin:   '/admin/users/all'                  // [DELETE] - удаление всех пользователей админом
         }
       },
 
@@ -483,7 +508,7 @@ module.exports = {
            host: '127.0.0.1',
            port: 28777,
            node_name: 'nodeName'
-           },*/
+           }, */
           logstashLogger: false
         }
       },

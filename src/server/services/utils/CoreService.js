@@ -10,6 +10,7 @@ import {
 } from '../../utils/send-server-request';
 
 import logger from '../../helpers/server-logger';
+import serverConfig from '../../server-config';
 
 import {
   REQUEST_FIELD__USER,
@@ -96,7 +97,13 @@ export default class CoreService {
       method,
       data,
       this.getRequest(),
-      requestOptions,
+      {
+        ...requestOptions,
+        pathParams: {
+          ...requestOptions.pathParams,
+          realm: serverConfig.server.features.auth.realm,
+        },
+      },
     );
   }
 
@@ -114,7 +121,13 @@ export default class CoreService {
       method,
       data,
       this.getRequest(),
-      requestOptions,
+      {
+        ...requestOptions,
+        pathParams: {
+          ...requestOptions.pathParams,
+          realm: serverConfig.server.features.auth.realm,
+        },
+      },
     );
   }
 
