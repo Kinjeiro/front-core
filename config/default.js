@@ -406,13 +406,6 @@ module.exports = {
           // credentials: {}
         },
 
-        // auth-server@1.1.1 - специальная роль для получени защищенных данных других пользователей
-        protectorUser: {
-          username: 'protector',
-          password: PROTECTOR_PASSWORD
-        },
-
-
         // урлы для авторизации по протоколу oauth2Urls
         // http://185.22.63.233:8080/auth/realms/exporter/.well-known/openid-configuration
         oauth2Urls: {
@@ -422,32 +415,34 @@ module.exports = {
           authUserInfo: '/realms/{realm}/protocol/openid-connect/userinfo',         // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/userinfo",
           authSignout:  '/realms/{realm}/protocol/openid-connect/logout',           // "https://185.22.63.233:443/auth/realms/exporter/protocol/openid-connect/logout",
 
-          authForgot: '/forgot',
-          authReset:  '/reset',
-          authSocialProviderSignin: '/social/{provider}',
-
-          // by admin
-          authRevokeTokens: '/revoke',  // удаление токенов доступа, при краже или смене пароля
-          authSignup: '/signup'
+          authSocialProviderSignin: '/social/{provider}'
         }
       },
       serviceUsers: {
         urls: {
+          // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_users_resource
+
           // public
-          checkUnique:        '/users/unique',                    // [GET] - field и value для проверки уникальности в рамках пользователей
-          getAvatar:          '/users/avatar/{userIdOrAliasId}',  // [GET] - получение аватарки в data:image
-          getPublicInfo:      '/users/public/{userIdOrAliasId}',  // [GET] - получение публичных данных пользователя
+          // checkUnique:        '/admin/realms/{realm}/users/unique',                    // [GET] - field и value для проверки уникальности в рамках пользователей
+          // getAvatar:          '/users/avatar/{userIdOrAliasId}',  // [GET] - получение аватарки в data:image
+          // getPublicInfo:      '/users/public/{userIdOrAliasId}',  // [GET] - получение публичных данных пользователя
 
           // authorized
-          editUser:           '/users',                           // [PUT] - изменение данных пользователя
-          changeUserPassword: '/users/changePassword',            // [PUT] - изменение пароля
-          deleteUser:         '/users',                           // [DELETE] - удаление пользователя
+          // editUserByUser:           '/users',                           // [PUT] - изменение данных пользователя
+          // changePasswordByUser: '/users/changePassword',            // [PUT] - изменение пароля
+          // deleteUserByUser:         '/users',                           // [DELETE] - удаление пользователя
 
           // by admin
-          getProtectedInfo:   '/admin/users/{userIdOrAliasId}',   // [GET] - получение частисных данных пользователя (телефон, почта и так далее). **Нужна роль 'protector'**
-          editUserByAdmin:    '/admin/users/{userId}',            // [PUT] - изменение данных пользователя админом
-          deleteUserByAdmin:  '/admin/users/{userId}',            // [DELETE] - удаление пользователя админом
-          deleteAllByAdmin:   '/admin/users/all'                  // [DELETE] - удаление всех пользователей админом
+          findUsers:          '/admin/realms/{realm}/users', // [GET]
+          userSignup:         '/admin/realms/{realm}/users', // [POST]
+          loadUser:           '/admin/realms/{realm}/users/{userId}',   // [GET] - получение частисных данных пользователя (телефон, почта и так далее). **Нужна роль 'protector'**
+          editUser:           '/admin/realms/{realm}/users/{userId}',            // [PUT] - изменение данных пользователя админом
+          deleteUser:         '/admin/realms/{realm}/users/{userId}',            // [DELETE] - удаление пользователя админом
+
+          revokeTokens:       '/admin/realms/{realm}/users/{userId}/consents/{clientId}',                          // удаление токенов доступа, при краже или смене пароля
+          // force logout:   POST /{realm}/users/{id}/logout
+          // sendForgotPasswordEmail:         '/forgot', // PUT /{realm}/users/{id}/send-verify-email
+          resetPassword:      '/admin/realms/{realm}/users/{userId}/reset-password'  // PUT /{realm}/users/{id}/reset-password
         }
       },
 
@@ -551,11 +546,11 @@ module.exports = {
     // ======================================================
     endpointServices: {
       // ======================================================
-      // AUTH Services - front-core-auth server
+      // AUTH Services - KEYCLOAK
       // ======================================================
       serviceAuth: createEndpointServiceConfig({
         protocol: 'https',
-        port: 1338,
+        port: 443,
         endpoint: 'auth',
         requestOptions: {
           // игнорировать, что сертификат не подписан
@@ -564,8 +559,8 @@ module.exports = {
       }),
       serviceUsers: createEndpointServiceConfig({
         protocol: 'https',
-        port: 1338,
-        endpoint: 'api',
+        port: 443,
+        endpoint: 'auth',
         requestOptions: {
           // игнорировать, что сертификат не подписан
           rejectUnauthorized: false

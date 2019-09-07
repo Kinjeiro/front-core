@@ -6,14 +6,48 @@ import logger from '../../../../common/helpers/client-logger';
 
 export const API_PREFIX = 'users';
 export const API_CONFIGS = {
-  editUser: api(`${API_PREFIX}/`, 'PUT'),
-  deleteUser: api(`${API_PREFIX}/`, 'DELETE'),
+  signup: api(`${API_PREFIX}/signup`, 'POST'),
+  forgot: api(`${API_PREFIX}/forgot`, 'POST'),
+  resetPasswordByUser: api(`${API_PREFIX}/resetPasswordByUser`, 'POST'),
+
+  editUserByUser: api(`${API_PREFIX}/`, 'PUT'),
+  deleteUserByUser: api(`${API_PREFIX}/`, 'DELETE'),
   changePassword: api(`${API_PREFIX}/changePassword`, 'PUT'),
 
   checkUnique: api(`${API_PREFIX}/checkUnique`, 'GET'),
   avatar: api(`${API_PREFIX}/avatar/{userIdOrAliasId}`, 'GET'),
   getPublicInfo: api(`${API_PREFIX}/public/{userIdOrAliasId}`, 'GET'),
 };
+
+export function apiSignup(userData) {
+  return sendApiRequest(API_CONFIGS.signup, userData, { isAuth: true });
+}
+export function apiForgotPassword(email, resetPasswordPageUrl, emailOptions) {
+  return sendApiRequest(
+    API_CONFIGS.forgot,
+    {
+      email,
+      resetPasswordPageUrl,
+      emailOptions,
+    },
+    {
+      isAuth: true,
+    },
+  );
+}
+export function apiResetPassword(resetPasswordToken, newPassword, successEmailOptions) {
+  return sendApiRequest(
+    API_CONFIGS.resetPasswordByUser,
+    {
+      resetPasswordToken,
+      newPassword,
+      successEmailOptions,
+    },
+    {
+      isAuth: true,
+    },
+  );
+}
 
 /**
  * синхронный метод, дает только урл, по которому вернется картинка
@@ -26,7 +60,7 @@ export function apiGetUserAvatarUrl(userIdOrAliasId, key = null) {
   ${key ? `?key=${encodeURI(key)}` : ''}`;
 }
 export function apiEditUser(userData) {
-  return sendApiRequest(API_CONFIGS.editUser, userData);
+  return sendApiRequest(API_CONFIGS.editUserByUser, userData);
 }
 export async function apiChangeUserAvatar(file) {
   return new Promise((resolve, reject) => {
@@ -74,13 +108,5 @@ export function apiGetPublicInfo(userIdOrAliasId) {
   return sendApiRequest(API_CONFIGS.getPublicInfo, { userIdOrAliasId });
 }
 export function apiDeleteUser() {
-  return sendApiRequest(API_CONFIGS.deleteUser);
+  return sendApiRequest(API_CONFIGS.deleteUserByUser);
 }
-
-export default {
-  apiGetUserAvatarUrl,
-
-  apiEditUser,
-  apiChangeUserPassword,
-  apiDeleteUser,
-};

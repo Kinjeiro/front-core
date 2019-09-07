@@ -3,7 +3,7 @@ import pick from 'lodash/pick';
 
 import {
   objectValues,
-  merge,
+  merge, getRandomInt, generateId,
 } from '../../../../../common/utils/common';
 import {
   PUBLIC_USER_INFO_PROP_TYPE_MAP,
@@ -22,8 +22,8 @@ export const PUBLIC_TO_ALL_ATTRS = Object.keys(PUBLIC_USER_INFO_PROP_TYPE_MAP);
 export const PROTECTED_ATTRS = Object.keys(PROTECTED_USER_INFO_PROP_TYPE_MAP);
 
 export default class ServiceMockUsers extends ServiceUsers {
-  async editUser(newData) {
-    logger.debug('ServiceMockUsers', 'editUser');
+  async editUserByUser(newData) {
+    logger.debug('ServiceMockUsers', 'editUserByUser');
     const serviceAuth = this.getService('serviceAuth');
     const user = await serviceAuth.authValidate(this.getUserToken());
     return merge(
@@ -31,8 +31,8 @@ export default class ServiceMockUsers extends ServiceUsers {
       pick(newData, PUBLIC_EDITABLE_ATTRS),
     );
   }
-  async changeUserPassword(newPassword, oldPassword) {
-    logger.debug('ServiceMockUsers', 'changeUserPassword');
+  async changePasswordByUser(newPassword, oldPassword) {
+    logger.debug('ServiceMockUsers', 'changePasswordByUser');
     const serviceAuth = this.getService('serviceAuth');
     const user = await serviceAuth.authValidate(this.getUserToken());
     if (user.password === oldPassword) {
@@ -55,8 +55,8 @@ export default class ServiceMockUsers extends ServiceUsers {
     };
   }
 
-  async deleteUser() {
-    logger.debug('ServiceMockUsers', 'deleteUser');
+  async deleteUserByUser() {
+    logger.debug('ServiceMockUsers', 'deleteUserByUser');
     const user = await this.getService('serviceAuth').authValidate(this.getUserToken());
     delete this.getService('serviceAuth').getUsers()[user.username];
   }
@@ -86,16 +86,55 @@ export default class ServiceMockUsers extends ServiceUsers {
   }
 
 
-  async editUserByAdmin(userId, userData) {
-    logger.log('ServiceMockUsers', 'editUserByAdmin', userId);
+  async loadUser(userId, userData) {
+    logger.log('ServiceMockUsers', 'loadUser', userId);
     throw new Error('Not implemented');
   }
-  async deleteUserByAdmin(userId) {
-    logger.log('ServiceMockUsers', 'deleteUserByAdmin', userId);
+  async editUser(userId, userData) {
+    logger.log('ServiceMockUsers', 'editUser', userId);
     throw new Error('Not implemented');
   }
-  async deleteAllByAdmin() {
-    logger.log('ServiceMockUsers', 'deleteAllByAdmin');
+  async deleteUser(userId) {
+    logger.log('ServiceMockUsers', 'deleteUser', userId);
+    throw new Error('Not implemented');
+  }
+
+
+
+  async userSignup(userData) {
+    // eslint-disable-next-line no-param-reassign
+    const userDataFinal = {
+      userId: `${getRandomInt()}`,
+      ...userData,
+    };
+    logger.log('ServiceAuthMock', 'userSignup', userDataFinal);
+    this.getUsers()[userDataFinal.userId] = userDataFinal;
+    this.getTokens()[userDataFinal.userId] = generateId();
+    return userDataFinal;
+  }
+  /**
+   * Протокол для @reagentum/auth-server@1.0.4
+   *
+   * @param email
+   * @param resetPasswordPageUrl
+   * @param emailOptions
+   * @return {*}
+   */
+  async sendForgotPasswordEmail(email, resetPasswordPageUrl, emailOptions) {
+    logger.log('ServiceAuthMock', 'sendForgotPasswordEmail', email);
+    throw new Error('Not implemented');
+  }
+
+  /**
+   * Протокол для @reagentum/auth-server@1.0.4
+   *
+   * @param resetPasswordToken
+   * @param newPassword
+   * @param emailOptions
+   * @return {Promise.<*>}
+   */
+  async resetPasswordByUser(resetPasswordToken, newPassword, emailOptions) {
+    logger.log('ServiceAuthMock', 'resetPasswordByUser', resetPasswordToken);
     throw new Error('Not implemented');
   }
 }

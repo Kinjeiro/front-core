@@ -17,7 +17,7 @@ export default [
       } = userData;
       logger.debug('mockDb: ', userData);
 
-      if (pass === serverConfig.server.features.auth.protectorUser.password) {
+      if (pass === serverConfig.server.features.auth.applicationClientInfo.client_secret) {
         return MOCK_DBS;
       }
       // todo @ANKU @LOW - @@loc

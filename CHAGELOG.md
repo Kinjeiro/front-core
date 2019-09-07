@@ -21,8 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### !!! Breaking changes:
 1. Коррекция реализации протокол oauth2.0 (на примере openconnect: urlencoded, basic для client_secret, post для валидации)
 добавились настройки ```server.features.auth.oauth2Urls``` - мапа в которой нужно указать пути до апи
+Убрал несколько методов из serviceAuth в serviceUsers - добавил методы сброса паролей
 
-Старый коровский авторизационный сервер ```auth-server@2.2.1``` больше не поддерживается. Нужна обновленная версия
+Старый коровский авторизационный сервер ```auth-server@2.2.1``` больше не поддерживается. 
+Теперь по умолчанию используется Keycloak
 
 2. ThrowableUniError теперь у себя в теле содержит uni-error а не отдельно переменной uniError
 
@@ -658,7 +660,7 @@ import { getUserAvatarUrl } from '@reagentum/front-core/lib/common/app-redux/red
     - feat(cb, user, avatar): - UserAvatar компонент
     - chore(*) patch version: 1.4.25
     - !!! feat(api, users): - profileImageURI теперь явно не передается в userInfo нужно использовать getUserAvatarUrl
-		\\ usersService, ServiceUsers - editUser, deleteUser, getAvatar, getPublicInfo, getProtectedInfo
+		\\ usersService, ServiceUsers - editUserByUser, deleteUserByUser, getAvatar, getPublicInfo, getProtectedInfo
 		\\ синхронизация с протколом auth-server@1.1.1
 		\\ добавил mime@2.3.1
     - feat(utils): image-utils::ImageTools::resize

@@ -4,7 +4,6 @@ import sendApiRequest from '../../../../common/utils/send-api-request';
 
 export const API_PREFIX = 'auth';
 export const API_CONFIGS = {
-  signup: api(`${API_PREFIX}/signup`, 'POST'),
   login: api(`${API_PREFIX}/login`, 'POST'),
 
   // todo @ANKU @CRIT @MAIN - сделать отдельный один метод с название провайдера
@@ -14,13 +13,8 @@ export const API_CONFIGS = {
 
   refreshLogin: api(`${API_PREFIX}/refreshLogin`),
   logout: api(`${API_PREFIX}/logout`),
-  forgot: api(`${API_PREFIX}/forgot`, 'POST'),
-  resetPassword: api(`${API_PREFIX}/resetPassword`, 'POST'),
 };
 
-export function apiSignup(userData) {
-  return sendApiRequest(API_CONFIGS.signup, userData, { isAuth: true });
-}
 export function apiLogin(username, password) {
   return sendApiRequest(
     API_CONFIGS.login,
@@ -44,39 +38,3 @@ export function apiRefreshLogin() {
 export function apiLogout() {
   return sendApiRequest(API_CONFIGS.logout, undefined, { isAuth: true });
 }
-
-export function apiForgotPassword(email, resetPasswordPageUrl, emailOptions) {
-  return sendApiRequest(
-    API_CONFIGS.forgot,
-    {
-      email,
-      resetPasswordPageUrl,
-      emailOptions,
-    },
-    {
-      isAuth: true,
-    },
-  );
-}
-export function apiResetPassword(resetPasswordToken, newPassword, successEmailOptions) {
-  return sendApiRequest(
-    API_CONFIGS.resetPassword,
-    {
-      resetPasswordToken,
-      newPassword,
-      successEmailOptions,
-    },
-    {
-      isAuth: true,
-    },
-  );
-}
-
-export default {
-  apiSignup,
-  apiLogin,
-  apiRefreshLogin,
-  apiLogout,
-  apiForgotPassword,
-  apiResetPassword,
-};

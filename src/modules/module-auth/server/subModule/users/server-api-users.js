@@ -1,11 +1,106 @@
+import serverConfig from '../../../../../server/server-config';
+
 /* eslint-disable camelcase */
 import apiPluginFactory from '../../../../../server/utils/api-plugin-factory';
 import logger from '../../../../../server/helpers/server-logger';
 
 import { API_CONFIGS } from '../../../common/subModule/api-users';
+import { login } from '../auth/server-api-auth';
 
 export default function createApiPlugins() {
-  return [
+  const plugins = [];
+
+  if (serverConfig.common.features.auth.allowSignup) {
+    plugins.push(
+      apiPluginFactory(
+        API_CONFIGS.signup,
+        async (requestData, request, reply) => {
+          const { username, password } = requestData;
+          const {
+            services: {
+              serviceAuth,
+              serviceUsers,
+            },
+          } = request;
+
+          logger.log('SIGNUP: ', username);
+          await serviceUsers.userSignup(requestData);
+
+          logger.log('-- done. Now login');
+          return login(username, password, serviceAuth, reply);
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+
+  if (serverConfig.common.features.auth.allowResetPasswordByEmail) {
+    plugins.push(
+      apiPluginFactory(
+        API_CONFIGS.forgot,
+        async (requestData, request, reply) => {
+          const { email, resetPasswordPageUrl, emailOptions } = requestData;
+          logger.log('[FORGOT PASSWORD]', email);
+          await request.services.serviceUsers.sendForgotPasswordEmail(
+            email,
+            resetPasswordPageUrl,
+            emailOptions,
+          );
+          return reply();
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+
+      apiPluginFactory(
+        API_CONFIGS.resetPasswordByUser,
+        async (requestData, request, reply) => {
+          const { resetPasswordToken, newPassword, emailOptions } = requestData;
+          const {
+            services: {
+              serviceAuth,
+              serviceUsers,
+            },
+          } = request;
+          logger.log('[RESET PASSWORD]');
+          const {
+            username,
+          } = await serviceUsers.resetPasswordByUser(
+            resetPasswordToken,
+            newPassword,
+            emailOptions,
+          );
+
+          logger.log(`-- done for user "${username}". Now login`);
+          return login(
+            username,
+            newPassword,
+            serviceAuth,
+            reply,
+          );
+        },
+        {
+          routeConfig: {
+            // для этого обработчика авторизация не нужна
+            auth: false,
+          },
+        },
+      ),
+    );
+  }
+
+
+
+  plugins.push(
     // ======================================================
     // NO AUTH
     // ======================================================
@@ -53,10 +148,10 @@ export default function createApiPlugins() {
         try {
           result = await request.services.serviceUsers.getAvatar(userIdOrAliasId, key);
         } catch (error) {
-          if (error.uniCode !== 404) {
+          if (error.responseStatusCode !== 404) {
             logger.error(error);
           }
-          return reply().code(error.uniCode);
+          return reply().code(error.responseStatusCode);
         }
 
         const {
@@ -83,18 +178,18 @@ export default function createApiPlugins() {
     // AUTH
     // ======================================================
     apiPluginFactory(
-      API_CONFIGS.editUser,
+      API_CONFIGS.editUserByUser,
       async (userData, request, reply) => {
-        logger.debug('editUser: ', userData);
-        const editedUser = await request.services.serviceUsers.editUser(userData);
+        logger.debug('editUserByUser: ', userData);
+        const editedUser = await request.services.serviceUsers.editUserByUser(userData);
         return reply(editedUser);
       },
     ),
     apiPluginFactory(
-      API_CONFIGS.deleteUser,
+      API_CONFIGS.deleteUserByUser,
       async (requestData, request, reply) => {
-        logger.debug('deleteUser');
-        await request.services.serviceUsers.deleteUser();
+        logger.debug('deleteUserByUser');
+        await request.services.serviceUsers.deleteUserByUser();
         return reply();
       },
     ),
@@ -106,8 +201,10 @@ export default function createApiPlugins() {
           newPassword,
           oldPassword,
         } = userData;
-        return reply(request.services.serviceUsers.changeUserPassword(newPassword, oldPassword));
+        return reply(request.services.serviceUsers.changePasswordByUser(newPassword, oldPassword));
       },
     ),
-  ];
+  );
+
+  return plugins;
 }

@@ -20,7 +20,7 @@ import PROVIDERS from './social-providers';
 
 export const API = API_CONFIGS;
 
-async function login(username, password, serviceAuth, reply) {
+export async function login(username, password, serviceAuth, reply) {
   const {
     access_token,
     refresh_token,
@@ -40,28 +40,6 @@ async function login(username, password, serviceAuth, reply) {
 
 export default function createApiPlugins() {
   const plugins = [];
-
-  if (serverConfig.common.features.auth.allowSignup) {
-    plugins.push(
-      apiPluginFactory(
-        API.signup,
-        async (requestData, request, reply) => {
-          const { username, password } = requestData;
-          logger.log('SIGNUP: ', username);
-          await request.services.serviceAuth.authSignup(requestData);
-
-          logger.log('-- done. Now login');
-          return login(username, password, request.services.serviceAuth, reply);
-        },
-        {
-          routeConfig: {
-            // для этого обработчика авторизация не нужна
-            auth: false,
-          },
-        },
-      ),
-    );
-  }
 
   if (serverConfig.common.features.auth.socialProvides.google) {
     // todo @ANKU @LOW - может сделать один метод апи просто пас параметр провайдера сделать
@@ -177,59 +155,6 @@ export default function createApiPlugins() {
       },
     ),
   );
-
-  if (serverConfig.common.features.auth.allowResetPasswordByEmail) {
-    plugins.push(
-      apiPluginFactory(
-        API.forgot,
-        async (requestData, request, reply) => {
-          const { email, resetPasswordPageUrl, emailOptions } = requestData;
-          logger.log('[FORGOT PASSWORD]', email);
-          await request.services.serviceAuth.authForgot(
-            email,
-            resetPasswordPageUrl,
-            emailOptions,
-          );
-          return reply();
-        },
-        {
-          routeConfig: {
-            // для этого обработчика авторизация не нужна
-            auth: false,
-          },
-        },
-      ),
-
-      apiPluginFactory(
-        API.resetPassword,
-        async (requestData, request, reply) => {
-          const { resetPasswordToken, newPassword, emailOptions } = requestData;
-          logger.log('[RESET PASSWORD]');
-          const {
-            username,
-          } = await request.services.serviceAuth.authResetPassword(
-            resetPasswordToken,
-            newPassword,
-            emailOptions,
-          );
-
-          logger.log(`-- done for user "${username}". Now login`);
-          return login(
-            username,
-            newPassword,
-            request.services.serviceAuth,
-            reply,
-          );
-        },
-        {
-          routeConfig: {
-            // для этого обработчика авторизация не нужна
-            auth: false,
-          },
-        },
-      ),
-    );
-  }
 
   return plugins;
 }

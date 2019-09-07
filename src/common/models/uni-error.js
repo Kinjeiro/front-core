@@ -157,8 +157,7 @@ export function createUniError(uniErrorData = {}) {
 
   uniError.uniCode = uniError.errorCode || uniError.responseStatusCode;
 
-  uniError.uniMessage =
-    (uniError.clientErrorMessages && uniError.clientErrorMessages[0])
+  uniError.uniMessage = (uniError.clientErrorMessages && uniError.clientErrorMessages[0])
     || uniError.clientErrorMessage
     || uniError.clientErrorTitle
     || uniError.message
@@ -171,7 +170,7 @@ export function createUniError(uniErrorData = {}) {
     || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode)
     || (uniError.uniMessage && uniError.uniMessage.indexOf('connect ECONNREFUSED') === 0);
 
-  uniError.isNotAuth = uniError.isNotAuth || uniError.uniCode === 401;
+  uniError.isNotAuth = uniError.isNotAuth || uniError.responseStatusCode === 401;
 
   uniError.stack = (uniError.originalObject && uniError.originalObject.stack)
     || uniError.stack

@@ -16,8 +16,31 @@ const {
 module.exports = {
   common: {
     features: {
-      // todo @ANKU @CRIT @MAIN - отключили временно авторизацию
       // auth: false,
+      auth: {
+        /**
+         * чаше всего необходимо для открытых систем, а для enterprise обычно не надо
+         */
+        allowSignup: true,
+        aliasIdAsUsername: true,
+
+        mockUsers: {
+          ivanovIUserId: '8fHHbu8SMf',
+          korolevaUUserId: 'HmsLfHcrcv'
+        },
+        socialProvides: {
+          google: true,
+          vkontakte: true,
+          facebook: true
+        },
+
+        paths: {
+          afterSignin: '/stub'
+        }
+      }
+      // preLoader: {
+      //   autoClose: 30000
+      // }
     }
   },
   server: {
@@ -34,7 +57,54 @@ module.exports = {
       mocking: {
         // authMock: false
         authMock: true
+      },
+
+      auth: {
+        realm: 'front-core',
+
+        // Настройки для аутентификации клиента в keyclock
+        // http://185.22.63.233:8080/auth/admin/master/console/#/realms/exporter/clients/5c08dfc5-2c1e-4396-9071-1da98b95796e/credentials
+        applicationClientInfo: {
+          client_id: 'front-core',
+          client_secret: '601f22c2-7c6d-40a7-8101-02df63033222'
+        }
+      },
+
+      attachments: {
+        /**
+         * accessPublic - все у кого есть ссылка
+         * accessAuth - только авторизованные пользователи
+         * accessOwnerOnly - только тот, кто создал (ну и админ ;))
+         * <permission> - пермишен специальный
+         */
+        defaultAccess: 'accessPublic'
       }
+    },
+
+    endpointServices: {
+      // ======================================================
+      // AUTH Services - keycloak
+      // ======================================================
+      serviceAuth: createEndpointServiceConfig({
+        protocol: 'https',
+        host: '185.22.63.233',
+        port: 443,
+        endpoint: 'auth',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
+      }),
+      serviceUsers: createEndpointServiceConfig({
+        protocol: 'https',
+        host: '185.22.63.233',
+        port: 443,
+        endpoint: 'auth',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
+      })
     }
   }
 };
