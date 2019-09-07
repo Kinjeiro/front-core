@@ -127,7 +127,7 @@ export function getBindActions({
           payload: apiLogout()
             // нужно до USER_LOGOUT_SUCCESS дернуть чтобы компоненты уже ЗААНМАУНТИЛИСЬ и пропсы в них не поменялись когда пользователя уже и нет
             .then(() => {
-              if (returnUrl) {
+              if (returnUrl !== false) {
                 dispatch(push(returnUrl || commonConfig.common.features.auth.paths.afterLogout || PATH_MAIN_INDEX));
               }
             }),
