@@ -4,6 +4,7 @@ import {
   ThrowableUniError,
 } from '../../../../../common/models/uni-error';
 import { createUserFromData } from '../../../../../common/models/model-user';
+import logger from '../../../../../server/helpers/server-logger';
 
 import {
   AUTH_TYPES,
@@ -29,6 +30,10 @@ export const GRANT_TYPES = {
   CLIENT_CREDENTIALS: 'client_credentials',
   REFRESH_TOKEN: 'refresh_token',
 };
+
+// SINGLETON
+let clientAuthData = null;
+let clientAuthDataExpire = null;
 
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
@@ -322,6 +327,7 @@ export default class ServiceAuth extends CoreService {
    "token_type": "Bearer"
    */
   async authLogin(username, password) {
+    logger.debug('ServiceAuth', 'authLogin', username);
     try {
       // https://tools.ietf.org/html/rfc6749#section-4.3.2
       return await this.send(
@@ -365,6 +371,7 @@ export default class ServiceAuth extends CoreService {
    */
   async authRefresh(refreshToken) {
     try {
+      logger.debug('ServiceAuth', 'authRefresh', this.getUserId());
       return await this.send(
         this.urls.authRefresh,
         {
@@ -406,6 +413,7 @@ export default class ServiceAuth extends CoreService {
    }
    */
   async authValidate(token) {
+    // logger.log('ServiceAuth', 'authValidate');
     try {
       // VALIDATE
       // https://connect2id.com/products/server/docs/api/token-introspection#introspection-response
@@ -490,6 +498,7 @@ export default class ServiceAuth extends CoreService {
    */
   async authUserInfo() {
     try {
+      logger.log('ServiceAuth', 'authUserInfo', this.getUserId());
       return this.parseUserFromOpenidData(
         await this.sendWithAuth(
           this.urls.authUserInfo,
@@ -510,6 +519,7 @@ export default class ServiceAuth extends CoreService {
   // LOGOUT
   // ======================================================
   async authLogout(token) {
+    logger.log('ServiceAuth', 'authLogout', this.getUserId());
     try {
       return await this.sendWithAuth(
         this.urls.authSignout,
@@ -542,19 +552,25 @@ export default class ServiceAuth extends CoreService {
    */
   async authClientCredentials(clientCredentials = undefined) {
     try {
-      return await this.send(
-        this.urls.authSignin,
-        {
-          grant_type: GRANT_TYPES.CLIENT_CREDENTIALS,
-        },
-        {
-          method: 'post',
-          headers: {
-            ...this.getClientCredentialsHeaders(clientCredentials),
-            contentType: CONTENT_TYPES.FORM_URLENCODED,
+      if (!clientAuthData || clientAuthDataExpire < Date.now()) {
+        logger.log('ServiceAuth', 'authClientCredentials');
+
+        clientAuthData = await await this.send(
+          this.urls.authSignin,
+          {
+            grant_type: GRANT_TYPES.CLIENT_CREDENTIALS,
           },
-        },
-      );
+          {
+            method: 'post',
+            headers: {
+              ...this.getClientCredentialsHeaders(clientCredentials),
+              contentType: CONTENT_TYPES.FORM_URLENCODED,
+            },
+          },
+        );
+        clientAuthDataExpire = Date.now() + clientAuthData.expires_in * 1000;
+      }
+      return clientAuthData;
     } catch (error) {
       return this.catchAuthError(error);
     }
