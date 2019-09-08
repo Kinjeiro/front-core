@@ -127,8 +127,17 @@ export default function createApiPlugins() {
       API_CONFIGS.getPublicInfo,
       async (userData, request, reply) => {
         logger.debug('getPublicInfo: ', userData);
-        const { userIdOrAliasId } = request.params;
-        return reply(request.services.serviceUsers.getPublicInfo(userIdOrAliasId));
+        const {
+          services: {
+            serviceUsers,
+          },
+          params: {
+            userIdOrAliasId,
+          },
+        } = request;
+        return reply(
+          serviceUsers.getPublicInfo(userIdOrAliasId),
+        );
       },
       {
         routeConfig: {

@@ -63,6 +63,10 @@ export default class CoreService {
   getUser() {
     return this.getRequest()[REQUEST_FIELD__USER];
   }
+  getUserId() {
+    const user = this.getUser();
+    return user ? user.userId : undefined;
+  }
   getUserToken() {
     return this.getRequest()[REQUEST_FIELD__USER_TOKEN];
   }

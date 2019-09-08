@@ -1,4 +1,6 @@
 /* eslint-disable lines-between-class-members */
+import pick from 'lodash/pick';
+
 import logger from '../../../../../server/helpers/server-logger';
 import serverConfig from '../../../../../server/server-config';
 
@@ -30,7 +32,15 @@ export default class ServiceUsers extends CoreService {
     return user;
   }
   parseToPublicUserInfo(user) {
-    return {};
+    return pick(user, 'username');
+  }
+
+  isUserId(userId) {
+    /*
+      296b6d56-84c0-41fa-bca3-dd3ae6233a25
+      8297b9f4-83e9-47bd-b4e9-729cf315466d
+    */
+    return /^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/gi.test(userId);
   }
 
   // ======================================================
@@ -74,8 +84,8 @@ export default class ServiceUsers extends CoreService {
 
   async getPublicInfo(userIdOrAliasId) {
     logger.log('ServiceUsers', 'getPublicInfo', userIdOrAliasId);
-    const user = await this.loadUser(userIdOrAliasId);
-    return this.parseToPublicUserInfo(user);
+    const user = await this.findUser(userIdOrAliasId);
+    return user && this.parseToPublicUserInfo(user);
   }
 
   /**
@@ -189,12 +199,48 @@ export default class ServiceUsers extends CoreService {
   // ======================================================
   // BY ADMIN
   // ======================================================
-  async findUsers(userId) {
-    logger.log('ServiceUsers', 'getProtectedInfo', userId);
+  /**
+   * Query
+
+    briefRepresentation   optional  boolean
+    email                 optional string
+    first                 optional integer(int32)
+    firstName             optional string
+    lastName              optional string
+    max                   optional Maximum results size (defaults to 100) integer(int32)
+    search                optional A String contained in username, first or last name, or email string
+    username              optional string
+
+   * @param query
+   * @return {Promise<*>}
+   */
+  async findUsers(query) {
+    logger.log('ServiceUsers', 'getProtectedInfo', query);
+
     return this.sendWithClientCredentials(
       this.urls.findUsers,
+      query,
     );
   }
+  async findUser(userIdOrUsername) {
+    let resultUser = null;
+    if (this.isUserId(userIdOrUsername)) {
+      try {
+        resultUser = await this.loadUser(userIdOrUsername);
+      } catch (error) {
+        logger.log(`UserId ${userIdOrUsername} not found - search by username`);
+      }
+    } else {
+      const result = await this.findUsers({
+        username: userIdOrUsername.toLowerCase(),
+        max: 1,
+      });
+      resultUser = result[0];
+      // todo @ANKU @LOW @BUG_OUT - Keycloak не умеет искать по кастомным аттрибутам - https://issues.jboss.org/browse/KEYCLOAK-2343
+    }
+    return resultUser;
+  }
+
   async userSignup(userData) {
     const {
       password,
@@ -285,8 +331,8 @@ export default class ServiceUsers extends CoreService {
    */
   async getProtectedInfo(userIdOrAliasId) {
     logger.log('ServiceUsers', 'getProtectedInfo', userIdOrAliasId);
-    const user = await this.loadUser(userIdOrAliasId);
-    return this.parseToProtectedUserInfo(user);
+    const user = await this.findUser(userIdOrAliasId);
+    return user && this.parseToProtectedUserInfo(user);
   }
 
   async revokeTokens(userId) {
