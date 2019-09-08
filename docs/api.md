@@ -175,14 +175,14 @@
 -   [actionChangeUser][171]
 -   [ServiceAuth][172]
     -   [authClientCredentials][173]
-    -   [authForgot][174]
-    -   [authResetPassword][175]
--   [ServiceAuthMock][176]
-    -   [authForgot][177]
-    -   [authResetPassword][178]
--   [remoteJwt][179]
--   [getProtectedInfoByToken][180]
--   [getProtectedInfo][181]
+-   [ServiceAuthMock][174]
+-   [remoteJwt][175]
+-   [resetPasswordByUser][176]
+-   [sendForgotPasswordEmail][177]
+-   [findUsers][178]
+-   [getProtectedInfo][179]
+-   [sendForgotPasswordEmail][180]
+-   [resetPasswordByUser][181]
 -   [SUB_MODULE_FACTORY][182]
     -   [COMMON_SUB_MODULE_REGEXP][183]
     -   [loadSubModules][184]
@@ -230,8 +230,8 @@
 -   [downloadFile][226]
 -   [dirnameNormalize][227]
 -   [inModules][228]
--   [applicationId][229]
--   [sendSimpleRequest][230]
+-   [sendSimpleRequest][229]
+-   [getEndpointServiceUrl][230]
 -   [sendEndpointMethodRequest][231]
 -   [factoryEndpointServiceMethodRequest][232]
 -   [proceedRequest][233]
@@ -1943,30 +1943,6 @@ clientCredentials { client_id, client_secret }
 
 -   `clientCredentials`   (optional, default `undefined`)
 
-### authForgot
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `email`  
--   `resetPasswordPageUrl`  
--   `emailOptions`  
-
-Returns **any** 
-
-### authResetPassword
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `resetPasswordToken`  
--   `newPassword`  
--   `emailOptions`  
-
-Returns **[Promise][240]&lt;any>** 
-
 ## ServiceAuthMock
 
 **Extends ServiceAuth**
@@ -1979,30 +1955,6 @@ Returns **[Promise][240]&lt;any>**
 
 Returns **{authValidate, authLogin}** 
 
-### authForgot
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `email`  
--   `resetPasswordPageUrl`  
--   `emailOptions`  
-
-Returns **any** 
-
-### authResetPassword
-
-Протокол для @reagentum/auth-server@1.0.4
-
-**Parameters**
-
--   `resetPasswordToken`  
--   `newPassword`  
--   `emailOptions`  
-
-Returns **[Promise][240]&lt;any>** 
-
 ## remoteJwt
 
 token - это токен сотрудника банка
@@ -2014,22 +1966,78 @@ token - это токен сотрудника банка
 
 Returns **{authenticate: authenticate}** 
 
-## getProtectedInfoByToken
+## resetPasswordByUser
 
 **Parameters**
 
--   `userIdOrAliasId`  
--   `token`  нужен пользователь с ролью 'protector'
+-   `resetPasswordToken`  
+-   `newPassword`  
+-   `emailOptions`  
+
+Returns **[Promise][240]&lt;any>** 
+
+## sendForgotPasswordEmail
+
+**Parameters**
+
+-   `email`  
+-   `resetPasswordPageUrl`  
+-   `emailOptions`  
 
 Returns **any** 
 
+## findUsers
+
+Query
+
+briefRepresentation   optional  boolean
+email                 optional string
+first                 optional integer(int32)
+firstName             optional string
+lastName              optional string
+max                   optional Maximum results size (defaults to 100) integer(int32)
+search                optional A String contained in username, first or last name, or email string
+username              optional string
+
+**Parameters**
+
+-   `query`  
+
+Returns **[Promise][240]&lt;any>** 
+
 ## getProtectedInfo
+
+Информация которая загружается на клиент о пользователе (без системной инфы)
 
 **Parameters**
 
 -   `userIdOrAliasId`  
 
 Returns **[Promise][240]&lt;\[`"userId"`, `"displayName"`, `"aliasId"`, `"description"`, `"username"`, `"firstName"`, `"lastName"`, `"middleName"`, `"email"`, `"phone"`, `"address"`]>** 
+
+## sendForgotPasswordEmail
+
+Протокол для @reagentum/auth-server@1.0.4
+
+**Parameters**
+
+-   `email`  
+-   `resetPasswordPageUrl`  
+-   `emailOptions`  
+
+Returns **any** 
+
+## resetPasswordByUser
+
+Протокол для @reagentum/auth-server@1.0.4
+
+**Parameters**
+
+-   `resetPasswordToken`  
+-   `newPassword`  
+-   `emailOptions`  
+
+Returns **[Promise][240]&lt;any>** 
 
 ## SUB_MODULE_FACTORY
 
@@ -2488,13 +2496,6 @@ Returns **[string][234]**
 
 Returns **[Array][237]** 
 
-## applicationId
-
-**Meta**
-
--   **deprecated**: use projectId
-
-
 ## sendSimpleRequest
 
 **Parameters**
@@ -2505,6 +2506,17 @@ Returns **[Array][237]**
     encoding: null,
 
 Returns **[Promise][240]** 
+
+## getEndpointServiceUrl
+
+**Parameters**
+
+-   `endpointServiceConfig`  
+-   `serviceMethodPath`  
+-   `data`  если потребуется возьмутся для pathParams
+-   `additionalPathParams`  сначала из них возьмутся
+
+Returns **any** 
 
 ## sendEndpointMethodRequest
 
@@ -2905,21 +2917,21 @@ Returns **any** Promise
 
 [173]: #authclientcredentials
 
-[174]: #authforgot
+[174]: #serviceauthmock
 
-[175]: #authresetpassword
+[175]: #remotejwt
 
-[176]: #serviceauthmock
+[176]: #resetpasswordbyuser
 
-[177]: #authforgot-1
+[177]: #sendforgotpasswordemail
 
-[178]: #authresetpassword-1
+[178]: #findusers
 
-[179]: #remotejwt
+[179]: #getprotectedinfo
 
-[180]: #getprotectedinfobytoken
+[180]: #sendforgotpasswordemail-1
 
-[181]: #getprotectedinfo
+[181]: #resetpasswordbyuser-1
 
 [182]: #sub_module_factory
 
@@ -3015,9 +3027,9 @@ Returns **any** Promise
 
 [228]: #inmodules
 
-[229]: #applicationid
+[229]: #sendsimplerequest
 
-[230]: #sendsimplerequest
+[230]: #getendpointserviceurl
 
 [231]: #sendendpointmethodrequest
 
