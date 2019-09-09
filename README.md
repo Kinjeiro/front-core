@@ -131,8 +131,28 @@ ___Front Core (FC) - в проектах должен быть только пр
 ## Описание структуры Front Core
 TODO
 
+
+## Настройка
+
+### Версия NODE 9!! (не node 10)
+
+### Если не компилится node-gyp
+- установить для винды `npm install -g windows-build-tools`
+- нужен Python 2 (второй, а не третье) версии
+
 ## Troubleshooting
-TODO
+
+### Cannot find module 'config'
+- Удалить `./node_modules/@reagentum/front-core/node_modules`
+- Удалить `./node_modules/config`
+- Добавить в проектные dependencies package.json: 
+    `"config": "github:kinjeiro/node-config",`
+- Сделать `npm i`
+(наша ветка библиотеки config конфликтует с офф версией)
+
+### Удалить node_modules
+- и заново сделать `npm i`
+
 
 ## Поддержка
 IE 11+
