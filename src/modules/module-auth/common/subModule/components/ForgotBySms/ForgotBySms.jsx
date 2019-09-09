@@ -320,7 +320,7 @@ export default class ForgotBySms extends Component {
     } = this.state;
 
     return (
-      <div className="Reset">
+      <div className="ForgotBySms">
         <div className="ui two column basic stackable grid container">
           <div className="row">
             <div className="six wide column left" />
@@ -329,10 +329,11 @@ export default class ForgotBySms extends Component {
                 Смена пароля
               </h2>
 
-              { this.renderPhoneBlock() }
-              { isPhoneConfirm && this.renderSmsBlock() }
-              { isPhoneConfirm && this.renderNewPassword() }
-
+              <div className="ui form">
+                { this.renderPhoneBlock() }
+                { isPhoneConfirm && this.renderSmsBlock() }
+                { isPhoneConfirm && this.renderNewPassword() }
+              </div>
             </div>
           </div>
         </div>
