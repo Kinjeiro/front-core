@@ -32,10 +32,6 @@ module.exports = {
           google: true,
           vkontakte: true,
           facebook: true
-        },
-
-        paths: {
-          afterSignin: '/stub'
         }
       }
       // preLoader: {
