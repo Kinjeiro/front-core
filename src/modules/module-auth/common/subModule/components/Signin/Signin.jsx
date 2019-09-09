@@ -19,22 +19,24 @@ import { SUB_TYPES } from '../../../../../../common/models/model-field';
 // ======================================================
 import { API_CONFIGS } from '../../api-auth';
 import { getUserInfo } from '../../redux-selectors';
+import MODULE_NAME from '../../module-name';
 import * as reduxUserInfo from '../../redux-user-info';
 
 import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 
-import './Signin.scss';
 import getComponents from '../../get-components';
 
 const {
-  Link,
+  ModuleLink,
   Form,
   Button,
   FbAuthIcon,
   GoogleAuthIcon,
   VKAuthIcon,
 } = getComponents();
+
+require('./Signin.scss');
 
 export const PAGE_ID = 'Signin';
 
@@ -253,11 +255,17 @@ export default class Signin extends Component {
         onCancel={ onModalCancel }
         textActionCancel={ i18n('pages.SigninPage.loginCancelButton') }
         postActions={
-          clientConfig.common.features.auth.allowResetPasswordByEmail && (
+          (
+            clientConfig.common.features.auth.allowResetPasswordByEmail
+            || clientConfig.common.features.auth.allowResetPasswordBySms
+          ) && (
             <div className={ this.bem('forgotPassword') }>
-              <Link to={ paths.PATH_AUTH_FORGOT }>
+              <ModuleLink
+                moduleName={ MODULE_NAME }
+                modulePath={ paths.PATH_AUTH_FORGOT }
+              >
                 {i18n('pages.SigninPage.forgotPassword')}
-              </Link>
+              </ModuleLink>
             </div>
           )
         }

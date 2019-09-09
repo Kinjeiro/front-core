@@ -114,9 +114,9 @@ export function generatePassword(initialPasswordLength = MIN_PASSWORD_LENGTH) {
 }
 
 // (?=n) - необходима любая строка, после которой следует n (пример: (?=.*[A-Z]) - в стринге должна быть хотя одна заглавная буква)
-// Допустимые символы: латинские буквы, цифры, спецсимволы. Не менее 8 символов, минимум 1 строчная, 1 заглавная, 1 спецсимвол или 1 цифра.
-export const PASSWORD_REGEXP = /^((?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*#?&~^\\d])[A-Za-z\\d@$!%*#?&^~]{8,})?$/;
-
+// Допустимые символы: латинские буквы, цифры, спецсимволы.
+// Не менее 8 символов, минимум 1 строчная, 1 заглавная, 1 спецсимвол или 1 цифра.
+export const REGEXP_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*#?&~^\d])[A-Za-z\d@$!%*#?&^~]{8,}$/;
 
 export function getRandomInt(minValue = 0, maxValue = Number.MAX_VALUE) {
   return Math.floor(Math.random() * ((maxValue - minValue) + 1)) + minValue;
@@ -673,4 +673,8 @@ export function emitProcessing(handlerPromise, componentWithSetState, processing
     );
   }
   return handlerPromise;
+}
+
+export function isEmail(email) {
+  return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(email.toLowerCase());
 }

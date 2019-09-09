@@ -10,6 +10,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('Signup', () => require('./components/Signup/Signup').default);
   COMPONENTS_BASE.replace('Signin', () => require('./components/Signin/Signin').default);
   COMPONENTS_BASE.replace('Forgot', () => require('./components/Forgot/Forgot').default);
+  COMPONENTS_BASE.replace('ForgotBySms', () => require('./components/ForgotBySms/ForgotBySms').default);
   COMPONENTS_BASE.replace('Reset', () => require('./components/Reset/Reset').default);
   COMPONENTS_BASE.replace('FbAuthIcon', () => require('./components/icons/FbAuthIcon').default);
   COMPONENTS_BASE.replace('GoogleAuthIcon', () => require('./components/icons/GoogleAuthIcon').default);

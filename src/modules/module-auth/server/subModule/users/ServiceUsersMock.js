@@ -61,28 +61,28 @@ export default class ServiceMockUsers extends ServiceUsers {
     delete this.getService('serviceAuth').getUsers()[user.username];
   }
 
-  async getAvatar(userIdOrAliasId, key = undefined) {
-    logger.debug('ServiceMockUsers', 'getAvatar', userIdOrAliasId);
-    const user = this.getService('serviceAuth').getUserInner(userIdOrAliasId);
+  async getAvatar(userIdentify, key = undefined) {
+    logger.debug('ServiceMockUsers', 'getAvatar', userIdentify);
+    const user = this.getService('serviceAuth').getUserInner(userIdentify);
     if (!user || !user.profileImageURI) {
       throw new ThrowableUniError({ errorCode: 404 });
     }
     return base64ToBuffer(user.profileImageURI);
   }
 
-  async getPublicInfo(userIdOrAliasId) {
-    logger.log('ServiceMockUsers', 'getPublicInfo', userIdOrAliasId);
-    return pick(this.getService('serviceAuth').getUserInner(userIdOrAliasId), PUBLIC_TO_ALL_ATTRS);
+  async getPublicInfo(userIdentify) {
+    logger.log('ServiceMockUsers', 'getPublicInfo', userIdentify);
+    return pick(this.getService('serviceAuth').getUserInner(userIdentify), PUBLIC_TO_ALL_ATTRS);
   }
 
-  async getProtectedInfoByToken(userIdOrAliasId, token = this.getUserToken()) {
-    logger.log('ServiceMockUsers', 'getProtectedInfoByToken', userIdOrAliasId);
-    return pick(this.getService('serviceAuth').getUserInner(userIdOrAliasId), PROTECTED_ATTRS);
+  async getProtectedInfoByToken(userIdentify, token = this.getUserToken()) {
+    logger.log('ServiceMockUsers', 'getProtectedInfoByToken', userIdentify);
+    return pick(this.getService('serviceAuth').getUserInner(userIdentify), PROTECTED_ATTRS);
   }
 
-  async getProtectedInfo(userIdOrAliasId) {
-    logger.log('ServiceMockUsers', 'getProtectedInfo', userIdOrAliasId);
-    return this.getProtectedInfoByToken(userIdOrAliasId);
+  async getProtectedInfo(userIdentify) {
+    logger.log('ServiceMockUsers', 'getProtectedInfo', userIdentify);
+    return this.getProtectedInfoByToken(userIdentify);
   }
 
 
@@ -133,8 +133,8 @@ export default class ServiceMockUsers extends ServiceUsers {
    * @param emailOptions
    * @return {Promise.<*>}
    */
-  async resetPasswordByUser(resetPasswordToken, newPassword, emailOptions) {
-    logger.log('ServiceAuthMock', 'resetPasswordByUser', resetPasswordToken);
+  async resetPasswordByEmail(resetPasswordToken, newPassword, emailOptions) {
+    logger.log('ServiceAuthMock', 'resetPasswordByEmail', resetPasswordToken);
     throw new Error('Not implemented');
   }
 }

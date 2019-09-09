@@ -19,6 +19,7 @@ export default function getRoutes(/* moduleRoutePrefix */) {
     // Signup,
     // Signin,
     Forgot,
+    ForgotBySms,
     Reset,
   } = getComponents();
 
@@ -52,6 +53,14 @@ export default function getRoutes(/* moduleRoutePrefix */) {
           <Route
             path={ paths.ROUTES_NAMES.reset }
             component={ Reset }
+          />
+        )
+      }
+      {
+        clientConfig.common.features.auth.allowResetPasswordBySms && (
+          <Route
+            path={ paths.ROUTES_NAMES.forgot }
+            component={ ForgotBySms }
           />
         )
       }

@@ -40,6 +40,8 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('AttachmentItemView', () => require('./components/fields/Attachment/AttachmentItem/AttachmentItemView').default);
   COMPONENTS_BASE.replace('AttachmentItemLayout', () => require('./components/fields/Attachment/AttachmentItem/AttachmentItemLayout').default);
 
+  COMPONENTS_BASE.replace('PhoneInput', () => require('./components/fields/PhoneInput/PhoneInput').default);
+
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;
 }

@@ -1,11 +1,16 @@
 /* eslint-disable lines-between-class-members */
 import pick from 'lodash/pick';
+import omit from 'lodash/omit';
+import { isEmail } from '../../../../../common/utils/common';
 
 import logger from '../../../../../server/helpers/server-logger';
 import serverConfig from '../../../../../server/server-config';
 
 import CoreService from '../../../../../server/services/utils/CoreService';
-import { CONTENT_TYPES } from '../../../../../server/utils/send-server-request';
+import { hashData } from '../../../../../server/utils/server-utils';
+import { USER_REPRESENTATION_FIELDS } from './user-representation';
+
+export const USER_ATTR__VERIFY_TOKEN = 'verifyToken';
 
 export default class ServiceUsers extends CoreService {
   urls = {};
@@ -23,17 +28,88 @@ export default class ServiceUsers extends CoreService {
   // UTILS
   // ======================================================
   serializeUserToStorageData(user) {
-    return this.getService('serviceAuth').serializeUserToStorageData(user);
+    // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_userrepresentation
+    // attributes email
+    // "username":"test1","enabled":true,"firstName":"test1","lastName"
+    const {
+      userId,
+      ...other
+    } = user;
+
+    const serverMainUserData = pick(other, USER_REPRESENTATION_FIELDS);
+    const customUserData = omit(other, USER_REPRESENTATION_FIELDS);
+
+    const serverUserRepresentation = serverMainUserData;
+    if (userId) {
+      serverUserRepresentation.id = userId;
+    }
+    if (Object.keys(customUserData).length > 0) {
+      serverUserRepresentation.attributes = customUserData;
+    }
+
+    // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_userrepresentation
+    return serverUserRepresentation;
   }
-  parseToFullUserInfo(user) {
-    return this.getService('serviceAuth').parseUserFromOpenidData(user);
-  }
-  parseToProtectedUserInfo(user) {
+  parseToFullUserInfo(serverUserData) {
+    /*
+    {
+      id: 'fe8df35e-16eb-4048-ba27-dbed0494e8ea',
+      createdTimestamp: 1567271584548,
+      username: '111',
+      enabled: true,
+      totp: false,
+      emailVerified: false,
+      firstName: '11',
+      lastName: '111',
+      email: '111q@asd.r',
+      attributes:
+       { middleName: [ '11' ],
+         clientId: [ '11' ],
+         position: [ '1' ],
+         phone: [ '+7-111-111-11-11' ] },
+      disableableCredentialTypes: [ 'password' ],
+      requiredActions: [],
+      notBefore: 0,
+      access:
+       { manageGroupMembership: true,
+         view: true,
+         mapRoles: true,
+         impersonate: true,
+         manage: true }
+       }
+    */
+    const {
+      id,
+      attributes,
+      ...other
+    } = serverUserData;
+
+    console.warn('ANKU , JSON.stringify(serverUserData)', JSON.stringify(serverUserData, null, 2));
+
+    // const user = this.getService('serviceAuth').parseUserFromOpenidData(serverUserData);
+    // Object.assign(user, other);
+    const user = {
+      userId: id,
+      ...other,
+    };
+    if (attributes) {
+      Object.keys(attributes).forEach((attribute) => {
+        const value = attributes[attribute];
+        // todo @ANKU @LOW @BUG_OUT @keycloak - почему-то все аттрибуты сохраняются в массиве!
+        user[attribute] = Array.isArray(value) ? value[0] : value;
+      });
+    }
     return user;
   }
-  parseToPublicUserInfo(user) {
+  parseToProtectedUserInfo(serverUserData) {
+    const user = this.parseToFullUserInfo(serverUserData);
+    return omit(user, [USER_ATTR__VERIFY_TOKEN]);
+  }
+  parseToPublicUserInfo(serverUserData) {
+    const user = this.parseToFullUserInfo(serverUserData);
     return pick(user, 'username');
   }
+
 
   isUserId(userId) {
     /*
@@ -59,13 +135,13 @@ export default class ServiceUsers extends CoreService {
     // return !responseData || typeof responseData.result === 'undefined' || responseData.result;
   }
 
-  async getAvatar(userIdOrAliasId, key = undefined) {
-    logger.debug('ServiceUsers', 'getAvatar', userIdOrAliasId, key);
+  async getAvatar(userIdentify, key = undefined) {
+    logger.debug('ServiceUsers', 'getAvatar', userIdentify, key);
     throw new Error('Not implemented');
     // const response = await this.send(
     //   this.urls.getAvatar,
     //   {
-    //     userIdOrAliasId,
+    //     userIdentify,
     //     key,
     //   },
     //   {
@@ -82,41 +158,10 @@ export default class ServiceUsers extends CoreService {
     // };
   }
 
-  async getPublicInfo(userIdOrAliasId) {
-    logger.log('ServiceUsers', 'getPublicInfo', userIdOrAliasId);
-    const user = await this.findUser(userIdOrAliasId);
+  async getPublicInfo(userIdentify) {
+    logger.log('ServiceUsers', 'getPublicInfo', userIdentify);
+    const user = await this.findUser(userIdentify);
     return user && this.parseToPublicUserInfo(user);
-  }
-
-  /**
-   * @param resetPasswordToken
-   * @param newPassword
-   * @param emailOptions
-   * @return {Promise.<*>}
-   */
-  async resetPasswordByUser(resetPasswordToken, newPassword, emailOptions) {
-    // try {
-    //   return await this.send(
-    //     this.urls.resetPasswordByUser,
-    //     {
-    //       resetPasswordToken,
-    //       newPassword,
-    //
-    //       emailOptions,
-    //       // ...this.getClientInfo(),
-    //     },
-    //     {
-    //       method: 'post',
-    //       headers: {
-    //         // todo @ANKU @CRIT @MAIN -
-    //         ...this.getClientCredentialsHeaders(),
-    //       },
-    //     },
-    //   );
-    // } catch (error) {
-    //   return this.catchAuthError(error);
-    // }
-    throw new Error('Not implemented');
   }
 
   /**
@@ -149,9 +194,41 @@ export default class ServiceUsers extends CoreService {
     //   return this.catchAuthError(error);
     // }
     throw new Error('Not implemented');
+  }/**
+   * @param resetPasswordToken
+   * @param newPassword
+   * @param emailOptions
+   * @return {Promise.<*>}
+   */
+  async resetPasswordByEmail(resetPasswordToken, newPassword, emailOptions) {
+    // try {
+    //   return await this.send(
+    //     this.urls.resetPasswordByEmail,
+    //     {
+    //       resetPasswordToken,
+    //       newPassword,
+    //
+    //       emailOptions,
+    //       // ...this.getClientInfo(),
+    //     },
+    //     {
+    //       method: 'post',
+    //       headers: {
+    //         // todo @ANKU @CRIT @MAIN -
+    //         ...this.getClientCredentialsHeaders(),
+    //       },
+    //     },
+    //   );
+    // } catch (error) {
+    //   return this.catchAuthError(error);
+    // }
+    throw new Error('Not implemented');
   }
-
-
+  async resetPasswordByVerifyToken(user, verifyToken, newPassword) {
+    if (await this.checkVerifyToken(user, verifyToken)) {
+      return this.resetPassword(user.userId, newPassword);
+    }
+  }
 
   // ======================================================
   // AUTH
@@ -202,43 +279,63 @@ export default class ServiceUsers extends CoreService {
   /**
    * Query
 
-    briefRepresentation   optional  boolean
     email                 optional string
-    first                 optional integer(int32)
     firstName             optional string
     lastName              optional string
-    max                   optional Maximum results size (defaults to 100) integer(int32)
     search                optional A String contained in username, first or last name, or email string
     username              optional string
 
+    briefRepresentation   optional  boolean
+    first                 optional integer(int32)
+    max                   optional Maximum results size (defaults to 100) integer(int32)
    * @param query
    * @return {Promise<*>}
    */
   async findUsers(query) {
     logger.log('ServiceUsers', 'getProtectedInfo', query);
 
+    // todo @ANKU @LOW - @BUG_OUT @keycloak - не умеет искать по кастомным аттрибутам (либо если базы не большие выкачивать их и искать там)
+
     return this.sendWithClientCredentials(
       this.urls.findUsers,
       query,
     );
   }
-  async findUser(userIdOrUsername) {
+
+  /**
+   *
+   * @param userIdentify - userId | email | username
+   * @return project user
+   */
+  async findUser(userIdentify, silent = false) {
     let resultUser = null;
-    if (this.isUserId(userIdOrUsername)) {
+    if (this.isUserId(userIdentify)) {
       try {
-        resultUser = await this.loadUser(userIdOrUsername);
+        resultUser = await this.loadUser(userIdentify);
       } catch (error) {
-        logger.log(`UserId ${userIdOrUsername} not found - search by username`);
+        logger.log(`UserId ${userIdentify} not found - search by username`);
       }
+    } else if (isEmail(userIdentify)) {
+      const result = await this.findUsers({
+        email: userIdentify.toLowerCase(),
+        max: 1,
+      });
+      resultUser = result[0];
     } else {
       const result = await this.findUsers({
-        username: userIdOrUsername.toLowerCase(),
+        username: userIdentify.toLowerCase(),
         max: 1,
       });
       resultUser = result[0];
       // todo @ANKU @LOW @BUG_OUT - Keycloak не умеет искать по кастомным аттрибутам - https://issues.jboss.org/browse/KEYCLOAK-2343
     }
-    return resultUser;
+
+    if (!resultUser && !silent) {
+      // todo @ANKU @LOW - @@loc
+      throw new Error(`Пользователь ${userIdentify} не найден`);
+    }
+
+    return this.parseToFullUserInfo(resultUser);
   }
 
   async userSignup(userData) {
@@ -271,7 +368,7 @@ export default class ServiceUsers extends CoreService {
   }
   async loadUser(userId) {
     logger.log('ServiceUsers', 'getProtectedInfo', userId);
-    const userFromDB = await this.sendWithClientCredentials(
+    const serverUser = await this.sendWithClientCredentials(
       this.urls.loadUser,
       undefined,
       {
@@ -280,13 +377,13 @@ export default class ServiceUsers extends CoreService {
         },
       },
     );
-    return this.parseToFullUserInfo(userFromDB);
+    return this.parseToFullUserInfo(serverUser);
   }
-  async editUser(userId, userData) {
+  async editUser(userId, userPartData) {
     logger.log('ServiceUsers', 'editUser', userId);
     return this.sendWithClientCredentials(
       this.urls.editUser,
-      this.serializeUserToStorageData(userData),
+      this.serializeUserToStorageData(userPartData),
       {
         method: 'PUT',
         pathParams: {
@@ -314,7 +411,7 @@ export default class ServiceUsers extends CoreService {
   /**
    * Информация которая загружается на клиент о пользователе (без системной инфы)
    *
-   * @param userIdOrAliasId
+   * @param userIdentify
    * @return {Promise.<[
      'userId',
      'displayName',
@@ -329,9 +426,9 @@ export default class ServiceUsers extends CoreService {
      'address',
    ]>}
    */
-  async getProtectedInfo(userIdOrAliasId) {
-    logger.log('ServiceUsers', 'getProtectedInfo', userIdOrAliasId);
-    const user = await this.findUser(userIdOrAliasId);
+  async getProtectedInfo(userIdentify) {
+    logger.log('ServiceUsers', 'getProtectedInfo', userIdentify);
+    const user = await this.findUser(userIdentify);
     return user && this.parseToProtectedUserInfo(user);
   }
 
@@ -349,6 +446,36 @@ export default class ServiceUsers extends CoreService {
       },
     );
   }
+
+
+  hashVerifyToken(verifyToken) {
+    return hashData(verifyToken);
+  }
+  async setVerifyToken(userId, resetPasswordToken) {
+    const hash = this.hashVerifyToken(resetPasswordToken);
+    await this.editUser(
+      userId,
+      {
+        [USER_ATTR__VERIFY_TOKEN]: hash,
+      },
+    );
+    return hash;
+  }
+  async checkVerifyToken(user, inputVerifyToken, silent = false) {
+    const {
+      [USER_ATTR__VERIFY_TOKEN]: verifyToken,
+    } = user;
+    // eslint-disable-next-line eqeqeq
+    if (inputVerifyToken && this.hashVerifyToken(inputVerifyToken) === verifyToken) {
+      return true;
+    }
+    if (silent) {
+      return false;
+    }
+    // todo @ANKU @LOW - @@loc
+    throw new Error('Неправильно введен проверочный код');
+  }
+
 
   async resetPassword(userId, newPassword) {
     logger.log('ServiceUsers', 'revokeTokens', userId);

@@ -11,6 +11,7 @@ import {
 /*
  https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
 */
+// todo @ANKU @LOW - вынести в модуль авторизации
 export default async function authStrategyOAuth2(request, response, servicesContext) {
   const accessToken = getToken(request);
   const authType = getAuthType(request);

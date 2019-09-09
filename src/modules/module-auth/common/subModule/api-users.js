@@ -6,17 +6,26 @@ import logger from '../../../../common/helpers/client-logger';
 
 export const API_PREFIX = 'users';
 export const API_CONFIGS = {
-  signup: api(`${API_PREFIX}/signup`, 'POST'),
-  forgot: api(`${API_PREFIX}/forgot`, 'POST'),
-  resetPasswordByUser: api(`${API_PREFIX}/resetPasswordByUser`, 'POST'),
+  // ======================================================
+  // NO AUTH
+  // ======================================================
+  checkUnique: api(`${API_PREFIX}/checkUnique`, 'GET'),
+  avatar: api(`${API_PREFIX}/{userIdentify}/avatar`, 'GET'),
+  getPublicInfo: api(`${API_PREFIX}/{userIdentify}/public`, 'GET'),
+  checkVerifyToken: api(`${API_PREFIX}/verifyToken`, 'GET'),
 
+  signup: api(`${API_PREFIX}/signup`, 'POST'),
+
+  forgot: api(`${API_PREFIX}/forgot`, 'POST'),
+  resetPasswordByEmail: api(`${API_PREFIX}/resetPasswordByEmail`, 'POST'),
+  resetPasswordByVerifyToken: api(`${API_PREFIX}/{userIdentify}/resetPasswordByVerifyToken`, 'POST'),
+
+  // ======================================================
+  // AUTH
+  // ======================================================
   editUserByUser: api(`${API_PREFIX}/`, 'PUT'),
   deleteUserByUser: api(`${API_PREFIX}/`, 'DELETE'),
   changePassword: api(`${API_PREFIX}/changePassword`, 'PUT'),
-
-  checkUnique: api(`${API_PREFIX}/checkUnique`, 'GET'),
-  avatar: api(`${API_PREFIX}/avatar/{userIdOrAliasId}`, 'GET'),
-  getPublicInfo: api(`${API_PREFIX}/public/{userIdOrAliasId}`, 'GET'),
 };
 
 export function apiSignup(userData) {
@@ -37,7 +46,7 @@ export function apiForgotPassword(email, resetPasswordPageUrl, emailOptions) {
 }
 export function apiResetPassword(resetPasswordToken, newPassword, successEmailOptions) {
   return sendApiRequest(
-    API_CONFIGS.resetPasswordByUser,
+    API_CONFIGS.resetPasswordByEmail,
     {
       resetPasswordToken,
       newPassword,
@@ -55,8 +64,8 @@ export function apiResetPassword(resetPasswordToken, newPassword, successEmailOp
  * @param userId
  * @param key
  */
-export function apiGetUserAvatarUrl(userIdOrAliasId, key = null) {
-  return `${API_CONFIGS.avatar.path.replace(/{userIdOrAliasId}/gi, userIdOrAliasId)}\
+export function apiGetUserAvatarUrl(userIdentify, key = null) {
+  return `${API_CONFIGS.avatar.path.replace(/{userIdentify}/gi, userIdentify)}\
   ${key ? `?key=${encodeURI(key)}` : ''}`;
 }
 export function apiEditUser(userData) {
@@ -104,9 +113,39 @@ export function apiCheckUnique(field, value) {
     value,
   });
 }
-export function apiGetPublicInfo(userIdOrAliasId) {
-  return sendApiRequest(API_CONFIGS.getPublicInfo, { userIdOrAliasId });
+export function apiGetPublicInfo(userIdentify) {
+  return sendApiRequest(API_CONFIGS.getPublicInfo, { userIdentify });
 }
 export function apiDeleteUser() {
   return sendApiRequest(API_CONFIGS.deleteUserByUser);
+}
+
+/**
+ *
+ * @param verifyToken
+ * @param userIdentify - может не быть если это смка для регистрации
+ * @return {*}
+ */
+export function apiCheckVerifyToken(verifyToken, userIdentify = undefined) {
+  return sendApiRequest(
+    API_CONFIGS.checkVerifyToken,
+    {
+      verifyToken,
+      userIdentify,
+    },
+  );
+}
+export function apiResetPasswordByVerifyToken(verifyToken, userIdentify, newPassword) {
+  return sendApiRequest(
+    API_CONFIGS.resetPasswordByVerifyToken,
+    {
+      verifyToken,
+      newPassword,
+    },
+    {
+      pathParams: {
+        userIdentify,
+      },
+    },
+  );
 }

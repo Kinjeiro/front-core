@@ -842,6 +842,7 @@ export default class CoreField extends Component {
   getControlClass(constraints) {
     const {
       type,
+      subType,
       controlClass,
     } = this.props;
 
@@ -864,6 +865,10 @@ export default class CoreField extends Component {
         }
 
         if (type === TYPES.TEXT) {
+          if (subType === SUB_TYPES.PHONE) {
+            return CB.PhoneInput;
+          }
+
           return CB.TextArea;
         }
 

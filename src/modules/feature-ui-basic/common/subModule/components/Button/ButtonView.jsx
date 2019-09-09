@@ -31,12 +31,14 @@ export default class ButtonView extends PureComponent {
       onClick,
     } = this.props;
 
-    const notNaturalButtonFinal = typeof notNaturalButton !== 'undefined' ? notNaturalButton : as !== ButtonView.defaultProps.as;
+    const notNaturalButtonFinal = typeof notNaturalButton !== 'undefined'
+      ? notNaturalButton
+      : as !== ButtonView.defaultProps.as;
 
     return React.createElement(
       as,
       {
-        ...(notNaturalButtonFinal ? {} : this.props),
+        ...(notNaturalButtonFinal ? this.props : { disabled }),
         onClick: notNaturalButtonFinal && disabled ? undefined : onClick,
         className: `${className} ${notNaturalButtonFinal ? 'Button--notNaturalButton' : ''}`,
       },

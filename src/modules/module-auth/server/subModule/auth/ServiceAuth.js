@@ -35,6 +35,114 @@ export const GRANT_TYPES = {
 let clientAuthData = null;
 let clientAuthDataExpire = null;
 
+/*
+// http://185.22.63.233:8080/auth/realms/exporter/.well-known/openid-configuration
+const test = {
+  "issuer":                       "http://185.22.63.233:8080/auth/realms/exporter",
+  "authorization_endpoint":       "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/auth",
+  "token_endpoint":               "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/token",
+  "token_introspection_endpoint": "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/token/introspect",
+  "introspection_endpoint":       "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/token/introspect",
+  "userinfo_endpoint":            "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/userinfo",
+  "end_session_endpoint":         "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/logout",
+  "jwks_uri":                     "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/certs",
+  "check_session_iframe":         "http://185.22.63.233:8080/auth/realms/exporter/protocol/openid-connect/login-status-iframe.html",
+  "registration_endpoint":        "http://185.22.63.233:8080/auth/realms/exporter/clients-registrations/openid-connect",
+
+  "grant_types_supported": ["authorization_code", "implicit", "refresh_token", "password", "client_credentials"],
+  "response_types_supported": [
+    "code",
+    "none",
+    "id_token",
+    "token",
+    "id_token token",
+    "code id_token",
+    "code token",
+    "code id_token token",
+  ],
+  "subject_types_supported": ["public", "pairwise"],
+  "id_token_signing_alg_values_supported": [
+    "PS384",
+    "ES384",
+    "RS384",
+    "HS256",
+    "HS512",
+    "ES256",
+    "RS256",
+    "HS384",
+    "ES512",
+    "PS256",
+    "PS512",
+    "RS512",
+  ],
+  "id_token_encryption_alg_values_supported": ["RSA-OAEP", "RSA1_5"],
+  "id_token_encryption_enc_values_supported": ["A128GCM", "A128CBC-HS256"],
+  "userinfo_signing_alg_values_supported": [
+    "PS384",
+    "ES384",
+    "RS384",
+    "HS256",
+    "HS512",
+    "ES256",
+    "RS256",
+    "HS384",
+    "ES512",
+    "PS256",
+    "PS512",
+    "RS512",
+    "none",
+  ],
+  "request_object_signing_alg_values_supported": [
+    "PS384",
+    "ES384",
+    "RS384",
+    "ES256",
+    "RS256",
+    "ES512",
+    "PS256",
+    "PS512",
+    "RS512",
+    "none",
+  ],
+  "response_modes_supported": ["query", "fragment", "form_post"],
+
+  "token_endpoint_auth_methods_supported": [
+    "private_key_jwt",
+    "client_secret_basic",
+    "client_secret_post",
+    "client_secret_jwt",
+  ],
+  "token_endpoint_auth_signing_alg_values_supported": ["RS256"],
+  "claims_supported": [
+    "aud",
+    "sub",
+    "iss",
+    "auth_time",
+    "name",
+    "given_name",
+    "family_name",
+    "preferred_username",
+    "email",
+  ],
+  "claim_types_supported": ["normal"],
+  "claims_parameter_supported": false,
+  "scopes_supported": [
+    "openid",
+    "address",
+    "email",
+    "microprofile-jwt",
+    "offline_access",
+    "phone",
+    "profile",
+    "roles",
+    "web-origins",
+  ],
+  "request_parameter_supported": true,
+  "request_uri_parameter_supported": true,
+  "code_challenge_methods_supported": ["plain", "S256"],
+  "tls_client_certificate_bound_access_tokens": true,
+}; */
+
 /**
  * Клиенсткая реализация протокола OAuth 2.0 Bearer
  * PROTOCOL - https://tools.ietf.org/html/rfc6749#
@@ -220,30 +328,6 @@ export default class ServiceAuth extends CoreService {
       // phone: undefined,
       // address: undefined,
     });
-  }
-
-  serializeUserToStorageData(user) {
-    // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_userrepresentation
-    // attributes email
-    // "username":"test1","enabled":true,"firstName":"test1","lastName"
-    const {
-      username,
-      firstName,
-      lastName,
-      email,
-
-      ...other
-    } = user;
-
-    // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_userrepresentation
-    return {
-      username,
-      firstName,
-      lastName,
-      email,
-
-      attributes: other,
-    };
   }
 
   getClientInfo() {

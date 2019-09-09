@@ -195,6 +195,7 @@ module.exports = {
          */
         allowSignup: false,
         allowResetPasswordByEmail: false,
+        allowResetPasswordBySms: false,
         /**
          * Вместо логина используется email и тогда логин не обязателен и не показывается при регистрации
          */
@@ -424,8 +425,8 @@ module.exports = {
 
           // public
           // checkUnique:        '/admin/realms/{realm}/users/unique',                    // [GET] - field и value для проверки уникальности в рамках пользователей
-          // getAvatar:          '/users/avatar/{userIdOrAliasId}',  // [GET] - получение аватарки в data:image
-          // getPublicInfo:      '/users/public/{userIdOrAliasId}',  // [GET] - получение публичных данных пользователя
+          // getAvatar:          '/users/avatar/{userIdentify}',  // [GET] - получение аватарки в data:image
+          // getPublicInfo:      '/users/public/{userIdentify}',  // [GET] - получение публичных данных пользователя
 
           // authorized
           // editUserByUser:           '/users',                           // [PUT] - изменение данных пользователя
@@ -570,7 +571,12 @@ module.exports = {
       /**
        * Дефолтный middleware (для него в \src\server\helpers\middleware-api.js есть методы по умолчанию send и proxy
        */
-      middlewareApiService: null
+      middlewareApiService: null,
+
+      /**
+       * Сервис для отсылки смсок
+       */
+      serviceSms: null,
     }
 
     // рестовый сервисов не должно быть, для единообразия все запросы которые не проксируются через apiConfig.serviceUrl

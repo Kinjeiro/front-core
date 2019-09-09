@@ -30,6 +30,9 @@ export const initialState = {
   actionChangeUserPasswordStatus: undefined,
   actionChangeUserAvatarStatus: undefined,
   actionDeleteUserStatus: undefined,
+
+  actionCheckVerifyTokenStatus: undefined,
+  actionResetPasswordByVerifyTokenStatus: undefined,
 };
 
 // ======================================================
@@ -77,6 +80,13 @@ export const TYPES = {
   DELETE_USER_FETCH:     `${PREFIX}/DELETE_USER_FETCH`,
   DELETE_USER_SUCCESS:   `${PREFIX}/DELETE_USER_SUCCESS`,
   DELETE_USER_FAIL:      `${PREFIX}/DELETE_USER_FAIL`,
+
+  CHECK_VERIFY_TOKEN_FETCH:     `${PREFIX}/CHECK_VERIFY_TOKEN_FETCH`,
+  CHECK_VERIFY_TOKEN_SUCCESS:   `${PREFIX}/CHECK_VERIFY_TOKEN_SUCCESS`,
+  CHECK_VERIFY_TOKEN_FAIL:      `${PREFIX}/CHECK_VERIFY_TOKEN_FAIL`,
+  RESET_PASSWORD_BY_VERIFY_TOKEN_FETCH:     `${PREFIX}/RESET_PASSWORD_BY_VERIFY_TOKEN_FETCH`,
+  RESET_PASSWORD_BY_VERIFY_TOKEN_SUCCESS:   `${PREFIX}/RESET_PASSWORD_BY_VERIFY_TOKEN_SUCCESS`,
+  RESET_PASSWORD_BY_VERIFY_TOKEN_FAIL:      `${PREFIX}/RESET_PASSWORD_BY_VERIFY_TOKEN_FAIL`,
 };
 
 
@@ -94,6 +104,9 @@ export function getBindActions({
   apiChangeUserPassword,
   apiChangeUserAvatar,
   apiDeleteUser,
+
+  apiCheckVerifyToken,
+  apiResetPasswordByVerifyToken,
 }) {
   const actionSignin = (username, password) => {
     return {
@@ -185,6 +198,21 @@ export function getBindActions({
         payload: apiDeleteUser(),
       };
     },
+
+    // resetPasswordByVerifyToken
+    // checkVerifyToken
+    actionCheckVerifyToken(verifyToken, userIdentify = undefined) {
+      return {
+        types: [TYPES.CHECK_VERIFY_TOKEN_FETCH, TYPES.CHECK_VERIFY_TOKEN_SUCCESS, TYPES.CHECK_VERIFY_TOKEN_FAIL],
+        payload: apiCheckVerifyToken(verifyToken, userIdentify),
+      };
+    },
+    actionResetPasswordByVerifyToken(verifyToken, userIdentify, newPassword) {
+      return {
+        types: [TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_FETCH, TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_SUCCESS, TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_FAIL],
+        payload: apiResetPasswordByVerifyToken(verifyToken, userIdentify, newPassword),
+      };
+    },
   };
 }
 
@@ -204,6 +232,8 @@ export const reducer = createReducer(
     [TYPES.CHANGE_USER_SUCCESS]:
       'userData',
     [TYPES.SIGNUP_SUCCESS]:
+      'userData',
+    [TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_SUCCESS]:
       'userData',
     [TYPES.USER_LOGOUT_SUCCESS]:
       (state) => ({
@@ -269,6 +299,12 @@ export const reducer = createReducer(
     ),
     actionChangeEmailStatus: createStatusReducer(
       TYPES.CHANGE_EMAIL_FETCH, TYPES.CHANGE_EMAIL_SUCCESS, TYPES.CHANGE_EMAIL_FAIL,
+    ),
+    actionCheckVerifyTokenStatus: createStatusReducer(
+      TYPES.CHECK_VERIFY_TOKEN_FETCH, TYPES.CHECK_VERIFY_TOKEN_SUCCESS, TYPES.CHECK_VERIFY_TOKEN_FAIL,
+    ),
+    actionResetPasswordByVerifyTokenStatus: createStatusReducer(
+      TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_FETCH, TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_SUCCESS, TYPES.RESET_PASSWORD_BY_VERIFY_TOKEN_FAIL,
     ),
   },
 );

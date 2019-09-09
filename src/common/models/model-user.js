@@ -35,7 +35,7 @@ export const PUBLIC_USER_PROP_TYPE_MAP = {
   displayName: PropTypes.string,
   description: PropTypes.string,
   computedDisplayName: PropTypes.string,
-  // profileImageURI: PropTypes.string, // не передаем, для этого есть метод front-core\src\common\app-redux\reducers\app\users.js::getUserAvatarUrl(userIdOrAliasId)
+  // profileImageURI: PropTypes.string, // не передаем, для этого есть метод front-core\src\common\app-redux\reducers\app\users.js::getUserAvatarUrl(userIdentify)
 };
 export const PUBLIC_USER_PROP_TYPE = PropTypes.shape(PUBLIC_USER_PROP_TYPE_MAP);
 export const DEFAULT_PUBLIC_USER = {
@@ -75,7 +75,7 @@ export const USER_PROP_TYPE_MAP = {
   // PUBLIC
   // ======================================================
   // userId: PropTypes.string,
-  // // profileImageURI: PropTypes.string, // не передаем, для этого есть метод front-core\src\common\app-redux\reducers\app\users.js::getUserAvatarUrl(userIdOrAliasId)
+  // // profileImageURI: PropTypes.string, // не передаем, для этого есть метод front-core\src\common\app-redux\reducers\app\users.js::getUserAvatarUrl(userIdentify)
   // aliasId: PropTypes.string,
   // displayName: PropTypes.string,
   // computedDisplayName: PropTypes.string,
