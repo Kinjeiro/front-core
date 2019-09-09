@@ -9,6 +9,10 @@ import logger from '../../../../../server/helpers/server-logger';
 import serverConfig from '../../../../../server/server-config';
 import CoreService from '../../../../../server/services/utils/CoreService';
 import { hashData } from '../../../../../server/utils/server-utils';
+import {
+  PROTECTED_USER_PROP_TYPE_MAP,
+  PUBLIC_USER_PROP_TYPE_MAP,
+} from '../../../common/subModule/model-user';
 
 import { USER_REPRESENTATION_FIELDS } from './user-representation';
 
@@ -101,13 +105,12 @@ export default class ServiceUsers extends CoreService {
     }
     return user;
   }
-  parseToProtectedUserInfo(serverUserData) {
-    const user = this.parseToFullUserInfo(serverUserData);
-    return omit(user, [USER_ATTR__VERIFY_TOKEN]);
+  parseToProtectedUserInfo(user) {
+    // return pick(user, [USER_ATTR__VERIFY_TOKEN]);
+    return pick(user, Object.keys(PROTECTED_USER_PROP_TYPE_MAP));
   }
-  parseToPublicUserInfo(serverUserData) {
-    const user = this.parseToFullUserInfo(serverUserData);
-    return pick(user, 'username');
+  parseToPublicUserInfo(user) {
+    return pick(user, Object.keys(PUBLIC_USER_PROP_TYPE_MAP));
   }
 
 
@@ -298,7 +301,7 @@ export default class ServiceUsers extends CoreService {
    * @return {Promise<*>}
    */
   async findUsers(query) {
-    logger.log('ServiceUsers', 'getProtectedInfo', query);
+    logger.log('ServiceUsers', 'findUsers', query);
 
     // todo @ANKU @LOW - @BUG_OUT @keycloak - не умеет искать по кастомным аттрибутам (либо если базы не большие выкачивать их и искать там)
 
@@ -314,34 +317,37 @@ export default class ServiceUsers extends CoreService {
    * @return project user
    */
   async findUser(userIdentify, silent = false) {
-    let resultUser = null;
-    if (this.isUserId(userIdentify)) {
-      try {
-        resultUser = await this.loadUser(userIdentify);
-      } catch (error) {
-        logger.log(`UserId ${userIdentify} not found - search by username`);
+    let resultServerUser = null;
+
+    if (userIdentify) {
+      if (this.isUserId(userIdentify)) {
+        try {
+          resultServerUser = await this.loadUser(userIdentify);
+        } catch (error) {
+          logger.log(`UserId ${userIdentify} not found - search by username`);
+        }
+      } else if (isEmail(userIdentify)) {
+        const result = await this.findUsers({
+          email: userIdentify.toLowerCase(),
+          max: 1,
+        });
+        resultServerUser = result[0];
+      } else {
+        const result = await this.findUsers({
+          username: userIdentify.toLowerCase(),
+          max: 1,
+        });
+        resultServerUser = result[0];
+        // todo @ANKU @LOW @BUG_OUT - Keycloak не умеет искать по кастомным аттрибутам - https://issues.jboss.org/browse/KEYCLOAK-2343
       }
-    } else if (isEmail(userIdentify)) {
-      const result = await this.findUsers({
-        email: userIdentify.toLowerCase(),
-        max: 1,
-      });
-      resultUser = result[0];
-    } else {
-      const result = await this.findUsers({
-        username: userIdentify.toLowerCase(),
-        max: 1,
-      });
-      resultUser = result[0];
-      // todo @ANKU @LOW @BUG_OUT - Keycloak не умеет искать по кастомным аттрибутам - https://issues.jboss.org/browse/KEYCLOAK-2343
     }
 
-    if (!resultUser && !silent) {
+    if (!resultServerUser && !silent) {
       // todo @ANKU @LOW - @@loc
       throw new Error(`Пользователь ${userIdentify} не найден`);
     }
 
-    return this.parseToFullUserInfo(resultUser);
+    return resultServerUser && this.parseToFullUserInfo(resultServerUser);
   }
 
   async userSignup(userData) {
@@ -373,7 +379,11 @@ export default class ServiceUsers extends CoreService {
     );
   }
   async loadUser(userId) {
-    logger.log('ServiceUsers', 'getProtectedInfo', userId);
+    logger.log('ServiceUsers', 'loadUser', userId);
+    if (!userId) {
+      // todo @ANKU @LOW - @@loc
+      throw new Error('Для поиска пользователя необходио задать userId');
+    }
     const serverUser = await this.sendWithClientCredentials(
       this.urls.loadUser,
       undefined,
