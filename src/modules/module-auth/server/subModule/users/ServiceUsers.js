@@ -1,13 +1,15 @@
 /* eslint-disable lines-between-class-members */
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
+
+import { ThrowableUniError } from '../../../../../common/models/uni-error';
 import { isEmail } from '../../../../../common/utils/common';
 
 import logger from '../../../../../server/helpers/server-logger';
 import serverConfig from '../../../../../server/server-config';
-
 import CoreService from '../../../../../server/services/utils/CoreService';
 import { hashData } from '../../../../../server/utils/server-utils';
+
 import { USER_REPRESENTATION_FIELDS } from './user-representation';
 
 export const USER_ATTR__VERIFY_TOKEN = 'verifyToken';
@@ -84,8 +86,6 @@ export default class ServiceUsers extends CoreService {
       ...other
     } = serverUserData;
 
-    console.warn('ANKU , JSON.stringify(serverUserData)', JSON.stringify(serverUserData, null, 2));
-
     // const user = this.getService('serviceAuth').parseUserFromOpenidData(serverUserData);
     // Object.assign(user, other);
     const user = {
@@ -137,7 +137,12 @@ export default class ServiceUsers extends CoreService {
 
   async getAvatar(userIdentify, key = undefined) {
     logger.debug('ServiceUsers', 'getAvatar', userIdentify, key);
-    throw new Error('Not implemented');
+    // throw new Error('Not implemented');
+
+    throw new ThrowableUniError({
+      responseStatusCode: 404,
+    });
+
     // const response = await this.send(
     //   this.urls.getAvatar,
     //   {
@@ -226,7 +231,8 @@ export default class ServiceUsers extends CoreService {
   }
   async resetPasswordByVerifyToken(user, verifyToken, newPassword) {
     if (await this.checkVerifyToken(user, verifyToken)) {
-      return this.resetPassword(user.userId, newPassword);
+      await this.resetPassword(user.userId, newPassword);
+      this.setVerifyToken(user, null); // обновление - можно не синхронным делать
     }
   }
 
@@ -379,15 +385,15 @@ export default class ServiceUsers extends CoreService {
     );
     return this.parseToFullUserInfo(serverUser);
   }
-  async editUser(userId, userPartData) {
-    logger.log('ServiceUsers', 'editUser', userId);
+  async editUser(user) {
+    logger.log('ServiceUsers', 'editUser', user.userId);
     return this.sendWithClientCredentials(
       this.urls.editUser,
-      this.serializeUserToStorageData(userPartData),
+      this.serializeUserToStorageData(user),
       {
         method: 'PUT',
         pathParams: {
-          userId,
+          userId: user.userId,
         },
       },
     );
@@ -451,11 +457,11 @@ export default class ServiceUsers extends CoreService {
   hashVerifyToken(verifyToken) {
     return hashData(verifyToken);
   }
-  async setVerifyToken(userId, resetPasswordToken) {
+  async setVerifyToken(user, resetPasswordToken) {
     const hash = this.hashVerifyToken(resetPasswordToken);
     await this.editUser(
-      userId,
       {
+        ...user,
         [USER_ATTR__VERIFY_TOKEN]: hash,
       },
     );

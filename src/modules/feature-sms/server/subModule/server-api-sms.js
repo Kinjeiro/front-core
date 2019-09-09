@@ -39,8 +39,7 @@ export default function getServerApi() {
         }
 
         if (user) {
-          console.warn('ANKU , user', smsCode);
-          await serviceUsers.setVerifyToken(user.userId, smsCode);
+          await serviceUsers.setVerifyToken(user, smsCode);
         } else {
           const hash = serviceUsers.hashVerifyToken(smsCode);
           setCookie(reply, COOKIE__VERIFY_TOKEN, hash);
