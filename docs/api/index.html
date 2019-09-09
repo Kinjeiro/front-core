@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.7 | Documentation</title>
+  <title>@reagentum/front-core 1.8.8 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.7</code></div>
+          <div class='mb1'><code>1.8.8</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1703,6 +1703,16 @@
               
                 
                 <li><a
+                  href='#apicheckverifytoken'
+                  class="">
+                  apiCheckVerifyToken
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#bind'
                   class="">
                   bind
@@ -1801,16 +1811,6 @@
               
                 
                 <li><a
-                  href='#resetpasswordbyuser'
-                  class="">
-                  resetPasswordByUser
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#sendforgotpasswordemail'
                   class="">
                   sendForgotPasswordEmail
@@ -1821,9 +1821,29 @@
               
                 
                 <li><a
+                  href='#resetpasswordbyemail'
+                  class="">
+                  resetPasswordByEmail
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#findusers'
                   class="">
                   findUsers
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#finduser'
+                  class="">
+                  findUser
                   
                 </a>
                 
@@ -1851,9 +1871,9 @@
               
                 
                 <li><a
-                  href='#resetpasswordbyuser'
+                  href='#resetpasswordbyemail'
                   class="">
-                  resetPasswordByUser
+                  resetPasswordByEmail
                   
                 </a>
                 
@@ -13290,7 +13310,7 @@ webkitRelativePath: "",
   <p>синхронный метод, дает только урл, по которому вернется картинка</p>
 
 
-  <div class='pre p1 fill-light mt0'>apiGetUserAvatarUrl(userIdOrAliasId: any, key: any, userId: any)</div>
+  <div class='pre p1 fill-light mt0'>apiGetUserAvatarUrl(userIdentify: any, key: any, userId: any)</div>
   
   
 
@@ -13307,7 +13327,7 @@ webkitRelativePath: "",
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>userIdOrAliasId</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>userIdentify</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -13334,6 +13354,82 @@ webkitRelativePath: "",
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='apicheckverifytoken'>
+      apiCheckVerifyToken
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>apiCheckVerifyToken(verifyToken: any, userIdentify: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>verifyToken</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>userIdentify</span> <code class='quiet'>(any)</code>
+	    может не быть если это смка для регистрации
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
   
 
   
@@ -14040,89 +14136,6 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='resetpasswordbyuser'>
-      resetPasswordByUser
-    </h3>
-    
-    
-  </div>
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>resetPasswordByUser(resetPasswordToken: any, newPassword: any, emailOptions: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>resetPasswordToken</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>newPassword</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>emailOptions</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='sendforgotpasswordemail'>
       sendForgotPasswordEmail
     </h3>
@@ -14206,6 +14219,89 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='resetpasswordbyemail'>
+      resetPasswordByEmail
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>resetPasswordByEmail(resetPasswordToken: any, newPassword: any, emailOptions: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>resetPasswordToken</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>newPassword</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>emailOptions</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='findusers'>
       findUsers
     </h3>
@@ -14215,14 +14311,14 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
   
 
   <p>Query</p>
-<p>briefRepresentation   optional  boolean
-email                 optional string
-first                 optional integer(int32)
+<p>email                 optional string
 firstName             optional string
 lastName              optional string
-max                   optional Maximum results size (defaults to 100) integer(int32)
 search                optional A String contained in username, first or last name, or email string
 username              optional string</p>
+<p>briefRepresentation   optional  boolean
+first                 optional integer(int32)
+max                   optional Maximum results size (defaults to 100) integer(int32)</p>
 
 
   <div class='pre p1 fill-light mt0'>findUsers(query: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
@@ -14282,18 +14378,17 @@ username              optional string</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='getprotectedinfo'>
-      getProtectedInfo
+    <h3 class='fl m0' id='finduser'>
+      findUser
     </h3>
     
     
   </div>
   
 
-  <p>Информация которая загружается на клиент о пользователе (без системной инфы)</p>
+  
 
-
-  <div class='pre p1 fill-light mt0'>getProtectedInfo(userIdOrAliasId: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[<code>"userId"</code>, <code>"displayName"</code>, <code>"aliasId"</code>, <code>"description"</code>, <code>"username"</code>, <code>"firstName"</code>, <code>"lastName"</code>, <code>"middleName"</code>, <code>"email"</code>, <code>"phone"</code>, <code>"address"</code>]></div>
+  <div class='pre p1 fill-light mt0'>findUser(userIdentify: any, silent: any): any</div>
   
   
 
@@ -14310,7 +14405,85 @@ username              optional string</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>userIdOrAliasId</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>userIdentify</span> <code class='quiet'>(any)</code>
+	    userId | email | username
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>silent</span> <code class='quiet'>(any
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        project user
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getprotectedinfo'>
+      getProtectedInfo
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Информация которая загружается на клиент о пользователе (без системной инфы)</p>
+
+
+  <div class='pre p1 fill-light mt0'>getProtectedInfo(userIdentify: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;[<code>"userId"</code>, <code>"displayName"</code>, <code>"aliasId"</code>, <code>"description"</code>, <code>"username"</code>, <code>"firstName"</code>, <code>"lastName"</code>, <code>"middleName"</code>, <code>"email"</code>, <code>"phone"</code>, <code>"address"</code>]></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>userIdentify</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -14434,8 +14607,8 @@ username              optional string</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='resetpasswordbyuser'>
-      resetPasswordByUser
+    <h3 class='fl m0' id='resetpasswordbyemail'>
+      resetPasswordByEmail
     </h3>
     
     
@@ -14445,7 +14618,7 @@ username              optional string</p>
   <p>Протокол для @reagentum/auth-server@1.0.4</p>
 
 
-  <div class='pre p1 fill-light mt0'>resetPasswordByUser(resetPasswordToken: any, newPassword: any, emailOptions: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+  <div class='pre p1 fill-light mt0'>resetPasswordByEmail(resetPasswordToken: any, newPassword: any, emailOptions: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
   
   
 
