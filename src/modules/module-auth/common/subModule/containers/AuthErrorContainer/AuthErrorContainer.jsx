@@ -10,12 +10,14 @@ import {
   getUserId,
 } from '../../../../../../common/app-redux/selectors';
 import * as reduxLastUniError from '../../../../../../common/app-redux/reducers/app/last-uni-error';
+import contextModules from '../../../../../../common/contexts/ContextModules/decorator-context-modules';
 
 // ======================================================
 // MODULE
 // ======================================================
 import i18n from '../../i18n';
 import { pathGetSigninPage } from '../../routes-paths-auth';
+import MODULE_NAME from '../../module-name';
 
 import getComponents from '../../get-components';
 
@@ -41,9 +43,9 @@ const reLoginModalForm = clientConfig.common.features.auth.reLoginModalForm;
   }),
   {
     ...reduxLastUniError.actions,
-    actionGoTo: push,
   },
 )
+@contextModules()
 export default class AuthErrorContainer extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -59,7 +61,11 @@ export default class AuthErrorContainer extends Component {
     userId: PropTypes.string,
 
     actionClearLastError: PropTypes.func,
-    actionGoTo: PropTypes.func,
+
+    // ======================================================
+    // @contextModules
+    // ======================================================
+    onGoTo: PropTypes.func,
   };
 
   static defaultProps = {
@@ -95,7 +101,7 @@ export default class AuthErrorContainer extends Component {
   handleGoToLogin() {
     const {
       // lastUniError,
-      actionGoTo,
+      onGoTo,
       location: {
         pathname,
         search,
@@ -107,7 +113,7 @@ export default class AuthErrorContainer extends Component {
     } = this.props;
 
     // if (!reLoginModalForm && lastUniError && lastUniError.isNotAuth) {
-    actionGoTo(pathGetSigninPage(linkForwardTo || `${pathname}${search}${hash}`));
+    onGoTo(pathGetSigninPage(linkForwardTo || `${pathname}${search}${hash}`), MODULE_NAME);
     // }
   }
 
