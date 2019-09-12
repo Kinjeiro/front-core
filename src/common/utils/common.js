@@ -678,3 +678,20 @@ export function emitProcessing(handlerPromise, componentWithSetState, processing
 export function isEmail(email) {
   return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(email.toLowerCase());
 }
+
+export function getFunctionName(func) {
+  let funcName = func.name;
+  if (!funcName) {
+    // Match:
+    // - ^          the beginning of the string
+    // - function   the word 'function'
+    // - \s+        at least some white space
+    // - ([\w\$]+)  capture one or more valid JavaScript identifier characters
+    // - \s*        optionally followed by white space (in theory there won't be any here,
+    //              so if performance is an issue this can be omitted[1]
+    // - \(         followed by an opening brace
+    const matcher = /^function\s+([\w$]+)\s*\(/.exec(func.toString());
+    funcName = matcher  ?  matcher[1]  :  undefined;
+  }
+  return funcName;
+}
