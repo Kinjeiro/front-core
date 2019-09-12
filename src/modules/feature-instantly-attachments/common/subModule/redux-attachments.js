@@ -96,11 +96,11 @@ export function getActions({
       };
     },
 
-    actionDownloadAttachment(serverAttachId) {
+    actionDownloadAttachment(serverAttachId, fileName = undefined) {
       return {
         uuid: serverAttachId,
         types: [TYPES.DOWNLOAD_ATTACHMENT_FETCH, TYPES.DOWNLOAD_ATTACHMENT_SUCCESS, TYPES.DOWNLOAD_ATTACHMENT_FAIL],
-        payload: apiDownloadAttachment(serverAttachId),
+        payload: apiDownloadAttachment(serverAttachId, fileName),
       };
     },
 

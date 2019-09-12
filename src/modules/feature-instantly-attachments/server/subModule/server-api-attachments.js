@@ -18,39 +18,6 @@ async function wrapToDownloadUrl(attachment) {
   return omit(attachmentFinal, 'contentId');
 }
 
-// todo @ANKU @CRIT @MAIN - сделать модуль прав на объект и CRUD действия
-function checkAttachmentAccess(attachment, currentUser, throwError = false) {
-  const {
-    uploadedBy,
-    // accessType,
-  } = attachment;
-  // todo @ANKU @LOW - переделать на модуль прав
-  const accessType = serverConfig.server.features.attachments.defaultAccess;
-
-  if (currentUser && currentUser.roles.includes(serverConfig.common.features.auth.adminRoleName)) {
-    return true;
-  }
-
-  let access;
-  switch (accessType) {
-    case ACCESS_TYPE.ACCESS_PUBLIC:
-      access = true;
-      break;
-    case ACCESS_TYPE.ACCESS_AUTH:
-      access = !!currentUser;
-      break;
-    case ACCESS_TYPE.ACCESS_OWNER_ONLY:
-      access = currentUser && uploadedBy === currentUser.userId;
-      break;
-    default:
-      access = currentUser && currentUser.permissions.includes(accessType);
-  }
-  if (throwError && !access) {
-    throw new Error('У вас нет доступа к этой объекту.');
-  }
-  return access;
-}
-
 export default function createApiPlugins() {
   return [
     // apiPluginFactory(
@@ -252,9 +219,8 @@ export default function createApiPlugins() {
         logger.debug(`downloadAttachment "${attachment.fileName}" [${id}] by "${user && user.userId}"`);
 
 
-        if (!checkAttachmentAccess(attachment, user)) {
+        if (!serviceAttachments.checkAttachmentAccess(attachment)) {
           logger.error('-- not permitted');
-          // return reply().code(404);
           return reply().code(403); // Forbidden
         }
         const {
@@ -287,7 +253,10 @@ export default function createApiPlugins() {
         const attachment = await serviceAttachments.readRecord(id);
         logger.debug(`deleteAttachment "${attachment.fileName}" [${id}] by "${user.userId}"`);
 
-        checkAttachmentAccess(attachment, user);
+        if (!serviceAttachments.checkAttachmentAccess(attachment)) {
+          logger.error('-- not permitted');
+          return reply().code(403); // Forbidden
+        }
         const {
           contentId,
         } = attachment;

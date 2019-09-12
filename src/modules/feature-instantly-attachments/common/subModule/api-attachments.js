@@ -30,6 +30,7 @@ export async function apiDownloadAttachment(serverAttachId, fileName = null) {
   return getApiClient().downloadFile(
     API_CONFIGS.downloadAttachment,
     fileName,
+    undefined,
     {
       pathParams: {
         id: serverAttachId,

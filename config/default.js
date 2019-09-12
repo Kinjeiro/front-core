@@ -446,6 +446,13 @@ module.exports = {
           resetPassword:      '/admin/realms/{realm}/users/{userId}/reset-password'  // PUT /{realm}/users/{id}/reset-password
         }
       },
+      serviceAttachmentContents: {
+        urls: {
+          uploadFile: '/attachment/upload',                 // POST
+          downloadFile: '/attachment/download/{contentId}', // GET
+          deleteFile: '/attachment/{contentId}'             // DELETE
+        }
+      },
 
       // ======================================================
       // Мокирование
