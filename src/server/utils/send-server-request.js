@@ -15,6 +15,10 @@ export const CONTENT_TYPES = {
   FORM_DATA: 'multipart/form-data',
   JSON: 'application/json',
 };
+export const ACCEPT = {
+  JSON: 'application/json',
+  ANY: '*/*',
+};
 
 // ======================================================
 // UTILS
@@ -53,7 +57,7 @@ export function sendSimpleRequest(requestOptions) {
   return new Promise((resolve, reject) => {
     logger.log(`==== [${requestOptions.url}] ====`);
 
-    function callback(error, response) {
+    function callback(error, responseIncomingMessage) {
       logger.log('[from server REQUEST]');
       logObject(requestOptions, ['method', 'url']);
       logObject(requestOptions, ['qs', 'payload', 'body', 'timeout', 'headers'], 'debug', true);
@@ -64,14 +68,21 @@ export function sendSimpleRequest(requestOptions) {
         //   logger.error('[server RESPONSE ERROR]\n', error.body || error);
         // }, 1);
         reject(parseToUniError(error));
-      } else if (response.statusCode >= 300 || response.statusCode < 200) {
-        logger.error(`[from server RESPONSE ERROR STATUS]\n${response.statusCode}: `);
-        logger.debug('\n-- responseBody:\n', response.body, '\n-- request options:\n', requestOptions, '\n\n');
-        reject(parseToUniError(response));
+      } else if (responseIncomingMessage.statusCode >= 300 || responseIncomingMessage.statusCode < 200) {
+        logger.error(`[from server RESPONSE ERROR STATUS]\n${responseIncomingMessage.statusCode}: `);
+        logger.debug('\n-- responseBody:\n', responseIncomingMessage.body, '\n-- request options:\n', requestOptions, '\n\n');
+        reject(parseToUniError(responseIncomingMessage));
       } else {
         logger.log('[from server RESPONSE]');
-        logger.debug(response.body, '\n\n');
-        resolve(response);
+
+        if (responseIncomingMessage.body && responseIncomingMessage.body.length) {
+          if (responseIncomingMessage.length < 5000 || !responseIncomingMessage.body.slice) {
+            logger.debug(responseIncomingMessage.body, '\n\n');
+          } else {
+            logger.debug(responseIncomingMessage.body.slice(0, 30), '...[BIG CONTENT]...\n\n');
+          }
+        }
+        resolve(responseIncomingMessage);
       }
     }
 
@@ -255,7 +266,7 @@ export async function sendEndpointMethodRequest(
       ? CONTENT_TYPES.FORM_URLENCODED
       // если это form-data сама проставится внутри request и добавит boundary
       : undefined,
-    accept: CONTENT_TYPES.JSON,
+    accept: ACCEPT.JSON,
     ...headersPreFinal,
   };
 
@@ -297,7 +308,7 @@ export async function sendEndpointMethodRequest(
     .then((response) => (
       returnResponse
         ? response
-        : headersFinal.accept === CONTENT_TYPES.JSON && response.body && typeof response.body === 'string'
+        : headersFinal.accept === ACCEPT.JSON && response.body && typeof response.body === 'string'
           ? JSON.parse(response.body)
           : response.body
     ));
