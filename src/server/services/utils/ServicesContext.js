@@ -53,7 +53,7 @@ export default class ServicesContext {
     let service = null;
     try {
       // Здесь создается экземпляр = new MyModuleService(configEndpoints[serviceName])
-      service = executeVariable(getServiceFn, null, endpoint);
+      service = executeVariable(getServiceFn, null, endpoint/* , urls, options */);
       if (service.setRequest) {
         service.setRequest(request);
       }

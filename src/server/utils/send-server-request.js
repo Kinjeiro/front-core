@@ -2,7 +2,7 @@ import Hoek from 'hoek';
 // todo @ANKU @LOW @BUG_OUT @superagent - ??? superagent имеет багу с поточной передачей данных, поэтому исползуем request
 import requestAgent from 'request';
 
-import { parseToUniError } from '../../common/models/uni-error';
+import { isUniError, parseToUniError, ThrowableUniError } from '../../common/models/uni-error';
 import { joinUri } from '../../common/utils/uri-utils';
 
 import serverConfig from '../server-config';
@@ -86,20 +86,39 @@ export function sendSimpleRequest(requestOptions) {
       }
     }
 
-    const req = requestAgent(requestOptions, callback);
-    req
-      .on('data', (data) => {
-        // decompressed data as it is received
-        console.log(`decoded chunk: ${data}`);
-      })
-      .on('response', (response) => {
-        // unmodified http.IncomingMessage object
-        response.on('data', (data) => {
-          // compressed data as it is received
-          console.log(`received ${data.length} bytes of compressed data`);
+    try {
+      const req = requestAgent(requestOptions, callback);
+      req
+        .on('data', (data) => {
+          // decompressed data as it is received
+          console.log(`decoded chunk: ${data}`);
+        })
+        .on('response', (response) => {
+          // unmodified http.IncomingMessage object
+          response.on('data', (data) => {
+            // compressed data as it is received
+            console.log(`received ${data.length} bytes of compressed data`);
+          });
         });
-      });
-
+    } catch (error) {
+      /*
+        code: "ECONNRESET"
+        errno: "ECONNRESET"
+        syscall: "read"
+      */
+      if (isUniError(error)) {
+        throw error;
+      }
+      if (error.code === 'ECONNRESET') {
+        throw new ThrowableUniError({
+          isNotFound: true,
+          isServerError: true,
+          originalObject: error,
+          message: error.message,
+        });
+      }
+      throw error;
+    }
     // if (pipeStream) {
     //   req.pipe(pipeStream);
     // }

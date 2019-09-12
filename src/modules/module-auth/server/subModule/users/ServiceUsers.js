@@ -19,12 +19,8 @@ import { USER_REPRESENTATION_FIELDS } from './user-representation';
 export const USER_ATTR__VERIFY_TOKEN = 'verifyToken';
 
 export default class ServiceUsers extends CoreService {
-  urls = {};
-
-  constructor(endpointServiceConfig, urls, options) {
-    super(endpointServiceConfig, options);
-
-    this.urls = {
+  getUrls(urls) {
+    return {
       ...serverConfig.server.features.serviceUsers.urls,
       ...urls,
     };

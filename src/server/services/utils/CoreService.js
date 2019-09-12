@@ -46,11 +46,19 @@ export default class CoreService {
    * timeout: number
    */
   endpointServiceConfig = undefined;
-  options = null;
+  options = undefined;
+  urls = undefined;
 
-  constructor(endpointServiceConfig = undefined, options = {}) {
-    this.setEndpointServiceConfig(endpointServiceConfig);
+  constructor(endpointServiceConfig = undefined, urls = undefined, options = {}) {
+    this.setEndpointServiceConfig(endpointServiceConfig, urls);
     this.options = options;
+    this.urls = this.getUrls(urls);
+  }
+
+  getUrls(urls) {
+    return {
+      ...urls,
+    };
   }
 
   setRequest(request) {
