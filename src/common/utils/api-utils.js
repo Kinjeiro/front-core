@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,implicit-arrow-linebreak */
 import FileSaver from 'file-saver';
 import { applyPatch } from 'fast-json-patch';
 
@@ -19,9 +19,9 @@ export const ADD_AS_LAST = '-';
 export const RE_DOT = /\./g;
 /**
  * по умолчанию не добавляет в конец, нужно обязательно указывать позицию
-   createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
-   @guide - "/-" обозначает в конец
-   createJsonPatchOperation('/field2/-', 'newValue4', PATCH_OPERATIONS.ADD),
+ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),
+ @guide - "/-" обозначает в конец
+ createJsonPatchOperation('/field2/-', 'newValue4', PATCH_OPERATIONS.ADD),
  * @param path
  * @param value
  * @param operationType
@@ -92,9 +92,12 @@ export function replacePathIndexToItemId(operation, saveItemIds = false) {
       itemIds,
     } = operation;
 
-    const resultPath = itemIds.reduce((result, itemId) =>
-      result.replace(/\/(\d+)(\/|$)/, `/${SPECIAL_DELIMITER}${itemId}${SPECIAL_DELIMITER}$2`,
-    ), path)
+    const resultPath = itemIds
+      .reduce(
+        (result, itemId) =>
+          result.replace(/\/(\d+)(\/|$)/, `/${SPECIAL_DELIMITER}${itemId}${SPECIAL_DELIMITER}$2`),
+        path,
+      )
       .replace(SPECIAL_DELIMITER_REGEXP, '');
 
     // const regExp = /\/(\d+)(\/|$)/g;
@@ -569,9 +572,24 @@ export function dataURLtoBlob(dataurl) {
   let n = bstr.length;
   const u8arr = new Uint8Array(n);
 
+  // eslint-disable-next-line no-plusplus
   while (n--) {
     u8arr[n] = bstr.charCodeAt(n);
   }
 
   return new Blob([u8arr], { type: mime });
+}
+
+export function getFileNameFromResponse(response) {
+  let filename = null;
+  const disposition = response.headers['content-disposition'];
+  if (disposition && disposition.indexOf('attachment') !== -1) {
+    // https://stackoverflow.com/questions/23054475/javascript-regex-for-extracting-filename-from-content-disposition-header/57589181#57589181
+    const filenameRegex = /filename[^;\n]*=(UTF-\d['"]*)?((['"]).*?[.]$\2|[^;\n]*)?/;
+    const matches = filenameRegex.exec(disposition);
+    if (matches !== null && matches[2]) {
+      filename = matches[2].replace(/['"]/g, '');
+    }
+  }
+  return filename;
 }

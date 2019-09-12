@@ -1,9 +1,10 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,implicit-arrow-linebreak */
 import path from 'path';
 import fs from 'fs';
 import { URL } from 'url';
 import { Readable } from 'stream';
 import Cookie from 'cookie';
+import http from 'http';
 import Response from 'hapi/lib/response';
 
 import {
@@ -260,25 +261,24 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
     return reply().code(404);
   }
 
-  if (serverPath instanceof Readable) {
-    // type = type || getFileType(fileName);
-    return reply(serverPath)
-      // .type(type)
-      // .header('content-disposition', `attachment; filename=${encodeURI(fileName)};`)
-      ;
-  }
-
-  const result = base64ToBuffer(serverPath, fileName);
-  if (result) {
+  // https://nodejs.org/api/http.html#http_class_http_incomingmessage
+  if (serverPath instanceof http.IncomingMessage) {
     const {
-      buffer,
+      // уже прочитанный
+      body,
       headers,
-    } = result;
-
-    const response = reply(buffer);
+    } = serverPath;
+    const response = reply(body);
     Object.keys(headers).forEach((headerKey) =>
       response.header(headerKey, headers[headerKey]));
     return response;
+  }
+
+  if (serverPath instanceof Readable) {
+    // type = type || getFileType(fileName);
+    return reply(serverPath);
+    // .type(type)
+    // .header('content-disposition', `attachment; filename=${encodeURI(fileName)};`)
   }
 
   if (path.isAbsolute(serverPath)) {
@@ -294,6 +294,19 @@ export function downloadFile(reply, serverPath, fileName = null, type = null) {
       .type(type || getFileType(serverPath))
       .header('content-length', fileBuffer.length)
       .header('content-disposition', `attachment; filename=${encodeURI(fileName)};`);
+  }
+
+  const result = base64ToBuffer(serverPath, fileName);
+  if (result) {
+    const {
+      buffer,
+      headers,
+    } = result;
+
+    const response = reply(buffer);
+    Object.keys(headers).forEach((headerKey) =>
+      response.header(headerKey, headers[headerKey]));
+    return response;
   }
 
   throw new Error(`Не понятный формат "${serverPath}"`);

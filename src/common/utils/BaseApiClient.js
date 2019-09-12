@@ -17,6 +17,7 @@ import {
   replacePathIndexToItemId,
   downloadFile,
   convertToFormData,
+  getFileNameFromResponse,
 } from './api-utils';
 import createApiConfig from './create-api-config';
 import { cutContextPath } from '../helpers/app-urls';
@@ -139,6 +140,7 @@ export default class BaseApiClientClass {
     } = createApiConfig(apiConfig);
     const httpMethod = method.toLowerCase();
     const clientMethod = httpMethod === 'delete'
+      // нельзя писать метод с названием зарезирвированного в языке слова delete
       ? 'delete1'
       : httpMethod;
     return this[clientMethod](path, paramsOrData, options);
@@ -164,10 +166,14 @@ export default class BaseApiClientClass {
       {
         ...options,
         isFile: true,
+        returnResponse: true,
       },
     )
-      // todo @ANKU @LOW - может брать из headers ответа?
-      .then((blob) => downloadFile(blob, fileName));
+      .then((response) =>
+        downloadFile(
+          response.body,
+          fileName || getFileNameFromResponse(response),
+        ));
   }
 
   proceedPathParams(url, pathParams) {
@@ -294,6 +300,7 @@ export default class BaseApiClientClass {
       // pre\post-processing
       serializer, // используется внутри this.serializeRequest
       deserializer, // используется внутри this.deserializeResponse
+      returnResponse = false,
 
       mock,
       mockFilter = this.mockFilter,
@@ -421,6 +428,7 @@ export default class BaseApiClientClass {
     const {
       isAuth,
       mockFilter = this.mockFilter,
+      returnResponse = false,
     } = requestOptions;
 
     const deserializedResponse = this.deserializeResponse(err, response, requestOptions);
@@ -459,6 +467,9 @@ export default class BaseApiClientClass {
       } else {
         reject(error);
       }
+    } else if (returnResponse) {
+      // custom deserialized object
+      resolve(deserializedResponse);
     } else if (typeof deserializedResponse.body !== 'undefined') {
       // response
       resolve(deserializedResponse.body || deserializedResponse.text);

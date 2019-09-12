@@ -2,29 +2,38 @@
 // https://github.com/babel/babel/issues/2877
 export * from '../../../build-scripts/utils/file-utils';
 
-export function base64ToBuffer(base65Url, fileName = null) {
-  // если data:image base64
-  // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAE
-  const parts = base65Url.match(/data:(.*);base64,(.*)/i);
-  if (parts && parts[0]) {
-    // eslint-disable-next-line no-param-reassign
-    const type = parts[1];
-    const buffer = Buffer.from(parts[2], 'base64');
+export function base64ToBuffer(base64Url, fileName = null) {
+  let buffer = null;
+  const headers = {};
+  if (fileName) {
+    headers['content-disposition'] = `attachment; filename=${encodeURI(fileName)};`;
+  }
 
-    const headers = {
-      'Content-Type': type,
-      'Content-Length': buffer.length,
-    };
-    if (fileName) {
-      headers['content-disposition'] = `attachment; filename=${encodeURI(fileName)};`;
+  if (Buffer.isBuffer(base64Url)) {
+    buffer = base64Url;
+  } else if (typeof base64Url === 'string') {
+    // если data:image base64
+    // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAE
+    const parts = base64Url.match(/data:(.*);base64,(.*)/i);
+    if (parts && parts[0]) {
+      // eslint-disable-next-line no-param-reassign
+      const type = parts[1];
+      buffer = Buffer.from(parts[2], 'base64');
+
+      headers['Content-Type'] = type;
+      headers['Content-Length'] = buffer.length;
+    } else {
+      // может из response понять что это идет контент
+      buffer = Buffer.from(base64Url, 'base64');
     }
+  }
 
-    return {
+  return buffer
+    ? {
       buffer,
       headers,
-    };
-  }
-  return null;
+    }
+    : null;
 }
 
 export function streamToString(stream, notParseToUtf = false) {
