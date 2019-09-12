@@ -42,8 +42,14 @@ export default class RootWithStore extends Component {
         if (domId) {
           const node = document.querySelector(`#${domId}`);
           // при hot reload node может уже и не быть
+
           if (node) {
-            node.remove();
+            if (node.remove) {
+              node.remove();
+            } else {
+              // ie11
+              node.parentNode.removeChild(node);
+            }
           }
         }
         this.bodyElement.style.overflow = 'visible';
