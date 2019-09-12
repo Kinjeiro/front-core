@@ -1595,7 +1595,7 @@ Returns **[Promise][242]** attachmentContentId
 
 **Parameters**
 
--   `id`  
+-   `contentId`  
 
 Returns **any** stream
 
@@ -1603,7 +1603,7 @@ Returns **any** stream
 
 **Parameters**
 
--   `id`  
+-   `contentId`  
 
 Returns **[Promise][242]** 
 
