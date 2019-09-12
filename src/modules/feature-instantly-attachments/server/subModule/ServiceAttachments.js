@@ -56,6 +56,14 @@ export default class ServiceAttachments extends CoreService {
     throw new Error('not Implemented');
   }
 
+  async createRecord(attachment) {
+    // в большинстве систем аттач хранится там же где и контент, но бывают и раздельно
+    return {
+      ...attachment,
+      id: attachment.contentId,
+    };
+  }
+
   async readRecord(attachmentId, options = undefined) {
     return {
       // в большинстве систем аттач хранится там же где и контент, но бывают и раздельно
