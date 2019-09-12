@@ -32,8 +32,21 @@ export const GRANT_TYPES = {
 };
 
 // SINGLETON
-let clientAuthData = null;
-let clientAuthDataExpire = null;
+const CLIENT_TOKENS_MAP = {};
+function setClientAuthData(className, authData) {
+  CLIENT_TOKENS_MAP[className] = {
+    authData,
+    authDataExpire: Date.now() + (authData.expire * 1000),
+  };
+}
+function getClientAuthData(className) {
+  const object = CLIENT_TOKENS_MAP[className];
+  return object && object.authData;
+}
+function isClientAuthDataExpire(className) {
+  const object = CLIENT_TOKENS_MAP[className];
+  return !object || object.authDataExpire < Date.now();
+}
 
 /*
 // http://185.22.63.233:8080/auth/realms/exporter/.well-known/openid-configuration
@@ -151,13 +164,6 @@ const test = {
  * @returns {{ authValidate, authLogin }}
  */
 export default class ServiceAuth extends CoreService {
-  urls = {};
-
-  constructor(endpointServiceConfig, urls, options) {
-    super(endpointServiceConfig, options);
-    this.urls = this.getUrls(urls);
-  }
-
   getUrls(customUrls) {
     return {
       ...serverConfig.server.features.auth.oauth2Urls,
@@ -636,10 +642,13 @@ export default class ServiceAuth extends CoreService {
    */
   async authClientCredentials(clientCredentials = undefined) {
     try {
-      if (!clientAuthData || clientAuthDataExpire < Date.now()) {
-        logger.log('ServiceAuth', 'authClientCredentials');
+      // могут быть расхожения в минификации (если не отключить минификацию имен классов)
+      const className = this.constructor.name;
 
-        clientAuthData = await await this.send(
+      if (isClientAuthDataExpire(className)) {
+        logger.log('ServiceAuth', 'authClientCredentials', className);
+
+        const authData = await this.send(
           this.urls.authSignin,
           {
             grant_type: GRANT_TYPES.CLIENT_CREDENTIALS,
@@ -652,9 +661,9 @@ export default class ServiceAuth extends CoreService {
             },
           },
         );
-        clientAuthDataExpire = Date.now() + clientAuthData.expires_in * 1000;
+        setClientAuthData(className, authData);
       }
-      return clientAuthData;
+      return getClientAuthData(className);
     } catch (error) {
       return this.catchAuthError(error);
     }
