@@ -1941,8 +1941,6 @@ PROTOCOL - [https://tools.ietf.org/html/rfc6749#][248]
 **Parameters**
 
 -   `endpointServiceConfig`  
--   `urls`  
--   `options`  
 
 Returns **{authValidate, authLogin}** 
 
