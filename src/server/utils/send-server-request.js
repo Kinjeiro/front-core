@@ -111,7 +111,7 @@ export function sendSimpleRequest(requestOptions) {
       }
       if (error.code === 'ECONNRESET') {
         throw new ThrowableUniError({
-          isNotFound: true,
+          isServerNotAvailable: true,
           isServerError: true,
           originalObject: error,
           message: error.message,

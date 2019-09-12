@@ -402,9 +402,12 @@ export default class ServiceAuth extends CoreService {
       uniError.message = uniError.message || error_description || error;
       uniError.clientErrorMessage = i18n(`errors.${error_description}`, undefined, undefined, null)
         || i18n(`errors.${error}`, undefined, undefined, null);
+      uniError.errorFrom = 'catchAuthError';
+
+      throw new ThrowableUniError(uniError);
     }
 
-    throw new ThrowableUniError(uniError);
+    throw errorObject;
   }
 
   // ======================================================

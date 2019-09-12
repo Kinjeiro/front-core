@@ -3,8 +3,9 @@ import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 
 // import i18n from '../utils/i18n-utils';
-import { errorToJson as utilsErrorToJson } from '../utils/common';
+import { errorToJson as utilsErrorToJson, getFunctionName } from '../utils/common';
 import logger from '../helpers/client-logger';
+import { translateCore } from '../utils/i18n-utils';
 
 // import { ExtendableError } from 'common/utils/common';
 
@@ -19,7 +20,7 @@ const RESPONSE_NOT_FOUND_STATUS_CODES = [
 
 export const UNI_ERROR_FROM = {
   FROM_CREATE: 'FROM_CREATE',
-  FROM_ERROR: 'FROM_ERROR',
+  FROM_JS_ERROR: 'FROM_JS_ERROR',
   FROM_RESPONSE: 'FROM_RESPONSE',
   FROM_RESPONSE_BODY: 'FROM_RESPONSE_BODY',
   /**
@@ -47,7 +48,7 @@ export const UNI_ERROR_PROP_TYPE_MAP = {
   isServerError: PropTypes.bool,
   errorFrom: PropTypes.oneOf([
     UNI_ERROR_FROM.FROM_CREATE,
-    UNI_ERROR_FROM.FROM_ERROR,
+    UNI_ERROR_FROM.FROM_JS_ERROR,
     UNI_ERROR_FROM.FROM_RESPONSE,
     UNI_ERROR_FROM.FROM_RESPONSE_BODY,
     UNI_ERROR_FROM.FROM_BOOM_RESPONSE,
@@ -80,6 +81,7 @@ export const UNI_ERROR_PROP_TYPE_MAP = {
   uniMessage: PropTypes.node,
   uniMessages: PropTypes.arrayOf(PropTypes.node),
   isNotFound: PropTypes.bool,
+  isServerNotAvailable: PropTypes.bool,
   isNotAuth: PropTypes.bool,
 };
 
@@ -95,10 +97,11 @@ export const UNI_ERROR_DEFAULT_VALUE = {
   errorCode: undefined,
   responseStatusCode: undefined,
   isServerError: false,
-  errorFrom: UNI_ERROR_FROM.FROM_CREATE,
+  // errorFrom: UNI_ERROR_FROM.FROM_CREATE,
+  errorFrom: undefined,
 
   clientErrorTitle: undefined,
-  clientErrorMessages: undefined,
+  clientErrorMessages: [],
   clientErrorMessage: undefined,
   message: undefined,
 
@@ -110,11 +113,11 @@ export const UNI_ERROR_DEFAULT_VALUE = {
 
   // calculated
   uniCode: undefined,
-  // todo @ANKU @LOW - подумать над локализацией
-  uniMessage: 'Произошла ошибка',
+  uniMessage: translateCore('errors.clientErrorMessageDefault'),
   uniMessages: undefined,
   isNotFound: false,
   isNotAuth: false,
+  isServerNotAvailable: false,
 };
 
 
@@ -157,7 +160,7 @@ export function createUniError(uniErrorData = {}) {
 
   uniError.uniCode = uniError.errorCode || uniError.responseStatusCode;
 
-  uniError.uniMessage = (uniError.clientErrorMessages && uniError.clientErrorMessages[0])
+  uniError.uniMessage = uniError.clientErrorMessages[0]
     || uniError.clientErrorMessage
     || uniError.clientErrorTitle
     || uniError.message
@@ -166,9 +169,14 @@ export function createUniError(uniErrorData = {}) {
     ? uniError.clientErrorMessages
     : [uniError.uniMessage];
 
-  uniError.isNotFound = uniError.isNotFound || ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
-    || RESPONSE_NOT_FOUND_STATUS_CODES.includes(uniError.responseStatusCode)
-    || (uniError.uniMessage && uniError.uniMessage.indexOf('connect ECONNREFUSED') === 0);
+  uniError.isServerNotAvailable = uniError.isServerNotAvailable
+    || ERROR_NOT_FOUND_CODES.includes(uniError.errorCode)
+    || (uniError.uniMessage && uniError.uniMessage.indexOf('connect ECONNREFUSED') >= 0)
+    || (uniError.uniMessage && uniError.uniMessage.indexOf('ECONNRESET') >= 0);
+
+  uniError.isNotFound = uniError.isNotFound
+    || uniError.isServerNotAvailable
+    || ERROR_NOT_FOUND_CODES.includes(uniError.errorCode);
 
   uniError.isNotAuth = uniError.isNotAuth || uniError.responseStatusCode === 401;
 
@@ -176,6 +184,20 @@ export function createUniError(uniErrorData = {}) {
     || uniError.stack
     || (uniError.stack !== false && getStackTrace());
 
+  // ======================================================
+  // POST PROCESSING
+  // ======================================================
+  if (
+    uniError.isServerNotAvailable
+    && !uniError.clientErrorMessage
+    && uniError.clientErrorMessages.length === 0
+  ) {
+    uniError.clientErrorMessage = translateCore('errors.authServerNotResponse');
+    uniError.clientErrorMessages = [uniError.clientErrorMessage];
+  }
+
+  console.warn('ANKU , uniErrorData.clientErrorMessage', uniError);
+  console.error(getStackTrace());
   return uniError;
 }
 
@@ -289,6 +311,7 @@ export function parseFromJsonError(errorOrResponse, uniErrorData) {
     if (clientErrorMessage || clientErrorMessages) {
       return createUniError(merge({}, errorOrResponse, uniErrorData));
     }
+
     if (typeof error === 'string' || typeof message === 'string') {
       /*
        error: "Internal Server Error",
@@ -298,6 +321,7 @@ export function parseFromJsonError(errorOrResponse, uniErrorData) {
        status: 500,
        timestamp: 1524833891185,
        */
+
       return createUniError(merge({}, {
         message: error && message ? message : error,
         clientErrorMessage: error && message ? error : message,
@@ -388,12 +412,20 @@ export function parseFromResponse(errorOrResponse, uniErrorData = {}) {
 
 export function parseFromError(error, uniErrorData = {}) {
   if (error instanceof Error) {
+    /*
+      {
+        message: 'read ECONNRESET',
+        "errno": "ECONNRESET",
+        "code": "ECONNRESET",
+        "syscall": "read"
+      }
+    */
     return createUniError({
       errorCode: error.code,
       message: error.message,
       stack: error.stack,
       originalObject: error,
-      errorFrom: UNI_ERROR_FROM.FROM_ERROR,
+      errorFrom: UNI_ERROR_FROM.FROM_JS_ERROR,
       ...uniErrorData,
     });
   }
@@ -532,16 +564,19 @@ export function parseToUniError(errorOrResponse, uniErrorData = {}, { withoutExc
     parseFromUniError,
     parseFromProjectFormat,
     parseFromBoom,
+    parseFromError,
     parseFromJsonError,
     parseFromResponse,
-    parseFromError,
     parseFromBoomResponse,
     parseFromBoomError,
     // parseFromString, // нельзя так как бывает просто проверка
   ].some((method) => {
     const methodResult = method(errorOrResponse, uniErrorData);
     if (methodResult) {
-      result = createUniError(methodResult);
+      result = isUniError(methodResult)
+        ? methodResult
+        : createUniError(methodResult);
+      result.errorFrom = result.errorFrom || getFunctionName(method);
     }
     return !!result;
   });
