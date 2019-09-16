@@ -36,7 +36,7 @@ const CLIENT_TOKENS_MAP = {};
 function setClientAuthData(className, authData) {
   CLIENT_TOKENS_MAP[className] = {
     authData,
-    authDataExpire: Date.now() + (authData.expire * 1000),
+    authDataExpire: Date.now() + (authData.expires_in * 1000),
   };
 }
 function getClientAuthData(className) {
@@ -643,12 +643,12 @@ export default class ServiceAuth extends CoreService {
         "jti": "b3e97907-94cf-4829-8555-0b510c8fab55"
     }
    */
-  async authClientCredentials(clientCredentials = undefined) {
+  async authClientCredentials(clientCredentials = undefined, force = false) {
     try {
       // могут быть расхожения в минификации (если не отключить минификацию имен классов)
       const className = this.constructor.name;
 
-      if (isClientAuthDataExpire(className)) {
+      if (force || isClientAuthDataExpire(className)) {
         logger.log('ServiceAuth', 'authClientCredentials', className);
 
         const authData = await this.send(
@@ -673,22 +673,44 @@ export default class ServiceAuth extends CoreService {
   }
 
   async sendWithClientCredentials(url, data, options = {}) {
-    // todo @ANKU @CRIT @MAIN - сделать через синглтон токен
-    const {
-      access_token,
-      token_type,
-    } = await this.authClientCredentials();
+    try {
+      const {
+        access_token,
+        token_type,
+      } = await this.authClientCredentials();
 
-    return this.send(
-      url,
-      data,
-      {
-        ...options,
-        headers: {
-          ...options.headers,
-          ...getHeadersByAuthType(access_token, token_type),
+      return await this.send(
+        url,
+        data,
+        {
+          ...options,
+          headers: {
+            ...options.headers,
+            ...getHeadersByAuthType(access_token, token_type),
+          },
         },
-      },
-    );
+      );
+    } catch (uniError) {
+      if (uniError.responseStatusCode === 401) {
+        // try again with force credentials reload
+        const {
+          access_token,
+          token_type,
+        } = await this.authClientCredentials(undefined, true);
+
+        return this.send(
+          url,
+          data,
+          {
+            ...options,
+            headers: {
+              ...options.headers,
+              ...getHeadersByAuthType(access_token, token_type),
+            },
+          },
+        );
+      }
+      throw uniError;
+    }
   }
 }
