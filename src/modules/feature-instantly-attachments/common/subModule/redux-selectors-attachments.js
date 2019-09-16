@@ -1,7 +1,22 @@
 import { generateId } from '../../../../common/utils/common';
 
+export function getAttachmentsInfo(globalState) {
+  return globalState.attachments;
+}
+
+export function getAttachmentStatuses(globalState, ids = undefined) {
+  const attachmentsMap = getAttachmentsInfo(globalState);
+  return Object.keys(attachmentsMap).reduce((result, attachmentId) => {
+    if (!ids || ids.includes(attachmentId)) {
+      // eslint-disable-next-line no-param-reassign
+      result[attachmentId] = attachmentsMap[attachmentId].status;
+    }
+    return result;
+  }, {});
+}
+
 export function getAttachmentInfo(globalState, id) {
-  const { attachments } = globalState;
+  const attachments = getAttachmentsInfo(globalState);
 
   let result = attachments[id];
   if (result) {
@@ -25,7 +40,7 @@ export function generateAttachmentUuid(fieldId) {
 }
 
 export function getAttachmentsByFieldId(globalState, fieldId) {
-  const { attachments } = globalState;
+  const attachments = getAttachmentsInfo(globalState);
   return Object.keys(attachments).reduce((result, attachKey) => {
     const attach = attachments[attachKey];
     if (attach.uuid.indexOf(`${fieldId}_`) === 0) {
