@@ -18,20 +18,9 @@ module.exports = {
     features: {
       // auth: false,
       auth: {
-        /**
-         * чаше всего необходимо для открытых систем, а для enterprise обычно не надо
-         */
-        allowSignup: true,
-        aliasIdAsUsername: true,
-
         mockUsers: {
           ivanovIUserId: '8fHHbu8SMf',
           korolevaUUserId: 'HmsLfHcrcv'
-        },
-        socialProvides: {
-          google: true,
-          vkontakte: true,
-          facebook: true
         }
       }
       // preLoader: {
