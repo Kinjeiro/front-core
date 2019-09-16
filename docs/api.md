@@ -1951,6 +1951,7 @@ clientCredentials { client_id, client_secret }
 **Parameters**
 
 -   `clientCredentials`   (optional, default `undefined`)
+-   `force`   (optional, default `false`)
 
 ## ServiceAuthMock
 

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.12 | Documentation</title>
+  <title>@reagentum/front-core 1.8.13 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.12</code></div>
+          <div class='mb1'><code>1.8.13</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -13898,7 +13898,7 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>authClientCredentials(clientCredentials)</span>
+            <span class='code strong strong truncate'>authClientCredentials(clientCredentials, force)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -13909,7 +13909,7 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
   <p>clientCredentials { client_id, client_secret }</p>
 
 
-  <div class='pre p1 fill-light mt0'>authClientCredentials(clientCredentials: any)</div>
+  <div class='pre p1 fill-light mt0'>authClientCredentials(clientCredentials: any, force: any)</div>
   
   
 
@@ -13928,6 +13928,15 @@ PROTOCOL - <a href="https://tools.ietf.org/html/rfc6749#">https://tools.ietf.org
           <div>
             <span class='code bold'>clientCredentials</span> <code class='quiet'>(any
             = <code>undefined</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>force</span> <code class='quiet'>(any
+            = <code>false</code>)</code>
 	    
           </div>
           
