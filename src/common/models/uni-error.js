@@ -13,6 +13,7 @@ import { translateCore } from '../utils/i18n-utils';
 const ERROR_NOT_FOUND_CODES = [
   'ETIMEDOUT',
   'ECONNREFUSED',
+  'EHOSTUNREACH',
 ];
 const RESPONSE_NOT_FOUND_STATUS_CODES = [
   404, 502,
@@ -196,7 +197,6 @@ export function createUniError(uniErrorData = {}) {
     uniError.clientErrorMessages = [uniError.clientErrorMessage];
   }
 
-  console.warn('ANKU , uniErrorData.clientErrorMessage', uniError);
   console.error(getStackTrace());
   return uniError;
 }
@@ -544,6 +544,21 @@ export function parseFromBoomError(boomError, uniErrorData = {}) {
 
   return null;
 }
+export function parseFromKeycloak(keycloakError, uniErrorData = {}) {
+  if (checkProperties(keycloakError, 'errorMessage')) {
+    /*
+     {
+       "errorMessage": "opaopa"
+     }
+     */
+
+    return createUniError({
+      clientErrorMessage: keycloakError.errrorMessage,
+      ...uniErrorData,
+    });
+  }
+  return null;
+}
 
 
 
@@ -566,6 +581,7 @@ export function parseToUniError(errorOrResponse, uniErrorData = {}, { withoutExc
     parseFromBoom,
     parseFromError,
     parseFromJsonError,
+    parseFromKeycloak,
     parseFromResponse,
     parseFromBoomResponse,
     parseFromBoomError,
