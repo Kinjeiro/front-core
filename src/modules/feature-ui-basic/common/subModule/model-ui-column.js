@@ -40,4 +40,8 @@ export const COLUMN_PROP_TYPE = PropTypes.oneOfType([
   }),
 ]);
 
+export function createColumn(columnData) {
+  return columnData;
+}
+
 export default COLUMN_PROP_TYPE;
