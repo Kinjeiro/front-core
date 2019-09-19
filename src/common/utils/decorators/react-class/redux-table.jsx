@@ -227,7 +227,7 @@ export default function reduxTableDecorator(
           actionReplaceState,
           table: {
             filters,
-          },
+          } = {},
         } = this.props;
 
         actionReplaceState({
