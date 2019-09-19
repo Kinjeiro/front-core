@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.13 | Documentation</title>
+  <title>@reagentum/front-core 1.8.14 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.13</code></div>
+          <div class='mb1'><code>1.8.14</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -187,9 +187,29 @@
               
                 
                 <li><a
+                  href='#apifindrecords'
+                  class="">
+                  apiFindRecords
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#apiloadrecords'
                   class="">
                   apiLoadRecords
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#apieditrecord'
+                  class="">
+                  apiEditRecord
                   
                 </a>
                 
@@ -717,6 +737,16 @@
               
                 
                 <li><a
+                  href='#meta_prop'
+                  class="">
+                  META_PROP
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#user'
                   class="">
                   USER
@@ -850,6 +880,16 @@
                   href='#createcrudapi'
                   class="">
                   createCrudApi
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadrecords'
+                  class="">
+                  loadRecords
                   
                 </a>
                 
@@ -2027,6 +2067,16 @@
               
                 
                 <li><a
+                  href='#getcrudurlsprefix'
+                  class="">
+                  getCrudUrlsPrefix
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#findrecords'
                   class="">
                   findRecords
@@ -2047,9 +2097,29 @@
               
                 
                 <li><a
+                  href='#removerecord'
+                  class="">
+                  removeRecord
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#bulkoperations'
                   class="">
                   bulkOperations
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removerecord'
+                  class="">
+                  removeRecord
                   
                 </a>
                 
@@ -3149,8 +3219,8 @@
 
   <p>В зависимости есть ли нужный api:</p>
 <ul>
-<li>apiLoadRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)</li>
-<li>apiEditRecord -> actionEditRecord(tableUuid, recordId, patchOperations)</li>
+<li>apiFindRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)</li>
+<li>apiUpdateRecord -> actionEditRecord(tableUuid, recordId, patchOperations)</li>
 <li>apiBulkChangeStatus -> actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)</li>
 </ul>
 <p>Остальные синхронные методы:</p>
@@ -3229,8 +3299,8 @@
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='apiloadrecords'>
-      apiLoadRecords
+    <h3 class='fl m0' id='apifindrecords'>
+      apiFindRecords
     </h3>
     
     
@@ -3240,11 +3310,105 @@
   <p>апи который возвращает { meta, records }, либо массив, когда мультипейджинг не нужен</p>
 
 
-  <div class='pre p1 fill-light mt0'>apiLoadRecords</div>
+  <div class='pre p1 fill-light mt0'>apiFindRecords</div>
   
   
 
   
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='apiloadrecords'>
+      apiLoadRecords
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>apiLoadRecords</div>
+  
+  
+
+  <div>Deprecated: use apiFindRecords
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='apieditrecord'>
+      apiEditRecord
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>apiEditRecord</div>
+  
+  
+
+  <div>Deprecated: use apiUpdateRecord
+</div>
   
   
   
@@ -6307,6 +6471,58 @@ touched</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='meta_prop'>
+      META_PROP
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>META_PROP</div>
+  
+    <p>
+      Type:
+      shim
+    </p>
+  
+  
+
+  <div>Deprecated: use META_PROP_TYPE
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='user'>
       USER
     </h3>
@@ -7111,6 +7327,53 @@ createJsonPatchOperation('/field2', 'newValue4', PATCH_OPERATIONS.ADD),</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loadrecords'>
+      loadRecords
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>loadRecords</div>
+  
+  
+
+  <div>Deprecated: use findRecords
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
   
 
   
@@ -15674,6 +15937,71 @@ timeout: number</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getcrudurlsprefix'>
+      getCrudUrlsPrefix
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>если его определить то все методы
+findRecords
+findRecordsWithPagination
+createRecord
+readRecord
+updateRecord
+deleteRecord
+patchRecord</p>
+<ul>
+<li>заработают автоматом</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>getCrudUrlsPrefix(): null</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>null</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='findrecords'>
       findRecords
     </h3>
@@ -15824,6 +16152,82 @@ timeout: number</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='removerecord'>
+      removeRecord
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>removeRecord(id: any, options: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;void></div>
+  
+  
+
+  <div>Deprecated: use deleteRecord
+</div>
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;void></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='bulkoperations'>
       bulkOperations
     </h3>
@@ -15880,15 +16284,91 @@ timeout: number</p>
       <code>any</code>:
         BulkWriteOpResultObject
 <ul>
-<li>insertedCount	number -- Number of documents inserted.</li>
-<li>matchedCount	  number -- Number of documents matched for update.</li>
-<li>modifiedCount	number -- Number of documents modified.</li>
-<li>deletedCount	  number -- Number of documents deleted.</li>
-<li>upsertedCount	number -- Number of documents upserted.</li>
-<li>insertedIds	  object -- Inserted document generated Id's, hash key is the index of the originating operation</li>
-<li>upsertedIds	  object -- Upserted document generated Id's, hash key is the index of the originating operation</li>
-<li>result	        object -- The command result object.</li>
+<li>insertedCount  number -- Number of documents inserted.</li>
+<li>matchedCount   number -- Number of documents matched for update.</li>
+<li>modifiedCount  number -- Number of documents modified.</li>
+<li>deletedCount   number -- Number of documents deleted.</li>
+<li>upsertedCount  number -- Number of documents upserted.</li>
+<li>insertedIds    object -- Inserted document generated Id's, hash key is the index of the originating operation</li>
+<li>upsertedIds    object -- Upserted document generated Id's, hash key is the index of the originating operation</li>
+<li>result         object -- The command result object.</li>
 </ul>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removerecord'>
+      removeRecord
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>removeRecord(id: any, options: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;void></div>
+  
+  
+
+  <div>Deprecated: use deleteRecord
+</div>
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;void></code>:
+        
 
       
     
