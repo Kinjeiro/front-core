@@ -85,8 +85,8 @@ export default class ReduxTable extends ReduxUni {
   // ======================================================
   /**
    В зависимости есть ли нужный api:
-   - apiLoadRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
-   - apiEditRecord -> actionEditRecord(tableUuid, recordId, patchOperations)
+   - apiFindRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
+   - apiUpdateRecord -> actionEditRecord(tableUuid, recordId, patchOperations)
    - apiBulkChangeStatus -> actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)
 
    Остальные синхронные методы:
@@ -101,8 +101,17 @@ export default class ReduxTable extends ReduxUni {
       /**
        * апи который возвращает { meta, records }, либо массив, когда мультипейджинг не нужен
        */
+      apiFindRecords,
+      /**
+       * @deprecated - use apiFindRecords
+       */
       apiLoadRecords,
       apiBulkChangeStatus,
+
+      apiUpdateRecord,
+      /**
+       * @deprecated - use apiUpdateRecord
+       */
       apiEditRecord,
     } = api;
 
@@ -137,7 +146,7 @@ export default class ReduxTable extends ReduxUni {
       },
     };
 
-    if (apiLoadRecords) {
+    if (apiFindRecords || apiLoadRecords) {
       const initialMeta = this.getInitialState().meta;
 
       /**
@@ -163,7 +172,7 @@ export default class ReduxTable extends ReduxUni {
         //   uuid: tableUuid,
         //   meta,
         //   filters,
-        //   payload: apiLoadRecords(tableUuid, meta, filters),
+        //   payload: apiFindRecords(tableUuid, meta, filters),
         // };
         return (dispatch, getState) => {
           let state = this.getSliceState(getState(), tableUuid);
@@ -253,7 +262,7 @@ export default class ReduxTable extends ReduxUni {
               meta: newMeta,
               filters: newFilters,
               types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
-              payload: apiLoadRecords(newMeta, newFilters)
+              payload: (apiFindRecords || apiLoadRecords)(newMeta, newFilters)
                 .then((response) => {
                   if (Array.isArray(response)) {
                     return {
@@ -284,12 +293,12 @@ export default class ReduxTable extends ReduxUni {
       };
     }
 
-    if (apiEditRecord) {
+    if (apiUpdateRecord || apiEditRecord) {
       actions.actionEditRecord = (tableUuid, recordId, patchOperations) => ({
         [FIELD_UUID]: tableUuid,
         [FIELD_RECORD_ID]: recordId,
         types: [TYPES.EDIT_RECORD_FETCH, TYPES.EDIT_RECORD_SUCCESS, TYPES.EDIT_RECORD_FAIL],
-        payload: apiEditRecord(recordId, patchOperations)
+        payload: (apiUpdateRecord || apiEditRecord)(recordId, patchOperations)
           .then((resultOperations) => resultOperations || patchOperations),
       });
     }

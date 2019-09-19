@@ -264,7 +264,7 @@ export default function createApiPlugins() {
         // сначала удаляем контент из базы
         await serviceAttachmentContents.deleteFile(contentId);
         // потом удаляем инфу об аттачменте
-        await serviceAttachments.removeRecord(id);
+        await serviceAttachments.deleteRecord(id);
 
         return reply();
       },

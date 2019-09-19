@@ -71,6 +71,6 @@ export default class ServiceAttachmentContentsMock extends CoreServiceMock {
   async deleteFile(attachmentContentId) {
     const attachmentContent = await this.readRecord(attachmentContentId);
     await removeFile(attachmentContent.serverPath);
-    return this.removeRecord(attachmentContentId);
+    return this.deleteRecord(attachmentContentId);
   }
 }

@@ -500,7 +500,11 @@ export function createCrudApi(API_PREFIX, sendApiFn, options = {}) {
   } = options || {};
 
   const API_CONFIGS = {
+    /**
+     * @deprecated - use findRecords
+     */
     loadRecords: apiConfig(`/${API_PREFIX}`, 'GET'),
+    findRecords: apiConfig(`/${API_PREFIX}`, 'GET'),
 
     createRecord: apiConfig(`/${API_PREFIX}`, 'POST'),
     readRecord: apiConfig(`/${API_PREFIX}/{id}`, 'GET'),
@@ -510,8 +514,8 @@ export function createCrudApi(API_PREFIX, sendApiFn, options = {}) {
     patchRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
   };
 
-  function apiLoadRecords(meta = null, filters = null) {
-    return sendApiFn(API_CONFIGS.loadRecords, {
+  function apiFindRecords(meta = null, filters = null) {
+    return sendApiFn(API_CONFIGS.findRecords, {
       // мета передаем от рута, а вот все остальные фильтры от объекта filters
       ...meta,
       filters,
@@ -537,17 +541,18 @@ export function createCrudApi(API_PREFIX, sendApiFn, options = {}) {
   function apiUpdateRecord(id, changedData) {
     return sendApiFn(API_CONFIGS.updateRecord, changedData, { pathParams: { id } });
   }
-  function apiPatchRecord(id, patchOperations) {
-    return sendApiFn(API_CONFIGS.patchRecord, patchOperations, { pathParams: { id } });
-  }
   function apiDeleteRecord(id) {
     return sendApiFn(API_CONFIGS.deleteRecord, null, { pathParams: { id } });
+  }
+  function apiPatchRecord(id, patchOperations) {
+    return sendApiFn(API_CONFIGS.patchRecord, patchOperations, { pathParams: { id } });
   }
 
   return {
     API_PREFIX,
     API_CONFIGS,
-    apiLoadRecords,
+    apiLoadRecords: apiFindRecords,
+    apiFindRecords,
     apiCreateRecord,
     apiReadRecord,
     apiUpdateRecord,

@@ -269,10 +269,20 @@ export default class CoreService {
   async updateRecord(id, data, options) {
     throw new Error('Not Implemented');
   }
-  async createOrUpdateRecord(id, data, options) {
+  async deleteRecord(id, options) {
     throw new Error('Not Implemented');
   }
+
+  /**
+   * @deprecated - use deleteRecord
+   * @param id
+   * @param options
+   * @return {Promise<void>}
+   */
   async removeRecord(id, options) {
+    throw new Error('Not Implemented');
+  }
+  async createOrUpdateRecord(id, data, options) {
     throw new Error('Not Implemented');
   }
 

@@ -134,7 +134,17 @@ export default class CoreServiceMock extends CoreService {
     );
   }
 
-  async removeRecord(id, options = undefined) {
+  async deleteRecord(id, options = undefined) {
     delete (await this.getData())[id];
+  }
+
+  /**
+   * @deprecated - use deleteRecord
+   * @param id
+   * @param options
+   * @return {Promise<void>}
+   */
+  async removeRecord(id, options = undefined) {
+    return this.deleteRecord(id, options);
   }
 }
