@@ -10,11 +10,11 @@ export default class ServiceAttachmentsMock extends CoreServiceMock {
       downloadUrl: attachment.downloadUrl || getDownloadUrl(attachment.id),
     };
   }
-  async serializeRecords(recordsQuery, operationType) {
-    const attachments = await recordsQuery;
-    return attachments.map((attachment, index) =>
-      this.serializeRecord(attachment, operationType, index));
-  }
+  // async serializeRecords(recordsQuery, operationType) {
+  //   const attachments = await recordsQuery;
+  //   return attachments.map((attachment, index) =>
+  //     this.serializeRecord(attachment, operationType, index));
+  // }
 
   // ======================================================
   // BUSINESS

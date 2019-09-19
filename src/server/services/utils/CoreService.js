@@ -1,7 +1,8 @@
-/* eslint-disable no-unused-vars,no-empty-function */
+/* eslint-disable no-unused-vars */
 import {
   generateId as utilsGenerateId,
 } from '../../../common/utils/common';
+import { isPatchOperations } from '../../../common/utils/api-utils';
 import { getMeta } from '../../../common/models/model-table';
 
 import {
@@ -55,8 +56,41 @@ export default class CoreService {
     this.urls = this.getUrls(urls);
   }
 
+  /**
+   * если его определить то все методы
+        findRecords
+        findRecordsWithPagination
+        createRecord
+        readRecord
+        updateRecord
+        deleteRecord
+        patchRecord
+    - заработают автоматом
+
+   * @return {null}
+   */
+  getCrudUrlsPrefix() {
+    return null;
+  }
+
+  getCrudUrls() {
+    const prefix = this.getCrudUrlsPrefix();
+    const commonTemplate = `${prefix}/{id}`;
+    return prefix !== null
+      ? {
+        urlFindRecords: `${prefix}`,
+        urlCreateRecord: `${prefix}`,
+        urlReadRecord: commonTemplate,
+        urlUpdateRecord: commonTemplate,
+        urlDeleteRecord: commonTemplate,
+        urlPatchRecord: commonTemplate,
+      }
+      : undefined;
+  }
+
   getUrls(urls) {
     return {
+      ...this.getCrudUrls(),
       ...urls,
     };
   }
@@ -187,6 +221,7 @@ export default class CoreService {
     return [];
   }
   async initData(data) {
+    return data;
   }
 
   // ======================================================
@@ -196,7 +231,8 @@ export default class CoreService {
     return recordQuery;
   }
   async serializeRecords(recordsQuery, operationType, options = undefined) {
-    return recordsQuery;
+    const records = await recordsQuery;
+    return Promise.all(records.map((record) => this.serializeRecord(record)));
   }
   async deserializeData(data, operationType, options = undefined) {
     return data;
@@ -209,7 +245,24 @@ export default class CoreService {
   // CRUD
   // ======================================================
   async innerFindRecords(query, searchFields = undefined, options = undefined, withPagination = false) {
-    throw new Error('Not Implemented');
+    if (!this.urls.urlFindRecords) {
+      throw new Error('Not define urls.urlFindRecords. Please override getCrudUrlsPrefix.');
+    }
+
+    // throw new Error('Not Implemented');
+    const tableResponseWithPagination = await this.sendWithAuth(
+      this.urls.urlFindRecords,
+      query,
+    );
+    tableResponseWithPagination.records = await this.serializeRecords(
+      tableResponseWithPagination.records,
+      this.OPERATION_TYPE.FIND,
+      options,
+    );
+
+    return withPagination
+      ? tableResponseWithPagination
+      : tableResponseWithPagination.records;
   }
 
   /**
@@ -260,16 +313,110 @@ export default class CoreService {
     return results ? results[0] : null;
   }
 
-  async createRecord(record, id, options) {
-    throw new Error('Not Implemented');
+  async createRecord(data, id, options) {
+    if (!this.urls.urlCreateRecord) {
+      throw new Error('Not define urls.urlCreateRecord. Please override getCrudUrlsPrefix.');
+    }
+
+    let dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.CREATE, options);
+    if (typeof dataFinal.id === 'undefined') {
+      dataFinal = {
+        ...dataFinal,
+        id: id || dataFinal.id || this.generateId(),
+      };
+    }
+
+    const result = await this.sendWithAuth(
+      this.urls.urlCreateRecord,
+      dataFinal,
+      {
+        method: 'POST',
+      },
+    );
+
+    return this.serializeRecord(
+      result,
+      this.OPERATION_TYPE.CREATE,
+      options,
+    );
   }
   async readRecord(id, options) {
-    throw new Error('Not Implemented');
+    if (!this.urls.urlReadRecord) {
+      throw new Error('Not define urls.urlReadRecord. Please override getCrudUrlsPrefix.');
+    }
+    // throw new Error('Not Implemented');
+    return this.serializeRecord(
+      await this.sendWithAuth(
+        this.urls.urlReadRecord,
+        undefined,
+        {
+          pathParams: {
+            id,
+          },
+        },
+      ),
+      this.OPERATION_TYPE.READ,
+      options,
+    );
   }
   async updateRecord(id, data, options) {
-    throw new Error('Not Implemented');
+    if (!this.urls.urlUpdateRecord) {
+      throw new Error('Not define urls.urlUpdateRecord. Please override getCrudUrlsPrefix.');
+    }
+
+    const record = await this.sendWithAuth(
+      this.urls.urlUpdateRecord,
+      await this.deserializeData(data, this.OPERATION_TYPE.UPDATE, options),
+      {
+        method: 'PUT',
+        pathParams: {
+          id,
+        },
+      },
+    );
+
+    return this.serializeRecord(
+      record,
+      this.OPERATION_TYPE.UPDATE,
+      options,
+    );
   }
   async deleteRecord(id, options) {
+    if (!this.urls.urlDeleteRecord) {
+      throw new Error('Not define urls.urlDeleteRecord. Please override getCrudUrlsPrefix.');
+    }
+    return this.sendWithAuth(
+      this.urls.urlDeleteRecord,
+      undefined,
+      {
+        method: 'DELETE',
+        pathParams: {
+          id,
+        },
+      },
+    );
+  }
+
+  async patchRecord(id, patchOperation, options) {
+    if (!this.urls.urlPatchRecord) {
+      throw new Error('Not define urls.urlPatchRecord. Please override getCrudUrlsPrefix.');
+    }
+    if (!isPatchOperations(patchOperation)) {
+      throw new Error(`Не патч операция: ${JSON.stringify(patchOperation, null, 2)}`);
+    }
+    return this.sendWithAuth(
+      this.urls.urlPatchRecord,
+      patchOperation,
+      {
+        method: 'PATCH',
+        pathParams: {
+          id,
+        },
+      },
+    );
+  }
+
+  async createOrUpdateRecord(id, data, options) {
     throw new Error('Not Implemented');
   }
 
@@ -280,10 +427,7 @@ export default class CoreService {
    * @return {Promise<void>}
    */
   async removeRecord(id, options) {
-    throw new Error('Not Implemented');
-  }
-  async createOrUpdateRecord(id, data, options) {
-    throw new Error('Not Implemented');
+    return this.deleteRecord(id, options);
   }
 
   // ======================================================
@@ -297,14 +441,14 @@ export default class CoreService {
       [this.OPERATION_TYPE.REMOVE]: removeArray,
     }
    * @return BulkWriteOpResultObject
-   - insertedCount	number -- Number of documents inserted.
-   - matchedCount	  number -- Number of documents matched for update.
-   - modifiedCount	number -- Number of documents modified.
-   - deletedCount	  number -- Number of documents deleted.
-   - upsertedCount	number -- Number of documents upserted.
-   - insertedIds	  object -- Inserted document generated Id's, hash key is the index of the originating operation
-   - upsertedIds	  object -- Upserted document generated Id's, hash key is the index of the originating operation
-   - result	        object -- The command result object.
+   - insertedCount  number -- Number of documents inserted.
+   - matchedCount   number -- Number of documents matched for update.
+   - modifiedCount  number -- Number of documents modified.
+   - deletedCount   number -- Number of documents deleted.
+   - upsertedCount  number -- Number of documents upserted.
+   - insertedIds    object -- Inserted document generated Id's, hash key is the index of the originating operation
+   - upsertedIds    object -- Upserted document generated Id's, hash key is the index of the originating operation
+   - result         object -- The command result object.
    */
   async bulkOperations(operations, options = null) {
     throw new Error('Not Implemented');
