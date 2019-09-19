@@ -33,6 +33,8 @@
     "arrow-body-style": 0, //методы render должны единообразно выглядеть, если даже в них один return
     "key-spacing": ["error", { "mode": "minimum" }], //чтобы можно было выравнивать значение для визуального удобства
     "prefer-arrow-callback": [ "error", { "allowNamedFunctions": true } ], // чтобы унифицировать и не потерять контекст (к примеру mocha describe it сделаем эту настройку)
+    "lines-between-class-members": 0, // стиль группировки
+    "implicit-arrow-linebreak": 0, // чтобы строчки разбивать по chain операциям
     "import/no-named-as-default": 0, // неудобно, порой нужно называть функцию отдельно в экпорт и ту же в экспорт дефолт
     "import/no-named-as-default-member": 0, // неудобно, порой нужно называть функцию отдельно в экпорт и ту же в экспорт дефолт
     "global-require": 0, // require используется не в node а для webpack
