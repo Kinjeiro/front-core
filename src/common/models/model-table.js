@@ -37,8 +37,19 @@ export const META_PROP_TYPE_MAP = {
   sortDesc: PropTypes.bool,
   total: PropTypes.number,
 };
+export const META_PROP_TYPE = PropTypes.shape(META_PROP_TYPE_MAP);
+/**
+ * @deprecated - use META_PROP_TYPE
+ * @type {shim}
+ */
+export const META_PROP = META_PROP_TYPE;
 
-export const META_PROP = PropTypes.shape(META_PROP_TYPE_MAP);
+
+export const QUERY_PROP_TYPE_MAP = {
+  ...META_PROP_TYPE_MAP,
+  filters: PropTypes.object,
+};
+export const QUERY_PROP_TYPE = PropTypes.shape(META_PROP_TYPE_MAP);
 
 export const TABLE_PROP_TYPE_MAP = {
   records: PropTypes.array,
@@ -63,6 +74,10 @@ export const DEFAULT_META = {
   itemsPerPage: 20,
   total: undefined,
 };
+
+export function createMeta(meta) {
+  return meta;
+}
 
 export function getMeta(query, defaultMeta = {}) {
   const queryFinal = parseUrlParameters(query);
@@ -98,6 +113,16 @@ function searchInValue(value, search) {
     return value.some((item) => searchInValue(item, search));
   }
   return `${value}`.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+}
+
+export function createTableResponse(records, meta, total) {
+  return {
+    records,
+    meta: createMeta({
+      ...meta,
+      total,
+    }),
+  };
 }
 
 export function filterAndSortDb(mockDb, query, searchFields = []) {
@@ -138,12 +163,12 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
       const fieldA = objectA[sortBy];
       const fieldB = objectB[sortBy];
       return (sortDesc ? -1 : 1) * (
-          fieldA > fieldB
-            ? 1
-            : fieldA < fieldB
+        fieldA > fieldB
+          ? 1
+          : fieldA < fieldB
             ? -1
             : 0
-        );
+      );
     });
   }
 
@@ -151,13 +176,8 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
   const total = result.length;
   result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
 
-  return {
-    records: result,
-    meta: {
-      ...meta,
-      total,
-    },
-  };
+  // todo @ANKU @LOW - filters обратно не возвращаются - а надо?
+  return createTableResponse(result, meta, total);
 }
 
 export default TABLE_PROP_TYPE;
