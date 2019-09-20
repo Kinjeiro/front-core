@@ -6,7 +6,7 @@ import serverConfig from '../../../../server/server-config';
 export default class ServiceAttachmentContents extends CoreService {
   getUrls(customUrls) {
     return {
-      ...serverConfig.server.features.serviceAttachmentContents.urls,
+      ...serverConfig.server.features.attachments.serviceAttachmentContents.urls,
       ...customUrls,
     };
   }

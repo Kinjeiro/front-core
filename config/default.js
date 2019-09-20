@@ -277,7 +277,7 @@ module.exports = {
       },
 
       preLoader: {
-        autoClose: 10,
+        autoClose: 300,
         domId: 'PreLoader'
       }
     },
@@ -419,40 +419,37 @@ module.exports = {
           authSocialProviderSignin: '/social/{provider}'
         }
       },
-      serviceUsers: {
-        urls: {
-          // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_users_resource
 
-          // public
-          // checkUnique:        '/admin/realms/{realm}/users/unique',                    // [GET] - field и value для проверки уникальности в рамках пользователей
-          // getAvatar:          '/users/avatar/{userIdentify}',  // [GET] - получение аватарки в data:image
-          // getPublicInfo:      '/users/public/{userIdentify}',  // [GET] - получение публичных данных пользователя
+      users: {
+        serviceUsers: {
+          urls: {
+            // https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_users_resource
 
-          // authorized
-          // editUserByUser:           '/users',                           // [PUT] - изменение данных пользователя
-          // changePasswordByUser: '/users/changePassword',            // [PUT] - изменение пароля
-          // deleteUserByUser:         '/users',                           // [DELETE] - удаление пользователя
+            // public
+            // checkUnique:        '/admin/realms/{realm}/users/unique',                    // [GET] - field и value для проверки уникальности в рамках пользователей
+            // getAvatar:          '/users/avatar/{userIdentify}',  // [GET] - получение аватарки в data:image
+            // getPublicInfo:      '/users/public/{userIdentify}',  // [GET] - получение публичных данных пользователя
 
-          // by admin
-          findUsers:          '/admin/realms/{realm}/users', // [GET]
-          userSignup:         '/admin/realms/{realm}/users', // [POST]
-          loadUser:           '/admin/realms/{realm}/users/{userId}',   // [GET] - получение частисных данных пользователя (телефон, почта и так далее). **Нужна роль 'protector'**
-          editUser:           '/admin/realms/{realm}/users/{userId}',            // [PUT] - изменение данных пользователя админом
-          deleteUser:         '/admin/realms/{realm}/users/{userId}',            // [DELETE] - удаление пользователя админом
+            // authorized
+            // editUserByUser:           '/users',                           // [PUT] - изменение данных пользователя
+            // changePasswordByUser: '/users/changePassword',            // [PUT] - изменение пароля
+            // deleteUserByUser:         '/users',                           // [DELETE] - удаление пользователя
 
-          revokeTokens:       '/admin/realms/{realm}/users/{userId}/consents/{clientId}',                          // удаление токенов доступа, при краже или смене пароля
-          // force logout:   POST /{realm}/users/{id}/logout
-          // sendForgotPasswordEmail:         '/forgot', // PUT /{realm}/users/{id}/send-verify-email
-          resetPassword:      '/admin/realms/{realm}/users/{userId}/reset-password'  // PUT /{realm}/users/{id}/reset-password
+            // by admin
+            findUsers:          '/admin/realms/{realm}/users', // [GET]
+            userSignup:         '/admin/realms/{realm}/users', // [POST]
+            loadUser:           '/admin/realms/{realm}/users/{userId}',   // [GET] - получение частисных данных пользователя (телефон, почта и так далее). **Нужна роль 'protector'**
+            editUser:           '/admin/realms/{realm}/users/{userId}',            // [PUT] - изменение данных пользователя админом
+            deleteUser:         '/admin/realms/{realm}/users/{userId}',            // [DELETE] - удаление пользователя админом
+
+            revokeTokens:       '/admin/realms/{realm}/users/{userId}/consents/{clientId}',                          // удаление токенов доступа, при краже или смене пароля
+            // force logout:   POST /{realm}/users/{id}/logout
+            // sendForgotPasswordEmail:         '/forgot', // PUT /{realm}/users/{id}/send-verify-email
+            resetPassword:      '/admin/realms/{realm}/users/{userId}/reset-password'  // PUT /{realm}/users/{id}/reset-password
+          }
         }
       },
-      serviceAttachmentContents: {
-        urls: {
-          uploadFile: '/attachment/upload',                 // POST
-          downloadFile: '/attachment/download/{contentId}', // GET
-          deleteFile: '/attachment/{contentId}'             // DELETE
-        }
-      },
+
 
       // ======================================================
       // Мокирование
@@ -524,7 +521,15 @@ module.exports = {
          * accessOwnerOnly - только тот, кто создал (ну и админ ;))
          * <permission> - пермишен специальный
          */
-        defaultAccess: 'accessAuth'
+        defaultAccess: 'accessAuth',
+
+        serviceAttachmentContents: {
+          urls: {
+            uploadFile: '/attachment/upload',                 // POST
+            downloadFile: '/attachment/download/{contentId}', // GET
+            deleteFile: '/attachment/{contentId}'             // DELETE
+          }
+        }
       },
 
       // todo @ANKU @LOW - под вопросом нужно ли yar включать (лишний id в куках)
@@ -556,23 +561,18 @@ module.exports = {
       // ======================================================
       // AUTH Services - KEYCLOAK
       // ======================================================
+      // KEYCLOAK - протокол oauth2.0 / openconnect id (OCID)
       serviceAuth: createEndpointServiceConfig({
         protocol: 'https',
+        host: '185.22.63.233',
         port: 443,
-        endpoint: 'auth',
-        requestOptions: {
-          // игнорировать, что сертификат не подписан
-          rejectUnauthorized: false
-        }
+        endpoint: 'auth'
       }),
       serviceUsers: createEndpointServiceConfig({
         protocol: 'https',
+        host: '185.22.63.233',
         port: 443,
-        endpoint: 'auth',
-        requestOptions: {
-          // игнорировать, что сертификат не подписан
-          rejectUnauthorized: false
-        }
+        endpoint: 'auth'
       }),
 
       /**

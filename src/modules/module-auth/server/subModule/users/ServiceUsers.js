@@ -21,7 +21,7 @@ export const USER_ATTR__VERIFY_TOKEN = 'verifyToken';
 export default class ServiceUsers extends CoreService {
   getUrls(urls) {
     return {
-      ...serverConfig.server.features.serviceUsers.urls,
+      ...serverConfig.server.features.users.serviceUsers.urls,
       ...urls,
     };
   }
