@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
@@ -229,6 +231,7 @@ export default class CoreField extends Component {
   static async validate(value, fieldProps = {}, domRef = null, getFormData = null) {
     const {
       type,
+      label,
       name,
       required: propsRequired,
       constraints: {
@@ -292,9 +295,14 @@ export default class CoreField extends Component {
       // code checking
       // eslint-disable-next-line no-lonely-if
       if ((propsRequired || required) && CoreField.isEmptyValue(type, value, fieldProps)) {
-        errors.push(i18n('components.CoreField.errors.requiredError', {
-          fieldName: name,
-        }));
+        errors.push(i18n('components.CoreField.errors.requiredErrorWithoutFieldName'));
+        // if (typeof label === 'string') {
+        //   errors.push(i18n('components.CoreField.errors.requiredError', {
+        //     fieldName: label,
+        //   }));
+        // } else {
+        //   errors.push(i18n('components.CoreField.errors.requiredErrorWithoutFieldName'));
+        // }
       }
     }
 

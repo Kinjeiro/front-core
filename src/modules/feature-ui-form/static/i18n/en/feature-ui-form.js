@@ -8,6 +8,7 @@ module.exports = {
     },
     CoreField: {
       errors: {
+        requiredErrorWithoutFieldName: 'Field is required.',
         requiredError: 'Field "{{fieldName}}" is required.',
         multipleMinSize: 'Field "{{fieldName}}" must contains at least {{multipleMinSize}} values.',
         multipleMaxSize: 'Field "{{fieldName}}" must contains no more than {{multipleMaxSize}} values.',
