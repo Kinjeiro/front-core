@@ -9,25 +9,29 @@ const {
   UnescapedHtml,
   Loading,
   ErrorLabel,
+  Hint,
 } = getComponents();
 
 require('./FieldLayout.css');
 
 export default class FieldLayout extends PureComponent {
   static propTypes = {
+    className: PropTypes.string,
+
     label: PropTypes.node,
     children: PropTypes.node,
+    textHint: PropTypes.node,
+
+    textDescription: PropTypes.node,
+
     errors: PropTypes.arrayOf(PropTypes.string),
     warnings: PropTypes.arrayOf(PropTypes.string),
-
-    className: PropTypes.string,
     /**
      * @deprecated - в CoreField--touched есть
      */
     touched: PropTypes.bool,
     required: PropTypes.bool,
     isProcessing: PropTypes.bool,
-    textDescription: PropTypes.node,
   };
 
   renderLabel() {
@@ -56,6 +60,22 @@ export default class FieldLayout extends PureComponent {
 
   renderField() {
     return this.props.children;
+  }
+
+  renderHint() {
+    const {
+      textHint,
+    } = this.props;
+
+    return (textHint === 0 || textHint)
+      ? (
+        <Hint
+          className="FieldLayout__hint"
+        >
+          { textHint }
+        </Hint>
+      )
+      : undefined;
   }
 
   renderDescription() {
@@ -117,6 +137,7 @@ export default class FieldLayout extends PureComponent {
         <div className="FieldLayout__control">
           { this.renderProcessing() }
           { this.renderField() }
+          { this.renderHint() }
         </div>
         { this.renderDescription() }
 

@@ -25,6 +25,7 @@ export function initComponents(COMPONENTS_BASE) {
   // FUTURE UI
   // ======================================================
   COMPONENTS_BASE.replace('Segment', () => require('./components/Segment/Segment').default);
+  COMPONENTS_BASE.replace('Hint', () => require('./components/Hint/Hint').default);
 
   CB = COMPONENTS_BASE;
   return COMPONENTS_BASE;
