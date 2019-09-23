@@ -354,6 +354,7 @@ export default class CoreForm extends Component {
     const {
       className,
       name,
+      placeholder,
       textPlaceholder,
       textHint,
       textDescription,
@@ -373,7 +374,7 @@ export default class CoreForm extends Component {
     } = this.state;
 
     const label = this.getFieldLabel(field);
-    const placeholder = textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`,
+    const placeholderFinal = placeholder || textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`,
         {},
         '',
         ''));
@@ -406,7 +407,8 @@ export default class CoreForm extends Component {
       key: name,
       className: `${this.bem('field')} ${className || ''}`,
       label,
-      textPlaceholder: placeholder,
+      placeholder: placeholderFinal,
+      textPlaceholder: placeholderFinal,
       textHint: hint,
       textDescription: textDescriptionFinal,
       onChange: onChange || (onChangeField ? this.handleChange : undefined),

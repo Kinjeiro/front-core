@@ -35,6 +35,8 @@ import getCb from '../../../../../../common/get-components';
 const CB = getCb();
 const { FieldLayout } = CB;
 
+require('./CoreField.css');
+
 export default class CoreField extends Component {
   static TYPES = TYPES;
   static SUB_TYPES = SUB_TYPES;
@@ -642,6 +644,8 @@ export default class CoreField extends Component {
       // value: inValue,
       // valueName,
       // emptyValue,
+
+      placeholder,
       textPlaceholder,
       textHint,
       controlProps = {},
@@ -684,7 +688,7 @@ export default class CoreField extends Component {
       defaultValue,
       multiple,
       ...controlProps,
-      placeholder: textPlaceholder,
+      placeholder: placeholder || textPlaceholder,
       title: textHint,
       readOnly: readOnly || !onChange || isProcessing,
       disabled: disabled || isProcessing,
@@ -1114,6 +1118,7 @@ export default class CoreField extends Component {
       multiple,
 
       className,
+      textHint,
       textDescription,
 
       required: propsRequired,
@@ -1153,13 +1158,16 @@ export default class CoreField extends Component {
         className={ classNameFinal }
 
         label={ this.renderLabel() }
+        isProcessing={ isProcessing }
+        textHint={ textHint }
+
         textDescription={ textDescription }
         errors={ touched && !isProcessing ? errors : undefined }
         warnings={ warnings }
 
         required={ required || propsRequired }
         touched={ touched }
-        isProcessing={ isProcessing }
+
       >
         { this.renderMultiple(constraints) }
       </Layout>
