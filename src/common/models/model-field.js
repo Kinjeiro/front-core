@@ -36,15 +36,58 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   id: PropTypes.string,
   label: PropTypes.node,
+
+  simpleText: PropTypes.bool,
   value: PropTypes.any,
   /**
    * Значение которое будет отображаться
    */
   valueName: PropTypes.node,
   emptyValue: PropTypes.node,
-  options: PropTypes.array,
-  simpleText: PropTypes.bool,
+
+  className: PropTypes.string,
+
+  readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
+
+  // ======================================================
+  // ADDITIONAL - LAYOUT
+  // ======================================================
+  placeholder: PropTypes.node,
+  /**
+   * @deprecated - use placeholder
+   */
+  textPlaceholder: PropTypes.node,
+  textHint: PropTypes.node,
+  textDescription: PropTypes.node,
+  /**
+   className
+
+   label
+   textDescription
+   errors
+
+   required
+   touched
+   */
+  Layout: PropTypes.any,
+
+
+  // ======================================================
+  // для листовых
+  // ======================================================
   multiple: PropTypes.bool,
+  options: PropTypes.array,
+
+  onAdd: PropTypes.func,
+  textOnAdd: PropTypes.node,
+  onRemove: PropTypes.func,
+  textOnRemove: PropTypes.node,
+
+
+  // ======================================================
+  // VALIDATION
+  // ======================================================
   /**
    values
    maxLength
@@ -129,17 +172,29 @@ export const FIELD_PROP_TYPE_MAP = {
    * дублирует поле constraints.required для удобства
    */
   required: PropTypes.bool,
-  readOnly: PropTypes.bool,
-  disabled: PropTypes.bool,
 
-  textPlaceholder: PropTypes.node,
-  textHint: PropTypes.node,
-  textDescription: PropTypes.node,
+  /**
+   * Список других полей на форме от которых зависит текущее поле
+   * Если есть - то будет подаваться formData в виде объекта и обновлять
+   */
+  formDependentFields: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
+  /**
+   * значение зависимых полей
+   */
+  formDependentData: PropTypes.object,
+  /**
+   * Метод с формы, чтобы получить остальные контекстные формы
+   * - функция - чтобы не перезагружать компонент, при смене других значений
+   */
+  getFormData: PropTypes.func,
 
-  context: PropTypes.object,
-  compareFn: PropTypes.func,
-  className: PropTypes.string,
 
+  // ======================================================
+  // INNER CONTROL
+  // ======================================================
   controlProps: PropTypes.object,
   /**
    * ссылка на DOM
@@ -159,6 +214,9 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   render: PropTypes.func,
 
+  // ======================================================
+  // VALUE CHANGE
+  // ======================================================
   /**
    * (value, index, contextData, node) => {}
    */
@@ -176,40 +234,8 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   instanceChange: PropTypes.bool,
 
-  onAdd: PropTypes.func,
-  textOnAdd: PropTypes.node,
-  onRemove: PropTypes.func,
-  textOnRemove: PropTypes.node,
-
-  /**
-   className
-
-   label
-   textDescription
-   errors
-
-   required
-   touched
-   */
-  Layout: PropTypes.any,
-
-  /**
-   * Список других полей на форме от которых зависит текущее поле
-   * Если есть - то будет подаваться formData в виде объекта и обновлять
-   */
-  formDependentFields: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
-  /**
-   * значение зависимых полей
-   */
-  formDependentData: PropTypes.object,
-  /**
-   * Метод с формы, чтобы получить остальные контекстные формы
-   * - функция - чтобы не перезагружать компонент, при смене других значений
-   */
-  getFormData: PropTypes.func,
+  context: PropTypes.object,
+  compareFn: PropTypes.func,
 };
 
 export function createField(name, value, otherProps = {}) {
