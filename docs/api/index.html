@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.15 | Documentation</title>
+  <title>@reagentum/front-core 1.8.16 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.15</code></div>
+          <div class='mb1'><code>1.8.16</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -607,6 +607,26 @@
               
                 
                 <li><a
+                  href='#textplaceholder'
+                  class="">
+                  textPlaceholder
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#layout'
+                  class="">
+                  Layout
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#constraints'
                   class="">
                   constraints
@@ -630,6 +650,36 @@
                   href='#required'
                   class="">
                   required
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#formdependentfields'
+                  class="">
+                  formDependentFields
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#formdependentdata'
+                  class="">
+                  formDependentData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getformdata'
+                  class="">
+                  getFormData
                   
                 </a>
                 
@@ -690,46 +740,6 @@
                   href='#instancechange'
                   class="">
                   instanceChange
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#layout'
-                  class="">
-                  Layout
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#formdependentfields'
-                  class="">
-                  formDependentFields
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#formdependentdata'
-                  class="">
-                  formDependentData
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#getformdata'
-                  class="">
-                  getFormData
                   
                 </a>
                 
@@ -5780,6 +5790,105 @@ moduleToRoutePrefixMap: {}
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='textplaceholder'>
+      textPlaceholder
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>textPlaceholder</div>
+  
+  
+
+  <div>Deprecated: use placeholder
+</div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='layout'>
+      Layout
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>className</p>
+<p>label
+textDescription
+errors</p>
+<p>required
+touched</p>
+
+
+  <div class='pre p1 fill-light mt0'>Layout</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='constraints'>
       constraints
     </h3>
@@ -5952,6 +6061,151 @@ errors = customValidateErrors;
 
 
   <div class='pre p1 fill-light mt0'>required</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='formdependentfields'>
+      formDependentFields
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Список других полей на форме от которых зависит текущее поле
+Если есть - то будет подаваться formData в виде объекта и обновлять</p>
+
+
+  <div class='pre p1 fill-light mt0'>formDependentFields</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='formdependentdata'>
+      formDependentData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>значение зависимых полей</p>
+
+
+  <div class='pre p1 fill-light mt0'>formDependentData</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getformdata'>
+      getFormData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Метод с формы, чтобы получить остальные контекстные формы</p>
+<ul>
+<li>функция - чтобы не перезагружать компонент, при смене других значений</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>getFormData</div>
   
   
 
@@ -6239,203 +6493,6 @@ errors = customValidateErrors;
 
 
   <div class='pre p1 fill-light mt0'>instanceChange</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='layout'>
-      Layout
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>className</p>
-<p>label
-textDescription
-errors</p>
-<p>required
-touched</p>
-
-
-  <div class='pre p1 fill-light mt0'>Layout</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='formdependentfields'>
-      formDependentFields
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Список других полей на форме от которых зависит текущее поле
-Если есть - то будет подаваться formData в виде объекта и обновлять</p>
-
-
-  <div class='pre p1 fill-light mt0'>formDependentFields</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='formdependentdata'>
-      formDependentData
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>значение зависимых полей</p>
-
-
-  <div class='pre p1 fill-light mt0'>formDependentData</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='getformdata'>
-      getFormData
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Метод с формы, чтобы получить остальные контекстные формы</p>
-<ul>
-<li>функция - чтобы не перезагружать компонент, при смене других значений</li>
-</ul>
-
-
-  <div class='pre p1 fill-light mt0'>getFormData</div>
   
   
 
