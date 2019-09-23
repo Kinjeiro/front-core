@@ -6,6 +6,7 @@ export function initComponents(COMPONENTS_BASE) {
   // FORM UI
   // ======================================================
   COMPONENTS_BASE.replace('Form', () => require('./components/Form/CoreForm').default);
+  COMPONENTS_BASE.replace('FormView', () => 'form');
   COMPONENTS_BASE.replace('FormLayout', () => require('./components/Form/FormLayout').default);
   COMPONENTS_BASE.replace('Field', () => require('./components/Field/CoreField').default);
   COMPONENTS_BASE.replace('FieldLayout', () => require('./components/Field/FieldLayout').default);

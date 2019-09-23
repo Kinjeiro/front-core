@@ -28,6 +28,7 @@ import i18n from '../../i18n';
 const {
   // todo @ANKU @LOW - можно сделать отложенную чтобы не загружать если задали кастомный Layout
   FormLayout,
+  FormView,
 
   ActionStatus,
   Button,
@@ -637,14 +638,14 @@ export default class CoreForm extends Component {
 
     if (useForm) {
       component = (
-        <form
+        <FormView
           id={ id }
           ref={ (domElement) => this.domForm = domElement }
           className={ className }
           onSubmit={ this.handleSubmit }
         >
           { component }
-        </form>
+        </FormView>
       );
     } else {
       component = (
