@@ -566,13 +566,21 @@ module.exports = {
         protocol: 'https',
         host: '185.22.63.233',
         port: 443,
-        endpoint: 'auth'
+        endpoint: 'auth',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
       }),
       serviceUsers: createEndpointServiceConfig({
         protocol: 'https',
         host: '185.22.63.233',
         port: 443,
-        endpoint: 'auth'
+        endpoint: 'auth',
+        requestOptions: {
+          // игнорировать, что сертификат не подписан
+          rejectUnauthorized: false
+        }
       }),
 
       /**
