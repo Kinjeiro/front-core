@@ -69,6 +69,7 @@ export default class CoreForm extends Component {
     inModal: PropTypes.bool,
     useForm: PropTypes.bool,
 
+    showErrorsOnDisabledSubmit: PropTypes.bool,
     actions: PropTypes.node,
     onSubmit: PropTypes.func,
     textActionSubmit: PropTypes.node,
@@ -455,6 +456,7 @@ export default class CoreForm extends Component {
       useForm,
       onSubmit,
       onCancel,
+      showErrorsOnDisabledSubmit,
       actionStatus: {
         isFetching,
       } = {},
@@ -470,20 +472,36 @@ export default class CoreForm extends Component {
 
     const actionsFinal = [];
 
+
     if (onSubmit && textActionSubmit) {
-      actionsFinal.push((
+      const isDisabled = isProcessing || isFetching || hasError || (!touched && !hasSendOnce);
+
+      let control = (
         <Button
           key="submitButton"
           type="submit"
           className={ this.bem('submitButton') }
           primary={ true }
-          disabled={ isProcessing || isFetching || hasError || (!touched && !hasSendOnce) }
+          disabled={ isDisabled }
           loading={ isProcessing || isFetching }
           onClick={ useForm ? undefined : this.handleSubmit }
         >
           { textActionSubmit }
         </Button>
-      ));
+      );
+
+      if (showErrorsOnDisabledSubmit && isDisabled && hasError) {
+        const errorStrings = this.getFormErrors();
+        control = (
+          <div
+            className={ this.bem('submitButtonWrapper') }
+            title={ errorStrings }
+          >
+            { control }
+          </div>
+        );
+      }
+      actionsFinal.push(control);
     }
 
     actionsFinal.push(...wrapToArray(actions));
@@ -518,6 +536,23 @@ export default class CoreForm extends Component {
     );
   }
 
+  getFormErrors() {
+    const {
+      formErrors,
+    } = this.state;
+    return formErrors.reduce(
+      (result, error) => {
+        if (typeof error === 'string') {
+          result.push(error)
+        } else if (error.errors) {
+          result.push(...error.errors.map((fieldError) =>
+            `${error.fieldLabel || error.field}: ${fieldError}`))
+        }
+        return result;
+      },
+      []
+    );
+  }
   renderFormError() {
     const {
       formErrors,
