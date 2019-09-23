@@ -37,7 +37,8 @@ import moduleAuth from '../modules/module-auth/common/subModule';
 import { AUTH_SCHEME_NAME } from '../modules/module-auth/server/subModule/plugins/jwt-auth';
 
 import pluginPageIndex from './plugins/pages/pages';
-import getPreLoader from './plugins/pages/default-pre-loader';
+// import getPreLoader from './plugins/pages/default-pre-loader';
+import getPreLoader from './plugins/pages/default-pre-loader-2';
 import pluginProxyAssets from './plugins/proxy-assets';
 import pluginStaticAssets from './plugins/static-assets';
 import pluginI18n from './plugins/i18n';
