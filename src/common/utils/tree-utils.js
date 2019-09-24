@@ -55,6 +55,13 @@ export function findInTree(tree, filter, options = {}, deep = 0, path = [], path
     fieldChildren = 'children',
   } = options;
 
+  if (Array.isArray(tree) && deep === 0) {
+    tree = {
+      // root
+      [fieldChildren]: tree,
+    };
+  }
+
   if (typeof filter !== 'function') {
     if (filter === null || typeof filter === 'undefined' || filter === '') {
       return {
@@ -78,23 +85,25 @@ export function findInTree(tree, filter, options = {}, deep = 0, path = [], path
     // path.push(result);
   } else {
     const isFound = tree[fieldChildren]
-      .some((child, index) => {
-        const pathStrChild = `${pathStr ? `${pathStr}.` : ''}${fieldChildren}.${index}`;
-        if (filter(child, options)) {
-          result = child;
-          // path.push(result);
-          pathStr = pathStrChild;
-          return true;
-        }
-        resultValue = findInTree(child, filter, options, deep + 1, path, pathStrChild);
-        if (resultValue.result) {
-          result = resultValue.result;
-          pathStr = resultValue.pathStr;
-          // path.push(result);
-          return true;
-        }
-        return false;
-      });
+      ? tree[fieldChildren]
+        .some((child, index) => {
+          const pathStrChild = `${pathStr ? `${pathStr}.` : ''}${fieldChildren}.${index}`;
+          if (filter(child, options)) {
+            result = child;
+            // path.push(result);
+            pathStr = pathStrChild;
+            return true;
+          }
+          resultValue = findInTree(child, filter, options, deep + 1, path, pathStrChild);
+          if (resultValue.result) {
+            result = resultValue.result;
+            pathStr = resultValue.pathStr;
+            // path.push(result);
+            return true;
+          }
+          return false;
+        })
+      : false;
 
     // if (isFound) {
     //   path.push(tree);
