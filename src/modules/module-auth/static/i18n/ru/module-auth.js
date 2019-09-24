@@ -17,22 +17,22 @@ module.exports = {
         username: {
           label: 'Пользователь',
           placeholder: 'Введите логин',
-          hint: 'Имя пользователя',
+          title: 'Имя пользователя',
         },
         password: {
           label: 'Пароль',
           placeholder: 'Введите пароль',
-          hint: 'Пароль пользователя',
+          title: 'Пароль пользователя',
         },
         email: {
           label: 'Почта',
           placeholder: 'Введите email',
-          hint: 'Почта пользователя',
+          title: 'Почта пользователя',
         },
         displayName: {
           label: 'Отображаемое имя',
           placeholder: 'Введите имя',
-          hint: 'Имя пользователя, которое будет всем видно',
+          title: 'Имя пользователя, которое будет всем видно',
         },
       },
       submitButton: 'Регистрация',
@@ -46,17 +46,17 @@ module.exports = {
         username: {
           label: 'Пользователь',
           placeholder: 'Введите логин',
-          hint: 'Имя пользователя',
+          title: 'Имя пользователя',
         },
         loginEmail: {
           label: 'Email',
           placeholder: 'Введите почту',
-          hint: 'Почта пользователя',
+          title: 'Почта пользователя',
         },
         password: {
           label: 'Пароль',
           placeholder: 'Введите пароль',
-          hint: 'Пароль пользователя',
+          title: 'Пароль пользователя',
         },
       },
       loginButton: 'Войти',

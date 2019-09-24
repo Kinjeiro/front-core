@@ -22,15 +22,18 @@ import {
   DATETIME_FORMAT,
 } from '../../../../../../common/utils/date-utils';
 
+// ======================================================
+// MODULE
+// ======================================================
 import i18n from '../../i18n';
 
 import {
   FIELD_PROP_TYPE_MAP,
   TYPES,
   SUB_TYPES,
-} from '../../../../../../common/models/model-field';
+} from '../../model-field';
 
-import getCb from '../../../../../../common/get-components';
+import getCb from '../../get-components';
 
 const CB = getCb();
 const { FieldLayout } = CB;
@@ -647,6 +650,7 @@ export default class CoreField extends Component {
 
       placeholder,
       textPlaceholder,
+      title,
       textHint,
       controlProps = {},
       onChange,
@@ -689,7 +693,8 @@ export default class CoreField extends Component {
       multiple,
       ...controlProps,
       placeholder: placeholder || textPlaceholder,
-      title: textHint,
+      title,
+      // textHint,
       readOnly: readOnly || !onChange || isProcessing,
       disabled: disabled || isProcessing,
       required: required || propsRequired,
@@ -1142,14 +1147,14 @@ export default class CoreField extends Component {
     } = constraints;
 
     const classNameFinal = `\
-      CoreField\
-      ${className || ''}\
-      ${multiple ? 'CoreField--multiple' : ''}\
-      ${propsRequired || required ? 'CoreField--required' : ''}\
-      ${touched ? 'CoreField--touched' : ''}\
-      ${isProcessing ? 'CoreField--isProcessing' : ''}\
-      ${touched && errors && errors.length > 0 ? 'CoreField--error' : ''}\
-    `;
+CoreField\
+ ${className || ''}\
+ ${multiple ? 'CoreField--multiple' : ''}\
+ ${propsRequired || required ? 'CoreField--required' : ''}\
+ ${touched ? 'CoreField--touched' : ''}\
+ ${isProcessing ? 'CoreField--isProcessing' : ''}\
+ ${touched && errors && errors.length > 0 ? 'CoreField--error' : ''}\
+`;
 
     return (
       <Layout

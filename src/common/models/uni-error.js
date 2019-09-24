@@ -197,7 +197,7 @@ export function createUniError(uniErrorData = {}) {
     uniError.clientErrorMessages = [uniError.clientErrorMessage];
   }
 
-  console.error(getStackTrace());
+  // console.error(getStackTrace());
   return uniError;
 }
 

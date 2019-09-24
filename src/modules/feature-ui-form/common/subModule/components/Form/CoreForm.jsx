@@ -15,14 +15,14 @@ import {
 } from '../../../../../../common/utils/common';
 import { ACTION_STATUS_PROPS } from '../../../../../../common/models';
 
-import {
-  FIELD_PROP_TYPE,
-  TYPES,
-} from '../../../../../../common/models/model-field';
-
 // ======================================================
 // MODULE
 // ======================================================
+import {
+  FIELD_PROP_TYPE,
+  TYPES,
+} from '../../model-field';
+
 import getComponents from '../../get-components';
 import i18n from '../../i18n';
 
@@ -355,6 +355,7 @@ export default class CoreForm extends Component {
       name,
       placeholder,
       textPlaceholder,
+      title,
       textHint,
       textDescription,
       onChange,
@@ -377,6 +378,7 @@ export default class CoreForm extends Component {
         {},
         '',
         ''));
+    const titleFinal = title || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.title`, {}, '', ''));
     const hint = textHint || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.hint`, {}, '', ''));
     const textDescriptionFinal = textDescription || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.description`,
         {},
@@ -408,6 +410,7 @@ export default class CoreForm extends Component {
       label,
       placeholder: placeholderFinal,
       textPlaceholder: placeholderFinal,
+      title: titleFinal,
       textHint: hint,
       textDescription: textDescriptionFinal,
       onChange: onChange || (onChangeField ? this.handleChange : undefined),

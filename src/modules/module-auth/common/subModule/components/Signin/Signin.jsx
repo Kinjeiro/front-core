@@ -7,12 +7,12 @@ import bind from 'lodash-decorators/bind';
 import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 import clientConfig from '../../../../../../common/client-config';
+import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
 
 // ======================================================
-// COMPONENTS and STYLES
+// OTHER_MODULES
 // ======================================================
-import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
-import { SUB_TYPES } from '../../../../../../common/models/model-field';
+import { SUB_TYPES } from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
 // MODULE

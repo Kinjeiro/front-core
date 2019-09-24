@@ -7,29 +7,25 @@ import bind from 'lodash-decorators/bind';
 import reduxSimpleForm from '../../../../../../common/utils/decorators/react-class/redux-simple-form';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 import clientConfig from '../../../../../../common/client-config';
-
-// ======================================================
-// REDUX
-// ======================================================
 import {
   getUserInfo,
 } from '../../../../../../common/app-redux/selectors';
-import * as reduxUserInfo from '../../redux-user-info';
-
-// ======================================================
-// COMPONENTS and STYLES
-// ======================================================
 import {
   ACTION_STATUS_PROPS,
 } from '../../../../../../common/models/index';
+
+// ======================================================
+// OTHER_MODULES
+// ======================================================
 import {
   SUB_TYPES,
-} from '../../../../../../common/models/model-field';
+} from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
 // MODULE
 // ======================================================
 import i18n, { NAMESPACE } from '../../i18n';
+import * as reduxUserInfo from '../../redux-user-info';
 import getComponents from '../../get-components';
 
 const {

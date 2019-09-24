@@ -16,5 +16,11 @@ export UNI_ERROR_PROP_TYPE from './uni-error';
 export USER_INFO_PROP_TYPE from './model-user-info';
 export ID_PROP_TYPE from './model-id';
 export TABLE_PROP_TYPE from './model-table';
-export CONSTRAINTS_PROP_TYPE from './model-constraints';
-export FIELD_PROP_TYPE from './model-field';
+/**
+ * @deprecated - use src/modules/feature-ui-form/common/subModule/model-constraints
+ */
+export CONSTRAINTS_PROP_TYPE from '../../modules/feature-ui-form/common/subModule/model-constraints';
+/**
+ * @deprecated - use src/modules/feature-ui-form/common/subModule/model-field
+ */
+export FIELD_PROP_TYPE from '../../modules/feature-ui-form/common/subModule/model-field';

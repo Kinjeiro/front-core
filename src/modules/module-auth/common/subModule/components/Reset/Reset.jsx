@@ -8,27 +8,26 @@ import reduxSimpleForm from '../../../../../../common/utils/decorators/react-cla
 import titled from '../../../../../../common/utils/decorators/react-class/titled';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 import appUrl from '../../../../../../common/helpers/app-urls';
-
-// ======================================================
-// REDUX
-// ======================================================
 import {
   getUserInfo,
 } from '../../../../../../common/app-redux/selectors';
-import * as reduxUserInfo from '../../redux-user-info';
 import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
-import {
-  SUB_TYPES,
-} from '../../../../../../common/models/model-field';
 import {
   PATH_INDEX,
 } from '../../../../../../common/constants/routes.pathes';
 
-import getCb from '../../../../../../common/get-components';
+// ======================================================
+// OTHER MODULES
+// ======================================================
+import {
+  SUB_TYPES,
+} from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
 // MODULE
 // ======================================================
+import getCb from '../../get-components';
+import * as reduxUserInfo from '../../redux-user-info';
 import i18n, { NAMESPACE } from '../../i18n';
 import * as paths from '../../routes-paths-auth';
 // import './ForgotPage.css';

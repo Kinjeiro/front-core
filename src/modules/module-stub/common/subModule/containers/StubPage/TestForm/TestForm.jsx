@@ -2,12 +2,15 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
+import reduxSimpleForm from '../../../../../../../common/utils/decorators/react-class/redux-simple-form';
+
+// ======================================================
+// OTHER_MODULES
+// ======================================================
 import {
   TYPES,
   SUB_TYPES,
-} from '../../../../../../../common/models/model-field';
-import reduxSimpleForm from '../../../../../../../common/utils/decorators/react-class/redux-simple-form';
-
+} from '../../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
 // MODULE

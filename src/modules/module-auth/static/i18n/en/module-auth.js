@@ -17,22 +17,22 @@ module.exports = {
         username: {
           label: 'Login',
           placeholder: 'Enter login',
-          hint: 'User login',
+          title: 'User login',
         },
         password: {
           label: 'Password',
           placeholder: 'Enter password',
-          hint: 'User password',
+          title: 'User password',
         },
         email: {
           label: 'Email',
           placeholder: 'Enter email',
-          hint: 'User email',
+          title: 'User email',
         },
         displayName: {
           label: 'Display name',
           placeholder: 'Enter display name',
-          hint: 'User name to be displayed for other users',
+          title: 'User name to be displayed for other users',
         },
       },
       submitButton: 'Sign up',
@@ -46,17 +46,17 @@ module.exports = {
         username: {
           label: 'Login',
           placeholder: 'Enter login',
-          hint: 'User login',
+          title: 'User login',
         },
         loginEmail: {
           label: 'Email',
           placeholder: 'Enter email',
-          hint: 'User email',
+          title: 'User email',
         },
         password: {
           label: 'Password',
           placeholder: 'Enter password',
-          hint: 'User password',
+          title: 'User password',
         },
       },
       loginButton: 'Sign in',
