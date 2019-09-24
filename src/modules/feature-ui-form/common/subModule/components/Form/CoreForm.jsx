@@ -20,7 +20,7 @@ import { ACTION_STATUS_PROPS } from '../../../../../../common/models';
 // ======================================================
 import {
   FIELD_PROP_TYPE,
-  TYPES,
+  FIELD_TYPES,
 } from '../../model-field';
 
 import getComponents from '../../get-components';
@@ -39,7 +39,7 @@ const {
 
 @bemDecorator({ componentName: 'CoreForm', wrapper: false })
 export default class CoreForm extends Component {
-  static FIELD_TYPES = TYPES;
+  static FIELD_TYPES = FIELD_TYPES;
 
   static propTypes = {
     id: PropTypes.string,

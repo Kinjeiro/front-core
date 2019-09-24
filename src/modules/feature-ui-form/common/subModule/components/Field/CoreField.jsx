@@ -29,8 +29,8 @@ import i18n from '../../i18n';
 
 import {
   FIELD_PROP_TYPE_MAP,
-  TYPES,
-  SUB_TYPES,
+  FIELD_TYPES,
+  FIELD_SUB_TYPES,
 } from '../../model-field';
 
 import getCb from '../../get-components';
@@ -41,13 +41,13 @@ const { FieldLayout } = CB;
 require('./CoreField.css');
 
 export default class CoreField extends Component {
-  static TYPES = TYPES;
-  static SUB_TYPES = SUB_TYPES;
+  static TYPES = FIELD_TYPES;
+  static SUB_TYPES = FIELD_SUB_TYPES;
 
   static propTypes = FIELD_PROP_TYPE_MAP;
 
   static defaultProps = {
-    type: TYPES.STRING,
+    type: FIELD_TYPES.STRING,
     compareFn: CoreField.defaultCompareFn,
     constraints: {},
     textOnAdd: '@@ Добавить',
@@ -125,15 +125,15 @@ export default class CoreField extends Component {
 
     switch (type) {
       // case TYPES.DATETIME:
-      case TYPES.DATE: {
-        const systemFormat = type === TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
+      case FIELD_TYPES.DATE: {
+        const systemFormat = type === FIELD_TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
         return parseDate(value, null, systemFormat);
       }
       default:
         return value;
     }
   }
-  static parseOutValue(type = TYPES.TEXT, value = null, props = {}) {
+  static parseOutValue(type = FIELD_TYPES.TEXT, value = null, props = {}) {
     const { controlClass } = props;
 
     if (controlClass && controlClass.parseOutValue) {
@@ -142,16 +142,16 @@ export default class CoreField extends Component {
 
     switch (type) {
       // case TYPES.DATETIME:
-      case TYPES.DATE: {
-        const dateFormat = type === TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
-        const systemFormat = type === TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
+      case FIELD_TYPES.DATE: {
+        const dateFormat = type === FIELD_TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
+        const systemFormat = type === FIELD_TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
         return parseDate(value, systemFormat, dateFormat);
       }
       default:
         return value;
     }
   }
-  static isEmptyValue(type = TYPES.TEXT, value = null, props = {}) {
+  static isEmptyValue(type = FIELD_TYPES.TEXT, value = null, props = {}) {
     const {
       controlClass,
     } = props;
@@ -196,18 +196,18 @@ export default class CoreField extends Component {
     const typeFinal = type || CoreField.TYPES.TEXT;
 
     switch (typeFinal) {
-      case TYPES.BOOLEAN:
+      case FIELD_TYPES.BOOLEAN:
         // todo @ANKU @LOW - локализаци
         return value ? 'Да' : 'Нет';
 
-      case TYPES.DATETIME:
-      case TYPES.DATE: {
-        const dateFormat = typeFinal === TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
-        const systemFormat = typeFinal === TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
+      case FIELD_TYPES.DATETIME:
+      case FIELD_TYPES.DATE: {
+        const dateFormat = typeFinal === FIELD_TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
+        const systemFormat = typeFinal === FIELD_TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
         return parseDate(value, customMask || dateFormat, systemFormat);
       }
 
-      case TYPES.LIST:
+      case FIELD_TYPES.LIST:
         return CB.Select.getSelectedOptionLabel
           ? CB.Select.getSelectedOptionLabel({
             selectedValue: value,
@@ -216,14 +216,14 @@ export default class CoreField extends Component {
           })
           : value;
 
-      case TYPES.STRING:
-      case TYPES.NUMERIC:
-      case TYPES.DECIMAL:
-      case TYPES.TEXT:
-      case TYPES.CUSTOM:
+      case FIELD_TYPES.STRING:
+      case FIELD_TYPES.NUMERIC:
+      case FIELD_TYPES.DECIMAL:
+      case FIELD_TYPES.TEXT:
+      case FIELD_TYPES.CUSTOM:
         return value;
 
-      case TYPES.BINARY:
+      case FIELD_TYPES.BINARY:
         return (CB.Attachment && CB.Attachment.parseValueToString && CB.Attachment.parseValueToString(value))
           || value;
 
@@ -592,7 +592,7 @@ export default class CoreField extends Component {
     } = this.props;
 
     switch (subType) {
-      case SUB_TYPES.LOGIN:
+      case FIELD_SUB_TYPES.LOGIN:
         return {
           autoComplete: name,
           autoCorrect: 'off',
@@ -601,7 +601,7 @@ export default class CoreField extends Component {
           autoFocus: 'autofocus',
           ...props,
         };
-      case SUB_TYPES.LOGIN_EMAIL:
+      case FIELD_SUB_TYPES.LOGIN_EMAIL:
         return {
           autoComplete: 'username',
           // autoComplete: 'email',
@@ -613,20 +613,20 @@ export default class CoreField extends Component {
           type: 'email',
         };
 
-      case SUB_TYPES.PASSWORD: {
+      case FIELD_SUB_TYPES.PASSWORD: {
         return {
           autoComplete: 'current-password',
           ...props,
           type: 'password',
         };
       }
-      case SUB_TYPES.EMAIL: {
+      case FIELD_SUB_TYPES.EMAIL: {
         return {
           ...props,
           type: 'email',
         };
       }
-      case SUB_TYPES.PHONE: {
+      case FIELD_SUB_TYPES.PHONE: {
         return {
           pattern: '^((\\+7|7|8)+([0-9]){10})$',
           ...props,
@@ -732,10 +732,10 @@ export default class CoreField extends Component {
     // }
 
     switch (type) {
-      case TYPES.STRING:
-      case TYPES.NUMERIC:
-      case TYPES.DECIMAL:
-      case TYPES.TEXT:
+      case FIELD_TYPES.STRING:
+      case FIELD_TYPES.NUMERIC:
+      case FIELD_TYPES.DECIMAL:
+      case FIELD_TYPES.TEXT:
         if (constraintsValues) {
           // todo @ANKU @LOW - возможно формат constraintsValues будет приходить от бэка более сложным и нужно будет этот мапинг переделать
           // Select
@@ -750,7 +750,7 @@ export default class CoreField extends Component {
         const onChangeBlur = instanceChange ? undefined : this.handleInputChange;
         const onChangeFinal = instanceChange ? this.handleInputChange : undefined;
 
-        if (type === TYPES.TEXT) {
+        if (type === FIELD_TYPES.TEXT) {
           // TextArea
           return {
             maxLength,
@@ -770,7 +770,7 @@ export default class CoreField extends Component {
           controlRef: this.controlRef,
           value: controlValue || '',
           withState: !instanceChange,
-          type: type === TYPES.DECIMAL ? 'number' : type,
+          type: type === FIELD_TYPES.DECIMAL ? 'number' : type,
           min: minValue,
           max: maxValue,
           maxLength,
@@ -781,7 +781,7 @@ export default class CoreField extends Component {
           indexItem: index,
           ...controlPropsFinal,
         };
-      case TYPES.BOOLEAN:
+      case FIELD_TYPES.BOOLEAN:
         // взято за основу Antd.Checkbox
         // Checkbox
         return {
@@ -799,9 +799,9 @@ export default class CoreField extends Component {
         };
 
       // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
-      case TYPES.DATETIME:
-      case TYPES.DATE: {
-        const dateFormat = type === TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
+      case FIELD_TYPES.DATETIME:
+      case FIELD_TYPES.DATE: {
+        const dateFormat = type === FIELD_TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
 
         // FC Components - DatePicker - https://github.com/airbnb/react-dates
         // todo @ANKU @LOW - нету времени - showTime
@@ -818,7 +818,7 @@ export default class CoreField extends Component {
               : this.handleChange(event, index)
           ),
 
-          showTime: type === TYPES.DATETIME,
+          showTime: type === FIELD_TYPES.DATETIME,
           disabledDate: (minValue || maxValue)
             ? (dateValue) => {
               let disableDate = false;
@@ -830,7 +830,7 @@ export default class CoreField extends Component {
           ...controlPropsFinal,
         };
       }
-      case TYPES.LIST: {
+      case FIELD_TYPES.LIST: {
         // Select
         return {
           selectedValue: controlValue,
@@ -872,17 +872,17 @@ export default class CoreField extends Component {
     }
 
     switch (type) {
-      case TYPES.STRING:
-      case TYPES.NUMERIC:
-      case TYPES.DECIMAL:
-      case TYPES.TEXT:
+      case FIELD_TYPES.STRING:
+      case FIELD_TYPES.NUMERIC:
+      case FIELD_TYPES.DECIMAL:
+      case FIELD_TYPES.TEXT:
         if (constraintsValues) {
           // todo @ANKU @LOW - возможно формат constraintsValues будет приходить от бэка более сложным и нужно будет этот мапинг переделать
           return CB.Select;
         }
 
-        if (type === TYPES.TEXT) {
-          if (subType === SUB_TYPES.PHONE) {
+        if (type === FIELD_TYPES.TEXT) {
+          if (subType === FIELD_SUB_TYPES.PHONE) {
             return CB.PhoneInput;
           }
 
@@ -891,13 +891,13 @@ export default class CoreField extends Component {
 
         return CB.Input;
 
-      case TYPES.BOOLEAN:
+      case FIELD_TYPES.BOOLEAN:
         // взято за основу Antd.Checkbox
         return CB.Checkbox;
 
       // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
-      case TYPES.DATETIME:
-      case TYPES.DATE: {
+      case FIELD_TYPES.DATETIME:
+      case FIELD_TYPES.DATE: {
         return CB.DatePicker;
 
         // // взято за основу Antd.DatePicker
@@ -921,14 +921,14 @@ export default class CoreField extends Component {
         //   />
         // );
       }
-      case TYPES.LIST: {
+      case FIELD_TYPES.LIST: {
         return CB.Select;
       }
 
-      case TYPES.BINARY: {
+      case FIELD_TYPES.BINARY: {
         return CB.Attachment;
       }
-      case TYPES.CUSTOM: {
+      case FIELD_TYPES.CUSTOM: {
         return null;
       }
       default:
@@ -1052,7 +1052,7 @@ export default class CoreField extends Component {
     } = constraints;
 
     switch (type) {
-      case TYPES.BINARY:
+      case FIELD_TYPES.BINARY:
         // эти типы сами разберутся с multiple
         // todo @ANKU @LOW - а вообще пора уже выделять в Factory и добавлять как листнеры
         return (

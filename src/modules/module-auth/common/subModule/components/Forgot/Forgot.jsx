@@ -23,7 +23,7 @@ import {
 // OTHER MODULES
 // ======================================================
 import {
-  SUB_TYPES,
+  FIELD_SUB_TYPES,
 } from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
@@ -138,7 +138,7 @@ export default class Forgot extends Component {
       {
         id: 'email',
         name: 'email',
-        subType: SUB_TYPES.EMAIL,
+        subType: FIELD_SUB_TYPES.EMAIL,
         value: email,
         instanceChange: true,
       },

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import CONSTRAINTS from './model-constraints';
 
-export const TYPES = {
+export const FIELD_TYPES = {
   STRING: 'text',
   TEXT: 'textarea',
   DATE: 'date',
@@ -17,18 +17,28 @@ export const TYPES = {
   BINARY: 'binary',
   CUSTOM: 'custom',
 };
+/**
+ * @deprecated - use FIELD_TYPES
+ * @type {{STRING: string, TEXT: string, DATE: string, DATETIME: string, NUMERIC: string, DECIMAL: string, BOOLEAN: string, REFERENCE: string, LIST: string, BINARY: string, CUSTOM: string}}
+ */
+export const TYPES = FIELD_TYPES;
 
-export const SUB_TYPES = {
+export const FIELD_SUB_TYPES = {
   LOGIN: 'login',
   LOGIN_EMAIL: 'loginEmail',
   PASSWORD: 'password',
   EMAIL: 'email',
   PHONE: 'phone',
 };
+/**
+ * @deprecated FIELD_SUB_TYPES
+ * @type {{LOGIN: string, LOGIN_EMAIL: string, PASSWORD: string, EMAIL: string, PHONE: string}}
+ */
+export const SUB_TYPES = FIELD_SUB_TYPES;
 
 export const FIELD_PROP_TYPE_MAP = {
-  type: PropTypes.oneOf(Object.values(TYPES)),
-  subType: PropTypes.oneOf(Object.values(SUB_TYPES)),
+  type: PropTypes.oneOf(Object.values(FIELD_TYPES)),
+  subType: PropTypes.oneOf(Object.values(FIELD_SUB_TYPES)),
 
   name: PropTypes.string.isRequired,
   /**
@@ -163,13 +173,13 @@ export const FIELD_PROP_TYPE_MAP = {
       {
         label: 'Старый пароль',
         name: 'oldPassword',
-        subType: SUB_TYPES.PASSWORD,
+        subType: FIELD_SUB_TYPES.PASSWORD,
         required: true,
       },
       {
         label: 'Новый пароль',
         name: 'newPassword',
-        subType: SUB_TYPES.PASSWORD,
+        subType: FIELD_SUB_TYPES.PASSWORD,
         required: true,
         formDependentFields: ['oldPassword'],
         validate: (value, props, formDependentData) => (

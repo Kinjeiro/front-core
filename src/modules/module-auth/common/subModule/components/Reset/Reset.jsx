@@ -20,7 +20,7 @@ import {
 // OTHER MODULES
 // ======================================================
 import {
-  SUB_TYPES,
+  FIELD_SUB_TYPES,
 } from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
@@ -131,7 +131,7 @@ export default class ResetPage extends Component {
     return [
       {
         name: 'newPassword',
-        subType: SUB_TYPES.PASSWORD,
+        subType: FIELD_SUB_TYPES.PASSWORD,
         value: newPassword,
         instanceChange: true,
       },

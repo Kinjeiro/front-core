@@ -12,7 +12,7 @@ import { ACTION_STATUS_PROPS } from '../../../../../../common/models/index';
 // ======================================================
 // OTHER_MODULES
 // ======================================================
-import { SUB_TYPES } from '../../../../../feature-ui-form/common/subModule/model-field';
+import { FIELD_SUB_TYPES } from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
 // MODULE
@@ -107,7 +107,7 @@ export default class Signin extends Component {
           */
           id: 'email',
           name: 'loginEmail',
-          subType: SUB_TYPES.LOGIN_EMAIL,
+          subType: FIELD_SUB_TYPES.LOGIN_EMAIL,
           value: loginEmail,
           instanceChange: true,
           required: true,
@@ -115,7 +115,7 @@ export default class Signin extends Component {
         : {
           id: 'username',
           name: 'username',
-          subType: SUB_TYPES.LOGIN,
+          subType: FIELD_SUB_TYPES.LOGIN,
           value: username,
           instanceChange: true,
           required: true,
@@ -123,7 +123,7 @@ export default class Signin extends Component {
       {
         id: 'password',
         name: 'password',
-        subType: SUB_TYPES.PASSWORD,
+        subType: FIELD_SUB_TYPES.PASSWORD,
         value: password,
         instanceChange: true,
         required: true,

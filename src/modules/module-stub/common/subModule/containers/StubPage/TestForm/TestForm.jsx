@@ -8,8 +8,8 @@ import reduxSimpleForm from '../../../../../../../common/utils/decorators/react-
 // OTHER_MODULES
 // ======================================================
 import {
-  TYPES,
-  SUB_TYPES,
+  FIELD_TYPES,
+  FIELD_SUB_TYPES,
 } from '../../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
@@ -123,13 +123,13 @@ export default class TestForm extends PureComponent {
       {
         name: 'attachmentsSingleSimple',
         label: 'attachmentsSingleSimple',
-        type: TYPES.BINARY,
+        type: FIELD_TYPES.BINARY,
         multiple: false,
       },
       {
         name: 'attachmentsSingle',
         label: 'attachmentsSingle',
-        type: TYPES.BINARY,
+        type: FIELD_TYPES.BINARY,
         multiple: false,
         required: true,
         controlProps: {
@@ -141,7 +141,7 @@ export default class TestForm extends PureComponent {
       {
         name: 'attachmentMultipleWithConditions',
         label: 'attachmentMultipleWithConditions',
-        type: TYPES.BINARY,
+        type: FIELD_TYPES.BINARY,
         multiple: true,
         required: true,
         constraints: {
@@ -159,7 +159,7 @@ export default class TestForm extends PureComponent {
       {
         name: 'attachmentMultipleDoc',
         label: 'attachmentMultipleDoc',
-        type: TYPES.BINARY,
+        type: FIELD_TYPES.BINARY,
         multiple: true,
         required: false,
         constraints: {

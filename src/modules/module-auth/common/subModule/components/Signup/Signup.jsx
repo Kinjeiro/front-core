@@ -18,7 +18,7 @@ import {
 // OTHER_MODULES
 // ======================================================
 import {
-  SUB_TYPES,
+  FIELD_SUB_TYPES,
 } from '../../../../../feature-ui-form/common/subModule/model-field';
 
 // ======================================================
@@ -148,7 +148,7 @@ export default class Signup extends Component {
         {
           id: 'username',
           name: 'username',
-          subType: SUB_TYPES.LOGIN,
+          subType: FIELD_SUB_TYPES.LOGIN,
           value: username,
           required: true,
         },
@@ -159,14 +159,14 @@ export default class Signup extends Component {
       {
         id: 'email',
         name: 'email',
-        subType: SUB_TYPES.EMAIL,
+        subType: FIELD_SUB_TYPES.EMAIL,
         value: email,
         required: true,
       },
       {
         id: 'password',
         name: 'password',
-        subType: SUB_TYPES.PASSWORD,
+        subType: FIELD_SUB_TYPES.PASSWORD,
         value: password,
         required: true,
       },
