@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import set from 'lodash/set';
+import get from 'lodash/get';
 
 import clientConfig from '../../../../../../common/client-config';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
@@ -270,9 +271,7 @@ export default class CoreForm extends Component {
     }
 
     emitProcessing(
-      this.isValid({
-        [fieldName]: newValue,
-      }),
+      this.isValid(set({}, fieldName, newValue)),
       this,
     );
 
@@ -345,7 +344,7 @@ export default class CoreForm extends Component {
       value = fieldProp.value;
     }
     if (typeof value === 'undefined') {
-      value = formData[fieldName];
+      value = get(formData, fieldName);
     }
     return value;
   }
@@ -387,7 +386,7 @@ export default class CoreForm extends Component {
     const formDependentData = wrapToArray(formDependentFields)
       .reduce((result, otherFieldName) => {
         // eslint-disable-next-line no-param-reassign
-        result[otherFieldName] = this.getFieldValue(otherFieldName);
+        set(result, otherFieldName, this.getFieldValue(otherFieldName));
         return result;
       }, {});
 
