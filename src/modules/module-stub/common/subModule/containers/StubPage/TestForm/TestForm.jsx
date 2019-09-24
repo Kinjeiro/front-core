@@ -23,7 +23,7 @@ const {
   InstanceAttachment,
 } = getComponents();
 
-// require('./TestForm.scss');
+require('./TestForm.css');
 
 export const PAGE_ID = 'TestForm';
 
@@ -170,6 +170,73 @@ export default class TestForm extends PureComponent {
         },
         controlClass: InstanceAttachment,
       },
+      {
+        type: FIELD_TYPES.GROUPING,
+        className: 'addressGroup',
+        nodeBefore: (
+          <h2>Заполнение адресс</h2>
+        ),
+        fields: [
+          {
+            name: 'address.country',
+            label: 'country',
+            required: true,
+          },
+          {
+            type: FIELD_TYPES.GROUPING,
+            fields: [
+              {
+                name: 'address.city',
+                label: 'city',
+                required: true,
+              },
+              {
+                name: 'address.street',
+                label: 'street',
+                required: true,
+              },
+            ],
+          },
+          {
+            type: FIELD_TYPES.GROUPING,
+            fields: [
+              {
+                name: 'address.apartment',
+                label: 'apartment',
+                required: true,
+              },
+              {
+                name: 'address.office',
+                label: 'office',
+              },
+              {
+                name: 'address.house',
+                label: 'house',
+              },
+            ],
+            renderGrouping: (groupingField, index, fieldCmps, fieldProps) => {
+              return (
+                <div>
+                  <div>
+                    Квартиры и офисы
+                  </div>
+                  <div>
+                    { fieldCmps }
+                  </div>
+                  <div>
+                    Выбрали квартиру: { fieldProps[0].value }
+                  </div>
+                </div>
+              );
+            },
+          },
+        ],
+        nodeAfter: (
+          <div>
+            Спасибо за предоставленный данные... МУХАХА!
+          </div>
+        ),
+      }
     );
     return fields;
   }
@@ -188,14 +255,14 @@ export default class TestForm extends PureComponent {
 
     return (
       <Segment
-        className="RuleNew"
+        className="TestForm"
       >
         <Form
           id={ formId }
 
           fields={ this.getFields() }
           formData={ form }
-          onChangeField={ onUpdateForm }
+          onUpdateForm={ onUpdateForm }
 
           onSubmit={ onSubmit }
           onCancel={ onCancel }

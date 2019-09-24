@@ -16,12 +16,16 @@ export const FIELD_TYPES = {
    */
   BINARY: 'binary',
   CUSTOM: 'custom',
+
+  GROUPING: '_GROUPING',
 };
 /**
  * @deprecated - use FIELD_TYPES
  * @type {{STRING: string, TEXT: string, DATE: string, DATETIME: string, NUMERIC: string, DECIMAL: string, BOOLEAN: string, REFERENCE: string, LIST: string, BINARY: string, CUSTOM: string}}
  */
 export const TYPES = FIELD_TYPES;
+
+export const GROUPING_ATTRIBUTE_INNER_FIELDS = 'fields';
 
 export const FIELD_SUB_TYPES = {
   LOGIN: 'login',
@@ -125,13 +129,43 @@ export const FIELD_PROP_TYPE_MAP = {
 
 
   // ======================================================
+  // VALUE CHANGE
+  // ======================================================
+  /**
+   * (fieldName, parseOutValue, multiple, context, node) => {}
+   */
+  onChange: PropTypes.func,
+  /**
+   * (value, fieldProps, index) => parsedValue
+   */
+  parseOutValue: PropTypes.func,
+  /**
+   * обычно для больших форм, чтобы сэкономить ресурсы значение применяется после потери фокуса или Enter
+   * Это сделано и для input
+   *
+   * Но бывают случаи когда нужно реально по символьно обновлять (когда данных мало и нужно явно показать что кнопка больше не дисеблится (к примеру, при форме логине)
+   * Значеие true - как раз и включает нотификацию по мере ввода
+   */
+  instanceChange: PropTypes.bool,
+
+  context: PropTypes.object,
+  compareFn: PropTypes.func,
+
+
+  // ======================================================
   // для листовых
   // ======================================================
   multiple: PropTypes.bool,
   options: PropTypes.array,
 
+  /**
+   * (fieldName, index, null, context) => {}
+   */
   onAdd: PropTypes.func,
   textOnAdd: PropTypes.node,
+  /**
+   * (fieldName, index, itemValue, context) => {}
+   */
   onRemove: PropTypes.func,
   textOnRemove: PropTypes.node,
 
@@ -265,28 +299,19 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   render: PropTypes.func,
 
-  // ======================================================
-  // VALUE CHANGE
-  // ======================================================
-  /**
-   * (value, index, contextData, node) => {}
-   */
-  onChange: PropTypes.func,
-  /**
-   * (value, fieldProps, index) => parsedValue
-   */
-  parseOutValue: PropTypes.func,
-  /**
-   * обычно для больших форм, чтобы сэкономить ресурсы значение применяется после потери фокуса или Enter
-   * Это сделано и для input
-   *
-   * Но бывают случаи когда нужно реально по символьно обновлять (когда данных мало и нужно явно показать что кнопка больше не дисеблится (к примеру, при форме логине)
-   * Значеие true - как раз и включает нотификацию по мере ввода
-   */
-  instanceChange: PropTypes.bool,
 
-  context: PropTypes.object,
-  compareFn: PropTypes.func,
+  // ======================================================
+  // TYPE = FIELD_TYPES.GROUPING
+  // ======================================================
+  // name
+  // className
+  [GROUPING_ATTRIBUTE_INNER_FIELDS]: PropTypes.array, // fields of FIELD_PROP_TYPE_MAP
+  /**
+   * (groupingField, index, innerFieldComponents, innerFieldProps) => {}
+   */
+  renderGrouping: PropTypes.func,
+  nodeBefore: PropTypes.node,
+  nodeAfter: PropTypes.node,
 };
 
 export function createField(name, value, otherProps = {}) {

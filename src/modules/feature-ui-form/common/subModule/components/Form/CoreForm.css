@@ -1,0 +1,6 @@
+.CoreForm {
+    &__grouping {
+        display: flex;
+        justify-content: space-between;
+    }
+}

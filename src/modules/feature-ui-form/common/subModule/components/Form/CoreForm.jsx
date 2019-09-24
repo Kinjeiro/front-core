@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import set from 'lodash/set';
 import get from 'lodash/get';
+import cloneDeep from 'lodash/cloneDeep';
 
 import clientConfig from '../../../../../../common/client-config';
+// import { createJsonPatchOperation } from '../../../../../../common/utils/api-utils';
 import bemDecorator from '../../../../../../common/utils/decorators/bem-component';
 import {
   executeVariable,
@@ -14,13 +16,17 @@ import {
   emitProcessing,
 } from '../../../../../../common/utils/common';
 import { ACTION_STATUS_PROPS } from '../../../../../../common/models';
+import {
+  findInTree,
+  treeToArray,
+} from '../../../../../../common/utils/tree-utils';
 
 // ======================================================
 // MODULE
 // ======================================================
 import {
   FIELD_PROP_TYPE,
-  FIELD_TYPES,
+  FIELD_TYPES, GROUPING_ATTRIBUTE_INNER_FIELDS,
 } from '../../model-field';
 
 import getComponents from '../../get-components';
@@ -37,6 +43,8 @@ const {
   ErrorBoundary,
 } = getComponents();
 
+require('./CoreForm.css');
+
 @bemDecorator({ componentName: 'CoreForm', wrapper: false })
 export default class CoreForm extends Component {
   static FIELD_TYPES = FIELD_TYPES;
@@ -52,7 +60,21 @@ export default class CoreForm extends Component {
      * Для передачи в onSubmit
      */
     formData: PropTypes.object,
+    /**
+     * (newFormPartValue) => {}
+     * приходит только часть и нужно делать merge в обработчике
+     * {
+     *   address: {
+     *     city: 'Moscow'
+     *   }
+     * }
+     */
     onChangeField: PropTypes.func,
+    /**
+     * (newFullFormData) => {}
+     * Идеально подходит onUpdateForm из redux-simple-form декоратор для редукс
+     */
+    onUpdateForm: PropTypes.func,
     /**
      (fieldErrors, formData, props) => result
      Где fieldErrors: [...string|{field, fieldLabel, errors}]
@@ -158,13 +180,23 @@ export default class CoreForm extends Component {
     this.unmount = true;
   }
 
+
   // ======================================================
   // UTILS
   // ======================================================
+  getAllFields() {
+    const {
+      fields,
+    } = this.props;
+
+    return treeToArray(fields, {
+      fieldChildren: GROUPING_ATTRIBUTE_INNER_FIELDS,
+    });
+  }
+
   async isValid(newValues = {}) {
     const {
       validate,
-      fields,
       formData,
       textDefaultFormErrorText,
     } = this.props;
@@ -182,30 +214,35 @@ export default class CoreForm extends Component {
       //   const domElement = this.domControls[field.name];
       //   return await Field.validate(field.value, field, domElement).length === 0;
       // });
-      fieldsErrors = (await Promise.all(fields.map(async (field, index) => {
-        const {
-          name,
-        } = field;
 
-        const domElement = this.domControls[name];
-        let value = newValues[name];
-        if (typeof value === 'undefined') {
-          value = this.getFieldValue(name, field);
-        }
-        const errors = await Field.validate(
-          value,
-          this.gerFieldProps(field, index),
-          domElement,
-          this.getFormData,
-        );
-        return errors && errors.length > 0
-          ? {
-            field: name,
-            fieldLabel: this.getFieldLabel(field),
-            errors,
+      fieldsErrors = (
+        await Promise.all(this.getAllFields().map(
+          async (field, index) => {
+            const {
+              name,
+            } = field;
+
+            const domElement = this.domControls[name];
+            let value = newValues[name];
+            if (typeof value === 'undefined') {
+              value = this.getFieldValue(name, field);
+            }
+            const errors = await Field.validate(
+              value,
+              this.gerFieldProps(field, index),
+              domElement,
+              this.getFormData,
+            );
+            return errors && errors.length > 0
+              ? {
+                field: name,
+                fieldLabel: this.getFieldLabel(field),
+                errors,
+              }
+              : null;
           }
-          : null;
-      })))
+        ))
+      )
         .filter(obj => !!obj);
     }
 
@@ -225,7 +262,15 @@ export default class CoreForm extends Component {
   }
 
   getFieldByName(fieldName) {
-    return this.props.fields.find(({ name }) => fieldName === name);
+    // return this.props.fields.find(({ name }) => fieldName === name);
+    return findInTree(
+      this.props.fields,
+      fieldName,
+      {
+        fieldSearch: 'name',
+        fieldChildren: GROUPING_ATTRIBUTE_INNER_FIELDS,
+      },
+    );
   }
 
   @bind()
@@ -244,7 +289,9 @@ export default class CoreForm extends Component {
   @bind()
   async handleChange(fieldName, newValue) {
     const {
+      formData,
       onChangeField,
+      onUpdateForm,
     } = this.props;
     const {
       touched,
@@ -262,20 +309,28 @@ export default class CoreForm extends Component {
     let result;
     if (onChange) {
       // todo @ANKU @LOW - нужно onChange тоже включить в процессинг, но почему-то падают странности
-      result = await onChange(fieldName, newValue);
-    } else if (onChangeField) {
-      const resultFormData = {};
-      // fieldName может быть составным: address.city
-      set(resultFormData, fieldName, newValue);
-      result = await onChangeField(resultFormData);
+      await onChange(fieldName, newValue);
+    } else {
+      if (onChangeField) {
+        // const resultFormData = cloneDeep(formData);
+        const resultFormData = {};
+        // fieldName может быть составным: address.city
+        set(resultFormData, fieldName, newValue);
+        // todo @ANKU @LOW - может сделать createJsonPatchOperation
+        await onChangeField(resultFormData);
+      }
+      if (onUpdateForm) {
+        const resultFormData = cloneDeep(formData);
+        // fieldName может быть составным: address.city
+        set(resultFormData, fieldName, newValue);
+        await onUpdateForm(resultFormData);
+      }
     }
 
     emitProcessing(
       this.isValid(set({}, fieldName, newValue)),
       this,
     );
-
-    return result;
   }
 
   @bind()
@@ -352,8 +407,10 @@ export default class CoreForm extends Component {
     return value;
   }
 
+  @bind()
   gerFieldProps(field, index) {
     const {
+      type,
       className,
       name,
       placeholder,
@@ -369,12 +426,17 @@ export default class CoreForm extends Component {
       id,
       i18nFieldPrefix,
       onChangeField,
+      onUpdateForm,
       // firstFocus,
       formData,
     } = this.props;
     const {
       isProcessing,
     } = this.state;
+
+    if (type === FIELD_TYPES.GROUPING) {
+      return field;
+    }
 
     const label = this.getFieldLabel(field);
     const placeholderFinal = placeholder || textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`,
@@ -416,16 +478,52 @@ export default class CoreForm extends Component {
       title: titleFinal,
       textHint: hint,
       textDescription: textDescriptionFinal,
-      onChange: onChange || (onChangeField ? this.handleChange : undefined),
+      onChange: onChange || ((onChangeField || onUpdateForm) ? this.handleChange : undefined),
       formDependentData,
       getFormData: this.getFormData,
     };
   }
 
+  @bind()
+  renderDefaultGrouping(groupingField, index, innerFieldComponents, innerFieldProps) {
+    const {
+      name = `grouping_${index}`,
+      className,
+      nodeBefore,
+      nodeAfter,
+    } = groupingField;
+
+    return (
+      <div
+        key={ name }
+        className={ `CoreForm__grouping ${name} ${className || ''}` }
+      >
+        { nodeBefore }
+        { innerFieldComponents }
+        { nodeAfter }
+      </div>
+    );
+  }
+
+  @bind()
   renderField(field, index) {
     const {
       name,
+      type,
     } = field;
+
+    if (type === FIELD_TYPES.GROUPING) {
+      const {
+        [GROUPING_ATTRIBUTE_INNER_FIELDS]: groupingFields = [],
+        renderGrouping = this.renderDefaultGrouping,
+      } = field;
+      return renderGrouping(
+        field,
+        index,
+        groupingFields.map(this.renderField),
+        groupingFields.map(this.gerFieldProps),
+      )
+    }
 
     let fieldCmp;
     if (typeof field === 'string' || React.isValidElement(field)) {
