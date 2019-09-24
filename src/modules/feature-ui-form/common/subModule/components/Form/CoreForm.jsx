@@ -327,8 +327,11 @@ export default class CoreForm extends Component {
     const {
       i18nFieldPrefix,
     } = this.props;
-    let labelFinal = label || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.label`, {}, '', ''));
-    if (!labelFinal && i18nFieldPrefix) {
+    let labelFinal = label === null || label === false
+      ? null
+      : label || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.label`, {}, '', ''));
+
+    if (labelFinal !== null && !labelFinal && i18nFieldPrefix) {
       labelFinal = i18n(`${i18nFieldPrefix}.${name}`, {}, '', '');
     }
     return labelFinal;
