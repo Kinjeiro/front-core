@@ -4,7 +4,7 @@ import {
   executeVariable,
 } from '../../common/utils/common';
 
-import { parseResponseHandler } from './hapi-utils';
+import { handlerWrapperParseResponse } from './hapi-utils';
 
 export function createMockRoute(
   { path, method = 'get' }, // apiConfig
@@ -15,7 +15,7 @@ export function createMockRoute(
   return {
     method,
     path,
-    handler: parseResponseHandler(handler, true),
+    handler: handlerWrapperParseResponse(handler, true),
     mockFilterConditions,
     ...otherRouteConfig,
   };

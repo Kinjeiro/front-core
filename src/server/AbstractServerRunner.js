@@ -13,7 +13,7 @@ import {
   aggregateObjectFn,
 } from '../common/utils/common';
 import { joinPath } from '../common/utils/uri-utils';
-import { parseToUniError } from '../common/models/uni-error';
+import { createUniError, parseToUniError } from '../common/models/uni-error';
 
 import logger from './helpers/server-logger';
 import serverConfig from './server-config';
@@ -21,6 +21,7 @@ import serverConfig from './server-config';
 import pluginServicesContext from './services/utils/plugin-services-context';
 import ServicesContext from './services/utils/ServicesContext';
 import pluginStrategies from './strategies/plugin-strategies';
+import { responseWrapper } from './utils/hapi-utils';
 
 
 if (!serverConfig.common.isProduction) {
@@ -343,15 +344,41 @@ export default class AbstractServerRunner {
              - message - the error message derived from error.message.
          ...inherited Error properties (stack, message)
         */
-        logger.error(`Boom error response sent for request: ${request.id} at ${request.url.path} because:\n\t`, response.trace, '\n\t', response.stack || response);
-        return reply(parseToUniError(response)).code(code);
+        /*
+          Почему-то ошибки склеиваются - isBoom: true,
+            linkForwardTo: undefined,
+            uniCode: 401,
+            uniMessage: 'Некорректно введенные данные.',
+            uniMessages: [ 'Некорректно введенные данные.' ],
+            isNotFound: false,
+            isNotAuth: true,
+            isServerNotAvailable: false,
+            isBoom: true,
+            isServer: true,
+            data: null,
+            output:
+             { statusCode: 500,
+               payload:
+                { statusCode: 500,
+                  error: 'Internal Server Error',
+                  message: 'An internal server error occurred' },
+               headers: {} },
+            reformat: [Function] }
+        */
+        const uniError = createUniError(response);
+        return responseWrapper(response, reply)
+          .code(uniError.responseStatusCode || code);
       }
 
       return reply.continue();
     });
 
     server.on('request-error', (request, err) => {
-      logger.error(`Error response (500) sent for request: ${request.id} at ${request.url.path} because: ${err.trace || err.stack || err}`);
+      logger.error(
+        `Error response (500) sent for request: ${request.id} at ${request.url.path} because:`,
+        err,
+        err.trace || err.stack,
+      );
     });
   }
 

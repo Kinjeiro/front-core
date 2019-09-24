@@ -12,7 +12,7 @@ import {
   formatUrlParameters,
 } from '../../common/utils/uri-utils';
 import appUrl from '../../common/helpers/app-urls';
-import { parseToUniError } from '../../common/models/uni-error';
+import { createUniError } from '../../common/models/uni-error';
 
 import serverConfig from '../server-config';
 
@@ -91,22 +91,31 @@ function responseWrapperInner(result, reply) {
 }
 
 export function responseWrapper(result, reply) {
-  if (result && result.then) {
-    // promise
-    return result.then((finalResult) =>
-      responseWrapperInner(finalResult, reply));
-  }
+  // if (result && result.then) {
+  //   // promise
+  //   return result.then(
+  //     (finalResult) => responseWrapperInner(finalResult, reply),
+  //     (error) => {
+  //       logger.error('ANKU , OPA ERRROR', error);
+  //     },
+  //   );
+  // }
   return responseWrapperInner(result, reply);
 }
 
-export function responseError(error, reply, code = undefined) {
+export async function responseError(error, reply, code = undefined) {
   // todo @ANKU @LOW - иногда при ошибка бывает - UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 2): Error: reply interface called twice
-  const uniError = parseToUniError(error);
-  return responseWrapperInner(uniError, reply)
-    .code(code || uniError.responseStatusCode || 500);
+  // Ошибка когда reply(объект Error) подается, ибо там срабатывает внутренний boom handler и вызывается reply дважды
+  // const uniError = parseToUniError(error);
+  const uniError = createUniError(error);
+  const response = responseWrapper(uniError, reply);
+
+  return response.code
+    ? response.code(code || uniError.responseStatusCode || 500)
+    : response;
 }
 
-export function parseResponseHandler(handler, proceedRequestData) {
+export function handlerWrapperParseResponse(handler, proceedRequestData) {
   let finalHandler;
 
   if (handler && handler.then) {
@@ -114,10 +123,12 @@ export function parseResponseHandler(handler, proceedRequestData) {
     finalHandler = async (request, reply) => reply(await handler);
   } else if (typeof handler === 'function') {
     // function - на выходе либо promise, либо data - поэтому используем рекурсию
-    finalHandler = (request, reply) => {
-      const result = proceedRequestData
-        ? handler(getRequestData(request), request, reply)
-        : handler(request, reply);
+    finalHandler = async (request, reply) => {
+      const result = await (
+        proceedRequestData
+          ? handler(getRequestData(request), request, reply)
+          : handler(request, reply)
+      );
       return responseWrapper(result, reply);
     };
   } else {
@@ -126,6 +137,27 @@ export function parseResponseHandler(handler, proceedRequestData) {
   }
 
   return finalHandler;
+}
+
+export function handlerWrapperAllErrors(handler) {
+  return async (request, reply) => {
+    try {
+      // todo @ANKU @LOW @hapi - если будут не пойманная ошибка, то хапи выбросит boom ошибку и дважды вызовет reply - поэтому все ошибки нужно отлавливать
+      /*
+        node_modules/hapi/lib/handler.js:108
+          // Execute handler
+
+          const result = request.route.settings.handler.call(bind, request, reply);
+          if (result &&
+              Promises.isThennable(result)) {
+              result.then(null, (err) => reply(err instanceof Error ? Boom.boomify(err) : Boom.badImplementation('Unhandled rejected promise', err)));
+          }
+      */
+      return await handler(request, reply);
+    } catch (uniError) {
+      return responseError(uniError, reply);
+    }
+  };
 }
 
 // const COOKIE_REGEXP = /(?:[^\x00-\x20\(\)<>@\,;\:\\"\/\[\]\?\=\{\}\x7F]+)\s*=\s*(?:([^\x00-\x20\"\,\;\\\x7F]*))/;

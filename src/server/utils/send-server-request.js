@@ -70,7 +70,13 @@ export function sendSimpleRequest(requestOptions) {
         reject(parseToUniError(error));
       } else if (responseIncomingMessage.statusCode >= 300 || responseIncomingMessage.statusCode < 200) {
         logger.error(`[from server RESPONSE ERROR STATUS]\n${responseIncomingMessage.statusCode}: `);
-        logger.debug('\n-- responseBody:\n', responseIncomingMessage.body, '\n-- request options:\n', requestOptions, '\n\n');
+        logger.debug(
+          '\n-- responseBody:\n',
+          responseIncomingMessage.body,
+          '\n-- request options:\n',
+          requestOptions,
+          '\n\n',
+        );
         reject(parseToUniError(responseIncomingMessage));
       } else {
         logger.log('[from server RESPONSE]');
