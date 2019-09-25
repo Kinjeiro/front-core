@@ -21,8 +21,7 @@ import { normalizeAccessObject } from '../../modules/module-auth/common/subModul
 
 import apiPluginLog from './api-plugin-log';
 import {
-  handlerWrapperAllErrors,
-  handlerWrapperParseResponse,
+  parseResponseHandler,
   responseError,
   getRequestData,
   responseWrapper,
@@ -91,7 +90,7 @@ export const ROUTE_CONFIG_OPTIONS = {
 // ======================================================
 // AUTH
 // ======================================================
-function handlerWrapperAuth(handler, apiPluginOptions, routeConfig, serverPluginOptions) {
+function authWrapper(handler, apiPluginOptions, routeConfig, serverPluginOptions) {
   const {
     [ROUTE_CONFIG_OPTIONS.AUTH]: auth,
   } = routeConfig;
@@ -324,7 +323,7 @@ function proxyWrapper(reply, proxy, callback) {
         }
       }
 
-      return callback(payload, newReply, response);
+      callback(payload, newReply, response);
     };
   }
 
@@ -340,9 +339,9 @@ function proxyWrapper(reply, proxy, callback) {
  * @returns {function(*=, *=, *=)}
  */
 function createProxyWrapperCallback(handler, apiRequest, pluginOptions) {
-  return async (payload, newReply, proxyResponse) => {
+  return (payload, newReply, proxyResponse) => {
     if (handler) {
-      const result = await handler(payload, getRequestData(apiRequest), apiRequest, newReply, proxyResponse, pluginOptions);
+      const result = handler(payload, getRequestData(apiRequest), apiRequest, newReply, proxyResponse, pluginOptions);
       return responseWrapper(result, newReply);
     }
 
@@ -447,15 +446,13 @@ export function pluginRouteFactory(
 
   const name = pluginName || (typeof path !== 'function' && `${path}_${method}`) || generateId();
 
-  const register = (server, serverPluginOptions, next) => {
+  const register = function (server, serverPluginOptions, next) {
     let finalHandler = (request, reply) => handler(request, reply, serverPluginOptions);
 
     // предпоследний враппер
-    finalHandler = handlerWrapperAuth(finalHandler, apiPluginOptions, routeConfig, serverPluginOptions);
-    // парсинг результата
-    finalHandler = handlerWrapperParseResponse(finalHandler);
+    finalHandler = authWrapper(finalHandler, apiPluginOptions, routeConfig, serverPluginOptions);
     // самый верхний враппер
-    finalHandler = handlerWrapperAllErrors(finalHandler);
+    finalHandler = parseResponseHandler(finalHandler);
 
     let methods = method;
     if (!Array.isArray(methods)) {
@@ -542,7 +539,7 @@ function apiPluginFullFactory(apiConfig, apiPluginOptions) {
 
       // проксируем
       if (proxy) {
-        return await proxyWrapper(
+        return proxyWrapper(
           reply,
           proxy,
           createProxyWrapperCallback(handler, apiRequest, pluginOptions),
