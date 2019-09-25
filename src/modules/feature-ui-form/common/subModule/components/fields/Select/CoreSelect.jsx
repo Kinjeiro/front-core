@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import omit from 'lodash/omit';
-import pick from 'lodash/pick';
+// import pick from 'lodash/pick';
 import memoizeOne from 'memoize-one';
 
 import {
@@ -35,6 +35,15 @@ export const ATTR_FULL_RECORD = 'optionrecord';
  * Нужно показывать только n первых элементов
  */
 export default class CoreSelect extends PureComponent {
+  static CUSTOM_FIELDS = [
+    'selectedValue',
+    'isSaveFullRecord',
+    'fieldLabel',
+    'fieldValue',
+    'maxVisible',
+    'onSelect',
+    'onSearch',
+  ];
   static propTypes = {
     value: PropTypes.any,
     /**
@@ -270,7 +279,7 @@ export default class CoreSelect extends PureComponent {
   // RENDERS
   // ======================================================
   getControlProps() {
-    return pick(this.props, ...Object.keys(BaseSelect.propTypes));
+    return omit(this.props, CoreSelect.CUSTOM_FIELDS);
   }
 
   // ======================================================
