@@ -629,7 +629,7 @@ export default class CoreField extends Component {
       }
       case FIELD_SUB_TYPES.PHONE: {
         return {
-          // todo @ANKU @LOW - могут быть и пробелы - ^((\+7|7|8)+[0-9-]{10,14})$
+          // todo @ANKU @LOW - могут быть и пробелы - ^((\+7|7|8)+[0-9-]{10,14})$ - https://www.regextester.com/94215
           pattern: '^((\\+7|7|8)+([0-9]){10})$',
           ...props,
           type: 'tel',

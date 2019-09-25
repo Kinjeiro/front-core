@@ -411,6 +411,10 @@ export default class CoreForm extends Component {
 
   @bind()
   gerFieldProps(field, index) {
+    if (typeof field === 'string') {
+      return null;
+    }
+
     const {
       type,
       className,
@@ -436,10 +440,6 @@ export default class CoreForm extends Component {
       isProcessing,
     } = this.state;
 
-    if (type === FIELD_TYPES.GROUPING) {
-      return field;
-    }
-
     const label = this.getFieldLabel(field);
     const placeholderFinal = placeholder || textPlaceholder || (i18nFieldPrefix && i18n(`${i18nFieldPrefix}.${name}.placeholder`,
         {},
@@ -459,6 +459,10 @@ export default class CoreForm extends Component {
         return result;
       }, {});
 
+    // if (type === FIELD_TYPES.GROUPING) {
+    //   return field;
+    // }
+
     return {
       id: `${id}_${name}`,
       ...field,
@@ -471,7 +475,6 @@ export default class CoreForm extends Component {
       //   }
       //   : field.controlProps,
       controlRef: this.controlRef,
-      value: this.getFieldValue(name, field),
       key: name,
       className: `${this.bem('field')} ${className || ''}`,
       label,
@@ -480,9 +483,11 @@ export default class CoreForm extends Component {
       title: titleFinal,
       textHint: hint,
       textDescription: textDescriptionFinal,
-      onChange: onChange || ((onChangeField || onUpdateForm) ? this.handleChange : undefined),
       formDependentData,
       getFormData: this.getFormData,
+
+      value: this.getFieldValue(name, field),
+      onChange: onChange || ((onChangeField || onUpdateForm) ? this.handleChange : undefined),
     };
   }
 
