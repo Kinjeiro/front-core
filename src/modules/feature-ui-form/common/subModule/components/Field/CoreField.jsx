@@ -210,6 +210,7 @@ export default class CoreField extends Component {
       case FIELD_TYPES.LIST:
         return CB.Select.getSelectedOptionLabel
           ? CB.Select.getSelectedOptionLabel({
+            value,
             selectedValue: value,
             options: props.options,
             ...props.controlProps,
@@ -643,6 +644,9 @@ export default class CoreField extends Component {
       id,
       name,
       type,
+      /**
+       * @deprecated - use controlProps.options
+       */
       options,
       // value: inValue,
       // valueName,
@@ -833,9 +837,10 @@ export default class CoreField extends Component {
       case FIELD_TYPES.LIST: {
         // Select
         return {
+          value: controlValue,
           selectedValue: controlValue,
           options,
-          onSelect: (id, node, contextSelect) => this.handleChange(id, index, contextSelect),
+          onSelect: (idOrFullRecord, node, contextSelect) => this.handleChange(idOrFullRecord, index, contextSelect),
           ...controlPropsFinal,
         };
       }
