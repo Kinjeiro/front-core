@@ -629,6 +629,7 @@ export default class CoreField extends Component {
       }
       case FIELD_SUB_TYPES.PHONE: {
         return {
+          // todo @ANKU @LOW - могут быть и пробелы - ^((\+7|7|8)+[0-9-]{10,14})$
           pattern: '^((\\+7|7|8)+([0-9]){10})$',
           ...props,
           type: 'tel',

@@ -6,6 +6,9 @@
     align-items: center;
     width: 100%;
 
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+
     &--touched {
         :invalid {
             background: var(--color-error-background);

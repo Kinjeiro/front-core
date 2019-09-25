@@ -7,6 +7,7 @@ import getComponents from '../../../../../../common/get-components';
 
 const {
   UnescapedHtml,
+  Label,
   Loading,
   ErrorLabel,
   Hint,
@@ -39,10 +40,10 @@ export default class FieldLayout extends PureComponent {
       label,
     } = this.props;
 
-    return (
-      <label className="FieldLayout__label">
+    return label && (
+      <Label className="FieldLayout__label">
         { label }
-      </label>
+      </Label>
     );
   }
 
