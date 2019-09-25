@@ -44,7 +44,7 @@ export const FIELD_PROP_TYPE_MAP = {
   type: PropTypes.oneOf(Object.values(FIELD_TYPES)),
   subType: PropTypes.oneOf(Object.values(FIELD_SUB_TYPES)),
 
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   /**
    * по умолчанию <form_id>_<name>
    */
