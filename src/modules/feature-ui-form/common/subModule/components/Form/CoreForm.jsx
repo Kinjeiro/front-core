@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import set from 'lodash/set';
 import get from 'lodash/get';
+import pick from 'lodash/pick';
 import cloneDeep from 'lodash/cloneDeep';
 
 import clientConfig from '../../../../../../common/client-config';
@@ -40,6 +41,7 @@ const {
   ActionStatus,
   Button,
   Field,
+  FieldLayout,
   ErrorBoundary,
 } = getComponents();
 
@@ -489,19 +491,24 @@ export default class CoreForm extends Component {
     const {
       name = `grouping_${index}`,
       className,
+
       nodeBefore,
       nodeAfter,
+      fields,
+
+      ...otherProps,
     } = groupingField;
 
     return (
-      <div
+      <FieldLayout
         key={ name }
+        { ...pick(otherProps, Object.keys(FieldLayout.propTypes)) }
         className={ `CoreForm__grouping ${name} ${className || ''}` }
       >
         { nodeBefore }
         { innerFieldComponents }
         { nodeAfter }
-      </div>
+      </FieldLayout>
     );
   }
 
@@ -513,12 +520,15 @@ export default class CoreForm extends Component {
     } = field;
 
     if (type === FIELD_TYPES.GROUPING) {
+      const groupingField = this.gerFieldProps(field, index);
+
       const {
         [GROUPING_ATTRIBUTE_INNER_FIELDS]: groupingFields = [],
         renderGrouping = this.renderDefaultGrouping,
-      } = field;
+      } = groupingField;
+
       return renderGrouping(
-        field,
+        groupingField,
         index,
         groupingFields.map(this.renderField),
         groupingFields.map(this.gerFieldProps),
