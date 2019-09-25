@@ -1,31 +1,39 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars,react/require-default-props */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 
 import getComponents from '../../../get-components';
+import { FIELD_SUB_TYPES, FIELD_TYPES } from '../../../model-field';
 
 const {
   BaseNumberInput,
   BaseTextArea,
   BaseInput,
+  PhoneInput,
 } = getComponents();
 
 export default class CoreInput extends PureComponent {
   static propTypes = {
     // ...input.propTypes
-    controlRef: PropTypes.func,
-    withState: PropTypes.bool,
+
+    // from CoreField
+    type: PropTypes.string,
+    subType: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]),
-    indexItem: PropTypes.number,
-    type: PropTypes.string,
     readOnly: PropTypes.bool,
-    InputClass: PropTypes.func,
     errors: PropTypes.arrayOf(PropTypes.string),
     title: PropTypes.string,
+    controlRef: PropTypes.func,
+
+    // other
+    withState: PropTypes.bool,
+    indexItem: PropTypes.number,
+
+    InputClass: PropTypes.func,
 
     onChangedBlur: PropTypes.func,
     onChange: PropTypes.func,
@@ -35,7 +43,7 @@ export default class CoreInput extends PureComponent {
 
   static defaultProps = {
     withState: true,
-    type: 'text',
+    type: FIELD_TYPES.STRING,
     errors: [],
   };
 
@@ -145,12 +153,17 @@ export default class CoreInput extends PureComponent {
 
   @bind()
   handleKeyPress(event, ...other) {
-    if (this.props.type !== 'textarea' && event.key === 'Enter') {
+    const {
+      type,
+      onKeyPress,
+    } = this.props;
+
+    if (type !== FIELD_TYPES.TEXT && event.key === 'Enter') {
       this.update(true, true, event, ...other);
     }
 
-    if (this.props.onKeyPress) {
-      this.props.onKeyPress(event, ...other);
+    if (onKeyPress) {
+      onKeyPress(event, ...other);
     }
   }
 
@@ -169,12 +182,37 @@ export default class CoreInput extends PureComponent {
         : value
      : value;
   }
+
+  getInputViewClass() {
+    const {
+      type,
+      subType,
+      InputClass,
+    } = this.props;
+
+    if (InputClass) {
+      return InputClass;
+    }
+    switch (type) {
+      case FIELD_TYPES.TEXT:
+        return BaseTextArea;
+      case FIELD_TYPES.NUMERIC:
+        return BaseNumberInput;
+      default:
+        if (subType === FIELD_SUB_TYPES.PHONE) {
+          return PhoneInput;
+        }
+        return BaseInput;
+    }
+  }
+
   // ======================================================
   // MAIN RENDER
   // ======================================================
   render() {
     const {
       type,
+      subType,
       InputClass,
       withState, // убираем из остальных пропертей
       onChangedBlur, // убираем из остальных пропертей
@@ -184,19 +222,7 @@ export default class CoreInput extends PureComponent {
       ...inputProps
     } = this.props;
 
-    let InputClassFinal = InputClass;
-    if (!InputClassFinal) {
-      switch (type) {
-        case 'textarea':
-          InputClassFinal = BaseTextArea;
-          break;
-        case 'number':
-          InputClassFinal = BaseNumberInput;
-          break;
-        default:
-          InputClassFinal = BaseInput;
-      }
-    }
+    const InputClassFinal = this.getInputViewClass();
 
     return (
       <InputClassFinal

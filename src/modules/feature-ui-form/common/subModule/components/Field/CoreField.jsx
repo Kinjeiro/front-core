@@ -645,6 +645,7 @@ export default class CoreField extends Component {
       id,
       name,
       type,
+      subType,
       /**
        * @deprecated - use controlProps.options
        */
@@ -692,6 +693,8 @@ export default class CoreField extends Component {
     let controlPropsFinal = {
       id,
       name,
+      type,
+      subType,
       errors: Array.isArray(errors) && errors.length === 0 ? null : errors,
       touched,
       defaultValue,
@@ -887,13 +890,12 @@ export default class CoreField extends Component {
           return CB.Select;
         }
 
-        if (type === FIELD_TYPES.TEXT) {
-          if (subType === FIELD_SUB_TYPES.PHONE) {
-            return CB.PhoneInput;
-          }
-
-          return CB.TextArea;
-        }
+        // if (type === FIELD_TYPES.STRING && subType === FIELD_SUB_TYPES.PHONE) {
+        //   return CB.PhoneInput;
+        // }
+        // if (type === FIELD_TYPES.TEXT) {
+        //   return CB.TextArea;
+        // }
 
         return CB.Input;
 
