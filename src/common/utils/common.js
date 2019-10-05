@@ -1,10 +1,11 @@
 /* eslint-disable no-param-reassign,no-continue,no-restricted-syntax */
 import flattenDeep from 'lodash/flattenDeep';
-import isEqual from 'lodash/isEqual';
 import mergeLib from 'lodash/merge';
 import memoizeLodash from 'lodash/memoize';
 import lodashDifference from 'lodash/difference';
 import emptyObject from 'lodash/isEmpty';
+// import isEqual from 'lodash/isEqual';
+import reactFastCompare from 'react-fast-compare';
 
 import shallowEqualLib from 'shallowequal';
 import promiseMemoize from 'promise-memoize';
@@ -212,8 +213,10 @@ export function shallowEqual(obj1, obj2) {
   return shallowEqualLib(obj1, obj2);
 }
 export function deepEquals(obj1, obj2) {
+  // в isEqual не учитывалась специфика реактовских нод (там была рекурсия с owner) и считал что разные + этот быстрее метод
   // return shallowequal(obj1, obj2);
-  return isEqual(obj1, obj2);
+  // return isEqual(obj1, obj2);
+  return reactFastCompare(obj1, obj2);
 }
 
 // ======================================================

@@ -77,16 +77,16 @@ export default class CoreField extends Component {
       ...otherProps
     } = nextProps;
 
-    const isShallowEqual =
-      shallowEqual(nextState, this.state)
+    const isShallowEqual = shallowEqual(nextState, this.state)
       && shallowEqual(
         otherProps,
         omit(this.props, 'context', 'controlProps', 'formDependentData'),
       )
       && shallowEqual(context, this.props.context)
       && shallowEqual(controlProps, this.props.controlProps);
-    const isDeepEquals = deepEquals(formDependentData, this.props.formDependentData);
-    return !isShallowEqual || !isDeepEquals;
+
+    return !isShallowEqual
+      || !deepEquals(formDependentData, this.props.formDependentData);
   }
 
   componentWillReceiveProps(newProps) {
