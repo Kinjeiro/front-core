@@ -387,6 +387,28 @@ export function difference(source, minusValues) {
   );
 }
 
+/**
+ *
+ * @param array
+ * @param predicate - либо значение \ либо (arrayItem, index)
+ * @return {*}
+ */
+export function removeFirstBy(array, predicate) {
+  const predicateFinal = typeof predicate === 'function'
+    ? predicate
+    : (value) => value === predicate;
+
+  let isFound = false;
+  return array.reduce((result, arrayItem, index) => {
+    if (!isFound && predicateFinal(arrayItem, index)) {
+      isFound = true;
+    } else {
+      result.push(arrayItem);
+    }
+    return result;
+  }, []);
+}
+
 export function isEmpty(value, objectChecker = emptyObject) {
   return value instanceof Object
     ? objectChecker(value)
