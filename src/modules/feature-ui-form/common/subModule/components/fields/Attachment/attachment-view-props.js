@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import CONSTRAINTS_PROP_TYPE from '../../../../../../../common/models/model-constraints';
+import CONSTRAINTS_PROP_TYPE from '../../../model-constraints';
 
 import {
   ATTACHMENT_PROP_TYPE,
