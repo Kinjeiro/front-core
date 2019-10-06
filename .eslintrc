@@ -50,6 +50,7 @@
     }}], //чтобы в jsx были пробелы для наглядного расположения параметров
     "react/forbid-prop-types": 0, // часто нужно обозначить мапу, а PropTypes.object запрещен
     "react/sort-comp": 0, // мы утилиты распологаем над жизненным циклом, а он ругается
+    "react/require-default-props": 0, // не удобно все проставлять
     "import/no-extraneous-dependencies": 0, // многие библиотеки есть в front-core но! // todo @ANKU @LOW @BUT_OUT - packageDir не работает на multiple, пока эта таска не заапрувится https://github.com/benmosher/eslint-plugin-import/pull/1104
     "import/prefer-default-export": 0 //у нас другой стиль, не всегда есть default для единообразия
 
