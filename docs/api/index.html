@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.8.19 | Documentation</title>
+  <title>@reagentum/front-core 1.8.20 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.8.19</code></div>
+          <div class='mb1'><code>1.8.20</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -853,6 +853,16 @@
               
                 
                 <li><a
+                  href='#removefirstby'
+                  class="">
+                  removeFirstBy
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#findintree'
                   class="">
                   findInTree
@@ -986,6 +996,26 @@
                   href='#onstatuspropupdate'
                   class="">
                   onStatusPropUpdate
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#accumulatediff'
+                  class="">
+                  accumulateDiff
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deep-diff'
+                  class="">
+                  deep-diff
                   
                 </a>
                 
@@ -7669,6 +7699,82 @@ valueFromRange(25, [0, 5, 8, 15, 20], ['a', 'b', 'c', 'd'], 'Y') => 'Y'</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='removefirstby'>
+      removeFirstBy
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>removeFirstBy(array: any, predicate: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>array</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>predicate</span> <code class='quiet'>(any)</code>
+	    либо значение \ либо (arrayItem, index)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='findintree'>
       findInTree
     </h3>
@@ -9191,6 +9297,156 @@ accountId: PropTypes.number,
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='accumulatediff'>
+      accumulateDiff
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arguments
+1) lhs - the left-hand operand; the origin object.
+2) rhs - the right-hand operand; the object being compared structurally with the origin object.
+3) options -
+a) object - A configuration object that can have the following properties:
+prefilter: (path, key) => bool - function that determines whether difference analysis should continue down the object graph. This function can also replace the options object in the parameters for backward compatibility.
+normalize: (path, key, lhs, rhs) => [lhs, rhs] - function that pre-processes every leaf of the tree.
+b) function - prefilter
+4) acc - an optional accumulator/array (requirement is that it have a push function). Each difference is pushed to the specified accumulator.</p>
+<p>Returns either an array of change</p>
+
+
+  <div class='pre p1 fill-light mt0'>accumulateDiff(lhs: any, rhs: any, prefilter: any, accum: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>lhs</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>rhs</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>prefilter</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>accum</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deep-diff'>
+      deep-diff
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arguments
+1) lhs - the left-hand operand; the origin object.
+2) rhs - the right-hand operand; the object being compared structurally with the origin object.
+3) options -
+a) object - A configuration object that can have the following properties:
+prefilter: (path, key) => bool - function that determines whether difference analysis should continue down the object graph. This function can also replace the options object in the parameters for backward compatibility.
+normalize: (path, key, lhs, rhs) => [lhs, rhs] - function that pre-processes every leaf of the tree.
+showEditLinks: bool - add not equal link result
+b) function - prefilter
+4) acc - an optional accumulator/array (requirement is that it have a push function). Each difference is pushed to the specified accumulator.</p>
+<p>Returns either an array of change</p>
+
+
+  <div class='pre p1 fill-light mt0'>deep-diff</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
   
 
   
