@@ -91,19 +91,226 @@ export default class TestForm extends PureComponent {
         type: Form.FIELD_TYPES.TEXT,
       },
       {
-        label: 'LIST',
+        label: '(default) LIST',
         name: 'list',
         type: Form.FIELD_TYPES.LIST,
-        options: [
+        defaultValue: 'eee',
+        controlProps: {
+          fieldLabel: 'label',
+          fieldValue: 'value',
+          records: [
+            {
+              label: 'label 1',
+              value: 'value 1',
+            },
+            {
+              label: 'bbbb',
+              value: 'bbbb',
+            },
+            {
+              label: 'ccc',
+              value: 'ccc',
+            },
+            {
+              label: 'ddd',
+              value: 'ddd',
+            },
+            {
+              label: 'eee',
+              value: 'eee',
+            },
+            {
+              label: 'fff',
+              value: 'fff',
+            },
+          ],
+        },
+      },
+      {
+        label: '(default) LIST MULTIPLE',
+        name: 'listMultiple',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [
+          'bbbb',
+          'ccc',
+        ],
+        controlProps: {
+          fieldLabel: 'myName',
+          fieldValue: 'myId',
+          records: [
+            {
+              myName: 'label 1',
+              myId: 'value 1',
+            },
+            {
+              myName: 'bbbb',
+              myId: 'bbbb',
+            },
+            {
+              myName: 'ccc',
+              myId: 'ccc',
+            },
+            {
+              myName: 'ddd',
+              myId: 'ddd',
+            },
+            {
+              myName: 'eee',
+              myId: 'eee',
+            },
+            {
+              myName: 'fff',
+              myId: 'fff',
+            },
+          ],
+        },
+      },
+      {
+        label: 'LIST MULTIPLE with empty options (useUnique: false, useSearch: false)',
+        name: 'listMultipleWithEmpty',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        value: [
+          'bbbb',
+          'ccc',
+        ],
+        controlProps: {
+          useSearch: false,
+          useUnique: false,
+          // fieldLabel: 'name',
+          // fieldValue: 'id',
+          // records: [],
+        },
+      },
+      {
+        label: '(default) LIST MULTIPLERecord (with renderOption)',
+        name: 'listMultipleRecordWithRender',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [
           {
-            label: 'label 1',
-            value: 'value 1',
+            myName: 'bbbb',
+            myId: 'bbbb',
           },
           {
-            label: 'bbbb',
-            value: 'bbbb',
+            myName: 'ccc',
+            myId: 'ccc',
           },
         ],
+        controlProps: {
+          isSaveFullRecord: true,
+          renderOption: (optionLabel) => {
+            return (
+              <span>
+                { `__${optionLabel}__` }
+              </span>
+            );
+          },
+          fieldLabel: 'myName',
+          fieldValue: 'myId',
+          records: [
+            {
+              myName: 'label 1',
+              myId: 'value 1',
+            },
+            {
+              myName: 'bbbb',
+              myId: 'bbbb',
+            },
+            {
+              myName: 'ccc',
+              myId: 'ccc',
+            },
+            {
+              myName: 'ddd',
+              myId: 'ddd',
+            },
+            {
+              myName: 'eee',
+              myId: 'eee',
+            },
+            {
+              myName: 'fff',
+              myId: 'fff',
+            },
+          ],
+        },
+      },
+      {
+        label: 'LIST MULTIPLERecord with empty options (isSaveFullRecord)',
+        name: 'listMultipleRecord',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        value: [
+          {
+            name: 'bbbb',
+            id: 'bbbb',
+          },
+          {
+            name: 'ccc',
+            id: 'ccc',
+          },
+        ],
+        controlProps: {
+          // default
+          // fieldLabel: 'name',
+          // fieldValue: 'id',
+          isSaveFullRecord: true,
+          records: [],
+        },
+      },
+      {
+        label: 'LIST MULTIPLERecord with disabledOptions (isSaveFullRecord)',
+        name: 'listMultipleRecordWithDisabled',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        value: [
+          {
+            name: 'bbbb',
+            id: 'bbbb',
+          },
+          {
+            name: 'ccc',
+            id: 'ccc',
+          },
+        ],
+        controlProps: {
+          // default
+          // fieldLabel: 'name',
+          // fieldValue: 'id',
+          isSaveFullRecord: true,
+          disabledOptions: [
+            'bbbb',
+            'eee',
+          ],
+          records: [
+            {
+              name: 'label 1',
+              id: 'value 1',
+            },
+            {
+              name: 'bbbb',
+              id: 'bbbb',
+            },
+            {
+              name: 'ccc',
+              id: 'ccc',
+            },
+            {
+              name: 'ddd',
+              id: 'ddd',
+            },
+            {
+              name: 'eee',
+              id: 'eee',
+            },
+            {
+              name: 'fff',
+              id: 'fff',
+            },
+          ],
+        },
       },
       {
         name: 'datetime',
@@ -162,8 +369,7 @@ export default class TestForm extends PureComponent {
         type: FIELD_TYPES.BINARY,
         multiple: true,
         required: false,
-        constraints: {
-        },
+        // constraints: {},
         controlProps: {
           withDescriptions: true,
           // accept: '.png, .jpg, .jpeg',

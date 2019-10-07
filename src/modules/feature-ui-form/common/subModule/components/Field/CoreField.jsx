@@ -34,6 +34,7 @@ import {
 } from '../../model-field';
 
 import getCb from '../../get-components';
+import { createSimpleSelectRecord } from '../../model-select-option';
 
 const CB = getCb();
 const { FieldLayout } = CB;
@@ -188,7 +189,7 @@ export default class CoreField extends Component {
    * @param type
    * @param value
    * @param customMask
-   * @param props - если LIST - то нужно options, componentProps: fieldLabel \ fieldValue - если они отличаются от стандартных
+   * @param props - если LIST - то нужно records, componentProps: fieldLabel \ fieldValue - если они отличаются от стандартных
    * @returns {*}
    */
   static parseValueToString(type, value, customMask = null, props = {}) {
@@ -213,11 +214,11 @@ export default class CoreField extends Component {
       }
 
       case FIELD_TYPES.LIST:
-        return CB.Select.getSelectedOptionLabel
-          ? CB.Select.getSelectedOptionLabel({
+        return CB.Select.getSelectedRecordLabel
+          ? CB.Select.getSelectedRecordLabel({
             value,
             selectedValue: value,
-            options: props.options,
+            records: props.options,
             ...props.controlProps,
           })
           : value;
@@ -767,9 +768,11 @@ export default class CoreField extends Component {
           // todo @ANKU @LOW - возможно формат constraintsValues будет приходить от бэка более сложным и нужно будет этот мапинг переделать
           // Select
           return {
+            // todo @ANKU @CRIT @MAIN - проверить
             selectedValue: controlValue,
-            options: constraintsValues.map((item) => ({ label: item, value: item })),
-            onChange: (value) => this.handleChange(value, index),
+            // options: constraintsValues.map((item) => ({ label: item, value: item })),
+            records: constraintsValues.map((item) => createSimpleSelectRecord(item, item)),
+            onChange: (value) => this.handleChange(value, multipleIndex),
             ...controlPropsFinal,
           };
         }
@@ -863,8 +866,9 @@ export default class CoreField extends Component {
         return {
           value: controlValue,
           selectedValue: controlValue,
-          options,
-          onSelect: (idOrFullRecord, node, contextSelect) => this.handleChange(idOrFullRecord, index, contextSelect),
+          onFieldChange: (idOrFullRecord, node, contextSelect) => this.handleChange(idOrFullRecord, multipleIndex, contextSelect),
+
+          records: options,
           ...controlPropsFinal,
         };
       }
@@ -1081,6 +1085,7 @@ export default class CoreField extends Component {
 
     switch (type) {
       case FIELD_TYPES.BINARY:
+      case FIELD_TYPES.LIST:
         // эти типы сами разберутся с multiple
         // todo @ANKU @LOW - а вообще пора уже выделять в Factory и добавлять как листнеры
         return (

@@ -30,8 +30,7 @@ export function initComponents(COMPONENTS_BASE) {
 
 
   COMPONENTS_BASE.replace('Select', () => require('./components/fields/Select/CoreSelect').default);
-  COMPONENTS_BASE.replace('BaseSelect', () => ({ options, value }) =>
-    <select value={ value } />);
+  COMPONENTS_BASE.replace('BaseSelect', () => require('./components/fields/Select/SelectView').default);
 
   COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
     <input ref={ controlRef } value={ value || '' } type="datetime" />);
