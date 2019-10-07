@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Меню
-* [[last version][1.8.0 - ] (2019.08.29)](#1_8)
+* [[last version][1.9.0 - ] (2019.10.07)](#1_9)
+* [[1.8.0 - 1.8.20] (2019.08.29)](#1_8)
 * [[1.7.0 - 1.7.10] (2019.03.19)](#1_7)
 * [[1.6.0 - 1.6.52] (2018.11.14)](#1_6)
 * [[1.5.0 - 1.5.14] (2018.09.17)](#1_5)
@@ -17,7 +18,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * [[1.0.0] - 2017.12.26](#1_0)
 * [[0.2.16] - 2017.11.17](#0_2)
 
-## [last version][1.8.0 - ] (2019.03.19)
+
+## [last version][1.9.0 - ] (2019.10.07)
+### !!! Breaking changes:
+1. Доработка Select
+    CoreSelect -> SelectCore \ BaseSelect -> SelectView \ fieldValue -> fieldId
+    общение вместо options -> optionMetas
+
+### API Dependencies:
+
+### Dependencies:
+    
+### Dev Dependencies:
+
+### Features:
+
+### Commits:
+    - 
+
+
+## [last version][1.8.0 - 1.8.20] (2019.08.29)
 ### !!! Breaking changes:
 1. Коррекция реализации протокол oauth2.0 (на примере openconnect: urlencoded, basic для client_secret, post для валидации)
 добавились настройки ```server.features.auth.oauth2Urls``` - мапа в которой нужно указать пути до апи
@@ -34,7 +54,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - auth-server@3.0.0
 
 ### Dependencies:
-    
+    - "react-fast-compare": "~2.0.4" - для глубокого сравнения даже с реактовскими нодами
+    - "memoize-one": "~5.1.1" - для перформанса функций
+     
 ### Dev Dependencies:
 
 ### Features:
