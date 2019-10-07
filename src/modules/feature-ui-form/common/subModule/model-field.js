@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import CONSTRAINTS from './model-constraints';
@@ -52,6 +53,7 @@ export const FIELD_PROP_TYPE_MAP = {
 
   simpleText: PropTypes.bool,
   value: PropTypes.any,
+  defaultValue: PropTypes.any,
   /**
    * Значение которое будет отображаться
    */
@@ -156,7 +158,8 @@ export const FIELD_PROP_TYPE_MAP = {
   // для листовых
   // ======================================================
   multiple: PropTypes.bool,
-  options: PropTypes.array,
+  // нужно в controlProps.records проставлять
+  // records: PropTypes.array,
 
   /**
    * (fieldName, index, null, context) => {}
@@ -276,10 +279,29 @@ export const FIELD_PROP_TYPE_MAP = {
    */
   getFormData: PropTypes.func,
 
+  // ======================================================
+  // ОСТАЛЬНОЙ ОБВЕС
+  // ======================================================
+  isProcessing: PropTypes.bool,
+
+  errors: PropTypes.array,
+  warnings: PropTypes.array,
+  touched: PropTypes.bool,
+  onTouch: PropTypes.func,
+  onBlur: PropTypes.func,
+
 
   // ======================================================
   // INNER CONTROL
   // ======================================================
+  /**
+   * для листов нужно объявить:
+   * {
+   *    records - вместо options мы используем данные, потом они преобразуются в optionMeta и передаются в SelectView, а он уже отображет из них option node
+   *    fieldValue
+   *    fieldLabel
+   * }
+   */
   controlProps: PropTypes.object,
   /**
    * ссылка на DOM

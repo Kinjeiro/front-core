@@ -11,6 +11,10 @@ export default class PhoneInput extends React.Component {
   render() {
     const {
       pattern, // - убираем, так как не подходит - нужна маска
+      onTouch,
+      isProcessing,
+      touched,
+      controlRef,
       ...other
     } = this.props;
     // todo @ANKU @LOW - адаптировать

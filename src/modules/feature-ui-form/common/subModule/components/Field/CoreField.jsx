@@ -134,7 +134,10 @@ export default class CoreField extends Component {
     }
   }
   static parseOutValue(type = FIELD_TYPES.TEXT, value = null, props = {}) {
-    const { controlClass } = props;
+    const {
+      multiple,
+      controlClass,
+    } = props;
 
     if (controlClass && controlClass.parseOutValue) {
       return controlClass.parseOutValue(type, value, props);
@@ -145,7 +148,9 @@ export default class CoreField extends Component {
       case FIELD_TYPES.DATE: {
         const dateFormat = type === FIELD_TYPES.DATE ? DATE_FORMAT : DATETIME_FORMAT;
         const systemFormat = type === FIELD_TYPES.DATE ? SYSTEM_DATE_FORMAT : SYSTEM_DATETIME_FORMAT;
-        return parseDate(value, systemFormat, dateFormat);
+        const dates = wrapToArray(value)
+          .map((valueItem) => parseDate(valueItem, systemFormat, dateFormat));
+        return multiple ? dates : dates[0];
       }
       default:
         return value;
@@ -444,7 +449,7 @@ export default class CoreField extends Component {
   }
 
   @bind()
-  handleChange(value, index, node = undefined, contextData = undefined) {
+  handleChange(value, multipleIndex, node = undefined, contextData = undefined) {
     const {
       name,
       type,
@@ -464,9 +469,9 @@ export default class CoreField extends Component {
       promiseChange = onChange(
         name,
         parseOutValue
-          ? parseOutValue(value, this.props, index)
+          ? parseOutValue(value, this.props, multipleIndex)
           : CoreField.parseOutValue(type, value, this.props),
-        multiple ? index : undefined,
+        multiple ? multipleIndex : undefined,
         contextData && typeof contextData === 'object'
           ? { ...contextData, ...context }
           : context,
@@ -528,7 +533,16 @@ export default class CoreField extends Component {
 
   @bind()
   async handleTouch() {
-    await emitProcessing(this.validateComponent(this.props), this);
+    const {
+      onTouch,
+    } = this.props;
+    await emitProcessing(
+      Promise.all([
+        onTouch ? onTouch() : Promise.resolve(),
+        this.validateComponent(this.props),
+      ]),
+      this,
+    );
     this.setState({
       touched: true,
     });
@@ -640,14 +654,14 @@ export default class CoreField extends Component {
     }
   }
 
-  getControlProps(inValue, index, constraints) {
+  getControlProps(inValue, multipleIndex, constraints) {
     const {
       id,
       name,
       type,
       subType,
       /**
-       * @deprecated - use controlProps.options
+       * @deprecated - use controlProps.records
        */
       options,
       // value: inValue,
@@ -666,6 +680,10 @@ export default class CoreField extends Component {
       required: propsRequired,
       defaultValue,
       multiple,
+      isProcessing: isProcessingFromProps,
+      errors: errorsFromProps,
+      warnings: warningsFromProps,
+      touched: touchedFromProps,
       // render,
     } = this.props;
     const {
@@ -695,8 +713,9 @@ export default class CoreField extends Component {
       name,
       type,
       subType,
-      errors: Array.isArray(errors) && errors.length === 0 ? null : errors,
-      touched,
+      errors: errorsFromProps || (Array.isArray(errors) && errors.length === 0 ? null : errors),
+      warnings: warningsFromProps || warnings,
+      touched: touchedFromProps || touched,
       defaultValue,
       multiple,
       ...controlProps,
@@ -706,7 +725,7 @@ export default class CoreField extends Component {
       readOnly: readOnly || !onChange || isProcessing,
       disabled: disabled || isProcessing,
       required: required || propsRequired,
-      isProcessing,
+      isProcessing: isProcessingFromProps || isProcessing,
       onBlur: this.handleBlur,
       onTouch: this.handleTouch,
       ...this.handlersWrapToPromiseChanging(controlProps, ['onMouseDown']),
@@ -766,7 +785,7 @@ export default class CoreField extends Component {
             // value: controlValue,
             onChangedBlur: onChangeBlur,
             onChange: onChangeFinal,
-            indexItem: index,
+            indexItem: multipleIndex,
             withState: !instanceChange,
             ...controlPropsFinal,
             children: controlValue,
@@ -786,7 +805,7 @@ export default class CoreField extends Component {
           pattern,
           onChangedBlur: onChangeBlur,
           onChange: onChangeFinal,
-          indexItem: index,
+          indexItem: multipleIndex,
           ...controlPropsFinal,
         };
       case FIELD_TYPES.BOOLEAN:
@@ -801,7 +820,7 @@ export default class CoreField extends Component {
                 : typeof event.target.checked !== 'undefined'
                   ? event.target.checked
                   : event.target.value || event,
-              index,
+              multipleIndex,
             ),
           ...controlPropsFinal,
         };
@@ -820,10 +839,11 @@ export default class CoreField extends Component {
           value: controlValue,
           placeholder: dateFormat,
           displayFormat: dateFormat,
+          // todo @ANKU @LOW - надо убрать анонимные функция (которые только из-за multipleIndex)
           onChange: (event, time) => (
             event.target
-              ? this.handleChange(time, index)
-              : this.handleChange(event, index)
+              ? this.handleChange(time, multipleIndex)
+              : this.handleChange(event, multipleIndex)
           ),
 
           showTime: type === FIELD_TYPES.DATETIME,
@@ -860,7 +880,7 @@ export default class CoreField extends Component {
           onErrors: this.handleErrors,
           onWarnings: this.handleWarnings,
           ...controlPropsFinal,
-          onChange: (value, node, contextData) => this.handleChange(value, index, node, contextData),
+          onChange: (value, node, contextData) => this.handleChange(value, multipleIndex, node, contextData),
         };
     }
   }
@@ -945,7 +965,7 @@ export default class CoreField extends Component {
     }
   }
 
-  renderFieldItem(inValue, index, constraints) {
+  renderFieldItem(inValue, multipleIndex, constraints) {
     const {
       type,
       valueName,
@@ -963,7 +983,7 @@ export default class CoreField extends Component {
       return emptyValue;
     }
 
-    const controlPropsFinal = this.getControlProps(inValue, index, constraints);
+    const controlPropsFinal = this.getControlProps(inValue, multipleIndex, constraints);
 
     let resultControl = null;
     const ControlClass = this.getControlClass(constraints);
@@ -1180,7 +1200,6 @@ CoreField\
 
         required={ required || propsRequired }
         touched={ touched }
-
       >
         { this.renderMultiple(constraints) }
       </Layout>
