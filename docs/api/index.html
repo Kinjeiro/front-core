@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.9.0 | Documentation</title>
+  <title>@reagentum/front-core 1.9.1 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.9.0</code></div>
+          <div class='mb1'><code>1.9.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1583,9 +1583,9 @@
               
                 
                 <li><a
-                  href='#coreselect'
+                  href='#selectcore'
                   class="">
-                  CoreSelect
+                  SelectCore
                   
                 </a>
                 
@@ -1603,9 +1603,39 @@
               
                 
                 <li><a
+                  href='#records'
+                  class="">
+                  records
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#issavefullrecord'
                   class="">
                   isSaveFullRecord
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onfieldchange'
+                  class="">
+                  onFieldChange
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onchange'
+                  class="">
+                  onChange
                   
                 </a>
                 
@@ -1623,9 +1653,99 @@
               
                 
                 <li><a
+                  href='#allowcreatenew'
+                  class="">
+                  allowCreateNew
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#parsenewitem'
+                  class="">
+                  parseNewItem
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#oncreatenew'
+                  class="">
+                  onCreateNew
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#renderoption'
+                  class="">
+                  renderOption
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#useunique'
+                  class="">
+                  useUnique
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onremoveselected'
+                  class="">
+                  onRemoveSelected
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#usesearch'
+                  class="">
+                  useSearch
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#onsearch'
                   class="">
                   onSearch
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#searchonceonmincharacters'
+                  class="">
+                  searchOnceOnMinCharacters
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onloadmore'
+                  class="">
+                  onLoadMore
                   
                 </a>
                 
@@ -1936,6 +2056,16 @@
                   href='#getformdata'
                   class="">
                   getFormData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#controlprops'
+                  class="">
+                  controlProps
                   
                 </a>
                 
@@ -12439,7 +12569,7 @@ undefined \ null - показывать везде</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>props</span> <code class='quiet'>(any)</code>
-	    если LIST - то нужно options, componentProps: fieldLabel \ fieldValue - если они отличаются от стандартных
+	    если LIST - то нужно records, componentProps: fieldLabel \ fieldId - если они отличаются от стандартных
 
           </div>
           
@@ -12493,7 +12623,7 @@ undefined \ null - показывать везде</p>
   
   
 
-  <div>Deprecated: use controlProps.options
+  <div>Deprecated: use controlProps.records
 </div>
   
   
@@ -13044,8 +13174,8 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='coreselect'>
-      CoreSelect
+    <h3 class='fl m0' id='selectcore'>
+      SelectCore
     </h3>
     
     
@@ -13055,7 +13185,7 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   <p>Нужно показывать только n первых элементов</p>
 
 
-  <div class='pre p1 fill-light mt0'>new CoreSelect()</div>
+  <div class='pre p1 fill-light mt0'>new SelectCore(args: ...any)</div>
   
   
     <p>
@@ -13073,6 +13203,19 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -13114,6 +13257,53 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
   <div>Deprecated: use value
 </div>
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='records'>
+      records
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Самый важный текущий список данных к отображения для выбора (мы работаем с данными, а потом они переводятся в optionMeta а в SelectView они преобразуются уже в option node</p>
+
+
+  <div class='pre p1 fill-light mt0'>records</div>
+  
+  
+
+  
   
   
   
@@ -13192,6 +13382,109 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='onfieldchange'>
+      onFieldChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Внутренний метод от CoreField чтобы можно было задать кастомный onChange</p>
+<p>(newValuesFinal, newRecordsFinal) => {}</p>
+<ul>
+<li>если multiple - это массивы, если нет - значения</li>
+<li>если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>onFieldChange</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onchange'>
+      onChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(newValuesFinal, newRecordsFinal) => {}</p>
+<ul>
+<li>если multiple - это массивы, если нет - значения</li>
+<li>если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>onChange</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='onselect'>
       onSelect
     </h3>
@@ -13200,10 +13493,347 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   </div>
   
 
-  <p>(value, optionNode, contextSelect, optionRecord) => {}</p>
+  <p>(newSelectedValue, newRecordsFinal) => {}</p>
+<ul>
+<li>если multiple - это массивы, если нет - значения</li>
+<li>если isSaveFullRecord - то newSelectedValue - это рекорд, если нет то id</li>
+</ul>
 
 
   <div class='pre p1 fill-light mt0'>onSelect</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='allowcreatenew'>
+      allowCreateNew
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Добавление новых сущностей</p>
+
+
+  <div class='pre p1 fill-light mt0'>allowCreateNew</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='parsenewitem'>
+      parseNewItem
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(label, id, index) => new record</p>
+
+
+  <div class='pre p1 fill-light mt0'>parseNewItem</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='oncreatenew'>
+      onCreateNew
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(record, index) => {}</p>
+
+
+  <div class='pre p1 fill-light mt0'>onCreateNew</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='renderoption'>
+      renderOption
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(record[fieldLabel], record, index, visibilityRecords) => React.node</p>
+
+
+  <div class='pre p1 fill-light mt0'>renderOption</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='useunique'>
+      useUnique
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>только уникальные значения могут быть выбраны</p>
+
+
+  <div class='pre p1 fill-light mt0'>useUnique</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onremoveselected'>
+      onRemoveSelected
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(deletedValue, newRecordsFinal) => {}</p>
+<ul>
+<li>если multiple - это массивы, если нет - значения</li>
+<li>если isSaveFullRecord - то deletedValue - это рекорд, если нет то id</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>onRemoveSelected</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='usesearch'>
+      useSearch
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>использовать поиск для выбора</p>
+
+
+  <div class='pre p1 fill-light mt0'>useSearch</div>
   
   
 
@@ -13254,6 +13884,105 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
 
   <div class='pre p1 fill-light mt0'>onSearch</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='searchonceonmincharacters'>
+      searchOnceOnMinCharacters
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>если включаем - то игнорируется maxVisible
+и ищет один раз а остальные уточняющие буквы фильтруют текущее значение и так будет пока не дойдет до минимального кол-ва символов и снова ищет</p>
+<ul>
+<li>если searchMinCharacters = 0 - то один раз при маунте будет</li>
+<li>если searchMinCharacters > 0 - будет дергаться onSearch каждый раз при пересечении этой границы</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>searchOnceOnMinCharacters</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onloadmore'>
+      onLoadMore
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>(searchTerm, alreadyShownLength) => {}</p>
+
+
+  <div class='pre p1 fill-light mt0'>onLoadMore</div>
   
   
 
@@ -14891,6 +15620,58 @@ errors = customValidateErrors;
 
 
   <div class='pre p1 fill-light mt0'>getFormData</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='controlprops'>
+      controlProps
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>для листов нужно объявить:
+{
+records - вместо options мы используем данные, потом они преобразуются в optionMeta и передаются в SelectView, а он уже отображет из них option node
+fieldId
+fieldLabel
+}</p>
+
+
+  <div class='pre p1 fill-light mt0'>controlProps</div>
   
   
 
