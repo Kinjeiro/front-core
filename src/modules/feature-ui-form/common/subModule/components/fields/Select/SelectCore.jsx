@@ -1,17 +1,15 @@
 /* eslint-disable no-unused-vars,consistent-return */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 // import omit from 'lodash/omit';
 // import pick from 'lodash/pick';
 import debounce from 'lodash/debounce';
 import memoizeOne from 'memoize-one';
 
-import ID_PROP_TYPE from '../../../../../../../common/models/model-id';
 import {
   deepEquals,
   emitProcessing,
-  executeVariable, removeFirstBy,
   wrapToArray,
 } from '../../../../../../../common/utils/common';
 import getComponents from '../../../get-components';
@@ -28,16 +26,16 @@ import {
 import { SELECT_CORE_PROP_TYPES_MAP } from './SelectView.propTypes';
 
 const {
-  BaseSelect,
+  SelectView,
   // BaseOption,
 } = getComponents();
 
-require('./CoreSelect.css');
+require('./SelectCore.css');
 
 /**
  * Нужно показывать только n первых элементов
  */
-export default class CoreSelect extends PureComponent {
+export default class SelectCore extends PureComponent {
   static propTypes = SELECT_CORE_PROP_TYPES_MAP;
 
   static defaultProps = {
@@ -46,7 +44,7 @@ export default class CoreSelect extends PureComponent {
     // maxVisible: 30,
     maxVisible: 100,
     fieldLabel: RECORD_LABEL_FIELD,
-    fieldValue: RECORD_ID_FIELD,
+    fieldId: RECORD_ID_FIELD,
     useSearch: true,
     useUnique: true,
     searchDebounce: 500,
@@ -56,7 +54,7 @@ export default class CoreSelect extends PureComponent {
   state = {
     lastSearch: '',
     lastSearchMeta: {},
-    selectedRecords: CoreSelect.getSelectedRecords(this.props, true),
+    selectedRecords: SelectCore.getSelectedRecords(this.props, true),
     isProcessing: false,
   };
 
@@ -94,7 +92,7 @@ export default class CoreSelect extends PureComponent {
   // static getDerivedStateFromProps(props, state) {
   //   return {
   //     ...state,
-  //     visibleOptions: CoreSelect.filterOptionMetas(props, state.lastSearch),
+  //     visibleOptions: SelectCore.filterOptionMetas(props, state.lastSearch),
   //   };
   // }
 
@@ -108,7 +106,7 @@ export default class CoreSelect extends PureComponent {
       value,
       defaultValue = null,
       // selectedValue,
-      fieldValue,
+      fieldId,
       fieldLabel,
       isSaveFullRecord,
     } = props;
@@ -123,12 +121,12 @@ export default class CoreSelect extends PureComponent {
       // noinspection EqualityComparisonWithCoercionJS
       selectedRecords = wrapToArray(value).map((valueItem) => (
         // eslint-disable-next-line eqeqeq
-        records.find((record) => record[fieldValue] == valueItem)
+        records.find((record) => record[fieldId] == valueItem)
         // может не быть в текущих records выбранных значений (к примеру, при ajax search)
         || createSimpleSelectRecord(
           valueItem,
           valueItem,
-          fieldValue,
+          fieldId,
           fieldLabel,
         )
       ));
@@ -138,7 +136,7 @@ export default class CoreSelect extends PureComponent {
       selectedRecords = wrapToArray(defaultValue).map((defaultItem) => (
         isSaveFullRecord
           ? defaultItem
-          : createSimpleSelectRecord(defaultItem, defaultItem, fieldValue, fieldLabel)
+          : createSimpleSelectRecord(defaultItem, defaultItem, fieldId, fieldLabel)
       ));
     }
 
@@ -160,13 +158,13 @@ export default class CoreSelect extends PureComponent {
   parseToOptionMeta(record, index, visibilityRecords) {
     const {
       fieldLabel,
-      fieldValue,
+      fieldId,
       renderOption,
       disabledOptions,
     } = this.props;
     const {
       [fieldLabel]: label,
-      [fieldValue]: recordId,
+      [fieldId]: recordId,
     } = record;
 
     const labelFinal = renderOption
@@ -203,7 +201,7 @@ export default class CoreSelect extends PureComponent {
       const {
         maxVisible,
         onSearch,
-        fieldValue,
+        fieldId,
         searchOnceOnMinCharacters,
       } = props;
 
@@ -214,8 +212,8 @@ export default class CoreSelect extends PureComponent {
         resultRecords = this.searchFunc(resultRecords, lastSearch, props);
       }
       if (uniqueRecords) {
-        const ids = uniqueRecords.map((record) => record[fieldValue]);
-        resultRecords = resultRecords.filter((record) => !ids.includes(record[fieldValue]));
+        const ids = uniqueRecords.map((record) => record[fieldId]);
+        resultRecords = resultRecords.filter((record) => !ids.includes(record[fieldId]));
       }
       if (!searchOnceOnMinCharacters && maxVisible && resultRecords.length > maxVisible) {
         resultRecords = resultRecords.slice(0, maxVisible);
@@ -267,13 +265,13 @@ export default class CoreSelect extends PureComponent {
   getControlValue() {
     const {
       multiple,
-      fieldValue,
+      fieldId,
     } = this.props;
     const {
       selectedRecords,
     } = this.state;
 
-    const result = selectedRecords.map((record) => record[fieldValue]);
+    const result = selectedRecords.map((record) => record[fieldId]);
     return multiple ? result : result[0];
   }
   isSelected(recordId) {
@@ -296,7 +294,7 @@ export default class CoreSelect extends PureComponent {
       multiple,
       isSaveFullRecord,
       fieldLabel,
-      fieldValue,
+      fieldId,
       useUnique,
 
       onSelect,
@@ -319,7 +317,7 @@ export default class CoreSelect extends PureComponent {
     const recordsFinal = multiple
       ? isRemove
         ? useUnique
-          ? selectedRecords.filter((record) => record[fieldValue] !== recordId)
+          ? selectedRecords.filter((record) => record[fieldId] !== recordId)
           // убираем только первый по списку из подходящих
           : selectedRecords.filter((record, index) => index !== currentRecordIndex)
         : [
@@ -335,12 +333,12 @@ export default class CoreSelect extends PureComponent {
     const valuesNew = isSaveFullRecord
       ? recordsFinal
       : multiple
-        ? recordsFinal.map((recordItem) => recordItem[fieldValue])
-        : recordsFinal[fieldValue];
+        ? recordsFinal.map((recordItem) => recordItem[fieldId])
+        : recordsFinal[fieldId];
 
     const valueSelected = isSaveFullRecord
       ? currentRecord
-      : currentRecord[fieldValue];
+      : currentRecord[fieldId];
 
 
     // todo @ANKU @LOW @BUG_OUT - элемент при выборе показывает в input option.value а не children option
@@ -419,7 +417,7 @@ export default class CoreSelect extends PureComponent {
     const {
       parseNewItem,
       fieldLabel,
-      fieldValue,
+      fieldId,
       renderOption,
       onCreateNew,
     } = this.props;
@@ -431,7 +429,7 @@ export default class CoreSelect extends PureComponent {
 
     const newRecord = parseNewItem
       ? parseNewItem(label, id, index)
-      : createSimpleSelectRecord(id || label, label, fieldValue, fieldLabel);
+      : createSimpleSelectRecord(id || label, label, fieldId, fieldLabel);
 
     const labelFinal = renderOption
       ? renderOption(newRecord[fieldLabel], newRecord, index, this.getFilteredOptionMetas())
@@ -446,7 +444,7 @@ export default class CoreSelect extends PureComponent {
     return this.updateSelect(
       createOptionMeta({
         record: newRecord,
-        recordId: newRecord[fieldValue],
+        recordId: newRecord[fieldId],
         label: labelFinal,
         index,
       }),
@@ -539,7 +537,7 @@ export default class CoreSelect extends PureComponent {
   // RENDERS
   // ======================================================
   getControlProps() {
-    // return omit(this.props, CoreSelect.CUSTOM_FIELDS);
+    // return omit(this.props, SelectCore.CUSTOM_FIELDS);
     return this.props;
   }
 
@@ -568,13 +566,13 @@ export default class CoreSelect extends PureComponent {
       allowClear={ true }
     */
     return (
-      <BaseSelect
-        placeholder={ i18n('components.CoreSelect.placeholder') }
+      <SelectView
+        placeholder={ i18n('components.SelectCore.placeholder') }
         loading={ isProcessing }
 
         { ...this.getControlProps() }
 
-        className={ `CoreSelect ${isProcessing ? 'CoreSelect--processing' : ''} ${className || ''}` }
+        className={ `SelectCore ${isProcessing ? 'SelectCore--processing' : ''} ${className || ''}` }
 
         options={ undefined }
         optionMetas={ this.getFilteredOptionMetas() }

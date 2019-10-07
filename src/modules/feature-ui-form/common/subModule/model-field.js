@@ -298,7 +298,7 @@ export const FIELD_PROP_TYPE_MAP = {
    * для листов нужно объявить:
    * {
    *    records - вместо options мы используем данные, потом они преобразуются в optionMeta и передаются в SelectView, а он уже отображет из них option node
-   *    fieldValue
+   *    fieldId
    *    fieldLabel
    * }
    */

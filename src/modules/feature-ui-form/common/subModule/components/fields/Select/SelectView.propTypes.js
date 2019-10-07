@@ -40,7 +40,7 @@ export const SELECT_CORE_PROP_TYPES_MAP = {
    */
   isSaveFullRecord: PropTypes.bool,
   fieldLabel: PropTypes.string,
-  fieldValue: PropTypes.string,
+  fieldId: PropTypes.string,
 
   /**
    * Внутренний метод от CoreField чтобы можно было задать кастомный onChange

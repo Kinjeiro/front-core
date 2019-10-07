@@ -189,7 +189,7 @@ export default class CoreField extends Component {
    * @param type
    * @param value
    * @param customMask
-   * @param props - если LIST - то нужно records, componentProps: fieldLabel \ fieldValue - если они отличаются от стандартных
+   * @param props - если LIST - то нужно records, componentProps: fieldLabel \ fieldId - если они отличаются от стандартных
    * @returns {*}
    */
   static parseValueToString(type, value, customMask = null, props = {}) {

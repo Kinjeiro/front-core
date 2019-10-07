@@ -39,7 +39,7 @@ export default class SelectView extends PureComponent {
   // parseToOptionMeta(option, index, allOptions, props = this.props) {
   //   const {
   //     fieldLabel,
-  //     fieldValue,
+  //     fieldId,
   //     renderOption,
   //   } = props;
   //   const {
@@ -54,7 +54,7 @@ export default class SelectView extends PureComponent {
   //     [ATTR_OPTION_VIEW__LABEL]: renderOption
   //       ? renderOption(option[fieldLabel], option, index, allOptions)
   //       : option[fieldLabel],
-  //     [ATTR_OPTION_VIEW__VALUE]: option[fieldValue],
+  //     [ATTR_OPTION_VIEW__VALUE]: option[fieldId],
   //   };
   //
   //   // взято за основу ANTDSelect.Option

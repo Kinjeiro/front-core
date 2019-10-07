@@ -15,7 +15,7 @@ module.exports = {
       },
     },
 
-    CoreSelect: {
+    SelectCore: {
       placeholder: 'Выберите значение...',
     },
 

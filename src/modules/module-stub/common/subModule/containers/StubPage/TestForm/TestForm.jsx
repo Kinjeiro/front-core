@@ -97,7 +97,7 @@ export default class TestForm extends PureComponent {
         defaultValue: 'eee',
         controlProps: {
           fieldLabel: 'label',
-          fieldValue: 'value',
+          fieldId: 'value',
           records: [
             {
               label: 'label 1',
@@ -137,7 +137,7 @@ export default class TestForm extends PureComponent {
         ],
         controlProps: {
           fieldLabel: 'myName',
-          fieldValue: 'myId',
+          fieldId: 'myId',
           records: [
             {
               myName: 'label 1',
@@ -179,7 +179,7 @@ export default class TestForm extends PureComponent {
           useSearch: false,
           useUnique: false,
           // fieldLabel: 'name',
-          // fieldValue: 'id',
+          // fieldId: 'id',
           // records: [],
         },
       },
@@ -208,7 +208,7 @@ export default class TestForm extends PureComponent {
             );
           },
           fieldLabel: 'myName',
-          fieldValue: 'myId',
+          fieldId: 'myId',
           records: [
             {
               myName: 'label 1',
@@ -255,7 +255,7 @@ export default class TestForm extends PureComponent {
         controlProps: {
           // default
           // fieldLabel: 'name',
-          // fieldValue: 'id',
+          // fieldId: 'id',
           isSaveFullRecord: true,
           records: [],
         },
@@ -278,7 +278,7 @@ export default class TestForm extends PureComponent {
         controlProps: {
           // default
           // fieldLabel: 'name',
-          // fieldValue: 'id',
+          // fieldId: 'id',
           isSaveFullRecord: true,
           disabledOptions: [
             'bbbb',
