@@ -140,14 +140,30 @@ export function createAllTypesReducer(TYPES, reducer) {
     return state;
   };
 }
-export function createAllTypesMapCollectionReducer(TYPES, reducer, actionIdField = ACTION_ID_FIELD, createIfNotExist = true) {
+
+/**
+ *
+ * @param TYPES
+ * @param reducer
+ * @param actionIdField
+ * @param createIfNotExist - bool | (initialState, action) => {}
+ * @return {*}
+ */
+export function createAllTypesMapCollectionReducer(
+  TYPES,
+  reducer,
+  actionIdField = ACTION_ID_FIELD,
+  createIfNotExist = true,
+) {
   return createAllTypesReducer(TYPES, (state, action) => {
     const uuid = action[actionIdField];
     const mapItem = state[uuid];
     if (typeof mapItem !== 'undefined' || createIfNotExist) {
       return {
         ...state,
-        [uuid]: reducer(mapItem, action),
+        [uuid]: typeof mapItem === 'undefined' && typeof createIfNotExist === 'function'
+          ? createIfNotExist(reducer(undefined, action), action)
+          : reducer(mapItem, action),
       };
     }
     return state;
