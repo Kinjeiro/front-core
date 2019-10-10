@@ -43,7 +43,7 @@ export function getAttachmentsByFieldId(globalState, fieldId) {
   const attachments = getAttachmentsInfo(globalState);
   return Object.keys(attachments).reduce((result, attachKey) => {
     const attach = attachments[attachKey];
-    if (attach.uuid.indexOf(`${fieldId}_`) === 0) {
+    if (`${attach.uuid}`.indexOf(`${fieldId}_`) === 0) {
       // eslint-disable-next-line no-param-reassign
       result[attach.uuid] = attach.data;
     }

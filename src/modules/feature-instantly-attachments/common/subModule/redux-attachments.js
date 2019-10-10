@@ -260,7 +260,17 @@ const reducer = createReducer(
   },
   null,
   // вверху указаны не все статусы. Необходимо прогонять через attachReducer чтобы менять статусы
-  createAllTypesMapCollectionReducer(TYPES, attachReducer),
+  createAllTypesMapCollectionReducer(
+    TYPES,
+    attachReducer,
+    undefined,
+    (newAttachmentState, action) => ({
+      ...newAttachmentState,
+      // бывают случаи, когда загрузой аттача пользуется когда данных в этом редукс нету (к примеру они как вложженый объект большого объекта пришли)
+      // поэтому используются только status и тогда uuid нету и его нужно проставить
+      uuid: action.uuid,
+    }),
+  ),
 );
 
 export default reducer;
