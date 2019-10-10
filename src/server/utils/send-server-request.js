@@ -91,15 +91,15 @@ export function sendSimpleRequest(requestOptions) {
       req
         .on('data', (data) => {
           // decompressed data as it is received
-          console.log(`decoded chunk: ${data}`);
-        })
-        .on('response', (response) => {
-          // unmodified http.IncomingMessage object
-          response.on('data', (data) => {
-            // compressed data as it is received
-            console.log(`received ${data.length} bytes of compressed data`);
-          });
+          logger.debug(`decoded chunk: ${data && data.length}`);
         });
+        // .on('response', (response) => {
+        //   // unmodified http.IncomingMessage object
+        //   response.on('data', (data) => {
+        //     // compressed data as it is received
+        //     logger.debug(`received ${data.length} bytes of compressed data`);
+        //   });
+        // });
     } catch (error) {
       /*
         code: "ECONNRESET"
