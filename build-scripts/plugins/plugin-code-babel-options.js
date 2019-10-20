@@ -72,6 +72,8 @@ function pluginCodeBabelOptions(webpackConfig, context) {
             at NodePath._containerInsert (H:\__CODER__\_W_Reagentum_\_FRONT_CORE_\front-core\node_modules\babel-traverse\lib\path\modification.js
         :94:23)
       */
+      // keepFnName: true
+      // keepClassName: true, // важная настройка чтобы this.constructor.name не менялось и корретно работало
       builtIns: false
     }]);
   }
