@@ -646,10 +646,10 @@ export default class ServiceAuth extends CoreService {
   async authClientCredentials(clientCredentials = undefined, force = false) {
     try {
       // могут быть расхожения в минификации (если не отключить минификацию имен классов)
-      const className = this.constructor.name;
+      const serviceName = this.getServiceName();
 
-      if (force || isClientAuthDataExpire(className)) {
-        logger.log('ServiceAuth', 'authClientCredentials', className);
+      if (force || isClientAuthDataExpire(serviceName)) {
+        logger.log('ServiceAuth', 'authClientCredentials', serviceName);
 
         const authData = await this.send(
           this.urls.authSignin,
@@ -664,9 +664,9 @@ export default class ServiceAuth extends CoreService {
             },
           },
         );
-        setClientAuthData(className, authData);
+        setClientAuthData(serviceName, authData);
       }
-      return getClientAuthData(className);
+      return getClientAuthData(serviceName);
     } catch (error) {
       return this.catchAuthError(error);
     }

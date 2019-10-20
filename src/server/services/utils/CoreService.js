@@ -30,6 +30,14 @@ export const OPERATION_TYPE = {
 };
 
 export default class CoreService {
+  // при минификации имена классов преобразуются и использовать this.constructor.name - становится опасно, поэтому добавим вот такую константу
+  serviceName = undefined;
+
+  getServiceName() {
+    return this.serviceName
+      || this.constructor.name; // но должна быть включена https://babeljs.io/docs/en/babel-preset-minify keepClassName=true
+  }
+
   OPERATION_TYPE = OPERATION_TYPE;
 
   servicesContext = null;
