@@ -1,3 +1,4 @@
+import memoizeOne from 'memoize-one';
 import PropTypes from 'prop-types';
 
 /* eslint-disable no-param-reassign */
@@ -5,6 +6,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 import omit from 'lodash/omit';
+import memoizeBind from 'memoize-bind';
 
 import {
   executeVariable,
@@ -423,10 +425,19 @@ export default class CoreField extends Component {
       constraints,
     } = this.props;
 
-    return Object.keys(constraints).reduce((result, constraintKey) => {
+    // мы должны всегда перепроверять результаты функции, ибо значения могут меняться
+    let hasFunc = false;
+
+    const constraintsResult = Object.keys(constraints).reduce((result, constraintKey) => {
+      const value = constraints[constraintKey];
+      if (typeof value === 'function') {
+        hasFunc = true;
+      }
       result[constraintKey] = executeVariable(constraints[constraintKey], null, this.props);
       return result;
     }, {});
+
+    return hasFunc ? constraintsResult : constraints;
   }
 
   // ======================================================
@@ -490,6 +501,40 @@ export default class CoreField extends Component {
     return promiseChange;
   }
 
+  handleChangeMultiple(multipleIndex, value) {
+    return this.handleChange(value, multipleIndex);
+  }
+
+  handleChangeBoolean(multipleIndex, event, props) {
+    return this.handleChange(
+      (props && typeof props.checked !== 'undefined')
+        ? props.checked
+        : typeof event.target.checked !== 'undefined'
+          ? event.target.checked
+          : event.target.value || event,
+      multipleIndex,
+    );
+  }
+
+  handleChangeDate(multipleIndex, event, time) {
+    return event.target
+      ? this.handleChange(time, multipleIndex)
+      : this.handleChange(event, multipleIndex);
+  }
+
+  handleChangeList(multipleIndex, idOrFullRecord, node, contextSelect) {
+    return this.handleChange(idOrFullRecord, multipleIndex, contextSelect);
+  }
+
+  handleChangeDefault(multipleIndex, value, node, contextData) {
+    return this.handleChange(value, multipleIndex, node, contextData);
+  }
+
+
+  // ======================================================
+  // HANDLE MULTIPLE
+  // ======================================================
+
   @bind()
   handleAdd() {
     const {
@@ -521,15 +566,24 @@ export default class CoreField extends Component {
   }
 
 
+  // handleEmitProcessing(eventName, prevHandler, ...args) {
+  //   return emitProcessing(prevHandler(...args), this);
+  // }
+  handlersWrapToPromiseChangingMemoizeOne = memoizeOne(
+    (controlProps, eventNames) => {
+      const wrappers = {};
+      eventNames.forEach((eventName) => {
+        const prevHandler = controlProps[eventName];
+        if (prevHandler) {
+          wrappers[eventName] = (...args) => emitProcessing(prevHandler(...args), this);
+          // wrappers[eventName] = memoizeBind(this.handleEmitProcessing, this, eventName, prevHandler);
+        }
+      });
+      return wrappers;
+    },
+  );
   handlersWrapToPromiseChanging(controlProps, eventNames) {
-    const wrappers = {};
-    eventNames.forEach((eventName) => {
-      const prevHandler = controlProps[eventName];
-      if (prevHandler) {
-        wrappers[eventName] = (...args) => emitProcessing(prevHandler(...args), this);
-      }
-    });
-    return wrappers;
+    return this.handlersWrapToPromiseChangingMemoizeOne(controlProps, eventNames);
   }
 
   @bind()
@@ -597,6 +651,8 @@ export default class CoreField extends Component {
         : [...this.state.warnings, ...wrapToArray(warnings)],
     });
   }
+
+
 
   // ======================================================
   // RENDERS
@@ -729,8 +785,14 @@ export default class CoreField extends Component {
       isProcessing: isProcessingFromProps || isProcessing,
       onBlur: this.handleBlur,
       onTouch: this.handleTouch,
-      ...this.handlersWrapToPromiseChanging(controlProps, ['onMouseDown']),
     };
+    Object.assign(
+      controlPropsFinal,
+      this.handlersWrapToPromiseChanging(
+        controlPropsFinal,
+        ['onMouseDown'],
+      ),
+    );
     controlPropsFinal = this.updatePropsBySubType(controlPropsFinal);
 
     /* if (controlClass) {
@@ -772,7 +834,7 @@ export default class CoreField extends Component {
             selectedValue: controlValue,
             // options: constraintsValues.map((item) => ({ label: item, value: item })),
             records: constraintsValues.map((item) => createSimpleSelectRecord(item, item)),
-            onChange: (value) => this.handleChange(value, multipleIndex),
+            onChange: memoizeBind(this.handleChangeMultiple, this, multipleIndex),
             ...controlPropsFinal,
           };
         }
@@ -816,16 +878,7 @@ export default class CoreField extends Component {
         // Checkbox
         return {
           checked: controlValue,
-          onChange: (event, props) =>
-            this.handleChange(
-              (props && typeof props.checked !== 'undefined')
-                ? props.checked
-                : typeof event.target.checked !== 'undefined'
-                  ? event.target.checked
-                  : event.target.value || event,
-              multipleIndex,
-            ),
-          ...controlPropsFinal,
+          onChange: memoizeBind(this.handleChangeBoolean, this, multipleIndex),
         };
 
       // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
@@ -842,12 +895,7 @@ export default class CoreField extends Component {
           value: controlValue,
           placeholder: dateFormat,
           displayFormat: dateFormat,
-          // todo @ANKU @LOW - надо убрать анонимные функция (которые только из-за multipleIndex)
-          onChange: (event, time) => (
-            event.target
-              ? this.handleChange(time, multipleIndex)
-              : this.handleChange(event, multipleIndex)
-          ),
+          onChange: memoizeBind(this.handleChangeDate, this, multipleIndex),
 
           showTime: type === FIELD_TYPES.DATETIME,
           disabledDate: (minValue || maxValue)
@@ -866,7 +914,7 @@ export default class CoreField extends Component {
         return {
           value: controlValue,
           selectedValue: controlValue,
-          onFieldChange: (idOrFullRecord, node, contextSelect) => this.handleChange(idOrFullRecord, multipleIndex, contextSelect),
+          onFieldChange: memoizeBind(this.handleChangeList, this, multipleIndex),
 
           records: options,
           ...controlPropsFinal,
@@ -884,7 +932,7 @@ export default class CoreField extends Component {
           onErrors: this.handleErrors,
           onWarnings: this.handleWarnings,
           ...controlPropsFinal,
-          onChange: (value, node, contextData) => this.handleChange(value, multipleIndex, node, contextData),
+          onChange: memoizeBind(this.handleChangeDefault, this, multipleIndex),
         };
     }
   }
