@@ -45,6 +45,7 @@ import contextModules from '../../../../../../common/contexts/ContextModules/dec
 // ======================================================
 import i18n from '../../i18n';
 import getComponents from '../../get-components';
+import MODULE_NAME from '../../module-name';
 
 const {
   Button,
@@ -391,6 +392,14 @@ export default class StubPage extends Component {
 
         { this.renderTestChangeAvatar() }
 
+
+        <ModuleLink
+          moduleName={ MODULE_NAME }
+          modulePath="hashRouterTest"
+          modulePathHash="test3"
+        >
+          Go to hash route
+        </ModuleLink>
       </div>
     );
   }

@@ -17,8 +17,9 @@ export default class ModuleLink extends Component {
     // PROPS
     // ======================================================
     ...Link.propTypes,
-    modulePath: PropTypes.string,
     moduleName: PropTypes.string,
+    modulePath: PropTypes.string,
+    modulePathHash: PropTypes.string,
     children: PropTypes.node,
 
     // ======================================================
@@ -34,14 +35,22 @@ export default class ModuleLink extends Component {
     const {
       children,
       getRoutePath,
-      modulePath,
       moduleName,
+      modulePath,
+      modulePathHash,
     } = this.props;
 
     return (
       <Link
         { ...pick(this.props, Object.keys(Link.propTypes)) }
-        to={ getRoutePath(modulePath, moduleName) }
+        to={
+          getRoutePath(
+            modulePathHash
+              ? `${modulePath}#${modulePathHash}`
+              : modulePath,
+            moduleName,
+          )
+        }
       >
         { children }
       </Link>

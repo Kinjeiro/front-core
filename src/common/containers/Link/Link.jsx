@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router';
+// todo @ANKU @LOW - работа с hash в react-router 4\5 для 2\3 есть другое решение - https://github.com/rafrex/react-router-hash-link/tree/react-router-v2/3
+// import { HashLink as RouterLink } from 'react-router-hash-link';
 
 // import { cutContextPath } from '../../helpers/app-urls';
 

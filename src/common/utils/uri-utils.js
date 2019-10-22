@@ -343,7 +343,12 @@ export function updateWindowLocationQueryParams(newQueryParams, ...args) {
  * @param modulesPrefixes - мапа: moduleName => prefix
  * @returns {*}
  */
-export function getModuleRoutePath(relativeLocation, moduleName = null, modulesPrefixes = {}, queryParams = undefined) {
+export function getModuleRoutePath(
+  relativeLocation,
+  moduleName = null,
+  modulesPrefixes = {},
+  queryParams = undefined,
+) {
   const prefix = moduleName ? modulesPrefixes[moduleName] : null;
 
   if (relativeLocation && typeof relativeLocation === 'object') {

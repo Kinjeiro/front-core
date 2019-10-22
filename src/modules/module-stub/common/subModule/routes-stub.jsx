@@ -16,6 +16,7 @@ export default function getRoutes(moduleRoutePrefix) {
     StubPage,
     AuthStubPage,
     AuthStubPageWithDecorators,
+    HashPage,
   } = getComponents();
 
   return (
@@ -30,6 +31,10 @@ export default function getRoutes(moduleRoutePrefix) {
       <Route
         path="testAuth2"
         components={ AuthStubPageWithDecorators }
+      />
+      <Route
+        path="hashRouterTest"
+        components={ HashPage }
       />
     </Route>
   );
