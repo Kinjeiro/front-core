@@ -117,10 +117,13 @@ function authWrapper(handler, apiPluginOptions, routeConfig, serverPluginOptions
           logger.info('-- No auth, but GUEST_MODE');
         } else {
           logger.info('[plugin ERROR AUTH]');
-          return responseError(createUniError({
-            message: i18n('No auth'),
-            responseStatusCode: 401,
-          }), reply, 401);
+          return responseError(
+            createUniError({
+              message: i18n('No auth'),
+              responseStatusCode: 401,
+            }),
+            reply,
+          );
         }
       }
 

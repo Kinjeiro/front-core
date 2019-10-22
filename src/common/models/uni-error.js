@@ -152,6 +152,7 @@ export function createUniError(uniErrorData = {}) {
   }
 
   if (uniErrorData.clientErrorMessages && uniErrorData.clientErrorMessages.length > 0) {
+    // eslint-disable-next-line prefer-destructuring
     uniErrorData.clientErrorMessage = uniErrorData.clientErrorMessages[0];
   } else if (uniErrorData.clientErrorMessage) {
     uniErrorData.clientErrorMessages = [uniErrorData.clientErrorMessage];

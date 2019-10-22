@@ -12,7 +12,7 @@ import {
   formatUrlParameters,
 } from '../../common/utils/uri-utils';
 import appUrl from '../../common/helpers/app-urls';
-import { parseToUniError } from '../../common/models/uni-error';
+import { createUniError, parseToUniError, ThrowableUniError } from '../../common/models/uni-error';
 
 import serverConfig from '../server-config';
 
@@ -73,16 +73,19 @@ export function setRequestData(requestOptions, data) {
   return requestOptionsFinal;
 }
 
+
 function responseWrapperInner(result, reply) {
   // если не вызывали reply - сделаем это за них
 
   // const isReplyResponse = typeof result === 'object' && !!result.headers && !!result.statusCode; // statusCode \ request
   // const isReplyResponse = reply._replied;
-
-  // todo @ANKU @LOW - бага он не сравнивает две одинаковые функции! result.constructor и Response - можно через сравнения тела функции сделать - a.toString() === b.toString()
-  const isReplyResponse = typeof result === 'object'
-    && result !== null
-    && (result.constructor === Response || !!result.headers);
+  const isReplyResponse = reply._replied
+    || (
+      typeof result === 'object'
+      && result !== null
+      // todo @ANKU @LOW - бага он не сравнивает две одинаковые функции! result.constructor и Response - можно через сравнения тела функции сделать - a.toString() === b.toString()
+      && (result.constructor === Response || !!result.headers)
+    );
 
   // если typeof result === 'undefined' - значит ничего не возвращали, и значит reply заиспользуют позже внутри колбэков
   return typeof result === 'undefined' || isReplyResponse
@@ -90,28 +93,38 @@ function responseWrapperInner(result, reply) {
     : reply(result);
 }
 
+export function responseError(error, reply, code = undefined) {
+  // todo @ANKU @LOW - иногда при ошибка бывает - UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 2): Error: reply interface called twice
+
+  // Ошибка когда reply(объект класса Error) подается, ибо там срабатывает внутренний boom handler и вызывается reply дважды
+  // const uniError = parseToUniError(error);
+  const uniError = error instanceof ThrowableUniError
+    ? createUniError(error)
+    : parseToUniError(error);
+  const response = responseWrapperInner(uniError, reply);
+
+  return response.code
+    ? response.code(code || uniError.responseStatusCode || 500)
+    : response;
+}
+
 export function responseWrapper(result, reply) {
   if (result && result.then) {
     // promise
-    return result.then((finalResult) =>
-      responseWrapperInner(finalResult, reply));
+    return result
+      .then((finalResult) => responseWrapperInner(finalResult, reply))
+      .catch((error) => responseError(error, reply));
   }
   return responseWrapperInner(result, reply);
 }
 
-export function responseError(error, reply, code = undefined) {
-  // todo @ANKU @LOW - иногда при ошибка бывает - UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 2): Error: reply interface called twice
-  const uniError = parseToUniError(error);
-  return responseWrapperInner(uniError, reply)
-    .code(code || uniError.responseStatusCode || 500);
-}
 
 export function parseResponseHandler(handler, proceedRequestData) {
   let finalHandler;
 
   if (handler && handler.then) {
     // promise
-    finalHandler = async (request, reply) => reply(await handler);
+    finalHandler = (request, reply) => reply(handler);
   } else if (typeof handler === 'function') {
     // function - на выходе либо promise, либо data - поэтому используем рекурсию
     finalHandler = (request, reply) => {

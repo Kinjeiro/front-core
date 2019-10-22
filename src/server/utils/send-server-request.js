@@ -5,7 +5,7 @@ import requestAgent from 'request';
 import { isUniError, parseToUniError, ThrowableUniError } from '../../common/models/uni-error';
 import { joinUri } from '../../common/utils/uri-utils';
 
-import serverConfig from '../server-config';
+// import serverConfig from '../server-config';
 import { getHeadersByAuthType } from './auth-utils';
 import logger, { logObject } from '../helpers/server-logger';
 
@@ -48,7 +48,7 @@ export function getHeaders(/* apiRequest */) {
  *
  * @returns {Promise}
  */
-export function sendSimpleRequest(requestOptions) {
+export async function sendSimpleRequest(requestOptions) {
   // const {
   //   pipeStream,
   //   ...requestOptionsFinal
@@ -58,7 +58,7 @@ export function sendSimpleRequest(requestOptions) {
     logger.log(`==== [${requestOptions.url}] ====`);
 
     function callback(error, responseIncomingMessage) {
-      logger.log('[from server REQUEST]');
+      logger.log(`[from server REQUEST][${responseIncomingMessage.statusCode}]`);
       logObject(requestOptions, ['method', 'url']);
       logObject(requestOptions, ['qs', 'payload', 'body', 'timeout', 'headers'], 'debug', true);
 
@@ -107,17 +107,17 @@ export function sendSimpleRequest(requestOptions) {
         syscall: "read"
       */
       if (isUniError(error)) {
-        throw error;
-      }
-      if (error.code === 'ECONNRESET') {
-        throw new ThrowableUniError({
+        reject(error);
+      } else if (error.code === 'ECONNRESET') {
+        reject(new ThrowableUniError({
           isServerNotAvailable: true,
           isServerError: true,
           originalObject: error,
           message: error.message,
-        });
+        }));
+      } else {
+        reject(error);
       }
-      throw error;
     }
     // if (pipeStream) {
     //   req.pipe(pipeStream);
@@ -291,7 +291,7 @@ export async function sendEndpointMethodRequest(
 
   const isFormUrlencoded = form || headersFinal.contentType === CONTENT_TYPES.FORM_URLENCODED;
 
-  return sendSimpleRequest(
+  const response = await sendSimpleRequest(
     {
       method,
       url,
@@ -323,14 +323,13 @@ export async function sendEndpointMethodRequest(
 
       headers: headersFinal,
     },
-  )
-    .then((response) => (
-      returnResponse
-        ? response
-        : headersFinal.accept === ACCEPT.JSON && response.body && typeof response.body === 'string'
-          ? JSON.parse(response.body)
-          : response.body
-    ));
+  );
+
+  return returnResponse
+    ? response
+    : headersFinal.accept === ACCEPT.JSON && response.body && typeof response.body === 'string'
+      ? JSON.parse(response.body)
+      : response.body;
 }
 
 export async function sendWithAuth(
@@ -358,7 +357,7 @@ export async function sendWithAuth(
   );
 }
 
-export function sendEndpointMethodFormDataRequest(
+export async function sendEndpointMethodFormDataRequest(
   endpointServiceConfig,
   serviceMethodPath,
   formData,
@@ -375,7 +374,8 @@ export function sendEndpointMethodFormDataRequest(
   //    }
   //  }
   // };
-  return sendEndpointMethodRequest(
+
+  const response = await sendEndpointMethodRequest(
     endpointServiceConfig,
     serviceMethodPath,
     'post',
@@ -386,16 +386,15 @@ export function sendEndpointMethodFormDataRequest(
       formData,
       ...requestOptions,
     },
-  )
-    .then((response) => {
-      // todo @ANKU @CRIT @MAIN - хочу отсылать form-data, но приходит почему-то content-type html
-      // если включаю json:true - то падает write of end
-      //
-      // headers: { 'Content-Type': 'application/json' },
-      // вариант не работает
-      // console.warn('ANKU response', typeof response, response);
-      return JSON.parse(response);
-    });
+  );
+
+  // todo @ANKU @CRIT @MAIN - хочу отсылать form-data, но приходит почему-то content-type html
+  // если включаю json:true - то падает write of end
+  //
+  // headers: { 'Content-Type': 'application/json' },
+  // вариант не работает
+  // console.warn('ANKU response', typeof response, response);
+  return JSON.parse(response);
 }
 /**
  * Реализует запрос до

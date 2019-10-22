@@ -30,7 +30,7 @@ if (!serverConfig.common.isProduction) {
 }
 
 process.on('unhandledRejection', error => {
-  console.error('unhandledRejection', error);
+  console.error('[ServerRunner] unhandledRejection', error);
 });
 
 /*
@@ -344,7 +344,10 @@ export default class AbstractServerRunner {
          ...inherited Error properties (stack, message)
         */
         logger.error(`Boom error response sent for request: ${request.id} at ${request.url.path} because:\n\t`, response.trace, '\n\t', response.stack || response);
-        return reply(parseToUniError(response)).code(code);
+        const responseFinal = reply(parseToUniError(response));
+        return responseFinal.code
+          ? responseFinal.code(code)
+          : responseFinal;
       }
 
       return reply.continue();
