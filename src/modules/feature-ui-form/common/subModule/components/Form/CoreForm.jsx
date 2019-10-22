@@ -615,6 +615,7 @@ export default class CoreForm extends Component {
         const errorStrings = this.getFormErrors();
         control = (
           <div
+            key="submitButtonWrapper"
             className={ this.bem('submitButtonWrapper') }
             title={ errorStrings }
           >

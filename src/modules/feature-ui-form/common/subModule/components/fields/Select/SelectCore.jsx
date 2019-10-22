@@ -89,6 +89,19 @@ export default class SelectCore extends PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps/* , prevState, snapshot */) {
+    const {
+      value,
+    } = this.props;
+
+    if (!deepEquals(value, prevProps.value)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        selectedRecords: SelectCore.getSelectedRecords(this.props, true),
+      });
+    }
+  }
+
   // static getDerivedStateFromProps(props, state) {
   //   return {
   //     ...state,

@@ -101,6 +101,19 @@ export default class CoreField extends Component {
     }
   }
 
+  componentDidUpdate(prevProps/* , prevState, snapshot */) {
+    const {
+      value,
+    } = this.props;
+
+    if (!deepEquals(value, prevProps.value)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        lastValue: value,
+      });
+    }
+  }
+
   // ======================================================
   // STATIC
   // ======================================================
