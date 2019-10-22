@@ -1,5 +1,6 @@
 import serverConfig from '../../../../server/server-config';
 import CoreService from '../../../../server/services/utils/CoreService';
+
 import ACCESS_TYPE from '../../common/subModule/model-attachment-access';
 
 export default class ServiceAttachments extends CoreService {

@@ -221,6 +221,7 @@ export default function createApiPlugins() {
 
         if (!serviceAttachments.checkAttachmentAccess(attachment)) {
           logger.error('-- not permitted');
+          // todo @ANKU @LOW - сделать ошибку на uni-error
           return reply().code(403); // Forbidden
         }
         const {
@@ -255,6 +256,7 @@ export default function createApiPlugins() {
 
         if (!serviceAttachments.checkAttachmentAccess(attachment)) {
           logger.error('-- not permitted');
+          // todo @ANKU @LOW - сделать ошибку на uni-error
           return reply().code(403); // Forbidden
         }
         const {
