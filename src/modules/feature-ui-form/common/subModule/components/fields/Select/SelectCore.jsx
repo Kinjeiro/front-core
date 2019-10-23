@@ -422,7 +422,11 @@ export default class SelectCore extends PureComponent {
 
   @bind()
   handleRemoveSelected(removeRecordId) {
-    return this.updateSelect(removeRecordId, true);
+    // todo @ANKU @LOW - сделать множественное удаление
+    return this.updateSelect(
+      Array.isArray(removeRecordId) ? removeRecordId[0] : removeRecordId,
+      true,
+    );
   }
 
   @bind()
