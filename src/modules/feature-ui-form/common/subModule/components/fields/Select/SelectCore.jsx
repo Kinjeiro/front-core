@@ -215,8 +215,13 @@ export default class SelectCore extends PureComponent {
         maxVisible,
         onSearch,
         fieldId,
+        searchMinCharacters,
         searchOnceOnMinCharacters,
       } = props;
+
+      if (lastSearch.length < searchMinCharacters) {
+        return [];
+      }
 
       let resultRecords = records;
 
@@ -244,6 +249,7 @@ export default class SelectCore extends PureComponent {
       selectedRecords,
       lastSearch,
     } = this.state;
+
     return this.filterOptionMetas(
       useUnique && multiple ? selectedRecords : null,
       lastSearch,
@@ -494,7 +500,7 @@ export default class SelectCore extends PureComponent {
       lastSearchMeta,
     } = this.state;
 
-    const isMetaChanges = !deepEquals(lastSearchMeta, meta);
+    const isMetaChanges = !deepEquals(lastSearchMeta || {}, meta || {});
     if (force || lastSearch !== searchTerm || isMetaChanges) {
       this.setState({
         lastSearch: searchTerm || '',
@@ -507,21 +513,25 @@ export default class SelectCore extends PureComponent {
         }
 
         const searchTermLength = (searchTerm || '').length;
-        if (
-          searchTermLength < searchMinCharacters
-          && lastSearch.length >= searchMinCharacters
-        ) {
-          return this.handleSearchInner('', meta);
-        }
 
         if (searchOnceOnMinCharacters) {
           if (
-            // переходим только на границе
-            searchTermLength >= searchMinCharacters
+            // на границе БОЛЬШЕ - загружаем
+            searchMinCharacters > 0 // если 0 то мы уже загрузили при didMount
+            && searchTermLength >= searchMinCharacters
             && lastSearch.length < searchMinCharacters
           ) {
             return this.handleSearchInner(searchTerm, meta);
           }
+        // } else if (
+        //   searchTermLength < searchMinCharacters
+        //   && lastSearch.length >= searchMinCharacters
+        // ) {
+        //   // todo @ANKU @LOW -
+        //   // на границе МЕНЬШЕ
+        //   return this.handleSearchInner('', meta);
+        } else if (searchTermLength === 0) {
+          return this.handleSearchInner('', meta);
         } else if (searchTermLength >= searchMinCharacters) {
           // default
           return this.handleSearchInner(searchTerm, meta);
