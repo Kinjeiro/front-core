@@ -1,12 +1,12 @@
-import { push } from 'react-router-redux';
+// import { push } from 'react-router-redux';
 
 import { USER_INFO_DEFAULT_VALUES } from '../../../../common/models/model-user-info';
 
 import { createReducer } from '../../../../common/app-redux/utils';
 import { createStatusReducer } from '../../../../common/app-redux/helpers/index';
 import { actions as errorActions } from '../../../../common/app-redux/reducers/app/last-uni-error';
-import { PATH_MAIN_INDEX } from '../../../../common/routes.pathes';
-import commonConfig from '../../../../common/client-config';
+// import { PATH_MAIN_INDEX } from '../../../../common/routes.pathes';
+// import commonConfig from '../../../../common/client-config';
 
 import * as apiAuth from './api-auth';
 import * as apiUsers from './api-users';
@@ -133,18 +133,24 @@ export function getBindActions({
      * @deprecated use actionSignin
      */
     actionChangeUser: actionSignin,
+    // actionUserLogout(returnUrl = undefined) {
+    //   return async (dispatch, getState) => {
+    //     await dispatch({
+    //       types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
+    //       payload: apiLogout()
+    //         // нужно до USER_LOGOUT_SUCCESS дернуть чтобы компоненты уже ЗААНМАУНТИЛИСЬ и пропсы в них не поменялись когда пользователя уже и нет
+    //         .then(() => {
+    //           if (returnUrl !== false) {
+    //             dispatch(push(returnUrl || commonConfig.common.features.auth.paths.afterLogout || PATH_MAIN_INDEX));
+    //           }
+    //         }),
+    //     });
+    //   };
+    // },
     actionUserLogout(returnUrl = undefined) {
-      return async (dispatch, getState) => {
-        await dispatch({
-          types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
-          payload: apiLogout()
-            // нужно до USER_LOGOUT_SUCCESS дернуть чтобы компоненты уже ЗААНМАУНТИЛИСЬ и пропсы в них не поменялись когда пользователя уже и нет
-            .then(() => {
-              if (returnUrl !== false) {
-                dispatch(push(returnUrl || commonConfig.common.features.auth.paths.afterLogout || PATH_MAIN_INDEX));
-              }
-            }),
-        });
+      return {
+        types: [TYPES.USER_LOGOUT_FETCH, TYPES.USER_LOGOUT_SUCCESS, TYPES.USER_LOGOUT_FAIL],
+        payload: apiLogout(),
       };
     },
     actionForgotPassword(email, resetPasswordPageUrl, emailOptions) {

@@ -649,7 +649,7 @@ export default class ServiceAuth extends CoreService {
       const serviceName = this.getServiceName();
 
       if (force || isClientAuthDataExpire(serviceName)) {
-        logger.log('ServiceAuth', 'authClientCredentials', serviceName);
+        logger.log('ServiceAuth', 'authClientCredentials', serviceName, force);
 
         const authData = await this.send(
           this.urls.authSignin,

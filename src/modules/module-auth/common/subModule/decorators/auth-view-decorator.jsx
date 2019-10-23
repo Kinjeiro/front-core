@@ -10,7 +10,8 @@ import {
 } from '../../../../../common/utils/common';
 import { cutContextPath } from '../../../../../common/helpers/app-urls';
 
-import { PATH_ACCESS_DENIED } from '../../../../../common/routes.pathes';
+import clientConfig from '../../../../../common/client-config';
+import { PATH_ACCESS_DENIED, PATH_MAIN_INDEX } from '../../../../../common/routes.pathes';
 import { getCurrentPath } from '../../../../../common/app-redux/selectors';
 // import { actions as globalUniErrorActions } from '../../../../../common/app-redux/reducers/app/global-uni-error';
 import { actions as lastUniErrorActions } from '../../../../../common/app-redux/reducers/app/last-uni-error';
@@ -57,7 +58,23 @@ const DEFAULT_OPTIONS = {
     ...
    }
 
- Пример 2:
+ Пример 2: - если будет logout то будет редрикет на страницу afterLogout
+   export default function getRoutes(moduleRoutePrefix) {
+      const {
+        AuthStubPage,
+      } = getComponents();
+
+      return (
+        <Route path="">
+          <Route
+            path="testAuth"
+            components={ authView()(AuthStubPage) }
+          />
+        </Route>
+      );
+    }
+
+ Пример 3: - толко админы могут попасть на страинцу
    const onlyAdmin = authView(ADMIN);
    export default function getRoutes(moduleRoutePrefix) {
       const {
@@ -75,30 +92,24 @@ const DEFAULT_OPTIONS = {
     }
  */
 export default function authViewDecorator(...args) {
-  let rolesOr;
-  let options = { ...DEFAULT_OPTIONS };
+  let authOptions = { ...DEFAULT_OPTIONS };
   const lastArg = args[args.length - 1];
   if (typeof lastArg === 'object') {
-    options = {
-      ...options,
+    authOptions = {
+      ...authOptions,
       ...lastArg,
+      rolesOr: args.length > 1
+        ? args.slice(0, args.length - 2)
+        : [],
     };
-    rolesOr = args.length > 1
-      ? args.slice(0, args.length - 2)
-      : [];
   } else {
-    rolesOr = args;
+    authOptions.rolesOr = wrapToArray(args);
   }
-  rolesOr = wrapToArray(rolesOr);
 
-  const {
-    rolesAnd,
-    permissionsOr,
-    permissionsAnd,
-    redirectNotAuth,
-    redirectNotAccess,
-    afterAuthRedirect,
-  } = options;
+  if (args.length === 0) {
+    // ничего не подали - то это просто доступ залогиненого пользователя - при логауте будет редирект
+    authOptions.redirectNotAuth = clientConfig.common.features.auth.paths.afterLogout || PATH_MAIN_INDEX;
+  }
 
   return (WrappedComponent) => {
     @contextModules()
@@ -114,6 +125,11 @@ export default function authViewDecorator(...args) {
     )
     class AuthViewWrapper extends Component {
       static propTypes = {
+        // ======================================================
+        // props
+        // ======================================================
+        children: PropTypes.node,
+
         // ======================================================
         // @connect
         // ======================================================
@@ -132,7 +148,7 @@ export default function authViewDecorator(...args) {
       };
 
       state = {
-        allow: true,
+        allow: this.checkAllow(),
       };
 
       // ======================================================
@@ -149,6 +165,16 @@ export default function authViewDecorator(...args) {
           location,
         } = props;
 
+        const {
+          rolesOr,
+          rolesAnd,
+          permissionsOr,
+          permissionsAnd,
+          redirectNotAuth,
+          redirectNotAccess,
+          afterAuthRedirect,
+        } = authOptions;
+
         const accessErrors = checkAccess(user, {
           rolesOr,
           rolesAnd,
@@ -158,14 +184,18 @@ export default function authViewDecorator(...args) {
 
         if (accessErrors === true) {
           return true;
-        } else if (accessErrors === false) {
+        }
+
+        if (accessErrors === false) {
           // не авторизован
           if (redirectNotAuth) {
-            const redirectNotAuthFinal = executeVariable(redirectNotAuth, null,
+            const redirectNotAuthUrl = executeVariable(
+              redirectNotAuth,
+              null,
               getRoutePath,
               location,
             );
-            onGoTo(cutContextPath(redirectNotAuthFinal));
+            onGoTo(cutContextPath(redirectNotAuthUrl));
           } else {
             // запускаем ошибку авторизации
             actionThrowNotAuthError(afterAuthRedirect || currentPath);
@@ -173,7 +203,9 @@ export default function authViewDecorator(...args) {
         } else if (Array.isArray(accessErrors)) {
           // есть ошибки доступа
           // actionChangeGlobalUniError(createUniError(i18n('У вас нет прав на просмотр страницы')));
-          const redirectNotAccessFinal = executeVariable(redirectNotAccess, null,
+          const redirectNotAccessFinal = executeVariable(
+            redirectNotAccess,
+            null,
             getRoutePath,
             location,
           );
@@ -189,11 +221,6 @@ export default function authViewDecorator(...args) {
       // ======================================================
       // LIFE CYCLE
       // ======================================================
-      componentWillMount() {
-        this.setState({
-          allow: this.checkAllow(),
-        });
-      }
       componentWillReceiveProps(newProps) {
         // если мы остались и ждем атворизации
         if (newProps.user !== this.props.user) {
@@ -208,10 +235,17 @@ export default function authViewDecorator(...args) {
       // ======================================================
       render() {
         const {
+          children,
+        } = this.props;
+        const {
           allow,
         } = this.state;
         return allow && (
-          <WrappedComponent { ...this.props } />
+          WrappedComponent
+            ? (
+              <WrappedComponent { ...this.props } />
+            )
+            : children
         );
       }
     }

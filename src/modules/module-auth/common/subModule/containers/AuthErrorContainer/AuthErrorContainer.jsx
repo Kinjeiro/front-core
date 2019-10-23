@@ -181,6 +181,7 @@ export default class AuthErrorContainer extends Component {
       // actionClearLastError,
     } = this.props;
 
+    // todo @ANKU @CRIT @MAIN - переделать и сделать получение роутов \ модулей вне авторизации
     return (
       <div
         className="AuthErrorContainer"
