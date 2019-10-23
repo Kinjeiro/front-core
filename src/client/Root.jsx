@@ -27,7 +27,7 @@ function hashLinkScroll() {
         if (element) {
           element.scrollIntoView();
         }
-      }, 0);
+      }, 200); // todo @ANKU @LOW - у нас многие loading и поэтому id может быть еще и не найжен - оптимальной задержки не найдем, нужно в каждом случае использовать componentDidMount - может сделать декоратор
     }
   }
 }

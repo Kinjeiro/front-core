@@ -46,7 +46,7 @@ export default class ModuleLink extends Component {
         to={
           getRoutePath(
             modulePathHash
-              ? `${modulePath}#${modulePathHash}`
+              ? `${modulePath || '/'}#${modulePathHash}`
               : modulePath,
             moduleName,
           )
