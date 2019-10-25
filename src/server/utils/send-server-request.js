@@ -58,7 +58,7 @@ export async function sendSimpleRequest(requestOptions) {
     logger.log(`==== [${requestOptions.url}] ====`);
 
     function callback(error, responseIncomingMessage) {
-      logger.log(`[from server REQUEST][${responseIncomingMessage.statusCode}]`);
+      logger.log(`[from server REQUEST]${responseIncomingMessage ? `[${responseIncomingMessage.statusCode}]` : ''}`);
       logObject(requestOptions, ['method', 'url']);
       logObject(requestOptions, ['qs', 'payload', 'body', 'timeout', 'headers'], 'debug', true);
 
