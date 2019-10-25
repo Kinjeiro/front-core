@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### !!! Breaking changes:
 1. Доработка Select
     CoreSelect -> SelectCore \ BaseSelect -> SelectView \ fieldValue -> fieldId
+    SelectCore принимает не options - а componentsProps: { records }
     общение вместо options -> optionMetas
 
 ### API Dependencies:

@@ -679,28 +679,27 @@ export default class CoreField extends Component {
     switch (subType) {
       case FIELD_SUB_TYPES.LOGIN:
         return {
-          autoComplete: name,
-          autoCorrect: 'off',
-          spellCheck: 'false',
-          autoCapitalize: 'off',
-          autoFocus: 'autofocus',
+          autocomplete: 'username', // для менеджера пароля обязательно username название
+          autocorrect: 'off',
+          spellcheck: 'false',
+          autocapitalize: 'off',
+          autofocus: 'autofocus',
           ...props,
         };
       case FIELD_SUB_TYPES.LOGIN_EMAIL:
         return {
-          autoComplete: 'username',
-          // autoComplete: 'email',
-          autoCorrect: 'off',
-          spellCheck: 'false',
-          autoCapitalize: 'off',
-          autoFocus: 'autofocus',
+          autocomplete: 'username',
+          autocorrect: 'off',
+          spellcheck: 'false',
+          autocapitalize: 'off',
+          autofocus: 'autofocus',
           ...props,
           type: 'email',
         };
 
       case FIELD_SUB_TYPES.PASSWORD: {
         return {
-          autoComplete: 'current-password',
+          autocomplete: 'current-password',
           ...props,
           type: 'password',
         };
