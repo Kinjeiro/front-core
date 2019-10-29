@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+// import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 
 import ID_PROP_TYPE from '../../../../../../../common/models/model-id';
@@ -86,6 +86,19 @@ export const SELECT_CORE_PROP_TYPES_MAP = {
    */
   renderOption: PropTypes.func,
   disabledOptions: PropTypes.arrayOf(ID_PROP_TYPE),
+  /**
+   * Если мы что-то выбрали, они убирается из доступного списко
+   */
+  isHideSelected: PropTypes.bool,
+
+  /**
+   * (selectedRecords, props) => PropTypes.node
+   */
+  renderInputText: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ]),
+
 
 
   // ======================================================
@@ -157,7 +170,7 @@ const SELECT_VIEW_PROP_TYPES_MAP = {
     PropTypes.arrayOf(SELECT_OPTION_META_PROP_TYPE),
   ]),
 
-  text: PropTypes.string,
+  inputText: PropTypes.node,
   searchTerm: PropTypes.string,
 
   // onChange={ undefined }

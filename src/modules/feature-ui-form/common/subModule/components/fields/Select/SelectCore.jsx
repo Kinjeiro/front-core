@@ -23,7 +23,7 @@ import {
   RECORD_ID_FIELD,
   RECORD_LABEL_FIELD,
 } from '../../../model-select-option';
-import { SELECT_CORE_PROP_TYPES_MAP } from './SelectView.propTypes';
+import { SELECT_CORE_PROP_TYPES_MAP } from './Select.propTypes';
 
 const {
   SelectView,
@@ -47,8 +47,10 @@ export default class SelectCore extends PureComponent {
     fieldId: RECORD_ID_FIELD,
     useSearch: true,
     useUnique: true,
+    isHideSelected: true,
     searchDebounce: 500,
     searchMinCharacters: 0,
+    renderInputText: (selectedRecords, props) => selectedRecords.map((record) => record[props.fieldLabel]).join(','),
   };
 
   state = {
@@ -94,7 +96,7 @@ export default class SelectCore extends PureComponent {
       value,
     } = this.props;
 
-    if (!deepEquals(value, prevProps.value)) {
+    if (!deepEquals(wrapToArray(value), wrapToArray(prevProps.value))) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedRecords: SelectCore.getSelectedRecords(this.props, true),
@@ -147,9 +149,17 @@ export default class SelectCore extends PureComponent {
 
     if (useDefault && defaultValue !== null && selectedRecords.length === 0) {
       selectedRecords = wrapToArray(defaultValue).map((defaultItem) => (
-        isSaveFullRecord
+        typeof defaultItem === 'object'
           ? defaultItem
-          : createSimpleSelectRecord(defaultItem, defaultItem, fieldId, fieldLabel)
+          // eslint-disable-next-line eqeqeq
+          : records.find((record) => record[fieldId] == defaultItem)
+            // может не быть в текущих records выбранных значений (к примеру, при ajax search)
+            || createSimpleSelectRecord(
+              defaultItem,
+              defaultItem,
+              fieldId,
+              fieldLabel,
+            )
       ));
     }
 
@@ -184,16 +194,13 @@ export default class SelectCore extends PureComponent {
       ? renderOption(label, record, index, visibilityRecords)
       : label;
 
-    const isDisabled = disabledOptions.includes(recordId);
-    const isSelected = this.isSelected(recordId);
-
     return createOptionMeta({
       record,
       recordId,
       label: labelFinal,
       index,
-      isDisabled,
-      isSelected,
+      isDisabled: disabledOptions.includes(recordId),
+      isSelected: this.isSelected(recordId),
     });
 
     // взято за основу ANTDSelect.Option
@@ -209,6 +216,7 @@ export default class SelectCore extends PureComponent {
     //   </BaseOption>
     // );
   }
+
   filterOptionMetas = memoizeOne(
     (uniqueRecords, lastSearch = '', records, props = this.props) => {
       const {
@@ -217,6 +225,7 @@ export default class SelectCore extends PureComponent {
         fieldId,
         searchMinCharacters,
         searchOnceOnMinCharacters,
+        isHideSelected,
       } = props;
 
       if (lastSearch.length < searchMinCharacters) {
@@ -229,7 +238,7 @@ export default class SelectCore extends PureComponent {
         // кастомный внутренний серч, в противном случае поиск должен делаться в onSearch
         resultRecords = this.searchFunc(resultRecords, lastSearch, props);
       }
-      if (uniqueRecords) {
+      if (uniqueRecords && isHideSelected) {
         const ids = uniqueRecords.map((record) => record[fieldId]);
         resultRecords = resultRecords.filter((record) => !ids.includes(record[fieldId]));
       }
@@ -368,7 +377,7 @@ export default class SelectCore extends PureComponent {
         !isRemove && onSelect        ? onSelect(valueSelected, recordsFinal)         : Promise.resolve(),
         isRemove && onRemoveSelected ? onRemoveSelected(valueSelected, recordsFinal) : Promise.resolve(),
         onChange ? onChange(valuesNew, recordsFinal) : Promise.resolve(),
-        onFieldChange(valuesNew, recordsFinal),
+        onFieldChange ? onFieldChange(valuesNew, recordsFinal) : Promise.resolve(),
       ]),
       this,
       'isProcessing',
@@ -576,14 +585,13 @@ export default class SelectCore extends PureComponent {
       className,
       onLoadMore,
       fieldLabel,
+      renderInputText,
     } = this.props;
     const {
       lastSearch,
       selectedRecords,
       isProcessing,
     } = this.state;
-
-    const selectedLabel = selectedRecords.map((record) => record[fieldLabel]).join(',');
 
     /*
       // взято за основу ANTDSelect
@@ -606,7 +614,7 @@ export default class SelectCore extends PureComponent {
         value={ this.getControlValue() }
         valueOptionMeta={ this.getValueOptionMeta() }
 
-        text={ selectedLabel }
+        inputText={ renderInputText(selectedRecords, this.props) }
         searchTerm={ lastSearch }
 
         onChange={ undefined }

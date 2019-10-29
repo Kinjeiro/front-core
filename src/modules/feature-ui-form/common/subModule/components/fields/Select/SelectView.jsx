@@ -7,7 +7,7 @@ import uniqBy from 'lodash/uniqBy';
 import { wrapToArray } from '../../../../../../../common/utils/common';
 
 import getComponents from '../../../get-components';
-import SELECT_VIEW_PROP_TYPES_MAP from './SelectView.propTypes';
+import SELECT_VIEW_PROP_TYPES_MAP from './Select.propTypes';
 
 const {
   Input,
