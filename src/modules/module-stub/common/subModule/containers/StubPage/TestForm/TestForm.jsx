@@ -58,42 +58,187 @@ export default class TestForm extends PureComponent {
     },
   };
 
-  // ======================================================
-  // RENDERS
-  // ======================================================
-  getFields() {
-    const fields = [];
-    fields.push(
+
+  getListFields() {
+    const records = [
       {
-        name: 'string',
-        label: 'Text "test"',
-        type: Form.FIELD_TYPES.STRING,
-        required: true,
-        validate: (value) => (!value || value === 'test' || 'Кастомная ошибка'),
+        name: 'label 1',
+        id: 'value 1',
       },
       {
-        name: 'string2',
-        label: 'Required text',
-        type: Form.FIELD_TYPES.STRING,
-        required: true,
+        name: 'bbbb',
+        id: 'bbbb',
       },
       {
-        name: 'numeric',
-        label: 'numeric',
-        type: Form.FIELD_TYPES.NUMERIC,
-        constraints: {
-          maxValue: 10,
-        },
+        name: 'ccc',
+        id: 'ccc',
       },
       {
-        name: 'text',
-        lagel: 'text',
-        type: Form.FIELD_TYPES.TEXT,
+        name: 'ddd',
+        id: 'ddd',
       },
+      {
+        name: 'eee',
+        id: 'eee',
+      },
+      {
+        name: 'fff',
+        id: 'fff',
+      },
+    ];
+
+    return [
       {
         label: '(default) LIST',
         name: 'list',
         type: Form.FIELD_TYPES.LIST,
+        defaultValue: 'eee',
+        controlProps: {
+          fieldLabel: 'label',
+          fieldId: 'value',
+          records: records.map(({ name, id }) => ({
+            label: name,
+            value: id,
+          })),
+        },
+      },
+      {
+        label: '(default) LIST MULTIPLE',
+        name: 'listMultiple',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [
+          'bbbb',
+          'ccc',
+        ],
+        controlProps: {
+          fieldLabel: 'myName',
+          fieldId: 'myId',
+          records: records.map(({ name, id }) => ({
+            myName: name,
+            myId: id,
+          })),
+        },
+      },
+      {
+        label: 'LIST MULTIPLE with empty options (useUnique: false, useSearch: false)',
+        name: 'listMultipleWithEmpty',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        value: [
+          'bbbb',
+          'ccc',
+        ],
+        controlProps: {
+          useSearch: false,
+          useUnique: false,
+          // fieldLabel: 'name',
+          // fieldId: 'id',
+          // records: [],
+        },
+      },
+      {
+        label: '(default) LIST MULTIPLERecord (with renderOption)',
+        name: 'listMultipleRecordWithRender',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [
+          {
+            myName: 'bbbb',
+            myId: 'bbbb',
+          },
+          {
+            myName: 'ccc',
+            myId: 'ccc',
+          },
+        ],
+        controlProps: {
+          isSaveFullRecord: true,
+          renderOption: (optionLabel) => {
+            return (
+              <span>
+                { `__${optionLabel}__` }
+              </span>
+            );
+          },
+          fieldLabel: 'myName',
+          fieldId: 'myId',
+          records: records.map(({ name, id }) => ({
+            myName: name,
+            myId: id,
+          })),
+        },
+      },
+      {
+        label: 'LIST MULTIPLE Record with empty options (isSaveFullRecord)',
+        name: 'listMultipleRecord',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        value: [
+          {
+            name: 'bbbb',
+            id: 'bbbb',
+          },
+          {
+            name: 'ccc',
+            id: 'ccc',
+          },
+        ],
+        controlProps: {
+          // default
+          // fieldLabel: 'name',
+          // fieldId: 'id',
+          isSaveFullRecord: true,
+          records: [],
+        },
+      },
+      {
+        label: 'LIST MULTIPLE Record with disabledOptions (isSaveFullRecord)',
+        name: 'listMultipleRecordWithDisabled',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        value: [
+          {
+            name: 'bbbb',
+            id: 'bbbb',
+          },
+          {
+            name: 'ccc',
+            id: 'ccc',
+          },
+        ],
+        controlProps: {
+          // default
+          // fieldLabel: 'name',
+          // fieldId: 'id',
+          isSaveFullRecord: true,
+          disabledOptions: [
+            'bbbb',
+            'eee',
+          ],
+          records,
+        },
+      },
+      {
+        label: 'LIST WITH DEFAULT and isHideSelected = false',
+        name: 'listWithDefaultsSimple',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [ 'ccc', 'bbbb' ],
+        controlProps: {
+          records,
+          isHideSelected: false,
+        },
+      },
+    ];
+  }
+
+  getCheckboxFields() {
+    return [
+      {
+        label: '(default) CHECKBOX',
+        name: 'checkbox1',
+        type: Form.FIELD_TYPES.BOOLEAN,
         defaultValue: 'eee',
         controlProps: {
           fieldLabel: 'label',
@@ -127,9 +272,9 @@ export default class TestForm extends PureComponent {
         },
       },
       {
-        label: '(default) LIST MULTIPLE',
-        name: 'listMultiple',
-        type: Form.FIELD_TYPES.LIST,
+        label: '(default) CHECKBOX MULTIPLE',
+        name: 'checkboxMultiple',
+        type: Form.FIELD_TYPES.BOOLEAN,
         multiple: true,
         defaultValue: [
           'bbbb',
@@ -167,26 +312,24 @@ export default class TestForm extends PureComponent {
         },
       },
       {
-        label: 'LIST MULTIPLE with empty options (useUnique: false, useSearch: false)',
-        name: 'listMultipleWithEmpty',
-        type: Form.FIELD_TYPES.LIST,
+        label: 'CHECKBOX MULTIPLE with empty options',
+        name: 'checkboxMultipleWithEmpty',
+        type: Form.FIELD_TYPES.BOOLEAN,
         multiple: true,
         value: [
           'bbbb',
           'ccc',
         ],
         controlProps: {
-          useSearch: false,
-          useUnique: false,
           // fieldLabel: 'name',
           // fieldId: 'id',
           // records: [],
         },
       },
       {
-        label: '(default) LIST MULTIPLERecord (with renderOption)',
-        name: 'listMultipleRecordWithRender',
-        type: Form.FIELD_TYPES.LIST,
+        label: '(default) CHECKBOX MULTIPLERecord (with renderOption)',
+        name: 'checkboxMultipleRecordWithRender',
+        type: Form.FIELD_TYPES.BOOLEAN,
         multiple: true,
         defaultValue: [
           {
@@ -238,9 +381,9 @@ export default class TestForm extends PureComponent {
         },
       },
       {
-        label: 'LIST MULTIPLERecord with empty options (isSaveFullRecord)',
-        name: 'listMultipleRecord',
-        type: Form.FIELD_TYPES.LIST,
+        label: 'CHECKBOX MULTIPLERecord with empty options (isSaveFullRecord)',
+        name: 'checkboxMultipleRecord',
+        type: Form.FIELD_TYPES.BOOLEAN,
         multiple: true,
         value: [
           {
@@ -261,9 +404,9 @@ export default class TestForm extends PureComponent {
         },
       },
       {
-        label: 'LIST MULTIPLERecord with disabledOptions (isSaveFullRecord)',
-        name: 'listMultipleRecordWithDisabled',
-        type: Form.FIELD_TYPES.LIST,
+        label: 'CHECKBOX MULTIPLERecord with disabledOptions (isSaveFullRecord)',
+        name: 'checkboxMultipleRecordWithDisabled',
+        type: Form.FIELD_TYPES.BOOLEAN,
         multiple: true,
         value: [
           {
@@ -312,6 +455,43 @@ export default class TestForm extends PureComponent {
           ],
         },
       },
+    ];
+  }
+
+  // ======================================================
+  // RENDERS
+  // ======================================================
+  getFields() {
+    const fields = [];
+    fields.push(
+      {
+        name: 'string',
+        label: 'Text "test"',
+        type: Form.FIELD_TYPES.STRING,
+        required: true,
+        validate: (value) => (!value || value === 'test' || 'Кастомная ошибка'),
+      },
+      {
+        name: 'string2',
+        label: 'Required text',
+        type: Form.FIELD_TYPES.STRING,
+        required: true,
+      },
+      {
+        name: 'numeric',
+        label: 'numeric',
+        type: Form.FIELD_TYPES.NUMERIC,
+        constraints: {
+          maxValue: 10,
+        },
+      },
+      {
+        name: 'text',
+        lagel: 'text',
+        type: Form.FIELD_TYPES.TEXT,
+      },
+      ...this.getListFields(),
+      ...this.getCheckboxFields(),
       {
         name: 'datetime',
         label: 'datetime',

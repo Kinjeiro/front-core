@@ -399,7 +399,7 @@ export default class CoreField extends Component {
   // ======================================================
   // UTILS
   // ======================================================
-  validateComponent(props = this.props, value = undefined, state = this.state) {
+  async validateComponent(props = this.props, value = undefined, state = this.state) {
     const {
       elementDom,
     } = this;
@@ -417,19 +417,17 @@ export default class CoreField extends Component {
       errors: [],
       warnings: [],
     });
-    const validatePromise = CoreField.validate(valueFinal, props, elementDom, getFormData)
-      .then((errors) => {
-        this.setState({
-          lastValue: valueFinal,
-          errors,
-        });
-        if (elementDom && !elementDom.validationMessage) {
-          // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
-          elementDom.setCustomValidity(errors.length > 0 ? errors[0] : '');
-        }
-      });
 
-    return validatePromise;
+    const errors = await CoreField.validate(valueFinal, props, elementDom, getFormData);
+    this.setState({
+      lastValue: valueFinal,
+      errors,
+    });
+
+    if (elementDom && !elementDom.validationMessage) {
+      // для инпутов кастомные ошибки - https://codepen.io/jmalfatto/pen/YGjmaJ?editors=0010
+      elementDom.setCustomValidity(errors.length > 0 ? errors[0] : '');
+    }
   }
 
   getConstrains() {
@@ -535,7 +533,10 @@ export default class CoreField extends Component {
       : this.handleChange(event, multipleIndex);
   }
 
-  handleChangeList(multipleIndex, idOrFullRecord, node, contextSelect) {
+  handleChangeCheckbox(multipleIndex, idOrFullRecord, allRecords, contextSelect) {
+    return this.handleChange(idOrFullRecord, multipleIndex, contextSelect);
+  }
+  handleChangeList(multipleIndex, idOrFullRecord, allRecords, contextSelect) {
     return this.handleChange(idOrFullRecord, multipleIndex, contextSelect);
   }
 
@@ -679,27 +680,28 @@ export default class CoreField extends Component {
     switch (subType) {
       case FIELD_SUB_TYPES.LOGIN:
         return {
-          autocomplete: 'username', // для менеджера пароля обязательно username название
-          autocorrect: 'off',
-          spellcheck: 'false',
-          autocapitalize: 'off',
-          autofocus: 'autofocus',
+          // https://reactjs.org/docs/dom-elements.html - camelcase нужен
+          autoComplete: 'username', // для менеджера пароля обязательно username название
+          autoCorrect: 'off',
+          spellCheck: 'false',
+          autoCapitalize: 'off',
+          autoFocus: 'autofocus',
           ...props,
         };
       case FIELD_SUB_TYPES.LOGIN_EMAIL:
         return {
-          autocomplete: 'username',
-          autocorrect: 'off',
-          spellcheck: 'false',
-          autocapitalize: 'off',
-          autofocus: 'autofocus',
+          autoComplete: 'username',
+          autoCorrect: 'off',
+          spellCheck: 'false',
+          autoCapitalize: 'off',
+          autoFocus: 'autofocus',
           ...props,
           type: 'email',
         };
 
       case FIELD_SUB_TYPES.PASSWORD: {
         return {
-          autocomplete: 'current-password',
+          autoComplete: 'current-password',
           ...props,
           type: 'password',
         };
@@ -886,11 +888,14 @@ export default class CoreField extends Component {
           ...controlPropsFinal,
         };
       case FIELD_TYPES.BOOLEAN:
-        // взято за основу Antd.Checkbox
         // Checkbox
         return {
-          checked: controlValue,
-          onChange: memoizeBind(this.handleChangeBoolean, this, multipleIndex),
+          value: controlValue,
+          selectedValue: controlValue,
+          onFieldChange: memoizeBind(this.handleChangeCheckbox, this, multipleIndex),
+
+          records: options,
+          ...controlPropsFinal,
         };
 
       // case TYPES.DATETIME: @todo @Panin - есть бага при попытке переключиться на выбор времени.
@@ -1146,6 +1151,7 @@ export default class CoreField extends Component {
     switch (type) {
       case FIELD_TYPES.BINARY:
       case FIELD_TYPES.LIST:
+      case FIELD_TYPES.BOOLEAN:
         // эти типы сами разберутся с multiple
         // todo @ANKU @LOW - а вообще пора уже выделять в Factory и добавлять как листнеры
         return (

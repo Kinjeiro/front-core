@@ -35,8 +35,8 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('DatePicker', () => ({ controlRef, value }) =>
     <input ref={ controlRef } value={ value || '' } type="datetime" />);
 
-  COMPONENTS_BASE.replace('Checkbox', () => ({ controlRef, touched, isProcessing, onTouch, ...props }) =>
-    <input ref={ controlRef } { ...props } type="checkbox" />);
+  COMPONENTS_BASE.replace('Checkbox', () => require('./components/fields/Checkbox/CheckboxCore').default);
+  COMPONENTS_BASE.replace('CheckboxView', () => require('./components/fields/Checkbox/CheckboxView').default);
 
   COMPONENTS_BASE.replace('Attachment', () => require('./components/fields/Attachment/Attachment').default);
   COMPONENTS_BASE.replace('AttachmentView', () => require('./components/fields/Attachment/AttachmentView').default);
