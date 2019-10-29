@@ -1,6 +1,6 @@
 {
   "name": "@reagentum/front-core",
-  "version": "1.9.8",
+  "version": "1.9.9",
   "description": "front-core",
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
   "main": "./build-scripts/start.js",
