@@ -62,6 +62,7 @@ export default class CoreForm extends Component {
      * Для передачи в onSubmit
      */
     formData: PropTypes.object,
+    readOnly: PropTypes.bool,
     /**
      * (newFormPartValue) => {}
      * приходит только часть и нужно делать merge в обработчике
@@ -125,7 +126,6 @@ export default class CoreForm extends Component {
   };
 
   static defaultProps = {
-    id: generateId(),
     Layout: FormLayout,
     textActionSubmit: i18n('components.CoreForm.textActionSubmit'),
     textActionCancel: i18n('components.CoreForm.textActionCancel'),
@@ -137,12 +137,14 @@ export default class CoreForm extends Component {
   };
 
   state = {
+    id: this.props.id || generateId(),
     formErrors: [],
     hasError: false,
     isProcessing: false,
     touched: false,
     hasSendOnce: false,
     dependentFieldsHashes: {},
+    formDataInState: this.props.formData, // чтобы без редукса работать
   };
 
   domForm = null;
@@ -178,6 +180,18 @@ export default class CoreForm extends Component {
   //     }, 2000);
   //   }
   // }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const {
+      formData,
+    } = this.props;
+
+    if (formData !== prevProps.formData) {
+      this.setState({
+        formDataInState: formData,
+      });
+    }
+  }
+
   componentWillUnmount() {
     this.unmount = true;
   }
@@ -199,7 +213,6 @@ export default class CoreForm extends Component {
   async isValid(newValues = {}) {
     const {
       validate,
-      formData,
       textDefaultFormErrorText,
     } = this.props;
     const {
@@ -248,7 +261,13 @@ export default class CoreForm extends Component {
         .filter(obj => !!obj);
     }
 
-    const formErrors = await executeVariable(validate, null, fieldsErrors, formData, this.props);
+    const formErrors = await executeVariable(
+      validate,
+      null,
+      fieldsErrors,
+      this.getFormData(),
+      this.props,
+    );
     const formErrorsFinal = formErrors === false
       ? [textDefaultFormErrorText]
       : formErrors === true || formErrors === null
@@ -275,9 +294,26 @@ export default class CoreForm extends Component {
     );
   }
 
+  isManagedComponent() {
+    const {
+      onChangeField,
+      onUpdateForm,
+    } = this.props;
+    return onChangeField || onUpdateForm;
+  }
+
   @bind()
   getFormData() {
-    return this.props.formData;
+    const {
+      formData,
+    } = this.props;
+    const {
+      formDataInState,
+    } = this.state;
+
+    return this.isManagedComponent()
+      ? formData // управляемый компонент, к примеру через редукс
+      : formDataInState; // управляет собой сам
   }
 
   // ======================================================
@@ -291,7 +327,6 @@ export default class CoreForm extends Component {
   @bind()
   async handleChange(fieldName, newValue) {
     const {
-      formData,
       onChangeField,
       onUpdateForm,
     } = this.props;
@@ -308,11 +343,13 @@ export default class CoreForm extends Component {
       });
     }
 
-    let result;
     if (onChange) {
       // todo @ANKU @LOW - нужно onChange тоже включить в процессинг, но почему-то падают странности
       await onChange(fieldName, newValue);
-    } else {
+    }
+
+    if (this.isManagedComponent()) {
+      // управляемый компонент
       if (onChangeField) {
         // const resultFormData = cloneDeep(formData);
         const resultFormData = {};
@@ -322,11 +359,21 @@ export default class CoreForm extends Component {
         await onChangeField(resultFormData);
       }
       if (onUpdateForm) {
-        const resultFormData = cloneDeep(formData);
+        const resultFormData = cloneDeep(this.getFormData());
         // fieldName может быть составным: address.city
         set(resultFormData, fieldName, newValue);
         await onUpdateForm(resultFormData);
       }
+    } else {
+      // не управляемый компонент
+
+      const resultFormData = cloneDeep(this.getFormData());
+      // fieldName может быть составным: address.city
+      set(resultFormData, fieldName, newValue);
+
+      this.setState({
+        formDataInState: resultFormData,
+      });
     }
 
     emitProcessing(
@@ -339,13 +386,11 @@ export default class CoreForm extends Component {
   async asyncSubmit() {
     const {
       onSubmit,
-      useForm,
-      formData,
     } = this.props;
 
     if (await this.isValid()) {
       if (onSubmit) {
-        await onSubmit(formData);
+        await onSubmit(this.getFormData());
       }
       // может получится так, что после submit будет редирект и компонент заанмаунтится, поэтому setState будет падать с ошибкой - это нормально
       if (!this.unmount) {
@@ -373,6 +418,24 @@ export default class CoreForm extends Component {
     return false;
   }
 
+  @bind()
+  async handleCancel(event) {
+    const {
+      onCancel,
+    } = this.props;
+
+    if (onCancel) {
+      const prevData = this.getFormData();
+      await onCancel(prevData);
+    }
+
+    if (!this.isManagedComponent()) {
+      this.setState({
+        formDataInState: {},
+      });
+    }
+  }
+
   // ======================================================
   // RENDERS
   // ======================================================
@@ -395,16 +458,12 @@ export default class CoreForm extends Component {
   }
 
   getFieldValue(fieldName, fieldProp = null) {
-    const {
-      formData,
-    } = this.props;
-
     let value;
     if (fieldProp) {
       value = fieldProp.value;
     }
     if (typeof value === 'undefined') {
-      value = get(formData, fieldName);
+      value = get(this.getFormData(), fieldName);
     }
     return value;
   }
@@ -429,14 +488,14 @@ export default class CoreForm extends Component {
       formDependentFields = [],
     } = field;
     const {
-      id,
       i18nFieldPrefix,
       onChangeField,
       onUpdateForm,
+      readOnly: formReadOnly,
       // firstFocus,
-      formData,
     } = this.props;
     const {
+      id,
       isProcessing,
     } = this.state;
 
@@ -467,7 +526,7 @@ export default class CoreForm extends Component {
       id: `${id}_${name}`,
       ...field,
       // пока форма находится в процессе сабмита никакие изменения вносить нельзя
-      readOnly: isProcessing || field.readOnly,
+      readOnly: formReadOnly || isProcessing || field.readOnly,
       // controlProps: firstFocus && index === 0
       //   ? {
       //     autoFocus: true,
@@ -487,7 +546,8 @@ export default class CoreForm extends Component {
       getFormData: this.getFormData,
 
       value: this.getFieldValue(name, field),
-      onChange: onChange || ((onChangeField || onUpdateForm) ? this.handleChange : undefined),
+      // onChange: onChange || ((onChangeField || onUpdateForm) ? this.handleChange : undefined),
+      onChange: this.handleChange,
     };
   }
 
@@ -628,13 +688,16 @@ export default class CoreForm extends Component {
 
     actionsFinal.push(...wrapToArray(actions));
 
-    if (onCancel && textActionCancel) {
+    if (
+      textActionCancel !== CoreForm.defaultProps.textActionCancel
+      || (onCancel && textActionCancel)
+    ) {
       actionsFinal.push((
         <Button
           key="cancelButton"
           className={ `${this.bem('cancelButton')}` }
           disabled={ isFetching }
-          onClick={ onCancel }
+          onClick={ this.handleCancel }
         >
           { textActionCancel }
         </Button>
@@ -710,7 +773,6 @@ export default class CoreForm extends Component {
   // ======================================================
   render() {
     const {
-      id,
       inModal,
       useForm,
       textActionSuccess,
@@ -719,6 +781,7 @@ export default class CoreForm extends Component {
       Layout,
     } = this.props;
     const {
+      id,
       touched,
       hasError,
       isProcessing,
