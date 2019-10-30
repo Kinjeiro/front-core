@@ -107,7 +107,7 @@ export default class SelectView extends PureComponent {
       value,
       // options,
       optionMetas,
-      valueOptionMeta,
+      valueOptionMetas,
       multiple,
 
       isLoading,
@@ -123,7 +123,7 @@ export default class SelectView extends PureComponent {
 
     const optionMetasFinal = !searchTerm && optionMetas.length === 0 && !useUnique
       // наполняем если пока пустой список
-      ? uniqBy(wrapToArray(valueOptionMeta), (optionMeta) => optionMeta.recordId)
+      ? uniqBy(wrapToArray(valueOptionMetas), (optionMeta) => optionMeta.recordId)
       : optionMetas;
 
     return (
@@ -156,7 +156,7 @@ export default class SelectView extends PureComponent {
           multiple && (
             <ul>
               {
-                valueOptionMeta.map((optionMeta) => (
+                valueOptionMetas.map((optionMeta) => (
                   <ListItem
                     key={ `${optionMeta.recordId}_${optionMeta.index}` }
                     disabled={ optionMeta.isDisabled }

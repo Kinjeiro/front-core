@@ -270,16 +270,12 @@ export default class SelectCore extends PureComponent {
   }
   getValueOptionMetaMemoize = memoizeOne(
     (selectedRecords) => {
-      const {
-        multiple,
-      } = this.props;
       const visibleRecords = this.getFilteredOptionMetas();
-      const valueOptionMeta = selectedRecords.map((selectedRecord, index) =>
+      return selectedRecords.map((selectedRecord, index) =>
         this.parseToOptionMeta(selectedRecord, index, visibleRecords));
-      return multiple ? valueOptionMeta : valueOptionMeta[0];
     },
   );
-  getValueOptionMeta() {
+  getValueOptionMetas() {
     const {
       selectedRecords,
     } = this.state;
@@ -289,7 +285,7 @@ export default class SelectCore extends PureComponent {
     return isOptionMeta(recordId)
       ? recordId
       : this.getFilteredOptionMetas().find((optionMeta) => optionMeta.recordId === recordId)
-        || this.getValueOptionMeta().find((optionMeta) => optionMeta.recordId === recordId);
+        || this.getValueOptionMetas().find((optionMeta) => optionMeta.recordId === recordId);
   }
 
   getControlValue() {
@@ -374,12 +370,16 @@ export default class SelectCore extends PureComponent {
     // todo @ANKU @LOW @BUG_OUT - элемент при выборе показывает в input option.value а не children option
     // onSelect(value);
 
+    const context = {
+      optionMeta: currentOptionMeta,
+    };
+
     return emitProcessing(
       Promise.all([
         !isRemove && onSelect        ? onSelect(valueSelected, recordsFinal)         : Promise.resolve(),
         isRemove && onRemoveSelected ? onRemoveSelected(valueSelected, recordsFinal) : Promise.resolve(),
-        onChange ? onChange(valuesNew, recordsFinal) : Promise.resolve(),
-        onFieldChange ? onFieldChange(valuesNew, recordsFinal) : Promise.resolve(),
+        onChange ? onChange(valuesNew, recordsFinal, context) : Promise.resolve(),
+        onFieldChange ? onFieldChange(valuesNew, recordsFinal, context) : Promise.resolve(),
       ]),
       this,
       'isProcessing',
@@ -482,7 +482,6 @@ export default class SelectCore extends PureComponent {
         label: labelFinal,
         index,
       }),
-      true,
     );
   }
 
@@ -614,7 +613,7 @@ export default class SelectCore extends PureComponent {
         options={ undefined }
         optionMetas={ this.getFilteredOptionMetas() }
         value={ this.getControlValue() }
-        valueOptionMeta={ this.getValueOptionMeta() }
+        valueOptionMetas={ this.getValueOptionMetas() }
 
         inputText={ renderInputText(selectedRecords, this.props) }
         searchTerm={ lastSearch }
