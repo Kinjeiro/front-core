@@ -533,11 +533,11 @@ export default class CoreField extends Component {
       : this.handleChange(event, multipleIndex);
   }
 
-  handleChangeCheckbox(multipleIndex, idOrFullRecord, allRecords, contextSelect) {
-    return this.handleChange(idOrFullRecord, multipleIndex, contextSelect);
+  handleChangeCheckbox(multipleIndex, valuesOrNull, selectedRecords, contextCheckbox) {
+    return this.handleChange(valuesOrNull, multipleIndex, contextCheckbox);
   }
-  handleChangeList(multipleIndex, idOrFullRecord, allRecords, contextSelect) {
-    return this.handleChange(idOrFullRecord, multipleIndex, contextSelect);
+  handleChangeList(multipleIndex, value, selectedRecords, contextSelect) {
+    return this.handleChange(value, multipleIndex, contextSelect);
   }
 
   handleChangeDefault(multipleIndex, value, node, contextData) {

@@ -33,14 +33,16 @@ export const CHECKBOX_CORE_PROP_TYPES_MAP = {
   /**
    * Внутренний метод от CoreField чтобы можно было задать кастомный onChange
    *
-   * (newValuesFinal, newRecordsFinal) => {}
-   * - если multiple - это массивы, если нет - значения
+   * (valuesOrNull, selectedRecords, context) => {}
+   * - context - { optionMeta: { record, recordId, isSelected, isDisabled } }
+   * - если multiple - это массивы, если нет - значения (если не выделено - null)
    * - если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id
    */
   onFieldChange: PropTypes.func,
   /**
-   * (newValuesFinal, newRecordsFinal) => {}
-   * - если multiple - это массивы, если нет - значения
+   * (valuesOrNull, selectedRecords, context) => {}
+   * - context - { optionMeta: { record, recordId, isSelected, isDisabled } }
+   * - если multiple - это массивы, если нет - значения (если не выделено - null)
    * - если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id
    */
   onChange: PropTypes.func,
@@ -76,7 +78,7 @@ const CHECKBOX_VIEW_PROP_TYPES_MAP = {
   // options: PropTypes.array,
   optionMetas: PropTypes.arrayOf(SELECT_OPTION_META_PROP_TYPE),
   value: PropTypes.any,
-  valueOptionMeta: PropTypes.oneOfType([
+  valueOptionMetas: PropTypes.oneOfType([
     SELECT_OPTION_META_PROP_TYPE,
     PropTypes.arrayOf(SELECT_OPTION_META_PROP_TYPE),
   ]),

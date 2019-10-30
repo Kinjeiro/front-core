@@ -70,10 +70,11 @@ export default class CheckboxView extends PureComponent {
   // ======================================================
   render() {
     const {
+      label,
       className,
 
       optionMetas,
-      valueOptionMeta,
+      valueOptionMetas,
       multiple,
 
       isLoading,
@@ -84,7 +85,7 @@ export default class CheckboxView extends PureComponent {
 
     const visibilityOptionMetas = optionMetas && optionMetas.length > 0
       ? optionMetas
-      : valueOptionMeta || [];
+      : valueOptionMetas || [];
 
     return (
       <div className={ `CheckboxView ${className || ''}` }>
@@ -94,6 +95,8 @@ export default class CheckboxView extends PureComponent {
           )
         }
 
+
+        <h3>{ label  }</h3>
         {
           visibilityOptionMetas.map(this.renderOption)
         }

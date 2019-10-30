@@ -21,6 +21,7 @@ const {
   Segment,
   Form,
   InstanceAttachment,
+  Checkbox,
 } = getComponents();
 
 require('./TestForm.css');
@@ -653,6 +654,14 @@ export default class TestForm extends PureComponent {
           onSubmit={ onSubmit }
           onCancel={ onCancel }
         />
+
+        <div>
+          <Checkbox
+            label="Checkbox"
+            name="opaName"
+            onChange={ (valueOrNull, record, { optionMeta: { recordId, label } }) => alert(recordId+ ": " + valueOrNull) }
+          />
+        </div>
       </Segment>
     );
   }

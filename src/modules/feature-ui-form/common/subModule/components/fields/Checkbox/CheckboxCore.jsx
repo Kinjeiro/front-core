@@ -10,6 +10,7 @@ import memoizeOne from 'memoize-one';
 import {
   deepEquals,
   emitProcessing,
+  executeVariable,
   wrapToArray,
 } from '../../../../../../../common/utils/common';
 import getComponents from '../../../get-components';
@@ -36,11 +37,12 @@ export default class CheckboxCore extends PureComponent {
   static propTypes = CHECKBOX_CORE_PROP_TYPES_MAP;
 
   static defaultProps = {
-    records: [],
+    records: undefined,
     disabledOptions: [],
     fieldLabel: RECORD_LABEL_FIELD,
     fieldId: RECORD_ID_FIELD,
   };
+
 
   state = {
     selectedRecords: CheckboxCore.getSelectedRecords(this.props, true),
@@ -67,18 +69,52 @@ export default class CheckboxCore extends PureComponent {
   // ======================================================
   // STATIC
   // ======================================================
-  // todo @ANKU @LOW - это копипаст от SelectCore в будущем нужно их объединить
-  static getSelectedRecords(props, useDefault) {
+  static getRecords(props) {
     const {
       multiple,
       records,
+      id,
+      name,
+      fieldId,
+      fieldLabel,
+      value,
+      isSaveFullRecord,
+    } = props;
+
+    if (records) {
+      return records;
+    }
+
+    if (value) {
+      return wrapToArray(value)
+        .map((valueItem) => (
+          isSaveFullRecord
+            ? valueItem
+            // может не быть в текущих records выбранных значений (к примеру, при ajax search)
+            : createSimpleSelectRecord(
+              valueItem,
+              valueItem,
+              fieldId,
+              fieldLabel,
+            )));
+    }
+
+    return multiple
+      ? []
+      : [createSimpleSelectRecord(id || name, undefined, fieldId, fieldLabel)];
+  }
+
+  // todo @ANKU @LOW - это копипаст от SelectCore в будущем нужно их объединить
+  static getSelectedRecords(props, useDefault) {
+    const {
       value,
       defaultValue = null,
-      // selectedValue,
       fieldId,
       fieldLabel,
       isSaveFullRecord,
     } = props;
+
+    const recordsFinal = CheckboxCore.getRecords(props);
 
     let selectedRecords;
     if (!value || (Array.isArray(value) && value.length === 0)) {
@@ -90,23 +126,16 @@ export default class CheckboxCore extends PureComponent {
       // noinspection EqualityComparisonWithCoercionJS
       selectedRecords = wrapToArray(value).map((valueItem) => (
         // eslint-disable-next-line eqeqeq
-        records.find((record) => record[fieldId] == valueItem)
-        // может не быть в текущих records выбранных значений (к примеру, при ajax search)
-        || createSimpleSelectRecord(
-          valueItem,
-          valueItem,
-          fieldId,
-          fieldLabel,
-        )
+        recordsFinal.find((record) => record[fieldId] == valueItem)
       ));
     }
 
     if (useDefault && defaultValue !== null && selectedRecords.length === 0) {
       selectedRecords = wrapToArray(defaultValue).map((defaultItem) => (
-        typeof defaultItem === 'object'
+        isSaveFullRecord
           ? defaultItem
           // eslint-disable-next-line eqeqeq
-          : records.find((record) => record[fieldId] == defaultItem)
+          : recordsFinal.find((record) => record[fieldId] == defaultItem)
             // может не быть в текущих records выбранных значений (к примеру, при ajax search)
             || createSimpleSelectRecord(
               defaultItem,
@@ -136,23 +165,31 @@ export default class CheckboxCore extends PureComponent {
       [fieldId]: recordId,
     } = record;
 
-    const labelFinal = renderOption
-      ? renderOption(label, record, index, visibilityRecords)
-      : label;
-
-    return createOptionMeta({
+    const optionMeta = createOptionMeta({
       record,
       recordId,
-      label: labelFinal,
+      label,
       index,
       isDisabled: disabledOptions.includes(recordId),
       isSelected: this.isSelected(recordId),
     });
+
+    optionMeta.label = executeVariable(
+      renderOption,
+      optionMeta.label,
+      optionMeta.label,
+      record,
+      optionMeta,
+      visibilityRecords,
+    );
+
+    return optionMeta;
   }
 
   getOptionMetasMemoize = memoizeOne(
-    (selectedRecords, records, props = this.props) => {
-      return (records || []).map((record, index) => this.parseToOptionMeta(record, index, records, props));
+    (selectedRecords, records, props) => {
+      return CheckboxCore.getRecords(props)
+        .map((record, index) => this.parseToOptionMeta(record, index, records, props));
     },
   );
   getOptionMetas() {
@@ -165,7 +202,7 @@ export default class CheckboxCore extends PureComponent {
     } = this.state;
 
     return this.getOptionMetasMemoize(
-      multiple ? selectedRecords : null,
+      selectedRecords,
       records,
       this.props,
     );
@@ -173,16 +210,12 @@ export default class CheckboxCore extends PureComponent {
 
   getValueOptionMetaMemoize = memoizeOne(
     (selectedRecords) => {
-      const {
-        multiple,
-      } = this.props;
       const visibleRecords = this.getOptionMetas();
-      const valueOptionMeta = selectedRecords.map((selectedRecord, index) =>
+      return selectedRecords.map((selectedRecord, index) =>
         this.parseToOptionMeta(selectedRecord, index, visibleRecords));
-      return multiple ? valueOptionMeta : valueOptionMeta[0];
     },
   );
-  getValueOptionMeta() {
+  getValueOptionMetas() {
     const {
       selectedRecords,
     } = this.state;
@@ -193,7 +226,7 @@ export default class CheckboxCore extends PureComponent {
     return isOptionMeta(recordId)
       ? recordId
       : this.getOptionMetas().find((optionMeta) => optionMeta.recordId === recordId)
-        || this.getValueOptionMeta().find((optionMeta) => optionMeta.recordId === recordId);
+        || this.getValueOptionMetas().find((optionMeta) => optionMeta.recordId === recordId);
   }
 
   getControlValue() {
@@ -236,10 +269,12 @@ export default class CheckboxCore extends PureComponent {
       selectedRecords,
     } = this.state;
 
+    let currentOptionMeta;
     let recordsFinal;
+
     // let valueSelected;
     if (currentRecordId) {
-      const currentOptionMeta = this.findOptionMetaByControlValue(currentRecordId);
+      currentOptionMeta = this.findOptionMetaByControlValue(currentRecordId);
 
       const {
         record: currentRecord,
@@ -273,12 +308,18 @@ export default class CheckboxCore extends PureComponent {
       ? recordsFinal
       : multiple
         ? recordsFinal.map((recordItem) => recordItem[fieldId])
-        : recordsFinal[fieldId];
+        : recordsFinal
+          ? recordsFinal[fieldId]
+          : null;
+
+    const contextCheckbox = {
+      optionMeta: currentOptionMeta,
+    };
 
     return emitProcessing(
       Promise.all([
-        onChange ? onChange(valuesNew, recordsFinal) : Promise.resolve(),
-        onFieldChange ? onFieldChange(valuesNew, recordsFinal) : Promise.resolve(),
+        onChange ? onChange(valuesNew, recordsFinal, contextCheckbox) : Promise.resolve(),
+        onFieldChange ? onFieldChange(valuesNew, recordsFinal, contextCheckbox) : Promise.resolve(),
       ]),
       this,
       'isProcessing',
@@ -329,7 +370,7 @@ export default class CheckboxCore extends PureComponent {
         options={ undefined }
         optionMetas={ this.getOptionMetas() }
         value={ this.getControlValue() }
-        valueOptionMeta={ this.getValueOptionMeta() }
+        valueOptionMetas={ this.getValueOptionMetas() }
 
         onChangeCheck={ this.handleChangeCheck }
         onCheckAll={ this.handleCheckAll }
