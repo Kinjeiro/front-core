@@ -1826,16 +1826,18 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
 Внутренний метод от CoreField чтобы можно было задать кастомный onChange
 
-(newValuesFinal, newRecordsFinal) => {}
+(valuesOrNull, selectedRecords, context) => {}
 
--   если multiple - это массивы, если нет - значения
+-   context - { optionMeta: { record, recordId, isSelected, isDisabled } }
+-   если multiple - это массивы, если нет - значения (если не выделено - null)
 -   если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id
 
 ## onChange
 
-(newValuesFinal, newRecordsFinal) => {}
+(valuesOrNull, selectedRecords, context) => {}
 
--   если multiple - это массивы, если нет - значения
+-   context - { optionMeta: { record, recordId, isSelected, isDisabled } }
+-   если multiple - это массивы, если нет - значения (если не выделено - null)
 -   если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id
 
 ## renderOption
@@ -1881,15 +1883,17 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
 Внутренний метод от CoreField чтобы можно было задать кастомный onChange
 
-(newValuesFinal, newRecordsFinal) => {}
+(values, selectedRecords, context) => {}
 
+-   context - { optionMeta: { record, recordId, isSelected, isDisabled } }
 -   если multiple - это массивы, если нет - значения
 -   если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id
 
 ## onChange
 
-(newValuesFinal, newRecordsFinal) => {}
+(values, selectedRecords, context) => {}
 
+-   context - { optionMeta: { record, recordId, isSelected, isDisabled } }
 -   если multiple - это массивы, если нет - значения
 -   если isSaveFullRecord - то newValuesFinal - это рекорд, если нет то id
 
@@ -1914,7 +1918,7 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
 ## renderOption
 
-(record[fieldLabel], record, index, visibilityRecords) => React.node
+(record[fieldLabel], record, optionMeta, visibilityRecords) => React.node
 
 ## isHideSelected
 
