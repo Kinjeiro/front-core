@@ -190,18 +190,20 @@ export default class SelectCore extends PureComponent {
       [fieldId]: recordId,
     } = record;
 
-    const labelFinal = renderOption
-      ? renderOption(label, record, index, visibilityRecords)
-      : label;
-
-    return createOptionMeta({
+    const optionMeta = createOptionMeta({
       record,
       recordId,
-      label: labelFinal,
+      label,
       index,
       isDisabled: disabledOptions.includes(recordId),
       isSelected: this.isSelected(recordId),
     });
+
+    optionMeta.label = renderOption
+      ? renderOption(optionMeta.label, record, optionMeta, visibilityRecords)
+      : optionMeta.label;
+
+    return optionMeta;
 
     // взято за основу ANTDSelect.Option
     // return (

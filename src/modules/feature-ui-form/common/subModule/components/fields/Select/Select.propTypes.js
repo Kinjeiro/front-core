@@ -82,7 +82,7 @@ export const SELECT_CORE_PROP_TYPES_MAP = {
   // ======================================================
   className: PropTypes.string,
   /**
-   * (record[fieldLabel], record, index, visibilityRecords) => React.node
+   * (record[fieldLabel], record, optionMeta, visibilityRecords) => React.node
    */
   renderOption: PropTypes.func,
   disabledOptions: PropTypes.arrayOf(ID_PROP_TYPE),
