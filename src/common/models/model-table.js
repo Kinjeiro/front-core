@@ -186,6 +186,12 @@ export function createTableResponse(records, meta, total) {
   };
 }
 
+function wrapToStrings(array) {
+  return array
+    ? array.map((value) => (typeof value !== 'undefined' && value !== null ? `${value}` : value))
+    : array;
+}
+
 export function filterAndSortDb(mockDb, query, searchFieldObjects = []) {
   const {
     filters,
@@ -208,7 +214,8 @@ export function filterAndSortDb(mockDb, query, searchFieldObjects = []) {
   if (filters) {
     result = result.filter((record) =>
       Object.keys(filters).every((filterKey) =>
-        includes(filters[filterKey], record[filterKey], false, true)));
+        // из фильтра мы всегда достаем string (не число), поэтому массив должен быть на стринг значениях
+        includes(filters[filterKey], wrapToStrings(record[filterKey]), false, true)));
   }
 
   // search
