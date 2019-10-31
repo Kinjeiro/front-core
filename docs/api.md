@@ -1201,7 +1201,7 @@ Returns **({method, path, payload} | any)**
     -   `$1.tableActions`  
     -   `$1.useLoading`   (optional, default `true`)
     -   `$1.urlFilterValueNormalizers`  
-    -   `$1.syncWithUrlParameters`   (optional, default `true`)
+    -   `$1.syncWithUrlParameters`   (optional, default `false`)
 -   `loadOnMount`  запускать загрузку данных при маунте (componentWillMount)
 -   `loadOnChange`  если изменилась мета или фильтры - запускает загрузку в componentWillReceiveProps
 -   `clearOnUnmount`  очищать ли данные, когда компонент unmount (componentWillUnmount)
