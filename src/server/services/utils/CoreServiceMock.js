@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import serverConfig from '../../../server/server-config';
+import serverConfig from '../../server-config';
+import serverLogger from '../../helpers/server-logger';
 
 import {
   objectValues,
@@ -57,6 +58,7 @@ export default class CoreServiceMock extends CoreService {
   // CRUD
   // ======================================================
   async innerFindRecords(query, searchFieldObjects, options = undefined, withPagination = false) {
+    serverLogger.log('filterAndSortDb: ', query, searchFieldObjects, options, withPagination);
     const tableResponseWithPagination = filterAndSortDb(await this.getData(), query, searchFieldObjects);
     tableResponseWithPagination.records = await this.serializeRecords(
       tableResponseWithPagination.records,

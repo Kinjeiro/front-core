@@ -248,7 +248,7 @@ export default class CoreService {
   }
   async serializeRecords(recordsQuery, operationType, options = undefined) {
     const records = await recordsQuery;
-    return Promise.all(records.map((record) => this.serializeRecord(record)));
+    return Promise.all(records.map((record) => this.serializeRecord(record, operationType, options)));
   }
   async deserializeData(data, operationType, options = undefined) {
     return data;
