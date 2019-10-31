@@ -108,12 +108,73 @@ export function getMeta(query, defaultMeta = {}) {
   };
 }
 
-function searchInValue(value, search) {
+export const SEARCH_MATCH_TYPE = {
+  INDEX_OF: 'indexOf',
+  EQUALS: 'equals',
+  START_WITH: 'startWith',
+};
+export const SEARCH_DATA_TYPE = {
+  CASE_SENSITIVE: 'caseSensitive',
+  NOT_CASE_SENSITIVE: 'notCaseSensitive',
+};
+
+export function createSearchFieldObject(
+  field,
+  searchMatchType = SEARCH_MATCH_TYPE.INDEX_OF,
+  searchDataType = SEARCH_DATA_TYPE.NOT_CASE_SENSITIVE,
+) {
+  if (typeof field === 'object') {
+    return {
+      searchMatchType,
+      searchDataType,
+      ...field,
+    };
+  }
+
+  return {
+    field,
+    searchMatchType,
+    searchDataType,
+  };
+}
+
+export function searchInValue(
+  value,
+  search,
+  searchMatchType = SEARCH_MATCH_TYPE.INDEX_OF,
+  searchDataType = SEARCH_DATA_TYPE.NOT_CASE_SENSITIVE,
+) {
   if (Array.isArray(value)) {
     return value.some((item) => searchInValue(item, search));
   }
-  return `${value}`.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+
+  let searchFinal;
+  let valueFinal;
+  switch (searchDataType) {
+    case SEARCH_DATA_TYPE.NOT_CASE_SENSITIVE:
+      searchFinal = search.toLowerCase();
+      valueFinal = `${value}`.toLowerCase();
+      break;
+    case SEARCH_DATA_TYPE.CASE_SENSITIVE:
+      searchFinal = search;
+      valueFinal = `${value}`;
+      break;
+    default:
+      throw new Error(`Unknown searchDataType: ${searchDataType}`);
+  }
+
+  switch (searchMatchType) {
+    case SEARCH_MATCH_TYPE.INDEX_OF:
+      return valueFinal.indexOf(searchFinal) >= 0;
+    case SEARCH_MATCH_TYPE.START_WITH:
+      return valueFinal.indexOf(searchFinal) === 0;
+    case SEARCH_MATCH_TYPE.EQUALS:
+      return valueFinal === searchFinal;
+    default:
+      throw new Error(`Unknown searchMatchType: ${searchMatchType}`);
+  }
 }
+
 
 export function createTableResponse(records, meta, total) {
   return {
@@ -125,7 +186,7 @@ export function createTableResponse(records, meta, total) {
   };
 }
 
-export function filterAndSortDb(mockDb, query, searchFields = []) {
+export function filterAndSortDb(mockDb, query, searchFieldObjects = []) {
   const {
     filters,
   } = query || {};
@@ -151,10 +212,16 @@ export function filterAndSortDb(mockDb, query, searchFields = []) {
   }
 
   // search
-  if (search) {
+  if (search && searchFieldObjects.length > 0) {
     result = result.filter((object) =>
-      searchFields.some((searchField) =>
-        searchInValue(object[searchField], search)));
+      searchFieldObjects.some((searchField) => {
+        const {
+          field,
+          searchDataType,
+          searchMatchType,
+        } = createSearchFieldObject(searchField);
+        return searchInValue(object[field], search, searchMatchType, searchDataType);
+      }));
   }
 
   // sorting
