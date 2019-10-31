@@ -215,7 +215,12 @@ export function filterAndSortDb(mockDb, query, searchFieldObjects = []) {
     result = result.filter((record) =>
       Object.keys(filters).every((filterKey) =>
         // из фильтра мы всегда достаем string (не число), поэтому массив должен быть на стринг значениях
-        includes(filters[filterKey], wrapToStrings(record[filterKey]), false, true)));
+        includes(
+          wrapToStrings(filters[filterKey]),
+          wrapToStrings(record[filterKey]),
+          false,
+          true,
+        )));
   }
 
   // search
