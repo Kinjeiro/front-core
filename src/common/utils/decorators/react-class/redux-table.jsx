@@ -78,7 +78,7 @@ export default function reduxTableDecorator(
     tableActions,
     useLoading = true,
     urlFilterValueNormalizers,
-    syncWithUrlParameters = true,
+    syncWithUrlParameters = false,
   } = {},
 ) {
   return (ReactComponentClass) => {
