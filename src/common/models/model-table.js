@@ -192,7 +192,13 @@ function wrapToStrings(array) {
     .map((value) => (typeof value !== 'undefined' && value !== null ? `${value}` : value));
 }
 
-export function filterAndSortDb(mockDb, query, searchFieldObjects = [], isGetAllNotMutable = false) {
+export function filterAndSortDb(
+  mockDb,
+  query,
+  searchFieldObjects = [],
+  withPagination = false,
+  isGetAllNotMutable = false,
+) {
   let result;
   let total;
 
@@ -265,9 +271,17 @@ export function filterAndSortDb(mockDb, query, searchFieldObjects = [], isGetAll
       });
     }
 
-    // pagination
     total = result.length;
-    result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
+
+    if (withPagination) {
+      // pagination
+      result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
+    }
+  }
+
+  if (!withPagination) {
+    meta.startPage = 0;
+    meta.itemsPerPage = total;
   }
 
   // todo @ANKU @LOW - filters обратно не возвращаются - а надо?
