@@ -1,22 +1,14 @@
-/* eslint-disable no-unused-vars */
-import {
-  generateId as utilsGenerateId,
-} from '../../../common/utils/common';
-import { isPatchOperations } from '../../../common/utils/api-utils';
 import { getMeta } from '../../../common/models/model-table';
-
-import {
-  sendWithAuth,
-  sendEndpointMethodRequest,
-} from '../../utils/send-server-request';
+import { isPatchOperations } from '../../../common/utils/api-utils';
+/* eslint-disable no-unused-vars */
+import { generateId as utilsGenerateId } from '../../../common/utils/common';
 
 import logger from '../../helpers/server-logger';
+
+import { REQUEST_FIELD__USER, REQUEST_FIELD__USER_TOKEN } from '../../plugins/plugin-request-user';
 import serverConfig from '../../server-config';
 
-import {
-  REQUEST_FIELD__USER,
-  REQUEST_FIELD__USER_TOKEN,
-} from '../../plugins/plugin-request-user';
+import { sendEndpointMethodRequest, sendWithAuth } from '../../utils/send-server-request';
 
 const INIT_SERVICES = {};
 
@@ -27,6 +19,11 @@ export const OPERATION_TYPE = {
   CREATE_OR_UPDATE: 'createOrUpdate',
   EDIT: 'update',
   REMOVE: 'remove',
+};
+
+export const SERVICE_OPTIONS = {
+  WITHOUT_SERIALIZE_DATA: 'WITHOUT_SERIALIZE_DATA',
+  WITHOUT_DESERIALIZE_DATA: 'WITHOUT_DESERIALIZE_DATA',
 };
 
 export default class CoreService {
@@ -45,7 +42,8 @@ export default class CoreService {
   /**
    * Создается в config/utils/create-config.js:
    *
-   * Если в serverConfig.server.endpointServices[serviceName] нету используется по умолчанию serverConfig.server.endpointServices.middlewareApiService
+   * Если в serverConfig.server.endpointServices[serviceName] нету используется по умолчанию
+   * serverConfig.server.endpointServices.middlewareApiService
    *
    * protocol: string
    * host: string
@@ -450,7 +448,8 @@ export default class CoreService {
   // BULK
   // ======================================================
   /**
-   * This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware for every document use create() instead.
+   * This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware
+   * for every document use create() instead.
    * @param operations: {
       [this.OPERATION_TYPE.CREATE]: createArray,
       [this.OPERATION_TYPE.UPDATE]: updateArray,
