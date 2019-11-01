@@ -1,21 +1,15 @@
+import { filterAndSortDb } from '../../../common/models/model-table';
+import { applyPatchOperations, isPatchOperations } from '../../../common/utils/api-utils';
+
+import { merge, objectValues, wrapToArray } from '../../../common/utils/common';
+import serverLogger from '../../helpers/server-logger';
 /* eslint-disable no-unused-vars */
 import serverConfig from '../../server-config';
-import serverLogger from '../../helpers/server-logger';
 
-import {
-  objectValues,
-  merge,
-  wrapToArray,
-} from '../../../common/utils/common';
-import {
-  isPatchOperations,
-  applyPatchOperations,
-} from '../../../common/utils/api-utils';
-import { filterAndSortDb } from '../../../common/models/model-table';
-
-import CoreService from './CoreService';
+import CoreService, { SERVICE_OPTIONS } from './CoreService';
 
 export const MOCK_DBS = {};
+export const MOCK_DBS_VALUES = {};
 
 export default class CoreServiceMock extends CoreService {
   async getData() {
@@ -32,12 +26,15 @@ export default class CoreServiceMock extends CoreService {
      Пока выберем убийственный второй вариант
     */
     await this.initService();
+    await this.initService();
     const mockDBName = this.getServiceName();
     return MOCK_DBS[mockDBName];
   }
 
   async getValues() {
-    return objectValues(await this.getData());
+    await this.initService();
+    const mockDBName = this.getServiceName();
+    return MOCK_DBS_VALUES[mockDBName] || objectValues(MOCK_DBS[mockDBName] || {});
   }
 
   // ======================================================
@@ -51,20 +48,30 @@ export default class CoreServiceMock extends CoreService {
     MOCK_DBS[mockDBName] = {};
     if (serverConfig.server.features.mocking.useMocks && serverConfig.server.features.mocking.useMocksInitData) {
       merge(MOCK_DBS[mockDBName], data);
+
+      if (serverConfig.server.features.mocking.useReservedObjectValues) {
+        merge(MOCK_DBS_VALUES[mockDBName], objectValues(data));
+      }
     }
   }
 
   // ======================================================
   // CRUD
   // ======================================================
-  async innerFindRecords(query, searchFieldObjects, options = undefined, withPagination = false) {
+  async innerFindRecords(query, searchFieldObjects, options = {}, withPagination = false) {
     serverLogger.log('filterAndSortDb: ', query, searchFieldObjects, options, withPagination);
-    const tableResponseWithPagination = filterAndSortDb(await this.getData(), query, searchFieldObjects);
-    tableResponseWithPagination.records = await this.serializeRecords(
-      tableResponseWithPagination.records,
-      this.OPERATION_TYPE.FIND,
-      options,
-    );
+
+    const allValues = await this.getValues();
+    const isGetAll = !query && (!searchFieldObjects || searchFieldObjects.length === 0);
+
+    const tableResponseWithPagination = filterAndSortDb(allValues, query, searchFieldObjects, isGetAll);
+    if (!options[SERVICE_OPTIONS.WITHOUT_SERIALIZE_DATA]) {
+      tableResponseWithPagination.records = await this.serializeRecords(
+        tableResponseWithPagination.records,
+        this.OPERATION_TYPE.FIND,
+        options,
+      );
+    }
 
     return withPagination
       ? tableResponseWithPagination

@@ -192,68 +192,83 @@ function wrapToStrings(array) {
     : array;
 }
 
-export function filterAndSortDb(mockDb, query, searchFieldObjects = []) {
-  const {
-    filters,
-  } = query || {};
+export function filterAndSortDb(mockDb, query, searchFieldObjects = [], isGetAllNotMutable = false) {
+  let result;
+  let total;
 
   const meta = getMeta(query);
-  const {
-    search,
-    sortBy,
-    sortDesc,
-    itemsPerPage,
-    startPage,
-  } = meta;
 
-  let result = Array.isArray(mockDb)
-    ? [...mockDb]
-    : objectValues(mockDb);
+  if (
+    // (!query || Object.keys(query))
+    // && (!searchFieldObjects || searchFieldObjects.length === 0)
+    isGetAllNotMutable
+  ) {
+    result = Array.isArray(mockDb)
+      ? mockDb // !!! WARNING - NOT MUTABLE - это для перформанса больших баз
+      : objectValues(mockDb);
+    total = result.length;
+  } else {
+    const {
+      filters,
+    } = query || {};
 
-  // filters
-  if (filters) {
-    result = result.filter((record) =>
-      Object.keys(filters).every((filterKey) =>
-        // из фильтра мы всегда достаем string (не число), поэтому массив должен быть на стринг значениях
-        includes(
-          wrapToStrings(filters[filterKey]),
-          wrapToStrings(record[filterKey]),
-          false,
-          true,
-        )));
+    const {
+      search,
+      sortBy,
+      sortDesc,
+      itemsPerPage,
+      startPage,
+    } = meta;
+
+    result = Array.isArray(mockDb)
+      ? [...mockDb]
+      : objectValues(mockDb);
+
+    // filters
+    if (filters) {
+      result = result.filter((record) =>
+        Object.keys(filters).every((filterKey) =>
+          // из фильтра мы всегда достаем string (не число), поэтому массив должен быть на стринг значениях
+          includes(
+            wrapToStrings(filters[filterKey]),
+            wrapToStrings(record[filterKey]),
+            false,
+            true,
+          )));
+    }
+
+    // search
+    if (search && searchFieldObjects.length > 0) {
+      result = result.filter((object) =>
+        searchFieldObjects.some((searchField) => {
+          const {
+            field,
+            searchDataType,
+            searchMatchType,
+          } = createSearchFieldObject(searchField);
+          return searchInValue(object[field], search, searchMatchType, searchDataType);
+        }));
+    }
+
+    // sorting
+    if (sortBy) {
+      result.sort((objectA, objectB) => {
+        const fieldA = objectA[sortBy];
+        const fieldB = objectB[sortBy];
+        return (sortDesc ? -1 : 1) * (
+          fieldA > fieldB
+            ? 1
+            : fieldA < fieldB
+              ? -1
+              : 0
+        );
+      });
+    }
+
+    // pagination
+    total = result.length;
+    result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
   }
-
-  // search
-  if (search && searchFieldObjects.length > 0) {
-    result = result.filter((object) =>
-      searchFieldObjects.some((searchField) => {
-        const {
-          field,
-          searchDataType,
-          searchMatchType,
-        } = createSearchFieldObject(searchField);
-        return searchInValue(object[field], search, searchMatchType, searchDataType);
-      }));
-  }
-
-  // sorting
-  if (sortBy) {
-    result.sort((objectA, objectB) => {
-      const fieldA = objectA[sortBy];
-      const fieldB = objectB[sortBy];
-      return (sortDesc ? -1 : 1) * (
-        fieldA > fieldB
-          ? 1
-          : fieldA < fieldB
-            ? -1
-            : 0
-      );
-    });
-  }
-
-  // pagination
-  const total = result.length;
-  result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
 
   // todo @ANKU @LOW - filters обратно не возвращаются - а надо?
   return createTableResponse(result, meta, total);

@@ -460,6 +460,10 @@ module.exports = {
         enable: isTrue(APP_MOCKS) || isTrue(USE_MOCKS),
         useMocks: isTrue(USE_MOCKS),
         useMocksInitData: isTrue(USE_MOCKS),
+        /**
+         * в качестве перформанса делаем слепок objectValues - увеличиваем потребление оперативки, зато придаем скорости
+         */
+        useReservedObjectValues: true,
         apiPrefix: FRONT_UI_SERVER_API_PREFIX,
         cookieEnableMocking: 'app-mocking',
         urlParamForEnableMocking: 'mock',
