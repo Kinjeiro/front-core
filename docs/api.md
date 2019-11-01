@@ -2645,7 +2645,8 @@ Returns **(void | any)**
 
 Создается в config/utils/create-config.js:
 
-Если в serverConfig.server.endpointServices[serviceName] нету используется по умолчанию serverConfig.server.endpointServices.middlewareApiService
+Если в serverConfig.server.endpointServices[serviceName] нету используется по умолчанию
+serverConfig.server.endpointServices.middlewareApiService
 
 protocol: string
 host: string
@@ -2701,7 +2702,8 @@ Returns **[Promise][296]&lt;void>**
 
 ## bulkOperations
 
-This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware for every document use create() instead.
+This function does not trigger any middleware, not save() nor update(). If you need to trigger save() middleware
+for every document use create() instead.
 
 **Parameters**
 
