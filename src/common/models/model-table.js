@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import {
   objectValues,
   includes,
+  wrapToArray,
 } from '../utils/common';
 import { parseUrlParameters } from '../utils/uri-utils';
 
@@ -187,9 +188,8 @@ export function createTableResponse(records, meta, total) {
 }
 
 function wrapToStrings(array) {
-  return array
-    ? array.map((value) => (typeof value !== 'undefined' && value !== null ? `${value}` : value))
-    : array;
+  return wrapToArray(array)
+    .map((value) => (typeof value !== 'undefined' && value !== null ? `${value}` : value));
 }
 
 export function filterAndSortDb(mockDb, query, searchFieldObjects = [], isGetAllNotMutable = false) {

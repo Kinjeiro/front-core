@@ -62,7 +62,7 @@ export default class CoreServiceMock extends CoreService {
     serverLogger.log('filterAndSortDb: ', query, searchFieldObjects, options, withPagination);
 
     const allValues = await this.getValues();
-    const isGetAll = !query && (!searchFieldObjects || searchFieldObjects.length === 0);
+    const isGetAll = (!query || Object.keys(query).length === 0) && (!searchFieldObjects || searchFieldObjects.length === 0);
 
     const tableResponseWithPagination = filterAndSortDb(allValues, query, searchFieldObjects, isGetAll);
     if (!options[SERVICE_OPTIONS.WITHOUT_SERIALIZE_DATA]) {
