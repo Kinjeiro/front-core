@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.9.16 | Documentation</title>
+  <title>@reagentum/front-core 1.9.17 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.9.16</code></div>
+          <div class='mb1'><code>1.9.17</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -640,6 +640,16 @@
                   href='#meta_prop'
                   class="">
                   META_PROP
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#filterandsortdb'
+                  class="">
+                  filterAndSortDb
                   
                 </a>
                 
@@ -3709,7 +3719,7 @@
 
   <p>В зависимости есть ли нужный api:</p>
 <ul>
-<li>apiFindRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)</li>
+<li>apiFindRecords(newMeta, newFilters) -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)</li>
 <li>apiUpdateRecord -> actionEditRecord(tableUuid, recordId, patchOperations)</li>
 <li>apiBulkChangeStatus -> actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)</li>
 </ul>
@@ -3728,9 +3738,11 @@
 <p>actionClearRecordSelection(tableUuid)</p>
 </li>
 </ul>
+<p>TYPES - типа который будут посылаться при событиях
+localDataList - лист объектов или (globalState) => лист объектов</p>
 
 
-  <div class='pre p1 fill-light mt0'>getBindActions(api: any, TYPES: any)</div>
+  <div class='pre p1 fill-light mt0'>getBindActions(api: any, TYPES: any, localDataList: any)</div>
   
   
 
@@ -3758,6 +3770,15 @@
           <div>
             <span class='code bold'>TYPES</span> <code class='quiet'>(any
             = <code>this.getTypes(this.getPrefix())</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>localDataList</span> <code class='quiet'>(any
+            = <code>undefined</code>)</code>
 	    
           </div>
           
@@ -6487,6 +6508,112 @@ moduleToRoutePrefixMap: {}
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='filterandsortdb'>
+      filterAndSortDb
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>filterAndSortDb(mockDb: any, query: any, searchFieldObjects: any, withPagination: any, isGetAllNotMutable: any): {records, meta}</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mockDb</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>query</span> <code class='quiet'>(any)</code>
+	    search
+sortBy
+sortDesc
+itemsPerPage
+если false - отменяет разбивку на страницы - выдает все разультаты
+startPage
+itemsPerPage
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>searchFieldObjects</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>withPagination</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>isGetAllNotMutable</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{records, meta}</code>:
+        
+
+      
+    
   
 
   
