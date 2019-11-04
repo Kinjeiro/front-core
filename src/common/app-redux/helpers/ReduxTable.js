@@ -7,6 +7,7 @@ import {
 
 import {
   deepEquals,
+  executeVariable,
   merge,
 } from '../../utils/common';
 import {
@@ -15,7 +16,9 @@ import {
 } from '../../utils/uri-utils';
 import { applyPatchOperations } from '../../utils/api-utils';
 import {
+  createTableResponse,
   DEFAULT_META,
+  filterAndSortDb,
   getMeta,
 } from '../../models/model-table';
 import { cutContextPath } from '../../helpers/app-urls';
@@ -80,12 +83,22 @@ export default class ReduxTable extends ReduxUni {
     };
   }
 
+  async defaultFindInLocalList(newMeta, newFilters, localList) {
+    return filterAndSortDb(
+      localList,
+      {
+        ...newMeta,
+        filters: newFilters,
+      },
+    );
+  }
+
   // ======================================================
   // ACTIONS
   // ======================================================
   /**
    В зависимости есть ли нужный api:
-   - apiFindRecords -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
+   - apiFindRecords(newMeta, newFilters) -> actionLoadRecords(tableUuid, meta = undefined, filters = undefined, forceUpdate = false)
    - apiUpdateRecord -> actionEditRecord(tableUuid, recordId, patchOperations)
    - apiBulkChangeStatus -> actionBulkChangeStatus(tableUuid, meta, selectedIds, isSelectedAll, newStatus, oldStatus)
 
@@ -95,8 +108,11 @@ export default class ReduxTable extends ReduxUni {
    - actionChangeRecordsSelected(tableUuid, recordIds, selected)
    - actionChangeRecordsSelectedAll(tableUuid, isSelectedAll)
    - actionClearRecordSelection(tableUuid)
+
+   TYPES - типа который будут посылаться при событиях
+   localDataList - лист объектов или (globalState) => лист объектов
    */
-  getBindActions(api = {}, TYPES = this.getTypes(this.getPrefix())) {
+  getBindActions(api = {}, TYPES = this.getTypes(this.getPrefix()), localDataList = undefined) {
     const {
       /**
        * апи который возвращает { meta, records }, либо массив, когда мультипейджинг не нужен
@@ -146,7 +162,7 @@ export default class ReduxTable extends ReduxUni {
       },
     };
 
-    if (apiFindRecords || apiLoadRecords) {
+    if (apiFindRecords || apiLoadRecords || localDataList) {
       const initialMeta = this.getInitialState().meta;
 
       /**
@@ -175,13 +191,14 @@ export default class ReduxTable extends ReduxUni {
         //   payload: apiFindRecords(tableUuid, meta, filters),
         // };
         return (dispatch, getState) => {
-          let state = this.getSliceState(getState(), tableUuid);
-          if (!state) {
+          const globalState = getState();
+          let stateTable = this.getSliceState(globalState, tableUuid);
+          if (!stateTable) {
             logger.debug(`State for tableUuid "${tableUuid}" doesn't found.`);
             // eslint-disable-next-line no-param-reassign
             forceUpdate = true;
             // eslint-disable-next-line no-param-reassign
-            state = {
+            stateTable = {
               actionLoadRecordsStatus: {},
               meta: initialMeta,
               filters: {},
@@ -192,7 +209,7 @@ export default class ReduxTable extends ReduxUni {
             actionLoadRecordsStatus,
             meta: currentMeta,
             filters: currentFilters,
-          } = state;
+          } = stateTable;
 
           let newMeta = (meta === null || meta === false)
             ? initialMeta
@@ -232,7 +249,13 @@ export default class ReduxTable extends ReduxUni {
             }
 
             if (syncWithUrlParameters) {
-              const currentUrlQuery = parseUrlParameters(location.search);
+              // todo @ANKU @LOW - переделать чтобы забирать location.search из globalState
+              const {
+                search,
+                pathname,
+              } = location;
+
+              const currentUrlQuery = parseUrlParameters(search);
               // обновляем location только если что-то поменялось
               if (
                 !deepEquals(newFilters, currentUrlQuery.filters || {})
@@ -250,11 +273,19 @@ export default class ReduxTable extends ReduxUni {
                 dispatch(
                   (isReplaceLocation ? replaceLocation : push)({
                     // ...location,
-                    pathname: cutContextPath(location.pathname),
+                    pathname: cutContextPath(pathname),
                     search: `?${formatUrlParameters(queryFinal)}`,
                   }),
                 );
               }
+            }
+
+            const apiFinalRecords = apiFindRecords
+              || apiLoadRecords
+              || (localDataList && this.defaultFindInLocalList);
+
+            if (!apiFinalRecords) {
+              throw new Error(`Для таблицы ${tableUuid} не указали apiFinalRecords или localDataList`);
             }
 
             return dispatch({
@@ -262,15 +293,14 @@ export default class ReduxTable extends ReduxUni {
               meta: newMeta,
               filters: newFilters,
               types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
-              payload: (apiFindRecords || apiLoadRecords)(newMeta, newFilters)
+              payload: apiFinalRecords(
+                newMeta,
+                newFilters,
+                executeVariable(localDataList, undefined, globalState),
+              )
                 .then((response) => {
                   if (Array.isArray(response)) {
-                    return {
-                      meta: {
-                        total: response.length,
-                      },
-                      records: response,
-                    };
+                    return createTableResponse(response, newMeta, response.length);
                   }
                   return response;
                 }),

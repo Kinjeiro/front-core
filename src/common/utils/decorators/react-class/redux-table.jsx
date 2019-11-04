@@ -190,6 +190,7 @@ export default function reduxTableDecorator(
         const isFailed = actionLoadRecordsStatus
           && actionLoadRecordsStatus.isFailed
           && !this.props.table.actionLoadRecordsStatus.isFailed;
+
         const oldTableId = this.getTableId();
         const newTableId = this.getTableId(newProps);
         if (newTableId !== oldTableId) {

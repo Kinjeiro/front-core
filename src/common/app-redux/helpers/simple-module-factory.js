@@ -49,7 +49,7 @@ export default function simpleModuleFactory(
   // ======================================================
   // ACTION CREATORS
   // ======================================================
-  function getBindActions(api) {
+  function getBindActions(api, ...other) {
     return {
       actionModuleItemInit(entityId, data = undefined) {
         return {
@@ -71,7 +71,7 @@ export default function simpleModuleFactory(
           type: TYPES.REMOVE,
         };
       },
-      ...(entityGetBindActions ? entityGetBindActions(api) : {}),
+      ...(entityGetBindActions ? entityGetBindActions(api, ...other) : {}),
     };
   }
 
