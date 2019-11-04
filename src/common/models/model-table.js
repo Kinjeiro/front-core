@@ -192,8 +192,25 @@ function wrapToStrings(array) {
     .map((value) => (typeof value !== 'undefined' && value !== null ? `${value}` : value));
 }
 
+/**
+ *
+ * @param mockDb
+ * @param query
+     search
+     sortBy
+     sortDesc
+     itemsPerPage
+        если false - отменяет разбивку на страницы - выдает все разультаты
+     startPage
+     itemsPerPage
+ *
+ * @param searchFieldObjects
+ * @param withPagination
+ * @param isGetAllNotMutable
+ * @return {{records, meta}}
+ */
 export function filterAndSortDb(
-  mockDb,
+  mockDb = [],
   query,
   searchFieldObjects = [],
   withPagination = false,
@@ -273,7 +290,8 @@ export function filterAndSortDb(
 
     total = result.length;
 
-    if (withPagination) {
+    // itemsPerPage = false - отменяет разбивку на страницы - выдает все разультаты
+    if (withPagination && (itemsPerPage !== false)) {
       // pagination
       result = result.slice(startPage * itemsPerPage, (startPage + 1) * itemsPerPage);
     }
