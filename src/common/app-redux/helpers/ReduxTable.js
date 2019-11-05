@@ -110,7 +110,7 @@ export default class ReduxTable extends ReduxUni {
    - actionClearRecordSelection(tableUuid)
 
    TYPES - типа который будут посылаться при событиях
-   localDataList - лист объектов или (globalState) => лист объектов
+   localDataList - лист объектов или (globalState, newMeta, newFilters) => лист объектов
    */
   getBindActions(api = {}, TYPES = this.getTypes(this.getPrefix()), localDataList = undefined) {
     const {
@@ -296,7 +296,7 @@ export default class ReduxTable extends ReduxUni {
               payload: apiFinalRecords(
                 newMeta,
                 newFilters,
-                executeVariable(localDataList, undefined, globalState),
+                executeVariable(localDataList, undefined, globalState, newMeta, newFilters),
               )
                 .then((response) => {
                   if (Array.isArray(response)) {
