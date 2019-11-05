@@ -102,18 +102,26 @@ export default function reduxTableDecorator(
           query = parseUrlParameters(props.location.search, filterNormalizers);
         }
 
-        const tableIdFinal = tableIdFromProps || executeVariable(initFiltersFromProps, null, props);
-        const table = getTableInfo(globalState, tableIdFinal);
-
         const projectInitMeta = executeVariable(initMetaFromProps || initMeta, {}, props);
         const projectInitFilters = executeVariable(initFiltersFromProps || initFilters, {}, props);
 
-        return {
-          syncWithUrlParameters,
-          table,
+        const propsFinal = {
+          tableId: undefined,
+          table: undefined,
+
           initMeta: getMeta(query, projectInitMeta),
           initFilters: query ? merge({}, projectInitFilters, query.filters) : projectInitFilters,
+
+          syncWithUrlParameters,
         };
+
+        const tableIdFinal = executeVariable(tableIdFromProps || tableId, null, propsFinal);
+        const table = getTableInfo(globalState, tableIdFinal);
+
+        propsFinal.tableId = tableIdFinal;
+        propsFinal.table = table;
+
+        return propsFinal;
       },
       {
         actionModuleItemInit,
@@ -127,6 +135,7 @@ export default function reduxTableDecorator(
     class ReduxTableExtendedComponent extends Component {
       static propTypes = {
         table: TABLE_PROP_TYPE,
+        tableId: PropTypes.string,
         initMeta: META_PROP,
         initFilters: PropTypes.object,
         syncWithUrlParameters: PropTypes.bool,
@@ -225,7 +234,8 @@ export default function reduxTableDecorator(
       // UTILS
       // ======================================================
       getTableId(props = this.props) {
-        return executeVariable(tableId, null, props);
+        // return executeVariable(props.tableId, null, props);
+        return props.tableId;
       }
 
       updateUrl(meta, newFilters = undefined) {
