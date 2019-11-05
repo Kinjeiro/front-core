@@ -251,12 +251,14 @@ export function filterAndSortDb(
     if (filters) {
       result = result.filter((record) =>
         Object.keys(filters).every((filterKey) =>
-          // из фильтра мы всегда достаем string (не число), поэтому массив должен быть на стринг значениях
           includes(
+            // из фильтра мы всегда достаем string (не число), поэтому массив должен быть на стринг значениях
             wrapToStrings(filters[filterKey]),
             wrapToStrings(record[filterKey]),
             false,
-            true,
+            // todo @ANKU @CRIT @MAIN - подумать над форматом как каждому фильтру задавать включение
+            // true,
+            false, // достаточно одного вхождения
           )));
     }
 
