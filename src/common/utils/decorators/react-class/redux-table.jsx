@@ -84,6 +84,12 @@ export default function reduxTableDecorator(
   return (ReactComponentClass) => {
     @connect(
       (globalState, props) => {
+        const {
+          tableId: tableIdFromProps,
+          initMeta: initMetaFromProps,
+          initFilters: initFiltersFromProps,
+        } = props;
+
         let query;
         if (syncWithUrlParameters) {
           const filterNormalizers = urlFilterValueNormalizers
@@ -96,11 +102,11 @@ export default function reduxTableDecorator(
           query = parseUrlParameters(props.location.search, filterNormalizers);
         }
 
-        const tableIdFinal = executeVariable(tableId, null, props);
+        const tableIdFinal = tableIdFromProps || executeVariable(initFiltersFromProps, null, props);
         const table = getTableInfo(globalState, tableIdFinal);
 
-        const projectInitMeta = executeVariable(initMeta, {}, props);
-        const projectInitFilters = executeVariable(initFilters, {}, props);
+        const projectInitMeta = executeVariable(initMetaFromProps || initMeta, {}, props);
+        const projectInitFilters = executeVariable(initFiltersFromProps || initFilters, {}, props);
 
         return {
           syncWithUrlParameters,
