@@ -10,6 +10,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('FormLayout', () => require('./components/Form/FormLayout').default);
   COMPONENTS_BASE.replace('Field', () => require('./components/Field/CoreField').default);
   COMPONENTS_BASE.replace('FieldLayout', () => require('./components/Field/FieldLayout').default);
+  COMPONENTS_BASE.replace('FieldsetLayout', () => require('./components/Field/FieldsetLayout').default);
 
   // ======================================================
   // FORM FIELDS

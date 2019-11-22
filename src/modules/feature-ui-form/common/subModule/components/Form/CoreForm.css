@@ -1,6 +1,6 @@
 .CoreForm {
     &__grouping {
-        .FieldLayout__control {
+        .FieldsetLayout__content {
             display: flex;
             justify-content: space-between;
         }

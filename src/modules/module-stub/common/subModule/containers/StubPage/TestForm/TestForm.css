@@ -1,5 +1,5 @@
 .TestForm {
-    .addressGroup {
+    .addressGroup > .FieldsetLayout__content {
         flex-direction: column;
     }
 }

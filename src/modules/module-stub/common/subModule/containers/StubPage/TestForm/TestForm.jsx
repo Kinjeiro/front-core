@@ -560,6 +560,7 @@ export default class TestForm extends PureComponent {
       {
         type: FIELD_TYPES.GROUPING,
         className: 'addressGroup',
+        label: 'АДРЕС',
         nodeBefore: (
           <h2>Заполнение адресс</h2>
         ),

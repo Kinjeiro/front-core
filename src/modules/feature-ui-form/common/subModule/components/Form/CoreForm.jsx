@@ -41,7 +41,8 @@ const {
   ActionStatus,
   Button,
   Field,
-  FieldLayout,
+  // FieldLayout,
+  FieldsetLayout,
   ErrorBoundary,
 } = getComponents();
 
@@ -565,15 +566,15 @@ export default class CoreForm extends Component {
     } = groupingField;
 
     return (
-      <FieldLayout
+      <FieldsetLayout
         key={ name }
-        { ...pick(otherProps, Object.keys(FieldLayout.propTypes)) }
+        { ...pick(otherProps, Object.keys(FieldsetLayout.propTypes)) }
         className={ `CoreForm__grouping ${name} ${className || ''}` }
       >
         { nodeBefore }
         { innerFieldComponents }
         { nodeAfter }
-      </FieldLayout>
+      </FieldsetLayout>
     );
   }
 
