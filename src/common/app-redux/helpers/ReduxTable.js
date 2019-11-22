@@ -83,13 +83,14 @@ export default class ReduxTable extends ReduxUni {
     };
   }
 
-  async defaultFindInLocalList(newMeta, newFilters, localList) {
+  async defaultFindInLocalList(newMeta, newFilters, localList, searchFieldObjects) {
     return filterAndSortDb(
       localList,
       {
         ...newMeta,
         filters: newFilters,
       },
+      searchFieldObjects,
     );
   }
 
@@ -112,7 +113,11 @@ export default class ReduxTable extends ReduxUni {
    TYPES - типа который будут посылаться при событиях
    localDataList - лист объектов или (globalState, newMeta, newFilters) => лист объектов
    */
-  getBindActions(api = {}, TYPES = this.getTypes(this.getPrefix()), localDataList = undefined) {
+  getBindActions(
+    api = {},
+    TYPES = this.getTypes(this.getPrefix()),
+    localDataList = undefined,
+  ) {
     const {
       /**
        * апи который возвращает { meta, records }, либо массив, когда мультипейджинг не нужен
@@ -182,6 +187,7 @@ export default class ReduxTable extends ReduxUni {
         forceUpdate = false,
         isReplaceLocation = false,
         syncWithUrlParameters = false,
+        searchFieldObjects = undefined,
       ) => {
         // return {
         //   types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
@@ -297,6 +303,7 @@ export default class ReduxTable extends ReduxUni {
                 newMeta,
                 newFilters,
                 executeVariable(localDataList, undefined, globalState, newMeta, newFilters),
+                searchFieldObjects,
               )
                 .then((response) => {
                   if (Array.isArray(response)) {
