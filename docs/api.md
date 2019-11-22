@@ -393,7 +393,7 @@ Returns **any** string || (reduxStore, i18n) => string
 -   actionClearRecordSelection(tableUuid)
 
 TYPES - типа который будут посылаться при событиях
-localDataList - лист объектов или (globalState) => лист объектов
+localDataList - лист объектов или (globalState, newMeta, newFilters) => лист объектов
 
 **Parameters**
 
@@ -429,6 +429,7 @@ localDataList - лист объектов или (globalState) => лист об�
 -   `forceUpdate`  
 -   `isReplaceLocation`  
 -   `syncWithUrlParameters`  синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
+-   `searchFieldObjects`   (optional, default `undefined`)
 
 Returns **function (any, any)** 
 
