@@ -156,3 +156,10 @@ export const PUBLIC_EDITABLE_ATTRS = [
 ];
 
 export default USER_PROP_TYPE;
+
+export function createUser(data) {
+  return {
+    ...USER_DEFAULT_VALUES,
+    ...data,
+  };
+}
