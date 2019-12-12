@@ -174,8 +174,10 @@ export default class SelectCore extends PureComponent {
       fieldLabel,
     } = props;
 
+    const searchTermLower = searchTerm.toLowerCase();
+
     return searchTerm
-      ? records.filter((record) => record[fieldLabel].indexOf(searchTerm) >= 0)
+      ? records.filter((record) => `${record[fieldLabel] || ''}`.toLowerCase().indexOf(searchTermLower) >= 0)
       : records;
   }
   parseToOptionMeta(record, index, visibilityRecords) {
