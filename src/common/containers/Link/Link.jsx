@@ -7,6 +7,7 @@ import { Link as RouterLink } from 'react-router';
 // import { cutContextPath } from '../../helpers/app-urls';
 
 import getComponents from '../../get-components';
+import { isAbsoluteUrl } from '../../utils/uri-utils';
 
 const { AuthCheckWrapper } = getComponents();
 
@@ -40,6 +41,7 @@ export default class Link extends Component {
       permissions,
       to,
       className,
+      href,
       ...otherProps
     } = this.props;
 
@@ -52,6 +54,14 @@ export default class Link extends Component {
     //     }
     //     : to;
 
+    let toFinal = to;
+    let hrefFinal = href;
+
+    if (isAbsoluteUrl(to)) {
+      toFinal = undefined;
+      hrefFinal = to;
+    }
+
     return (
       <AuthCheckWrapper
         checkAuth={ checkAuth }
@@ -60,7 +70,8 @@ export default class Link extends Component {
       >
         <RouterLink
           { ...otherProps }
-          to={ to }
+          to={ toFinal }
+          href={ hrefFinal }
           className={ `Link ${className || ''}` }
         >
           { children }
