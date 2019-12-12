@@ -337,12 +337,15 @@ export default function reduxTableDecorator(
           );
         }
 
+        const tableId = this.getTableId();
+
         // убираем, ибо нужно использовать onUpdateTableFilters и onUpdateTableMeta вместо. Так чтобы не учитывать там всегда флаг синхронизации с урл параметрами
         return (
           <ReactComponentClass
+            key={ tableId }
             { ...this.props }
 
-            tableId={ this.getTableId() }
+            tableId={ tableId }
             getTableId={ this.getTableId }
 
             actionLoadRecords={ this.handleWrapActionLoadRecords }

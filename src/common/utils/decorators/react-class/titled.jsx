@@ -88,6 +88,7 @@ export default function titledDecorator(
       render() {
         return (
           <ReactComponentClass
+            key={ id }
             { ...this.props }
           />
         );
