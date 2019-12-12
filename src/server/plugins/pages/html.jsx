@@ -3,6 +3,7 @@ import Boom from 'boom';
 import { RouterContext } from 'react-router';
 import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
+import lodashSet from 'lodash/set';
 // import { readFileSync } from 'jsonfile';
 
 // init into \src\server\plugins\i18n.js
@@ -93,6 +94,11 @@ export default function createRenderHandler(
         }
 
         const state = store.getState();
+        // todo @ANKU @LOW - куда-нибудь пихнуть удобнее?
+        if (state && state.userInfo && state.userInfo.userData) {
+          // обнуляем инфу о пароле
+          lodashSet(state, 'userInfo.userData.password', '');
+        }
 
         // ======================================================
         // i18n part
