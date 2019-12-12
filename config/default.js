@@ -173,7 +173,7 @@ module.exports = {
     // ======================================================
     features: {
       auth: {
-        globalAuth: true,
+        globalAuth: true, // todo @ANKU @LOW - перенести это в server
         // если сессия протухает, то над компонентами появляется модальное окно для входа в систему
         reLoginModalForm: true,
         // permissions - настройки прав, если permissions: false - отключает проверку прав
@@ -595,7 +595,7 @@ module.exports = {
       /**
        * Сервис для отсылки смсок
        */
-      serviceSms: null,
+      serviceSms: null
     }
 
     // рестовый сервисов не должно быть, для единообразия все запросы которые не проксируются через apiConfig.serviceUrl

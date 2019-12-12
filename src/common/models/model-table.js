@@ -74,12 +74,59 @@ export const DEFAULT_META = {
   startPage: 0,
   itemsPerPage: 20,
   total: undefined,
+
+  groupBy: null,
 };
 
 export function createMeta(meta) {
   return meta;
 }
 
+/**
+ Формат ЗАПРОСА от фронта к бэку:
+
+ GET http://dev.reagentum.ru:8098/api/projects?search=&sortBy=releaseDate&sortDesc=false&startPage=0&itemsPerPage=20&filters%5BprojectType%5D=START&filters%5Bsupervisor%5D=1&filters%5Bsupervisor%5D=2&filters%5BproductIds%5D=3&filters%5BproductIds%5D=4&groupBy=name
+
+ Вот так это выглядит
+ search:
+ sortBy: releaseDate
+ sortDesc: false
+ startPage: 0
+ itemsPerPage: 20
+ filters[projectType]: START
+ filters[supervisor]: 1
+ filters[supervisor]: 2
+ filters[productIds]: 3
+ filters[productIds]: 4
+ groupBy: name
+
+ Формат ОТВЕТА от back на front
+ {
+  "meta":{
+    "search":"",
+    "sortBy":"releaseDate",
+    "sortDesc":false,
+    "startPage":0,
+    "itemsPerPage":20,
+    "groupBy": "name",
+    "total":0
+  },
+  "records":[
+    {
+       ...
+    },
+    ...
+  ],
+}
+
+ В records и писать ваш иерархичный лист сущностей
+ В принципе можете не группировать ответ, главное чтобы группировка учитывалась при пагинации и сортировки, а мы на фронте уже сгруппируем
+
+ *
+ * @param query
+ * @param defaultMeta
+ * @return {{search: (*|string), sortBy: (<T, TSort>(collection: Array<T>, callback?: _.ListIterator<T, TSort>, thisArg?: any) => T[]) | (<T, TSort>(collection: _.List<T>, callback?: _.ListIterator<T, TSort>, thisArg?: any) => T[]) | (<T>(collection: Array<T>, pluckValue: string) => T[]) | (<T>(collection: _.List<T>, pluckValue: string) => T[]) | (<W, T>(collection: Array<T>, whereValue: W) => T[]) | (<W, T>(collection: _.List<T>, whereValue: W) => T[]) | (<TSort>(callback?: _.ListIterator<T, TSort>, thisArg?: any) => _.LoDashArrayWrapper<T>) | ((pluckValue: string) => _.LoDashArrayWrapper<T>) | (<W>(whereValue: W) => _.LoDashArrayWrapper<T>) | *, sortDesc: boolean, startPage: number, itemsPerPage: number, total: number, groupBy: (*|null)}}
+ */
 export function getMeta(query, defaultMeta = {}) {
   const queryFinal = parseUrlParameters(query);
 
@@ -106,6 +153,8 @@ export function getMeta(query, defaultMeta = {}) {
     total: queryFinal.total
       ? parseInt(queryFinal.total, 10)
       : defaultMeta.total,
+
+    groupBy: queryFinal.groupBy || defaultMeta.groupBy || DEFAULT_META.groupBy,
   };
 }
 

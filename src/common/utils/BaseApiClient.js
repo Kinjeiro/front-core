@@ -282,6 +282,7 @@ export default class BaseApiClientClass {
       url,
       method = 'get',
 
+      // todo @ANKU @CRIT @MAIN - почему не включен по умолчанию? сейчас идет пустой
       // customize
       // type = 'json',
       type,
@@ -363,6 +364,7 @@ export default class BaseApiClientClass {
         ),
       );
     }
+    // todo @ANKU @CRIT @MAIN - сделать настройку отключаемую, чтобы CORS
     request.set('X-Request-ID', generateId());
     Object.keys(headers).forEach((headerKey) => {
       request.set(headerKey, headers[headerKey]);
@@ -452,15 +454,18 @@ export default class BaseApiClientClass {
 
         if (requestOptions.retryWhenNotAuthErrorAttempts < this.apiClientOptions.retryWhenNotAuthErrorAttempts) {
           requestOptions.retryWhenNotAuthErrorAttempts += 1;
-          setTimeout(() => {
-            // возможно уже отработал refresh_token и пришли на клиент обновленные токены
-            this.proceedRequest({
-              ...requestOptions,
-              url: urlPath,
-            })
-              .then((result) => resolve(result))
-              .catch((result) => reject(result));
-          }, this.apiClientOptions.retryWhenNotAuthErrorTimeout);
+          setTimeout(
+            () => {
+              // возможно уже отработал refresh_token и пришли на клиент обновленные токены
+              this.proceedRequest({
+                ...requestOptions,
+                url: urlPath,
+              })
+                .then((result) => resolve(result))
+                .catch((result) => reject(result));
+            },
+            this.apiClientOptions.retryWhenNotAuthErrorTimeout,
+          );
         } else {
           reject(error);
         }

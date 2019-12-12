@@ -67,6 +67,7 @@ export default class ReduxTable extends ReduxUni {
       LOAD_RECORDS_FAIL: `${PREFIX}/LOAD_RECORDS_FAIL`,
       LOAD_RECORDS_SUCCESS: `${PREFIX}/LOAD_RECORDS_SUCCESS`,
 
+      // CHANGE_META_OR_FILTERS: `${PREFIX}/CHANGE_META_OR_FILTERS`,
       CLEAR_FILTERS: `${PREFIX}/CLEAR_FILTERS`,
 
       CHANGE_SELECTED: `${PREFIX}/CHANGE_SELECTED`,
@@ -165,6 +166,12 @@ export default class ReduxTable extends ReduxUni {
           type: TYPES.CLEAR_SELECTION,
         };
       },
+
+      // todo @ANKU @LOW - необходимо иногда изменять фильтры, без выполняния загрузки данных, quite режим
+      // actionChangeMetaOrFilters() {
+      //   return {
+      //   };
+      // },
     };
 
     if (apiFindRecords || apiLoadRecords || localDataList) {

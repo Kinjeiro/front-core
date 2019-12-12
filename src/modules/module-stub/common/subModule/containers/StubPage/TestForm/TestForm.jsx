@@ -494,6 +494,11 @@ export default class TestForm extends PureComponent {
       ...this.getListFields(),
       ...this.getCheckboxFields(),
       {
+        name: 'date',
+        label: 'date',
+        type: Form.FIELD_TYPES.DATE,
+      },
+      {
         name: 'datetime',
         label: 'datetime',
         type: Form.FIELD_TYPES.DATETIME,
