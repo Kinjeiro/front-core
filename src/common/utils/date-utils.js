@@ -7,6 +7,7 @@ import clientConfig from '../client-config';
 import i18n from './i18n-utils';
 
 export const FORMATS = {
+  JS_DATE: 'jsDate',
   ISO: 'iso',
   /**
    * @deprecated use MILLISECONDS or UNIX_TIMESTAMP_SECONDS
@@ -95,6 +96,8 @@ export function parseDate(date, outputFormat = undefined, inputFormat) {
       return momentDate.valueOf();
     case FORMATS.ISO:
       return momentDate.toISOString();
+    case FORMATS.JS_DATE:
+      return momentDate.toDate();
     // если не задан формат - возвращаем moment дату
     case null:
     case undefined:
@@ -134,6 +137,14 @@ export function getCurrentTime() {
 export function fromNow(date, format = 'days') {
   return moment().diff(moment(date), format);
 }
+
+export function getLastDayInMonth(date) {
+  const jsDate =  parseToSystem(date, FORMATS.JS_DATE);
+  jsDate.setMonth(jsDate.getMonth() + 1);
+  jsDate.setUTCDate(0);
+  return date;
+}
+
 
 export function compareDate(dateA, dateB, withoutTime = true) {
   const momentDateA = normalizeDate(dateA);
