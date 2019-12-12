@@ -835,6 +835,8 @@ export default class CoreField extends Component {
     //   return emptyValue;
     // }
 
+    let onChangeForCustom;
+
     switch (type) {
       case FIELD_TYPES.STRING:
       case FIELD_TYPES.NUMERIC:
@@ -942,6 +944,8 @@ export default class CoreField extends Component {
       // case TYPES.BINARY:
       //   // Attachment
       default:
+        onChangeForCustom = memoizeBind(this.handleChangeDefault, this, multipleIndex);
+
         return {
           value: controlValue,
           constraints,
@@ -949,7 +953,8 @@ export default class CoreField extends Component {
           onErrors: this.handleErrors,
           onWarnings: this.handleWarnings,
           ...controlPropsFinal,
-          onChange: memoizeBind(this.handleChangeDefault, this, multipleIndex),
+          onChange: onChangeForCustom,
+          onFieldChange: onChangeForCustom,
         };
     }
   }
