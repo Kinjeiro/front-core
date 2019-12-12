@@ -153,6 +153,24 @@ TODO
 ### Удалить node_modules
 - и заново сделать `npm i`
 
+### Cross origin - CORS
+К стандартным корсам необходимод добавить заголовки `X-CSRF-Token, X-Request-ID` либо отключить их в настройках
+```
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+  response.setHeader("Access-Control-Max-Age", "3600");
+  response.setHeader("Access-Control-Allow-Headers", "x-requested-with, X-CSRF-Token, X-Request-ID");
+```
+
+На java включается это с помощью
+```
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
+```
+
+разработчики могут отключить cors у себя в браузере, сделав такой ярлык:
+```
+  "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir="C:/Chrome dev session" --disable-web-security
+```
 
 ## Поддержка
 IE 11+
