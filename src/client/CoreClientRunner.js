@@ -76,8 +76,8 @@ export default class CoreClientRunner extends AbstractClientRunner {
   getRoutes(store, options = {}) {
     return require('../common/create-routes').default(
       store,
-      this.getProjectLayoutComponent(),
-      this.getIndexRoute(),
+      this.getProjectLayoutComponent(store, options),
+      this.getIndexRoute(store, options),
       {
         ...options,
         commonSubModules: this.getCommonSubModules(),

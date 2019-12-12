@@ -202,12 +202,12 @@ export default class AbstractClientRunner {
       : null;
   }
 
-  createStore(history, initialState = null) {
+  async createStore(history, initialState = null) {
     // перед тем как будут запрошены reducer (через require, чтобы раньше не подцепились) нужно инициализировать orm модели
     this.registerModels();
 
     return createStore(history, {
-      initialState: initialState || this.getInitialState(),
+      initialState: initialState || await this.getInitialState(),
       rootReducer: getRootReducer(this.getReducers()),
     });
   }
@@ -220,7 +220,7 @@ export default class AbstractClientRunner {
     }
   }
 
-  init() {
+  async init() {
     // ======================================================
     // COMPONENTS
     // ======================================================
@@ -231,7 +231,7 @@ export default class AbstractClientRunner {
     // CREATE STORE + HISTORY + ROUTES
     // ======================================================
     const routeHistory = this.createHistory();
-    this.store = this.createStore(routeHistory);
+    this.store = await this.createStore(routeHistory);
     this.history = syncHistoryWithStore(routeHistory, this.store);
     this.routes = this.getRoutes(this.store);
     this.api = this.getApi();
@@ -375,12 +375,12 @@ export default class AbstractClientRunner {
   // ======================================================
   // MAIN RUN
   // ======================================================
-  run() {
+  async run() {
     try {
       // ======================================================
       // INITIALIZATION
       // ======================================================
-      this.init();
+      await this.init();
       this.printDebugInfo();
 
 
