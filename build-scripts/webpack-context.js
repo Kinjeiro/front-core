@@ -75,8 +75,8 @@ const context = {
     limit: 10000,
     publicPath: hasContextRoot ? publicPath : undefined,
   },
-  isProduction: ENV.NODE_ENV === 'production',
-  isLocalhost: ENV.NODE_ENV === 'localhost',
+  isProduction: appConfig.common.app.isProduction,
+  isLocalhost: appConfig.common.app.isLocalhost,
 
   compileNodeModules: [
     // 'redux-logger'
