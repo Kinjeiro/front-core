@@ -1260,7 +1260,7 @@ Returns **({method, path, payload} | any)**
 
 **Meta**
 
--   **deprecated**: use MILLISECONDS or UNIX_TIMESTAMP_SECONDS
+-   **deprecated**: use TIMESTAMP_MILLISECONDS or UNIX_TIMESTAMP_SECONDS
 
 
 ## reduxSimpleFormDecorator
