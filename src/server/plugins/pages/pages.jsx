@@ -194,7 +194,7 @@ export function register(server, pluginOptions, next) {
       const memoryHistory = createMemoryHistory(location);
 
       // const store = createClientStore(memoryHistory, reduxGlobalState);
-      const store = clientRunner.createStore(memoryHistory, reduxGlobalState);
+      const store = await clientRunner.createStore(memoryHistory, reduxGlobalState);
       const history = syncHistoryWithStore(memoryHistory, store);
       // const routes = createProjectRoutes(store);
       const routes = clientRunner.getRoutes(store);
