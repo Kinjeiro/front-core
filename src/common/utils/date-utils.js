@@ -10,20 +10,20 @@ export const FORMATS = {
   JS_DATE: 'jsDate',
   ISO: 'iso',
   /**
-   * @deprecated use MILLISECONDS or UNIX_TIMESTAMP_SECONDS
+   * @deprecated use TIMESTAMP_MILLISECONDS or UNIX_TIMESTAMP_SECONDS
    */
-  TIMESTAMP: 'timestamp', // in milliseconds
-  MILLISECONDS: 'milliseconds', // in milliseconds (like as date.getTime())
+  TIMESTAMP: 'milliseconds', // in milliseconds
+  TIMESTAMP_MILLISECONDS: 'milliseconds', // in milliseconds (like as date.getTime())
   UNIX_TIMESTAMP_SECONDS: 'unixTimestamp', // in seconds
 };
 
 // todo @ANKU @LOW - брать из clientConfig
-export const SYSTEM_DATE_FORMAT =     clientConfig.common.features.date.systemDateFormat || FORMATS.MILLISECONDS;
-export const SYSTEM_DATETIME_FORMAT = clientConfig.common.features.date.systemDateTimeFormat || FORMATS.MILLISECONDS;
+export const SYSTEM_DATE_FORMAT =     clientConfig.common.features.date.systemDateFormat || FORMATS.TIMESTAMP_MILLISECONDS;
+export const SYSTEM_DATETIME_FORMAT = clientConfig.common.features.date.systemDateTimeFormat || FORMATS.TIMESTAMP_MILLISECONDS;
 export const DATE_FORMAT =            clientConfig.common.features.date.dateFormat || 'DD.MM.YYYY';
 export const DATETIME_FORMAT =        clientConfig.common.features.date.dateTimeFormat || 'DD.MM.YYYY HH:mm';
-export const SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || FORMATS.MILLISECONDS;
-export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeFormat || FORMATS.MILLISECONDS;
+export const SERVER_DATE_FORMAT =     clientConfig.common.features.date.serverDateFormat || FORMATS.TIMESTAMP_MILLISECONDS;
+export const SERVER_DATETIME_FORMAT = clientConfig.common.features.date.serverDateTimeFormat || FORMATS.TIMESTAMP_MILLISECONDS;
 
 export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT, FORMATS.ISO]) {
   let momentDate;
@@ -45,7 +45,7 @@ export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT
 
     inputFormats.some((inputFormat) => {
       let valueMoment;
-      if (inputFormat === FORMATS.ISO || inputFormat === FORMATS.MILLISECONDS || inputFormat === FORMATS.UNIX_TIMESTAMP_SECONDS) {
+      if (inputFormat === FORMATS.ISO || inputFormat === FORMATS.TIMESTAMP_MILLISECONDS || inputFormat === FORMATS.UNIX_TIMESTAMP_SECONDS) {
         valueMoment = moment(inputFormat === FORMATS.UNIX_TIMESTAMP_SECONDS ? valueTrimmed * 1000 : valueTrimmed);
       } else if (valueTrimmed.length === inputFormat.length) {
         // Проверяем, чтобы пользователь ввел полную строку даты без пробелов.
@@ -59,7 +59,7 @@ export function normalizeDate(date, inputFormats = [DATETIME_FORMAT, DATE_FORMAT
       return false;
     });
   } else if (typeof date === 'number') {
-    if (inputFormats === FORMATS.MILLISECONDS) {
+    if (inputFormats === FORMATS.TIMESTAMP_MILLISECONDS) {
       momentDate = moment(date);
     } else if (inputFormats === FORMATS.UNIX_TIMESTAMP_SECONDS) {
       momentDate = moment(date * 1000);
@@ -91,9 +91,11 @@ export function parseDate(date, outputFormat = undefined, inputFormat) {
   }
 
   switch (outputFormat) {
-    case FORMATS.MILLISECONDS:
+    case FORMATS.TIMESTAMP_MILLISECONDS:
     case 'x':
       return momentDate.valueOf();
+    case FORMATS.UNIX_TIMESTAMP_SECONDS:
+      return momentDate.valueOf() / 1000;
     case FORMATS.ISO:
       return momentDate.toISOString();
     case FORMATS.JS_DATE:
@@ -108,7 +110,7 @@ export function parseDate(date, outputFormat = undefined, inputFormat) {
 }
 
 export function formatDateToTimestamp(date, inputFormat) {
-  return parseDate(date, FORMATS.MILLISECONDS, inputFormat);
+  return parseDate(date, FORMATS.TIMESTAMP_MILLISECONDS, inputFormat);
 }
 export function formatDateToIso(date, inputFormat) {
   return parseDate(date, FORMATS.ISO, inputFormat);

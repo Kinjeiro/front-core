@@ -228,12 +228,12 @@ module.exports = {
       },
 
       date: {
-        systemDateFormat: 'timestamp',
-        systemDateTimeFormat: 'timestamp',
+        systemDateFormat: 'milliseconds',
+        systemDateTimeFormat: 'milliseconds',
         dateFormat: 'DD.MM.YYYY',
         dateTimeFormat: 'DD.MM.YYYY HH:mm',
-        serverDateFormat: 'timestamp',
-        serverDateTimeFormat: 'timestamp'
+        serverDateFormat: 'milliseconds',
+        serverDateTimeFormat: 'milliseconds'
       },
 
       i18n: {
