@@ -119,9 +119,9 @@ export default class CoreClientRunner extends AbstractClientRunner {
     };
   }
 
-  getInitialState() {
+  getInitialState(initialState) {
     // данные преходящие с серверного рендеринга, смотри \src\server\plugins\pages\index.html.ejs
-    return getStateFromPage();
+    return initialState || getStateFromPage();
   }
 
   // hotReloadListeners() {

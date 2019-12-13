@@ -171,8 +171,8 @@ export default class AbstractClientRunner {
     };
   }
 
-  getInitialState() {
-    return {};
+  getInitialState(initialState) {
+    return initialState || {};
   }
 
   // ======================================================
@@ -207,7 +207,7 @@ export default class AbstractClientRunner {
     this.registerModels();
 
     return createStore(history, {
-      initialState: initialState || await this.getInitialState(),
+      initialState: await this.getInitialState(initialState),
       rootReducer: getRootReducer(this.getReducers()),
     });
   }
@@ -222,21 +222,6 @@ export default class AbstractClientRunner {
 
   async init() {
     // ======================================================
-    // COMPONENTS
-    // ======================================================
-    // должны инициализироваться до роутев
-    this.initAllComponents(createComponentBase());
-
-    // ======================================================
-    // CREATE STORE + HISTORY + ROUTES
-    // ======================================================
-    const routeHistory = this.createHistory();
-    this.store = await this.createStore(routeHistory);
-    this.history = syncHistoryWithStore(routeHistory, this.store);
-    this.routes = this.getRoutes(this.store);
-    this.api = this.getApi();
-
-    // ======================================================
     // API CLIENT
     // (после store чтобы дать доступ к контекстным данным, к примеру текущему пользователю)
     // ======================================================
@@ -244,6 +229,29 @@ export default class AbstractClientRunner {
     initApiClientClass(ApiClientClass);
     const apiClient = this.getApiClient(clientConfig.common.apiClientEndpoint);
     initApiClient(apiClient);
+
+    this.api = this.getApi();
+
+
+    // ======================================================
+    // CREATE STORE + HISTORY + ROUTES
+    // ======================================================
+    const routeHistory = this.createHistory();
+    this.store = await this.createStore(routeHistory);
+    this.history = syncHistoryWithStore(routeHistory, this.store);
+
+
+    // ======================================================
+    // COMPONENTS
+    // ======================================================
+    // должны инициализироваться до роутев
+    this.initAllComponents(createComponentBase());
+
+
+    // ======================================================
+    // ROUTES
+    // ======================================================
+    this.routes = this.getRoutes(this.store);
   }
 
 
