@@ -15,3 +15,4 @@ minimizedPackage/
 
 src/
 docs/api/assets/fonts/
+package-lock.json
