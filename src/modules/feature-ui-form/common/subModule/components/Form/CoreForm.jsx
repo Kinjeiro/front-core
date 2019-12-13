@@ -134,7 +134,6 @@ export default class CoreForm extends Component {
     useForm: true,
     firstFocus: true,
     textDefaultFormErrorText: i18n('components.CoreForm.textDefaultFormErrorText'),
-    formData: {},
   };
 
   state = {
@@ -145,7 +144,9 @@ export default class CoreForm extends Component {
     touched: false,
     hasSendOnce: false,
     dependentFieldsHashes: {},
-    formDataInState: this.props.formData, // чтобы без редукса работать
+    formDataInState: typeof this.props.formData !== 'undefined'
+      ? this.props.formData // чтобы без редукса работать
+      : {},
   };
 
   domForm = null;
@@ -295,13 +296,13 @@ export default class CoreForm extends Component {
     );
   }
 
-  isManagedComponent() {
-    const {
-      onChangeField,
-      onUpdateForm,
-    } = this.props;
-    return onChangeField || onUpdateForm;
-  }
+  // isManagedComponent() {
+  //   const {
+  //     onChangeField,
+  //     onUpdateForm,
+  //   } = this.props;
+  //   return onChangeField || onUpdateForm;
+  // }
 
   @bind()
   getFormData() {
@@ -312,7 +313,8 @@ export default class CoreForm extends Component {
       formDataInState,
     } = this.state;
 
-    return this.isManagedComponent()
+    // return this.isManagedComponent()
+    return typeof formData !== 'undefined'
       ? formData // управляемый компонент, к примеру через редукс
       : formDataInState; // управляет собой сам
   }
@@ -349,35 +351,31 @@ export default class CoreForm extends Component {
       await onChange(fieldName, newValue);
     }
 
-    if (this.isManagedComponent()) {
-      // управляемый компонент
-      if (onChangeField) {
-        // const resultFormData = cloneDeep(formData);
-        const resultFormData = {};
-        // fieldName может быть составным: address.city
-        set(resultFormData, fieldName, newValue);
-        // todo @ANKU @LOW - может сделать createJsonPatchOperation
-        await onChangeField(resultFormData);
-      }
-      if (onUpdateForm) {
-        const resultFormData = cloneDeep(this.getFormData());
-        // fieldName может быть составным: address.city
-        set(resultFormData, fieldName, newValue);
-        await onUpdateForm(resultFormData);
-      }
-    } else {
-      // не управляемый компонент
-
+    // управляемый компонент
+    if (onChangeField) {
+      // const resultFormData = cloneDeep(formData);
+      const resultFormData = {};
+      // fieldName может быть составным: address.city
+      set(resultFormData, fieldName, newValue);
+      // todo @ANKU @LOW - может сделать createJsonPatchOperation
+      await onChangeField(resultFormData);
+    }
+    if (onUpdateForm) {
       const resultFormData = cloneDeep(this.getFormData());
       // fieldName может быть составным: address.city
       set(resultFormData, fieldName, newValue);
-
-      this.setState({
-        formDataInState: resultFormData,
-      });
+      await onUpdateForm(resultFormData);
     }
 
-    emitProcessing(
+    // не управляемый компонент
+    const resultFormData = cloneDeep(this.getFormData());
+    // fieldName может быть составным: address.city
+    set(resultFormData, fieldName, newValue);
+    this.setState({
+      formDataInState: resultFormData,
+    });
+
+    return emitProcessing(
       this.isValid(set({}, fieldName, newValue)),
       this,
     );
@@ -430,11 +428,9 @@ export default class CoreForm extends Component {
       await onCancel(prevData);
     }
 
-    if (!this.isManagedComponent()) {
-      this.setState({
-        formDataInState: {},
-      });
-    }
+    this.setState({
+      formDataInState: {},
+    });
   }
 
   // ======================================================
