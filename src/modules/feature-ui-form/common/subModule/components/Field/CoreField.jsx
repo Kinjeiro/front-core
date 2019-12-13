@@ -527,10 +527,8 @@ export default class CoreField extends Component {
     );
   }
 
-  handleChangeDate(multipleIndex, event, time) {
-    return event.target
-      ? this.handleChange(time, multipleIndex)
-      : this.handleChange(event, multipleIndex);
+  handleChangeDate(multipleIndex, date) {
+    return this.handleChange(date, multipleIndex);
   }
 
   handleChangeCheckbox(multipleIndex, valuesOrNull, selectedRecords, contextCheckbox) {
