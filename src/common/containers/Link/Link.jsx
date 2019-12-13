@@ -57,7 +57,7 @@ export default class Link extends Component {
     let toFinal = to;
     let hrefFinal = href;
 
-    if (isAbsoluteUrl(to)) {
+    if (to && isAbsoluteUrl(to)) {
       toFinal = undefined;
       hrefFinal = to;
     }
