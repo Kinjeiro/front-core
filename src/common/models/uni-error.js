@@ -165,7 +165,7 @@ export function createUniError(uniErrorData = {}) {
   uniError.uniMessage = uniError.clientErrorMessages[0]
     || uniError.clientErrorMessage
     || uniError.clientErrorTitle
-    || uniError.message
+    // || uniError.message
     || UNI_ERROR_DEFAULT_VALUE.uniMessage;
   uniError.uniMessages = uniError.clientErrorMessages && uniError.clientErrorMessages.length > 0
     ? uniError.clientErrorMessages

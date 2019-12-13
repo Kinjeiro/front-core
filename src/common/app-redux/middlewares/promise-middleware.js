@@ -84,7 +84,7 @@ const promiseMiddleware = ({ dispatch, getState }) => next => action => {
           isNoAuthError = uniError.isNotAuth;
         }
 
-        if (!errorIsAnswer && !isNoAuthError) {
+        if (!errorIsAnswer && !isNoAuthError && uniError.clientErrorMessages.length > 0) {
           Notifications.notify(uniError.clientErrorMessages);
         }
       });
