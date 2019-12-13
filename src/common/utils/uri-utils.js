@@ -220,7 +220,7 @@ export function joinPath(...paths) {
   if (typeof lastUrlParameters === 'object') {
     // url parameters
     lastPart = formatUrlParameters(lastUrlParameters, middlePart || '');
-  } else {
+  } else if (middlePart || lastUrlParameters) {
     lastPart = joinPathInner('/', middlePart, lastUrlParameters || '');
   }
 
