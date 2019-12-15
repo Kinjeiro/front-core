@@ -1,4 +1,5 @@
 // import lodashGet from 'lodash/get';
+// import lodashGet from 'lodash/get';
 //
 // export const getCookieValue = key => {
 //  /* eslint no-useless-escape: "off" */
@@ -9,7 +10,7 @@
 // };
 
 export function getCookie(name) {
-  const matches = document.cookie.match(new RegExp(
+  const matches = typeof document !== 'undefined' && document.cookie.match(new RegExp(
     `(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1')}=([^;]*)`,
   ));
   return matches ? decodeURIComponent(matches[1]) : undefined;
@@ -39,7 +40,9 @@ export function setCookie(name, value, options = {}) {
     }
   }
 
-  document.cookie = updatedCookie;
+  if (typeof document !== 'undefined') {
+    document.cookie = updatedCookie;
+  }
 }
 
 export function deleteCookie(name) {
