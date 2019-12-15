@@ -86,7 +86,8 @@ export default class SelectCore extends PureComponent {
       lastSearchMeta,
     } = this.state;
 
-    if (searchOnceOnMinCharacters && searchMinCharacters === 0) {
+    // if (searchOnceOnMinCharacters && searchMinCharacters === 0) {
+    if (searchMinCharacters === 0) {
       this.handleSearchInner(lastSearch, lastSearchMeta);
     }
   }
@@ -236,7 +237,7 @@ export default class SelectCore extends PureComponent {
         return [];
       }
 
-      let resultRecords = records;
+      let resultRecords = wrapToArray(records);
 
       if (!onSearch) {
         // кастомный внутренний серч, в противном случае поиск должен делаться в onSearch
@@ -572,6 +573,21 @@ export default class SelectCore extends PureComponent {
     }
   }
 
+  @bind()
+  handleBlur(...args) {
+    const {
+      onBlur,
+    } = this.props;
+
+    if (onBlur) {
+      onBlur(...args);
+    }
+
+    this.setState({
+      lastSearch: '',
+    });
+  }
+
   // ======================================================
   // RENDERS
   // ======================================================
@@ -626,6 +642,7 @@ export default class SelectCore extends PureComponent {
         onCreateNew={ this.handleCreateNew }
         onSearch={ this.handleSearch }
         onLoadMore={ onLoadMore && this.handleLoadMore }
+        onBlur={ this.handleBlur }
       />
     );
   }
