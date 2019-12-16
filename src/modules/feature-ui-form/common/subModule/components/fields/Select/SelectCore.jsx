@@ -543,8 +543,10 @@ export default class SelectCore extends PureComponent {
         //   // todo @ANKU @LOW -
         //   // на границе МЕНЬШЕ
         //   return this.handleSearchInner('', meta);
-        } else if (searchTermLength === 0) {
-          return this.handleSearchInner('', meta);
+
+
+        // } else if (searchTermLength === 0) {
+        //   return this.handleSearchInner('', meta);
         } else if (searchTermLength >= searchMinCharacters) {
           // default
           return this.handleSearchInner(searchTerm, meta);
@@ -605,6 +607,7 @@ export default class SelectCore extends PureComponent {
       onLoadMore,
       fieldLabel,
       renderInputText,
+      isProcessing: isProcessingFromProps,
     } = this.props;
     const {
       lastSearch,
@@ -622,7 +625,8 @@ export default class SelectCore extends PureComponent {
     return (
       <SelectView
         placeholder={ i18n('components.SelectCore.placeholder') }
-        loading={ isProcessing }
+        isProcessing={ isProcessingFromProps || isProcessing }
+        loading={ isProcessingFromProps || isProcessing }
 
         { ...this.getControlProps() }
 

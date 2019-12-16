@@ -110,7 +110,7 @@ export default class SelectView extends PureComponent {
       valueOptionMetas,
       multiple,
 
-      isLoading,
+      isProcessing,
 
       onRemoveSelected,
 
@@ -129,7 +129,7 @@ export default class SelectView extends PureComponent {
     return (
       <div className={ `SelectView ${className || ''}` }>
         {
-          isLoading && (
+          isProcessing && (
             <Loading />
           )
         }
