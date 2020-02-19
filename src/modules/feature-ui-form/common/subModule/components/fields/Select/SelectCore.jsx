@@ -9,6 +9,7 @@ import memoizeOne from 'memoize-one';
 
 import {
   deepEquals,
+  difference,
   emitProcessing,
   wrapToArray,
 } from '../../../../../../../common/utils/common';
@@ -39,7 +40,7 @@ export default class SelectCore extends PureComponent {
   static propTypes = SELECT_CORE_PROP_TYPES_MAP;
 
   static defaultProps = {
-    records: [],
+    records: undefined,
     disabledOptions: [],
     // maxVisible: 30,
     maxVisible: 100,
@@ -90,14 +91,27 @@ export default class SelectCore extends PureComponent {
     if (searchMinCharacters === 0) {
       this.handleSearchInner(lastSearch, lastSearchMeta);
     }
+
+    this.checkOutOfRecordsRange();
   }
 
   componentDidUpdate(prevProps/* , prevState, snapshot */) {
     const {
       value,
+      defaultValue,
+      records,
     } = this.props;
 
-    if (!deepEquals(wrapToArray(value), wrapToArray(prevProps.value))) {
+    const isRecordsChanged = !deepEquals(records, prevProps.records);
+    if (isRecordsChanged && this.checkOutOfRecordsRange()) {
+      return; // дальше не нужно продолжать, ибо внутри уже будет set selectedRecords и вызывается реакция изменения и новые значения придут сверху
+    }
+
+    if (
+      !deepEquals(wrapToArray(value), wrapToArray(prevProps.value)) // обновили значения
+      || isRecordsChanged // пришли новые рекорды - нужно обновить вдруг labels уже подтянулись
+      || !deepEquals(defaultValue, prevProps.defaultValue)
+    ) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedRecords: SelectCore.getSelectedRecords(this.props, true),
@@ -105,6 +119,35 @@ export default class SelectCore extends PureComponent {
     }
   }
 
+  checkOutOfRecordsRange() {
+    const {
+      value,
+      records,
+      isSaveFullRecord,
+      isValueOnlyIntoRecords,
+      fieldId,
+    } = this.props;
+
+    if (!isValueOnlyIntoRecords || typeof records === 'undefined') {
+      return false;
+    }
+
+    const valueIds = isSaveFullRecord
+      ? wrapToArray(value).map((valueRecord) => valueRecord[fieldId])
+      : wrapToArray(value);
+
+    const valuesIdsIntoRecords = wrapToArray(records)
+      .filter((record) => valueIds.includes(record[fieldId]))
+      .map((valueRecord) => valueRecord[fieldId]);
+
+    // если изменили рекорды и из-за этого убрались некоторые элементы (это частный кейс, когда один селект зависит от другого (к примеру, изменили федеральный округ - должны сбросятся регионы)
+    // нужно запустить сигнал что они удалились и больше не показывались
+    const valuesRemoved = difference(value, valuesIdsIntoRecords);
+    if (valuesRemoved.length > 0) {
+      this.updateMultiple(valuesRemoved, true);
+      return true;
+    }
+  }
   // static getDerivedStateFromProps(props, state) {
   //   return {
   //     ...state,
@@ -118,7 +161,7 @@ export default class SelectCore extends PureComponent {
   static getSelectedRecords(props, useDefault) {
     const {
       multiple,
-      records,
+      records = [],
       value,
       defaultValue = null,
       // selectedValue,
@@ -325,12 +368,14 @@ export default class SelectCore extends PureComponent {
    * @param removedItemIndexes
    * @return {*}
    */
-  updateMultiple(currentItemIds, isRemove = false, removedItemIndexes = undefined) {
+  updateMultiple(
+    currentItemIds,
+    isRemove = false,
+    removedItemIndexes = undefined,
+  ) {
     const {
-      records,
       multiple,
       isSaveFullRecord,
-      fieldLabel,
       fieldId,
       useUnique,
 
@@ -372,7 +417,7 @@ export default class SelectCore extends PureComponent {
       selectedRecords: selectedRecordsNew,
     });
 
-    const valueNewFinal = multiple
+    const valueNew = multiple
       ? isSaveFullRecord
         ? selectedRecordsNew
         : selectedRecordsNew.map((recordItem) => recordItem[fieldId])
@@ -380,7 +425,7 @@ export default class SelectCore extends PureComponent {
         ? selectedRecordsNew[0]
         : selectedRecordsNew[0] && selectedRecordsNew[0][fieldId];
 
-    const currentSelected = multiple
+    const currentValue = multiple
       ? isSaveFullRecord
         ? currentRecords
         : currentRecords.map((currentRecord) => currentRecord[fieldId])
@@ -400,10 +445,10 @@ export default class SelectCore extends PureComponent {
 
     return emitProcessing(
       Promise.all([
-        !isRemove && onSelect         ? onSelect(currentSelected, selectedRecordsNew)         : Promise.resolve(),
-        isRemove && onRemoveSelected  ? onRemoveSelected(currentSelected, selectedRecordsNew, removedItemIndexes) : Promise.resolve(),
-        onChange                      ? onChange(valueNewFinal, selectedRecordsNew, context) : Promise.resolve(),
-        onFieldChange                 ? onFieldChange(valueNewFinal, selectedRecordsNew, context) : Promise.resolve(),
+        !isRemove && onSelect         ? onSelect(currentValue, selectedRecordsNew)         : Promise.resolve(),
+        isRemove && onRemoveSelected  ? onRemoveSelected(currentValue, selectedRecordsNew, removedItemIndexes) : Promise.resolve(),
+        onChange                      ? onChange(valueNew, selectedRecordsNew, context) : Promise.resolve(),
+        onFieldChange                 ? onFieldChange(valueNew, selectedRecordsNew, context) : Promise.resolve(),
       ]),
       this,
       'isProcessing',
@@ -556,13 +601,13 @@ export default class SelectCore extends PureComponent {
           ) {
             return this.handleSearchInner(searchTerm, meta);
           }
-        // } else if (
-        //   searchTermLength < searchMinCharacters
-        //   && lastSearch.length >= searchMinCharacters
-        // ) {
-        //   // todo @ANKU @LOW -
-        //   // на границе МЕНЬШЕ
-        //   return this.handleSearchInner('', meta);
+          // } else if (
+          //   searchTermLength < searchMinCharacters
+          //   && lastSearch.length >= searchMinCharacters
+          // ) {
+          //   // todo @ANKU @LOW -
+          //   // на границе МЕНЬШЕ
+          //   return this.handleSearchInner('', meta);
 
 
         // } else if (searchTermLength === 0) {

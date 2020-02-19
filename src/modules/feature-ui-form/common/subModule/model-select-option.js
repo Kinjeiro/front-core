@@ -5,11 +5,19 @@ import ID_PROP_TYPE from '../../../../common/models/model-id';
 export const RECORD_ID_FIELD = 'id';
 export const RECORD_LABEL_FIELD = 'name';
 
-export function createSimpleSelectRecord(id, label, fieldId = RECORD_ID_FIELD, fieldLabel = RECORD_LABEL_FIELD) {
+export function createSimpleSelectRecord(id, label = undefined, fieldId = RECORD_ID_FIELD, fieldLabel = RECORD_LABEL_FIELD) {
   return {
     [fieldId]: id,
-    [fieldLabel]: label,
+    [fieldLabel]: label || id,
   };
+}
+export function parseArrayToSelectRecords(array, fieldId = RECORD_ID_FIELD, fieldLabel = RECORD_LABEL_FIELD) {
+  if (!array || typeof array[0] === 'object') {
+    return array;
+  }
+  return array.map((arrayItem) => {
+    return createSimpleSelectRecord(arrayItem, undefined, fieldId, fieldLabel);
+  });
 }
 
 export const SELECT_OPTION_META_PROP_TYPE_MAP = {

@@ -33,14 +33,25 @@ export const SELECT_CORE_PROP_TYPES_MAP = {
   selectedValue: PropTypes.any,
   /**
    * Самый важный текущий список данных к отображения для выбора (мы работаем с данными, а потом они переводятся в optionMeta а в SelectView они преобразуются уже в option node
+   * Может быть массивом стрингов, либо массивом сущностей createSimpleSelectRecord ({ id, label })
    */
   records: PropTypes.array,
   /**
    * по-умолчанию сохраняется только id, но если эта true - сохранится весь объект
    */
   isSaveFullRecord: PropTypes.bool,
+  /**
+   * 'name' - or use createSimpleSelectRecord
+   */
   fieldLabel: PropTypes.string,
+  /**
+   * 'id'
+   */
   fieldId: PropTypes.string,
+  /**
+   * false - значения могут быть только в рамках records. Если они выходят за рамки, происходит событие onChange и чистятся недопустимые
+   */
+  isValueOnlyIntoRecords: PropTypes.bool,
 
   /**
    * Внутренний метод от CoreField чтобы можно было задать кастомный onChange

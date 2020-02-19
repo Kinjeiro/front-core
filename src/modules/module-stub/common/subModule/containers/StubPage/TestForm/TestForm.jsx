@@ -28,11 +28,51 @@ require('./TestForm.css');
 
 export const PAGE_ID = 'TestForm';
 
+const COUNTRIES = {
+  RUSSIA: 'RUSSIA',
+  GERMAN: 'GERMAN',
+  USA: 'USA',
+  ENGLAND: 'ENGLAND',
+  ITALY: 'ITALY',
+  FRANCE: 'FRANCE',
+};
+const CITIES = {
+  MOSCOW: 'MOSCOW',
+  SAMARA: 'SAMARA',
+  BERLIN: 'BERLIN',
+  NEW_YORK: 'NEW_YORK',
+  LONDON: 'LONDON',
+  ROME: 'ROME',
+  PARIS: 'PARIS',
+};
+
+
+const countriesList = Object.keys(COUNTRIES);
+const citiesList = Object.keys(CITIES);
+
+function getCities(countryId) {
+  switch (countryId) {
+    case COUNTRIES.RUSSIA: return [CITIES.MOSCOW, CITIES.SAMARA];
+    case COUNTRIES.GERMAN: return [CITIES.BERLIN];
+    case COUNTRIES.USA: return [CITIES.NEW_YORK];
+    case COUNTRIES.ENGLAND: return [CITIES.LONDON];
+    case COUNTRIES.ITALY: return [CITIES.ROME];
+    case COUNTRIES.FRANCE: return [CITIES.PARIS];
+  }
+}
+
+
 @reduxSimpleForm(
   PAGE_ID,
   {
     name: null,
     attachments: [],
+    listCountries: COUNTRIES.RUSSIA,
+    listCities: [
+      'OTTO',
+      CITIES.MOSCOW,
+      CITIES.BERLIN,
+    ],
   },
 )
 export default class TestForm extends PureComponent {
@@ -87,6 +127,8 @@ export default class TestForm extends PureComponent {
         id: 'fff',
       },
     ];
+
+
 
     return [
       {
@@ -156,11 +198,12 @@ export default class TestForm extends PureComponent {
         controlProps: {
           isSaveFullRecord: true,
           renderOption: (optionLabel) => {
-            return (
-              <span>
-                { `__${optionLabel}__` }
-              </span>
-            );
+            // return (
+            //   <span>
+            //     { `__${optionLabel}__` }
+            //   </span>
+            // );
+            return `__${optionLabel}__`;
           },
           fieldLabel: 'myName',
           fieldId: 'myId',
@@ -229,6 +272,27 @@ export default class TestForm extends PureComponent {
         controlProps: {
           records,
           isHideSelected: false,
+        },
+      },
+      {
+        label: 'LIST COUNTRIES',
+        name: 'listCountries',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [],
+        controlProps: {
+          records: countriesList,
+        },
+      },
+      {
+        label: 'LIST CITIES',
+        name: 'listCities',
+        type: Form.FIELD_TYPES.LIST,
+        multiple: true,
+        defaultValue: [],
+        controlProps: {
+          records: getCities(COUNTRIES.RUSSIA),
+          isValueOnlyIntoRecords: true,
         },
       },
     ];
@@ -655,6 +719,7 @@ export default class TestForm extends PureComponent {
 
           fields={ this.getFields() }
           formData={ form }
+
           onUpdateForm={ onUpdateForm }
 
           onSubmit={ onSubmit }

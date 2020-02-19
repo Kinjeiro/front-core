@@ -36,7 +36,7 @@ import {
 } from '../../model-field';
 
 import getCb from '../../get-components';
-import { createSimpleSelectRecord } from '../../model-select-option';
+import { createSimpleSelectRecord, parseArrayToSelectRecords } from '../../model-select-option';
 
 const CB = getCb();
 const { FieldLayout } = CB;
@@ -928,13 +928,18 @@ export default class CoreField extends Component {
       }
       case FIELD_TYPES.LIST: {
         // Select
+        const {
+          fieldId,
+          fieldLabel,
+        } = controlPropsFinal;
+
         return {
           value: controlValue,
           selectedValue: controlValue,
           onFieldChange: memoizeBind(this.handleChangeList, this, multipleIndex),
 
-          records: options,
           ...controlPropsFinal,
+          records: parseArrayToSelectRecords(controlPropsFinal.records || options, fieldId, fieldLabel),
         };
       }
 

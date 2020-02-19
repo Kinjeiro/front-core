@@ -146,7 +146,7 @@ export default class SelectView extends PureComponent {
         <select
           value={ value }
           multiple={ multiple }
-          disabled={ isLoading }
+          disabled={ isProcessing }
           onChange={ this.handleChange }
         >
           { optionMetasFinal.map(this.renderOption) }
