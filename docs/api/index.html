@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.9.27 | Documentation</title>
+  <title>@reagentum/front-core 1.9.28 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.9.27</code></div>
+          <div class='mb1'><code>1.9.28</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1743,6 +1743,36 @@
               
                 
                 <li><a
+                  href='#fieldlabel'
+                  class="">
+                  fieldLabel
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#fieldid'
+                  class="">
+                  fieldId
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isvalueonlyintorecords'
+                  class="">
+                  isValueOnlyIntoRecords
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#onfieldchange'
                   class="">
                   onFieldChange
@@ -1894,10 +1924,28 @@
                 
                 <li><a
                   href='#selectcore'
-                  class="">
+                  class=" toggle-sibling">
                   SelectCore
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#selectcoreupdatemultiple'
+                        class='regular pre-open'>
+                        #updateMultiple
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -2580,6 +2628,46 @@
                   href='#createmockservices'
                   class="">
                   createMockServices
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#without_serialize_data'
+                  class="">
+                  WITHOUT_SERIALIZE_DATA
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#without_linked_data'
+                  class="">
+                  WITHOUT_LINKED_DATA
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#without_calculating_data'
+                  class="">
+                  WITHOUT_CALCULATING_DATA
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#without_deserialize_data'
+                  class="">
+                  WITHOUT_DESERIALIZE_DATA
                   
                 </a>
                 
@@ -14228,7 +14316,8 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   </div>
   
 
-  <p>Самый важный текущий список данных к отображения для выбора (мы работаем с данными, а потом они переводятся в optionMeta а в SelectView они преобразуются уже в option node</p>
+  <p>Самый важный текущий список данных к отображения для выбора (мы работаем с данными, а потом они переводятся в optionMeta а в SelectView они преобразуются уже в option node
+Может быть массивом стрингов, либо массивом сущностей createSimpleSelectRecord ({ id, label })</p>
 
 
   <div class='pre p1 fill-light mt0'>records</div>
@@ -14279,6 +14368,147 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
 
 
   <div class='pre p1 fill-light mt0'>isSaveFullRecord</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='fieldlabel'>
+      fieldLabel
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>'name' - or use createSimpleSelectRecord</p>
+
+
+  <div class='pre p1 fill-light mt0'>fieldLabel</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='fieldid'>
+      fieldId
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>'id'</p>
+
+
+  <div class='pre p1 fill-light mt0'>fieldId</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isvalueonlyintorecords'>
+      isValueOnlyIntoRecords
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>false - значения могут быть только в рамках records. Если они выходят за рамки, происходит событие onChange и чистятся недопустимые</p>
+
+
+  <div class='pre p1 fill-light mt0'>isValueOnlyIntoRecords</div>
   
   
 
@@ -14807,7 +15037,7 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   </div>
   
 
-  <p>(deletedValue, newRecordsFinal) => {}</p>
+  <p>(deletedValue, newRecordsFinal, removedItemIndex) => {}</p>
 <ul>
 <li>если multiple - это массивы, если нет - значения</li>
 <li>если isSaveFullRecord - то deletedValue - это рекорд, если нет то id</li>
@@ -15099,6 +15329,95 @@ accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-office
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='selectcoreupdatemultiple'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>updateMultiple(currentItemIds, isRemove, removedItemIndexes)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>updateMultiple(currentItemIds: any, isRemove: any, removedItemIndexes: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>currentItemIds</span> <code class='quiet'>(any)</code>
+	    может быть как id так и просто optionMeta (если это createNew)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>isRemove</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>removedItemIndexes</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -19278,6 +19597,194 @@ and avoid cache pollution)</p>
 
 
   <div class='pre p1 fill-light mt0'>createMockServices()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='without_serialize_data'>
+      WITHOUT_SERIALIZE_DATA
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Данные нужные без обработки</p>
+
+
+  <div class='pre p1 fill-light mt0'>WITHOUT_SERIALIZE_DATA</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='without_linked_data'>
+      WITHOUT_LINKED_DATA
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Данные без связей (чтобы зациклинности не было)</p>
+
+
+  <div class='pre p1 fill-light mt0'>WITHOUT_LINKED_DATA</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='without_calculating_data'>
+      WITHOUT_CALCULATING_DATA
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Данные без калькулируемых полей</p>
+
+
+  <div class='pre p1 fill-light mt0'>WITHOUT_CALCULATING_DATA</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='without_deserialize_data'>
+      WITHOUT_DESERIALIZE_DATA
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Без десериализации на сервер</p>
+
+
+  <div class='pre p1 fill-light mt0'>WITHOUT_DESERIALIZE_DATA</div>
   
   
 
