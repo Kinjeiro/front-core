@@ -243,7 +243,11 @@ export default class ReduxTable extends ReduxUni {
 
           if (
             forceUpdate
-            || (!actionLoadRecordsStatus.isLoaded && !actionLoadRecordsStatus.isFetching)
+            || (
+              !actionLoadRecordsStatus.isLoaded
+              && !actionLoadRecordsStatus.isFetching
+              && !actionLoadRecordsStatus.isFailed
+            )
             || hasFiltersChanged
             || !deepEquals(newMeta, omit(currentMeta, 'total'))
           ) {
