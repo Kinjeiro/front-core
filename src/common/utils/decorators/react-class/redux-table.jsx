@@ -350,6 +350,7 @@ export default function reduxTableDecorator(
 
             actionLoadRecords={ this.handleWrapActionLoadRecords }
             actionClearFilters={ this.handleWrapActionClearFilters }
+
             onUpdateTableFilters={ this.handleUpdateTableFilters }
             onUpdateTableMeta={ this.handleUpdateTableMeta }
           />

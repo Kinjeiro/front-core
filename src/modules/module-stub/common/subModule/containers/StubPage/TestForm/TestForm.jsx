@@ -20,7 +20,7 @@ import getComponents from '../../../get-components';
 const {
   Segment,
   Form,
-  InstanceAttachment,
+  InstantlyAttachment,
   Checkbox,
 } = getComponents();
 
@@ -529,7 +529,7 @@ export default class TestForm extends PureComponent {
           accept: '.jpg, .jpeg',
           // addButtonText: 'Загрузить фотографии',
         },
-        controlClass: InstanceAttachment,
+        controlClass: InstantlyAttachment,
       },
       {
         name: 'attachmentMultipleWithConditions',
@@ -547,7 +547,7 @@ export default class TestForm extends PureComponent {
           acceptOnlyImages: true,
           addButtonText: 'Загрузить фотографии',
         },
-        controlClass: InstanceAttachment,
+        controlClass: InstantlyAttachment,
       },
       {
         name: 'attachmentMultipleDoc',
@@ -560,7 +560,7 @@ export default class TestForm extends PureComponent {
           withDescriptions: true,
           // accept: '.png, .jpg, .jpeg',
         },
-        controlClass: InstanceAttachment,
+        controlClass: InstantlyAttachment,
       },
       {
         type: FIELD_TYPES.GROUPING,

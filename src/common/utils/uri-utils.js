@@ -182,7 +182,7 @@ function pushEncodedKeyValuePair(pairs, key, val) {
  * @returns {string}
  */
 export function formatUrlParameters(params, url = null, hash = ''/* , useBracket = false */) {
-  // const paramStr =
+  // const paramStr =parseUrlParameters
   //   queryString.stringify(params, { arrayFormat: useBracket ? 'bracket' : undefined })
   //   // todo @ANKU @LOW - @BUT_OUT queryString - они не кодируют # hash
   //   .replace(/#/g, '%23');
