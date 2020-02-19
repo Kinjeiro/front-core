@@ -93,9 +93,11 @@ export default class CoreClientRunner extends AbstractClientRunner {
     };
   }
 
-  getApiClientClass() {
-    const { store } = this;
+  getContextData = (...args) => {
+    return this.getStore().getState(...args);
+  };
 
+  getApiClientClass() {
     /*
       todo @ANKU @LOW @BUG_OUT @babel-minify - не умеет минимизировать файл если есть динамическое наследование внутри методов
       Cannot read property 'end' of null
@@ -114,7 +116,7 @@ export default class CoreClientRunner extends AbstractClientRunner {
     return class extends SuperClass {
       constructor(...args) {
         super(...args);
-        this.setGetContextDataFn(store.getState.bind(store));
+        this.setGetContextDataFn(this.getContextData);
       }
     };
   }

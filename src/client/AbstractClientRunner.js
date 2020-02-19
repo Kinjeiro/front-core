@@ -152,6 +152,9 @@ export default class AbstractClientRunner {
   getApiClientClass() {
     return BaseApiClient;
   }
+  getStore() {
+    return this.store;
+  }
 
   getApiClient(defaultEndpoint) {
     return createApiClientByEndpoint(defaultEndpoint);
@@ -159,7 +162,7 @@ export default class AbstractClientRunner {
 
   getGlobalWindowDebugVariables() {
     return {
-      store: this.store,
+      store: this.getStore(),
       config: clientConfig,
       api: this.api,
       apiClient: getApiClient(),
@@ -238,7 +241,7 @@ export default class AbstractClientRunner {
     // ======================================================
     const routeHistory = this.createHistory();
     this.store = await this.createStore(routeHistory);
-    this.history = syncHistoryWithStore(routeHistory, this.store);
+    this.history = syncHistoryWithStore(routeHistory, this.getStore());
 
 
     // ======================================================
@@ -251,7 +254,7 @@ export default class AbstractClientRunner {
     // ======================================================
     // ROUTES
     // ======================================================
-    this.routes = this.getRoutes(this.store);
+    this.routes = this.getRoutes(this.getStore());
   }
 
 
@@ -288,7 +291,6 @@ export default class AbstractClientRunner {
   createRootComponent(isUseHot = undefined) {
     let Root = require('./Root').default;
     const {
-      store,
       history,
       routes,
     } = this;
@@ -318,7 +320,7 @@ export default class AbstractClientRunner {
     return React.createElement(
       Root,
       {
-        store,
+        store: this.getStore(),
         history,
         routes,
       },
@@ -368,14 +370,14 @@ export default class AbstractClientRunner {
 
   @bind()
   reloadStore() {
-    reloadReducers(this.store, getRootReducer(this.getReducers()));
+    reloadReducers(this.getStore(), getRootReducer(this.getReducers()));
   }
 
   @bind()
   reloadUi() {
     this.commonSubModules = null;
     this.initAllComponents(createComponentBase());
-    this.routes = this.getRoutes(this.store);
+    this.routes = this.getRoutes(this.getStore());
     this.renderDOM(true);
   }
 
