@@ -58,7 +58,12 @@ export default class CoreServiceMock extends CoreService {
   // ======================================================
   // CRUD
   // ======================================================
-  async innerFindRecords(query, searchFieldObjects, options = {}, withPagination = false) {
+  async innerFindRecords(
+    query,
+    searchFieldObjects,
+    options = {},
+    withPagination = false,
+  ) {
     serverLogger.log('filterAndSortDb: ', query, searchFieldObjects, options, withPagination);
 
     const allValues = await this.getValues();
@@ -78,20 +83,31 @@ export default class CoreServiceMock extends CoreService {
       : tableResponseWithPagination.records;
   }
 
-  async readRecord(id, options = undefined) {
+  async readRecord(id, options = {}) {
+    const data = (await this.getData())[id];
+
+    if (options[SERVICE_OPTIONS.WITHOUT_SERIALIZE_DATA]) {
+      return data;
+    }
     return this.serializeRecord(
-      (await this.getData())[id],
+      data,
       this.OPERATION_TYPE.READ,
       options,
     );
   }
 
-  async createRecord(data, id = null, options = undefined) {
-    const dataFinal = await this.deserializeData(data, this.OPERATION_TYPE.CREATE, options);
-    const idFinal = id || dataFinal.id || this.generateId();
+  async createRecord(data, id = null, options = {}) {
+    const dataFinal = options[SERVICE_OPTIONS.WITHOUT_DESERIALIZE_DATA]
+      ? data
+      : await this.deserializeData(data, this.OPERATION_TYPE.CREATE, options);
+    const idFinal = id || (dataFinal && dataFinal.id) || this.generateId();
     // eslint-disable-next-line no-param-reassign
     dataFinal.id = idFinal;
     (await this.getData())[idFinal] = dataFinal;
+
+    if (options[SERVICE_OPTIONS.WITHOUT_SERIALIZE_DATA]) {
+      return dataFinal;
+    }
     return this.serializeRecord(
       dataFinal,
       this.OPERATION_TYPE.CREATE,
@@ -99,12 +115,20 @@ export default class CoreServiceMock extends CoreService {
     );
   }
 
-  async createOrUpdateRecord(id, data, options = undefined) {
+  async createOrUpdateRecord(id, data, options = {}) {
     const records = await this.getData();
     if (!records[id]) {
       records[id] = { id: this.generateId() };
     }
-    const dataFinal = merge(records[id], await this.deserializeData(data, this.OPERATION_TYPE.CREATE_OR_UPDATE, options));
+
+    let dataFinal = options[SERVICE_OPTIONS.WITHOUT_DESERIALIZE_DATA]
+      ? data
+      : await this.deserializeData(data, this.OPERATION_TYPE.CREATE_OR_UPDATE, options);
+    dataFinal = merge(records[id], dataFinal);
+
+    if (options[SERVICE_OPTIONS.WITHOUT_SERIALIZE_DATA]) {
+      return dataFinal;
+    }
     return this.serializeRecord(
       dataFinal,
       this.OPERATION_TYPE.CREATE_OR_UPDATE,
@@ -112,7 +136,7 @@ export default class CoreServiceMock extends CoreService {
     );
   }
 
-  async updateRecord(id, data, options = undefined) {
+  async updateRecord(id, data, options = {}) {
     const records = await this.getData();
     if (isPatchOperations(data)) {
       applyPatchOperations(
@@ -131,12 +155,16 @@ export default class CoreServiceMock extends CoreService {
         ),
       );
     } else {
-      merge(
-        records[id],
-        await this.deserializeData(data, this.OPERATION_TYPE.UPDATE, options),
-      );
+      const dataFinal = options[SERVICE_OPTIONS.WITHOUT_DESERIALIZE_DATA]
+        ? data
+        : await this.deserializeData(data, this.OPERATION_TYPE.UPDATE, options);
+
+      merge(records[id], dataFinal);
     }
 
+    if (options[SERVICE_OPTIONS.WITHOUT_SERIALIZE_DATA]) {
+      return records[id];
+    }
     return this.serializeRecord(
       records[id],
       this.OPERATION_TYPE.UPDATE,
@@ -144,7 +172,7 @@ export default class CoreServiceMock extends CoreService {
     );
   }
 
-  async deleteRecord(id, options = undefined) {
+  async deleteRecord(id, options = {}) {
     delete (await this.getData())[id];
   }
 
@@ -154,7 +182,7 @@ export default class CoreServiceMock extends CoreService {
    * @param options
    * @return {Promise<void>}
    */
-  async removeRecord(id, options = undefined) {
+  async removeRecord(id, options = {}) {
     return this.deleteRecord(id, options);
   }
 }
