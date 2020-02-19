@@ -86,8 +86,9 @@ export default function reduxSimpleFormDecorator(
       // ======================================================
       // LIFECYCLE
       // ======================================================
-      // componentWillMount() {
-      componentDidMount() {
+      constructor(props) {
+        super(props);
+
         const {
           form,
           formId: formIdFinal,
@@ -95,6 +96,16 @@ export default function reduxSimpleFormDecorator(
         } = this.props;
         actionFormInit(formIdFinal, form);
       }
+
+      // componentWillMount() {
+      // componentDidMount() {
+      //   const {
+      //     form,
+      //     formId: formIdFinal,
+      //     actionFormInit,
+      //   } = this.props;
+      //   actionFormInit(formIdFinal, form);
+      // }
       componentWillUnmount() {
         this.props.actionFormRemove(this.props.formId);
       }
