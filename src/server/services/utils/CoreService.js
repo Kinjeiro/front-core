@@ -22,7 +22,21 @@ export const OPERATION_TYPE = {
 };
 
 export const SERVICE_OPTIONS = {
+  /**
+   * Данные нужные без обработки
+   */
   WITHOUT_SERIALIZE_DATA: 'WITHOUT_SERIALIZE_DATA',
+  /**
+   * Данные без связей (чтобы зациклинности не было)
+   */
+  WITHOUT_LINKED_DATA: 'WITHOUT_LINKED_DATA',
+  /**
+   * Данные без калькулируемых полей
+   */
+  WITHOUT_CALCULATING_DATA: 'WITHOUT_CALCULATING_DATA',
+  /**
+   * Без десериализации на сервер
+   */
   WITHOUT_DESERIALIZE_DATA: 'WITHOUT_DESERIALIZE_DATA',
 };
 
