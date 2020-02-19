@@ -13,6 +13,7 @@ import {
 } from '../../helpers/app-urls';
 import {
   getModuleRoutePath,
+  joinPath,
 } from '../../utils/uri-utils';
 
 import { actions as modulesActions } from '../../app-redux/reducers/app/redux-modules';
@@ -103,12 +104,18 @@ export default class ContextModulesProvider extends Component {
   }
 
   @bind()
-  onGoTo(relativeLocation, moduleName = null) {
+  onGoTo(relativeLocation, moduleName = null, queryParams = undefined) {
     const {
       actionGoTo,
     } = this.props;
+    const routePath = this.getRoutePath(relativeLocation, moduleName);
+
     // роутинг нужно делать без контекст паса
-    return actionGoTo(this.getRoutePath(relativeLocation, moduleName));
+    return actionGoTo(
+      queryParams
+        ? joinPath(routePath, queryParams)
+        : routePath
+    );
   }
   @bind()
   onReplaceLocation(relativeLocation, moduleName = null) {
