@@ -156,7 +156,7 @@ export default class SelectView extends PureComponent {
           multiple && (
             <ul>
               {
-                valueOptionMetas.map((optionMeta) => (
+                valueOptionMetas.map((optionMeta, index) => (
                   <ListItem
                     key={ `${optionMeta.recordId}_${optionMeta.index}` }
                     disabled={ optionMeta.isDisabled }
@@ -168,7 +168,7 @@ export default class SelectView extends PureComponent {
                     {
                       !optionMeta.isDisabled && (
                         <Button
-                          onClick={ () => onRemoveSelected(optionMeta.recordId) }
+                          onClick={ () => onRemoveSelected(optionMeta.recordId, undefined, index) }
                         >
                           [x]
                         </Button>

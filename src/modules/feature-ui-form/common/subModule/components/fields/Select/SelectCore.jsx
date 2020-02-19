@@ -250,7 +250,8 @@ export default class SelectCore extends PureComponent {
       if (!searchOnceOnMinCharacters && maxVisible && resultRecords.length > maxVisible) {
         resultRecords = resultRecords.slice(0, maxVisible);
       }
-      return resultRecords.map((record, index) => this.parseToOptionMeta(record, index, resultRecords, props));
+      return resultRecords.map((record, index) =>
+        this.parseToOptionMeta(record, index, resultRecords, props));
     },
   );
   getFilteredOptionMetas() {
@@ -317,7 +318,14 @@ export default class SelectCore extends PureComponent {
   // ======================================================
   // HANDLERS
   // ======================================================
-  updateSelect(currentRecordId, isRemove = false) {
+  /**
+   *
+   * @param currentItemIds - может быть как id так и просто optionMeta (если это createNew)
+   * @param isRemove
+   * @param removedItemIndexes
+   * @return {*}
+   */
+  updateMultiple(currentItemIds, isRemove = false, removedItemIndexes = undefined) {
     const {
       records,
       multiple,
@@ -335,64 +343,76 @@ export default class SelectCore extends PureComponent {
       selectedRecords,
     } = this.state;
 
-    const currentOptionMeta = this.findOptionMetaByControlValue(currentRecordId);
-
-    const {
-      record: currentRecord,
-      recordId,
-      index: currentRecordIndex,
-    } = currentOptionMeta;
-
-    const recordsFinal = multiple
-      ? isRemove
-        ? useUnique
-          ? selectedRecords.filter((record) => record[fieldId] !== recordId)
-          // убираем только первый по списку из подходящих
-          : selectedRecords.filter((record, index) => index !== currentRecordIndex)
-        : [
-          ...selectedRecords,
-          currentRecord,
-        ]
-      : currentRecord;
-
-    this.setState({
-      selectedRecords: wrapToArray(recordsFinal),
+    const currentRecords = [];
+    const currentRecordIds = [];
+    const currentOptionsMetas = wrapToArray(currentItemIds).map((currentItem) => {
+      const optionMeta = this.findOptionMetaByControlValue(currentItem);
+      currentRecords.push(optionMeta.record);
+      currentRecordIds.push(optionMeta.recordId);
+      return optionMeta;
     });
 
-    const valuesNew = isSaveFullRecord
-      ? recordsFinal
-      : multiple
-        ? recordsFinal.map((recordItem) => recordItem[fieldId])
-        : recordsFinal[fieldId];
+    const removedItemIndexesFinal = typeof removedItemIndexes !== 'undefined'
+      ? wrapToArray(removedItemIndexes)
+      : currentOptionsMetas.map(({ index }) => index);
 
-    const valueSelected = isSaveFullRecord
-      ? currentRecord
-      : currentRecord[fieldId];
+    const selectedRecordsNew = multiple
+      ? isRemove
+        ? useUnique
+          ? selectedRecords.filter((record) => !currentRecordIds.includes(record[fieldId]))
+          // убираем только первый по списку из подходящих
+          : selectedRecords.filter((record, index) => !removedItemIndexesFinal.includes(index))
+        : [
+          ...selectedRecords,
+          ...currentRecords,
+        ]
+      : currentRecords;
+
+    this.setState({
+      selectedRecords: selectedRecordsNew,
+    });
+
+    const valueNewFinal = multiple
+      ? isSaveFullRecord
+        ? selectedRecordsNew
+        : selectedRecordsNew.map((recordItem) => recordItem[fieldId])
+      : isSaveFullRecord
+        ? selectedRecordsNew[0]
+        : selectedRecordsNew[0] && selectedRecordsNew[0][fieldId];
+
+    const currentSelected = multiple
+      ? isSaveFullRecord
+        ? currentRecords
+        : currentRecords.map((currentRecord) => currentRecord[fieldId])
+      : isSaveFullRecord
+        ? currentRecords[0]
+        : currentRecords[0] && currentRecords[0][fieldId];
 
 
     // todo @ANKU @LOW @BUG_OUT - элемент при выборе показывает в input option.value а не children option
     // onSelect(value);
 
     const context = {
-      optionMeta: currentOptionMeta,
+      optionMeta: multiple
+        ? currentOptionsMetas
+        : currentOptionsMetas[0],
     };
 
     return emitProcessing(
       Promise.all([
-        !isRemove && onSelect        ? onSelect(valueSelected, recordsFinal)         : Promise.resolve(),
-        isRemove && onRemoveSelected ? onRemoveSelected(valueSelected, recordsFinal) : Promise.resolve(),
-        onChange ? onChange(valuesNew, recordsFinal, context) : Promise.resolve(),
-        onFieldChange ? onFieldChange(valuesNew, recordsFinal, context) : Promise.resolve(),
+        !isRemove && onSelect         ? onSelect(currentSelected, selectedRecordsNew)         : Promise.resolve(),
+        isRemove && onRemoveSelected  ? onRemoveSelected(currentSelected, selectedRecordsNew, removedItemIndexes) : Promise.resolve(),
+        onChange                      ? onChange(valueNewFinal, selectedRecordsNew, context) : Promise.resolve(),
+        onFieldChange                 ? onFieldChange(valueNewFinal, selectedRecordsNew, context) : Promise.resolve(),
       ]),
       this,
       'isProcessing',
     );
   }
 
-
   @bind()
   handleSelect(newRecordId) {
-    return this.updateSelect(newRecordId);
+    return this.updateMultiple(newRecordId);
     //
     // if (typeof selectViewControl === 'object') {
     //   const {
@@ -441,11 +461,11 @@ export default class SelectCore extends PureComponent {
   }
 
   @bind()
-  handleRemoveSelected(removeRecordId) {
-    // todo @ANKU @LOW - сделать множественное удаление
-    return this.updateSelect(
-      Array.isArray(removeRecordId) ? removeRecordId[0] : removeRecordId,
+  handleRemoveSelected(removeRecordId, newRecordsFinal = undefined, removedItemIndex = undefined) {
+    return this.updateMultiple(
+      removeRecordId,
       true,
+      removedItemIndex,
     );
   }
 
@@ -478,7 +498,7 @@ export default class SelectCore extends PureComponent {
       'isProcessing',
     );
 
-    return this.updateSelect(
+    return this.updateMultiple(
       createOptionMeta({
         record: newRecord,
         recordId: newRecord[fieldId],

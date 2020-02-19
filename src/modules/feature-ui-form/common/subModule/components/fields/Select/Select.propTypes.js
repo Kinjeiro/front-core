@@ -113,7 +113,7 @@ export const SELECT_CORE_PROP_TYPES_MAP = {
   useUnique: PropTypes.bool,
 
   /**
-   * (deletedValue, newRecordsFinal) => {}
+   * (deletedValue, newRecordsFinal, removedItemIndex) => {}
    * - если multiple - это массивы, если нет - значения
    * - если isSaveFullRecord - то deletedValue - это рекорд, если нет то id
    */
