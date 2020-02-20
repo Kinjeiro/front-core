@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars,consistent-return */
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 // import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
 // import omit from 'lodash/omit';
@@ -7,12 +7,7 @@ import bind from 'lodash-decorators/bind';
 import debounce from 'lodash/debounce';
 import memoizeOne from 'memoize-one';
 
-import {
-  deepEquals,
-  difference,
-  emitProcessing,
-  wrapToArray,
-} from '../../../../../../../common/utils/common';
+import {deepEquals, difference, emitProcessing, wrapToArray,} from '../../../../../../../common/utils/common';
 import getComponents from '../../../get-components';
 // ======================================================
 // MODULE
@@ -20,11 +15,12 @@ import getComponents from '../../../get-components';
 import i18n from '../../../i18n';
 import {
   createOptionMeta,
-  createSimpleSelectRecord, isOptionMeta,
+  createSimpleSelectRecord,
+  isOptionMeta,
   RECORD_ID_FIELD,
   RECORD_LABEL_FIELD,
 } from '../../../model-select-option';
-import { SELECT_CORE_PROP_TYPES_MAP } from './Select.propTypes';
+import {SELECT_CORE_PROP_TYPES_MAP} from './Select.propTypes';
 
 const {
   SelectView,
@@ -148,6 +144,7 @@ export default class SelectCore extends PureComponent {
       return true;
     }
   }
+
   // static getDerivedStateFromProps(props, state) {
   //   return {
   //     ...state,
@@ -197,13 +194,13 @@ export default class SelectCore extends PureComponent {
           ? defaultItem
           // eslint-disable-next-line eqeqeq
           : records.find((record) => record[fieldId] == defaultItem)
-            // может не быть в текущих records выбранных значений (к примеру, при ajax search)
-            || createSimpleSelectRecord(
-              defaultItem,
-              defaultItem,
-              fieldId,
-              fieldLabel,
-            )
+          // может не быть в текущих records выбранных значений (к примеру, при ajax search)
+          || createSimpleSelectRecord(
+            defaultItem,
+            defaultItem,
+            fieldId,
+            fieldLabel,
+          )
       ));
     }
 
@@ -224,6 +221,7 @@ export default class SelectCore extends PureComponent {
       ? records.filter((record) => `${record[fieldLabel] || ''}`.toLowerCase().indexOf(searchTermLower) >= 0)
       : records;
   }
+
   parseToOptionMeta(record, index, visibilityRecords) {
     const {
       fieldLabel,
@@ -297,6 +295,7 @@ export default class SelectCore extends PureComponent {
         this.parseToOptionMeta(record, index, resultRecords, props));
     },
   );
+
   getFilteredOptionMetas() {
     const {
       multiple,
@@ -315,6 +314,7 @@ export default class SelectCore extends PureComponent {
       this.props,
     );
   }
+
   getValueOptionMetaMemoize = memoizeOne(
     (selectedRecords) => {
       const visibleRecords = this.getFilteredOptionMetas();
@@ -322,17 +322,19 @@ export default class SelectCore extends PureComponent {
         this.parseToOptionMeta(selectedRecord, index, visibleRecords));
     },
   );
+
   getValueOptionMetas() {
     const {
       selectedRecords,
     } = this.state;
     return this.getValueOptionMetaMemoize(selectedRecords, this.props);
   }
+
   findOptionMetaByControlValue(recordId) {
     return isOptionMeta(recordId)
       ? recordId
       : this.getFilteredOptionMetas().find((optionMeta) => optionMeta.recordId === recordId)
-        || this.getValueOptionMetas().find((optionMeta) => optionMeta.recordId === recordId);
+      || this.getValueOptionMetas().find((optionMeta) => optionMeta.recordId === recordId);
   }
 
   getControlValue() {
@@ -347,6 +349,7 @@ export default class SelectCore extends PureComponent {
     const result = selectedRecords.map((record) => record[fieldId]);
     return multiple ? result : result[0];
   }
+
   isSelected(recordId) {
     const {
       multiple,
@@ -390,16 +393,19 @@ export default class SelectCore extends PureComponent {
 
     const currentRecords = [];
     const currentRecordIds = [];
-    const currentOptionsMetas = wrapToArray(currentItemIds).map((currentItem) => {
+    const currentOptionsMetas = wrapToArray(currentItemIds).reduce((res, currentItem) => {
       const optionMeta = this.findOptionMetaByControlValue(currentItem);
-      currentRecords.push(optionMeta.record);
-      currentRecordIds.push(optionMeta.recordId);
-      return optionMeta;
-    });
+      if (optionMeta) {
+        currentRecords.push(optionMeta.record);
+        currentRecordIds.push(optionMeta.recordId);
+        res.push(optionMeta);
+      }
+      return res;
+    }, []);
 
     const removedItemIndexesFinal = typeof removedItemIndexes !== 'undefined'
       ? wrapToArray(removedItemIndexes)
-      : currentOptionsMetas.map(({ index }) => index);
+      : currentOptionsMetas.map(({index}) => index);
 
     const selectedRecordsNew = multiple
       ? isRemove
@@ -445,10 +451,10 @@ export default class SelectCore extends PureComponent {
 
     return emitProcessing(
       Promise.all([
-        !isRemove && onSelect         ? onSelect(currentValue, selectedRecordsNew)         : Promise.resolve(),
-        isRemove && onRemoveSelected  ? onRemoveSelected(currentValue, selectedRecordsNew, removedItemIndexes) : Promise.resolve(),
-        onChange                      ? onChange(valueNew, selectedRecordsNew, context) : Promise.resolve(),
-        onFieldChange                 ? onFieldChange(valueNew, selectedRecordsNew, context) : Promise.resolve(),
+        !isRemove && onSelect ? onSelect(currentValue, selectedRecordsNew) : Promise.resolve(),
+        isRemove && onRemoveSelected ? onRemoveSelected(currentValue, selectedRecordsNew, removedItemIndexes) : Promise.resolve(),
+        onChange ? onChange(valueNew, selectedRecordsNew, context) : Promise.resolve(),
+        onFieldChange ? onFieldChange(valueNew, selectedRecordsNew, context) : Promise.resolve(),
       ]),
       this,
       'isProcessing',
@@ -610,8 +616,8 @@ export default class SelectCore extends PureComponent {
           //   return this.handleSearchInner('', meta);
 
 
-        // } else if (searchTermLength === 0) {
-        //   return this.handleSearchInner('', meta);
+          // } else if (searchTermLength === 0) {
+          //   return this.handleSearchInner('', meta);
         } else if (searchTermLength >= searchMinCharacters) {
           // default
           return this.handleSearchInner(searchTerm, meta);
@@ -623,6 +629,7 @@ export default class SelectCore extends PureComponent {
       // }
     }
   }
+
   @bind()
   handleLoadMore() {
     const {
@@ -689,29 +696,29 @@ export default class SelectCore extends PureComponent {
     */
     return (
       <SelectView
-        placeholder={ i18n('components.SelectCore.placeholder') }
-        isProcessing={ isProcessingFromProps || isProcessing }
-        loading={ isProcessingFromProps || isProcessing }
+        placeholder={i18n('components.SelectCore.placeholder')}
+        isProcessing={isProcessingFromProps || isProcessing}
+        loading={isProcessingFromProps || isProcessing}
 
-        { ...this.getControlProps() }
+        {...this.getControlProps()}
 
-        className={ `SelectCore ${isProcessing ? 'SelectCore--processing' : ''} ${className || ''}` }
+        className={`SelectCore ${isProcessing ? 'SelectCore--processing' : ''} ${className || ''}`}
 
-        options={ undefined }
-        optionMetas={ this.getFilteredOptionMetas() }
-        value={ this.getControlValue() }
-        valueOptionMetas={ this.getValueOptionMetas() }
+        options={undefined}
+        optionMetas={this.getFilteredOptionMetas()}
+        value={this.getControlValue()}
+        valueOptionMetas={this.getValueOptionMetas()}
 
-        inputText={ renderInputText(selectedRecords, this.props) }
-        searchTerm={ lastSearch }
+        inputText={renderInputText(selectedRecords, this.props)}
+        searchTerm={lastSearch}
 
-        onChange={ undefined }
-        onSelect={ this.handleSelect }
-        onRemoveSelected={ this.handleRemoveSelected }
-        onCreateNew={ this.handleCreateNew }
-        onSearch={ this.handleSearch }
-        onLoadMore={ onLoadMore && this.handleLoadMore }
-        onBlur={ this.handleBlur }
+        onChange={undefined}
+        onSelect={this.handleSelect}
+        onRemoveSelected={this.handleRemoveSelected}
+        onCreateNew={this.handleCreateNew}
+        onSearch={this.handleSearch}
+        onLoadMore={onLoadMore && this.handleLoadMore}
+        onBlur={this.handleBlur}
       />
     );
   }
