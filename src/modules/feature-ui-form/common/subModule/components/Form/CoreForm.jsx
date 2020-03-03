@@ -63,6 +63,12 @@ export default class CoreForm extends Component {
      * Для передачи в onSubmit
      */
     formData: PropTypes.object,
+    /**
+     * Начальные значения (которые могут потом меняться), но весь основной стейт находится внутри формы.
+     * Это подходит для форм с фильтрами, где есть кнопочка "Применить". Загружаем из урла начальные значения, потом внутри формы выбираем значения полей, нажимаем "применить" и обновляется таблица и initFormData (а вместе с ней и state этой формы)
+     */
+    initFormData: PropTypes.object,
+
     readOnly: PropTypes.bool,
     /**
      * (newFormPartValue) => {}
@@ -146,7 +152,7 @@ export default class CoreForm extends Component {
     dependentFieldsHashes: {},
     formDataInState: typeof this.props.formData !== 'undefined'
       ? this.props.formData // чтобы без редукса работать
-      : {},
+      : this.props.initFormData || {},
   };
 
   domForm = null;
@@ -185,12 +191,23 @@ export default class CoreForm extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
       formData,
+      initFormData,
     } = this.props;
 
     if (formData !== prevProps.formData) {
       this.setState({
+        // полная замена, так как полное управление через пропсы
         formDataInState: formData,
       });
+    }
+    if (initFormData !== prevProps.initFormData) {
+      this.setState((prev) => ({
+        formDataInState: {
+          // обновляем начальные позиции, но только те, которые подаются, остальное управляемое не трогаем
+          ...prev.formDataInState,
+          ...initFormData,
+        },
+      }));
     }
   }
 
