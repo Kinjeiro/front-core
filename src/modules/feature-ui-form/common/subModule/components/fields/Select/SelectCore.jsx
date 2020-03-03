@@ -395,6 +395,7 @@ export default class SelectCore extends PureComponent {
     const currentRecordIds = [];
     const currentOptionsMetas = wrapToArray(currentItemIds).reduce((res, currentItem) => {
       const optionMeta = this.findOptionMetaByControlValue(currentItem);
+      // todo @ANKU @CRIT @MAIN - подумать что делать если не найдено? мол раньше выбрано, чего нет в records
       if (optionMeta) {
         currentRecords.push(optionMeta.record);
         currentRecordIds.push(optionMeta.recordId);
@@ -434,10 +435,10 @@ export default class SelectCore extends PureComponent {
     const currentValue = multiple
       ? isSaveFullRecord
         ? currentRecords
-        : currentRecords.map((currentRecord) => currentRecord[fieldId])
+        : currentRecordIds
       : isSaveFullRecord
         ? currentRecords[0]
-        : currentRecords[0] && currentRecords[0][fieldId];
+        : currentRecordIds[0];
 
 
     // todo @ANKU @LOW @BUG_OUT - элемент при выборе показывает в input option.value а не children option

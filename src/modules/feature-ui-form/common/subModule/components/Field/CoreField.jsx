@@ -909,6 +909,8 @@ export default class CoreField extends Component {
         // todo @ANKU @LOW - проверить что свои инпуты они проставляют type 'date' или 'datetime'
         // DatePicker
         return {
+          // todo @ANKU @CRIT @MAIN - а для DATE сделать корный класс с внутренним состоянием (а то сейчас от неуправляемой формы приходит undefined
+          // todo @ANKU @CRIT @MAIN - либо заиспользовать lastValue из state
           value: controlValue,
           placeholder: dateFormat,
           displayFormat: dateFormat,
