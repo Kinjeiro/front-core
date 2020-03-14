@@ -2,6 +2,8 @@ import forOwn from 'lodash/forOwn';
 import isNil from 'lodash/isNil';
 import mergeWith from 'lodash/mergeWith';
 import uniqueId from 'lodash/uniqueId';
+import cloneDeepLodash from 'lodash/cloneDeep';
+import cloneDeepWith from 'lodash/cloneDeepWith';
 
 import { objectValues } from '../utils/common';
 
@@ -186,7 +188,7 @@ export function getFetchTypes(fetchTypes) {
     fail: fetchTypes[2],
   };
 }
-function customizer(objValue, newValue) {
+function arrayConcatMergeCustomizer(objValue, newValue) {
   if (Array.isArray(objValue)) {
     return objValue.concat(newValue);
   }
@@ -203,10 +205,27 @@ export function getFetchTypesByType(...arrayOfFetchTypes) {
       return result;
     }
     const types = getFetchTypes(fetchTypes);
-    return mergeWith(result, types, customizer);
+    return mergeWith(result, types, arrayConcatMergeCustomizer);
   }, {
     fetch: [],
     success: [],
     fail: [],
   });
+}
+
+/**
+ * !!! mutable
+ *
+ * @param source
+ * @param newObj
+ * @return {*}
+ */
+export function mergeWithConcatArrays(source, newObj) {
+  return mergeWith(source, newObj, arrayConcatMergeCustomizer);
+}
+
+export function cloneDeep(value, customizer = undefined) {
+  return customizer
+    ? cloneDeepWith(value, customizer)
+    : cloneDeepLodash(value);
 }
