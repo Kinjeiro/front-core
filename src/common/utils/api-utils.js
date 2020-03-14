@@ -514,12 +514,13 @@ export function createCrudApi(API_PREFIX, sendApiFn, options = {}) {
     patchRecord: apiConfig(`/${API_PREFIX}/{id}`, 'PATCH'),
   };
 
-  function apiFindRecords(meta = null, filters = null) {
-    return sendApiFn(API_CONFIGS.findRecords, {
+  function apiFindRecords(meta = undefined, filters = undefined) {
+    const query = { ...meta };
+    if (filters) {
       // мета передаем от рута, а вот все остальные фильтры от объекта filters
-      ...meta,
-      filters,
-    });
+      query.filters = filters;
+    }
+    return sendApiFn(API_CONFIGS.findRecords, query);
   }
 
   /**

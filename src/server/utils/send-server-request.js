@@ -3,7 +3,7 @@ import Hoek from 'hoek';
 import requestAgent from 'request';
 
 import { isUniError, parseToUniError, ThrowableUniError } from '../../common/models/uni-error';
-import { joinUri } from '../../common/utils/uri-utils';
+import { formatUrlParameters, joinUri } from '../../common/utils/uri-utils';
 
 // import serverConfig from '../server-config';
 import { getHeadersByAuthType } from './auth-utils';
@@ -54,13 +54,20 @@ export async function sendSimpleRequest(requestOptions) {
   //   ...requestOptionsFinal
   // } = requestOptions;
 
+  // todo @ANKU @BUG_OUT @request - не пользуйтеся request библиотекой, она использует queryStrings, а она brackets для малтипл параметром не понимает, тупо пытается их сериализовать
+  const requestOptionsFinal = {
+    ...requestOptions,
+    url: formatUrlParameters(requestOptions.qs, requestOptions.url),
+    qs: undefined,
+  };
+
   return new Promise((resolve, reject) => {
-    logger.log(`==== [${requestOptions.url}] ====`);
+    logger.log(`==== [${requestOptionsFinal.url}] ====`);
 
     function callback(error, responseIncomingMessage) {
       logger.log(`[from server REQUEST]${responseIncomingMessage ? `[${responseIncomingMessage.statusCode}]` : ''}`);
-      logObject(requestOptions, ['method', 'url']);
-      logObject(requestOptions, ['qs', 'payload', 'body', 'timeout', 'headers'], 'debug', true);
+      logObject(requestOptionsFinal, ['method', 'url']);
+      logObject(requestOptionsFinal, ['qs', 'payload', 'body', 'timeout', 'headers'], 'debug', true);
 
       if (error) {
         logger.error('\n\n\n[from server RESPONSE ERROR]\n', error.body || error, '\n\n');
@@ -70,7 +77,7 @@ export async function sendSimpleRequest(requestOptions) {
         reject(parseToUniError(error));
       } else if (responseIncomingMessage.statusCode >= 300 || responseIncomingMessage.statusCode < 200) {
         logger.error(`[from server RESPONSE ERROR STATUS]\n${responseIncomingMessage.statusCode}: `);
-        logger.debug('\n-- responseBody:\n', responseIncomingMessage.body, '\n-- request options:\n', requestOptions, '\n\n');
+        logger.debug('\n-- responseBody:\n', responseIncomingMessage.body, '\n-- request options:\n', requestOptionsFinal, '\n\n');
         reject(parseToUniError(responseIncomingMessage));
       } else {
         logger.log('[from server RESPONSE]');
@@ -87,7 +94,7 @@ export async function sendSimpleRequest(requestOptions) {
     }
 
     try {
-      const req = requestAgent(requestOptions, callback);
+      const req = requestAgent(requestOptionsFinal, callback);
       req
         .on('data', (data) => {
           // decompressed data as it is received
