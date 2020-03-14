@@ -194,7 +194,7 @@ export function createUniError(uniErrorData = {}) {
     && !uniError.clientErrorMessage
     && uniError.clientErrorMessages.length === 0
   ) {
-    uniError.clientErrorMessage = translateCore('errors.authServerNotResponse');
+    uniError.clientErrorMessage = translateCore('errors.serverNotResponse');
     uniError.clientErrorMessages = [uniError.clientErrorMessage];
   }
 

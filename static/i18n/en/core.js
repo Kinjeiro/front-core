@@ -15,6 +15,7 @@ module.exports = {
     errorWhileParseToUniError: "Can't convert to UniError.",
 
     authServerNotResponse: "Authenticated server doesn't response.",
+    serverNotResponse: 'Server doesn\'t response.',
     wrongUserCredentials: 'Invalid user credentials.',
     missingPassword: 'Missing required parameter: password.',
     notAuthorize: 'Not authorize.',

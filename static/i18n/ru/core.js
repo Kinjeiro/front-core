@@ -15,6 +15,7 @@ module.exports = {
     errorWhileParseToUniError: "@RU Can't convert to UniError.",
 
     authServerNotResponse: 'Авторизационный сервер не отвечает.',
+    serverNotResponse: 'Сервер не отвечает.',
     wrongUserCredentials: 'Некорректно введенные данные.',
     missingPassword: 'Введите пароль.',
     notAuthorize: 'Не авторизован.',
