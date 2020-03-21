@@ -159,13 +159,27 @@ export function createAllTypesMapCollectionReducer(
 ) {
   return createAllTypesReducer(TYPES, (state, action) => {
     const uuid = action[actionIdField];
+    const payload = action[ACTION_PAYLOAD_FIELD];
+
+    if (typeof uuid === 'undefined' || uuid === true) {
+      // тип подходит, но не задан uuid - значит на все
+      return Object.keys(state).reduce(
+        (stateNew, eachUuid) => {
+          // eslint-disable-next-line no-param-reassign
+          stateNew[eachUuid] = reducer(state[eachUuid], action, payload);
+          return stateNew;
+        },
+        {},
+      );
+    }
+
     const mapItem = state[uuid];
     if (typeof mapItem !== 'undefined' || createIfNotExist) {
       return {
         ...state,
         [uuid]: typeof mapItem === 'undefined' && typeof createIfNotExist === 'function'
-          ? createIfNotExist(reducer(undefined, action), action)
-          : reducer(mapItem, action),
+          ? createIfNotExist(reducer(undefined, action), action, payload)
+          : reducer(mapItem, action, payload),
       };
     }
     return state;
