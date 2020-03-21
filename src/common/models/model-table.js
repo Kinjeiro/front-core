@@ -54,7 +54,7 @@ export const QUERY_PROP_TYPE = PropTypes.shape(META_PROP_TYPE_MAP);
 
 export const TABLE_PROP_TYPE_MAP = {
   records: PropTypes.array,
-  meta: META_PROP,
+  meta: META_PROP_TYPE,
   filters: PropTypes.object,
   selected: PropTypes.arrayOf(ID_PROP_TYPE),
   isSelectedAll: PropTypes.bool,
@@ -68,6 +68,7 @@ export const TABLE_PROP_TYPE = PropTypes.shape(TABLE_PROP_TYPE_MAP);
 
 export const DEFAULT_META = {
   search: '',
+  // todo @ANKU @LOW - переделать на multiple sorting: [{ sortBy: 'sort1', sortDesc: true }, { sortBy: 'sort2' }],
   sortBy: null,
   sortDesc: true,
 
@@ -76,6 +77,8 @@ export const DEFAULT_META = {
   total: undefined,
 
   groupBy: null,
+
+  totalOnly: false,
 };
 
 export function createMeta(meta) {

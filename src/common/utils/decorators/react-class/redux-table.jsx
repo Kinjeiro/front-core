@@ -306,10 +306,31 @@ export default function reduxTableDecorator(
       }
 
       @bind()
-      handleWrapActionLoadRecords(...args) {
-        // eslint-disable-next-line max-len
-        clientLogger.error('@deprecated: Use "onUpdateTableFilters" or "onUpdateTableMeta" instead of "actionLoadRecords"');
-        return this.props.actionLoadRecords(...args);
+      handleWrapActionLoadRecords(newMeta, replaceMeta = false, newFilters = undefined, replaceFilters = false) {
+        const {
+          table: {
+            filters,
+          },
+          syncWithUrlParameters,
+          actionLoadRecords,
+        } = this.props;
+
+        const newMetaFinal = replaceMeta
+          ? getMeta(newMeta)
+          : newMeta;
+
+        const newFiltersFinal = replaceFilters
+          ? newFilters
+          : {
+            ...filters,
+            ...newFilters,
+          };
+
+        if (syncWithUrlParameters) {
+          return this.updateUrl(newMetaFinal, newFiltersFinal);
+        }
+
+        return actionLoadRecords(this.getTableId(), newMetaFinal, newFiltersFinal);
       }
       @bind()
       handleWrapActionClearFilters(...args) {
