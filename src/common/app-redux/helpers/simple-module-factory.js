@@ -4,6 +4,7 @@ import { objectValues } from '../../utils/common';
 import {
   createReducer,
   createAllTypesMapCollectionReducer,
+  ACTION_PAYLOAD_FIELD,
 } from '../utils';
 
 export const FIELD_ACTION_UUID = 'uuid';
@@ -76,21 +77,22 @@ export default function simpleModuleFactory(
   }
 
   const moduleItemReducer = (state = moduleItemInitialState, action) => {
+    const payload = action[ACTION_PAYLOAD_FIELD];
     if (action.type === TYPES.UPDATE) {
       return {
         ...state,
-        data: typeof action.payload === 'object'
+        data: typeof payload === 'object'
           ? {
             ...(state.data || {}),
-            ...action.payload,
+            ...payload,
           }
-          : action.payload,
+          : payload,
       };
     }
     return entityReducer
       ? {
         ...state,
-        data: entityReducer(state.data, action),
+        data: entityReducer(state.data, action, payload),
       }
       : { ...state };
   };
@@ -172,7 +174,7 @@ export default function simpleModuleFactory(
 
   const moduleReducerWrapper = (state = moduleInitialState, action, data) => {
     let stateFinal = state;
-    if (TYPES_VALUES.includes(action.type) && action.type !== TYPES.REMOVE) {
+    if (action && TYPES_VALUES.includes(action.type) && action.type !== TYPES.REMOVE) {
       stateFinal = {
         ...stateFinal,
         lastUsed: action[FIELD_ACTION_UUID],
@@ -183,10 +185,15 @@ export default function simpleModuleFactory(
 
   return {
     PREFIX: moduleName,
+
+    // ENTITY
     entityReducer,
     moduleItemReducer,
-    moduleReducer: moduleReducerWrapper,
+
+    // MODULE
+    moduleInitialState,
     TYPES,
+    moduleReducer: moduleReducerWrapper,
     getBindActions,
     actions: getBindActions(),
   };
