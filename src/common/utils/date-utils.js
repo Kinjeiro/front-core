@@ -159,3 +159,6 @@ export function compareDate(dateA, dateB, withoutTime = true) {
       : -1;
 }
 
+export function isAnyDate(value) {
+  return value && (moment.isDate(value) || moment.isMoment(value));
+}
