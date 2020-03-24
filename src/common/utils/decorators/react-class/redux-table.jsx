@@ -109,8 +109,9 @@ export default function reduxTableDecorator(
           tableId: undefined,
           table: undefined,
 
-          initMeta: getMeta(query, projectInitMeta),
-          initFilters: query ? merge({}, projectInitFilters, query.filters) : projectInitFilters,
+          initMeta: projectInitMeta,
+          initFilters: projectInitFilters,
+          query,
 
           syncWithUrlParameters,
         };
@@ -161,6 +162,7 @@ export default function reduxTableDecorator(
         const {
           initMeta,
           initFilters,
+          query,
           actionModuleItemInit,
           actionLoadRecords,
           syncWithUrlParameters,
@@ -170,11 +172,16 @@ export default function reduxTableDecorator(
 
         const tableIdFinal = this.getTableId(props);
 
+        // при старте нужно подать помимо init инфу еще и из query
+        // но только при старте, при сбрасывании форму, урл не должен учитываться
+        const metaStart = getMeta(query, initMeta);
+        const filtersStart = query ? merge({}, initFilters, query.filters) : initFilters;
+
         actionModuleItemInit(
           tableIdFinal,
           {
-            meta: initMeta,
-            filters: initFilters,
+            meta: metaStart,
+            filters: filtersStart,
           },
         );
 
@@ -187,7 +194,7 @@ export default function reduxTableDecorator(
           actionLoadRecords(tableIdFinal, undefined, undefined, false, true, syncWithUrlParameters);
         } else if (syncWithUrlParameters) {
           // если не загружаем, то вручную обновим урл
-          this.updateUrl(initMeta, initFilters);
+          this.updateUrl(metaStart, filtersStart);
         }
       }
       componentWillReceiveProps(newProps) {
@@ -200,6 +207,7 @@ export default function reduxTableDecorator(
           table: {
             actionLoadRecordsStatus,
           } = {},
+          query,
         } = newProps;
 
         const isFailed = actionLoadRecordsStatus
@@ -217,8 +225,12 @@ export default function reduxTableDecorator(
           && actionLoadRecords
           && syncWithUrlParameters
         ) {
+          // мы обновили фильтры в урле и теперь нужно обновить в таблице
+          const metaWithQuery = getMeta(query);
+          const filtersWithQuery = query ? merge({}, query.filters) : {};
+
           // если обновился урл (через updateUrl) - нужно обновиться загрузку
-          actionLoadRecords(newTableId, initMeta, initFilters, false, false, syncWithUrlParameters);
+          actionLoadRecords(newTableId, metaWithQuery, filtersWithQuery, false, false, syncWithUrlParameters);
         }
       }
       componentWillUnmount(props = this.props) {
