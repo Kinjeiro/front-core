@@ -37,6 +37,7 @@ export const META_PROP_TYPE_MAP = {
   sortBy: PropTypes.string,
   sortDesc: PropTypes.bool,
   total: PropTypes.number,
+  presets: PropTypes.arrayOf(PropTypes.string),
 };
 export const META_PROP_TYPE = PropTypes.shape(META_PROP_TYPE_MAP);
 /**
@@ -68,17 +69,17 @@ export const TABLE_PROP_TYPE = PropTypes.shape(TABLE_PROP_TYPE_MAP);
 
 export const DEFAULT_META = {
   search: '',
-  // todo @ANKU @LOW - переделать на multiple sorting: [{ sortBy: 'sort1', sortDesc: true }, { sortBy: 'sort2' }],
-  sortBy: null,
+  sortBy: undefined,
   sortDesc: true,
 
   startPage: 0,
   itemsPerPage: 20,
   total: undefined,
 
-  groupBy: null,
+  groupBy: undefined,
+  presets: undefined,
 
-  totalOnly: false,
+  totalOnly: undefined,
 };
 
 export function createMeta(meta) {
@@ -158,6 +159,8 @@ export function getMeta(query, defaultMeta = {}) {
       : defaultMeta.total,
 
     groupBy: queryFinal.groupBy || defaultMeta.groupBy || DEFAULT_META.groupBy,
+
+    presets: queryFinal.presets || defaultMeta.presets || DEFAULT_META.presets,
   };
 }
 

@@ -8,7 +8,6 @@ import {
 import {
   deepEquals,
   executeVariable,
-  merge,
 } from '../../utils/common';
 import {
   parseUrlParameters,
@@ -227,7 +226,11 @@ export default class ReduxTable extends ReduxUni {
           let newMeta = (meta === null || meta === false)
             ? initialMeta
             : meta
-              ? merge({}, currentMeta, meta)
+              // ? merge({}, currentMeta, meta)
+              ? {
+                ...currentMeta,
+                ...meta,
+              }
               : currentMeta;
           newMeta = omit(newMeta, 'total');
 
