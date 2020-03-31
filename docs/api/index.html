@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.9.35 | Documentation</title>
+  <title>@reagentum/front-core 1.9.36 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.9.35</code></div>
+          <div class='mb1'><code>1.9.36</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -4099,7 +4099,7 @@ localDataList - лист объектов или (globalState, newMeta, newFilte
 
   
 
-  <div class='pre p1 fill-light mt0'>actionLoadRecords(tableUuid: any, meta: any, filters: any, forceUpdate: any, isReplaceLocation: any, syncWithUrlParameters: any, searchFieldObjects: any): function (any, any)</div>
+  <div class='pre p1 fill-light mt0'>actionLoadRecords(tableUuid: any, meta: any, filters: any, forceUpdate: any, isReplaceLocation: any, syncWithUrlParameters: any, searchFieldObjects: any, isLoadMore: any): function (any, any)</div>
   
   
 
@@ -4167,8 +4167,15 @@ localDataList - лист объектов или (globalState, newMeta, newFilte
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>searchFieldObjects</span> <code class='quiet'>(any
-            = <code>undefined</code>)</code>
+            <span class='code bold'>searchFieldObjects</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>isLoadMore</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -9610,6 +9617,16 @@ processingStateVariable (по умолчанию, isProcessing)</p>
               
                 <tr>
   <td class='break-word'><span class='code bold'>$1.syncWithUrlParameters</span> <code class='quiet'>any</code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$1.autoSaveState</span> <code class='quiet'>any</code>
   
     (default <code>false</code>)
   </td>

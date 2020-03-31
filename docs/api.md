@@ -442,7 +442,8 @@ localDataList - лист объектов или (globalState, newMeta, newFilte
 -   `forceUpdate`  
 -   `isReplaceLocation`  
 -   `syncWithUrlParameters`  синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
--   `searchFieldObjects`   (optional, default `undefined`)
+-   `searchFieldObjects`  
+-   `isLoadMore`  
 
 Returns **function (any, any)** 
 
@@ -1316,6 +1317,7 @@ Returns **({method, path, payload} | any)**
     -   `$1.useLoading`   (optional, default `true`)
     -   `$1.urlFilterValueNormalizers`  
     -   `$1.syncWithUrlParameters`   (optional, default `false`)
+    -   `$1.autoSaveState`   (optional, default `false`)
 -   `loadOnMount`  запускать загрузку данных при маунте (componentWillMount)
 -   `loadOnChange`  если изменилась мета или фильтры - запускает загрузку в componentWillReceiveProps
 -   `clearOnUnmount`  очищать ли данные, когда компонент unmount (componentWillUnmount)
