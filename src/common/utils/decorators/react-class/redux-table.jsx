@@ -9,6 +9,7 @@ import {
 import merge from 'lodash/merge';
 // import omit from 'lodash/omit';
 import bind from 'lodash-decorators/bind';
+import { loadStorageData } from '../../../helpers/helper-storage-data';
 
 import {
   generateUuid,
@@ -79,6 +80,7 @@ export default function reduxTableDecorator(
     useLoading = true,
     urlFilterValueNormalizers,
     syncWithUrlParameters = false,
+    autoSaveState = false,
   } = {},
 ) {
   return (ReactComponentClass) => {
@@ -182,6 +184,9 @@ export default function reduxTableDecorator(
           {
             meta: metaStart,
             filters: filtersStart,
+            autoSaveState,
+            // todo @ANKU @LOW - по-хорошему нужно это рядом с ReduxTable класть, но там нет момент инициализации, он в init module
+            ...loadStorageData(tableIdFinal),
           },
         );
 

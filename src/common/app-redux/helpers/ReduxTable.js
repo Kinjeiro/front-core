@@ -4,6 +4,7 @@ import {
   push,
   replace as replaceLocation,
 } from 'react-router-redux';
+import { mergeStorageData } from '../../helpers/helper-storage-data';
 
 import {
   deepEquals,
@@ -45,6 +46,7 @@ export default class ReduxTable extends ReduxUni {
       },
       selected: [],
       isSelectedAll: false,
+      autoSaveState: false,
 
       actionLoadRecordsStatus: undefined,
       actionBulkChangeStatusStatus: undefined,
@@ -224,6 +226,7 @@ export default class ReduxTable extends ReduxUni {
             actionLoadRecordsStatus,
             meta: currentMeta,
             filters: currentFilters,
+            autoSaveState,
           } = stateTable;
 
           let newMeta = (meta === null || meta === false)
@@ -324,6 +327,12 @@ export default class ReduxTable extends ReduxUni {
                 searchFieldObjects,
               )
                 .then((response) => {
+                  if (autoSaveState) {
+                    mergeStorageData(tableUuid, {
+                      meta: newMeta,
+                      filters: newFilters,
+                    });
+                  }
                   if (Array.isArray(response)) {
                     return createTableResponse(response, newMeta, response.length);
                   }
