@@ -124,6 +124,18 @@ export function formatDateTime(date, format = DATETIME_FORMAT) {
   return parseDate(date, format);
 }
 
+
+export const DEFAULT_FORMAT_JS_DATE_OPTIONS = {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+};
+// todo @ANKU @LOW - locale
+export function formatJsDate(date, formatOptions = DEFAULT_FORMAT_JS_DATE_OPTIONS, locale = 'ru-Ru') {
+  const jsDate = parseDate(date, FORMATS.JS_DATE);
+  return jsDate && jsDate.toLocaleString(locale, formatOptions);
+}
+
 export function parseToSystem(momentData) {
   return parseDate(momentData, SYSTEM_DATE_FORMAT);
 }
