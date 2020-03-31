@@ -41,7 +41,8 @@ export default class I18NProvider extends Component {
   // ======================================================
   // LIFECYCLE
   // ======================================================
-  componentWillMount() {
+  constructor(...args) {
+    super(...args);
     const {
       i18nInstance: {
         language,

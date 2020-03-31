@@ -44,7 +44,9 @@ export default function permissionWrapper(
         actionGoTo: PropTypes.func,
       };
 
-      componentWillMount() {
+      constructor(...args) {
+        super(...args);
+
         const {
           user,
           actionChangeGlobalUniError,
