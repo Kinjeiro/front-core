@@ -184,6 +184,8 @@ export default class ReduxTable extends ReduxUni {
        * @param forceUpdate
        * @param isReplaceLocation
        * @param syncWithUrlParameters - синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
+       * @param searchFieldObjects
+       * @param isLoadMore
        * @return {function(*, *)}
        */
       actions.actionLoadRecords = (
@@ -194,6 +196,7 @@ export default class ReduxTable extends ReduxUni {
         isReplaceLocation = false,
         syncWithUrlParameters = false,
         searchFieldObjects = undefined,
+        isLoadMore = false,
       ) => {
         // return {
         //   types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
@@ -312,6 +315,7 @@ export default class ReduxTable extends ReduxUni {
               [FIELD_UUID]: tableUuid,
               meta: newMeta,
               filters: newFilters,
+              isLoadMore,
               types: [TYPES.LOAD_RECORDS_FETCH, TYPES.LOAD_RECORDS_SUCCESS, TYPES.LOAD_RECORDS_FAIL],
               payload: apiFinalRecords(
                 newMeta,
@@ -383,13 +387,15 @@ export default class ReduxTable extends ReduxUni {
         },
         filters: action.filters,
       }),
-      [TYPES.LOAD_RECORDS_SUCCESS]: (state, action, { meta, records }) => ({
+      [TYPES.LOAD_RECORDS_SUCCESS]: (state, { isLoadMore }, { meta, records }) => ({
         ...state,
         meta: {
           ...state.meta,
           ...meta,
         },
-        records,
+        records: isLoadMore
+          ? [...state.records, ...records]
+          : records,
       }),
       [TYPES.EDIT_RECORD_SUCCESS]: (state, action, patchOperations) => ({
         ...state,

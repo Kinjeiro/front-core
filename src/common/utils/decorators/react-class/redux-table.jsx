@@ -276,7 +276,7 @@ export default function reduxTableDecorator(
       // HANDLERS
       // ======================================================
       @bind()
-      handleUpdateTableMeta(newMeta, replace = false) {
+      handleUpdateTableMeta(newMeta, replace = false, isLoadMore = false) {
         const {
           actionLoadRecords,
           syncWithUrlParameters,
@@ -288,9 +288,19 @@ export default function reduxTableDecorator(
 
         if (syncWithUrlParameters) {
           // делаем через обновления урла, так как есть случаи когда tableId зависит от меты и фильтров, а если сразу запустить actionLoadRecords c новыми фильтрами то tableId еще не поменяется ибо урл еще не поменялся
+          // todo @ANKU @CRIT @MAIN - isLoadMore не работает с синхронизацией через url
           return this.updateUrl(newMetaFinal);
         }
-        return actionLoadRecords(this.getTableId(), newMetaFinal);
+        return actionLoadRecords(
+          this.getTableId(),
+          newMetaFinal,
+          undefined, // filters
+          undefined, // forceUpdate
+          undefined, // isReplaceLocation
+          undefined, // syncWithUrlParameters
+          undefined, // searchFieldObjects
+          isLoadMore,
+        );
       }
 
       @bind()
