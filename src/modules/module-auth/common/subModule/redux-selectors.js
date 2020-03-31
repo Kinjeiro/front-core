@@ -9,13 +9,11 @@ export function getUserInfo(globalState) {
 export function getUser(globalState) {
   const userInfo = getUserInfo(globalState);
   const { userData } = userInfo || {};
-  return userData && userData.userId
-    ? userData
-    : null;
+  return userData && userData.userId && userData;
 }
 export function getUserId(globalState) {
   const userData = getUser(globalState);
-  return (userData && userData.userId) || null;
+  return userData && userData.userId;
 }
 
 export function hasPermission(globalState, ...permissions) {
