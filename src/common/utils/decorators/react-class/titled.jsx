@@ -67,8 +67,8 @@ export default function titledDecorator(
       // ======================================================
       // LIFECYCLE
       // ======================================================
-      componentWillMount() {
-      // componentDidMount() {
+      constructor(...args) {
+        super(...args);
         this.props.actionCurrentPageChanged(this.getPageInfo());
       }
       componentWillReceiveProps(nextProps, nextContext) {
