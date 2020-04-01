@@ -4,7 +4,7 @@ import {
   push,
   replace as replaceLocation,
 } from 'react-router-redux';
-import { mergeStorageData } from '../../helpers/helper-storage-data';
+import { replaceStorageData } from '../../helpers/helper-storage-data';
 
 import {
   deepEquals,
@@ -328,7 +328,9 @@ export default class ReduxTable extends ReduxUni {
               )
                 .then((response) => {
                   if (autoSaveState) {
-                    mergeStorageData(tableUuid, {
+                    // todo @ANKU @LOW - пока сделаем замену, но потому лучше merge с обязательной заменой undefined
+                    // mergeStorageData(tableUuid, {
+                    replaceStorageData(tableUuid, {
                       meta: newMeta,
                       filters: newFilters,
                     });
