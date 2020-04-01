@@ -635,10 +635,10 @@ export async function promiseState(promise) {
 }
 export async function promiseStatusSwitch(
   promise,
-  pendingFunc = null,
-  resolvedFunc = null,
-  rejectedFunc = null,
-  timeout = null,
+  pendingFunc = undefined,
+  resolvedFunc = undefined,
+  rejectedFunc = undefined,
+  timeout = undefined,
 ) {
   if (timeout) {
     await delayPromiseSilence(true, timeout);
@@ -671,30 +671,56 @@ export async function promiseWaterFall(promises) {
  * Метод который, который на время исполнения промиса, проставляет через setState значение переменной
  * processingStateVariable (по умолчанию, isProcessing)
  *
+ * Многие промисы - это обычные Promise.resolve и выполняются моментально
+ * Поэтому, проверка необходимости этих действий идет через 10 секунд, и если proimse до сих пор в pending тогда запускается setState, чтобы лишний раз не нагружать перерендеринг реакта
+ *
  * @param handlerPromise
  * @param componentWithSetState
  * @param processingStateVariable
+ * @param immediately - выполняет setState сразу же, без задержки в 15 милисекунд
  * @return {*}
  */
-export function emitProcessing(handlerPromise, componentWithSetState, processingStateVariable = 'isProcessing') {
+export function emitProcessing(
+  handlerPromise,
+  componentWithSetState,
+  processingStateVariable = 'isProcessing',
+  immediately = false,
+) {
   const handlerPromiseFinal = executeVariable(handlerPromise);
   if (isPromise(handlerPromiseFinal) && componentWithSetState && componentWithSetState.setState) {
     /*
      бывает так, что промис - лишь обертка над Promise.resolve а setState заставляете перирисоваться ради этой милисекунды
      поэтому сделаем setTimeout и проверим значение на следующем тике
      */
+
+    const setStartProcessing = () => {
+      componentWithSetState.setState({ [processingStateVariable]: true });
+    };
+    const setStopProcessing = () => {
+      componentWithSetState.setState({ [processingStateVariable]: false });
+    };
+
+    if (immediately) {
+      setStartProcessing();
+      // может случится так что через 15 секунд промис уже выполнен, тогда запускаются функции resolve и failed
+      return handlerPromiseFinal
+        .then(setStopProcessing)
+        .catch(setStopProcessing);
+    }
+
+    // может случится так что через 15 секунд промис уже выполнен, тогда запускаются функции resolve и failed
     return promiseStatusSwitch(
       handlerPromiseFinal,
       (promise) => {
-        componentWithSetState.setState({ [processingStateVariable]: true });
+        setStartProcessing();
         return promise
-        // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-          .then(() => componentWithSetState.setState({ [processingStateVariable]: false }))
-          .catch(() => componentWithSetState.setState({ [processingStateVariable]: false }));
+          // todo @ANKU @LOW - warning.js:33 Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+          .then(setStopProcessing)
+          .catch(setStopProcessing);
       },
-      null,
-      null,
-      10,
+      undefined,
+      undefined,
+      15,
     );
   }
   return handlerPromise;

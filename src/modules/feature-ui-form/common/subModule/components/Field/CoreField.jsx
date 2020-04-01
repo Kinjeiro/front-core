@@ -507,6 +507,7 @@ export default class CoreField extends Component {
           this.validateComponent(this.props, value),
         ]),
         this,
+        'isProcessing',
       );
     }
     return promiseChange;
@@ -587,7 +588,7 @@ export default class CoreField extends Component {
       eventNames.forEach((eventName) => {
         const prevHandler = controlProps[eventName];
         if (prevHandler) {
-          wrappers[eventName] = (...args) => emitProcessing(prevHandler(...args), this);
+          wrappers[eventName] = (...args) => emitProcessing(prevHandler(...args), this, 'isProcessing');
           // wrappers[eventName] = memoizeBind(this.handleEmitProcessing, this, eventName, prevHandler);
         }
       });
@@ -609,6 +610,7 @@ export default class CoreField extends Component {
         this.validateComponent(this.props),
       ]),
       this,
+      'isProcessing',
     );
     this.setState({
       touched: true,
@@ -636,7 +638,7 @@ export default class CoreField extends Component {
 
     // для первой валидации
     if (!touched) {
-      emitProcessing(this.validateComponent(this.props, newValue), this);
+      emitProcessing(this.validateComponent(this.props, newValue), this, 'isProcessing');
 
       // this.handleTouch();
       this.setState({

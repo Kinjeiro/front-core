@@ -147,6 +147,7 @@ export default class CoreForm extends Component {
     formErrors: [],
     hasError: false,
     isProcessing: false,
+    isValidating: false,
     touched: false,
     hasSendOnce: false,
     dependentFieldsHashes: {},
@@ -395,6 +396,7 @@ export default class CoreForm extends Component {
     return emitProcessing(
       this.isValid(set({}, fieldName, newValue)),
       this,
+      'isValidating',
     );
   }
 
@@ -430,8 +432,7 @@ export default class CoreForm extends Component {
       event.stopPropagation();
     }
 
-    await emitProcessing(this.asyncSubmit, this, 'isProcessing');
-    return false;
+    return emitProcessing(this.asyncSubmit(), this, 'isProcessing');
   }
 
   @bind()
@@ -511,6 +512,7 @@ export default class CoreForm extends Component {
     const {
       id,
       isProcessing,
+      isValidating,
     } = this.state;
 
     const label = this.getFieldLabel(field);
@@ -540,7 +542,7 @@ export default class CoreForm extends Component {
       id: `${id}_${name}`,
       ...field,
       // пока форма находится в процессе сабмита никакие изменения вносить нельзя
-      readOnly: formReadOnly || isProcessing || field.readOnly,
+      readOnly: formReadOnly || isProcessing || isValidating || field.readOnly,
       // controlProps: firstFocus && index === 0
       //   ? {
       //     autoFocus: true,
@@ -575,7 +577,7 @@ export default class CoreForm extends Component {
       nodeAfter,
       fields,
 
-      ...otherProps,
+      ...otherProps
     } = groupingField;
 
     return (
@@ -661,6 +663,7 @@ export default class CoreForm extends Component {
     const {
       hasError,
       isProcessing,
+      isValidating,
       touched,
       hasSendOnce,
     } = this.state;
@@ -669,7 +672,7 @@ export default class CoreForm extends Component {
 
 
     if (onSubmit && textActionSubmit) {
-      const isDisabled = isProcessing || isFetching || hasError || (!touched && !hasSendOnce);
+      const isDisabled = isProcessing || isValidating || isFetching || hasError || (!touched && !hasSendOnce);
 
       let control = (
         <Button
@@ -678,7 +681,7 @@ export default class CoreForm extends Component {
           className={ this.bem('submitButton') }
           primary={ true }
           disabled={ isDisabled }
-          loading={ isProcessing || isFetching }
+          loading={ isProcessing || isValidating || isFetching }
           onClick={ useForm ? undefined : this.handleSubmit }
         >
           { textActionSubmit }
@@ -799,12 +802,13 @@ export default class CoreForm extends Component {
       touched,
       hasError,
       isProcessing,
+      isValidating,
     } = this.state;
 
     const className = `\
       ${this.fullClassName}\
       ${touched && hasError ? 'CoreForm--error' : ''}\
-      ${isProcessing ? 'CoreForm--processing' : ''}\
+      ${isProcessing || isValidating ? 'CoreForm--processing' : ''}\
     `;
 
     let component = (
