@@ -212,6 +212,10 @@ export default class ServiceAuth extends CoreService {
 
     /*
       1 вариант opid от Keycloak
+      1_1 протух
+        "active": false
+
+      1_2
         "active": true,
         "jti": "c5592bbd-840a-4be4-9a8f-456b7c953526",
         "exp": 1567015812,
@@ -261,6 +265,8 @@ export default class ServiceAuth extends CoreService {
     */
 
     const {
+      active,
+
       sub,
       name,
       username,
@@ -309,6 +315,13 @@ export default class ServiceAuth extends CoreService {
        permissions: [],
      };
     */
+
+    if (active === false) {
+      throw new ThrowableUniError({
+        message: 'Клиент не активен',
+        isNotAuth: true,
+      });
+    }
 
     const usernameFinal = username || user_name || preferred_username;
 
