@@ -46,7 +46,8 @@ const {
 /**
  * Декорирует компонент для отображения таблицы с данными
  * Автоматически инициализирует в redux store под tables свои данные и при выходе их очищает
- * @param tableId - айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)
+ * @param tableId - айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не
+ *   используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)
  *
  * Options:
  * @param loadOnMount - запускать загрузку данных при маунте (componentWillMount)
@@ -54,10 +55,13 @@ const {
  * @param clearOnUnmount - очищать ли данные, когда компонент unmount (componentWillUnmount)
  * @param initMeta - (объект или функция от props) - начальная мета, которая будет перезаписана из урл параметров
  * @param initFilters - (объект или функция от props) - начальный фильтры
- * @param tableActions - actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect не передавать
+ * @param tableActions - actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect
+ *   не передавать
  * @param useLoading - использовать лоадинг для первоначальной загрузки
- * @param urlFilterValueNormalizers - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
- * @param syncWithUrlParameters - синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
+ * @param urlFilterValueNormalizers - мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из
+ *   урла значений
+ * @param syncWithUrlParameters - синхронизировать с url query (но делается scroll to top и не подходит для load more и
+ *   нескольких таблиц на странице)
  *
  * Возвращает компонент с доп пропертями:
  * - table - текущая данные таблицы
@@ -65,7 +69,8 @@ const {
  * - getTableId - (props = this.props) => {} id таблицы, удобно если он зависит от пропсов
  * - initMeta - начальная мета из options и урла
  * - initFilters - начальный фильтры из options и урла
- * - onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры тут не замекняеются, а мержатся
+ * - onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры
+ *   тут не замекняеются, а мержатся
  * - onUpdateTableMeta - (newMeta, replaceAll = false) начальный фильтры из options и урла
  */
 export default function reduxTableDecorator(
@@ -142,6 +147,7 @@ export default function reduxTableDecorator(
         initMeta: META_PROP,
         initFilters: PropTypes.object,
         syncWithUrlParameters: PropTypes.bool,
+        query: PropTypes.object,
 
         actionModuleItemInit: PropTypes.func,
         actionModuleItemRemove: PropTypes.func,
@@ -153,26 +159,17 @@ export default function reduxTableDecorator(
         actionReplaceState: PropTypes.func,
       };
 
-      /*
-        @NOTE: в React v16 componentWillUnmount стал асинхронным, то есть теперь он может сработать после того как замаунтится новый компонент
-        То есть своим уникальным id стереть значения для нового
-        Поэтому нужно вместо componentWillMount (который в 16 deprecated) использовать componentDidMount
-        https://github.com/facebook/react/issues/11106
-      */
-      // componentWillMount(props = this.props) {
-      componentDidMount(props = this.props) {
+      constructor(...args) {
+        super(...args);
+
         const {
           initMeta,
           initFilters,
           query,
           actionModuleItemInit,
-          actionLoadRecords,
-          syncWithUrlParameters,
-          // actionClearFilters,
-          // actionPushState,
-        } = props;
+        } = this.props;
 
-        const tableIdFinal = this.getTableId(props);
+        const tableIdFinal = this.getTableId(this.props);
 
         // при старте нужно подать помимо init инфу еще и из query
         // но только при старте, при сбрасывании форму, урл не должен учитываться
@@ -189,6 +186,28 @@ export default function reduxTableDecorator(
             ...loadStorageData(tableIdFinal),
           },
         );
+      }
+
+      /*
+        @NOTE: в React v16 componentWillUnmount стал асинхронным, то есть теперь он может сработать после того как замаунтится новый компонент
+        То есть своим уникальным id стереть значения для нового
+        Поэтому нужно вместо componentWillMount (который в 16 deprecated) использовать componentDidMount
+        https://github.com/facebook/react/issues/11106
+      */
+      // componentWillMount(props = this.props) {
+      componentDidMount(props = this.props) {
+        const {
+          initMeta,
+          initFilters,
+          query,
+          actionLoadRecords,
+          syncWithUrlParameters,
+        } = props;
+
+        const tableIdFinal = this.getTableId(props);
+
+        const metaStart = getMeta(query, initMeta);
+        const filtersStart = query ? merge({}, initFilters, query.filters) : initFilters;
 
         // if (clearOnMount) {
         //   actionClearFilters(TABLE_ID);
@@ -202,27 +221,24 @@ export default function reduxTableDecorator(
           this.updateUrl(metaStart, filtersStart);
         }
       }
-      componentWillReceiveProps(newProps) {
+      componentDidUpdate(prevProps, prevState, snapshot) {
         const {
-          initMeta,
-          initFilters,
-          // actionClearFilters,
           actionLoadRecords,
           syncWithUrlParameters,
           table: {
             actionLoadRecordsStatus,
           } = {},
           query,
-        } = newProps;
+        } = this.props;
 
         const isFailed = actionLoadRecordsStatus
           && actionLoadRecordsStatus.isFailed
-          && !this.props.table.actionLoadRecordsStatus.isFailed;
+          && !prevProps.table.actionLoadRecordsStatus.isFailed;
 
-        const oldTableId = this.getTableId();
-        const newTableId = this.getTableId(newProps);
+        const oldTableId = this.getTableId(prevProps);
+        const newTableId = this.getTableId();
         if (newTableId !== oldTableId) {
-          this.componentWillUnmount(this.props);
+          this.componentWillUnmount(prevProps);
           // this.componentWillMount(newProps);
         } else if (
           !isFailed
@@ -238,6 +254,7 @@ export default function reduxTableDecorator(
           actionLoadRecords(newTableId, metaWithQuery, filtersWithQuery, false, false, syncWithUrlParameters);
         }
       }
+
       componentWillUnmount(props = this.props) {
         const {
           actionModuleItemRemove,
