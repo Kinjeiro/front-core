@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.9.36 | Documentation</title>
+  <title>@reagentum/front-core 1.9.37 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.9.36</code></div>
+          <div class='mb1'><code>1.9.37</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -9113,9 +9113,11 @@ m.tellAge(); // Mike is 12 years old.
 
   <p>Метод который, который на время исполнения промиса, проставляет через setState значение переменной
 processingStateVariable (по умолчанию, isProcessing)</p>
+<p>Многие промисы - это обычные Promise.resolve и выполняются моментально
+Поэтому, проверка необходимости этих действий идет через 10 секунд, и если proimse до сих пор в pending тогда запускается setState, чтобы лишний раз не нагружать перерендеринг реакта</p>
 
 
-  <div class='pre p1 fill-light mt0'>emitProcessing(handlerPromise: any, componentWithSetState: any, processingStateVariable: any): any</div>
+  <div class='pre p1 fill-light mt0'>emitProcessing(handlerPromise: any, componentWithSetState: any, processingStateVariable: any, immediately: any): any</div>
   
   
 
@@ -9150,6 +9152,15 @@ processingStateVariable (по умолчанию, isProcessing)</p>
           <div>
             <span class='code bold'>processingStateVariable</span> <code class='quiet'>(any)</code>
 	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>immediately</span> <code class='quiet'>(any)</code>
+	    выполняет setState сразу же, без задержки в 15 милисекунд
+
           </div>
           
         </div>
@@ -9512,7 +9523,8 @@ processingStateVariable (по умолчанию, isProcessing)</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>tableId</span> <code class='quiet'>(any)</code>
-	    айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)
+	    айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не
+используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)
 <p>Options:</p>
 
           </div>
@@ -9690,7 +9702,8 @@ processingStateVariable (по умолчанию, isProcessing)</p>
             <span class='code bold'>tableActions</span> <code class='quiet'>(any)</code>
 	    actions чтобы можно было запускать тут load 
 \
- они все передадуться в пропсы (можно в @connect не передавать
+ они все передадуться в пропсы (можно в @connect
+не передавать
 
           </div>
           
@@ -9710,7 +9723,8 @@ processingStateVariable (по умолчанию, isProcessing)</p>
             <span class='code bold'>urlFilterValueNormalizers</span> <code class='quiet'>(any)</code>
 	    мапа 
 <filterName>
-: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
+: (urlValue)=>normalizedValue  - для правильного парсинга из
+урла значений
 
           </div>
           
@@ -9719,7 +9733,8 @@ processingStateVariable (по умолчанию, isProcessing)</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>syncWithUrlParameters</span> <code class='quiet'>(any)</code>
-	    синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)
+	    синхронизировать с url query (но делается scroll to top и не подходит для load more и
+нескольких таблиц на странице)
 <p>Возвращает компонент с доп пропертями:</p>
 <ul>
 <li>table - текущая данные таблицы</li>
@@ -9727,7 +9742,8 @@ processingStateVariable (по умолчанию, isProcessing)</p>
 <li>getTableId - (props = this.props) => {} id таблицы, удобно если он зависит от пропсов</li>
 <li>initMeta - начальная мета из options и урла</li>
 <li>initFilters - начальный фильтры из options и урла</li>
-<li>onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры тут не замекняеются, а мержатся</li>
+<li>onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры
+тут не замекняеются, а мержатся</li>
 <li>onUpdateTableMeta - (newMeta, replaceAll = false) начальный фильтры из options и урла</li>
 </ul>
 

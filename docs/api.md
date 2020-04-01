@@ -1246,11 +1246,15 @@ m.tellAge(); // Mike is 12 years old.
 Метод который, который на время исполнения промиса, проставляет через setState значение переменной
 processingStateVariable (по умолчанию, isProcessing)
 
+Многие промисы - это обычные Promise.resolve и выполняются моментально
+Поэтому, проверка необходимости этих действий идет через 10 секунд, и если proimse до сих пор в pending тогда запускается setState, чтобы лишний раз не нагружать перерендеринг реакта
+
 **Parameters**
 
 -   `handlerPromise`  
 -   `componentWithSetState`  
 -   `processingStateVariable`  
+-   `immediately`  выполняет setState сразу же, без задержки в 15 милисекунд
 
 Returns **any** 
 
@@ -1306,7 +1310,8 @@ Returns **({method, path, payload} | any)**
 
 **Parameters**
 
--   `tableId`  айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)Options:
+-   `tableId`  айди таблицы, или функция (props) => id. !!! Если зависит от table meta или filters то не
+      используйте actionLoadRecords со старым id (вместо этого используйте onUpdateTableFilters и onUpdateTableMeta)Options:
 -   `$1` **[Object][306]**  (optional, default `{}`)
     -   `$1.loadOnMount`   (optional, default `true`)
     -   `$1.loadOnChange`   (optional, default `true`)
@@ -1323,15 +1328,19 @@ Returns **({method, path, payload} | any)**
 -   `clearOnUnmount`  очищать ли данные, когда компонент unmount (componentWillUnmount)
 -   `initMeta`  (объект или функция от props) - начальная мета, которая будет перезаписана из урл параметров
 -   `initFilters`  (объект или функция от props) - начальный фильтры
--   `tableActions`  actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect не передавать
+-   `tableActions`  actions чтобы можно было запускать тут load \\ они все передадуться в пропсы (можно в @connect
+      не передавать
 -   `useLoading`  использовать лоадинг для первоначальной загрузки
--   `urlFilterValueNormalizers`  мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из урла значений
--   `syncWithUrlParameters`  синхронизировать с url query (но делается scroll to top и не подходит для load more и нескольких таблиц на странице)Возвращает компонент с доп пропертями:-   table - текущая данные таблицы
+-   `urlFilterValueNormalizers`  мапа <filterName>: (urlValue)=>normalizedValue  - для правильного парсинга из
+      урла значений
+-   `syncWithUrlParameters`  синхронизировать с url query (но делается scroll to top и не подходит для load more и
+      нескольких таблиц на странице)Возвращает компонент с доп пропертями:-   table - текущая данные таблицы
     -   tableId - id таблицы
     -   getTableId - (props = this.props) => {} id таблицы, удобно если он зависит от пропсов
     -   initMeta - начальная мета из options и урла
     -   initFilters - начальный фильтры из options и урла
-    -   onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры тут не замекняеются, а мержатся
+    -   onUpdateTableFilters - (newFilters, replaceAll = false) => {} укороченная записть для actionLoadRecords. Фильтры
+        тут не замекняеются, а мержатся
     -   onUpdateTableMeta - (newMeta, replaceAll = false) начальный фильтры из options и урла
 
 ## titledDecorator
