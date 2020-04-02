@@ -171,6 +171,16 @@ export function compareDate(dateA, dateB, withoutTime = true) {
       : -1;
 }
 
-export function isAnyDate(value) {
+export function isDateObject(value) {
   return value && (moment.isDate(value) || moment.isMoment(value));
+}
+
+export function isAnyDate(anyFormatDate) {
+  try {
+    const dateObj = normalizeDate(anyFormatDate);
+    // todo @ANKU @LOW - как обойти проблемы хаком 1900 годом? А если у нас исторические приложения будут? =)))
+    return !!dateObj && dateObj.year() > 1900; // иначе любое число подходит
+  } catch (e) {
+    return false;
+  }
 }
