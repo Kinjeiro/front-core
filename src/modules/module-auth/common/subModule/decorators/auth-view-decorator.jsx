@@ -21,9 +21,11 @@ import { notifyError } from '../../../../../common/helpers/notifications';
 // ======================================================
 // MODULE
 // ======================================================
+import MODULE_NAME from '../module-name';
 import { getUser } from '../redux-selectors';
 import USER_PROP_TYPE from '../model-user';
 import { checkAccess, DEFAULT_ACCESS_OBJECT } from '../helpers/access-object-utils';
+import { PATH_AUTH_SIGNIN } from '../routes-paths-auth';
 
 const DEFAULT_OPTIONS = {
   ...DEFAULT_ACCESS_OBJECT,
@@ -90,7 +92,25 @@ const DEFAULT_OPTIONS = {
         </Route>
       );
     }
+
+ Пример 4: - все дети будут показаны, только если есть залогинен пользователь
+ const UserCheckWrapper = authView()();
+
+ render() {
+    const {
+      children,
+    } = this.props;
+
+    return (
+      <div className="ProjectApp">
+        <UserCheckWrapper  { ...this.props }>
+          { children }
+        </UserCheckWrapper>
+      </div>
+    );
+  }
  */
+
 export default function authViewDecorator(...args) {
   let authOptions = { ...DEFAULT_OPTIONS };
   const lastArg = args[args.length - 1];
@@ -195,7 +215,14 @@ export default function authViewDecorator(...args) {
               getRoutePath,
               location,
             );
-            onGoTo(cutContextPath(redirectNotAuthUrl));
+            let redirectNotAuthPath = cutContextPath(redirectNotAuthUrl);
+
+            if (redirectNotAuthPath === PATH_MAIN_INDEX) {
+              // если редиректят на индекс, а это он и есть - то есть индекс не доступен значит редиректить на логин
+              redirectNotAuthPath = getRoutePath(PATH_AUTH_SIGNIN, MODULE_NAME);
+            }
+
+            onGoTo(redirectNotAuthPath);
           } else {
             // запускаем ошибку авторизации
             actionThrowNotAuthError(afterAuthRedirect || currentPath);
