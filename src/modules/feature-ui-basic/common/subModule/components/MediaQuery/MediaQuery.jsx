@@ -4,7 +4,7 @@ import Responsive from 'react-responsive';
 
 export const MAX_SIZES = {
   // todo @ANKU @LOW - WATCH
-  EXTRA_SMALL: 480,
+  // EXTRA_SMALL: 375,
   MOBILE: 768,
   TABLET: 1024,
   DESKTOP: 1200,
@@ -12,7 +12,7 @@ export const MAX_SIZES = {
 };
 
 export const SIZES_ARRAY = [
-  MAX_SIZES.EXTRA_SMALL,
+  // MAX_SIZES.EXTRA_SMALL,
   MAX_SIZES.MOBILE,
   MAX_SIZES.TABLET,
   MAX_SIZES.DESKTOP,
@@ -61,12 +61,16 @@ export default class MediaQuery extends Component {
       minSize,
       maxSize,
       mobile,
+      tablet,
       strict,
       children,
       ...mediaQueryLibProps
     } = this.props;
 
-    const { MOBILE } = MAX_SIZES;
+    const {
+      MOBILE,
+      TABLET,
+    } = MAX_SIZES;
     let minWidth;
     let maxWidth;
 
@@ -75,6 +79,12 @@ export default class MediaQuery extends Component {
       maxWidth = MOBILE;
     } else if (mobile === false) {
       minWidth = MOBILE;
+      maxWidth = undefined;
+    } else if (tablet === true) {
+      minWidth = strict ? getMinSize(TABLET) : undefined;
+      maxWidth = TABLET;
+    } else if (tablet === false) {
+      minWidth = TABLET;
       maxWidth = undefined;
     } else {
       minWidth = minSize;
@@ -97,7 +107,11 @@ export default class MediaQuery extends Component {
         maxWidth={ maxWidth }
         { ...mediaQueryLibProps }
       >
-        { children }
+        {
+          typeof children === 'function'
+            ? children
+            : (match) => match && children
+        }
       </Responsive>
     );
   }
