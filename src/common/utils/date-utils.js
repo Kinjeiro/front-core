@@ -109,13 +109,24 @@ export function parseDate(date, outputFormat = undefined, inputFormat) {
   }
 }
 
-export function formatDateToTimestamp(date, inputFormat) {
+export function formatDateToTimestamp(date, inputFormat = undefined) {
+  if (typeof date === 'number' && typeof inputFormat === 'undefined') {
+    return date;
+  }
   return parseDate(date, FORMATS.TIMESTAMP_MILLISECONDS, inputFormat);
 }
 export function formatDateToIso(date, inputFormat) {
   return parseDate(date, FORMATS.ISO, inputFormat);
 }
 
+/*
+ LTS  : 'h:mm:ss A',
+ LT   : 'h:mm A',
+ L    : 'MM/DD/YYYY',
+ LL   : 'MMMM D, YYYY',
+ LLL  : 'MMMM D, YYYY h:mm A',
+ LLLL : 'dddd, MMMM D, YYYY h:mm A'
+*/
 export function formatDate(date, format = DATE_FORMAT) {
   return parseDate(date, format);
 }
