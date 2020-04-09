@@ -5,6 +5,12 @@ import bind from 'lodash-decorators/bind';
 
 import i18n from '../../i18n';
 
+import getComponents from '../../get-components';
+
+const {
+  Button,
+} = getComponents();
+
 export default class ReadMore extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -12,6 +18,7 @@ export default class ReadMore extends Component {
     lines: PropTypes.number,
     more: PropTypes.node,
     less: PropTypes.node,
+    onChangeStatus: PropTypes.func,
   };
 
   static defaultProps = {
@@ -35,11 +42,19 @@ export default class ReadMore extends Component {
 
   @bind()
   toggleLines(event) {
-    event.preventDefault();
+    const {
+      onChangeStatus,
+    } = this.props;
 
+    event.preventDefault();
+    event.stopPropagation();
+
+    const expandedNew = !this.state.expanded;
     this.setState({
-      expanded: !this.state.expanded,
+      expanded: expandedNew,
     });
+
+    return onChangeStatus && onChangeStatus(expandedNew);
   }
 
   render() {
@@ -60,24 +75,25 @@ export default class ReadMore extends Component {
         <Truncate
           lines={ !expanded && lines }
           ellipsis={ (
-            <span>... <a
-              href="#"
+            <span>... <Button
+              asLink={ true }
               onClick={ this.toggleLines }
-            >{more}</a>
+            >{more}</Button>
             </span>
           ) }
           onTruncate={ this.handleTruncate }
         >
           {children}
         </Truncate>
+
         { less && !truncated && expanded && (
           <span>
-            <a
-              href="#"
+            <Button
+              asLink={ true }
               onClick={ this.toggleLines }
             >
               {less}
-            </a>
+            </Button>
           </span>
         )}
       </div>
