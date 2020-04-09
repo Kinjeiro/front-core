@@ -1,6 +1,11 @@
 @import "../../../../../../common/app-style/vars.css";
 
 .Button {
+  &--asLink {
+    color: #4183c4;
+    padding: 0;
+  }
+
   &--notNaturalButton {
   //text-rendering: auto;
   //letter-spacing: normal;

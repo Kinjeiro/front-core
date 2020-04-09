@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import bind from 'lodash-decorators/bind';
+import classnames from 'classnames';
 
 import { emitProcessing, wrapToArray } from '../../../../../../common/utils/common';
 
@@ -63,6 +64,7 @@ export default class Button extends PureComponent {
     const {
       className,
       simple,
+      asLink,
       primary,
       loading,
       disabled,
@@ -82,7 +84,16 @@ export default class Button extends PureComponent {
         ? isProcessing
         : undefined;
 
-    const classNameFinal = `Button ${className || ''} ${simple ? 'Button--simple' : ''} ${primary ? 'Button--primary' : ''} ${isLoading ? 'Button--loading' : ''}`;
+    const classNameFinal = classnames(
+      'Button',
+      className,
+      {
+        'Button--simple': asLink || simple,
+        'Button--asLink': asLink,
+        'Button--primary': primary,
+        'Button--loading': isLoading,
+      },
+    );
 
     return (
       <ButtonView

@@ -11,6 +11,7 @@ export default {
    */
   type: PropTypes.string,
   simple: PropTypes.bool,
+  asLink: PropTypes.bool,
   primary: PropTypes.bool,
   loading: PropTypes.oneOfType([
     PropTypes.bool,
