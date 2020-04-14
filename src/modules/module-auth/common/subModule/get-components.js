@@ -15,6 +15,7 @@ export function initComponents(COMPONENTS_BASE) {
   COMPONENTS_BASE.replace('FbAuthIcon', () => require('./components/icons/FbAuthIcon').default);
   COMPONENTS_BASE.replace('GoogleAuthIcon', () => require('./components/icons/GoogleAuthIcon').default);
   COMPONENTS_BASE.replace('VKAuthIcon', () => require('./components/icons/VKAuthIcon').default);
+  COMPONENTS_BASE.replace('NeedRelogin', () => require('./components/NeedRelogin/NeedRelogin').default);
 
   // ======================================================
   // Containers AUTHS

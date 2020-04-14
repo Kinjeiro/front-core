@@ -26,6 +26,7 @@ const {
 
   AuthFormLayout,
   AuthEnter,
+  NeedRelogin,
 } = getComponents();
 
 require('./AuthErrorContainer.css');
@@ -122,24 +123,17 @@ export default class AuthErrorContainer extends Component {
   // ======================================================
   renderNeedReLoginOnIndexPage() {
     const {
-      lastUniError: {
-        uniMessage,
-      },
+      lastUniError,
+      children,
+      ...other
     } = this.props;
 
-    // todo @ANKU @LOW - можно сделать пропсы для текста отдельные
     return (
-      <div className="AuthErrorContainer__goToLogin GoToLogin">
-        <h3 className="GoToLogin__title">
-          { uniMessage || i18n('containers.AuthErrorContainer.sessionExpire') }
-        </h3>
-        <button
-          className="GoToLogin__action"
-          onClick={ this.handleGoToLogin }
-        >
-          { i18n('containers.AuthErrorContainer.actionGoToLogin') }
-        </button>
-      </div>
+      <NeedRelogin
+        { ...other }
+        uniError={ lastUniError }
+        onGoToLogin={ this.handleGoToLogin }
+      />
     );
   }
 

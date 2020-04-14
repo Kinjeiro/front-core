@@ -2,28 +2,6 @@
   height: 100%;
 }
 
-@block GoToLogin {
-  @element title {
-    margin-top: 0;
-  }
-
-  /*// todo @ANKU @LOW - кнопку сделать как ссылку*/
-  @element action {
-    & ,
-    &:hover,
-    &:focus {
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      margin: 0;
-      text-decoration: underline;
-      /*// todo @ANKU @LOW - цвет вынести в константы*/
-      color: blue;
-      background: transparent;
-    }
-  }
-}
-
 @block AuthModal {
   /*// CoreModal 10000 дефолтный // todo @ANKU @LOW - вынести z-index в константы */
   z-index: 10010;
