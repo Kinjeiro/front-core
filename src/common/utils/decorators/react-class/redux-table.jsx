@@ -105,7 +105,7 @@ export default function reduxTableDecorator(
             return result;
           }, {})
           : undefined;
-        const query = parseUrlParameters(props.location.search, filterNormalizers);
+        const query = parseUrlParameters(props.location.search, undefined, filterNormalizers);
         // }
 
         const projectInitMeta = executeVariable(initMetaFromProps || initMeta, {}, props);
