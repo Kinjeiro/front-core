@@ -160,7 +160,9 @@ export function getMeta(query, defaultMeta = {}) {
 
     groupBy: queryFinal.groupBy || defaultMeta.groupBy || DEFAULT_META.groupBy,
 
-    presets: queryFinal.presets || defaultMeta.presets || DEFAULT_META.presets,
+    presets: typeof queryFinal.presets !== 'undefined'
+      ? wrapToArray(queryFinal.presets)
+      : defaultMeta.presets || DEFAULT_META.presets,
   };
 }
 
