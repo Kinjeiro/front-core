@@ -167,14 +167,11 @@ export default function reduxTableDecorator(
           query = {},
           actionModuleItemInit,
           syncWithUrlParameters,
+          actionLoadRecords,
         } = this.props;
 
         const tableIdFinal = this.getTableId(this.props);
-
-        if (typeof window !== 'undefined' && window.history && Object.keys(query).length > 0 && !syncWithUrlParameters) {
-          // то есть мы перешли с параметрами, но синхронизировать не надо - нужно очистить
-          window.history.replaceState(null, null, window.location.pathname);
-        }
+        const hasQuery = Object.keys(query).length > 0;
 
         const {
           meta: storageMeta,
@@ -182,67 +179,89 @@ export default function reduxTableDecorator(
           ...storageOther
         } = loadStorageData(tableIdFinal) || {};
 
+        // при старте нужно подать помимо init инфу еще и из query
+        // но только при старте, при сбрасывании форму, урл не должен учитываться
+
         // !!! любая инфа в query приоритетнее storage и обнуляет ее, но initFilters используются как по умолчанию
+        const metaStart = getMeta(
+          hasQuery ? query : undefined,
+          hasQuery
+            ? initMeta
+            : {
+              ...initMeta,
+              ...storageMeta,
+            },
+        );
+        const filtersStart = hasQuery
+          ? merge({}, initFilters, query.filters)
+          : {
+            ...initFilters,
+            ...storageFilters,
+          };
+
         actionModuleItemInit(
           tableIdFinal,
           {
-            // при старте нужно подать помимо init инфу еще и из query
-            // но только при старте, при сбрасывании форму, урл не должен учитываться
-            meta: getMeta(
-              query,
-              query
-                ? initMeta
-                : {
-                  ...initMeta,
-                  ...storageMeta,
-                },
-            ),
-            filters: query
-              ? merge({}, initFilters, query.filters)
-              : {
-                ...initFilters,
-                ...storageFilters,
-              },
+            meta: metaStart,
+            filters: filtersStart,
             autoSaveState,
             // todo @ANKU @LOW - по-хорошему нужно это рядом с ReduxTable класть, но там нет момент инициализации, он в init module
             ...storageOther,
           },
         );
-      }
-
-      /*
-        @NOTE: в React v16 componentWillUnmount стал асинхронным, то есть теперь он может сработать после того как замаунтится новый компонент
-        То есть своим уникальным id стереть значения для нового
-        Поэтому нужно вместо componentWillMount (который в 16 deprecated) использовать componentDidMount
-        https://github.com/facebook/react/issues/11106
-      */
-      // componentWillMount(props = this.props) {
-      componentDidMount(props = this.props) {
-        const {
-          initMeta,
-          initFilters,
-          query,
-          actionLoadRecords,
-          syncWithUrlParameters,
-        } = props;
-
-        const tableIdFinal = this.getTableId(props);
-
-        const metaStart = getMeta(query, initMeta);
-        const filtersStart = query ? merge({}, initFilters, query.filters) : initFilters;
 
         // if (clearOnMount) {
         //   actionClearFilters(TABLE_ID);
         // }
 
+        if (!syncWithUrlParameters && hasQuery) {
+          // то есть мы перешли с параметрами, но синхронизировать не надо - нужно очистить
+          this.updateUrl(undefined, undefined, true);
+        }
+
         if (loadOnMount && actionLoadRecords) {
-          // replace
-          actionLoadRecords(tableIdFinal, undefined, undefined, false, true, syncWithUrlParameters);
+          // forceUpdate
+          // replace location
+          actionLoadRecords(tableIdFinal, undefined, undefined, true, true, syncWithUrlParameters);
         } else if (syncWithUrlParameters) {
           // если не загружаем, то вручную обновим урл
           this.updateUrl(metaStart, filtersStart);
         }
       }
+
+      // /*
+      //   @NOTE: в React v16 componentWillUnmount стал асинхронным, то есть теперь он может сработать после того как замаунтится новый компонент
+      //   То есть своим уникальным id стереть значения для нового
+      //   Поэтому нужно вместо componentWillMount (который в 16 deprecated) использовать componentDidMount
+      //   https://github.com/facebook/react/issues/11106
+      // */
+      // // componentWillMount(props = this.props) {
+      // componentDidMount(props = this.props) {
+      //   const {
+      //     initMeta,
+      //     initFilters,
+      //     query,
+      //     actionLoadRecords,
+      //     syncWithUrlParameters,
+      //   } = props;
+      //
+      //   const tableIdFinal = this.getTableId(props);
+      //
+      //   const metaStart = getMeta(query, initMeta);
+      //   const filtersStart = query ? merge({}, initFilters, query.filters) : initFilters;
+      //
+      //   // if (clearOnMount) {
+      //   //   actionClearFilters(TABLE_ID);
+      //   // }
+      //
+      //   if (loadOnMount && actionLoadRecords) {
+      //     // replace
+      //     actionLoadRecords(tableIdFinal, undefined, undefined, false, true, syncWithUrlParameters);
+      //   } else if (syncWithUrlParameters) {
+      //     // если не загружаем, то вручную обновим урл
+      //     this.updateUrl(metaStart, filtersStart);
+      //   }
+      // }
       componentDidUpdate(prevProps, prevState, snapshot) {
         const {
           actionLoadRecords,
@@ -294,7 +313,7 @@ export default function reduxTableDecorator(
         return props.tableId;
       }
 
-      updateUrl(meta, newFilters = undefined) {
+      updateUrl(meta, newFilters = undefined, forceClear = false) {
         const {
           location,
           actionReplaceState,
@@ -303,16 +322,19 @@ export default function reduxTableDecorator(
           } = {},
         } = this.props;
 
+        // window.history.replaceState(null, null, window.location.pathname);
         actionReplaceState({
           pathname: cutContextPath(location.pathname),
-          search: updateLocationSearch(
-            location.search,
-            {
-              ...meta,
-              filters: typeof newFilters === 'undefined' ? filters : newFilters,
-            },
-            true, // assign = replace
-          ),
+          search: forceClear
+            ? undefined
+            : updateLocationSearch(
+              location.search,
+              {
+                ...meta,
+                filters: typeof newFilters === 'undefined' ? filters : newFilters,
+              },
+              true, // assign = replace
+            ),
         });
       }
 
