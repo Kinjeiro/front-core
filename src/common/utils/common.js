@@ -448,6 +448,10 @@ export function checkExist(value, error = 'Произошла ошибка', not
 export function convertToString(...args) {
   return args.map((value) => (typeof value === 'string' ? value : `${value}`));
 }
+export function convertToNumber(...args) {
+  return args.map((value) => (typeof value === 'number' ? value : parseInt(value, 10)));
+}
+
 
 export function escapeToRegExp(str) {
   // eslint-disable-next-line no-useless-escape
