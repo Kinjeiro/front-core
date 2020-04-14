@@ -2,6 +2,22 @@
   "name": "@reagentum/front-core",
   "version": "1.9.41",
   "description": "front-core",
+
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Andrey \"Kinjeiro\" Kuzmin",
+    "email": "kinjeiro@gmail.com"
+  },
+  "contributors": [
+    "kinjeiro@gmail.com"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kinjeiro/front-core.git"
+  },
+  "homepage": "https://github.com/kinjeiro/front-core",
+
+
   "//": "// For comments see https://stackoverflow.com/questions/14221579/how-do-i-add-comments-to-package-json-for-npm-install",
   "main": "./build-scripts/start.js",
   "scripts": {
@@ -272,12 +288,5 @@
     "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "webpack-dev-server": "~2.7.1",
     "yargs": "~9.0.1"
-  },
-  "author": {
-    "name": "Andrey \"Kinjeiro\" Kuzmin",
-    "email": "kinjeiro@gmail.com"
-  },
-  "contributors": [
-    "kinjeiro@gmail.com"
-  ]
+  }
 }
