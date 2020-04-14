@@ -97,17 +97,16 @@ export default function reduxTableDecorator(
           initFilters: initFiltersFromProps,
         } = props;
 
-        let query;
-        if (syncWithUrlParameters) {
-          const filterNormalizers = urlFilterValueNormalizers
-            ? Object.keys(urlFilterValueNormalizers).reduce((result, filterParamName) => {
-              // eslint-disable-next-line no-param-reassign
-              result[`filters.${filterParamName}`] = urlFilterValueNormalizers[filterParamName];
-              return result;
-            }, {})
-            : undefined;
-          query = parseUrlParameters(props.location.search, filterNormalizers);
-        }
+        // if (syncWithUrlParameters) {
+        const filterNormalizers = urlFilterValueNormalizers
+          ? Object.keys(urlFilterValueNormalizers).reduce((result, filterParamName) => {
+            // eslint-disable-next-line no-param-reassign
+            result[`filters.${filterParamName}`] = urlFilterValueNormalizers[filterParamName];
+            return result;
+          }, {})
+          : undefined;
+        const query = parseUrlParameters(props.location.search, filterNormalizers);
+        // }
 
         const projectInitMeta = executeVariable(initMetaFromProps || initMeta, {}, props);
         const projectInitFilters = executeVariable(initFiltersFromProps || initFilters, {}, props);
@@ -165,25 +164,48 @@ export default function reduxTableDecorator(
         const {
           initMeta,
           initFilters,
-          query,
+          query = {},
           actionModuleItemInit,
+          syncWithUrlParameters,
         } = this.props;
 
         const tableIdFinal = this.getTableId(this.props);
 
-        // при старте нужно подать помимо init инфу еще и из query
-        // но только при старте, при сбрасывании форму, урл не должен учитываться
-        const metaStart = getMeta(query, initMeta);
-        const filtersStart = query ? merge({}, initFilters, query.filters) : initFilters;
+        if (typeof window !== 'undefined' && window.history && Object.keys(query).length > 0 && !syncWithUrlParameters) {
+          // то есть мы перешли с параметрами, но синхронизировать не надо - нужно очистить
+          window.history.replaceState(null, null, window.location.pathname);
+        }
 
+        const {
+          meta: storageMeta,
+          filters: storageFilters,
+          ...storageOther
+        } = loadStorageData(tableIdFinal) || {};
+
+        // !!! любая инфа в query приоритетнее storage и обнуляет ее, но initFilters используются как по умолчанию
         actionModuleItemInit(
           tableIdFinal,
           {
-            meta: metaStart,
-            filters: filtersStart,
+            // при старте нужно подать помимо init инфу еще и из query
+            // но только при старте, при сбрасывании форму, урл не должен учитываться
+            meta: getMeta(
+              query,
+              query
+                ? initMeta
+                : {
+                  ...initMeta,
+                  ...storageMeta,
+                },
+            ),
+            filters: query
+              ? merge({}, initFilters, query.filters)
+              : {
+                ...initFilters,
+                ...storageFilters,
+              },
             autoSaveState,
             // todo @ANKU @LOW - по-хорошему нужно это рядом с ReduxTable класть, но там нет момент инициализации, он в init module
-            ...loadStorageData(tableIdFinal),
+            ...storageOther,
           },
         );
       }
