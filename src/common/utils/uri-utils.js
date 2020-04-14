@@ -145,7 +145,7 @@ export function parseUrlParameters(url, defaultValues = {}, customNormalizersMap
       : defaultValuesFinal[paramPath];
 
     const normalizer = customNormalizersMap[paramPath];
-    valueFinal = normalizer ? normalizer(valueFinal) : valueFinal;
+    valueFinal = typeof valueFinal !== 'undefined' && normalizer ? normalizer(valueFinal) : valueFinal;
 
     set(paramsFinal, paramPath, valueFinal);
     return paramsFinal;
