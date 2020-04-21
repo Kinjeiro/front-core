@@ -173,11 +173,12 @@ export function getLastDayInMonth(date) {
 
 export function compareDate(dateA, dateB, withoutTime = true) {
   const momentDateA = normalizeDate(dateA);
+  const momentDateB = normalizeDate(dateB);
   const filterParam = withoutTime ? 'day' : undefined;
 
-  return ((momentDateA && !dateB) || (momentDateA && momentDateA.isAfter(dateB, filterParam)))
+  return ((momentDateA && !momentDateB) || (momentDateA && momentDateA.isAfter(momentDateB, filterParam)))
     ? 1
-    : ((!momentDateA && !dateB) || momentDateA.isSame(dateB, filterParam))
+    : ((!momentDateA && !momentDateB) || momentDateA.isSame(momentDateB, filterParam))
       ? 0
       : -1;
 }
