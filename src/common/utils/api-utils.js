@@ -6,6 +6,7 @@ import {
   wrapToArray,
 } from './common';
 import apiConfig from './create-api-config';
+import clientConfig from '../client-config';
 
 // https://tools.ietf.org/html/rfc6902
 export const PATCH_OPERATIONS = {
@@ -546,7 +547,23 @@ export function createCrudApi(API_PREFIX, sendApiFn, options = {}) {
     return sendApiFn(API_CONFIGS.deleteRecord, null, { pathParams: { id } });
   }
   function apiPatchRecord(id, patchOperations) {
-    return sendApiFn(API_CONFIGS.patchRecord, patchOperations, { pathParams: { id } });
+    const headers = clientConfig.common.features.api.useJsonPatchJsonContentType
+      ? {
+        // https://apisyouwonthate.com/blog/put-vs-patch-vs-json-patch
+        contentType: 'application/json-patch+json',
+      }
+      : undefined;
+
+    return sendApiFn(
+      API_CONFIGS.patchRecord,
+      patchOperations,
+      {
+        headers,
+        pathParams: {
+          id,
+        },
+      },
+    );
   }
 
   return {

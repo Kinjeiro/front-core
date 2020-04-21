@@ -17,6 +17,7 @@ export const OPERATION_TYPE = {
   READ: 'read',
   CREATE: 'create',
   CREATE_OR_UPDATE: 'createOrUpdate',
+  PATCH: 'patch',
   EDIT: 'update',
   REMOVE: 'remove',
 };
@@ -425,11 +426,20 @@ export default class CoreService {
     if (!isPatchOperations(patchOperation)) {
       throw new Error(`Не патч операция: ${JSON.stringify(patchOperation, null, 2)}`);
     }
+
+    const headers = serverConfig.common.features.api.useJsonPatchJsonContentType
+      ? {
+        // https://apisyouwonthate.com/blog/put-vs-patch-vs-json-patch
+        contentType: 'application/json-patch+json',
+      }
+      : undefined;
+
     return this.sendWithAuth(
       this.urls.urlPatchRecord,
       patchOperation,
       {
         method: 'PATCH',
+        headers,
         pathParams: {
           id,
         },

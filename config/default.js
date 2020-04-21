@@ -279,6 +279,14 @@ module.exports = {
       preLoader: {
         autoClose: 300,
         domId: 'PreLoader'
+      },
+
+      api: {
+        /*
+          // https://apisyouwonthate.com/blog/put-vs-patch-vs-json-patch
+          contentType: 'application/json-patch+json',
+        */
+        useJsonPatchJsonContentType: false
       }
     },
 
