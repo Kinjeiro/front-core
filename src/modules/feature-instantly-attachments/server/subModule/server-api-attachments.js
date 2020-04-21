@@ -140,14 +140,15 @@ export default function createApiPlugins() {
         logger.debug(`uploadAttachment "${fileName}"[${contentType}] by "${userId}"`);
 
         // upload data
+        const content = await serviceAttachmentContents.uploadFile(fileName, contentType, fileStream);
         const {
           id: contentId,
           length: size,
-        } = await serviceAttachmentContents.uploadFile(fileName, contentType, fileStream);
+        } = content;
         logger.debug(`-- size = "${size}"`);
 
         const attachmentData = createAttachment(
-          null,
+          undefined,
           fileName,
           size,
           contentType,
@@ -164,7 +165,11 @@ export default function createApiPlugins() {
           contentId,
         );
 
-        return reply(wrapToDownloadUrl(serviceAttachments.createRecord(serverAttachmentData)));
+        return reply(
+          wrapToDownloadUrl(
+            serviceAttachments.createRecord(serverAttachmentData, content),
+          ),
+        );
       },
       {
         routeConfig: {
