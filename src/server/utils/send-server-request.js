@@ -61,6 +61,14 @@ export async function sendSimpleRequest(requestOptions) {
     qs: undefined,
   };
 
+  if (requestOptionsFinal.headers && requestOptionsFinal.headers.contentType) {
+    requestOptionsFinal.headers = {
+      ...requestOptionsFinal.headers,
+      // todo @ANKU @LOW - бага node_modules/request/request.js:526
+      'content-type': requestOptionsFinal.headers.contentType,
+    };
+  }
+
   return new Promise((resolve, reject) => {
     logger.log(`==== [${requestOptionsFinal.url}] ====`);
 
