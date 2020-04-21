@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
+import getApiClient from '../../../../../common/helpers/get-api-client';
 
 import { wrapToArray } from '../../../../../common/utils/common';
 
@@ -136,7 +137,9 @@ export default class InstantlyAttachment extends Component {
         });
 
         // записываем его значение внутрь какой-нибудь формы
-        onChange(multiple ? newValues : newValues[0], valueIndex);
+        if (onChange) {
+          onChange(multiple ? newValues : newValues[0], valueIndex);
+        }
 
         // а сам аттачмент удаляем из общего хранилища аттачей - он загрузился и хранится теперь в форме
         actionClearAttachment(attach.uuid);
@@ -164,6 +167,23 @@ export default class InstantlyAttachment extends Component {
       ...(parseValue ? parseValue(file) : {}),
       uuid: generateAttachmentUuid(id),
     };
+  }
+
+  @bind()
+  handleAttachmentClick(attachment) {
+    const {
+      actionDownloadAttachment,
+    } = this.props;
+    const {
+      id,
+      downloadUrl,
+      fileName,
+    } = attachment;
+
+    if (downloadUrl) {
+      return getApiClient().downloadFile(downloadUrl, fileName);
+    }
+    return actionDownloadAttachment(id);
   }
 
   @bind()
@@ -228,6 +248,7 @@ export default class InstantlyAttachment extends Component {
 
         onAdd={ this.handleAdd }
         onRemove={ this.handleRemove }
+        onAttachmentClick={ this.handleAttachmentClick }
       />
     );
   }
