@@ -13,6 +13,7 @@ export const ATTACHMENT_PROP_TYPE_MAP = {
   uploadedBy: PropTypes.string,
   size: PropTypes.number,
   type: PropTypes.string,
+  contentType: PropTypes.string,
   contextParams: PropTypes.object,
   // virtual от id
   downloadUrl: PropTypes.string,
@@ -67,9 +68,13 @@ export function createAttachment(
     preview,
     description,
     uploadedOn,
+    // для спринга
+    uploadTime: uploadedOn,
     uploadedBy,
     size,
     type,
+    // для спринга
+    contentType: type,
     downloadUrl,
     contextParams,
   };
