@@ -95,6 +95,7 @@ export default function reduxTableDecorator(
           tableId: tableIdFromProps,
           initMeta: initMetaFromProps,
           initFilters: initFiltersFromProps,
+          location,
         } = props;
 
         // if (syncWithUrlParameters) {
@@ -105,7 +106,7 @@ export default function reduxTableDecorator(
             return result;
           }, {})
           : undefined;
-        const query = parseUrlParameters(props.location.search, undefined, filterNormalizers);
+        const query = location && parseUrlParameters(location.search, undefined, filterNormalizers);
         // }
 
         const projectInitMeta = executeVariable(initMetaFromProps || initMeta, {}, props);
