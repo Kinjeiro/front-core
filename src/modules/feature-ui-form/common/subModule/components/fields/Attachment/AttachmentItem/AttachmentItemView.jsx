@@ -223,6 +223,7 @@ export default class AttachmentItemView extends React.Component {
   // ======================================================
   render() {
     const {
+      attachment,
       attachment: {
         isNew,
         loaded,
@@ -238,6 +239,7 @@ export default class AttachmentItemView extends React.Component {
       <AttachmentItemLayout
         className={ className }
 
+        attachment={ attachment }
         attachmentDetails={ this.renderAttachmentDetails() }
         removeButton={ this.renderRemoveButton() }
         preview={ this.renderPreview() }
