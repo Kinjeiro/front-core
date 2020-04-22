@@ -9,6 +9,8 @@ import * as api from './api-attachments';
 // ======================================================
 // INITIAL STATE
 // ======================================================
+export const byIdsInitialState = {};
+
 export const attachInitialState = {
   uuid: undefined,
   /*
@@ -35,8 +37,6 @@ export const attachInitialState = {
   statusUploadAttach: undefined,
   statusDeleteAttach: undefined,
 };
-
-export const byIdsInitialState = {};
 
 // ======================================================
 // TYPES

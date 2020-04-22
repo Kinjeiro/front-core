@@ -3,6 +3,14 @@ import CoreService from '../../../../server/services/utils/CoreService';
 
 import ACCESS_TYPE from '../../common/subModule/model-attachment-access';
 
+/**
+ * Обычно аттачи хранят в виде двух сущностей информации об аттаче (Attachment) и его контент (AttachmentContent) причем бывают на разных серверах
+ *
+ * Но, по умолчанию, мы будем считать, что аттачи хранятся в базе и Attachment = AttachmentContent, весь процесс управляется через ServiceAttachmentContents
+ * поэтому тут ничего не нунжно делать
+ *
+ * Если необходимо разбить сущности, то этот класс нужно переопределить
+ */
 export default class ServiceAttachments extends CoreService {
   // todo @ANKU @LOW - сделать модуль прав на объект и CRUD действия
   checkAttachmentAccess(attachment, throwError = false) {
@@ -71,5 +79,8 @@ export default class ServiceAttachments extends CoreService {
       id: attachmentId,
       contentId: attachmentId,
     };
+  }
+  async deleteRecord(attachmentId, options = undefined) {
+    // ничего не делаем
   }
 }

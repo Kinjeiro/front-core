@@ -71,10 +71,9 @@ export default class ServiceAttachmentContents extends CoreService {
   async deleteFile(contentId) {
     return this.sendWithClientCredentials(
       this.urls.deleteFile,
+      undefined,
       {
         method: 'DELETE',
-      },
-      {
         pathParams: {
           contentId,
         },

@@ -269,12 +269,14 @@ export default function createApiPlugins() {
         } = attachment;
 
         // сначала удаляем контент из базы
-        await serviceAttachmentContents.deleteFile(contentId);
+        await serviceAttachmentContents.deleteFile(contentId || id);
         // потом удаляем инфу об аттачменте
         await serviceAttachments.deleteRecord(id);
 
         return reply();
       },
     ),
+
+    // todo @ANKU @CRIT @MAIN - update attach info
   ];
 }

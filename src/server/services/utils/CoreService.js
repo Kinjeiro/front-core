@@ -367,16 +367,18 @@ export default class CoreService {
       throw new Error('Not define urls.urlReadRecord. Please override getCrudUrlsPrefix.');
     }
     // throw new Error('Not Implemented');
-    return this.serializeRecord(
-      await this.sendWithAuth(
-        this.urls.urlReadRecord,
-        undefined,
-        {
-          pathParams: {
-            id,
-          },
+    const record = await this.sendWithAuth(
+      this.urls.urlReadRecord,
+      undefined,
+      {
+        pathParams: {
+          id,
         },
-      ),
+      },
+    );
+
+    return record && this.serializeRecord(
+      record,
       this.OPERATION_TYPE.READ,
       options,
     );
