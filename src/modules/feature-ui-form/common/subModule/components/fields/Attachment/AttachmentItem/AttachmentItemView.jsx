@@ -26,6 +26,10 @@ require('./AttachmentItemView.css');
 export default class AttachmentItemView extends React.Component {
   static propTypes = {
     attachment: ATTACHMENT_PROP_TYPE,
+    /**
+     * Доп информация (в основном статусы, уровень загрузки) конкретного аттача
+     */
+    attachmentInfo: PropTypes.object,
     customPreview: PropTypes.string,
     customDescription: PropTypes.node,
 
@@ -237,6 +241,7 @@ export default class AttachmentItemView extends React.Component {
 
     return (
       <AttachmentItemLayout
+        { ...this.props }
         className={ className }
 
         attachment={ attachment }

@@ -7,6 +7,7 @@ export default class AttachmentItemLayout extends PureComponent {
   static propTypes = {
     className: PropTypes.string,
     attachment: ATTACHMENT_PROP_TYPE,
+    attachmentInfo: PropTypes.object,
 
     description: PropTypes.node,
     attachmentDetails: PropTypes.node,
@@ -17,7 +18,8 @@ export default class AttachmentItemLayout extends PureComponent {
   render() {
     const {
       className,
-      attachment,
+      // attachment,
+      // attachmentInfo,
       description,
       attachmentDetails,
       removeButton,

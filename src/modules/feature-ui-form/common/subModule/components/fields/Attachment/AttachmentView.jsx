@@ -45,11 +45,14 @@ export default class AttachmentView extends React.Component {
       onRemove,
       onDescriptionChange,
       onDescriptionBlur,
+
+      attachmentsInfoMap,
     } = this.props;
 
     const {
       id,
       fileName,
+      uuid,
     } = attachment;
 
     return (
@@ -58,6 +61,7 @@ export default class AttachmentView extends React.Component {
         className="Attachment__AttachmentItem"
 
         attachment={ attachment }
+        attachmentInfo={ attachmentsInfoMap[uuid] }
         customPreview={ previews[fileName] }
 
         usePreview={ usePreview }

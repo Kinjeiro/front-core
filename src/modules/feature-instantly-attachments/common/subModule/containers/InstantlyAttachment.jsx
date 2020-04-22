@@ -174,7 +174,7 @@ export default class InstantlyAttachment extends Component {
       }
     });
 
-    if (isSummaryFetching !== prevProps.isSummaryFetching) {
+    if (onChangeStatus && isSummaryFetching !== prevProps.isSummaryFetching) {
       onChangeStatus(isSummaryFetching);
     }
   }
@@ -271,17 +271,24 @@ export default class InstantlyAttachment extends Component {
       onChangeStatus,
       isSummaryFetching,
 
+      isProcessing,
+
       ...attachmentProps
     } = this.props;
     return (
       <Attachment
         { ...attachmentProps }
+
         value={ this.updateValues() }
         parseValue={ this.parseValueFromFile }
 
         onAdd={ this.handleAdd }
         onRemove={ this.handleRemove }
         onAttachmentClick={ this.handleAttachmentClick }
+
+        isProcessing={ isProcessing || isSummaryFetching }
+        attachmentsInfoMap={ attachmentsInfoMap }
+        isSummaryFetching={ isSummaryFetching }
       />
     );
   }

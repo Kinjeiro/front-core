@@ -50,6 +50,10 @@ export default {
    */
   accept: PropTypes.string,
   hasMaxValues: PropTypes.bool,
+  /**
+   * доп инфа по статусам на каждый элемент аттачмента [uuid]: attachInfo
+   */
+  attachmentsInfoMap: PropTypes.object,
 
   // ======================================================
   // inner componennts
