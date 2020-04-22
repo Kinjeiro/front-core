@@ -371,7 +371,7 @@ export default class Attachment extends React.Component {
   }
 
   @bind()
-  handleAttachRemove(attachment, event) {
+  async handleAttachRemove(attachment, event) {
     const {
       fileName,
     } = attachment;
@@ -391,7 +391,7 @@ export default class Attachment extends React.Component {
     const resultValues = values.filter((attachItem) => attachItem.fileName !== fileName);
 
     if (onRemove) {
-      onRemove(attachment, resultValues);
+      await onRemove(attachment, resultValues);
     }
 
     this.update(resultValues, attachment);
