@@ -287,6 +287,10 @@ module.exports = {
           contentType: 'application/json-patch+json',
         */
         useJsonPatchJsonContentType: false
+      },
+
+      attachments: {
+        useContentDeleteOnAttachmentDelete: false
       }
     },
 

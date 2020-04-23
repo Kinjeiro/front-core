@@ -6,7 +6,7 @@ import { generateUuid } from '../../../../common/utils/common';
 
 export const ATTACHMENT_PROP_TYPE_MAP = {
   id: ID,
-  fileName: PropTypes.string.isRequired,
+  fileName: PropTypes.string,
   preview: PropTypes.string,
   description: PropTypes.string,
   uploadedOn: DATE,
@@ -115,7 +115,7 @@ export function normalizeAttachment(attachment) {
     || (Array.isArray(attachment) && typeof attachment[0] === 'string')) {
     return Array.isArray(attachment)
       ? attachment.map((attachItem) =>
-        createAttachment(attachItem, attachItem, null, null, null, attachItem, attachItem))
+          createAttachment(attachItem, attachItem, null, null, null, attachItem, attachItem))
       : createAttachment(attachment, attachment, null, null, null, attachment, attachment);
   }
   return attachment;

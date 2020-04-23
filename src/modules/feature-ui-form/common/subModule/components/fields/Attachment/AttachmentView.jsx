@@ -61,7 +61,7 @@ export default class AttachmentView extends React.Component {
         className="Attachment__AttachmentItem"
 
         attachment={ attachment }
-        attachmentInfo={ attachmentsInfoMap[uuid] }
+        attachmentInfo={ attachmentsInfoMap && attachmentsInfoMap[uuid] }
         customPreview={ previews[fileName] }
 
         usePreview={ usePreview }

@@ -1,4 +1,23 @@
+import { createSelector, createSelectorCreator } from 'reselect';
+
 import { generateId, wrapToArray } from '../../../../common/utils/common';
+
+/*
+  https://github.com/reduxjs/reselect
+  const customSelectorCreator = createSelectorCreator(
+    customMemoize, // function to be used to memoize resultFunc
+    option1, // option1 will be passed as second argument to customMemoize
+    option2, // option2 will be passed as third argument to customMemoize
+    option3 // option3 will be passed as fourth argument to customMemoize
+  )
+
+  const customSelector = customSelectorCreator(
+    input1,
+    input2,
+    resultFunc // resultFunc will be passed as first argument to customMemoize
+  )
+*/
+
 
 export function getAttachmentsInfo(globalState) {
   return globalState.attachments;
@@ -57,34 +76,29 @@ export function getAttachmentsByFieldId(globalState, fieldId = undefined) {
   }, {});
 }
 
-/**
- *
- * @param globalState
- * @param uuids
- * @return {{}}
- */
-// todo @ANKU @CRIT @MAIN - reselect добавить
-export function getAttachmentInfosByUuids(globalState, uuids) {
-  const attachments = getAttachmentsInfo(globalState);
 
-  return Object.keys(attachments).reduce((result, attachKey) => {
+const getUuids = (globalState, attachments) => wrapToArray(attachments).map(({ uuid, id }) => uuid || id);
+
+/**
+ * (globalState, attachments) => { [uuid]: objectInfo }
+ */
+export const getAttachmentInfosByUuids = createSelector(
+  [getAttachmentsInfo, getUuids],
+  (attachments, uuids) => Object.keys(attachments).reduce((result, attachKey) => {
     const attachItem = attachments[attachKey];
     if (uuids.includes(attachItem.uuid)) {
       // eslint-disable-next-line no-param-reassign
       result[attachItem.uuid] = attachItem;
     }
     return result;
-  }, {});
-}
-/**
- *
- * @param globalState
- * @param uuids
- * @return {{}}
- */
-export function getAttachmentIsSummaryFetching(globalState, uuids) {
-  const attachmentInfoMap = getAttachmentInfosByUuids(globalState, uuids);
+  }, {}),
+);
 
-  return Object.keys(attachmentInfoMap).some((attachUuid) =>
-    attachmentInfoMap[attachUuid].status.isFetching);
-}
+/**
+ * (globalState, attachments) => boolean
+ */
+export const getAttachmentIsSummaryFetching = createSelector(
+  getAttachmentInfosByUuids,
+  (attachmentInfoMap) => Object.keys(attachmentInfoMap).some((attachUuid) =>
+    attachmentInfoMap[attachUuid].status.isFetching),
+);

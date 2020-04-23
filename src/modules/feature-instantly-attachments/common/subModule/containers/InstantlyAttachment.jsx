@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import bind from 'lodash-decorators/bind';
+import memoizeOne from 'memoize-one';
+
+import clientConfig from '../../../../../common/client-config';
 import getApiClient from '../../../../../common/helpers/get-api-client';
 
 import { wrapToArray } from '../../../../../common/utils/common';
@@ -31,11 +34,10 @@ const {
  * класс который поддерживает мгновенную загрузку аттачментов и хранение инфы об этом в редуксе
  */
 @connect(
-  (globalState, { id, onChangeStatus, value }) => {
-    const uuids = wrapToArray(value).map(({ uuid }) => uuid);
+  (globalState, { id, editable, onChangeStatus, value }) => {
     return {
-      attachmentsInfoMap: getAttachmentInfosByUuids(globalState, uuids),
-      isSummaryFetching: getAttachmentIsSummaryFetching(globalState, uuids),
+      attachmentsInfoMap: editable === false ? undefined : getAttachmentInfosByUuids(globalState, value) ,
+      isSummaryFetching: editable === false ? undefined : getAttachmentIsSummaryFetching(globalState, value),
     }
   },
   {
@@ -67,7 +69,8 @@ export default class InstantlyAttachment extends Component {
     attachmentsInfoMap: PropTypes.object,
   };
 
-  defaultProps = {
+  static defaultProps = {
+    ...Attachment.defaultProps,
     id: Math.random(),
   };
 
@@ -81,17 +84,13 @@ export default class InstantlyAttachment extends Component {
   // ======================================================
   // UTILS
   // ======================================================
-  updateValue(value, props = this.props) {
-    const {
-      attachmentsInfoMap,
-    } = props;
-
-    const additional = value ? attachmentsInfoMap[value.uuid] : null;
+  updateValue(value, attachmentsInfoMap = undefined) {
+    const additional = value && attachmentsInfoMap ? attachmentsInfoMap[value.uuid || value.id] : null;
     return additional
       ? {
         ...value,
-        ...additional,
-        preview: additional.preview || value.preview,
+        ...additional.data,
+        preview: additional.data.preview || value.preview,
       }
       : value;
   }
@@ -100,23 +99,30 @@ export default class InstantlyAttachment extends Component {
    * Наполняем результаты из рудекса (сколько загружено)
    * @return {*}
    */
-  updateValues() {
-    const {
-      value,
-    } = this.props;
+  updateValues = memoizeOne(
+    (attachmentsInfoMap, value) => {
+      const valueFinal = normalizeAttachment(value);
 
-    const valueFinal = normalizeAttachment(value);
-
-    return Array.isArray(valueFinal)
-      ? valueFinal.map((valueItem) => this.updateValue(valueItem))
-      : this.updateValue(valueFinal);
-  }
+      return Array.isArray(valueFinal)
+        ? valueFinal.map((valueItem) => this.updateValue(valueItem, attachmentsInfoMap))
+        : this.updateValue(valueFinal);
+    }
+  );
 
   // ======================================================
   // LIFECYCLE
   // ======================================================
   // componentDidMount() {
   // }
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    const {
+      editable,
+      value,
+    } = nextProps;
+
+    return editable || value !== this.props.value;
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
       onChange,
@@ -126,7 +132,7 @@ export default class InstantlyAttachment extends Component {
       multiple,
       actionClearAttachment,
 
-      attachmentsInfoMap,
+      attachmentsInfoMap = {},
       isSummaryFetching,
       onChangeStatus,
     } = this.props;
@@ -244,11 +250,14 @@ export default class InstantlyAttachment extends Component {
       actionDeleteAttach,
     } = this.props;
 
+    let stopPropagation = false;
     if (onRemove) {
-      await onRemove(attachment, resultValues);
+      stopPropagation = await onRemove(attachment, resultValues);
     }
 
-    await actionDeleteAttach(attachment.id);
+    if (!stopPropagation && clientConfig.common.features.attachments.useContentDeleteOnAttachmentDelete !== false) {
+      await actionDeleteAttach(attachment.id);
+    }
 
     if (typeof attachment.uuid !== 'undefined') {
       actionClearAttachment(attachment.uuid);
@@ -272,6 +281,7 @@ export default class InstantlyAttachment extends Component {
       isSummaryFetching,
 
       isProcessing,
+      value,
 
       ...attachmentProps
     } = this.props;
@@ -279,7 +289,7 @@ export default class InstantlyAttachment extends Component {
       <Attachment
         { ...attachmentProps }
 
-        value={ this.updateValues() }
+        value={ this.updateValues(attachmentsInfoMap, value) }
         parseValue={ this.parseValueFromFile }
 
         onAdd={ this.handleAdd }

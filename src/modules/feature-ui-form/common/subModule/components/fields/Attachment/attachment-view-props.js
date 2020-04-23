@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import ID_PROP_TYPE from '../../../../../../../common/models/model-id';
 
 import CONSTRAINTS_PROP_TYPE from '../../../model-constraints';
 
@@ -24,7 +25,7 @@ export default {
   // ======================================================
   // main
   // ======================================================
-  id: PropTypes.string,
+  id: ID_PROP_TYPE,
   name: PropTypes.string,
   value: PropTypes.oneOfType([
     ATTACHMENT_PROP_TYPE,

@@ -196,6 +196,7 @@
     "redux-orm": "~0.9.4",
     "redux-thunk": "~2.1.0",
     "request": "~2.70.0",
+    "reselect": "~4.0.0",
     "resolve-url-loader": "~2.3.0",
     "rimraf": "~2.6.2",
     "route-parser": "0.0.5",

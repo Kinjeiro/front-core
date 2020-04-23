@@ -62,7 +62,7 @@ module.exports = {
          * accessOwnerOnly - только тот, кто создал (ну и админ ;))
          * <permission> - пермишен специальный
          */
-        defaultAccess: 'accessPublic'
+        defaultAccess: 'accessAuth'
       }
     },
 
