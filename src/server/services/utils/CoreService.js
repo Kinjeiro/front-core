@@ -421,6 +421,13 @@ export default class CoreService {
     );
   }
 
+  /**
+   * Соглашение, что патч возвращает получившийся объект - https://stackoverflow.com/a/37718786/344172
+   * @param id
+   * @param patchOperation
+   * @param options
+   * @return {Promise<*>}
+   */
   async patchRecord(id, patchOperation, options) {
     if (!this.urls.urlPatchRecord) {
       throw new Error('Not define urls.urlPatchRecord. Please override getCrudUrlsPrefix.');
@@ -436,7 +443,7 @@ export default class CoreService {
       }
       : undefined;
 
-    return this.sendWithAuth(
+    const record = await this.sendWithAuth(
       this.urls.urlPatchRecord,
       patchOperation,
       {
@@ -446,6 +453,12 @@ export default class CoreService {
           id,
         },
       },
+    );
+
+    return this.serializeRecord(
+      record,
+      this.OPERATION_TYPE.PATCH,
+      options,
     );
   }
 
