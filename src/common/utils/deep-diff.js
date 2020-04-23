@@ -170,7 +170,7 @@ function getOrderIndependentHash(object) {
   return accum + hashThisString(stringToHash);
 }
 
-function deepDiff(lhs, rhs, changes, prefilter, path, key, stack, orderIndependent) {
+function deepDiffInner(lhs, rhs, changes, prefilter, path, key, stack, orderIndependent) {
   changes = changes || [];
   path = path || [];
   stack = stack || [];
@@ -257,7 +257,7 @@ function deepDiff(lhs, rhs, changes, prefilter, path, key, stack, orderIndepende
         }
 
         for (; i >= 0; --i) {
-          deepDiff(lhs[i], rhs[i], changes, prefilter, currentPath, i, stack, orderIndependent);
+          deepDiffInner(lhs[i], rhs[i], changes, prefilter, currentPath, i, stack, orderIndependent);
         }
       } else {
         var akeys = Object.keys(lhs);
@@ -278,16 +278,16 @@ function deepDiff(lhs, rhs, changes, prefilter, path, key, stack, orderIndepende
           objectKey = akeys[i];
           other = pkeys.indexOf(objectKey);
           if (other >= 0) {
-            deepDiff(lhs[objectKey], rhs[objectKey], changes, prefilter, currentPath, objectKey, stack, orderIndependent);
+            deepDiffInner(lhs[objectKey], rhs[objectKey], changes, prefilter, currentPath, objectKey, stack, orderIndependent);
             pkeys[other] = null;
           } else {
-            deepDiff(lhs[objectKey], undefined, changes, prefilter, currentPath, objectKey, stack, orderIndependent);
+            deepDiffInner(lhs[objectKey], undefined, changes, prefilter, currentPath, objectKey, stack, orderIndependent);
           }
         }
         for (i = 0; i < pkeys.length; ++i) {
           objectKey = pkeys[i];
           if (objectKey) {
-            deepDiff(undefined, rhs[objectKey], changes, prefilter, currentPath, objectKey, stack, orderIndependent);
+            deepDiffInner(undefined, rhs[objectKey], changes, prefilter, currentPath, objectKey, stack, orderIndependent);
           }
         }
       }
@@ -305,7 +305,7 @@ function deepDiff(lhs, rhs, changes, prefilter, path, key, stack, orderIndepende
 
 function observableDiff(lhs, rhs, observer, prefilter, orderIndependent) {
   var changes = [];
-  deepDiff(lhs, rhs, changes, prefilter, null, null, null, orderIndependent);
+  deepDiffInner(lhs, rhs, changes, prefilter, null, null, null, orderIndependent);
   if (observer) {
     for (var i = 0; i < changes.length; ++i) {
       observer(changes[i]);
@@ -315,7 +315,7 @@ function observableDiff(lhs, rhs, observer, prefilter, orderIndependent) {
 }
 
 function orderIndependentDeepDiff(lhs, rhs, changes, prefilter, path, key, stack) {
-  return deepDiff(lhs, rhs, changes, prefilter, path, key, stack, true);
+  return deepDiffInner(lhs, rhs, changes, prefilter, path, key, stack, true);
 }
 
 /**
@@ -331,7 +331,7 @@ function orderIndependentDeepDiff(lhs, rhs, changes, prefilter, path, key, stack
 
  Returns either an array of change
  */
-function accumulateDiff(lhs, rhs, prefilter, accum) {
+function deepDiff(lhs, rhs, prefilter, accum) {
   var observer = (accum) ?
     function (difference) {
       if (difference) {
@@ -507,10 +507,10 @@ function applyDiff(target, source, filter) {
   }
 }
 
-Object.defineProperties(accumulateDiff, {
+Object.defineProperties(deepDiff, {
 
   diff: {
-    value: accumulateDiff,
+    value: deepDiff,
     enumerable: true
   },
   orderIndependentDiff: {
@@ -550,7 +550,7 @@ Object.defineProperties(accumulateDiff, {
 });
 
 // hackish...
-accumulateDiff.DeepDiff = accumulateDiff;
+deepDiff.DeepDiff = deepDiff;
 
 /*
 const example = [
@@ -607,14 +607,14 @@ const example2 = [
  1) lhs - the left-hand operand; the origin object.
  2) rhs - the right-hand operand; the object being compared structurally with the origin object.
  3) options -
- a) object - A configuration object that can have the following properties:
- prefilter: (path, key) => bool - function that determines whether difference analysis should continue down the object graph. This function can also replace the options object in the parameters for backward compatibility.
- normalize: (path, key, lhs, rhs) => [lhs, rhs] - function that pre-processes every leaf of the tree.
- showEditLinks: bool - add not equal link result
- b) function - prefilter
+   a) object - A configuration object that can have the following properties:
+     - prefilter: (path, key) => bool - function that determines whether difference analysis should continue down the object graph. This function can also replace the options object in the parameters for backward compatibility.
+     - normalize: (path, key, lhs, rhs) => [lhs, rhs] - function that pre-processes every leaf of the tree.
+     - showEditLinks: bool - add not equal link result
+   b) function - prefilter
  4) acc - an optional accumulator/array (requirement is that it have a push function). Each difference is pushed to the specified accumulator.
 
  Returns either an array of change
  */
-export default accumulateDiff;
+export default deepDiff;
 
