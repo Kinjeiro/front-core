@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@reagentum/front-core 1.9.48 | Documentation</title>
+  <title>@reagentum/front-core 1.9.49 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@reagentum/front-core</h3>
-          <div class='mb1'><code>1.9.48</code></div>
+          <div class='mb1'><code>1.9.49</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1063,9 +1063,9 @@
               
                 
                 <li><a
-                  href='#accumulatediff'
+                  href='#deepdiff'
                   class="">
-                  accumulateDiff
+                  deepDiff
                   
                 </a>
                 
@@ -2806,6 +2806,16 @@
                   href='#findrecordswithpagination'
                   class="">
                   findRecordsWithPagination
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#patchrecord'
+                  class="">
+                  patchRecord
                   
                 </a>
                 
@@ -10340,8 +10350,8 @@ accountId: PropTypes.number,
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='accumulatediff'>
-      accumulateDiff
+    <h3 class='fl m0' id='deepdiff'>
+      deepDiff
     </h3>
     
     
@@ -10360,7 +10370,7 @@ b) function - prefilter
 <p>Returns either an array of change</p>
 
 
-  <div class='pre p1 fill-light mt0'>accumulateDiff(lhs: any, rhs: any, prefilter: any, accum: any)</div>
+  <div class='pre p1 fill-light mt0'>deepDiff(lhs: any, rhs: any, prefilter: any, accum: any)</div>
   
   
 
@@ -10445,12 +10455,14 @@ b) function - prefilter
 1) lhs - the left-hand operand; the origin object.
 2) rhs - the right-hand operand; the object being compared structurally with the origin object.
 3) options -
-a) object - A configuration object that can have the following properties:
-prefilter: (path, key) => bool - function that determines whether difference analysis should continue down the object graph. This function can also replace the options object in the parameters for backward compatibility.
-normalize: (path, key, lhs, rhs) => [lhs, rhs] - function that pre-processes every leaf of the tree.
-showEditLinks: bool - add not equal link result
+a) object - A configuration object that can have the following properties:</p>
+<ul>
+<li>prefilter: (path, key) => bool - function that determines whether difference analysis should continue down the object graph. This function can also replace the options object in the parameters for backward compatibility.</li>
+<li>normalize: (path, key, lhs, rhs) => [lhs, rhs] - function that pre-processes every leaf of the tree.</li>
+<li>showEditLinks: bool - add not equal link result
 b) function - prefilter
-4) acc - an optional accumulator/array (requirement is that it have a push function). Each difference is pushed to the specified accumulator.</p>
+4) acc - an optional accumulator/array (requirement is that it have a push function). Each difference is pushed to the specified accumulator.</li>
+</ul>
 <p>Returns either an array of change</p>
 
 
@@ -12140,7 +12152,7 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
   <p>Наполняем результаты из рудекса (сколько загружено)</p>
 
 
-  <div class='pre p1 fill-light mt0'>updateValues(): any</div>
+  <div class='pre p1 fill-light mt0'>updateValues</div>
   
   
 
@@ -12362,52 +12374,24 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
   </div>
   
 
-  
+  <p>(globalState, attachments) => { [uuid]: objectInfo }</p>
 
-  <div class='pre p1 fill-light mt0'>getAttachmentInfosByUuids(globalState: any, uuids: any): {}</div>
-  
-  
 
-  
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>getAttachmentInfosByUuids</div>
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>globalState</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>uuids</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
+  
+  
+  
+  
   
 
   
 
   
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>{}</code>:
-        
 
-      
-    
   
 
   
@@ -12437,52 +12421,24 @@ document.getElementById('preview').src = window.URL.createObjectURL(blob);
   </div>
   
 
-  
+  <p>(globalState, attachments) => boolean</p>
 
-  <div class='pre p1 fill-light mt0'>getAttachmentIsSummaryFetching(globalState: any, uuids: any): {}</div>
-  
-  
 
-  
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>getAttachmentIsSummaryFetching</div>
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>globalState</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>uuids</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
+  
+  
+  
+  
   
 
   
 
   
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>{}</code>:
-        
 
-      
-    
   
 
   
@@ -20745,6 +20701,90 @@ patchRecord</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='patchrecord'>
+      patchRecord
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Соглашение, что патч возвращает получившийся объект - <a href="https://stackoverflow.com/a/37718786/344172">https://stackoverflow.com/a/37718786/344172</a></p>
+
+
+  <div class='pre p1 fill-light mt0'>patchRecord(id: any, patchOperation: any, options: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>patchOperation</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+        
+
+      
+    
   
 
   
