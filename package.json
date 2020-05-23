@@ -284,7 +284,7 @@
     "stylelint": "~7.12.0",
     "typescript": "~1.8.10",
     "uglify-es": "github:mishoo/UglifyJS2#harmony",
-    "webpack-dev-server": "~2.7.1",
+    "webpack-dev-server": "~3.1.11",
     "yargs": "~9.0.1"
   }
 }
