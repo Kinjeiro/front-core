@@ -178,7 +178,7 @@ export function compareDate(dateA, dateB, withoutTime = true) {
 
   return ((momentDateA && !momentDateB) || (momentDateA && momentDateA.isAfter(momentDateB, filterParam)))
     ? 1
-    : ((!momentDateA && !momentDateB) || momentDateA.isSame(momentDateB, filterParam))
+    : ((!momentDateA && !momentDateB) || (momentDateA && momentDateA.isSame(momentDateB, filterParam)))
       ? 0
       : -1;
 }
