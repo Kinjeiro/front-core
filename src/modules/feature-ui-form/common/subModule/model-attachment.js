@@ -69,7 +69,7 @@ export function createAttachment(
     description,
     uploadedOn,
     // для спринга
-    // uploadTime: uploadedOn,
+    uploadTime: uploadedOn && new Date(uploadedOn),
     uploadedBy,
     size,
     type,
