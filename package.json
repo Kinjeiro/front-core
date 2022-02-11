@@ -257,7 +257,7 @@
     "ignore-styles": "~5.0.1",
     "isparta-loader": "~2.0.0",
     "istanbul": "~0.4.2",
-    "karma": "~1.7.0",
+    "karma": "~6.3.14",
     "karma-chai": "~0.1.0",
     "karma-chai-as-promised": "~0.1.2",
     "karma-chai-dom": "~1.1.0",
